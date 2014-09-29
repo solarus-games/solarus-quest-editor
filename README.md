@@ -6,6 +6,17 @@ Solarus Quest Editor is a GUI to create and modify quests for the
 This project is a full rewriting in C++/Qt of the official quest editor
 (written in Java).
 
+## License
+
+The source code of Solarus Quest Editor is licensed under the terms of the
+GNU General Public License v3.
+
+Images used in the editor are licensed under
+Creatives Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0).
+http://creativecommons.org/licenses/by-sa/3.0/
+
+See the license.txt file for more details.
+
 ## Compilation instructions
 
 To build Solarus Quest Editor, you need:
