@@ -1,0 +1,10 @@
+*~
+*.swp
+.DS_Store
+tags
+valgrind.out
+callgrind.out.*
+core
+CMakeLists.txt.user
+build/
+
