@@ -19,19 +19,23 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Solarus REQUIRED)
 
 include_directories(
+  "${CMAKE_SOURCE_DIR}/include"
+)
+
+include_directories(SYSTEM
   "${SOLARUS_INCLUDE_DIR}"
 )
 
 # Source files.
 set(solarus_quest_editor_SOURCES
-  main.cpp
-  mainwindow.cpp
-  mainwindow.h
+  src/main.cpp
+  src/mainwindow.cpp
+  include/mainwindow.h
 )
 
 # UI files.
 set(solarus_quest_editor_FORMS
-  mainwindow.ui
+  src/mainwindow.ui
 )
 
 # Generate .h from .ui.
