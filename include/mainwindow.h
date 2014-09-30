@@ -7,26 +7,26 @@
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+  explicit MainWindow(QWidget* parent = nullptr);
 
-    QString get_quest_path();
-    void set_quest_path(QString quest_path);
+  QString get_quest_path();
+  bool set_quest_path(QString quest_path);
 
 private slots:
-    void on_actionRun_quest_triggered();
+  void on_actionRun_quest_triggered();
 
-    void on_actionExit_triggered();
+  void on_actionExit_triggered();
 
-    void on_actionLoad_quest_triggered();
+  void on_actionLoad_quest_triggered();
 
 private:
 
-    std::unique_ptr<Ui::MainWindow> ui;
+  std::unique_ptr<Ui::MainWindow> ui;
 
-    QString quest_path;      /**< Path of the quest loaded. */
+  QString quest_path;      /**< Path of the quest loaded. */
 };
 
 #endif // MAINWINDOW_H
