@@ -24,6 +24,8 @@
 QuestTreeView::QuestTreeView(QWidget* parent) :
   QTreeView(parent),
   quest_manager(nullptr) {
+
+  setUniformRowHeights(true);
 }
 
 /**
@@ -50,9 +52,19 @@ void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
  */
 void QuestTreeView::current_quest_changed(QString /* quest_path */) {
 
+  // Clean the old tree.
+  setModel(nullptr);
+  setSortingEnabled(false);
+
+  // Create a new model.
   QString quest_data_path = quest_manager->get_quest_data_path();
   QFileSystemModel* model = new QFileSystemModel;
   model->setRootPath(quest_data_path);
+  model->setReadOnly(false);
   setModel(model);
   setRootIndex(model->index(quest_data_path));
+
+  // It is better for performance to do this after setting the model.
+  setSortingEnabled(true);
+  sortByColumn(0, Qt::AscendingOrder);
 }
