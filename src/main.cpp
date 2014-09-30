@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "main_window.h"
 #include <QApplication>
 
 /**
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
   QApplication application(argc, argv);
   MainWindow window;
-  window.set_quest_path(quest_path);
+  window.get_quest_manager().set_quest_path(quest_path);
   window.show();
 
   return application.exec();

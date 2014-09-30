@@ -1,0 +1,41 @@
+#ifndef SOLARUSEDITOR_MAINWINDOW_H
+#define SOLARUSEDITOR_MAINWINDOW_H
+
+#include "quest_manager.h"
+#include "ui_mainwindow.h"
+#include <QMainWindow>
+#include <memory>
+
+/**
+ * @brief Main window of the quest editor.
+ */
+class MainWindow : public QMainWindow
+{
+  Q_OBJECT
+
+public:
+
+  explicit MainWindow(QWidget* parent = nullptr);
+
+  QuestManager& get_quest_manager();
+
+private slots:
+
+  // Menu actions.
+  void on_actionRun_quest_triggered();
+  void on_actionExit_triggered();
+  void on_actionLoad_quest_triggered();
+
+  // Quest.
+  void current_quest_changed(QString quest_path);
+
+private:
+
+  void update_title();
+
+  std::unique_ptr<Ui::MainWindow> ui;
+  QuestManager quest_manager;
+
+};
+
+#endif
