@@ -1,10 +1,11 @@
 #ifndef SOLARUSEDITOR_MAINWINDOW_H
 #define SOLARUSEDITOR_MAINWINDOW_H
 
-#include "quest_manager.h"
 #include "ui_main_window.h"
 #include <QMainWindow>
 #include <memory>
+
+class QuestManager;
 
 /**
  * @brief Main window of the quest editor.
@@ -14,7 +15,7 @@ class MainWindow : public QMainWindow {
 
 public:
 
-  explicit MainWindow(QWidget* parent = nullptr);
+  explicit MainWindow(QWidget* parent, QuestManager& quest_manager);
 
   QuestManager& get_quest_manager();
 
@@ -33,7 +34,7 @@ private:
   void update_title();
 
   std::unique_ptr<Ui::MainWindow> ui;
-  QuestManager quest_manager;
+  QuestManager& quest_manager;
 
 };
 

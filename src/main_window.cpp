@@ -1,3 +1,4 @@
+#include "quest_manager.h"
 #include "main_window.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
@@ -10,11 +11,12 @@
 /**
  * @brief Creates a main window.
  * @param parent The parent widget or nullptr.
+ * @param quest_manager The quest manager.
  */
-MainWindow::MainWindow(QWidget* parent) :
+MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   QMainWindow(parent),
   ui(new Ui::MainWindow),
-  quest_manager(this) {
+  quest_manager(quest_manager) {
 
   ui->setupUi(this);
 

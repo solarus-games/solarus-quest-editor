@@ -1,3 +1,4 @@
+#include "quest_manager.h"
 #include "main_window.h"
 #include <QApplication>
 #include <QDesktopWidget>
@@ -19,8 +20,11 @@ int main(int argc, char* argv[]) {
   }
 
   QApplication application(argc, argv);
-  MainWindow window;
-  window.get_quest_manager().set_quest_path(quest_path);
+
+  QuestManager quest_manager;
+  quest_manager.set_quest_path(quest_path);
+
+  MainWindow window(nullptr, quest_manager);
 
   // Center the window initially.
   window.setGeometry(
