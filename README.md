@@ -23,7 +23,16 @@ To build Solarus Quest Editor, you need:
 - A C++ compiler with support of C++11.
 - CMake 2.8.11 or greater.
 - Qt5
-- Solarus
+- Solarus and its dependencies:
+  - SDL2
+  - SDL2main
+  - SDL2_image
+  - SDL2_ttf
+  - openal
+  - vorbisfile
+  - modplug (0.8.8.4 or greater)
+  - lua5.1 (LuaJIT is recommended)
+  - physfs
 
 We always keep branch master of Solarus Quest Editor compatible with branch
 master of Solarus.

@@ -15,17 +15,26 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
+option(SOLARUS_USE_LUAJIT "Use LuaJIT instead of default Lua (recommended)" ON)
 find_package(Qt5Widgets REQUIRED)
 find_package(Solarus REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(VorbisFile REQUIRED)
+find_package(Ogg REQUIRED)
+find_package(ModPlug REQUIRED)
+find_package(PhysFS REQUIRED)
+if(SOLARUS_USE_LUAJIT)
+  find_package(LuaJit REQUIRED)
+else()
+  find_package(Lua51 REQUIRED)
+endif()
 
 include_directories(
   "${CMAKE_SOURCE_DIR}/include"
 )
-
-include_directories(SYSTEM
-  "${SOLARUS_INCLUDE_DIR}"
-)
-
 # Source files.
 set(solarus_quest_editor_SOURCES
   src/main.cpp
@@ -53,6 +62,20 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
 )
 
 # Main executable.
+
+include_directories(SYSTEM
+  "${SOLARUS_INCLUDE_DIR}"
+  "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
+  "${SDL2_INCLUDE_DIR}"
+  "${SDL2_TTF_INCLUDE_DIR}"
+  "${SDL2_IMAGE_INCLUDE_DIR}"
+  "${OPENAL_INCLUDE_DIR}"
+  "${VORBISFILE_INCLUDE_DIR}"
+  "${OGG_INCLUDE_DIR}"
+  "${LUA_INCLUDE_DIR}"
+  "${PHYSFS_INCLUDE_DIR}"
+)
+
 add_executable(solarus-quest-editor
   ${solarus_quest_editor_SOURCES}
   ${solarus_quest_editor_FORMS_HEADERS}
@@ -62,5 +85,15 @@ add_executable(solarus-quest-editor
 target_link_libraries(solarus-quest-editor
   Qt5::Widgets
   "${SOLARUS_LIBRARIES}"
+  "${SDL2_LIBRARY}"
+  "${SDL2_IMAGE_LIBRARY}"
+  "${SDL2_TTF_LIBRARY}"
+  "${OPENAL_LIBRARY}"
+  "${LUA_LIBRARY}"
+  "${DL_LIBRARY}"
+  "${PHYSFS_LIBRARY}"
+  "${VORBISFILE_LIBRARY}"
+  "${OGG_LIBRARY}"
+  "${MODPLUG_LIBRARY}"
 )
 
