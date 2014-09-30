@@ -51,20 +51,24 @@ void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
  * @brief Slot called when the user loads another quest.
  * @param quest_path Path of the current quest.
  */
-void QuestTreeView::current_quest_changed(QString /* quest_path */) {
+void QuestTreeView::current_quest_changed(QString quest_path) {
 
   // Clean the old tree.
   setModel(nullptr);
   setSortingEnabled(false);
 
   // Create a new model.
-  QString quest_data_path = quest_manager->get_quest_data_path();
-  QuestFilesModel* model = new QuestFilesModel(quest_data_path);
+  QuestFilesModel* model = new QuestFilesModel(quest_path);
   setModel(model);
   setRootIndex(model->get_quest_root_index());
 
-  // It is better for performance to sort only after the model is ready.
-  setSortingEnabled(true);
+  if (model->hasChildren(rootIndex())) {
+    expand(rootIndex().child(0, 0));  // Expand the data directory.
+  }
+
   sortByColumn(0, Qt::AscendingOrder);
   setColumnWidth(0, 200);
+
+  // It is better for performance to enable sorting only after the model is ready.
+  setSortingEnabled(true);
 }

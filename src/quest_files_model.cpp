@@ -19,17 +19,17 @@
 
 /**
  * @brief Creates a quest files model.
- * @param parent Data path of the quest to represent.
+ * @param parent Path of the quest to represent.
  */
-QuestFilesModel::QuestFilesModel(QString quest_data_path):
+QuestFilesModel::QuestFilesModel(QString quest_path):
   QSortFilterProxyModel(nullptr),
-  quest_data_path(quest_data_path),
+  quest_path(quest_path),
+  quest_data_path(quest_path + "/data"),
   source_model(new QFileSystemModel) {
 
-  source_model->setRootPath(quest_data_path);
+  source_model->setRootPath(quest_data_path);  // Only watch changes in the data directory.
   source_model->setReadOnly(false);
   setSourceModel(source_model);
-
 }
 
 /**
@@ -38,7 +38,7 @@ QuestFilesModel::QuestFilesModel(QString quest_data_path):
  */
 QModelIndex QuestFilesModel::get_quest_root_index() const {
 
-  return mapFromSource(source_model->index(quest_data_path));
+  return mapFromSource(source_model->index(quest_path));
 }
 
 /**
@@ -104,6 +104,11 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     switch (index.column()) {
 
     case 0:  // File.
+      if (is_quest_data_index(source_index)) {
+        // Data directory: show the quest name instead of "data".
+        // TODO use QuestManager to get this info.
+        return quest_path.section('/', -1);
+      }
       return source_model->fileName(source_index);
 
     case 1:  // Friendly resource name.
@@ -111,6 +116,9 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return "";
 
     case 2:  // Type
+      if (is_quest_data_index(source_index)) {
+        return "Quest";
+      }
       // TODO
       return "";
 
@@ -126,7 +134,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   case Qt::DecorationRole:
     // Icon.
     if (index.column() == 0) {
-      return get_quest_file_icon(source_index);
+      return QIcon(":/images/" + get_quest_file_icon_name(source_index));
     }
     return QVariant();  // No icon in other columns.
   }
@@ -138,21 +146,29 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 /**
  * @brief Returns an appropriate icon for the specified quest file.
  * @param index Index of a file item in the source model.
- * @return An appropriate icon to represent this file.
+ * @return An appropriate icon name to represent this file.
  */
-QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& source_index) const {
+QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_index) const {
 
-  QString icon_name = "icon_file.png";
   QString file_name = source_model->fileName(source_index);
+
+  // Quest data directory.
+  if (is_quest_data_index(source_index)) {
+    return "icon_solarus.png";
+  }
+
+  // Directory icon.
   if (source_model->isDir(source_index)) {
-    icon_name = "icon_folder_open.png";
+    return "icon_folder_open.png";
   }
-  else {
-    if (file_name.endsWith(".lua")) {
-      icon_name = "icon_script.png";
-    }
+
+  // Lua script icon.
+  if (file_name.endsWith(".lua")) {
+    return "icon_script.png";
   }
-  return QIcon(":/images/" + icon_name);
+
+  // Generic file icon.
+  return "icon_file.png";
 }
 
 /**
@@ -187,13 +203,22 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 
   QModelIndex source_index = source_model->index(source_row, 0, source_parent);
 
+  if (source_model->index(source_model->rootPath()).parent() == source_parent) {
+    // This is a top-level item: only keep the data directory.
+    if (is_quest_data_index(source_index)) {
+      return true;
+    }
+    return false;
+  }
+
   if (source_model->isDir(source_index)) {
     // Keep all directories.
     return true;
   }
 
-  QString file_path = source_model->filePath(source_index);
-  if (file_path.endsWith(".lua")) {
+  QString file_name = source_model->fileName(source_index);
+
+  if (file_name.endsWith(".lua")) {
     // Keep all .lua scripts.
     return true;
   }
@@ -201,4 +226,14 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   // TODO keep resources
 
   return false;
+}
+
+/**
+ * @brief Returns whether a source index is the index of the quest data directory.
+ * @param source_index An index in the source model.
+ * @return \c true if this is the quest data directory.
+ */
+bool QuestFilesModel::is_quest_data_index(const QModelIndex& source_index) const {
+
+  return source_model->filePath(source_index) == quest_data_path;
 }

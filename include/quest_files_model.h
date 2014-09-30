@@ -29,7 +29,7 @@ class QuestFilesModel : public QSortFilterProxyModel {
 
 public:
 
-  QuestFilesModel(QString quest_data_path);
+  QuestFilesModel(QString quest_path);
 
   QModelIndex get_quest_root_index() const;
 
@@ -46,8 +46,10 @@ protected:
 
 private:
 
-  QIcon get_quest_file_icon(const QModelIndex& source_index) const;
+  QString get_quest_file_icon_name(const QModelIndex& source_index) const;
+  bool is_quest_data_index(const QModelIndex& source_index) const;
 
+  const QString quest_path;            /**< Path of the quest. */
   const QString quest_data_path;       /**< Data path of the quest. */
   QFileSystemModel* source_model;      /**< The underlying model. */
 
