@@ -142,9 +142,63 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
  */
 QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& source_index) const {
 
-  QString icon_file_name = "icon_file.png";
+  QString icon_name = "icon_file.png";
+  QString file_name = source_model->fileName(source_index);
   if (source_model->isDir(source_index)) {
-    icon_file_name = "icon_folder_closed.png";
+    icon_name = "icon_folder_open.png";
   }
-  return QIcon(":/images/" + icon_file_name);
+  else {
+    if (file_name.endsWith(".lua")) {
+      icon_name = "icon_script.png";
+    }
+  }
+  return QIcon(":/images/" + icon_name);
+}
+
+/**
+ * @brief Compares two items for sorting purposes.
+ * @param left An item index in the source model.
+ * @param right Another item index in the source model.
+ * @return \c true if the value of the first item is less than the second one.
+ */
+bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
+
+  // Directories are before regular files.
+  if (source_model->isDir(left) &&
+      !source_model->isDir(right)) {
+    return true;
+  }
+
+  if (!source_model->isDir(left) &&
+      source_model->isDir(right)) {
+    return false;
+  }
+
+  return QSortFilterProxyModel::lessThan(left, right);
+}
+
+/**
+ * @brief Returns whether a source row should be included in the model.
+ * @param source_row A row in the source model.
+ * @param source_parent Parent index of the row in the source model.
+ * @return \c true to keep the row, \c false to filter it out.
+ */
+bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const {
+
+  QModelIndex source_index = source_model->index(source_row, 0, source_parent);
+
+  if (source_model->isDir(source_index)) {
+    // Keep all directories.
+    return true;
+  }
+
+  QString file_path = source_model->filePath(source_index);
+  if (file_path.endsWith(".lua")) {
+    // Keep all .lua scripts.
+    return true;
+  }
+
+  // TODO keep resources
+
+  return false;
 }

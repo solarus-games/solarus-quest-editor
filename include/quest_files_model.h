@@ -39,6 +39,11 @@ public:
       ) const override;
   virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
+protected:
+
+  virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
+  virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+
 private:
 
   QIcon get_quest_file_icon(const QModelIndex& source_index) const;
