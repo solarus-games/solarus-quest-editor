@@ -2,7 +2,7 @@
 #define SOLARUSEDITOR_MAINWINDOW_H
 
 #include "quest_manager.h"
-#include "ui_mainwindow.h"
+#include "ui_main_window.h"
 #include <QMainWindow>
 #include <memory>
 
