@@ -1,5 +1,6 @@
 #include "main_window.h"
 #include <QApplication>
+#include <QDesktopWidget>
 
 /**
  * @brief Entry point of the quest editor.
@@ -20,6 +21,16 @@ int main(int argc, char* argv[]) {
   QApplication application(argc, argv);
   MainWindow window;
   window.get_quest_manager().set_quest_path(quest_path);
+
+  // Center the window initially.
+  window.setGeometry(
+        QStyle::alignedRect(
+          Qt::LeftToRight,
+          Qt::AlignCenter,
+          window.size(),
+          application.desktop()->availableGeometry()
+          )
+        );
   window.show();
 
   return application.exec();

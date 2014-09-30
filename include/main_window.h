@@ -9,8 +9,7 @@
 /**
  * @brief Main window of the quest editor.
  */
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
   Q_OBJECT
 
 public:
