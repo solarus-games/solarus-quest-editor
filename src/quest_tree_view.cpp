@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "quest_tree_view.h"
+#include "quest_files_model.h"
 #include <QFileSystemModel>
 
 /**
@@ -58,13 +59,12 @@ void QuestTreeView::current_quest_changed(QString /* quest_path */) {
 
   // Create a new model.
   QString quest_data_path = quest_manager->get_quest_data_path();
-  QFileSystemModel* model = new QFileSystemModel;
-  model->setRootPath(quest_data_path);
-  model->setReadOnly(false);
+  QuestFilesModel* model = new QuestFilesModel(quest_data_path);
   setModel(model);
-  setRootIndex(model->index(quest_data_path));
+  setRootIndex(model->get_quest_root_index());
 
-  // It is better for performance to do this after setting the model.
+  // It is better for performance to sort only after the model is ready.
   setSortingEnabled(true);
   sortByColumn(0, Qt::AscendingOrder);
+  setColumnWidth(0, 200);
 }

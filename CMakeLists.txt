@@ -39,9 +39,11 @@ include_directories(
 set(solarus_quest_editor_SOURCES
   src/main.cpp
   src/main_window.cpp
+  src/quest_files_model.cpp
   src/quest_manager.cpp
   src/quest_tree_view.cpp
   include/main_window.h
+  include/quest_files_model.h
   include/quest_manager.h
   include/quest_tree_view.h
 )
@@ -58,6 +60,7 @@ qt5_wrap_ui(solarus_quest_editor_FORMS_HEADERS
 
 # Resources.
 set(solarus_quest_editor_RESOURCES
+  resources/resources.qrc
 )
 
 # Compile resource files.
