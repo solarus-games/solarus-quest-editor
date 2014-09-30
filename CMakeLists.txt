@@ -37,11 +37,13 @@ include_directories(
 )
 # Source files.
 set(solarus_quest_editor_SOURCES
-  src/quest_manager.cpp
   src/main.cpp
   src/main_window.cpp
-  include/quest_manager.h
+  src/quest_manager.cpp
+  src/quest_tree_view.cpp
   include/main_window.h
+  include/quest_manager.h
+  include/quest_tree_view.h
 )
 
 # UI files.

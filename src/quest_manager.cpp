@@ -30,7 +30,7 @@ QuestManager::QuestManager(QObject* parent) :
  * @brief Returns the path of the current quest.
  * @return The current quest path (above the data directory).
  */
-QString QuestManager::get_quest_path() {
+QString QuestManager::get_quest_path() const {
   return quest_path;
 }
 
@@ -58,12 +58,15 @@ bool QuestManager::set_quest_path(QString quest_path) {
  *
  * @return The name of the quest directory.
  */
-QString QuestManager::get_quest_name() {
-
-  int index = quest_path.lastIndexOf('/');
-  if (index == -1) {
-    return quest_path;
-  }
+QString QuestManager::get_quest_name() const {
 
   return quest_path.section('/', -1);
+}
+
+/**
+ * @brief Returns the path of the data directory of the current quest.
+ * @return The path to the quest data directory.
+ */
+QString QuestManager::get_quest_data_path() const {
+  return quest_path + "/data";
 }

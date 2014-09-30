@@ -26,7 +26,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QTreeView" name="questTreeView"/>
+      <widget class="QuestTreeView" name="quest_tree_view"/>
       <widget class="QTreeView" name="tmpTreeView"/>
      </widget>
     </item>
@@ -100,6 +100,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QuestTreeView</class>
+   <extends>QTreeView</extends>
+   <header>quest_tree_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

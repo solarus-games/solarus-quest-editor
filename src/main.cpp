@@ -35,11 +35,9 @@ int main(int argc, char* argv[]) {
     quest_path = argv[1];
   }
 
+  // Set up the GUI.
   QApplication application(argc, argv);
-
   QuestManager quest_manager;
-  quest_manager.set_quest_path(quest_path);
-
   MainWindow window(nullptr, quest_manager);
 
   // Center the window initially.
@@ -51,6 +49,10 @@ int main(int argc, char* argv[]) {
           application.desktop()->availableGeometry()
           )
         );
+
+  // Open the quest.
+  quest_manager.set_quest_path(quest_path);
+
   window.show();
 
   return application.exec();

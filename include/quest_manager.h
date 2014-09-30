@@ -29,10 +29,11 @@ public:
 
   explicit QuestManager(QObject* parent = nullptr);
 
-  QString get_quest_path();
+  QString get_quest_path() const;
   bool set_quest_path(QString quest_path);
 
-  QString get_quest_name();
+  QString get_quest_name() const;
+  QString get_quest_data_path() const;
 
 signals:
 
@@ -47,6 +48,7 @@ signals:
 private:
 
   QString quest_path;   /**< Path of the current quest. */
+
 };
 
 #endif

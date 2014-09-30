@@ -36,6 +36,9 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
 
   ui->setupUi(this);
 
+  // Set up children.
+  ui->quest_tree_view->set_quest_manager(quest_manager);
+
   // Add menu actions to this widget so that key shortcuts work
   // when menus are closed.
   addAction(ui->actionNew_quest);
