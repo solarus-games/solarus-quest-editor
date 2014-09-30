@@ -1,0 +1,29 @@
+________________________________________
+
+Solarus Quest Editor 1.4.0 (in progress)
+________________________________________
+
+The quest editor is being rewritten from scratch in C++/Qt.
+
+New features
+------------
+
+* The quest can now be run from the editor.
+* The quest tree now automatically refreshes after changes in the filesystem.
+
+Missing features
+----------------
+
+The rewriting is currently in progress.
+At this moment, it is in a very early stage, so almost everything that is
+possible with the old editor is still to be done in the new one.
+
+* Create a new quest.
+* Add, remove or rename resources.
+* Edit maps.
+* Edit tilesets.
+* Edit sprites.
+* Edit Lua scripts.
+* Edit text files.
+* Upgrade quests to the latest format.
+
