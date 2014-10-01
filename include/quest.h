@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_H
 #define SOLARUSEDITOR_QUEST_H
 
-#include <solarus/QuestResourceList.h>
+#include <solarus/ResourceType.h>
 #include <QObject>
 
 /**

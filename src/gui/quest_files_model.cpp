@@ -16,6 +16,7 @@
  */
 #include "gui/quest_files_model.h"
 #include "quest.h"
+#include "solarus/QuestResources.h"
 #include <QFileSystemModel>
 
 namespace {
@@ -273,8 +274,10 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
 
   // Resource element (possibly a directory for languages).
   if (quest.is_resource_element(file_path, resource_type)) {
+    const std::string& resource_type_name =
+        Solarus::QuestResources::get_resource_type_name(resource_type);
     return "icon_resource_" +
-        QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
+        QString::fromStdString(resource_type_name) +
         ".png";
   }
 
@@ -282,8 +285,10 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
   if (source_model->isDir(source_index)) {
 
     if (quest.is_resource_path(file_path, resource_type)) {
+      const std::string& resource_type_name =
+          Solarus::QuestResources::get_resource_type_name(resource_type);
       return "icon_folder_open_" +
-          QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
+          QString::fromStdString(resource_type_name) +
           ".png";
     }
 

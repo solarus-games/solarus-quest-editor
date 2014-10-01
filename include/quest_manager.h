@@ -23,6 +23,9 @@
 
 /**
  * @brief Stores the current quest and sends signals when it changes.
+ *
+ * Several quests objects can live at the same time, but this class
+ * keeps the current one.
  */
 class QuestManager : public QObject {
   Q_OBJECT
