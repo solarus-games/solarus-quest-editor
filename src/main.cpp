@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "quest_manager.h"
-#include "main_window.h"
+#include "gui/main_window.h"
 #include <QApplication>
 #include <QDesktopWidget>
 

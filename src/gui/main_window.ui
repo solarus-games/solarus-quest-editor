@@ -26,7 +26,14 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QuestTreeView" name="quest_tree_view"/>
+      <widget class="QuestTreeView" name="quest_tree_view">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
       <widget class="QTreeView" name="tmpTreeView"/>
      </widget>
     </item>
@@ -104,7 +111,7 @@
   <customwidget>
    <class>QuestTreeView</class>
    <extends>QTreeView</extends>
-   <header>quest_tree_view.h</header>
+   <header>gui/quest_tree_view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

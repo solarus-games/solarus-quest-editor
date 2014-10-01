@@ -37,22 +37,22 @@ include_directories(
 )
 # Source files.
 set(solarus_quest_editor_SOURCES
-  src/quest.cpp
-  src/main.cpp
-  src/main_window.cpp
-  src/quest_files_model.cpp
-  src/quest_manager.cpp
-  src/quest_tree_view.cpp
+  include/gui/main_window.h
+  include/gui/quest_tree_view.h
+  include/gui/quest_files_model.h
   include/quest.h
-  include/main_window.h
-  include/quest_files_model.h
   include/quest_manager.h
-  include/quest_tree_view.h
+  src/gui/main_window.cpp
+  src/gui/quest_files_model.cpp
+  src/gui/quest_tree_view.cpp
+  src/main.cpp
+  src/quest.cpp
+  src/quest_manager.cpp
 )
 
 # UI files.
 set(solarus_quest_editor_FORMS
-  src/main_window.ui
+  src/gui/main_window.ui
 )
 
 # Generate .h from .ui.

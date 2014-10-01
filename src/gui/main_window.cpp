@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/main_window.h"
 #include "quest_manager.h"
-#include "main_window.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
 #include <solarus/SolarusFatal.h>

@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "quest_tree_view.h"
-#include "quest_files_model.h"
+#include "gui/quest_tree_view.h"
+#include "gui/quest_files_model.h"
 #include <QFileSystemModel>
 
 /**
