@@ -32,7 +32,7 @@ class MainWindow : public QMainWindow {
 
 public:
 
-  explicit MainWindow(QWidget* parent, QuestManager& quest_manager);
+  MainWindow(QWidget* parent, QuestManager& quest_manager);
 
   QuestManager& get_quest_manager();
 

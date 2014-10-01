@@ -33,7 +33,7 @@ class QuestFilesModel : public QSortFilterProxyModel {
 
 public:
 
-  QuestFilesModel(Quest& quest);
+  explicit QuestFilesModel(Quest& quest);
 
   QModelIndex get_quest_root_index() const;
 
