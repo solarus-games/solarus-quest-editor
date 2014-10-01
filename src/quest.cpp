@@ -205,6 +205,11 @@ bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& reso
     return false;
   }
 
+  if (is_resource_path(path, resource_type)) {
+    // The top-level resource directory itself.
+    return false;
+  }
+
   // We are under a resource directory. Check if a resource element with this id is declared.
   QString resource_path = get_resource_path(resource_type);
   QString path_from_resource = path.right(path.size() - resource_path.size() - 1);
@@ -236,19 +241,19 @@ bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& reso
     break;
 
   case Solarus::ResourceType::LANGUAGE:
-    // TODO
-    ;
+    // No extension.
+    break;
   }
 
-  if (extensions.isEmpty()) {
-    // TODO languages
-    return true;
+  if (resource_type == Solarus::ResourceType::LANGUAGE) {
+    element_id = path_from_resource;
   }
-
-  for (const QString& extension: extensions) {
-    if (path_from_resource.endsWith(extension)) {
-      element_id = path_from_resource.remove(path_from_resource.lastIndexOf(extension), extension.size());
-      break;
+  else {
+    for (const QString& extension: extensions) {
+      if (path_from_resource.endsWith(extension)) {
+        element_id = path_from_resource.remove(path_from_resource.lastIndexOf(extension), extension.size());
+        break;
+      }
     }
   }
   if (element_id.isEmpty()) {

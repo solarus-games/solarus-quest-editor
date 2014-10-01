@@ -198,6 +198,38 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 }
 
 /**
+ * @brief Returns the flags of an item.
+ * @param index An item index.
+ * @return The item flags.
+ */
+Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
+
+  QModelIndex source_index = mapToSource(index);
+  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
+  QString file_path = source_model->filePath(file_source_index);
+  Solarus::ResourceType resource_type;
+  Qt::ItemFlags flags =  Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+
+  switch (index.column()) {
+
+  case 0:  // File.
+
+    if (quest.is_resource_element(file_path, resource_type) &&
+        resource_type == Solarus::ResourceType::LANGUAGE) {
+      // Remove the subtree of languages.
+      return flags | Qt::ItemNeverHasChildren;
+    }
+
+  case 1:  // Resource description.
+
+    return flags | Qt::ItemIsEditable;
+
+  }
+
+  return flags;
+}
+
+/**
  * @brief Returns an appropriate icon for the specified quest file.
  * @param index Index of a file item in the source model.
  * @return An appropriate icon name to represent this file.
@@ -213,6 +245,13 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
     return "icon_solarus.png";
   }
 
+  // Resource element (possibly a directory for languages).
+  if (quest.is_resource_element(file_path, resource_type)) {
+    return "icon_resource_" +
+        QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
+        ".png";
+  }
+
   // Directory icon.
   if (source_model->isDir(source_index)) {
 
@@ -223,15 +262,6 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
     }
 
     return "icon_folder_open.png";
-  }
-
-  // This is not a directory.
-
-  // Resource element.
-  if (quest.is_resource_element(file_path, resource_type)) {
-    return "icon_resource_" +
-        QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
-        ".png";
   }
 
   // Lua script icon.
@@ -276,7 +306,7 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   QModelIndex source_index = source_model->index(source_row, 0, source_parent);
 
   if (source_model->index(source_model->rootPath()).parent() == source_parent) {
-    // This is a top-level item: only keep the data directory.
+    // This is a top-level item: only keep the quest data directory.
     if (is_quest_data_index(source_index)) {
       return true;
     }
@@ -284,7 +314,7 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   }
 
   if (source_model->isDir(source_index)) {
-    // Keep all directories.
+    // Keep all other directories.
     return true;
   }
 
