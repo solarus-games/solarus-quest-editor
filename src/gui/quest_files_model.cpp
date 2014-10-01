@@ -251,6 +251,8 @@ bool QuestFilesModel::setData(
 
   // TODO quest.get_resource_element(resource_type, element_id).set_description(value.toString());
   emit dataChanged(index, index);
+
+  return true;
 }
 
 /**
