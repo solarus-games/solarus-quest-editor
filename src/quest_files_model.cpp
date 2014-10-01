@@ -107,7 +107,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (is_quest_data_index(source_index)) {
         // Data directory: show the quest name instead of "data".
         // TODO use QuestManager to get this info.
-        return quest_path.section('/', -1);
+        return quest_path.section('/', -1, -1, QString::SectionSkipEmpty);
       }
       return source_model->fileName(source_index);
 

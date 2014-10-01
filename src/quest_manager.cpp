@@ -16,6 +16,7 @@
  */
 #include "quest_manager.h"
 #include <QFile>
+#include <QFileInfo>
 
 /**
  * @brief Creates a quest manager.
@@ -42,11 +43,11 @@ QString QuestManager::get_quest_path() const {
  */
 bool QuestManager::set_quest_path(QString quest_path) {
 
-  bool success = QFile(quest_path + "/data/quest.dat").exists();
+  bool success = QFileInfo(quest_path + "/data/quest.dat").exists();
 
   if (success) {
-    this->quest_path = quest_path;
-    emit current_quest_changed(quest_path);
+    this->quest_path = QFileInfo(quest_path).canonicalFilePath();
+    emit current_quest_changed(this->quest_path);
   }
   return success;
 }
@@ -60,7 +61,7 @@ bool QuestManager::set_quest_path(QString quest_path) {
  */
 QString QuestManager::get_quest_name() const {
 
-  return quest_path.section('/', -1);
+  return quest_path.section('/', -1, -1, QString::SectionSkipEmpty);
 }
 
 /**
