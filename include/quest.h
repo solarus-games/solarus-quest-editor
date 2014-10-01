@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_H
 #define SOLARUSEDITOR_QUEST_H
 
+#include <quest_resources.h>
 #include <solarus/ResourceType.h>
 #include <QObject>
 
@@ -37,27 +38,30 @@ public:
   bool is_valid() const;
   bool exists() const;
 
+  // Paths.
   QString get_name() const;
   QString get_data_path() const;
   QString get_main_script_path() const;
+  QString get_resource_list_path() const;
   QString get_resource_path(Solarus::ResourceType resource_type) const;
   bool is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
-  bool is_resource_element(const QString& path, Solarus::ResourceType& resource_type) const;
+  bool is_resource_element(
+      const QString& path, Solarus::ResourceType& resource_type, QString& element_id) const;
+
+  // Resources.
+  QuestResources& get_resources();
 
 signals:
 
-  // TODO
-  // resource_element_added
-  // resource_element_removed
-  // resource_element_moved
-  // resource_element_renamed
+  void root_path_changed(const QString& root_path);
 
 private:
 
-  QString root_path;    /**< Root path of this quest.
-                         * An empty string means no quest. */
+  QString root_path;               /**< Root path of this quest.
+                                    * An empty string means no quest. */
 
+  QuestResources resources;   /**< Resources declared in project_db.dat. */
 };
 
 #endif

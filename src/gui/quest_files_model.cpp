@@ -83,18 +83,16 @@ int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
  */
 Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 
-  QModelIndex source_index = mapToSource(index);
-  QModelIndex file_source_index = source_model->index(
-        source_index.row(), FILE_COLUMN, source_index.parent());
-  QString file_path = source_model->filePath(file_source_index);
+  QString file_path = get_file_path(index);
   Solarus::ResourceType resource_type;
+  QString element_id;
   Qt::ItemFlags flags =  Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
   switch (index.column()) {
 
   case FILE_COLUMN:  // File name.
 
-    if (quest.is_resource_element(file_path, resource_type) &&
+    if (quest.is_resource_element(file_path, resource_type, element_id) &&
         resource_type == Solarus::ResourceType::LANGUAGE) {
       // Ignore the subtree of languages.
       flags |= Qt::ItemNeverHasChildren;
@@ -155,6 +153,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   QString file_name = source_model->fileName(file_source_index);
   QString file_path = source_model->filePath(file_source_index);
   Solarus::ResourceType resource_type;
+  QString element_id;
 
   switch (role) {
 
@@ -169,7 +168,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         return quest.get_name();
       }
 
-      if (quest.is_resource_element(file_path, resource_type)) {
+      if (quest.is_resource_element(file_path, resource_type, element_id)) {
         // A resource element: show its id (remove the extension).
         if (resource_type != Solarus::ResourceType::LANGUAGE) {
           return file_name.section('.', -2, -2);
@@ -197,7 +196,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         return resource_type_friendly_names[resource_type] + " folder";
       }
 
-      if (quest.is_resource_element(file_path, resource_type)) {
+      if (quest.is_resource_element(file_path, resource_type, element_id)) {
         // A declared resource element.
         return resource_type_friendly_names[resource_type];
       }
@@ -237,9 +236,10 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
  * @param index Index of the item to set.
  * @param value The new value to set.
  * @param role The role to change.
+ * @parem @c true in case of success.
  */
 bool QuestFilesModel::setData(
-    const QModelIndex& index, const QVariant& /* value */, int role) {
+    const QModelIndex& index, const QVariant& value, int role) {
 
   if (index.column() != DESCRIPTION_COLUMN) {
     // Only the description column is editable.
@@ -250,7 +250,14 @@ bool QuestFilesModel::setData(
     return false;
   }
 
-  // TODO quest.get_resource_element(resource_type, element_id).set_description(value.toString());
+  QString file_path = get_file_path(index);
+  Solarus::ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(file_path, resource_type, element_id)) {
+    return false;
+  }
+
+  quest.get_resources().set_element_description(resource_type, element_id, value.toString());
   emit dataChanged(index, index);
 
   return true;
@@ -266,6 +273,7 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
   QString file_name = source_model->fileName(source_index);
   QString file_path = source_model->filePath(source_index);
   Solarus::ResourceType resource_type;
+  QString element_id;
 
   // Quest data directory.
   if (is_quest_data_index(source_index)) {
@@ -273,7 +281,7 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
   }
 
   // Resource element (possibly a directory for languages).
-  if (quest.is_resource_element(file_path, resource_type)) {
+  if (quest.is_resource_element(file_path, resource_type, element_id)) {
     const std::string& resource_type_name =
         Solarus::QuestResources::get_resource_type_name(resource_type);
     return "icon_resource_" +
@@ -357,7 +365,8 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
     // Keep all .lua scripts except map scripts.
     QString file_path_dat = file_path.replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
     Solarus::ResourceType resource_type;
-    if (quest.is_resource_element(file_path_dat, resource_type) &&
+    QString element_id;
+    if (quest.is_resource_element(file_path_dat, resource_type, element_id) &&
         resource_type == Solarus::ResourceType::MAP) {
       return false;
     }
@@ -367,7 +376,8 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 
   // Keep resources.
   Solarus::ResourceType resource_type;
-  if (quest.is_resource_element(file_path, resource_type)) {
+  QString element_id;
+  if (quest.is_resource_element(file_path, resource_type, element_id)) {
     return true;
   }
 
@@ -382,4 +392,21 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 bool QuestFilesModel::is_quest_data_index(const QModelIndex& source_index) const {
 
   return source_model->filePath(source_index) == quest.get_data_path();
+}
+
+/**
+ * @brief Returns the path of the file at the specified index.
+ *
+ * Only the row of the index is considered, so the result is the same for all
+ * columns.
+ *
+ * @param index Index of an item in this model.
+ * @return The corresponding path.
+ */
+QString QuestFilesModel::get_file_path(const QModelIndex& index) const {
+
+  QModelIndex source_index = mapToSource(index);
+  QModelIndex file_source_index = source_model->index(
+        source_index.row(), FILE_COLUMN, source_index.parent());
+  return source_model->filePath(file_source_index);
 }

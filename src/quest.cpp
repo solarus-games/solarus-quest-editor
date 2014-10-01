@@ -43,7 +43,9 @@ const QMap<Solarus::ResourceType, QString> resource_dirs = {
 /**
  * @brief Creates an invalid quest.
  */
-Quest::Quest() {
+Quest::Quest():
+  root_path(),
+  resources(*this) {
 }
 
 /**
@@ -51,7 +53,8 @@ Quest::Quest() {
  * @param root_path Root path of the quest.
  */
 Quest::Quest(const QString& root_path):
-  root_path() {
+  root_path(),
+  resources(*this) {
   set_root_path(root_path);
 }
 
@@ -90,8 +93,8 @@ QString Quest::get_root_path() const {
 
 /**
  * @brief Sets the path of this quest.
- * @param root_path The root path (above the data directory). An empty string
- * means an invalid quest.
+ * @param root_path The root path (above the data directory).
+ * An empty string means an invalid quest.
  */
 void Quest::set_root_path(const QString& root_path) {
 
@@ -102,6 +105,8 @@ void Quest::set_root_path(const QString& root_path) {
   else {
     this->root_path = root_path;
   }
+
+  emit root_path_changed(root_path);
 }
 
 /**
@@ -131,12 +136,31 @@ QString Quest::get_data_path() const {
 }
 
 /**
- * @brief Returns the path to he main.lua script of this quest.
+ * @brief Returns the path to the main.lua script of this quest.
  * @return The path to the quest main script.
  * Returns an empty string if the quest is invalid.
  */
 QString Quest::get_main_script_path() const {
+
+  if (!is_valid()) {
+    return "";
+  }
+
   return get_data_path() + "/main.lua";
+}
+
+/**
+ * @brief Returns the path to the project.dat resource file of this quest.
+ * @return The path to the resource list file.
+ * Returns an empty string if the quest is invalid.
+ */
+QString Quest::get_resource_list_path() const {
+
+  if (!is_valid()) {
+    return "";
+  }
+
+  return get_data_path() + "/project_db.dat";
 }
 
 /**
@@ -193,12 +217,14 @@ bool Quest::is_in_resource_path(const QString& path, Solarus::ResourceType& reso
 }
 
 /**
- * @brief Returns whether a path is a resource element like a map, a tileset, etc.
- * @param path The path to test.
- * @param resource_type The resource type found if any.
- * @return \c true if this path is under a resource element.
+ * @brief Determines if a path is a resource element like a map, a tileset, etc.
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
+ * @param[out] element_id Id of the resource element if any.
+ * @return @c true if this path is a resource element.
  */
-bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& resource_type) const {
+bool Quest::is_resource_element(
+    const QString& path, Solarus::ResourceType& resource_type, QString& element_id) const {
 
   if (!is_in_resource_path(path, resource_type)) {
     // We are not in a resource directory.
@@ -213,7 +239,6 @@ bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& reso
   // We are under a resource directory. Check if a resource element with this id is declared.
   QString resource_path = get_resource_path(resource_type);
   QString path_from_resource = path.right(path.size() - resource_path.size() - 1);
-  QString element_id;
   QStringList extensions;
   switch (resource_type) {
   case Solarus::ResourceType::MAP:
@@ -251,16 +276,30 @@ bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& reso
   else {
     for (const QString& extension: extensions) {
       if (path_from_resource.endsWith(extension)) {
-        element_id = path_from_resource.remove(path_from_resource.lastIndexOf(extension), extension.size());
+        // Remove the extension.
+        element_id = path_from_resource.section('.', -2, -2);
         break;
       }
     }
   }
+
   if (element_id.isEmpty()) {
     // Not an recognized extension.
     return false;
   }
 
-  // TODO return quest.get_resource(resource_type).exists(element_id);
+  if (!resources.exists(resource_type, element_id)) {
+    // Valid id, but not declared in the resource list.
+    return false;
+  }
+
   return true;
+}
+
+/**
+ * @brief Returns this resources declared in this quest.
+ * @return The resources.
+ */
+QuestResources& Quest::get_resources() {
+  return resources;
 }
