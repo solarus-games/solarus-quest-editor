@@ -72,8 +72,41 @@ QModelIndex QuestFilesModel::get_quest_root_index() const {
  */
 int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
 
-  // File, Name, Type
+  // File, Description, Type.
   return 3;
+}
+
+/**
+ * @brief Returns the flags of an item.
+ * @param index An item index.
+ * @return The item flags.
+ */
+Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
+
+  QModelIndex source_index = mapToSource(index);
+  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
+  QString file_path = source_model->filePath(file_source_index);
+  Solarus::ResourceType resource_type;
+  Qt::ItemFlags flags =  Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+
+  switch (index.column()) {
+
+  case 0:  // File.
+
+    if (quest.is_resource_element(file_path, resource_type) &&
+        resource_type == Solarus::ResourceType::LANGUAGE) {
+      // Ignore the subtree of languages.
+      flags |= Qt::ItemNeverHasChildren;
+    }
+    return flags;
+
+  case 1:  // Resource description.
+
+    return flags | Qt::ItemIsEditable;
+
+  }
+
+  return flags;
 }
 
 /**
@@ -198,35 +231,25 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 }
 
 /**
- * @brief Returns the flags of an item.
- * @param index An item index.
- * @return The item flags.
+ * @brief Sets the data of an item for a given role.
+ * @param index Index of the item to set.
+ * @param value The new value to set.
+ * @param role The role to change.
  */
-Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
+bool QuestFilesModel::setData(
+    const QModelIndex& index, const QVariant& /* value */, int role) {
 
-  QModelIndex source_index = mapToSource(index);
-  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
-  QString file_path = source_model->filePath(file_source_index);
-  Solarus::ResourceType resource_type;
-  Qt::ItemFlags flags =  Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-
-  switch (index.column()) {
-
-  case 0:  // File.
-
-    if (quest.is_resource_element(file_path, resource_type) &&
-        resource_type == Solarus::ResourceType::LANGUAGE) {
-      // Remove the subtree of languages.
-      return flags | Qt::ItemNeverHasChildren;
-    }
-
-  case 1:  // Resource description.
-
-    return flags | Qt::ItemIsEditable;
-
+  if (index.column() != 1) {
+    // Only the description column is editable.
+    return false;
   }
 
-  return flags;
+  if (role != Qt::EditRole) {
+    return false;
+  }
+
+  // TODO quest.get_resource_element(resource_type, element_id).set_description(value.toString());
+  emit dataChanged(index, index);
 }
 
 /**
