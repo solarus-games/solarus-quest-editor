@@ -95,6 +95,9 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
 QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
   QModelIndex source_index = mapToSource(index);
+  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
+  QString file_name = source_model->fileName(file_source_index);
+  QString file_path = source_model->filePath(file_source_index);
 
   switch (role) {
 
@@ -108,7 +111,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         // Data directory: show the quest name instead of "data".
         return quest.get_name();
       }
-      return source_model->fileName(source_index);
+      return file_name;
 
     case 1:  // Friendly resource name.
       // TODO
@@ -118,7 +121,15 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (is_quest_data_index(source_index)) {
         return "Quest";
       }
-      // TODO
+
+      if (file_path == quest.get_main_script_path()) {
+        return "Main Lua script";
+      }
+
+      if (file_name.endsWith(".lua")) {
+        return "Lua script";
+      }
+      // TODO resource type
       return "";
 
     }
@@ -126,8 +137,9 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   case Qt::EditRole:
     // Editable file name.
     if (index.column() == 0) {
-      return source_model->fileName(source_index);
+      return file_name;
     }
+    // TODO allow to edit the resource description.
     return QVariant();
 
   case Qt::DecorationRole:

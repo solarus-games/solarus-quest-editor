@@ -38,6 +38,7 @@ public:
 
   QString get_name() const;
   QString get_data_path() const;
+  QString get_main_script_path() const;
 
 signals:
 

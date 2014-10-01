@@ -95,9 +95,9 @@ QString Quest::get_name() const {
 }
 
 /**
- * @brief Returns the path of the data directory of the current quest.
- * @return The path to the quest data directory. Returns an empty string if
- * the quest is invalid.
+ * @brief Returns the path of the data directory of this quest.
+ * @return The path to the quest data directory.
+ * Returns an empty string if the quest is invalid.
  */
 QString Quest::get_data_path() const {
 
@@ -106,4 +106,13 @@ QString Quest::get_data_path() const {
   }
 
   return get_root_path() + "/data";
+}
+
+/**
+ * @brief Returns the path to he main.lua script of this quest.
+ * @return The path to the quest main script.
+ * Returns an empty string if the quest is invalid.
+ */
+QString Quest::get_main_script_path() const {
+  return get_data_path() + "/main.lua";
 }
