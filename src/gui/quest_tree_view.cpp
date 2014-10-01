@@ -67,7 +67,8 @@ void QuestTreeView::current_quest_changed(Quest& quest) {
   }
 
   sortByColumn(0, Qt::AscendingOrder);
-  setColumnWidth(0, 200);
+  setColumnWidth(QuestFilesModel::FILE_COLUMN, 200);
+  setColumnWidth(QuestFilesModel::DESCRIPTION_COLUMN, 200);
 
   // It is better for performance to enable sorting only after the model is ready.
   setSortingEnabled(true);

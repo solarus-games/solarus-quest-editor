@@ -50,14 +50,27 @@ bool QuestResources::exists(ResourceType type, const QString& id) const {
 }
 
 /**
+ * @brief Returns the description of a resource element.
+ * @param type A type of resource.
+ * @param id Id of the element to get.
+ * @return The description of this element.
+ * Returns an empty string if the element does not exist.
+ */
+QString QuestResources::get_description(
+    ResourceType type, const QString& id) const {
+
+  return QString::fromStdString(
+        resources.get_description(type, id.toStdString()));
+}
+
+/**
  * @brief Changes the description of a resource element.
  * @param type A type of resource.
  * @param id Id of the element to change.
  * @param description The new description to set.
  */
-void QuestResources::set_element_description(
-    ResourceType type, const QString& id, const QString& description
-    ) {
+void QuestResources::set_description(
+    ResourceType type, const QString& id, const QString& description) {
 
   resources.set_description(type, id.toStdString(), description.toStdString());
   // TODO resources.save_to_file();

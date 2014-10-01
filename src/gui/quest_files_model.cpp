@@ -16,6 +16,7 @@
  */
 #include "gui/quest_files_model.h"
 #include "quest.h"
+#include "quest_resources.h"
 #include "solarus/QuestResources.h"
 #include <QFileSystemModel>
 
@@ -101,8 +102,11 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 
   case DESCRIPTION_COLUMN:  // Resource description.
 
-    return flags | Qt::ItemIsEditable;
-
+    if (quest.is_resource_element(file_path, resource_type, element_id)) {
+      // The description column of a resource element can be modified.
+      return flags | Qt::ItemIsEditable;
+    }
+    return flags;
   }
 
   return flags;
@@ -177,8 +181,11 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return file_name;
 
     case DESCRIPTION_COLUMN:  // Resource element description.
-      // TODO
-      return "";
+
+      if (!quest.is_resource_element(file_path, resource_type, element_id)) {
+        return QVariant();
+      }
+      return quest.get_resources().get_description(resource_type, element_id);
 
     case TYPE_COLUMN:  // Type
       if (is_quest_data_index(source_index)) {
@@ -207,17 +214,23 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       }
 
       // Not a file managed by Solarus.
-      return "";
-
+      return QVariant();
     }
 
   case Qt::EditRole:
     // Editable file name.
-    if (index.column() == FILE_COLUMN) {
+    switch (index.column()) {
+
+    case FILE_COLUMN:  // File name.
       return file_name;
+
+    case DESCRIPTION_COLUMN:
+      // The resource element description can be edited.
+      if (!quest.is_resource_element(file_path, resource_type, element_id)) {
+        return QVariant();
+      }
+      return quest.get_resources().get_description(resource_type, element_id);
     }
-    // TODO allow to edit the resource element description.
-    return QVariant();
 
   case Qt::DecorationRole:
     // Icon.
@@ -225,6 +238,10 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return QIcon(":/images/" + get_quest_file_icon_name(source_index));
     }
     return QVariant();  // No icon in other columns.
+
+  case Qt::TextAlignmentRole:
+    // Remove the alignment done by QFileSystemModel.
+    return Qt::AlignLeft;
   }
 
   // For other roles, rely on the standard settings.
@@ -257,7 +274,7 @@ bool QuestFilesModel::setData(
     return false;
   }
 
-  quest.get_resources().set_element_description(resource_type, element_id, value.toString());
+  quest.get_resources().set_description(resource_type, element_id, value.toString());
   emit dataChanged(index, index);
 
   return true;
