@@ -43,22 +43,22 @@ void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
   this->quest_manager = &quest_manager;
 
   // Connect to the new quest manager.
-  connect(this->quest_manager, SIGNAL(current_quest_changed(QString)),
-          this, SLOT(current_quest_changed(QString)));
+  connect(this->quest_manager, SIGNAL(current_quest_changed(Quest&)),
+          this, SLOT(current_quest_changed(Quest&)));
 }
 
 /**
  * @brief Slot called when the user loads another quest.
- * @param quest_path Path of the current quest.
+ * @param quest The current quest.
  */
-void QuestTreeView::current_quest_changed(QString quest_path) {
+void QuestTreeView::current_quest_changed(Quest& quest) {
 
   // Clean the old tree.
   setModel(nullptr);
   setSortingEnabled(false);
 
   // Create a new model.
-  QuestFilesModel* model = new QuestFilesModel(quest_path);
+  QuestFilesModel* model = new QuestFilesModel(quest);
   setModel(model);
   setRootIndex(model->get_quest_root_index());
 

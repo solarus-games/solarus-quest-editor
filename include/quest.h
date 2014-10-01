@@ -14,33 +14,43 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_QUEST_MANAGER_H
-#define SOLARUSEDITOR_QUEST_MANAGER_H
+#ifndef SOLARUSEDITOR_QUEST_H
+#define SOLARUSEDITOR_QUEST_H
 
-#include "quest.h"
 #include <QObject>
-#include <memory>
 
 /**
- * @brief Stores the current quest and sends signals when it changes.
+ * @brief A Solarus project that can be open with the editor.
  */
-class QuestManager : public QObject {
+class Quest: public QObject {
   Q_OBJECT
 
 public:
 
-  explicit QuestManager(QObject* parent = nullptr);
+  Quest();
+  explicit Quest(const QString& root_path);
 
-  Quest& get_quest();
-  bool set_quest(const QString& quest_path);
+  QString get_root_path() const;
+  void set_root_path(const QString& root_path);
+
+  bool is_valid() const;
+  bool exists() const;
+
+  QString get_name() const;
+  QString get_data_path() const;
 
 signals:
 
-  void current_quest_changed(Quest& quest);
+  // TODO
+  // resource_element_added
+  // resource_element_removed
+  // resource_element_moved
+  // resource_element_renamed
 
 private:
 
-  Quest quest;   /**< The current quest, possibly an invalid one. */
+  QString root_path;    /**< Root path of this quest.
+                         * An empty string means no quest. */
 
 };
 

@@ -12,14 +12,14 @@ class QuestTreeView : public QTreeView {
   Q_OBJECT
 
 public:
+
   explicit QuestTreeView(QWidget* parent = nullptr);
 
   void set_quest_manager(QuestManager& quest_manager);
 
-signals:
-
 public slots:
-  void current_quest_changed(QString quest_path);
+
+  void current_quest_changed(Quest& quest);
 
 private:
 

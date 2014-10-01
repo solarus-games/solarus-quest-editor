@@ -19,17 +19,21 @@
 
 #include <QSortFilterProxyModel>
 
+class Quest;
 class QFileSystemModel;
 
 /**
- * @brief A hierarchical model of files in a quest.
+ * @brief A hierarchical model of files, resources and scripts of a quest.
+ *
+ * This models acts as a proxy to a filesytem model, filtering and modifying
+ * the files representation to present them as quest resources.
  */
 class QuestFilesModel : public QSortFilterProxyModel {
   Q_OBJECT
 
 public:
 
-  QuestFilesModel(QString quest_path);
+  QuestFilesModel(Quest& quest);
 
   QModelIndex get_quest_root_index() const;
 
@@ -49,9 +53,8 @@ private:
   QString get_quest_file_icon_name(const QModelIndex& source_index) const;
   bool is_quest_data_index(const QModelIndex& source_index) const;
 
-  const QString quest_path;            /**< Path of the quest. */
-  const QString quest_data_path;       /**< Data path of the quest. */
-  QFileSystemModel* source_model;      /**< The underlying model. */
+  Quest& quest;                        /**< The quest represented by this model. */
+  QFileSystemModel* source_model;      /**< The underlying file model. */
 
 };
 

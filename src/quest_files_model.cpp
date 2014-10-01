@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "quest.h"
 #include "quest_files_model.h"
 #include <QFileSystemModel>
 
@@ -21,13 +22,12 @@
  * @brief Creates a quest files model.
  * @param parent Path of the quest to represent.
  */
-QuestFilesModel::QuestFilesModel(QString quest_path):
+QuestFilesModel::QuestFilesModel(Quest& quest):
   QSortFilterProxyModel(nullptr),
-  quest_path(quest_path),
-  quest_data_path(quest_path + "/data"),
+  quest(quest),
   source_model(new QFileSystemModel) {
 
-  source_model->setRootPath(quest_data_path);  // Only watch changes in the data directory.
+  source_model->setRootPath(quest.get_data_path());  // Only watch changes in the data directory.
   source_model->setReadOnly(false);
   setSourceModel(source_model);
 }
@@ -38,7 +38,7 @@ QuestFilesModel::QuestFilesModel(QString quest_path):
  */
 QModelIndex QuestFilesModel::get_quest_root_index() const {
 
-  return mapFromSource(source_model->index(quest_path));
+  return mapFromSource(source_model->index(quest.get_root_path()));
 }
 
 /**
@@ -106,8 +106,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     case 0:  // File.
       if (is_quest_data_index(source_index)) {
         // Data directory: show the quest name instead of "data".
-        // TODO use QuestManager to get this info.
-        return quest_path.section('/', -1, -1, QString::SectionSkipEmpty);
+        return quest.get_name();
       }
       return source_model->fileName(source_index);
 
@@ -235,5 +234,5 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
  */
 bool QuestFilesModel::is_quest_data_index(const QModelIndex& source_index) const {
 
-  return source_model->filePath(source_index) == quest_data_path;
+  return source_model->filePath(source_index) == quest.get_data_path();
 }

@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
         );
 
   // Open the quest.
-  quest_manager.set_quest_path(quest_path);
+  quest_manager.set_quest(quest_path);
 
   window.show();
 

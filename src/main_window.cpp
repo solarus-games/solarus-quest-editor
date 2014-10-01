@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   addAction(ui->actionExit);
   addAction(ui->actionRun_quest);
 
-  connect(&quest_manager, SIGNAL(current_quest_changed(QString)),
-          this, SLOT(current_quest_changed(QString)));
+  connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
+          this, SLOT(current_quest_changed(Quest&)));
 }
 
 /**
@@ -83,7 +83,7 @@ void MainWindow::on_actionLoad_quest_triggered() {
   }
 
   QString quest_path = file_names.first();
-  if (!quest_manager.set_quest_path(quest_path)) {
+  if (!quest_manager.set_quest(quest_path)) {
     QMessageBox messageBox;
     messageBox.setIcon(QMessageBox::Warning);
     messageBox.setText("No quest was found in directory\n'" + quest_path + "'");
@@ -96,7 +96,7 @@ void MainWindow::on_actionLoad_quest_triggered() {
  */
 void MainWindow::on_actionRun_quest_triggered() {
 
-  QString quest_path = quest_manager.get_quest_path();
+  QString quest_path = quest_manager.get_quest().get_root_path();
   if (quest_path.isEmpty()) {
     return;
   }
@@ -117,7 +117,7 @@ void MainWindow::on_actionRun_quest_triggered() {
 /**
  * @brief Slot called when the user opens another quest.
  */
-void MainWindow::current_quest_changed(QString /* quest_path */) {
+void MainWindow::current_quest_changed(Quest& /* quest */) {
   update_title();
 }
 
@@ -127,7 +127,7 @@ void MainWindow::current_quest_changed(QString /* quest_path */) {
 void MainWindow::update_title() {
 
   QString title = "Solarus Quest Editor";
-  QString quest_name = quest_manager.get_quest_name();
+  QString quest_name = quest_manager.get_quest().get_name();
   if (!quest_name.isEmpty()) {
     title = quest_name + " - " + title;
   }

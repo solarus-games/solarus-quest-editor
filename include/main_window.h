@@ -21,6 +21,7 @@
 #include <QMainWindow>
 #include <memory>
 
+class Quest;
 class QuestManager;
 
 /**
@@ -43,7 +44,7 @@ private slots:
   void on_actionLoad_quest_triggered();
 
   // Quest.
-  void current_quest_changed(QString quest_path);
+  void current_quest_changed(Quest& quest);
 
 private:
 
