@@ -245,7 +245,7 @@ bool Quest::is_resource_element(const QString& path, Solarus::ResourceType& reso
     return true;
   }
 
-  for (const QString extension: extensions) {
+  for (const QString& extension: extensions) {
     if (path_from_resource.endsWith(extension)) {
       element_id = path_from_resource.remove(path_from_resource.lastIndexOf(extension), extension.size());
       break;
