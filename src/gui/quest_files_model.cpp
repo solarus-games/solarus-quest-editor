@@ -36,7 +36,6 @@ const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
   { Solarus::ResourceType::FONT,     "Font"          },
 };
 
-
 }
 
 /**
@@ -84,14 +83,15 @@ int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
 Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 
   QModelIndex source_index = mapToSource(index);
-  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
+  QModelIndex file_source_index = source_model->index(
+        source_index.row(), FILE_COLUMN, source_index.parent());
   QString file_path = source_model->filePath(file_source_index);
   Solarus::ResourceType resource_type;
   Qt::ItemFlags flags =  Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 
   switch (index.column()) {
 
-  case 0:  // File.
+  case FILE_COLUMN:  // File name.
 
     if (quest.is_resource_element(file_path, resource_type) &&
         resource_type == Solarus::ResourceType::LANGUAGE) {
@@ -100,7 +100,7 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
     }
     return flags;
 
-  case 1:  // Resource description.
+  case DESCRIPTION_COLUMN:  // Resource description.
 
     return flags | Qt::ItemIsEditable;
 
@@ -124,13 +124,13 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
     // Text of each header.
     switch (section) {
 
-    case 0:
-      return "File";
+    case FILE_COLUMN:
+      return "Resource";
 
-    case 1:
+    case DESCRIPTION_COLUMN:
       return "Description";
 
-    case 2:
+    case TYPE_COLUMN:
       return "Type";
     }
     return QVariant();
@@ -149,7 +149,8 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
 QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
   QModelIndex source_index = mapToSource(index);
-  QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
+  QModelIndex file_source_index = source_model->index(
+        source_index.row(), FILE_COLUMN, source_index.parent());
   QString file_name = source_model->fileName(file_source_index);
   QString file_path = source_model->filePath(file_source_index);
   Solarus::ResourceType resource_type;
@@ -161,7 +162,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
     switch (index.column()) {
 
-    case 0:  // File.
+    case FILE_COLUMN:  // File name.
       if (is_quest_data_index(source_index)) {
         // Data directory: show the quest name instead of "data".
         return quest.get_name();
@@ -175,11 +176,11 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       }
       return file_name;
 
-    case 1:  // Resource element description.
+    case DESCRIPTION_COLUMN:  // Resource element description.
       // TODO
       return "";
 
-    case 2:  // Type
+    case TYPE_COLUMN:  // Type
       if (is_quest_data_index(source_index)) {
         // Quest data directory (top-level item).
         return "Quest";
@@ -212,7 +213,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
   case Qt::EditRole:
     // Editable file name.
-    if (index.column() == 0) {
+    if (index.column() == FILE_COLUMN) {
       return file_name;
     }
     // TODO allow to edit the resource element description.
@@ -220,7 +221,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
   case Qt::DecorationRole:
     // Icon.
-    if (index.column() == 0) {
+    if (index.column() == FILE_COLUMN) {
       return QIcon(":/images/" + get_quest_file_icon_name(source_index));
     }
     return QVariant();  // No icon in other columns.
@@ -239,7 +240,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 bool QuestFilesModel::setData(
     const QModelIndex& index, const QVariant& /* value */, int role) {
 
-  if (index.column() != 1) {
+  if (index.column() != DESCRIPTION_COLUMN) {
     // Only the description column is editable.
     return false;
   }
@@ -326,7 +327,7 @@ bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right
  */
 bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const {
 
-  QModelIndex source_index = source_model->index(source_row, 0, source_parent);
+  QModelIndex source_index = source_model->index(source_row, FILE_COLUMN, source_parent);
 
   if (source_model->index(source_model->rootPath()).parent() == source_parent) {
     // This is a top-level item: only keep the quest data directory.
