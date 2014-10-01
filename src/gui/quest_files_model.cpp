@@ -18,6 +18,27 @@
 #include "quest.h"
 #include <QFileSystemModel>
 
+namespace {
+
+/**
+ * Description of each resource type.
+ */
+const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
+  { Solarus::ResourceType::MAP,      "Map"           },
+  { Solarus::ResourceType::TILESET,  "Tileset"       },
+  { Solarus::ResourceType::SPRITE,   "Sprite"        },
+  { Solarus::ResourceType::MUSIC,    "Music"         },
+  { Solarus::ResourceType::SOUND,    "Sound"         },
+  { Solarus::ResourceType::ITEM,     "Item"          },
+  { Solarus::ResourceType::ENEMY,    "Enemy"         },
+  { Solarus::ResourceType::ENTITY,   "Custom entity" },
+  { Solarus::ResourceType::LANGUAGE, "Language"      },
+  { Solarus::ResourceType::FONT,     "Font"          },
+};
+
+
+}
+
 /**
  * @brief Creates a quest files model.
  * @param parent Path of the quest to represent.
@@ -98,6 +119,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   QModelIndex file_source_index = source_model->index(source_index.row(), 0, source_index.parent());  // First column.
   QString file_name = source_model->fileName(file_source_index);
   QString file_path = source_model->filePath(file_source_index);
+  Solarus::ResourceType resource_type;
 
   switch (role) {
 
@@ -111,25 +133,46 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         // Data directory: show the quest name instead of "data".
         return quest.get_name();
       }
+
+      if (quest.is_resource_element(file_path, resource_type)) {
+        // A resource element: show its id (remove the extension).
+        if (resource_type != Solarus::ResourceType::LANGUAGE) {
+          return file_name.section('.', -2, -2);
+        }
+      }
       return file_name;
 
-    case 1:  // Friendly resource name.
+    case 1:  // Resource element description.
       // TODO
       return "";
 
     case 2:  // Type
       if (is_quest_data_index(source_index)) {
+        // Quest data directory (top-level item).
         return "Quest";
       }
 
       if (file_path == quest.get_main_script_path()) {
+        // main.lua
         return "Main Lua script";
       }
 
+      if (quest.is_resource_path(file_path, resource_type)) {
+        // A resource element folder.
+        return resource_type_friendly_names[resource_type] + " folder";
+      }
+
+      if (quest.is_resource_element(file_path, resource_type)) {
+        // A declared resource element.
+        return resource_type_friendly_names[resource_type];
+      }
+
       if (file_name.endsWith(".lua")) {
+        // An arbitrary Lua script.
         return "Lua script";
       }
-      // TODO resource type
+
+      // Not a file managed by Solarus.
       return "";
 
     }
@@ -139,7 +182,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     if (index.column() == 0) {
       return file_name;
     }
-    // TODO allow to edit the resource description.
+    // TODO allow to edit the resource element description.
     return QVariant();
 
   case Qt::DecorationRole:
@@ -162,6 +205,8 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_index) const {
 
   QString file_name = source_model->fileName(source_index);
+  QString file_path = source_model->filePath(source_index);
+  Solarus::ResourceType resource_type;
 
   // Quest data directory.
   if (is_quest_data_index(source_index)) {
@@ -170,7 +215,23 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
 
   // Directory icon.
   if (source_model->isDir(source_index)) {
+
+    if (quest.is_resource_path(file_path, resource_type)) {
+      return "icon_folder_open_" +
+          QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
+          ".png";
+    }
+
     return "icon_folder_open.png";
+  }
+
+  // This is not a directory.
+
+  // Resource element.
+  if (quest.is_resource_element(file_path, resource_type)) {
+    return "icon_resource_" +
+        QString::fromStdString(Solarus::QuestResourceList::get_resource_type_name(resource_type)) +
+        ".png";
   }
 
   // Lua script icon.
@@ -228,13 +289,26 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   }
 
   QString file_name = source_model->fileName(source_index);
+  QString file_path = source_model->filePath(source_index);
 
-  if (file_name.endsWith(".lua")) {
-    // Keep all .lua scripts.
+  QString lua_extension = ".lua";
+  if (file_name.endsWith(lua_extension)) {
+    // Keep all .lua scripts except map scripts.
+    QString file_path_dat = file_path.replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
+    Solarus::ResourceType resource_type;
+    if (quest.is_resource_element(file_path_dat, resource_type) &&
+        resource_type == Solarus::ResourceType::MAP) {
+      return false;
+    }
+
     return true;
   }
 
-  // TODO keep resources
+  // Keep resources.
+  Solarus::ResourceType resource_type;
+  if (quest.is_resource_element(file_path, resource_type)) {
+    return true;
+  }
 
   return false;
 }

@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_H
 #define SOLARUSEDITOR_QUEST_H
 
+#include <solarus/QuestResourceList.h>
 #include <QObject>
 
 /**
@@ -39,6 +40,10 @@ public:
   QString get_name() const;
   QString get_data_path() const;
   QString get_main_script_path() const;
+  QString get_resource_path(Solarus::ResourceType resource_type) const;
+  bool is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
+  bool is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
+  bool is_resource_element(const QString& path, Solarus::ResourceType& resource_type) const;
 
 signals:
 
