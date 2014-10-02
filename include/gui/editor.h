@@ -14,30 +14,25 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/closable_tab_bar.h"
-#include "gui/editor_tabs.h"
+#ifndef SOLARUSEDITOR_EDITOR_H
+#define SOLARUSEDITOR_EDITOR_H
+
+#include <QWidget>
 
 /**
- * @brief Creates an editor tab widget.
- * @param parent The parent object or nullptr.
+ * \brief Abstract class for a widget that can edit something in Solarus.
+ *
+ * It has to support common operations like saving and closing.
+ * This widget is initialized with a layout and margins, so that
+ * subclasses can add a child widget of their choice.
  */
-EditorTabs::EditorTabs(QWidget* parent):
-  QTabWidget(parent) {
+class Editor : public QWidget {
+  Q_OBJECT
 
-  setMovable(true);
+public:
 
-  ClosableTabBar* tab_bar = new ClosableTabBar();
-  setTabBar(tab_bar);
-  connect(tab_bar, SIGNAL(tabCloseRequested(int)),
-          this, SLOT(on_tab_close_requested(int)));
-}
+  Editor(QWidget* parent = nullptr);
 
-/**
- * @brief Slot called when the user attempts to close a tab.
- * @param index Index of the tab to closed.
- */
-void EditorTabs::on_tab_close_requested(int index) {
+};
 
-  // TODO confirm save
-  removeTab(index);
-}
+#endif

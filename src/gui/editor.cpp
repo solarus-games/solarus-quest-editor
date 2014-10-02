@@ -14,30 +14,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/closable_tab_bar.h"
-#include "gui/editor_tabs.h"
+#include "gui/editor.h"
+#include <QVBoxLayout>
 
 /**
- * @brief Creates an editor tab widget.
+ * @brief Creates an editor.
  * @param parent The parent object or nullptr.
  */
-EditorTabs::EditorTabs(QWidget* parent):
-  QTabWidget(parent) {
+Editor::Editor(QWidget* parent) :
+  QWidget(parent) {
 
-  setMovable(true);
-
-  ClosableTabBar* tab_bar = new ClosableTabBar();
-  setTabBar(tab_bar);
-  connect(tab_bar, SIGNAL(tabCloseRequested(int)),
-          this, SLOT(on_tab_close_requested(int)));
-}
-
-/**
- * @brief Slot called when the user attempts to close a tab.
- * @param index Index of the tab to closed.
- */
-void EditorTabs::on_tab_close_requested(int index) {
-
-  // TODO confirm save
-  removeTab(index);
+  QVBoxLayout* layout = new QVBoxLayout();
+  layout->setContentsMargins(0, 0, 0, 0);
+  setLayout(layout);
 }

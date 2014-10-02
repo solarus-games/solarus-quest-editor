@@ -14,30 +14,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/closable_tab_bar.h"
-#include "gui/editor_tabs.h"
+#include "gui/text_editor.h"
+#include <QLayout>
+#include <QPlainTextEdit>
 
 /**
- * @brief Creates an editor tab widget.
+ * @brief Creates a text editor.
+ * @param file_name Name of the file to open or an empty string.
  * @param parent The parent object or nullptr.
  */
-EditorTabs::EditorTabs(QWidget* parent):
-  QTabWidget(parent) {
+TextEditor::TextEditor(const QString& file_name, QWidget* parent) :
+  Editor(parent) {
 
-  setMovable(true);
-
-  ClosableTabBar* tab_bar = new ClosableTabBar();
-  setTabBar(tab_bar);
-  connect(tab_bar, SIGNAL(tabCloseRequested(int)),
-          this, SLOT(on_tab_close_requested(int)));
-}
-
-/**
- * @brief Slot called when the user attempts to close a tab.
- * @param index Index of the tab to closed.
- */
-void EditorTabs::on_tab_close_requested(int index) {
-
-  // TODO confirm save
-  removeTab(index);
+  layout()->addWidget(new QPlainTextEdit(file_name));
 }

@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/main_window.h"
+#include "gui/text_editor.h"  // TODO remove
 #include "quest_manager.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
@@ -22,6 +23,7 @@
 #include <solarus/lowlevel/Debug.h>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPlainTextEdit>  // TODO remove
 #include <iostream>
 
 /**
@@ -44,6 +46,17 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
 
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
           this, SLOT(current_quest_changed(Quest&)));
+
+  // TODO remove
+  ui->tabWidget->addTab(new QPlainTextEdit("map"),
+         QIcon(":/images/icon_resource_map.png"),
+         "Map");
+  ui->tabWidget->addTab(new TextEditor("tileset"),
+         QIcon(":/images/icon_resource_tileset.png"),
+         "Tileset");
+  ui->tabWidget->addTab(new TextEditor("script"),
+         QIcon(":/images/icon_script.png"),
+         "Script");
 }
 
 /**

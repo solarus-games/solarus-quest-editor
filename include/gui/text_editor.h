@@ -14,30 +14,21 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/closable_tab_bar.h"
-#include "gui/editor_tabs.h"
+#ifndef SOLARUSEDITOR_TEXT_EDITOR_H
+#define SOLARUSEDITOR_TEXT_EDITOR_H
+
+#include "gui/editor.h"
 
 /**
- * @brief Creates an editor tab widget.
- * @param parent The parent object or nullptr.
+ * \brief A plain text edition widget.
  */
-EditorTabs::EditorTabs(QWidget* parent):
-  QTabWidget(parent) {
+class TextEditor : public Editor {
+  Q_OBJECT
 
-  setMovable(true);
+public:
 
-  ClosableTabBar* tab_bar = new ClosableTabBar();
-  setTabBar(tab_bar);
-  connect(tab_bar, SIGNAL(tabCloseRequested(int)),
-          this, SLOT(on_tab_close_requested(int)));
-}
+  TextEditor(const QString& file_name, QWidget* parent = nullptr);
 
-/**
- * @brief Slot called when the user attempts to close a tab.
- * @param index Index of the tab to closed.
- */
-void EditorTabs::on_tab_close_requested(int index) {
+};
 
-  // TODO confirm save
-  removeTab(index);
-}
+#endif
