@@ -34,7 +34,7 @@
         </sizepolicy>
        </property>
       </widget>
-      <widget class="QTabWidget" name="tabWidget"/>
+      <widget class="EditorTabs" name="tabWidget"/>
      </widget>
     </item>
    </layout>
@@ -112,6 +112,12 @@
    <class>QuestTreeView</class>
    <extends>QTreeView</extends>
    <header>gui/quest_tree_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EditorTabs</class>
+   <extends>QTabWidget</extends>
+   <header>include/gui/editor_tabs.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

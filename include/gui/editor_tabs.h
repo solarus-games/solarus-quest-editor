@@ -14,32 +14,24 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_QUEST_TREE_VIEW_H
-#define SOLARUSEDITOR_QUEST_TREE_VIEW_H
+#ifndef SOLARUSEDITOR_EDITOR_TABS_H
+#define SOLARUSEDITOR_EDITOR_TABS_H
 
-#include "quest_manager.h"
-#include <QPointer>
-#include <QTreeView>
+#include <QTabWidget>
 
 /**
- * @brief A view of the quest files.
+ * \brief The main tab widget with all editors currently open.
  */
-class QuestTreeView : public QTreeView {
+class EditorTabs : public QTabWidget {
   Q_OBJECT
 
 public:
 
-  explicit QuestTreeView(QWidget* parent = nullptr);
+  EditorTabs(QWidget* parent = nullptr);
 
-  void set_quest_manager(QuestManager& quest_manager);
+private slots:
 
-public slots:
-
-  void current_quest_changed(Quest& quest);
-
-private:
-
-  QPointer<QuestManager> quest_manager;    /**< The quest manager observed or nullptr. */
+  void on_tab_close_requested(int index);
 
 };
 
