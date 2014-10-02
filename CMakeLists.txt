@@ -37,6 +37,7 @@ include_directories(
 )
 # Source files.
 set(solarus_quest_editor_SOURCES
+  include/gui/closable_tab_bar.h
   include/gui/editor_tabs.h
   include/gui/main_window.h
   include/gui/quest_files_model.h
@@ -44,6 +45,7 @@ set(solarus_quest_editor_SOURCES
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
+  src/gui/closable_tab_bar.cpp
   src/gui/editor_tabs.cpp
   src/gui/main_window.cpp
   src/gui/quest_files_model.cpp

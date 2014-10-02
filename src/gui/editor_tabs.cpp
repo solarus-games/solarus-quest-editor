@@ -14,17 +14,25 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/closable_tab_bar.h"
 #include "gui/editor_tabs.h"
 
 #include <QAction>
 #include <QLabel>  // TODO remove
 
 /**
- * @brief Creates the editors tab widget.
+ * @brief Creates an editor tab widget.
  * @param parent The parent object or nullptr.
  */
 EditorTabs::EditorTabs(QWidget* parent):
   QTabWidget(parent) {
+
+  setMovable(true);
+
+  ClosableTabBar* tab_bar = new ClosableTabBar();
+  setTabBar(tab_bar);
+  connect(tab_bar, SIGNAL(tabCloseRequested(int)),
+          this, SLOT(on_tab_close_requested(int)));
 
   addTab(new QLabel("TODO", this),
          QIcon(":/images/icon_resource_map.png"),
@@ -35,16 +43,6 @@ EditorTabs::EditorTabs(QWidget* parent):
   addTab(new QLabel("TODO", this),
          QIcon(":/images/icon_script.png"),
          "Script");
-
-  setTabsClosable(true);
-  setMovable(true);
-
-  // Remove a tab when clicking its close button.
-  connect(this, SIGNAL(tabCloseRequested(int)),
-          this, SLOT(on_tab_close_requested(int)));
-
-  connect(this, SIGNAL(tabBarClicked(int)),
-          this, SLOT(on_tab_close_requested(int)));
 }
 
 /**
