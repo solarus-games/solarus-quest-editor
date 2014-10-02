@@ -34,7 +34,7 @@
         </sizepolicy>
        </property>
       </widget>
-      <widget class="QTreeView" name="tmpTreeView"/>
+      <widget class="QTabWidget" name="tabWidget"/>
      </widget>
     </item>
    </layout>

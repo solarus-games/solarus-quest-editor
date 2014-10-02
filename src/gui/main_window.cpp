@@ -39,6 +39,9 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   // Set up children.
   ui->quest_tree_view->set_quest_manager(quest_manager);
 
+  int tree_width = 400;
+  ui->splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
+
   // Add menu actions to this widget so that key shortcuts work
   // when menus are closed.
   addAction(ui->actionNew_quest);
