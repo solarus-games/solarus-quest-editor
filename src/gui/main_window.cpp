@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
           this, SLOT(current_quest_changed(Quest&)));
 
   // TODO remove
-  ui->tabWidget->addTab(new QPlainTextEdit("map"),
+  ui->tabWidget->addTab(new TextEditor("map"),
          QIcon(":/images/icon_resource_map.png"),
          "Map");
   ui->tabWidget->addTab(new TextEditor("tileset"),

@@ -27,4 +27,10 @@ TextEditor::TextEditor(const QString& file_name, QWidget* parent) :
   Editor(parent) {
 
   layout()->addWidget(new QPlainTextEdit(file_name));
+
+  QFont font("Monospace");
+  font.setStyleHint(QFont::TypeWriter);
+
+  setFont(font);
+
 }
