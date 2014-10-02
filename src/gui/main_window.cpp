@@ -44,19 +44,13 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   int tree_width = 400;
   ui->splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
+  // Connect children.
+  connect(ui->quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
+          ui->tabWidget, SLOT(open_file_requested(Quest&, const QString&)));
+
+  // Connect to external signals.
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
           this, SLOT(current_quest_changed(Quest&)));
-
-  // TODO remove
-  ui->tabWidget->addTab(new TextEditor("map.lua"),
-         QIcon(":/images/icon_resource_map.png"),
-         "Map");
-  ui->tabWidget->addTab(new TextEditor("tileset"),
-         QIcon(":/images/icon_resource_tileset.png"),
-         "Tileset");
-  ui->tabWidget->addTab(new TextEditor("script"),
-         QIcon(":/images/icon_script.png"),
-         "Script");
 }
 
 /**
@@ -105,7 +99,7 @@ void MainWindow::on_actionLoad_quest_triggered() {
  */
 void MainWindow::on_actionClose_triggered() {
 
-  ui->tabWidget->on_tab_close_requested(ui->tabWidget->currentIndex());
+  ui->tabWidget->close_file_requested(ui->tabWidget->currentIndex());
 }
 
 /**

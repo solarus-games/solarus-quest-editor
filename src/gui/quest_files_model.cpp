@@ -55,6 +55,14 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
 }
 
 /**
+ * @brief Returns the quest represented by this model.
+ * @return The quest.
+ */
+Quest& QuestFilesModel::get_quest() {
+  return quest;
+}
+
+/**
  * @brief Returns the index of the root item of the quest.
  * @return The root index.
  */

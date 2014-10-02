@@ -24,9 +24,12 @@
  */
 QuestTreeView::QuestTreeView(QWidget* parent) :
   QTreeView(parent),
-  quest_manager(nullptr) {
+  model(nullptr) {
 
   setUniformRowHeights(true);
+
+  connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
+          this, SLOT(item_double_clicked(const QModelIndex&)));
 }
 
 /**
@@ -35,15 +38,8 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
  */
 void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
 
-  if (this->quest_manager != nullptr) {
-    // Disconnect from the old quest manager.
-    this->quest_manager->disconnect(this);
-  }
-
-  this->quest_manager = &quest_manager;
-
-  // Connect to the new quest manager.
-  connect(this->quest_manager, SIGNAL(current_quest_changed(Quest&)),
+  // Connect to the quest manager.
+  connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
           this, SLOT(current_quest_changed(Quest&)));
 }
 
@@ -58,7 +54,7 @@ void QuestTreeView::current_quest_changed(Quest& quest) {
   setSortingEnabled(false);
 
   // Create a new model.
-  QuestFilesModel* model = new QuestFilesModel(quest);
+  model = new QuestFilesModel(quest);
   setModel(model);
   setRootIndex(model->get_quest_root_index());
 
@@ -72,4 +68,14 @@ void QuestTreeView::current_quest_changed(Quest& quest) {
 
   // It is better for performance to enable sorting only after the model is ready.
   setSortingEnabled(true);
+}
+
+/**
+ * @brief Slot called when the user double-clicks an item.
+ * @param index Index of the item.
+ */
+void QuestTreeView::item_double_clicked(const QModelIndex& index) {
+
+  QString path = model->get_file_path(index);
+  emit open_file_requested(model->get_quest(), path);
 }

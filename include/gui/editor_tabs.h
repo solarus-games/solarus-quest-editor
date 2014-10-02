@@ -17,7 +17,11 @@
 #ifndef SOLARUSEDITOR_EDITOR_TABS_H
 #define SOLARUSEDITOR_EDITOR_TABS_H
 
+#include <solarus/ResourceType.h>
 #include <QTabWidget>
+
+class Quest;
+class QuestManager;
 
 /**
  * \brief The main tab widget with all editors currently open.
@@ -27,11 +31,21 @@ class EditorTabs : public QTabWidget {
 
 public:
 
+  using ResourceType = Solarus::ResourceType;
+
   EditorTabs(QWidget* parent = nullptr);
+
+  void set_quest_manager(QuestManager& quest_manager);
+
+  void open_resource(
+      Quest& quest, ResourceType resource_type, const QString& id);
+  void open_script(
+      Quest& quest, const QString& path);
 
 public slots:
 
-  void on_tab_close_requested(int index);
+  void close_file_requested(int index);
+  void open_file_requested(Quest& quest, const QString& path);
 
 };
 

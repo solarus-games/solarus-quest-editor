@@ -21,6 +21,9 @@
 #include <QPointer>
 #include <QTreeView>
 
+class QuestFilesModel;
+class MainWindow;
+
 /**
  * @brief A view of the quest files.
  */
@@ -33,13 +36,18 @@ public:
 
   void set_quest_manager(QuestManager& quest_manager);
 
+signals:
+
+  void open_file_requested(Quest&, const QString& path);
+
 public slots:
 
   void current_quest_changed(Quest& quest);
+  void item_double_clicked(const QModelIndex& index);
 
 private:
 
-  QPointer<QuestManager> quest_manager;    /**< The quest manager observed or nullptr. */
+  QuestFilesModel* model;                  /**< The underlying model. */
 
 };
 

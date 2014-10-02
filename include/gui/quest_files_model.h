@@ -35,7 +35,9 @@ public:
 
   explicit QuestFilesModel(Quest& quest);
 
+  Quest& get_quest();
   QModelIndex get_quest_root_index() const;
+  QString get_file_path(const QModelIndex& index) const;
 
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
@@ -62,7 +64,6 @@ private:
 
   QString get_quest_file_icon_name(const QModelIndex& source_index) const;
   bool is_quest_data_index(const QModelIndex& source_index) const;
-  QString get_file_path(const QModelIndex& index) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */

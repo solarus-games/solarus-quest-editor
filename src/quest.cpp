@@ -181,6 +181,16 @@ QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
 }
 
 /**
+ * @brief Returns whether a path is under the quest path.
+ * @param path The path to test.
+ * @return \c true if this path is in the quest.
+ */
+bool Quest::is_in_root_path(const QString& path) const {
+
+  return path.startsWith(get_root_path());
+}
+
+/**
  * @brief Returns whether a path is a resource path.
  * @param path The path to test.
  * @param resource_type The resource type found if any.
