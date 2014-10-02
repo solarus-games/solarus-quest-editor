@@ -1,8 +1,15 @@
 Source code
 -----------
 
-The source code of Solarus Quest Editor is licensed under the terms of the
-GNU General Public License in version 3.
+The original source code of Solarus Quest Editor is licensed under the terms of
+the GNU General Public License in version 3.
+
+Part of the souce code from the following third parties.
+
+- From qtlua: License LGPL v3.
+
+include/third_party/qluasyntaxhighlighter_p.h
+src/third_party/qluasyntaxhighlighter_p.cpp
 
 Data files
 ----------

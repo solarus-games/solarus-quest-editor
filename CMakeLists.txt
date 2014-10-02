@@ -32,9 +32,6 @@ else()
   find_package(Lua51 REQUIRED)
 endif()
 
-include_directories(
-  "${CMAKE_SOURCE_DIR}/include"
-)
 # Source files.
 set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
@@ -44,6 +41,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/text_editor.h
+  include/third_party/qluasyntaxhighlighter_p.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
@@ -54,6 +52,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/text_editor.cpp
+  src/third_party/qluasyntaxhighlighter_p.cpp
   src/main.cpp
   src/quest.cpp
   src/quest_manager.cpp
@@ -82,7 +81,12 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
 
 # Main executable.
 
+include_directories(
+  "${CMAKE_SOURCE_DIR}/include"
+)
+
 include_directories(SYSTEM
+  "${CMAKE_SOURCE_DIR}/include/third_party"
   "${SOLARUS_INCLUDE_DIR}"
   "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
   "${SDL2_INCLUDE_DIR}"

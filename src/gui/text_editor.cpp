@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/text_editor.h"
+#include "third_party/qluasyntaxhighlighter_p.h"
 #include <QLayout>
 #include <QPlainTextEdit>
 
@@ -26,11 +27,16 @@
 TextEditor::TextEditor(const QString& file_name, QWidget* parent) :
   Editor(parent) {
 
-  layout()->addWidget(new QPlainTextEdit(file_name));
+  QPlainTextEdit* text_edit = new QPlainTextEdit(file_name);
+  layout()->addWidget(text_edit);
 
+  // Use a monospace font.
   QFont font("Monospace");
   font.setStyleHint(QFont::TypeWriter);
-
   setFont(font);
 
+  // Activate syntax coloring for Lua scripts.
+  if (file_name.endsWith(".lua")) {
+    new QLuaSyntaxHighlighter(text_edit->document());
+  }
 }
