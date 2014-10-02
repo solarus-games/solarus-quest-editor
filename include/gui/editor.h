@@ -19,6 +19,8 @@
 
 #include <QWidget>
 
+class Quest;
+
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
  *
@@ -31,7 +33,13 @@ class Editor : public QWidget {
 
 public:
 
-  Editor(QWidget* parent = nullptr);
+  Editor(Quest& quest, QWidget* parent = nullptr);
+
+  Quest& get_quest();
+
+private:
+
+  Quest& quest;  /**< The quest the edited file belongs to. */
 
 };
 

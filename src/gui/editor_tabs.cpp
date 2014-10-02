@@ -62,8 +62,15 @@ void EditorTabs::open_resource(
 void EditorTabs::open_script(
     Quest& quest, const QString& path) {
 
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
   // TODO find the existing tab if any. Identify tabs by the full path.
-  addTab(new TextEditor(path), QIcon(":/icon_script.png"), path.section('/', -1));
+  addTab(new TextEditor(quest, path),
+         QIcon(":/images/icon_script.png"),
+         path.section('/', -1));
 }
 
 /**

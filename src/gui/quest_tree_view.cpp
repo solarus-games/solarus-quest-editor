@@ -38,6 +38,9 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
  */
 void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
 
+  // TODO replace by set_quest. This will allow several quest trees to live
+  // at the same time.
+
   // Connect to the quest manager.
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
           this, SLOT(current_quest_changed(Quest&)));

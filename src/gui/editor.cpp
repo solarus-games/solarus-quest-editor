@@ -15,16 +15,27 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/editor.h"
+#include "quest.h"
 #include <QVBoxLayout>
 
 /**
  * @brief Creates an editor.
+ * @param quest The quest the file to edit belongs to.
  * @param parent The parent object or nullptr.
  */
-Editor::Editor(QWidget* parent) :
-  QWidget(parent) {
+Editor::Editor(Quest& quest, QWidget* parent) :
+  QWidget(parent),
+  quest(quest) {
 
   QVBoxLayout* layout = new QVBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
   setLayout(layout);
+}
+
+/**
+ * @brief Returns the quest the edited file belongs to.
+ * @return The quest.
+ */
+Quest& Editor::get_quest() {
+  return quest;
 }

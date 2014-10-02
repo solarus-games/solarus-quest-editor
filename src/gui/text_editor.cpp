@@ -21,11 +21,12 @@
 
 /**
  * @brief Creates a text editor.
+ * @param quest The quest containing the file.
  * @param file_name Name of the file to open or an empty string.
  * @param parent The parent object or nullptr.
  */
-TextEditor::TextEditor(const QString& file_name, QWidget* parent) :
-  Editor(parent) {
+TextEditor::TextEditor(Quest& quest, const QString& file_name, QWidget* parent) :
+  Editor(quest, parent) {
 
   QPlainTextEdit* text_edit = new QPlainTextEdit(file_name);
   layout()->addWidget(text_edit);
