@@ -42,13 +42,6 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   int tree_width = 400;
   ui->splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
-  // Add menu actions to this widget so that key shortcuts work
-  // when menus are closed.
-  addAction(ui->actionNew_quest);
-  addAction(ui->actionLoad_quest);
-  addAction(ui->actionExit);
-  addAction(ui->actionRun_quest);
-
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
           this, SLOT(current_quest_changed(Quest&)));
 }
@@ -92,6 +85,14 @@ void MainWindow::on_actionLoad_quest_triggered() {
     messageBox.setText("No quest was found in directory\n'" + quest_path + "'");
     messageBox.exec();
   }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Close" action.
+ */
+void MainWindow::on_actionClose_triggered() {
+
+  ui->tabWidget->on_tab_close_requested(ui->tabWidget->currentIndex());
 }
 
 /**

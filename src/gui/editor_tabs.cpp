@@ -16,7 +16,8 @@
  */
 #include "gui/editor_tabs.h"
 
-#include <QLabel>
+#include <QAction>
+#include <QLabel>  // TODO remove
 
 /**
  * @brief Creates the editors tab widget.
@@ -38,9 +39,12 @@ EditorTabs::EditorTabs(QWidget* parent):
   setTabsClosable(true);
   setMovable(true);
 
+  // Remove a tab when clicking its close button.
   connect(this, SIGNAL(tabCloseRequested(int)),
           this, SLOT(on_tab_close_requested(int)));
 
+  connect(this, SIGNAL(tabBarClicked(int)),
+          this, SLOT(on_tab_close_requested(int)));
 }
 
 /**

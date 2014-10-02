@@ -29,7 +29,7 @@ public:
 
   EditorTabs(QWidget* parent = nullptr);
 
-private slots:
+public slots:
 
   void on_tab_close_requested(int index);
 
