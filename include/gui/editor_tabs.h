@@ -18,8 +18,10 @@
 #define SOLARUSEDITOR_EDITOR_TABS_H
 
 #include <solarus/ResourceType.h>
+#include <QMap>
 #include <QTabWidget>
 
+class Editor;
 class Quest;
 class QuestManager;
 
@@ -42,11 +44,22 @@ public:
   void open_script(
       Quest& quest, const QString& path);
 
+  int find_editor(const QString& path);
+  bool show_editor(const QString& path);
+
 public slots:
 
   void close_file_requested(int index);
   void open_file_requested(Quest& quest, const QString& path);
 
+private:
+
+  void add_editor(Editor* editor,
+                  const QString& icon_name);
+  void remove_editor(int index);
+
+  QMap<QString, QWidget*> editors;     /**< All editors currently open,
+                                        * indexed by their file path. */
 };
 
 #endif

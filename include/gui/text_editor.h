@@ -27,7 +27,7 @@ class TextEditor : public Editor {
 
 public:
 
-  TextEditor(Quest& quest, const QString& file_name, QWidget* parent = nullptr);
+  TextEditor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
 
 };
 

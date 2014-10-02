@@ -14,34 +14,30 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_EDITOR_H
-#define SOLARUSEDITOR_EDITOR_H
+#ifndef SOLARUSEDITOR_EDITOR_EXCEPTION_H
+#define SOLARUSEDITOR_EDITOR_EXCEPTION_H
 
-#include <QWidget>
-
-class Quest;
+#include <QString>
+#include <exception>
 
 /**
- * \brief Abstract class for a widget that can edit something in Solarus.
- *
- * It has to support common operations like saving and closing.
- * This widget is initialized with a layout and margins, so that
- * subclasses can add a child widget of their choice.
+ * @brief Exception thrown if something wrong happens in the quest editor.
  */
-class Editor : public QWidget {
-  Q_OBJECT
+class EditorException : public std::exception {
 
 public:
 
-  Editor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
+  EditorException(const QString& message);
 
-  Quest& get_quest();
-  QString get_file_path() const;
+  QString get_message() const noexcept;
+  virtual const char* what() const noexcept override;
+
+  void show_dialog() const;
 
 private:
 
-  Quest& quest;        /**< The quest the edited file belongs to. */
-  QString file_path;   /**< Path of the edited file. */
+  QString message;                     /**< The error message. */
+  mutable QByteArray message_utf8;     /**< The error message in UTF-8. */
 
 };
 

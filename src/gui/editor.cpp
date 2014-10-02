@@ -21,11 +21,13 @@
 /**
  * @brief Creates an editor.
  * @param quest The quest the file to edit belongs to.
+ * @param file_path Path of the file to edit.
  * @param parent The parent object or nullptr.
  */
-Editor::Editor(Quest& quest, QWidget* parent) :
+Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   QWidget(parent),
-  quest(quest) {
+  quest(quest),
+  file_path(file_path) {
 
   QVBoxLayout* layout = new QVBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
@@ -38,4 +40,12 @@ Editor::Editor(Quest& quest, QWidget* parent) :
  */
 Quest& Editor::get_quest() {
   return quest;
+}
+
+/**
+ * @brief Returns the path of the file being edited.
+ * @return The file path.
+ */
+QString Editor::get_file_path() const {
+  return file_path;
 }

@@ -16,19 +16,22 @@
  */
 #include "gui/text_editor.h"
 #include "third_party/qluasyntaxhighlighter_p.h"
+#include "editor_exception.h"
 #include <QLayout>
 #include <QPlainTextEdit>
+#include <QTextStream>
 
 /**
  * @brief Creates a text editor.
  * @param quest The quest containing the file.
- * @param file_name Name of the file to open or an empty string.
+ * @param file_path Path of the file to open.
  * @param parent The parent object or nullptr.
+ * @throws QuestEditorException If the file could not be opened.
  */
-TextEditor::TextEditor(Quest& quest, const QString& file_name, QWidget* parent) :
-  Editor(quest, parent) {
+TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) :
+  Editor(quest, file_path, parent) {
 
-  QPlainTextEdit* text_edit = new QPlainTextEdit(file_name);
+  QPlainTextEdit* text_edit = new QPlainTextEdit(file_path);
   layout()->addWidget(text_edit);
 
   // Use a monospace font.
@@ -37,7 +40,20 @@ TextEditor::TextEditor(Quest& quest, const QString& file_name, QWidget* parent) 
   setFont(font);
 
   // Activate syntax coloring for Lua scripts.
-  if (file_name.endsWith(".lua")) {
+  if (file_path.endsWith(".lua")) {
     new QLuaSyntaxHighlighter(text_edit->document());
   }
+
+  if (file_path.isEmpty()) {
+    return;
+  }
+
+  QFile file(file_path);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    throw EditorException("Cannot open file '" + file_path + "'");
+  }
+
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+  text_edit->setPlainText(out.readAll());
 }

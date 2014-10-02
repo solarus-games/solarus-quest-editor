@@ -14,35 +14,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_EDITOR_H
-#define SOLARUSEDITOR_EDITOR_H
+#ifndef SOLARUSEDITOR_GUI_TOOLS_H
+#define SOLARUSEDITOR_GUI_TOOLS_H
 
-#include <QWidget>
+class QString;
 
-class Quest;
+namespace GuiTools {
 
-/**
- * \brief Abstract class for a widget that can edit something in Solarus.
- *
- * It has to support common operations like saving and closing.
- * This widget is initialized with a layout and margins, so that
- * subclasses can add a child widget of their choice.
- */
-class Editor : public QWidget {
-  Q_OBJECT
+void informationDialog(const QString& message);
+void warningDialog(const QString& message);
+void errorDialog(const QString& message);
 
-public:
-
-  Editor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
-
-  Quest& get_quest();
-  QString get_file_path() const;
-
-private:
-
-  Quest& quest;        /**< The quest the edited file belongs to. */
-  QString file_path;   /**< Path of the edited file. */
-
-};
+}
 
 #endif

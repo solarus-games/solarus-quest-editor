@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/gui_tools.h"
 #include "gui/main_window.h"
-#include "gui/text_editor.h"  // TODO remove
 #include "quest_manager.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
@@ -23,7 +23,6 @@
 #include <solarus/lowlevel/Debug.h>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QPlainTextEdit>  // TODO remove
 #include <iostream>
 
 /**
@@ -87,10 +86,8 @@ void MainWindow::on_actionLoad_quest_triggered() {
 
   QString quest_path = file_names.first();
   if (!quest_manager.set_quest(quest_path)) {
-    QMessageBox messageBox;
-    messageBox.setIcon(QMessageBox::Warning);
-    messageBox.setText("No quest was found in directory\n'" + quest_path + "'");
-    messageBox.exec();
+    GuiTools::errorDialog(
+          "No quest was found in directory\n'" + quest_path + "'");
   }
 }
 

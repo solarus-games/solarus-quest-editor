@@ -16,7 +16,9 @@
  */
 #include "gui/closable_tab_bar.h"
 #include "gui/editor_tabs.h"
+#include "gui/gui_tools.h"
 #include "gui/text_editor.h"
+#include "editor_exception.h"
 #include "quest.h"
 
 /**
@@ -67,10 +69,78 @@ void EditorTabs::open_script(
     return;
   }
 
-  // TODO find the existing tab if any. Identify tabs by the full path.
-  addTab(new TextEditor(quest, path),
-         QIcon(":/images/icon_script.png"),
-         path.section('/', -1));
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    Editor* editor = new TextEditor(quest, path);
+    add_editor(editor, "icon_script.png");
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+}
+
+/**
+ * @brief Creates a new tab and shows it.
+ * @param editor The editor to put in the new tab.
+ * @param icon_name Name of an icon file relative to the icons directory.
+ */
+void EditorTabs::add_editor(Editor* editor,
+                            const QString& icon_name) {
+
+  QString path = editor->get_file_path();
+  editors.insert(path, editor);
+  QString file_name = path.section('/', -1);
+  addTab(editor, QIcon(":/images/" + icon_name), file_name);
+  setCurrentIndex(count() - 1);
+}
+
+/**
+ * @brief Closes the editor at the specified index without confirmation.
+ * @param index An editor index.
+ */
+void EditorTabs::remove_editor(int index) {
+
+  Editor* editor = static_cast<Editor*>(widget(index));
+  editors.remove(editor->get_file_path());
+  removeTab(index);
+}
+
+/**
+ * @brief Returns the index of an editor in the tabs.
+ * @param path Path of a file to find the editor of.
+ * @return The index of the editor or -1 if the file is not open.
+ */
+int EditorTabs::find_editor(const QString& path) {
+
+  QWidget* editor = editors.value(path);
+  if (editor == nullptr) {
+    return -1;
+  }
+
+  return indexOf(editor);
+}
+
+/**
+ * @brief If the specified file is open in a tab, sets it as the current tab.
+ * @param path Path of a file to show the editor of.
+ * @return @c true if the file is open in an editor.
+ */
+bool EditorTabs::show_editor(const QString& path) {
+
+  QWidget* editor = editors.value(path);
+  if (editor == nullptr) {
+    return false;
+  }
+
+  setCurrentWidget(editor);
+  return true;
 }
 
 /**
