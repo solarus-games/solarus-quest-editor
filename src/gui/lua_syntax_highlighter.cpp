@@ -71,7 +71,11 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
 
   // Comments.
   single_line_comment_format.setForeground(Qt::darkGreen);
-  rule.pattern = QRegExp("--[^\n]*");
+  // The following awful regexp avoids to highlight comments in strings.
+  // To do that, we check that the number of quotes and double-quotes before
+  // the comment is even.
+  // (Keeping state information would probably be more readable.)
+  rule.pattern = QRegExp("^[^\"']*(?:\"[^\"]*\"|\'[^\']*\')*[^\'\"]*(--[^\n]*)");
   rule.format = single_line_comment_format;
   rules.append(rule);
 
