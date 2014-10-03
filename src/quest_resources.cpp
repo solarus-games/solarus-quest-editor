@@ -35,7 +35,11 @@ QuestResources::QuestResources(Quest& quest):
 void QuestResources::reload() {
 
   resources.clear();
-  resources.load_from_file(quest.get_resource_list_path().toStdString());
+
+  if (quest.is_valid()) {
+    resources.load_from_file(quest.get_resource_list_path().toStdString());
+    // TODO throw an exception in case of error
+  }
 }
 
 /**
