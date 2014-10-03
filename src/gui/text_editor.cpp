@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/lua_syntax_highlighter.h"
 #include "gui/text_editor.h"
-#include "third_party/qluasyntaxhighlighter_p.h"
 #include "editor_exception.h"
 #include <QLayout>
 #include <QPlainTextEdit>
@@ -41,7 +41,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   // Activate syntax coloring for Lua scripts.
   if (file_path.endsWith(".lua")) {
-    new QLuaSyntaxHighlighter(text_edit->document());
+    new LuaSyntaxHighlighter(text_edit->document());
   }
 
   if (file_path.isEmpty()) {
