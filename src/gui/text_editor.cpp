@@ -37,6 +37,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   // Use a monospace font.
   QFont font("DejaVu Sans Mono");
   font.setStyleHint(QFont::TypeWriter);
+  font.setPointSize(10);
   setFont(font);
 
   // Activate syntax coloring for Lua scripts.
