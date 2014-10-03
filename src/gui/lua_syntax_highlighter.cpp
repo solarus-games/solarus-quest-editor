@@ -58,12 +58,6 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
     rules.append(rule);
   }
 
-  // Function calls.
-  // No special format (for now?).
-  rule.pattern = QRegExp("\\b[A-Za-z0-9_]+(?=\\()");
-  rule.format = function_format;
-  rules.append(rule);
-
   // Strings.
   string_format.setForeground(Qt::blue);
   rule.pattern = QRegExp("\"[^\"]*\"");

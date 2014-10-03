@@ -37,7 +37,7 @@ public:
 
 protected:
 
-  void highlightBlock(const QString& text);
+  virtual void highlightBlock(const QString& text) override;
 
   /**
    * @brief A single-line highlighting rule.
@@ -56,7 +56,6 @@ protected:
   QTextCharFormat single_line_comment_format;    /**< Format applied to single-line comments. */
   QTextCharFormat multi_line_comment_format;     /**< Format applied to multi-line comments. */
   QTextCharFormat string_format;                 /**< Format applied to strings litterals. */
-  QTextCharFormat function_format;               /**< Format applied to function names. */
 
 };
 
