@@ -28,7 +28,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
 
   // Keywords.
   keyword_format.setForeground(Qt::darkRed);
-  keyword_format.setFontWeight(QFont::Bold);  // FIXME not working
+  keyword_format.setFontWeight(QFont::Bold);
   QStringList keyword_patterns;
   keyword_patterns << "\\band\\b"
                    << "\\bbreak\\b"

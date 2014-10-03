@@ -35,7 +35,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   layout()->addWidget(text_edit);
 
   // Use a monospace font.
-  QFont font("Monospace");
+  QFont font("DejaVu Sans Mono");
   font.setStyleHint(QFont::TypeWriter);
   setFont(font);
 
