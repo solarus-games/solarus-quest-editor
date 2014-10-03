@@ -16,6 +16,7 @@
  */
 #include "include/gui/lua_syntax_highlighter.h"
 #include <QVariant>
+#include <QDebug>
 
 /**
  * @brief Creates a Lua syntax highlighter.
@@ -89,8 +90,14 @@ void LuaSyntaxHighlighter::highlightBlock(const QString& text) {
   for (const HighlightingRule& rule: rules) {
     QRegExp pattern(rule.pattern);
     int index = pattern.indexIn(text);
+    if (pattern.captureCount() > 0) {
+      index = pattern.pos(1);
+    }
     while (index >= 0) {
       int length = pattern.matchedLength();
+      if (pattern.captureCount() > 0) {
+        length = pattern.capturedTexts()[0].size();
+      }
       setFormat(index, length, rule.format);
       index = pattern.indexIn(text, index + length);
     }

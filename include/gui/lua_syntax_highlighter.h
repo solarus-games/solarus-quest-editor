@@ -43,7 +43,8 @@ protected:
    * @brief A single-line highlighting rule.
    */
   struct HighlightingRule {
-    QRegExp pattern;                             /**< A regexp. */
+    QRegExp pattern;                             /**< A regexp. If it contains a capture, only the
+                                                  * captured text will be highlighted. */
     QTextCharFormat format;                      /**< Format to apply to text matching the regexp. */
   };
 
