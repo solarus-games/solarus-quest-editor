@@ -74,8 +74,8 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
   rule.format = single_line_comment_format;
   rules.append(rule);
 
-  comment_start_pattern = QRegExp("--\\[[[");
-  comment_end_pattern = QRegExp("--\\]]]");
+  comment_start_pattern = QRegExp("--\\[\\[");
+  comment_end_pattern = QRegExp("--\\]\\]");
   multi_line_comment_format.setForeground(
         single_line_comment_format.foreground());
 }
