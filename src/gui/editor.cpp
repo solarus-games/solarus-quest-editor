@@ -66,6 +66,7 @@ QString Editor::get_file_name() const {
  * @brief Returns a user-friendly title for this editor.
  *
  * It is used in the tab label.
+ * An asterisk is automatically added in the tab title if the file is modified.
  *
  * @return A title describing the file edited.
  */

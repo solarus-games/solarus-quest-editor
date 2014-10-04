@@ -47,6 +47,13 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
     new LuaSyntaxHighlighter(text_widget->document());
   }
 
+  text_widget->document()->setModified(false);
+
+  // Watch modifications.
+  connect(text_widget, SIGNAL(modificationChanged(bool)),
+          this, SIGNAL(modification_state_changed(bool)));
+
+  // Open the file.
   if (file_path.isEmpty()) {
     return;
   }
@@ -55,11 +62,10 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     throw EditorException("Cannot open file '" + file_path + "'");
   }
-
   QTextStream out(&file);
   out.setCodec("UTF-8");
   text_widget->setPlainText(out.readAll());
-  text_widget->document()->setModified(false);
+
 }
 
 /**

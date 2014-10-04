@@ -45,6 +45,10 @@ public:
   virtual void save() = 0;
   virtual bool confirm_close() = 0;
 
+signals:
+
+  void modification_state_changed(bool modified);
+
 private:
 
   Quest& quest;        /**< The quest the edited file belongs to. */

@@ -54,6 +54,7 @@ public slots:
 
   void close_file_requested(int index);
   void open_file_requested(Quest& quest, const QString& path);
+  void modification_state_changed(bool modified);
 
 private:
 

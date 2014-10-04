@@ -97,6 +97,10 @@ void EditorTabs::add_editor(Editor* editor) {
   int index = count() - 1;
   setTabToolTip(index, editor->get_file_path());
   setCurrentIndex(index);
+
+  // Show asterisk in tab title when a file is modified.
+  connect(editor, SIGNAL(modification_state_changed(bool)),
+          this, SLOT(modification_state_changed(bool)));
 }
 
 /**
@@ -223,4 +227,23 @@ bool EditorTabs::confirm_close() {
   }
 
   return true;
+}
+
+/**
+ * @brief Slot called when the is-modified state of a file has changed.
+ * @param modified @c true if the file is now modified, @c false if it is now
+ * saved.
+ */
+void EditorTabs::modification_state_changed(bool modified) {
+
+  Editor* editor = dynamic_cast<Editor*>(sender());
+  if (editor == nullptr) {
+    return;
+  }
+
+  QString title = editor->get_title();
+  if (modified) {
+    title += '*';
+  }
+  setTabText(indexOf(editor), title);
 }

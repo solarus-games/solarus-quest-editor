@@ -11,6 +11,7 @@ New features
 * The quest can now be run from the editor.
 * The quest tree now automatically refreshes after changes in the filesystem.
 * Editor tabs now show an icon representing the kind of file opened.
+* Show an asterisk in the tab of files that are changed.
 
 Missing features
 ----------------
