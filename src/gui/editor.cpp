@@ -109,3 +109,18 @@ QString Editor::get_file_name() const {
  * @fn Editor::redo
  * @brief Redoes the previous undone action.
  */
+
+/**
+ * @fn Editor::cut
+ * @brief Copies the selection to the clipboard and removes it.
+ */
+
+/**
+ * @fn Editor::copy
+ * @brief Copies the selection to the clipboard.
+ */
+
+/**
+ * @fn Editor::paste
+ * @brief Inserts the content of the clipboard.
+ */

@@ -47,11 +47,10 @@ public:
   int find_editor(const QString& path);
   bool show_editor(const QString& path);
 
-  void save_current_file();
-  bool confirm_close();
+  Editor* get_editor(int index);
+  Editor* get_editor();
 
-  void undo();
-  void redo();
+  bool confirm_close();
 
 public slots:
 
@@ -63,8 +62,6 @@ private:
 
   void add_editor(Editor* editor);
   void remove_editor(int index);
-  Editor* get_editor(int index);
-  Editor* get_current_editor();
 
   QMap<QString, Editor*> editors;     /**< All editors currently open,
                                         * indexed by their file path. */

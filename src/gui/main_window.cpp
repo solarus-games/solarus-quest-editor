@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/editor.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
 #include "quest_manager.h"
@@ -100,7 +101,10 @@ void MainWindow::on_actionLoad_quest_triggered() {
  */
 void MainWindow::on_actionSave_triggered() {
 
-  ui->tabWidget->save_current_file();
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->save();
+  }
 }
 
 /**
@@ -116,7 +120,10 @@ void MainWindow::on_actionClose_triggered() {
  */
 void MainWindow::on_actionUndo_triggered() {
 
-  ui->tabWidget->undo();
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->undo();
+  }
 }
 
 /**
@@ -124,7 +131,43 @@ void MainWindow::on_actionUndo_triggered() {
  */
 void MainWindow::on_actionRedo_triggered() {
 
-  ui->tabWidget->redo();
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->redo();
+  }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Cut" action.
+ */
+void MainWindow::on_actionCut_triggered() {
+
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->cut();
+  }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Copy" action.
+ */
+void MainWindow::on_actionCopy_triggered() {
+
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->copy();
+  }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Paste" action.
+ */
+void MainWindow::on_actionPaste_triggered() {
+
+  Editor* editor = ui->tabWidget->get_editor();
+  if (editor != nullptr) {
+    editor->paste();
+  }
 }
 
 /**

@@ -125,11 +125,11 @@ Editor* EditorTabs::get_editor(int index) {
 }
 
 /**
- * @brief Returns the editor currently open.
+ * @brief Returns the editor currently open if any
  * @return The current editor.
  * Returns nullptr if there is no tab.
  */
-Editor* EditorTabs::get_current_editor() {
+Editor* EditorTabs::get_editor() {
 
   int index = currentIndex();
   if (index == -1) {
@@ -198,18 +198,6 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
 }
 
 /**
- * @brief Function called when the user wants to save the current file.
- */
-void EditorTabs::save_current_file() {
-
-  if (count() == 0) {
-    return;
-  }
-
-  get_current_editor()->save();
-}
-
-/**
  * @brief Slot called when the user attempts to close a tab.
  * @param index Index of the tab to closed.
  */
@@ -261,26 +249,4 @@ void EditorTabs::modification_state_changed(bool modified) {
     title += '*';
   }
   setTabText(indexOf(editor), title);
-}
-
-/**
- * @brief Performs an undo operation in the current tab if any.
- */
-void EditorTabs::undo() {
-
-  Editor* editor = get_current_editor();
-  if (editor != nullptr) {
-    editor->undo();
-  }
-}
-
-/**
- * @brief Performs an redo operation in the current tab if any.
- */
-void EditorTabs::redo() {
-
-  Editor* editor = get_current_editor();
-  if (editor != nullptr) {
-    editor->redo();
-  }
 }

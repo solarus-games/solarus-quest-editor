@@ -166,3 +166,27 @@ void TextEditor::redo() {
 
   text_widget->redo();
 }
+
+/**
+ * @copydoc Editor::cut
+ */
+void TextEditor::cut() {
+
+  text_widget->cut();
+}
+
+/**
+ * @copydoc Editor::copy
+ */
+void TextEditor::copy() {
+
+  text_widget->copy();
+}
+
+/**
+ * @copydoc Editor::paste
+ */
+void TextEditor::paste() {
+
+  text_widget->paste();
+}
