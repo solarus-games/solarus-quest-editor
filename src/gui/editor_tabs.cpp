@@ -218,15 +218,12 @@ void EditorTabs::close_file_requested(int index) {
  */
 bool EditorTabs::confirm_close() {
 
-  int index = currentIndex();
-  while (count() > 0) {
-    Editor* editor = get_editor(index);
+  for (int i = 0; i < count(); ++i) {
+
+    Editor* editor = get_editor(i);
     if (!editor->confirm_close()) {
       return false;
     }
-    remove_editor(index);
-    index = 0;
-    setCurrentIndex(index);
   }
 
   return true;
