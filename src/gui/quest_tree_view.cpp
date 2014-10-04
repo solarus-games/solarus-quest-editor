@@ -21,6 +21,8 @@
 #include <QMenu>
 #include <QSignalMapper>
 
+using ResourceType = Solarus::ResourceType;
+
 /**
  * @brief Creates a quest tree view.
  * @param parent The parent or nullptr.
@@ -100,8 +102,6 @@ void QuestTreeView::mouseDoubleClickEvent(QMouseEvent* event) {
  */
 void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
 
-  using ResourceType = Solarus::ResourceType;
-
   QPoint position = event->pos();
   QModelIndex index = indexAt(position);
   if (!index.isValid()) {
@@ -113,13 +113,94 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     return;
   }
 
+  QString path = model->get_file_path(index);
   QMenu* menu = new QMenu(this);
-  QAction* open_action = nullptr;
-  QSignalMapper* signal_mapper = new QSignalMapper();  // To add the path parameter.
+
+  build_context_menu_new(*menu, path);
+  build_context_menu_open(*menu, path);
+
+  if (menu->isEmpty()) {
+    delete menu;
+  }
+  else {
+    menu->popup(viewport()->mapToGlobal(position));
+  }
+}
+
+/**
+ * @brief Adds actions "New" to a context menu being created for a file.
+ * @param menu The context menu being created.
+ * @param path Path whose context menu is requested.
+ */
+void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
+
+  if (!menu.isEmpty()) {
+    menu.addSeparator();
+  }
+
+  Quest& quest = model->get_quest();
+  QAction* action = nullptr;
+
+  Solarus::ResourceType resource_type;
+  if (quest.is_resource_path(path, resource_type)) {
+    // Resource directory: let the user create a new element in it.
+    QSignalMapper* new_element_signal_mapper = new QSignalMapper(this);  // To add the path parameter.
+    connect(new_element_signal_mapper, SIGNAL(mapped(int)),
+            this, SLOT(new_element_action_triggered(int)));
+
+    QString resource_type_lua_name = QuestResources::get_lua_name(resource_type);
+    QString resource_type_friendly_name = QuestResources::get_friendly_name(resource_type);
+    action = new QAction(
+          QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
+          "Create " + resource_type_friendly_name,
+          this);
+    connect(action, SIGNAL(triggered()),
+            new_element_signal_mapper, SLOT(map()));
+    new_element_signal_mapper->setMapping(action, static_cast<int>(resource_type));
+    menu.addAction(action);
+    menu.addSeparator();
+  }
+
+  if (QFileInfo(path).isDir()) {
+    // Any directory: create directory and create script.
+    QSignalMapper* new_directory_signal_mapper = new QSignalMapper(this);
+    connect(new_directory_signal_mapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(new_directory_action_triggered(const QString&)));
+    action = new QAction(QIcon(":/images/icon_folder_closed.png"), "New folder", this);
+    connect(action, SIGNAL(triggered()),
+            new_directory_signal_mapper, SLOT(map()));
+    new_directory_signal_mapper->setMapping(action, path);
+    menu.addAction(action);
+
+    QSignalMapper* new_script_signal_mapper = new QSignalMapper(this);
+    connect(new_script_signal_mapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(new_script_action_triggered(const QString&)));
+    action = new QAction(QIcon(":/images/icon_script.png"), "New script", this);
+    connect(action, SIGNAL(triggered()),
+            new_script_signal_mapper, SLOT(map()));
+    new_script_signal_mapper->setMapping(action, path);
+    menu.addAction(action);
+
+  }
+}
+
+/**
+ * @brief Adds actions "Open" to a context menu being created for a file.
+ * @param menu The context menu being created.
+ * @param path Path whose context menu is requested.
+ */
+void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
+
+  if (!menu.isEmpty()) {
+    menu.addSeparator();
+  }
+
+  Quest& quest = model->get_quest();
+  QAction* action = nullptr;
+  QSignalMapper* signal_mapper = new QSignalMapper(this);  // To add the path parameter.
   connect(signal_mapper, SIGNAL(mapped(const QString&)),
           this, SLOT(open_action_triggered(const QString&)));
 
-  QString path = model->get_file_path(index);
   Solarus::ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_element(path, resource_type, element_id)) {
@@ -134,36 +215,36 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     case ResourceType::MAP:
 
       // For a map, the user can open the map data file or the map script.
-      open_action = new QAction(icon, "Open Map", this);
-      connect(open_action, SIGNAL(triggered()),
+      action = new QAction(icon, "Open Map", this);
+      connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, path);
-      menu->addAction(open_action);
+      signal_mapper->setMapping(action, path);
+      menu.addAction(action);
 
-      open_action = new QAction(
+      action = new QAction(
             QIcon(":/images/icon_script.png"),
             "Open Map script",
             this);
-      connect(open_action, SIGNAL(triggered()),
+      connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, quest.get_map_script_path(element_id));
-      menu->addAction(open_action);
+      signal_mapper->setMapping(action, quest.get_map_script_path(element_id));
+      menu.addAction(action);
       break;
 
     case ResourceType::LANGUAGE:
 
       // For a language, the user can open dialogs or strings.
-      open_action = new QAction(icon, "Open Dialogs", this);
-      connect(open_action, SIGNAL(triggered()),
+      action = new QAction(icon, "Open Dialogs", this);
+      connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, quest.get_dialogs_path(element_id));
-      menu->addAction(open_action);
+      signal_mapper->setMapping(action, quest.get_dialogs_path(element_id));
+      menu.addAction(action);
 
-      open_action = new QAction(icon, "Open Strings", this);
-      connect(open_action, SIGNAL(triggered()),
+      action = new QAction(icon, "Open Strings", this);
+      connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, quest.get_strings_path(element_id));
-      menu->addAction(open_action);
+      signal_mapper->setMapping(action, quest.get_strings_path(element_id));
+      menu.addAction(action);
       break;
 
     case ResourceType::TILESET:
@@ -172,11 +253,11 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     case ResourceType::ENEMY:
     case ResourceType::ENTITY:
       // Other editable resource types,
-      open_action = new QAction(icon, "Open " + resource_type_friendly_name, this);
-      connect(open_action, SIGNAL(triggered()),
+      action = new QAction(icon, "Open " + resource_type_friendly_name, this);
+      connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, path);
-      menu->addAction(open_action);
+      signal_mapper->setMapping(action, path);
+      menu.addAction(action);
       break;
 
     case ResourceType::MUSIC:
@@ -187,12 +268,14 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     }
 
   }
-
-  if (menu->isEmpty()) {
-    delete menu;
-  }
-  else {
-    menu->popup(viewport()->mapToGlobal(position));
+  else if (path.endsWith(".lua")) {
+    // Open a Lua script that is not a resource.
+    action = new QAction(
+          QIcon(":/images/icon_script.png"), "Open", this);
+    connect(action, SIGNAL(triggered()),
+            signal_mapper, SLOT(map()));
+    signal_mapper->setMapping(action, path);
+    menu.addAction(action);
   }
 }
 
@@ -203,4 +286,37 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
 void QuestTreeView::open_action_triggered(const QString& path) {
 
   emit open_file_requested(model->get_quest(), path);
+}
+
+/**
+ * @brief Slot called when the user wants to create a new resource element.
+ *
+ * The id and description of the element will be prompted to the user.
+ *
+ * @param resource_type Type of resource to create.
+ */
+void QuestTreeView::new_element_action_triggered(int resource_type) {
+  // TODO
+}
+
+/**
+ * @brief Slot called when the user wants to create a new directory.
+ *
+ * The directory name will be prompted to the user
+ *
+ * @param parent_path An exiting directory where the new one will be created.
+ */
+void QuestTreeView::new_directory_action_triggered(const QString& parent_path) {
+  // TODO
+}
+
+/**
+ * @brief Slot called when the user wants to create a new Lua script.
+ *
+ * The file name will be prompted to the user
+ *
+ * @param parent_path An exiting directory where the new script will be created.
+ */
+void QuestTreeView::new_script_action_triggered(const QString& parent_path) {
+  // TODO
 }
