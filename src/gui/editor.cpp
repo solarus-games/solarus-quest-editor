@@ -99,3 +99,13 @@ QString Editor::get_file_name() const {
  *
  * @return @c false to cancel the closing operation.
  */
+
+/**
+ * @fn Editor::undo
+ * @brief Undoes the last action.
+ */
+
+/**
+ * @fn Editor::redo
+ * @brief Redoes the previous undone action.
+ */

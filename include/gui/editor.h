@@ -44,6 +44,8 @@ public:
   virtual bool is_modified() const = 0;
   virtual void save() = 0;
   virtual bool confirm_close() = 0;
+  virtual void undo() = 0;
+  virtual void redo() = 0;
 
 signals:
 

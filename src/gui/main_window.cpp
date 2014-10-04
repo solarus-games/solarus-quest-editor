@@ -112,6 +112,22 @@ void MainWindow::on_actionClose_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Undo" action.
+ */
+void MainWindow::on_actionUndo_triggered() {
+
+  ui->tabWidget->undo();
+}
+
+/**
+ * @brief Slot called when the user triggers the "Redo" action.
+ */
+void MainWindow::on_actionRedo_triggered() {
+
+  ui->tabWidget->redo();
+}
+
+/**
  * @brief Slot called when the user triggers the "Run quest" action.
  */
 void MainWindow::on_actionRun_quest_triggered() {

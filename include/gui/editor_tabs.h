@@ -50,6 +50,9 @@ public:
   void save_current_file();
   bool confirm_close();
 
+  void undo();
+  void redo();
+
 public slots:
 
   void close_file_requested(int index);
@@ -61,6 +64,7 @@ private:
   void add_editor(Editor* editor);
   void remove_editor(int index);
   Editor* get_editor(int index);
+  Editor* get_current_editor();
 
   QMap<QString, Editor*> editors;     /**< All editors currently open,
                                         * indexed by their file path. */

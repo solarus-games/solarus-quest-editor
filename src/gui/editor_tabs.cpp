@@ -125,6 +125,21 @@ Editor* EditorTabs::get_editor(int index) {
 }
 
 /**
+ * @brief Returns the editor currently open.
+ * @return The current editor.
+ * Returns nullptr if there is no tab.
+ */
+Editor* EditorTabs::get_current_editor() {
+
+  int index = currentIndex();
+  if (index == -1) {
+    return nullptr;
+  }
+
+  return get_editor(index);
+}
+
+/**
  * @brief Returns the index of an editor in the tabs.
  * @param path Path of a file to find the editor of.
  * @return The index of the editor or -1 if the file is not open.
@@ -191,7 +206,7 @@ void EditorTabs::save_current_file() {
     return;
   }
 
-  get_editor(currentIndex())->save();
+  get_current_editor()->save();
 }
 
 /**
@@ -246,4 +261,26 @@ void EditorTabs::modification_state_changed(bool modified) {
     title += '*';
   }
   setTabText(indexOf(editor), title);
+}
+
+/**
+ * @brief Performs an undo operation in the current tab if any.
+ */
+void EditorTabs::undo() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    editor->undo();
+  }
+}
+
+/**
+ * @brief Performs an redo operation in the current tab if any.
+ */
+void EditorTabs::redo() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    editor->redo();
+  }
 }

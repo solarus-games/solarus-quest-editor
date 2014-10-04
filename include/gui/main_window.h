@@ -39,11 +39,13 @@ public:
 private slots:
 
   // Menu actions.
-  void on_actionRun_quest_triggered();
   void on_actionExit_triggered();
   void on_actionLoad_quest_triggered();
   void on_actionSave_triggered();
   void on_actionClose_triggered();
+  void on_actionUndo_triggered();
+  void on_actionRedo_triggered();
+  void on_actionRun_quest_triggered();
 
   // Quest.
   void current_quest_changed(Quest& quest);

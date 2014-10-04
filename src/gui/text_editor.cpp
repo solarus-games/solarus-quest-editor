@@ -150,3 +150,19 @@ bool TextEditor::confirm_close() {
   }
 
 }
+
+/**
+ * @copydoc Editor::undo
+ */
+void TextEditor::undo() {
+
+  text_widget->undo();
+}
+
+/**
+ * @copydoc Editor::redo
+ */
+void TextEditor::redo() {
+
+  text_widget->redo();
+}

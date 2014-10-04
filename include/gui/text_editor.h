@@ -36,6 +36,8 @@ public:
   virtual bool is_modified() const override;
   virtual void save() override;
   virtual bool confirm_close() override;
+  virtual void undo() override;
+  virtual void redo() override;
 
 private:
 
