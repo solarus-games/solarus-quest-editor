@@ -38,12 +38,17 @@ public:
 
 signals:
 
-  void open_file_requested(Quest&, const QString& path);
+  void open_file_requested(Quest& quest, const QString& path);
+
+protected:
+
+  virtual void contextMenuEvent(QContextMenuEvent* event) override;
 
 public slots:
 
   void current_quest_changed(Quest& quest);
   void item_double_clicked(const QModelIndex& index);
+  void open_action_triggered(const QString& path);
 
 private:
 

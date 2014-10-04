@@ -28,6 +28,7 @@ void informationDialog(const QString& message) {
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Information);
   messageBox.setText(message);
+  messageBox.setWindowTitle("Information");
   messageBox.exec();
 }
 
@@ -40,6 +41,7 @@ void warningDialog(const QString& message) {
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Warning);
   messageBox.setText(message);
+  messageBox.setWindowTitle("Warning");
   messageBox.exec();
 }
 
@@ -52,6 +54,7 @@ void errorDialog(const QString& message) {
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Critical);
   messageBox.setText(message);
+  messageBox.setWindowTitle("Error");
   messageBox.exec();
 }
 

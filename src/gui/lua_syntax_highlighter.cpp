@@ -16,7 +16,6 @@
  */
 #include "include/gui/lua_syntax_highlighter.h"
 #include <QVariant>
-#include <QDebug>
 
 /**
  * @brief Creates a Lua syntax highlighter.

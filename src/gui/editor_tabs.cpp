@@ -54,6 +54,7 @@ void EditorTabs::set_quest_manager(QuestManager& /* quest_manager */) {
 void EditorTabs::open_resource(
     Quest& quest, ResourceType resource_type, const QString& id) {
   // TODO
+  GuiTools::warningDialog("Not implemented yet!");
 }
 
 /**
@@ -189,6 +190,7 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     // Possibly a map data file, an enemy Lua script,
     // a language directory, etc.
     open_resource(quest, resource_type, element_id);
+    return;
   }
 
   if (path.endsWith(".lua")) {

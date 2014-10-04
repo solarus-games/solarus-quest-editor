@@ -16,6 +16,27 @@
  */
 #include "quest.h"
 #include "quest_resources.h"
+#include <QMap>
+
+namespace {
+
+/**
+ * Description of each resource type.
+ */
+const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
+  { Solarus::ResourceType::MAP,      "Map"           },
+  { Solarus::ResourceType::TILESET,  "Tileset"       },
+  { Solarus::ResourceType::SPRITE,   "Sprite"        },
+  { Solarus::ResourceType::MUSIC,    "Music"         },
+  { Solarus::ResourceType::SOUND,    "Sound"         },
+  { Solarus::ResourceType::ITEM,     "Item"          },
+  { Solarus::ResourceType::ENEMY,    "Enemy"         },
+  { Solarus::ResourceType::ENTITY,   "Custom entity" },
+  { Solarus::ResourceType::LANGUAGE, "Language"      },
+  { Solarus::ResourceType::FONT,     "Font"          },
+};
+
+}
 
 /**
  * @brief Creates an empty resource list for the specified quest.
@@ -79,4 +100,23 @@ void QuestResources::set_description(
   resources.set_description(type, id.toStdString(), description.toStdString());
   // TODO resources.save_to_file();
   emit element_description_changed(type, id, description);
+}
+
+/**
+ * @brief Returns the Lua name for the specified resource type.
+ * @param resource_type A type of resources.
+ * @return The Lua name of this resource type.
+ */
+QString QuestResources::get_lua_name(ResourceType resource_type) {
+  return QString::fromStdString(
+        Solarus::QuestResources::get_resource_type_name(resource_type));
+}
+
+/**
+ * @brief Returns a user-friendly name for the specified resource type.
+ * @param resource_type A type of resources.
+ * @return The human-readable name of this resource type.
+ */
+QString QuestResources::get_friendly_name(ResourceType resource_type) {
+  return resource_type_friendly_names[resource_type];
 }

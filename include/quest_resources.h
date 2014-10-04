@@ -40,6 +40,9 @@ public:
   void set_description(
       ResourceType type, const QString& id, const QString& description);
 
+  static QString get_lua_name(ResourceType resource_type);
+  static QString get_friendly_name(ResourceType resource_type);
+
 signals:
 
   void element_added(

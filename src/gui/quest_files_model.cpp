@@ -20,26 +20,6 @@
 #include "solarus/QuestResources.h"
 #include <QFileSystemModel>
 
-namespace {
-
-/**
- * Description of each resource type.
- */
-const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
-  { Solarus::ResourceType::MAP,      "Map"           },
-  { Solarus::ResourceType::TILESET,  "Tileset"       },
-  { Solarus::ResourceType::SPRITE,   "Sprite"        },
-  { Solarus::ResourceType::MUSIC,    "Music"         },
-  { Solarus::ResourceType::SOUND,    "Sound"         },
-  { Solarus::ResourceType::ITEM,     "Item"          },
-  { Solarus::ResourceType::ENEMY,    "Enemy"         },
-  { Solarus::ResourceType::ENTITY,   "Custom entity" },
-  { Solarus::ResourceType::LANGUAGE, "Language"      },
-  { Solarus::ResourceType::FONT,     "Font"          },
-};
-
-}
-
 /**
  * @brief Creates a quest files model.
  * @param parent Path of the quest to represent.
@@ -208,12 +188,12 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
       if (quest.is_resource_path(file_path, resource_type)) {
         // A resource element folder.
-        return resource_type_friendly_names[resource_type] + " folder";
+        return QuestResources::get_friendly_name(resource_type) + " folder";
       }
 
       if (quest.is_resource_element(file_path, resource_type, element_id)) {
         // A declared resource element.
-        return resource_type_friendly_names[resource_type];
+        return QuestResources::get_friendly_name(resource_type);
       }
 
       if (file_name.endsWith(".lua")) {
