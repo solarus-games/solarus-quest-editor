@@ -38,7 +38,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
  * @brief Returns the quest the edited file belongs to.
  * @return The quest.
  */
-Quest& Editor::get_quest() {
+const Quest& Editor::get_quest() const {
   return quest;
 }
 

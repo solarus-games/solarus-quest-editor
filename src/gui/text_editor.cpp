@@ -17,6 +17,7 @@
 #include "gui/lua_syntax_highlighter.h"
 #include "gui/text_editor.h"
 #include "editor_exception.h"
+#include "quest.h"
 #include <QIcon>
 #include <QLayout>
 #include <QMessageBox>
@@ -73,6 +74,17 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
  */
 QString TextEditor::get_title() const {
 
+  QString path = get_file_path();
+  QString language_id;
+
+  if (get_quest().is_dialogs_file(path, language_id)) {
+    return get_file_name() + " (" + language_id + ')';
+  }
+
+  if (get_quest().is_strings_file(path, language_id)) {
+    return get_file_name() + " (" + language_id + ')';
+  }
+
   return get_file_name();
 }
 
@@ -81,11 +93,30 @@ QString TextEditor::get_title() const {
  */
 QIcon TextEditor::get_icon() const {
 
+  QString path = get_file_path();
+  Solarus::ResourceType resource_type;
+  QString element_id;
+  if (get_quest().is_resource_element(path, resource_type, element_id)) {
+    QString resource_lua_name = QuestResources::get_lua_name(resource_type);
+    return QIcon(":/images/icon_resource_" + resource_lua_name + ".png");
+  }
+
+  if (get_quest().is_map_script(path, element_id)) {
+    return QIcon(":/images/icon_resource_map.png");
+  }
+
+  if (get_quest().is_dialogs_file(path, element_id)) {
+    return QIcon(":/images/icon_resource_language.png");
+  }
+
+  if (get_quest().is_dialogs_file(path, element_id)) {
+    return QIcon(":/images/icon_resource_language.png");
+  }
+
   if (get_file_path().endsWith(".lua")) {
     // A Lua script.
     return QIcon(":/images/icon_script.png");
   }
-
   return QIcon(":/images/icon_file.png");
 }
 

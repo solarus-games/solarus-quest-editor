@@ -35,7 +35,7 @@ public:
 
   Editor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
 
-  Quest& get_quest();
+  const Quest& get_quest() const;
   QString get_file_path() const;
   QString get_file_name() const;
 
