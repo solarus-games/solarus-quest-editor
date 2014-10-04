@@ -40,11 +40,6 @@ signals:
 
   void open_file_requested(Quest& quest, const QString& path);
 
-protected:
-
-  virtual void contextMenuEvent(QContextMenuEvent* event) override;
-  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
-
 public slots:
 
   void current_quest_changed(Quest& quest);
@@ -56,6 +51,11 @@ public slots:
   void rename_action_triggered(const QString& path);
   void change_description_action_triggered(const QString& path);
   void delete_action_triggered(const QString& path);
+
+protected:
+
+  virtual void contextMenuEvent(QContextMenuEvent* event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
 
