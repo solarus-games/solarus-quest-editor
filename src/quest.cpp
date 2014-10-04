@@ -181,6 +181,115 @@ QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
 }
 
 /**
+ * @brief Returns the path to a dialogs file.
+ * @param language_id Id of a language.
+ * @return The path to the dialogs file of this language.
+ */
+QString Quest::get_dialogs_path(
+    const QString& language_id) const {
+
+  return get_language_path(language_id) + "/text/dialogs.dat";
+}
+
+/**
+ * @brief Returns the path to an enemy script file.
+ * @param language_id Id of an enemy.
+ * @return The path to the enemy script file.
+ */
+QString Quest::get_enemy_script_path(
+    const QString& enemy_id) const {
+
+  return get_data_path() + "/enemies/" + enemy_id + ".lua";
+}
+
+/**
+ * @brief Returns the path to a custom entity script file.
+ * @param custom_entity_id Id of an custom entity model.
+ * @return The path to the custom entity script file.
+ */
+QString Quest::get_entity_script_path(
+    const QString& custom_entity_id) const {
+
+  return get_data_path() + "/entities/" + custom_entity_id + ".lua";
+}
+
+/**
+ * @brief Returns the path to an item script file.
+ * @param item_id Id of an item.
+ * @return The path to the item script file.
+ */
+QString Quest::get_item_script_path(
+    const QString& item_id) const {
+
+  return get_data_path() + "/items/" + item_id + ".lua";
+}
+
+/**
+ * @brief Returns the path to a language directory.
+ * @param language_id Id of a language.
+ * @return The path to the directory of this language.
+ */
+QString Quest::get_language_path(const QString& language_id) const {
+
+  return get_data_path() + "/languages/" + language_id;
+}
+
+/**
+ * @brief Returns the path to a map data file.
+ * @param map_id Id of a map.
+ * @return The path to the map data file.
+ */
+QString Quest::get_map_data_file_path(
+    const QString& map_id) const {
+
+  return get_data_path() + "/maps/" + map_id + ".dat";
+}
+
+/**
+ * @brief Returns the path to a map script file.
+ * @param map_id Id of a map.
+ * @return The path to the map script file.
+ */
+QString Quest::get_map_script_path(
+    const QString& map_id) const {
+
+  return get_data_path() + "/maps/" + map_id + ".lua";
+}
+
+/**
+ * @brief Returns the path to a sprite sheet file.
+ * @param sprite_id Id of a sprite sheet.
+ * @return The path to the sprite sheet file.
+ */
+QString Quest::get_sprite_path(
+    const QString& sprite_id) const {
+
+  return get_data_path() + "/sprites/" + sprite_id + ".dat";
+}
+
+/**
+ * @brief Returns the path to a strings file.
+ * @param language_id Id of a language.
+ * @return The path to the strings file of this language.
+ */
+QString Quest::get_strings_path(
+    const QString& language_id) const {
+
+  return get_language_path(language_id) + "/text/strings.dat";
+}
+
+/**
+ * @brief Returns the path to a tileset data file.
+ * @param tileset_id Id of a tileset.
+ * @return The path to the tileset data file.
+ */
+QString Quest::get_tileset_path(
+    const QString& tileset_id) const {
+
+  return get_data_path() + "/tilesets/" + tileset_id + ".dat";
+}
+
+/**
  * @brief Returns whether a path is under the quest path.
  * @param path The path to test.
  * @return \c true if this path is in the quest.

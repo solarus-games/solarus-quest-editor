@@ -41,7 +41,7 @@ public:
 
   void open_resource(
       Quest& quest, ResourceType resource_type, const QString& id);
-  void open_script(
+  void open_text_file(
       Quest& quest, const QString& path);
 
   int find_editor(const QString& path);

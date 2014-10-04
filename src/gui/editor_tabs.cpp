@@ -53,16 +53,54 @@ void EditorTabs::set_quest_manager(QuestManager& /* quest_manager */) {
  */
 void EditorTabs::open_resource(
     Quest& quest, ResourceType resource_type, const QString& id) {
-  // TODO
-  GuiTools::warningDialog("Not implemented yet!");
+
+  switch (resource_type) {
+
+  case ResourceType::MAP:
+  case ResourceType::TILESET:
+    // TODO
+    break;
+
+  case ResourceType::LANGUAGE:
+    // Open the dialogs file.
+    open_text_file(quest, quest.get_dialogs_path(id));
+    break;
+
+  case ResourceType::SPRITE:
+    // Open the sprite file.
+    open_text_file(quest, quest.get_sprite_path(id));
+    break;
+
+  case ResourceType::ITEM:
+    // Open the item script.
+    open_text_file(quest, quest.get_item_script_path(id));
+    break;
+
+  case ResourceType::ENEMY:
+    open_text_file(quest, quest.get_enemy_script_path(id));
+    break;
+
+  case ResourceType::ENTITY:
+    open_text_file(quest, quest.get_entity_script_path(id));
+    break;
+
+  case ResourceType::MUSIC:
+  case ResourceType::SOUND:
+  case ResourceType::FONT:
+    // These resource types cannot be edited.
+    break;
+  }
 }
 
 /**
- * @brief Shows a tab to edit a Lua script file that is not a resource element.
+ * @brief Shows a tab to edit a text file.
+ *
+ * The file may be a Lua script.
+ *
  * @param quest A Solarus quest.
  * @param path Path of the Lua file to open.
  */
-void EditorTabs::open_script(
+void EditorTabs::open_text_file(
     Quest& quest, const QString& path) {
 
   if (!quest.is_in_root_path(path)) {
@@ -193,9 +231,11 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     return;
   }
 
+  // TODO languages
+
   if (path.endsWith(".lua")) {
     // A Lua script that is not a resource element.
-    open_script(quest, path);
+    open_text_file(quest, path);
   }
 }
 

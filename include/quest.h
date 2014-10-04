@@ -44,6 +44,17 @@ public:
   QString get_main_script_path() const;
   QString get_resource_list_path() const;
   QString get_resource_path(Solarus::ResourceType resource_type) const;
+  QString get_dialogs_path(const QString& language_id) const;
+  QString get_enemy_script_path(const QString& enemy_id) const;
+  QString get_entity_script_path(const QString& custom_entity_id) const;
+  QString get_item_script_path(const QString& item_id) const;
+  QString get_language_path(const QString& language_id) const;
+  QString get_map_data_file_path(const QString& map_id) const;
+  QString get_map_script_path(const QString& map_id) const;
+  QString get_sprite_path(const QString& sprite_id) const;
+  QString get_strings_path(const QString& language_id) const;
+  QString get_tileset_path(const QString& tileset_id) const;
+
   bool is_in_root_path(const QString& path) const;
   bool is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;

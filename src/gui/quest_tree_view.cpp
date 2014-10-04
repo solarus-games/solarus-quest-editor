@@ -138,8 +138,7 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
             this);
       connect(open_action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action,
-                                path.replace(path.length() - 4, 4, ".lua"));
+      signal_mapper->setMapping(open_action, quest.get_map_script_path(element_id));
       menu->addAction(open_action);
       break;
 
@@ -149,13 +148,13 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
       open_action = new QAction(icon, "Open Dialogs", this);
       connect(open_action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, path + "/text/dialogs.dat");
+      signal_mapper->setMapping(open_action, quest.get_dialogs_path(element_id));
       menu->addAction(open_action);
 
       open_action = new QAction(icon, "Open Strings", this);
       connect(open_action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(open_action, path + "/text/strings.dat");
+      signal_mapper->setMapping(open_action, quest.get_strings_path(element_id));
       menu->addAction(open_action);
       break;
 
