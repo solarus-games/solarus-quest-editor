@@ -95,6 +95,15 @@ bool TextEditor::is_modified() const {
  */
 void TextEditor::save() {
 
+  QFile file(get_file_path());
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    throw EditorException("Cannot open file '" + get_file_name() + "' for writing");
+  }
+
+  QTextStream in(&file);
+  in.setCodec("UTF-8");
+  in << text_widget->toPlainText();
+  text_widget->document()->setModified(false);
 }
 
 /**
