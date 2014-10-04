@@ -96,6 +96,14 @@ void MainWindow::on_actionLoad_quest_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Save" action.
+ */
+void MainWindow::on_actionSave_triggered() {
+
+  ui->tabWidget->save_current_file();
+}
+
+/**
  * @brief Slot called when the user triggers the "Close" action.
  */
 void MainWindow::on_actionClose_triggered() {

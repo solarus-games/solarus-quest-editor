@@ -179,6 +179,18 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
 }
 
 /**
+ * @brief Function called when the user wants to save the current file.
+ */
+void EditorTabs::save_current_file() {
+
+  if (count() == 0) {
+    return;
+  }
+
+  get_editor(currentIndex())->save();
+}
+
+/**
  * @brief Slot called when the user attempts to close a tab.
  * @param index Index of the tab to closed.
  */

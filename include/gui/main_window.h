@@ -42,6 +42,7 @@ private slots:
   void on_actionRun_quest_triggered();
   void on_actionExit_triggered();
   void on_actionLoad_quest_triggered();
+  void on_actionSave_triggered();
   void on_actionClose_triggered();
 
   // Quest.
