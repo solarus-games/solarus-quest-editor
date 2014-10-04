@@ -161,7 +161,7 @@ void EditorTabs::open_tileset_editor(
 void EditorTabs::open_sprite_editor(
     Quest& quest, const QString& path) {
 
-  // TODO sprite editor.
+  open_text_editor(quest, path);  // TODO sprite editor.
 }
 
 /**
