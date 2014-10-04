@@ -21,6 +21,7 @@
 #include <solarus/MainLoop.h>
 #include <solarus/SolarusFatal.h>
 #include <solarus/lowlevel/Debug.h>
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <iostream>
@@ -64,7 +65,10 @@ QuestManager& MainWindow::get_quest_manager() {
  * @brief Slot called when the user triggers the "Exit" action.
  */
 void MainWindow::on_actionExit_triggered() {
-  std::exit(0);
+
+  if (confirm_close()) {
+    QApplication::exit(0);
+  }
 }
 
 /**
@@ -141,4 +145,30 @@ void MainWindow::update_title() {
   }
 
   setWindowTitle(title);
+}
+
+/**
+ * @brief Receives a window close event.
+ * @param event The event to handle.
+ */
+void MainWindow::closeEvent(QCloseEvent* event) {
+
+  if (confirm_close()) {
+    event->accept();
+  }
+  else {
+    event->ignore();
+  }
+}
+
+/**
+ * @brief Function called when the user wants to exit the program.
+ *
+ * The user can save files if necessary.
+ *
+ * @return @c false to cancel the closing operation.
+ */
+bool MainWindow::confirm_close() {
+
+  return ui->tabWidget->confirm_close();
 }

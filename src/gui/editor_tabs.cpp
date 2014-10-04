@@ -189,3 +189,26 @@ void EditorTabs::close_file_requested(int index) {
     removeTab(index);
   }
 }
+
+/**
+ * @brief Function called when the user wants to close all editors.
+ *
+ * The user can save files if necessary.
+ *
+ * @return @c false to cancel the closing operation.
+ */
+bool EditorTabs::confirm_close() {
+
+  int index = currentIndex();
+  while (count() > 0) {
+    Editor* editor = get_editor(index);
+    if (!editor->confirm_close()) {
+      return false;
+    }
+    remove_editor(index);
+    index = 0;
+    setCurrentIndex(index);
+  }
+
+  return true;
+}

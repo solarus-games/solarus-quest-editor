@@ -46,6 +46,7 @@ public:
 
   int find_editor(const QString& path);
   bool show_editor(const QString& path);
+  bool confirm_close();
 
 public slots:
 

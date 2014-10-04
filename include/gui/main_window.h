@@ -47,8 +47,13 @@ private slots:
   // Quest.
   void current_quest_changed(Quest& quest);
 
+protected:
+
+  virtual void closeEvent(QCloseEvent* event) override;
+
 private:
 
+  bool confirm_close();
   void update_title();
 
   std::unique_ptr<Ui::MainWindow> ui;
