@@ -101,6 +101,26 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 }
 
 /**
+ * @brief Returns whether an item has any children.
+ * @param parent The item to test.
+ * @return @c true if this item has children.
+ */
+bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
+
+  QString file_path = get_file_path(parent);
+  Solarus::ResourceType resource_type;
+  QString element_id;
+
+  if (quest.is_resource_element(file_path, resource_type, element_id) &&
+      resource_type == Solarus::ResourceType::LANGUAGE) {
+    // Remove the subtree of languages.
+    return false;
+  }
+
+  return QSortFilterProxyModel::hasChildren(parent);
+}
+
+/**
  * @brief Returns the header info.
  * @param section Column or row number.
  * @param orientation Horizontal or vertical header orientation.

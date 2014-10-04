@@ -30,9 +30,6 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   model(nullptr) {
 
   setUniformRowHeights(true);
-
-  connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-          this, SLOT(item_double_clicked(const QModelIndex&)));
 }
 
 /**
@@ -77,13 +74,24 @@ void QuestTreeView::current_quest_changed(Quest& quest) {
 }
 
 /**
- * @brief Slot called when the user double-clicks an item.
- * @param index Index of the item.
+ * @brief Receives a double-click event.
+ * @param event The event to handle.
  */
-void QuestTreeView::item_double_clicked(const QModelIndex& index) {
+void QuestTreeView::mouseDoubleClickEvent(QMouseEvent* event) {
 
-  QString path = model->get_file_path(index);
-  emit open_file_requested(model->get_quest(), path);
+  QModelIndex index = indexAt(event->pos());
+  if (index.isValid() &&
+      !model->hasChildren(index) &&
+      event->button() == Qt::LeftButton) {
+    // Left double-click on leaf item: open the file.
+    QString path = model->get_file_path(index);
+    emit open_file_requested(model->get_quest(), path);
+    return;
+  }
+
+  // Other cases: keep the default double-click behavior
+  // (like expanding nodes).
+  QTreeView::mouseDoubleClickEvent(event);
 }
 
 /**

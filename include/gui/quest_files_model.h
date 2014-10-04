@@ -41,6 +41,7 @@ public:
 
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
   virtual QVariant headerData(
       int section, Qt::Orientation orientation, int role = Qt::DisplayRole
       ) const override;

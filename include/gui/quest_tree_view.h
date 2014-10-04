@@ -43,11 +43,11 @@ signals:
 protected:
 
   virtual void contextMenuEvent(QContextMenuEvent* event) override;
+  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 public slots:
 
   void current_quest_changed(Quest& quest);
-  void item_double_clicked(const QModelIndex& index);
   void open_action_triggered(const QString& path);
 
 private:
