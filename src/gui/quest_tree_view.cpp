@@ -83,6 +83,7 @@ void QuestTreeView::mouseDoubleClickEvent(QMouseEvent* event) {
 
   QModelIndex index = indexAt(event->pos());
   if (index.isValid() &&
+      index.column() == QuestFilesModel::FILE_COLUMN &&
       !model->hasChildren(index) &&
       event->button() == Qt::LeftButton) {
     // Left double-click on leaf item: open the file.
