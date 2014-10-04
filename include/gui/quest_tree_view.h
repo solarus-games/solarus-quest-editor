@@ -48,18 +48,21 @@ protected:
 public slots:
 
   void current_quest_changed(Quest& quest);
+
   void open_action_triggered(const QString& path);
   void new_element_action_triggered(int resource_type);
   void new_directory_action_triggered(const QString& parent_path);
   void new_script_action_triggered(const QString& parent_path);
   void rename_action_triggered(const QString& path);
   void change_description_action_triggered(const QString& path);
+  void delete_action_triggered(const QString& path);
 
 private:
 
   void build_context_menu_new(QMenu& menu, const QString& path);
   void build_context_menu_open(QMenu& menu, const QString& path);
   void build_context_menu_rename(QMenu& menu, const QString& path);
+  void build_context_menu_delete(QMenu& menu, const QString& path);
 
   QuestFilesModel* model;                  /**< The underlying model. */
 

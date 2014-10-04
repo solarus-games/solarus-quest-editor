@@ -119,6 +119,7 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
   build_context_menu_new(*menu, path);
   build_context_menu_open(*menu, path);
   build_context_menu_rename(*menu, path);
+  build_context_menu_delete(*menu, path);
 
   if (menu->isEmpty()) {
     delete menu;
@@ -129,7 +130,7 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
 }
 
 /**
- * @brief Adds actions "New" to a context menu being created for a file.
+ * @brief Builds the "New" part of a context menu for a file.
  * @param menu The context menu being created.
  * @param path Path whose context menu is requested.
  */
@@ -186,7 +187,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
 }
 
 /**
- * @brief Adds actions "Open" to a context menu being created for a file.
+ * @brief Builds the "Open" part of a context menu for a file.
  * @param menu The context menu being created.
  * @param path Path whose context menu is requested.
  */
@@ -281,7 +282,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
 }
 
 /**
- * @brief Adds actions "Rename" to a context menu being created for a file.
+ * @brief Builds the "Rename" part of a context menu for a file.
  * @param menu The context menu being created.
  * @param path Path whose context menu is requested.
  */
@@ -306,12 +307,12 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
     return;
   }
 
-  // All other paths can be renamed.
+  // All other paths can have a "Rename" menu item.
   QSignalMapper* rename_signal_mapper = new QSignalMapper(this);
   connect(rename_signal_mapper, SIGNAL(mapped(const QString&)),
           this, SLOT(rename_action_triggered(const QString&)));
 
-  action = new QAction("Rename...", this);
+  action = new QAction(QIcon(":/images/icon_rename.png"), "Rename...", this);
   connect(action, SIGNAL(triggered()),
           rename_signal_mapper, SLOT(map()));
   rename_signal_mapper->setMapping(action, path);
@@ -329,6 +330,44 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
     change_description_signal_mapper->setMapping(action, path);
     menu.addAction(action);
   }
+}
+
+/**
+ * @brief Builds the "Delete" part of a context menu for a file.
+ * @param menu The context menu being created.
+ * @param path Path whose context menu is requested.
+ */
+void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) {
+
+  if (!menu.isEmpty()) {
+    menu.addSeparator();
+  }
+
+  Quest& quest = model->get_quest();
+  QAction* action = nullptr;
+
+  if (path == quest.get_data_path()) {
+    // We don't to delete the data directory.
+    return;
+  }
+
+  Solarus::ResourceType resource_type;
+  QString element_id;
+  if (quest.is_resource_path(path, resource_type)) {
+    // Don't delete resource directories.
+    return;
+  }
+
+  // All other paths can have a "Delete" menu item.
+  QSignalMapper* signal_mapper = new QSignalMapper(this);
+  connect(signal_mapper, SIGNAL(mapped(const QString&)),
+          this, SLOT(delete_action_triggered(const QString&)));
+
+  action = new QAction(QIcon(":/images/icon_delete.png"), "Delete...", this);
+  connect(action, SIGNAL(triggered()),
+          signal_mapper, SLOT(map()));
+  signal_mapper->setMapping(action, path);
+  menu.addAction(action);
 }
 
 /**
@@ -384,7 +423,6 @@ void QuestTreeView::rename_action_triggered(const QString& path) {
   // TODO
 }
 
-
 /**
  * @brief Slot called when the user wants to change the description of a
  * resource element.
@@ -394,5 +432,16 @@ void QuestTreeView::rename_action_triggered(const QString& path) {
  * @param path The path of the resource to change.
  */
 void QuestTreeView::change_description_action_triggered(const QString& path) {
+  // TODO
+}
+
+/**
+ * @brief Slot called when the user wants to delete a file or directory.
+ *
+ * Confirmation will be asked to the user.
+ *
+ * @param path The path to delete.
+ */
+void QuestTreeView::delete_action_triggered(const QString& path) {
   // TODO
 }
