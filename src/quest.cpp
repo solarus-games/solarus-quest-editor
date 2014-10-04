@@ -181,17 +181,6 @@ QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
 }
 
 /**
- * @brief Returns the path to a dialogs file.
- * @param language_id Id of a language.
- * @return The path to the dialogs file of this language.
- */
-QString Quest::get_dialogs_path(
-    const QString& language_id) const {
-
-  return get_language_path(language_id) + "/text/dialogs.dat";
-}
-
-/**
  * @brief Returns the path to an enemy script file.
  * @param language_id Id of an enemy.
  * @return The path to the enemy script file.
@@ -268,6 +257,17 @@ QString Quest::get_sprite_path(
 }
 
 /**
+ * @brief Returns the path to a dialogs file.
+ * @param language_id Id of a language.
+ * @return The path to the dialogs file of this language.
+ */
+QString Quest::get_dialogs_path(
+    const QString& language_id) const {
+
+  return get_language_path(language_id) + "/text/dialogs.dat";
+}
+
+/**
  * @brief Returns the path to a strings file.
  * @param language_id Id of a language.
  * @return The path to the strings file of this language.
@@ -326,7 +326,7 @@ bool Quest::is_resource_path(const QString& path, Solarus::ResourceType& resourc
 bool Quest::is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const {
 
   for (auto it = resource_dirs.begin(); it != resource_dirs.end(); ++it) {
-    if (path.startsWith(get_resource_path(it.key()))) {
+    if (path.startsWith(get_resource_path(it.key()) + "/")) {
       resource_type = it.key();
       return true;
     }
@@ -396,7 +396,7 @@ bool Quest::is_resource_element(
     for (const QString& extension: extensions) {
       if (path_from_resource.endsWith(extension)) {
         // Remove the extension.
-        element_id = path_from_resource.section('.', -2, -2);
+        element_id = path_from_resource.section('.', 0, -2);
         break;
       }
     }
@@ -409,6 +409,113 @@ bool Quest::is_resource_element(
 
   if (!resources.exists(resource_type, element_id)) {
     // Valid id, but not declared in the resource list.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a map script.
+ *
+ * This function exists because the main map resource path (as recognized by
+ * is_resource_element()) is the map data file, not the map script.
+ *
+ * @param[in] path The path to test.
+ * @param[out] map_id Id of the map if it is a map script.
+ * @return @c true if this path is a map script.
+ */
+bool Quest::is_map_script(const QString& path, QString& map_id) const {
+
+  QString maps_path = get_resource_path(Solarus::ResourceType::MAP);
+  if (!path.startsWith(maps_path + "/")) {
+    // We are not in the maps directory.
+    return false;
+  }
+
+  if (!path.endsWith(".lua")) {
+    // Not a script.
+    return false;
+  }
+
+  QString path_from_maps = path.right(path.size() - maps_path.size() - 1);
+
+  // Remove the extension.
+  map_id = path_from_maps.section('.', 0, -2);
+  if (!resources.exists(Solarus::ResourceType::MAP, map_id)) {
+    // Valid map id, but not declared in the resource list.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a language dialogs file.
+ *
+ * This function exists because the main language resource path (as recognized by
+ * is_resource_element()) is the language directory, not the dialogs file.
+ *
+ * @param[in] path The path to test.
+ * @param[out] map_id Id of the map if it is a map script.
+ * @return @c true if this path is a map script.
+ */
+bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
+
+  QString languages_path = get_resource_path(Solarus::ResourceType::LANGUAGE);
+  if (!path.startsWith(languages_path + "/")) {
+    // We are not in the languages directory.
+    return false;
+  }
+
+  QString expected_path_end = "/text/dialogs.dat";
+  if (!path.endsWith(expected_path_end)) {
+    // Not a dialogs file.
+    return false;
+  }
+
+  QString path_from_languages = path.right(path.size() - languages_path.size() - 1);
+
+  // Remove "/text/dialogs.dat" to determine the language id.
+  language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
+  if (!resources.exists(Solarus::ResourceType::LANGUAGE, language_id)) {
+    // Language id not declared in the resource list.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a language strings file.
+ *
+ * This function exists because the main language resource path (as recognized by
+ * is_resource_element()) is the language directory, not the strings file.
+ *
+ * @param[in] path The path to test.
+ * @param[out] map_id Id of the map if it is a map script.
+ * @return @c true if this path is a map script.
+ */
+bool Quest::is_strings_file(const QString& path, QString& language_id) const {
+
+  QString languages_path = get_resource_path(Solarus::ResourceType::LANGUAGE);
+  if (!path.startsWith(languages_path + "/")) {
+    // We are not in the languages directory.
+    return false;
+  }
+
+  QString expected_path_end = "/text/strings.dat";
+  if (!path.endsWith(expected_path_end)) {
+    // Not a dialogs file.
+    return false;
+  }
+
+  QString path_from_languages = path.right(path.size() - languages_path.size() - 1);
+
+  // Remove "/text/strings.dat" to determine the language id.
+  language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
+  if (!resources.exists(Solarus::ResourceType::LANGUAGE, language_id)) {
+    // Language id not declared in the resource list.
     return false;
   }
 

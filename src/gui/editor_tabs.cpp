@@ -57,31 +57,38 @@ void EditorTabs::open_resource(
   switch (resource_type) {
 
   case ResourceType::MAP:
+    // Open the map data file.
+    open_map_editor(quest, quest.get_map_data_file_path(id));
+    break;
+
   case ResourceType::TILESET:
-    // TODO
+    // Open the tileset data file.
+    open_tileset_editor(quest, quest.get_tileset_path(id));
     break;
 
   case ResourceType::LANGUAGE:
     // Open the dialogs file.
-    open_text_file(quest, quest.get_dialogs_path(id));
+    open_dialogs_editor(quest, quest.get_dialogs_path(id));
     break;
 
   case ResourceType::SPRITE:
     // Open the sprite file.
-    open_text_file(quest, quest.get_sprite_path(id));
+    open_sprite_editor(quest, quest.get_sprite_path(id));
     break;
 
   case ResourceType::ITEM:
     // Open the item script.
-    open_text_file(quest, quest.get_item_script_path(id));
+    open_text_editor(quest, quest.get_item_script_path(id));
     break;
 
   case ResourceType::ENEMY:
-    open_text_file(quest, quest.get_enemy_script_path(id));
+    // Open the enemy script.
+    open_text_editor(quest, quest.get_enemy_script_path(id));
     break;
 
   case ResourceType::ENTITY:
-    open_text_file(quest, quest.get_entity_script_path(id));
+    // Open the custom entity model script.
+    open_text_editor(quest, quest.get_entity_script_path(id));
     break;
 
   case ResourceType::MUSIC:
@@ -93,14 +100,14 @@ void EditorTabs::open_resource(
 }
 
 /**
- * @brief Shows a tab to edit a text file.
+ * @brief Opens a file with a text editor in a new tab.
  *
  * The file may be a Lua script.
  *
  * @param quest A Solarus quest.
  * @param path Path of the Lua file to open.
  */
-void EditorTabs::open_text_file(
+void EditorTabs::open_text_editor(
     Quest& quest, const QString& path) {
 
   if (!quest.is_in_root_path(path)) {
@@ -122,6 +129,61 @@ void EditorTabs::open_text_file(
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
+}
+
+/**
+ * @brief Opens a file with a map editor in a new tab.
+ * @param quest A Solarus quest.
+ * @param path Path of the map data file to open.
+ */
+void EditorTabs::open_map_editor(
+    Quest& quest, const QString& path) {
+
+  // TODO map editor.
+}
+
+/**
+ * @brief Opens a file with a tileset editor in a new tab.
+ * @param quest A Solarus quest.
+ * @param path Path of the tileset data file to open.
+ */
+void EditorTabs::open_tileset_editor(
+    Quest& quest, const QString& path) {
+
+  // TODO tileset editor.
+}
+
+/**
+ * @brief Opens a file with a sprite editor in a new tab.
+ * @param quest A Solarus quest.
+ * @param path Path of the sprite data file to open.
+ */
+void EditorTabs::open_sprite_editor(
+    Quest& quest, const QString& path) {
+
+  // TODO sprite editor.
+}
+
+/**
+ * @brief Opens a file with a language dialogs editor in a new tab.
+ * @param quest A Solarus quest.
+ * @param path Path of the dialogs file to open.
+ */
+void EditorTabs::open_dialogs_editor(
+    Quest& quest, const QString& path) {
+
+  open_text_editor(quest, path);  // TODO dialogs editor.
+}
+
+/**
+ * @brief Opens a file with a language strings list editor in a new tab.
+ * @param quest A Solarus quest.
+ * @param path Path of the strings file to open.
+ */
+void EditorTabs::open_strings_editor(
+    Quest& quest, const QString& path) {
+
+  open_text_editor(quest, path);  // TODO strings list editor.
 }
 
 /**
@@ -228,14 +290,16 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     // Possibly a map data file, an enemy Lua script,
     // a language directory, etc.
     open_resource(quest, resource_type, element_id);
-    return;
   }
-
-  // TODO languages
-
-  if (path.endsWith(".lua")) {
+  else if (quest.is_dialogs_file(path, element_id)) {
+    open_dialogs_editor(quest, path);
+  }
+  else if (quest.is_strings_file(path, element_id)) {
+    open_strings_editor(quest, path);
+  }
+  else if (path.endsWith(".lua")) {
     // A Lua script that is not a resource element.
-    open_text_file(quest, path);
+    open_text_editor(quest, path);
   }
 }
 

@@ -41,7 +41,17 @@ public:
 
   void open_resource(
       Quest& quest, ResourceType resource_type, const QString& id);
-  void open_text_file(
+  void open_map_editor(
+      Quest& quest, const QString& path);
+  void open_tileset_editor(
+      Quest& quest, const QString& path);
+  void open_sprite_editor(
+      Quest& quest, const QString& path);
+  void open_text_editor(
+      Quest& quest, const QString& path);
+  void open_dialogs_editor(
+      Quest& quest, const QString& path);
+  void open_strings_editor(
       Quest& quest, const QString& path);
 
   int find_editor(const QString& path);

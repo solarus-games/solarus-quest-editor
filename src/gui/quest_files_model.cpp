@@ -163,7 +163,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (quest.is_resource_element(file_path, resource_type, element_id)) {
         // A resource element: show its id (remove the extension).
         if (resource_type != Solarus::ResourceType::LANGUAGE) {
-          return file_name.section('.', -2, -2);
+          return QFileInfo(file_name).completeBaseName();
         }
       }
       return file_name;
