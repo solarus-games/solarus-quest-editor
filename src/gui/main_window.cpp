@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   // Set up children.
   ui->quest_tree_view->set_quest_manager(quest_manager);
 
-  int tree_width = 400;
+  int tree_width = 300;
   ui->splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
   // Connect children.
