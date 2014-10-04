@@ -29,6 +29,11 @@ public:
 
   TextEditor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
 
+  virtual QString get_title() const override;
+  virtual QIcon get_icon() const override;
+  virtual void save() override;
+  virtual bool confirm_close() override;
+
 };
 
 #endif

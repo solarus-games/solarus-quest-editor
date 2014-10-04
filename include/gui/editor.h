@@ -37,6 +37,12 @@ public:
 
   Quest& get_quest();
   QString get_file_path() const;
+  QString get_file_name() const;
+
+  virtual QString get_title() const = 0;
+  virtual QIcon get_icon() const = 0;
+  virtual void save() = 0;
+  virtual bool confirm_close() = 0;
 
 private:
 

@@ -17,6 +17,7 @@
 #include "gui/lua_syntax_highlighter.h"
 #include "gui/text_editor.h"
 #include "editor_exception.h"
+#include <QIcon>
 #include <QLayout>
 #include <QPlainTextEdit>
 #include <QTextStream>
@@ -57,4 +58,40 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   QTextStream out(&file);
   out.setCodec("UTF-8");
   text_edit->setPlainText(out.readAll());
+}
+
+/**
+ * @copydoc Editor::get_title
+ */
+QString TextEditor::get_title() const {
+
+  return get_file_name();
+}
+
+/**
+ * @copydoc Editor::get_icon
+ */
+QIcon TextEditor::get_icon() const {
+
+  if (get_file_path().endsWith(".lua")) {
+    // A Lua script.
+    return QIcon(":/images/icon_script.png");
+  }
+
+  return QIcon(":/images/icon_file.png");
+}
+
+/**
+ * @copydoc Editor::save
+ */
+void TextEditor::save() {
+  // TODO
+}
+
+/**
+ * @copydoc Editor::confirm_close
+ */
+bool TextEditor::confirm_close() {
+  // TODO
+  return true;
 }

@@ -49,3 +49,46 @@ Quest& Editor::get_quest() {
 QString Editor::get_file_path() const {
   return file_path;
 }
+
+/**
+ * @brief Returns the name of the file being edited.
+ *
+ * The file name is the last component of the path.
+ *
+ * @return The file name.
+ */
+QString Editor::get_file_name() const {
+  return file_path.section('/', -1, -1, QString::SectionSkipEmpty);
+}
+
+/**
+ * @fn Editor::get_title
+ * @brief Returns a user-friendly title for this editor.
+ *
+ * It is used in the tab label.
+ *
+ * @return A title describing the file edited.
+ */
+
+/**
+ * @fn Editor::get_title
+ * @brief Returns an icon representing this editor.
+ *
+ * It is used in the tab bar.
+ *
+ * @return An icon representing the file edited.
+ */
+
+/**
+ * @fn Editor::save
+ * @brief Saves the file.
+ */
+
+/**
+ * @fn Editor::confirm_close
+ * @brief Function called when the user wants to close the editor.
+ *
+ * If the file is not saved, you should propose to save it.
+ *
+ * @return @c false to cancel the closing operation.
+ */

@@ -54,8 +54,7 @@ public slots:
 
 private:
 
-  void add_editor(Editor* editor,
-                  const QString& icon_name);
+  void add_editor(Editor* editor);
   void remove_editor(int index);
 
   QMap<QString, QWidget*> editors;     /**< All editors currently open,

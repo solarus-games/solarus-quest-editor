@@ -19,7 +19,7 @@
 #include <QMouseEvent>
 
 /**
- * @brief Creates an editor tab bar.
+ * @brief Creates a closable tab bar.
  * @param parent The parent object or nullptr.
  */
 ClosableTabBar::ClosableTabBar(QWidget* parent) :

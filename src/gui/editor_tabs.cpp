@@ -78,8 +78,7 @@ void EditorTabs::open_script(
   }
 
   try {
-    Editor* editor = new TextEditor(quest, path);
-    add_editor(editor, "icon_script.png");
+    add_editor(new TextEditor(quest, path));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -89,16 +88,15 @@ void EditorTabs::open_script(
 /**
  * @brief Creates a new tab and shows it.
  * @param editor The editor to put in the new tab.
- * @param icon_name Name of an icon file relative to the icons directory.
  */
-void EditorTabs::add_editor(Editor* editor,
-                            const QString& icon_name) {
+void EditorTabs::add_editor(Editor* editor) {
 
   QString path = editor->get_file_path();
   editors.insert(path, editor);
-  QString file_name = path.section('/', -1);
-  addTab(editor, QIcon(":/images/" + icon_name), file_name);
-  setCurrentIndex(count() - 1);
+  addTab(editor, editor->get_icon(), editor->get_title());
+  int index = count() - 1;
+  setTabToolTip(index, editor->get_file_path());
+  setCurrentIndex(index);
 }
 
 /**
