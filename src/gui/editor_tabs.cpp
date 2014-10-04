@@ -105,9 +105,19 @@ void EditorTabs::add_editor(Editor* editor) {
  */
 void EditorTabs::remove_editor(int index) {
 
-  Editor* editor = static_cast<Editor*>(widget(index));
+  Editor* editor = get_editor(index);
   editors.remove(editor->get_file_path());
   removeTab(index);
+}
+
+/**
+ * @brief Returns the editor at the specified index.
+ * @param index An editor index.
+ * @return The editor at this index in the tab bar.
+ */
+Editor* EditorTabs::get_editor(int index) {
+
+  return static_cast<Editor*>(widget(index));
 }
 
 /**
@@ -117,7 +127,7 @@ void EditorTabs::remove_editor(int index) {
  */
 int EditorTabs::find_editor(const QString& path) {
 
-  QWidget* editor = editors.value(path);
+  Editor* editor = editors.value(path);
   if (editor == nullptr) {
     return -1;
   }
@@ -132,7 +142,7 @@ int EditorTabs::find_editor(const QString& path) {
  */
 bool EditorTabs::show_editor(const QString& path) {
 
-  QWidget* editor = editors.value(path);
+  Editor* editor = editors.value(path);
   if (editor == nullptr) {
     return false;
   }
@@ -174,6 +184,8 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
  */
 void EditorTabs::close_file_requested(int index) {
 
-  // TODO confirm save
-  removeTab(index);
+  Editor* editor = get_editor(index);
+  if (editor->confirm_close()) {
+    removeTab(index);
+  }
 }

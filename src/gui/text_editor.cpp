@@ -19,6 +19,7 @@
 #include "editor_exception.h"
 #include <QIcon>
 #include <QLayout>
+#include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QTextStream>
 
@@ -32,8 +33,8 @@
 TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) :
   Editor(quest, file_path, parent) {
 
-  QPlainTextEdit* text_edit = new QPlainTextEdit(file_path);
-  layout()->addWidget(text_edit);
+  text_widget= new QPlainTextEdit(file_path);
+  layout()->addWidget(text_widget);
 
   // Use a monospace font.
   QFont font("DejaVu Sans Mono");
@@ -43,7 +44,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   // Activate syntax coloring for Lua scripts.
   if (file_path.endsWith(".lua")) {
-    new LuaSyntaxHighlighter(text_edit->document());
+    new LuaSyntaxHighlighter(text_widget->document());
   }
 
   if (file_path.isEmpty()) {
@@ -57,7 +58,8 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   QTextStream out(&file);
   out.setCodec("UTF-8");
-  text_edit->setPlainText(out.readAll());
+  text_widget->setPlainText(out.readAll());
+  text_widget->document()->setModified(false);
 }
 
 /**
@@ -82,16 +84,54 @@ QIcon TextEditor::get_icon() const {
 }
 
 /**
+ * @copydoc Editor::is_modified
+ */
+bool TextEditor::is_modified() const {
+  return text_widget->document()->isModified();
+}
+
+/**
  * @copydoc Editor::save
  */
 void TextEditor::save() {
-  // TODO
+
 }
 
 /**
  * @copydoc Editor::confirm_close
  */
 bool TextEditor::confirm_close() {
-  // TODO
-  return true;
+
+  if (!text_widget->document()->isModified()) {
+    return true;
+  }
+
+  QMessageBox::StandardButton answer = QMessageBox::question(
+        nullptr,
+        "Save the modifications",
+        "File '" + get_file_name() + "' has been modified. Do you want to save it?",
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+        QMessageBox::Save
+        );
+
+  switch (answer) {
+
+  case QMessageBox::Save:
+    // Save and close.
+    save();
+    return true;
+
+  case QMessageBox::Discard:
+    // Close without saving.
+    return true;
+
+  case QMessageBox::Cancel:
+  case QMessageBox::Escape:
+    // Don't close.
+    return false;
+
+  default:
+    return false;
+  }
+
 }

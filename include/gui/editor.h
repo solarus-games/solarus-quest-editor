@@ -41,6 +41,7 @@ public:
 
   virtual QString get_title() const = 0;
   virtual QIcon get_icon() const = 0;
+  virtual bool is_modified() const = 0;
   virtual void save() = 0;
   virtual bool confirm_close() = 0;
 

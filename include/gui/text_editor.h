@@ -19,6 +19,8 @@
 
 #include "gui/editor.h"
 
+class QPlainTextEdit;
+
 /**
  * \brief A plain text edition widget.
  */
@@ -31,8 +33,13 @@ public:
 
   virtual QString get_title() const override;
   virtual QIcon get_icon() const override;
+  virtual bool is_modified() const override;
   virtual void save() override;
   virtual bool confirm_close() override;
+
+private:
+
+  QPlainTextEdit* text_widget;    /**< The text editing area contained. */
 
 };
 

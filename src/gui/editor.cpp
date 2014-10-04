@@ -80,6 +80,12 @@ QString Editor::get_file_name() const {
  */
 
 /**
+ * @fn Editor::is_modified
+ * @brief Returns whether the file being edited has been modified.
+ * @return @c true if the file is modified, @c false if it is saved.
+ */
+
+/**
  * @fn Editor::save
  * @brief Saves the file.
  */
