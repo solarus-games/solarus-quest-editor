@@ -106,14 +106,11 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
 set(solarus_quest_editor_TRANSLATIONS
   translations/solarus_editor_fr_FR.ts
 )
-qt5_create_translation(solarus_quest_editor_TRANSLATIONS_QM
-  ${solarus_quest_editor_SOURCES}
-  ${solarus_quest_editor_FORMS}
+qt5_add_translation(solarus_quest_editor_TRANSLATIONS_QM
   ${solarus_quest_editor_TRANSLATIONS}
 )
 
 # Main executable.
-
 add_executable(solarus-quest-editor
   ${solarus_quest_editor_SOURCES}
   ${solarus_quest_editor_FORMS_HEADERS}
