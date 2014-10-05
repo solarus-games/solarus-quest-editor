@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "editor_exception.h"
 #include "quest.h"
+#include <QDir>
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
@@ -203,6 +205,32 @@ QString Quest::get_entity_script_path(
 }
 
 /**
+ * @brief Returns the path to a font file.
+ *
+ * Several extensions are allowed for font.
+ * The first existing file with an accepted extension is returned.
+ * If such a file does not exist yet, the path corresponding to
+ * the preferred extension is returned.
+ *
+ * @param font_id Id of a music.
+ * @return The path to the font file.
+ */
+QString Quest::get_font_path(
+    const QString& font_id) const {
+
+  QString prefix = get_data_path() + "/fonts/" + font_id;
+  QStringList extensions;
+  extensions << ".ttf" << ".ttc" << ".fon";
+  for (const QString& extension: extensions) {
+    QString path = prefix + extension;
+    if (QFileInfo(path).exists()) {
+      return path;
+    }
+  }
+  return prefix + extensions.first();
+}
+
+/**
  * @brief Returns the path to an item script file.
  * @param item_id Id of an item.
  * @return The path to the item script file.
@@ -246,6 +274,43 @@ QString Quest::get_map_script_path(
 }
 
 /**
+ * @brief Returns the path to a sound file.
+ * @param sound_id Id of a sound.
+ * @return The path to the sound file.
+ */
+QString Quest::get_sound_path(
+    const QString& sound_id) const {
+
+  return get_data_path() + "/sounds/" + sound_id + ".ogg";
+}
+
+/**
+ * @brief Returns the path to a music file.
+ *
+ * Several extensions are allowed for musics.
+ * The first existing file with an accepted extension is returned.
+ * If such a file does not exist yet, the path corresponding to
+ * the preferred extension is returned.
+ *
+ * @param music_id Id of a music.
+ * @return The path to the music file.
+ */
+QString Quest::get_music_path(
+    const QString& music_id) const {
+
+  QString prefix = get_data_path() + "/musics/" + music_id;
+  QStringList extensions;
+  extensions << ".ogg" << ".it" << ".spc";
+  for (const QString& extension: extensions) {
+    QString path = prefix + extension;
+    if (QFileInfo(path).exists()) {
+      return path;
+    }
+  }
+  return prefix + extensions.first();
+}
+
+/**
  * @brief Returns the path to a sprite sheet file.
  * @param sprite_id Id of a sprite sheet.
  * @return The path to the sprite sheet file.
@@ -283,7 +348,7 @@ QString Quest::get_strings_path(
  * @param tileset_id Id of a tileset.
  * @return The path to the tileset data file.
  */
-QString Quest::get_tileset_path(
+QString Quest::get_tileset_data_file_path(
     const QString& tileset_id) const {
 
   return get_data_path() + "/tilesets/" + tileset_id + ".dat";
@@ -558,4 +623,142 @@ const QuestResources& Quest::get_resources() const {
  */
 QuestResources& Quest::get_resources() {
   return resources;
+}
+
+/**
+ * @brief Attempts to delete a file of this quest.
+ * @param path Path of the file to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_file(const QString& path) {
+
+  if (!is_in_root_path(path)) {
+    throw EditorException(tr("File is not in this quest"));
+  }
+
+  if (!QFile(path).remove()) {
+    throw EditorException(tr("Cannot delete file '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete a file of this quest if it exists.
+ * @param path Path of the file to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_file_if_exists(const QString& path) {
+
+  if (!is_in_root_path(path)) {
+    throw EditorException(tr("File is not in this quest"));
+  }
+
+  QFile file(path);
+  if (!file.exists()) {
+    return;
+  }
+
+  if (!file.remove()) {
+    throw EditorException(tr("Cannot delete file '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete an empty directory of this quest.
+ * @param path Path of the empty directory to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir(const QString& path) {
+
+  if (!is_in_root_path(path)) {
+    throw EditorException(tr("File '%1' is not in this quest").arg(path));
+  }
+
+  if (!QDir(path + "/..").rmdir(QDir(path).dirName())) {
+    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete a directory of this quest and all its content.
+ * @param path Path of the directory to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_recursive(const QString& path) {
+
+  if (!is_in_root_path(path)) {
+    throw EditorException(tr("File is not in this quest"));
+  }
+
+  if (!QDir(path).removeRecursively()) {
+    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Deletes a resource element from the filesystem and from the resource list.
+ * @param resource_type A type of resource.
+ * @param id Id of the element to remove.
+ * @return @c true in case of success.
+ * @throws EditorException If an error occured.
+ */
+void Quest::delete_resource_element(
+    ResourceType resource_type, const QString& element_id) {
+
+  switch (resource_type) {
+
+  case ResourceType::LANGUAGE:
+    // A language is a directory.
+    delete_dir_recursive(get_language_path(element_id));
+    break;
+
+  case ResourceType::MAP:
+    // Remove the map data file.
+    delete_file(get_map_data_file_path(element_id));
+
+    // Also delete the map script.
+    delete_file_if_exists(get_map_script_path(element_id));
+    break;
+
+  case ResourceType::TILESET:
+    // Remove the tileset data file.
+    delete_file(get_tileset_data_file_path(element_id));
+
+    // Also delete the two tileset images.
+    delete_file_if_exists(get_tileset_tiles_image_path(element_id));
+    delete_file_if_exists(get_tileset_entities_image_path(element_id));
+    break;
+
+  case ResourceType::SPRITE:
+    delete_file(get_sprite_path(element_id));
+    break;
+
+  case ResourceType::MUSIC:
+    delete_file(get_music_path(element_id));
+    break;
+
+  case ResourceType::SOUND:
+    delete_file(get_sound_path(element_id));
+    break;
+
+  case ResourceType::ITEM:
+    delete_file(get_item_script_path(element_id));
+    break;
+
+  case ResourceType::ENEMY:
+    delete_file(get_enemy_script_path(element_id));
+    break;
+
+  case ResourceType::ENTITY:
+    delete_file(get_entity_script_path(element_id));
+    break;
+
+  case ResourceType::FONT:
+    delete_file(get_font_path(element_id));
+    break;
+  }
+
+  // The file was successfully removed from the filesystem.
+  // Also remove it from the resource list.
+  resources.remove(resource_type, element_id);
+  resources.save();
 }

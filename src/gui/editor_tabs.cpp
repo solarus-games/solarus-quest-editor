@@ -63,7 +63,7 @@ void EditorTabs::open_resource(
 
   case ResourceType::TILESET:
     // Open the tileset data file.
-    open_tileset_editor(quest, quest.get_tileset_path(id));
+    open_tileset_editor(quest, quest.get_tileset_data_file_path(id));
     break;
 
   case ResourceType::LANGUAGE:

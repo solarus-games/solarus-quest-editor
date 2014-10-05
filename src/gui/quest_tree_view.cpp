@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gui/gui_tools.h>
+#include "gui/gui_tools.h"
 #include "gui/quest_tree_view.h"
 #include "gui/quest_files_model.h"
+#include "editor_exception.h"
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QFile>
@@ -526,113 +527,73 @@ void QuestTreeView::delete_action_triggered() {
     return;
   }
 
-  // See if we want to delete
-  // - a resource element,
-  // - a directory,
-  // - a file.
-  QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
-  QString element_id;
-  if (quest.is_resource_element(path, resource_type, element_id)) {
-    // This is a resource element.
+  try {
+    // See if we want to delete
+    // - a resource element,
+    // - a directory,
+    // - a file.
+    QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
+    QString element_id;
+    if (quest.is_resource_element(path, resource_type, element_id)) {
+      // This is a resource element.
 
-    QuestResources& resources = quest.get_resources();
-    const QString& resource_friendly_name_for_id =
-        resources.get_friendly_name_for_id(resource_type);
-    QMessageBox::StandardButton answer = QMessageBox::question(
-          this,
-          tr("Delete confirmation"),
-          tr("Do you really want to delete %1 '%2'?").
-                 arg(resource_friendly_name_for_id).arg(element_id),
-          QMessageBox::Yes | QMessageBox::No);
-
-    if (answer != QMessageBox::Yes) {
-      return;
-    }
-
-    bool success = false;
-    if (QFileInfo(path).isDir()) {
-      // Some resource elements are directories (languages).
-      success = QDir(path).removeRecursively();
-    }
-    else {
-      // Remove the main resource file.
-      success = QFile(path).remove();
-
-      // Some resource type have additional files.
-      QFile additional_file;
-      switch (resource_type) {
-
-      case ResourceType::MAP:
-        // Also delete the map script.
-        additional_file.setFileName(quest.get_map_script_path(element_id));
-        if (additional_file.exists()) {
-          success &= additional_file.remove();
-        }
-        break;
-
-      case ResourceType::TILESET:
-        // Also delete the tileset images.
-        additional_file.setFileName(quest.get_tileset_tiles_image_path(element_id));
-        if (additional_file.exists()) {
-          success &= additional_file.remove();
-        }
-        additional_file.setFileName(quest.get_tileset_entities_image_path(element_id));
-        if (additional_file.exists()) {
-          success &= additional_file.remove();
-        }
-        break;
-
-      default:
-        break;
-      }
-    }
-
-    if (!success) {
-      return;
-    }
-
-    // The file was successfully removed from the filesystem.
-    // Also temove it from the resource list.
-    resources.remove(resource_type, element_id);
-    resources.save();
-  }
-
-  else {
-    // This is a regular file or directory.
-    if (QFileInfo(path).isDir()) {
-      QDir dir(path);
-      bool empty_dir = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() == 0;
-      if (!empty_dir) {
-        // TODO we could remove directoriers recursively,
-        // but we have to take of resources they contain.
-        GuiTools::warningDialog(tr("Directory is not empty"));
-      }
-      else {
-        // Empty directory.
-        QMessageBox::StandardButton answer = QMessageBox::question(
-              this,
-              tr("Delete confirmation"),
-              tr("Do you really want to delete folder '%1'?").arg(path_from_data),
-              QMessageBox::Yes | QMessageBox::No);
-
-        if (answer != QMessageBox::Yes) {
-          return;
-        }
-        QDir(path + "/..").rmdir(dir.dirName());
-      }
-    }
-    else {
-      // Not a directory and not a resource.
+      QuestResources& resources = quest.get_resources();
+      const QString& resource_friendly_name_for_id =
+          resources.get_friendly_name_for_id(resource_type);
       QMessageBox::StandardButton answer = QMessageBox::question(
             this,
             tr("Delete confirmation"),
-            tr("Do you really want to delete file '%1'?").arg(path_from_data),
+            tr("Do you really want to delete %1 '%2'?").
+            arg(resource_friendly_name_for_id).arg(element_id),
             QMessageBox::Yes | QMessageBox::No);
 
       if (answer != QMessageBox::Yes) {
         return;
       }
-      QFile(path).remove();
+
+      quest.delete_resource_element(resource_type, element_id);
     }
+
+    else {
+      // This is a regular file or directory.
+      if (QFileInfo(path).isDir()) {
+        QDir dir(path);
+        bool empty_dir = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() == 0;
+        if (!empty_dir) {
+          // TODO we could remove directoriers recursively,
+          // but we have to take of resources they contain.
+          GuiTools::warningDialog(tr("Directory is not empty"));
+        }
+        else {
+          // Empty directory.
+          QMessageBox::StandardButton answer = QMessageBox::question(
+                this,
+                tr("Delete confirmation"),
+                tr("Do you really want to delete folder '%1'?").arg(path_from_data),
+                QMessageBox::Yes | QMessageBox::No);
+
+          if (answer != QMessageBox::Yes) {
+            return;
+          }
+          quest.delete_dir(path);
+        }
+      }
+      else {
+        // Not a directory and not a resource.
+        QMessageBox::StandardButton answer = QMessageBox::question(
+              this,
+              tr("Delete confirmation"),
+              tr("Do you really want to delete file '%1'?").arg(path_from_data),
+              QMessageBox::Yes | QMessageBox::No);
+
+        if (answer != QMessageBox::Yes) {
+          return;
+        }
+        quest.delete_file(path);
+      }
+    }
+  }
+  catch (EditorException& ex) {
+    ex.show_dialog();
   }
 }

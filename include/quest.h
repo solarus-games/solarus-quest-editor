@@ -29,6 +29,8 @@ class Quest: public QObject {
 
 public:
 
+  using ResourceType = Solarus::ResourceType;
+
   Quest();
   explicit Quest(const QString& root_path);
 
@@ -43,25 +45,28 @@ public:
   QString get_data_path() const;
   QString get_main_script_path() const;
   QString get_resource_list_path() const;
-  QString get_resource_path(Solarus::ResourceType resource_type) const;
+  QString get_resource_path(ResourceType resource_type) const;
   QString get_dialogs_path(const QString& language_id) const;
   QString get_enemy_script_path(const QString& enemy_id) const;
   QString get_entity_script_path(const QString& custom_entity_id) const;
+  QString get_font_path(const QString& font_id) const;
   QString get_item_script_path(const QString& item_id) const;
   QString get_language_path(const QString& language_id) const;
   QString get_map_data_file_path(const QString& map_id) const;
   QString get_map_script_path(const QString& map_id) const;
+  QString get_music_path(const QString& music_id) const;
+  QString get_sound_path(const QString& sound_id) const;
   QString get_sprite_path(const QString& sprite_id) const;
   QString get_strings_path(const QString& language_id) const;
-  QString get_tileset_path(const QString& tileset_id) const;
+  QString get_tileset_data_file_path(const QString& tileset_id) const;
   QString get_tileset_tiles_image_path(const QString& tileset_id) const;
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
   bool is_in_root_path(const QString& path) const;
-  bool is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
-  bool is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const;
+  bool is_resource_path(const QString& path, ResourceType& resource_type) const;
+  bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_resource_element(
-      const QString& path, Solarus::ResourceType& resource_type, QString& element_id) const;
+      const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool is_map_script(const QString& path, QString& map_id) const;
   bool is_dialogs_file(const QString& path, QString& language_id) const;
   bool is_strings_file(const QString& path, QString& language_id) const;
@@ -69,6 +74,13 @@ public:
   // Resources.
   const QuestResources& get_resources() const;
   QuestResources& get_resources();
+
+  void delete_resource_element(ResourceType resource_type, const QString& element_id);
+
+  void delete_file(const QString& path);
+  void delete_file_if_exists(const QString& path);
+  void delete_dir(const QString& path);
+  void delete_dir_recursive(const QString& path);
 
 signals:
 
@@ -79,7 +91,7 @@ private:
   QString root_path;               /**< Root path of this quest.
                                     * An empty string means no quest. */
 
-  QuestResources resources;   /**< Resources declared in project_db.dat. */
+  QuestResources resources;        /**< Resources declared in project_db.dat. */
 };
 
 #endif
