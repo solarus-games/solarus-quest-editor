@@ -39,7 +39,12 @@ int main(int argc, char* argv[]) {
 
   QApplication application(argc, argv);
 
-  // Set up the translation.
+  // Set up the translations.
+  QTranslator qt_translator;
+  qt_translator.load("qt_" + QLocale::system().name(),
+                     QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+  application.installTranslator(&qt_translator);
+
   QTranslator translator;
   translator.load("solarus_editor_" + QLocale::system().name());
   application.installTranslator(&translator);
