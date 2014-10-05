@@ -32,7 +32,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="106"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="111"/>
@@ -42,7 +42,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="114"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="119"/>
@@ -52,7 +52,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="122"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="127"/>
@@ -62,7 +62,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="130"/>
         <source>F9</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="135"/>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="138"/>
         <source>Ctrl+Z</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="143"/>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="146"/>
         <source>Ctrl+Shift+W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="151"/>
@@ -92,7 +92,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="154"/>
         <source>Ctrl+X</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="159"/>
@@ -102,7 +102,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="162"/>
         <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="167"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="170"/>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="175"/>
@@ -122,7 +122,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="178"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="183"/>
@@ -132,7 +132,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="186"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.cpp" line="80"/>
