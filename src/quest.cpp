@@ -633,7 +633,7 @@ QuestResources& Quest::get_resources() {
 void Quest::delete_file(const QString& path) {
 
   if (!is_in_root_path(path)) {
-    throw EditorException(tr("File is not in this quest"));
+    throw EditorException(tr("File '%1' is not in this quest").arg(path));
   }
 
   if (!QFile(path).remove()) {
@@ -649,7 +649,7 @@ void Quest::delete_file(const QString& path) {
 void Quest::delete_file_if_exists(const QString& path) {
 
   if (!is_in_root_path(path)) {
-    throw EditorException(tr("File is not in this quest"));
+    throw EditorException(tr("File '%1' is not in this quest").arg(path));
   }
 
   QFile file(path);
@@ -686,7 +686,7 @@ void Quest::delete_dir(const QString& path) {
 void Quest::delete_dir_recursive(const QString& path) {
 
   if (!is_in_root_path(path)) {
-    throw EditorException(tr("File is not in this quest"));
+    throw EditorException(tr("File '%1' is not in this quest").arg(path));
   }
 
   if (!QDir(path).removeRecursively()) {
