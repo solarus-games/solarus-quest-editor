@@ -48,11 +48,11 @@ public slots:
   void open_action_triggered();
   void open_map_script_action_triggered();
   void open_language_strings_action_triggered();
-  void new_element_action_triggered(const QString& parent_path);
-  void new_directory_action_triggered(const QString& parent_path);
-  void new_script_action_triggered(const QString& parent_path);
-  void rename_action_triggered(const QString& path);
-  void change_description_action_triggered(const QString& path);
+  void new_element_action_triggered();
+  void new_directory_action_triggered();
+  void new_script_action_triggered();
+  void rename_action_triggered();
+  void change_description_action_triggered();
   void delete_action_triggered();
 
 protected:
@@ -69,6 +69,7 @@ private:
 
   QuestFilesModel* model;         /**< The underlying model. */
   QAction* open_action;           /**< Action of opening the selected file. */
+  QAction* rename_action;         /**< Action of renaming the selected file. */
   QAction* delete_action;         /**< Action of deleting the selected file. */
 
 };

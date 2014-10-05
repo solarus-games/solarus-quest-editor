@@ -24,7 +24,6 @@
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
-#include <QSignalMapper>
 
 using ResourceType = Solarus::ResourceType;
 
@@ -38,6 +37,19 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
 
   setUniformRowHeights(true);
 
+  open_action = new QAction(tr("Open"), this);
+  open_action->setShortcut(tr("Return"));
+  connect(open_action, SIGNAL(triggered()),
+          this, SLOT(open_action_triggered()));
+  addAction(open_action);
+
+  rename_action = new QAction(
+        QIcon(":/images/icon_rename.ong"), tr("Rename..."), this);
+  rename_action->setShortcut(tr("F2"));
+  connect(rename_action, SIGNAL(triggered()),
+          this, SLOT(rename_action_triggered()));
+  addAction(rename_action);
+
   delete_action = new QAction(
         QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
   delete_action->setShortcut(QKeySequence::Delete);
@@ -45,16 +57,6 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
           this, SLOT(delete_action_triggered()));
   addAction(delete_action);
 
-  open_action = new QAction(tr("Open"), this);
-  open_action->setShortcut(tr("Return"));
-  connect(open_action, SIGNAL(triggered()),
-          this, SLOT(open_action_triggered()));
-  addAction(open_action);
-
-  // TODO other actions (new, rename, etc.) should also be here.
-  // This allows to make keyboard shortcuts.
-  // It is also much simpler to use the selected index instead of
-  // making a QSignalWatcher to add a path parameter.
 }
 
 /**
@@ -195,11 +197,8 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
 
   if (quest.is_resource_path(path, resource_type) ||
       (quest.is_in_resource_path(path, resource_type) && QFileInfo(path).isDir())) {
-    // Resource directory or subdirectory: let the user create a new element in it.
-    QSignalMapper* new_element_signal_mapper = new QSignalMapper(this);  // To add the path parameter.
-    connect(new_element_signal_mapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(new_element_action_triggered(const QString&)));
 
+    // Resource directory or subdirectory: let the user create a new element in it.
     QString resource_type_lua_name = resources.get_lua_name(resource_type);
     QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
     action = new QAction(
@@ -207,35 +206,26 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
           tr("Create %1...").arg(resource_type_friendly_name),
           this);
     connect(action, SIGNAL(triggered()),
-            new_element_signal_mapper, SLOT(map()));
-    new_element_signal_mapper->setMapping(action, path);
+            this, SLOT(new_element_action_triggered()));
     menu.addAction(action);
     menu.addSeparator();
   }
 
   // Any directory: create directory and create script.
-  QSignalMapper* new_directory_signal_mapper = new QSignalMapper(this);
-  connect(new_directory_signal_mapper, SIGNAL(mapped(const QString&)),
-          this, SLOT(new_directory_action_triggered(const QString&)));
   action = new QAction(
         QIcon(":/images/icon_folder_closed.png"),
         tr("New folder..."),
         this);
   connect(action, SIGNAL(triggered()),
-          new_directory_signal_mapper, SLOT(map()));
-  new_directory_signal_mapper->setMapping(action, path);
+          this, SLOT(new_directory_action_triggered()));
   menu.addAction(action);
 
-  QSignalMapper* new_script_signal_mapper = new QSignalMapper(this);
-  connect(new_script_signal_mapper, SIGNAL(mapped(const QString&)),
-          this, SLOT(new_script_action_triggered(const QString&)));
   action = new QAction(
         QIcon(":/images/icon_script.png"),
         tr("New script..."),
         this);
   connect(action, SIGNAL(triggered()),
-          new_script_signal_mapper, SLOT(map()));
-  new_script_signal_mapper->setMapping(action, path);
+          this, SLOT(new_script_action_triggered()));
   menu.addAction(action);
 }
 
@@ -329,8 +319,6 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
   }
 
   Quest& quest = model->get_quest();
-  QAction* action = nullptr;
-
   if (path == quest.get_data_path()) {
     // We don't to rename the data directory.
     return;
@@ -344,26 +332,13 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
   }
 
   // All other paths can have a "Rename" menu item.
-  QSignalMapper* rename_signal_mapper = new QSignalMapper(this);
-  connect(rename_signal_mapper, SIGNAL(mapped(const QString&)),
-          this, SLOT(rename_action_triggered(const QString&)));
-
-  action = new QAction(QIcon(":/images/icon_rename.png"), tr("Rename..."), this);
-  connect(action, SIGNAL(triggered()),
-          rename_signal_mapper, SLOT(map()));
-  rename_signal_mapper->setMapping(action, path);
-  menu.addAction(action);
+  menu.addAction(rename_action);
 
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // Resource element: additionally, allow to change the description.
-    QSignalMapper* change_description_signal_mapper = new QSignalMapper(this);
-    connect(change_description_signal_mapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(change_description_action_triggered(const QString&)));
-
-    action = new QAction(tr("Change description..."), this);
+    QAction* action = new QAction(tr("Change description..."), this);
     connect(action, SIGNAL(triggered()),
-            change_description_signal_mapper, SLOT(map()));
-    change_description_signal_mapper->setMapping(action, path);
+            this, SLOT(change_description_action_triggered()));
     menu.addAction(action);
   }
 }
@@ -453,59 +428,57 @@ void QuestTreeView::open_language_strings_action_triggered() {
 }
 
 /**
- * @brief Slot called when the user wants to create a new resource element.
+ * @brief Slot called when the user wants to create a new resource element
+ * under the selected resource top-level directory.
  *
  * The id and description of the element will be prompted to the user.
- *
- * @param parent_path Directory where the new element will be created.
- * The type of resource is indicated by the beginning of this path.
  */
-void QuestTreeView::new_element_action_triggered(const QString& parent_path) {
+void QuestTreeView::new_element_action_triggered() {
   // TODO
 }
 
 /**
- * @brief Slot called when the user wants to create a new directory.
+ * @brief Slot called when the user wants to create a new directory
+ * under the selected directory.
  *
  * The directory name will be prompted to the user.
- *
- * @param parent_path An exiting directory where the new one will be created.
  */
-void QuestTreeView::new_directory_action_triggered(const QString& parent_path) {
+void QuestTreeView::new_directory_action_triggered() {
   // TODO
 }
 
 /**
- * @brief Slot called when the user wants to create a new Lua script.
+ * @brief Slot called when the user wants to create a new Lua script
+ * under the selected directory.
  *
  * The file name will be prompted to the user.
- *
- * @param parent_path An exiting directory where the new script will be created.
  */
-void QuestTreeView::new_script_action_triggered(const QString& parent_path) {
+void QuestTreeView::new_script_action_triggered() {
   // TODO
 }
 
 /**
- * @brief Slot called when the user wants to rename a file or directory.
+ * @brief Slot called when the user wants to rename the selected file or
+ * directory.
  *
  * The new name will be prompted to the user.
- *
- * @param path The path to rename.
  */
-void QuestTreeView::rename_action_triggered(const QString& path) {
+void QuestTreeView::rename_action_triggered() {
   // TODO
 }
 
 /**
- * @brief Slot called when the user wants to change the description of a
- * resource element.
+ * @brief Slot called when the user wants to change the description of the
+ * seelcted resource element.
  *
  * The new description will be prompted to the user.
- *
- * @param path The path of the resource to change.
  */
-void QuestTreeView::change_description_action_triggered(const QString& path) {
+void QuestTreeView::change_description_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
 
   Quest& quest = model->get_quest();
   QuestResources& resources = quest.get_resources();
