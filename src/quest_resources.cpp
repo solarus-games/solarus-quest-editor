@@ -29,16 +29,44 @@ QuestResources::QuestResources(Quest& quest):
 
   // Friendly names are set dynamically because they are translated.
   resource_type_friendly_names = {
-    { Solarus::ResourceType::MAP,      tr("Map")           },
-    { Solarus::ResourceType::TILESET,  tr("Tileset")       },
-    { Solarus::ResourceType::SPRITE,   tr("Sprite")        },
-    { Solarus::ResourceType::MUSIC,    tr("Music")         },
-    { Solarus::ResourceType::SOUND,    tr("Sound")         },
-    { Solarus::ResourceType::ITEM,     tr("Item")          },
-    { Solarus::ResourceType::ENEMY,    tr("Enemy")         },
-    { Solarus::ResourceType::ENTITY,   tr("Custom entity") },
-    { Solarus::ResourceType::LANGUAGE, tr("Language")      },
-    { Solarus::ResourceType::FONT,     tr("Font")          },
+    //: To describe the type of resource itself like: New Map.
+    { Solarus::ResourceType::MAP,      tr("Map", "resource_type")           },
+    { Solarus::ResourceType::TILESET,  tr("Tileset", "resource_type")       },
+    { Solarus::ResourceType::SPRITE,   tr("Sprite", "resource_type")        },
+    { Solarus::ResourceType::MUSIC,    tr("Music", "resource_type")         },
+    { Solarus::ResourceType::SOUND,    tr("Sound", "resource_type")         },
+    { Solarus::ResourceType::ITEM,     tr("Item", "resource_type")          },
+    { Solarus::ResourceType::ENEMY,    tr("Enemy", "resource_type")         },
+    { Solarus::ResourceType::ENTITY,   tr("Custom entity", "resource_type") },
+    { Solarus::ResourceType::LANGUAGE, tr("Language", "resource_type")      },
+    { Solarus::ResourceType::FONT,     tr("Font", "resource_type")          },
+  };
+
+  resource_type_friendly_names_for_id = {
+    //: To be used with a specific element id like: Rename Map X.
+    { Solarus::ResourceType::MAP,      tr("Map", "resource_element")           },
+    { Solarus::ResourceType::TILESET,  tr("Tileset", "resource_element")       },
+    { Solarus::ResourceType::SPRITE,   tr("Sprite", "resource_element")        },
+    { Solarus::ResourceType::MUSIC,    tr("Music", "resource_element")         },
+    { Solarus::ResourceType::SOUND,    tr("Sound", "resource_element")         },
+    { Solarus::ResourceType::ITEM,     tr("Item", "resource_element")          },
+    { Solarus::ResourceType::ENEMY,    tr("Enemy", "resource_element")         },
+    { Solarus::ResourceType::ENTITY,   tr("Custom entity", "resource_element") },
+    { Solarus::ResourceType::LANGUAGE, tr("Language", "resource_element")      },
+    { Solarus::ResourceType::FONT,     tr("Font", "resource_element")          },
+  };
+
+  resource_type_directory_friendly_names = {
+    { Solarus::ResourceType::MAP,      tr("Map folder")           },
+    { Solarus::ResourceType::TILESET,  tr("Tileset folder")       },
+    { Solarus::ResourceType::SPRITE,   tr("Sprite folder")        },
+    { Solarus::ResourceType::MUSIC,    tr("Music folder")         },
+    { Solarus::ResourceType::SOUND,    tr("Sound folder")         },
+    { Solarus::ResourceType::ITEM,     tr("Item folder")          },
+    { Solarus::ResourceType::ENEMY,    tr("Enemy folder")         },
+    { Solarus::ResourceType::ENTITY,   tr("Custom entity folder") },
+    { Solarus::ResourceType::LANGUAGE, tr("Language folder")      },
+    { Solarus::ResourceType::FONT,     tr("Font folder")          },
   };
 
   connect(&quest, SIGNAL(root_path_changed(const QString&)),
@@ -142,7 +170,7 @@ void QuestResources::set_description(
 
 /**
  * @brief Returns the Lua name for the specified resource type.
- * @param resource_type A type of resources.
+ * @param resource_type A type of resource.
  * @return The Lua name of this resource type.
  */
 QString QuestResources::get_lua_name(ResourceType resource_type) const {
@@ -157,4 +185,31 @@ QString QuestResources::get_lua_name(ResourceType resource_type) const {
  */
 QString QuestResources::get_friendly_name(ResourceType resource_type) const {
   return resource_type_friendly_names[resource_type];
+}
+
+/**
+ * @brief Returns a resource type user-friendly name to be followed by an it.
+ *
+ * For example the string "Tileset" in
+ * "Do you want to save Tileset 'House'?".
+ * This is different from get_friendly_name() in languages where a
+ * determiner is needed, like in French:
+ * "Voulez-vous sauvegarder le Tileset 'House'?"
+ *
+ * @param resource_type A type of resource.
+ * @return The human-readable name of this resource type when it needs to be
+ * followed by a resource element id.
+ */
+QString QuestResources::get_friendly_name_for_id(ResourceType resource_type) const {
+  return resource_type_friendly_names_for_id[resource_type];
+}
+
+/**
+ * @brief Returns a user-friendly name describing the top-level directory of a
+ * resource type.
+ * @param resource_type A type of resources.
+ * @return The human-readable description of the corresponding directory.
+ */
+QString QuestResources::get_directory_friendly_name(ResourceType resource_type) const {
+  return resource_type_directory_friendly_names[resource_type];
 }

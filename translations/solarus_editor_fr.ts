@@ -205,12 +205,7 @@
         <translation>Script Lua principal</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="212"/>
-        <source>%1 folder</source>
-        <translation>Dossier %1</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="223"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="222"/>
         <source>Lua script</source>
         <translation>Script Lua</translation>
     </message>
@@ -218,54 +213,176 @@
 <context>
     <name>QuestResources</name>
     <message>
-        <location filename="../src/quest_resources.cpp" line="32"/>
+        <location filename="../src/quest_resources.cpp" line="33"/>
         <source>Map</source>
+        <comment>resource_type</comment>
+        <extracomment>To describe the type of resource itself like: New Map.</extracomment>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="33"/>
+        <location filename="../src/quest_resources.cpp" line="34"/>
         <source>Tileset</source>
+        <comment>resource_type</comment>
         <translation>Tileset</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="34"/>
+        <location filename="../src/quest_resources.cpp" line="35"/>
         <source>Sprite</source>
+        <comment>resource_type</comment>
         <translation>Sprite</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="35"/>
+        <location filename="../src/quest_resources.cpp" line="36"/>
         <source>Music</source>
+        <comment>resource_type</comment>
         <translation>Musique</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="36"/>
+        <location filename="../src/quest_resources.cpp" line="37"/>
         <source>Sound</source>
+        <comment>resource_type</comment>
         <translation>Son</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="37"/>
+        <location filename="../src/quest_resources.cpp" line="38"/>
         <source>Item</source>
+        <comment>resource_type</comment>
         <translation>Item</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="38"/>
+        <location filename="../src/quest_resources.cpp" line="39"/>
         <source>Enemy</source>
+        <comment>resource_type</comment>
         <translation>Ennemi</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="39"/>
+        <location filename="../src/quest_resources.cpp" line="40"/>
         <source>Custom entity</source>
+        <comment>resource_type</comment>
         <translation>Entité custom</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="40"/>
+        <location filename="../src/quest_resources.cpp" line="41"/>
         <source>Language</source>
+        <comment>resource_type</comment>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="41"/>
+        <location filename="../src/quest_resources.cpp" line="42"/>
         <source>Font</source>
+        <comment>resource_type</comment>
         <translation>Police</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="47"/>
+        <source>Map</source>
+        <comment>resource_element</comment>
+        <extracomment>To be used with a specific element id like: Rename Map X.</extracomment>
+        <translation>la Map</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="48"/>
+        <source>Tileset</source>
+        <comment>resource_element</comment>
+        <translation>le Tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="49"/>
+        <source>Sprite</source>
+        <comment>resource_element</comment>
+        <translation>le Sprite</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="50"/>
+        <source>Music</source>
+        <comment>resource_element</comment>
+        <translation>la Musique</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="51"/>
+        <source>Sound</source>
+        <comment>resource_element</comment>
+        <translation>le Son</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="52"/>
+        <source>Item</source>
+        <comment>resource_element</comment>
+        <translation>l&apos;Item</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="53"/>
+        <source>Enemy</source>
+        <comment>resource_element</comment>
+        <translation>l&apos;Ennemi</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="54"/>
+        <source>Custom entity</source>
+        <comment>resource_element</comment>
+        <translation>l&apos;Entité custom</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="55"/>
+        <source>Language</source>
+        <comment>resource_element</comment>
+        <translation>la Langue</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="56"/>
+        <source>Font</source>
+        <comment>resource_element</comment>
+        <translation>la Police</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="60"/>
+        <source>Map folder</source>
+        <translation>Dossier des Maps</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="61"/>
+        <source>Tileset folder</source>
+        <translation>Dossier des Tilesets</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="62"/>
+        <source>Sprite folder</source>
+        <translation>Dossier des Sprites</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="63"/>
+        <source>Music folder</source>
+        <translation>Dossier des Musiques</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="64"/>
+        <source>Sound folder</source>
+        <translation>Dossier des Sons</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="65"/>
+        <source>Item folder</source>
+        <translation>Dossier des Items</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="66"/>
+        <source>Enemy folder</source>
+        <translation>Dossier des Ennemis</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="67"/>
+        <source>Custom entity folder</source>
+        <translation>Dossier des Entités custom</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="68"/>
+        <source>Language folder</source>
+        <translation>Dossier des Langues</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="69"/>
+        <source>Font folder</source>
+        <translation>Dossier des Polices</translation>
     </message>
 </context>
 <context>
@@ -286,49 +403,49 @@
         <translation>Nouveau script...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="231"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="269"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="287"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="230"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="268"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="286"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="239"/>
-        <source>Open script</source>
-        <translation>Ouvrir le script</translation>
+        <location filename="../src/gui/quest_tree_view.cpp" line="238"/>
+        <source>Open Script</source>
+        <translation>Ouvrir le Script</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="250"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="249"/>
         <source>Open Dialogs</source>
-        <translation>Ouvrir les dialogues</translation>
+        <translation>Ouvrir les Dialogues</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="256"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="255"/>
         <source>Open Strings</source>
-        <translation>Ouvrir les textes</translation>
+        <translation>Ouvrir les Textes</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="326"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="325"/>
         <source>Rename...</source>
         <translation>Renommer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="338"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="337"/>
         <source>Change description...</source>
         <translation>Changer la description...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="377"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="376"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="462"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="461"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="463"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="462"/>
         <source>New description for  %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos;:</translation>
     </message>

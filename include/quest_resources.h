@@ -45,6 +45,8 @@ public:
 
   QString get_lua_name(ResourceType resource_type) const;
   QString get_friendly_name(ResourceType resource_type) const;
+  QString get_friendly_name_for_id(ResourceType resource_type) const;
+  QString get_directory_friendly_name(ResourceType resource_type) const;
 
 signals:
 
@@ -63,11 +65,22 @@ private slots:
 
 private:
 
-  Quest& quest;                        /**< The quest. */
-  Solarus::QuestResources resources;   /**< The wrapped data. */
-  QMap<Solarus::ResourceType, QString>
-      resource_type_friendly_names;    /**< Description of each resource type. */
+  Quest& quest;                                  /**< The quest. */
+  Solarus::QuestResources resources;             /**< The wrapped data. */
 
+  QMap<Solarus::ResourceType, QString>
+      resource_type_friendly_names;              /**< Human-readable name of each resource type. */
+  QMap<Solarus::ResourceType, QString>
+      resource_type_friendly_names_for_id;       /**< Human-readable name of each resource type,
+                                                  * to be followed by an element id.
+                                                  * For example the string "Tileset" in
+                                                  * "Do you want to save Tileset 'House'?".
+                                                  * This makes a difference in languages where a
+                                                  * determiner is needed, like in French:
+                                                  * "Voulez-vous sauvegarder le Tileset 'House'?" */
+  QMap<Solarus::ResourceType, QString>
+      resource_type_directory_friendly_names;    /**< Human-readable name describing the directory
+                                                  * of each resource type. */
 };
 
 #endif

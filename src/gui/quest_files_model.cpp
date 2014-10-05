@@ -209,8 +209,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
       if (quest.is_resource_path(file_path, resource_type)) {
         // A resource element folder.
-        return tr("%1 folder").
-            arg(resources.get_friendly_name(resource_type));
+        return resources.get_directory_friendly_name(resource_type);
       }
 
       if (quest.is_resource_element(file_path, resource_type, element_id)) {

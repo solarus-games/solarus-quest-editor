@@ -220,7 +220,6 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     // A resource element.
 
     QString resource_type_lua_name = resources.get_lua_name(resource_type);
-    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
     QIcon icon(":/images/icon_resource_" + resource_type_lua_name + ".png");
 
     switch (resource_type) {
@@ -236,7 +235,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
 
       action = new QAction(
             QIcon(":/images/icon_script.png"),
-            tr("Open script"),
+            tr("Open Script"),
             this);
       connect(action, SIGNAL(triggered()),
               signal_mapper, SLOT(map()));
@@ -454,13 +453,13 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
     return;
   }
 
-  QString resource_friendly_type_name = resources.get_friendly_name(resource_type);
+  QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
   QString old_description = resources.get_description(resource_type, element_id);
   bool ok;
   QString new_description = QInputDialog::getText(
         this,
         tr("Change description"),
-        tr("New description for  %1 '%2':").arg(resource_friendly_type_name, element_id),
+        tr("New description for  %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
         QLineEdit::Normal,
         old_description,
         &ok);
