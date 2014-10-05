@@ -29,3 +29,8 @@ possible with the old editor is still to be done in the new one.
 * Edit sprites.
 * Upgrade quests to the latest format.
 
+Bug fixes
+---------
+
+* Fix encoding of non-ascii characters in project_db.dat with Windows.
+
