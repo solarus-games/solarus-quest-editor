@@ -145,11 +145,12 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   QAction* action = nullptr;
 
   Solarus::ResourceType resource_type;
-  if (quest.is_resource_path(path, resource_type)) {
-    // Resource directory: let the user create a new element in it.
+  if (quest.is_resource_path(path, resource_type) ||
+      (quest.is_in_resource_path(path, resource_type) && QFileInfo(path).isDir())) {
+    // Resource directory or subdirectory: let the user create a new element in it.
     QSignalMapper* new_element_signal_mapper = new QSignalMapper(this);  // To add the path parameter.
-    connect(new_element_signal_mapper, SIGNAL(mapped(int)),
-            this, SLOT(new_element_action_triggered(int)));
+    connect(new_element_signal_mapper, SIGNAL(mapped(const QString&)),
+            this, SLOT(new_element_action_triggered(const QString&)));
 
     QString resource_type_lua_name = QuestResources::get_lua_name(resource_type);
     QString resource_type_friendly_name = QuestResources::get_friendly_name(resource_type);
@@ -159,7 +160,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
           this);
     connect(action, SIGNAL(triggered()),
             new_element_signal_mapper, SLOT(map()));
-    new_element_signal_mapper->setMapping(action, static_cast<int>(resource_type));
+    new_element_signal_mapper->setMapping(action, path);
     menu.addAction(action);
     menu.addSeparator();
   }
@@ -385,9 +386,10 @@ void QuestTreeView::open_action_triggered(const QString& path) {
  *
  * The id and description of the element will be prompted to the user.
  *
- * @param resource_type Type of resource to create.
+ * @param parent_path Directory where the new element will be created.
+ * The type of resource is indicated by the beginning of this path.
  */
-void QuestTreeView::new_element_action_triggered(int resource_type) {
+void QuestTreeView::new_element_action_triggered(const QString& parent_path) {
   // TODO
 }
 

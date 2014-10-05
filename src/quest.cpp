@@ -292,7 +292,7 @@ QString Quest::get_tileset_path(
 /**
  * @brief Returns whether a path is under the quest path.
  * @param path The path to test.
- * @return \c true if this path is in the quest.
+ * @return @c true if this path is in the quest.
  */
 bool Quest::is_in_root_path(const QString& path) const {
 
@@ -303,7 +303,7 @@ bool Quest::is_in_root_path(const QString& path) const {
  * @brief Returns whether a path is a resource path.
  * @param path The path to test.
  * @param resource_type The resource type found if any.
- * @return \c true if this is a resource path.
+ * @return @c true if this is a resource path.
  */
 bool Quest::is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const {
 
@@ -321,7 +321,7 @@ bool Quest::is_resource_path(const QString& path, Solarus::ResourceType& resourc
  * @brief Returns whether a path is under a resource path.
  * @param path The path to test.
  * @param resource_type The resource type found if any.
- * @return \c true if this path is under a resource path.
+ * @return @c true if this path is under a resource path.
  */
 bool Quest::is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const {
 

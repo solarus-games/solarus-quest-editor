@@ -45,7 +45,7 @@ public slots:
   void current_quest_changed(Quest& quest);
 
   void open_action_triggered(const QString& path);
-  void new_element_action_triggered(int resource_type);
+  void new_element_action_triggered(const QString& parent_path);
   void new_directory_action_triggered(const QString& parent_path);
   void new_script_action_triggered(const QString& parent_path);
   void rename_action_triggered(const QString& path);
