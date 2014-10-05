@@ -50,7 +50,7 @@ public slots:
   void new_script_action_triggered(const QString& parent_path);
   void rename_action_triggered(const QString& path);
   void change_description_action_triggered(const QString& path);
-  void delete_action_triggered(const QString& path);
+  void delete_action_triggered();
 
 protected:
 
@@ -64,7 +64,8 @@ private:
   void build_context_menu_rename(QMenu& menu, const QString& path);
   void build_context_menu_delete(QMenu& menu, const QString& path);
 
-  QuestFilesModel* model;                  /**< The underlying model. */
+  QuestFilesModel* model;         /**< The underlying model. */
+  QAction* delete_action;         /**< Action of deleting a file. */
 
 };
 

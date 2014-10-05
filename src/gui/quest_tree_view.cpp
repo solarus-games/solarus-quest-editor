@@ -37,6 +37,18 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   model(nullptr) {
 
   setUniformRowHeights(true);
+
+  delete_action = new QAction(
+        QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
+  delete_action->setShortcut(QKeySequence::Delete);
+  connect(delete_action, SIGNAL(triggered()),
+          this, SLOT(delete_action_triggered()));
+  addAction(delete_action);
+
+  // TODO other actions (new, rename, etc.) should also be here.
+  // This allows to make keyboard shortcuts.
+  // It is also much simpler to use the selected index instead of
+  // making a QSignalWatcher to add a path parameter.
 }
 
 /**
@@ -196,7 +208,6 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
             new_script_signal_mapper, SLOT(map()));
     new_script_signal_mapper->setMapping(action, path);
     menu.addAction(action);
-
   }
 }
 
@@ -358,30 +369,20 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
   }
 
   Quest& quest = model->get_quest();
-  QAction* action = nullptr;
 
   if (path == quest.get_data_path()) {
-    // We don't to delete the data directory.
+    // We don't want to delete the data directory.
     return;
   }
 
   Solarus::ResourceType resource_type;
-  QString element_id;
   if (quest.is_resource_path(path, resource_type)) {
     // Don't delete resource directories.
     return;
   }
 
   // All other paths can have a "Delete" menu item.
-  QSignalMapper* signal_mapper = new QSignalMapper(this);
-  connect(signal_mapper, SIGNAL(mapped(const QString&)),
-          this, SLOT(delete_action_triggered(const QString&)));
-
-  action = new QAction(QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
-  connect(action, SIGNAL(triggered()),
-          signal_mapper, SLOT(map()));
-  signal_mapper->setMapping(action, path);
-  menu.addAction(action);
+  menu.addAction(delete_action);
 }
 
 /**
@@ -475,18 +476,34 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
 }
 
 /**
- * @brief Slot called when the user wants to delete a file or directory.
+ * @brief Slot called when the user wants to delete the selected file or
+ * directory.
  *
  * Confirmation will be asked to the user.
- *
- * @param path The path to delete.
  */
-void QuestTreeView::delete_action_triggered(const QString& path) {
+void QuestTreeView::delete_action_triggered() {
 
+  QModelIndexList selected_indexes = selectedIndexes();
+  if (selected_indexes.isEmpty()) {
+    return;
+  }
+  const QString& path = model->get_file_path(selected_indexes.first());
   Quest& quest = model->get_quest();
-  QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
-
+  if (path == quest.get_data_path()) {
+    // We don't delete the data directory.
+    return;
+  }
   Solarus::ResourceType resource_type;
+  if (quest.is_resource_path(path, resource_type)) {
+    // Don't delete resource directories.
+    return;
+  }
+
+  // See if we want to delete
+  // - a resource element,
+  // - a directory,
+  // - a file.
+  QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
   QString element_id;
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // This is a resource element.
@@ -557,12 +574,14 @@ void QuestTreeView::delete_action_triggered(const QString& path) {
     // This is a regular file or directory.
     if (QFileInfo(path).isDir()) {
       QDir dir(path);
-      if (dir.count() != 0) {
+      bool empty_dir = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() == 0;
+      if (!empty_dir) {
         // TODO we could remove directoriers recursively,
         // but we have to take of resources they contain.
         GuiTools::warningDialog(tr("Directory is not empty"));
       }
       else {
+        // Empty directory.
         QMessageBox::StandardButton answer = QMessageBox::question(
               this,
               tr("Delete confirmation"),
@@ -572,7 +591,7 @@ void QuestTreeView::delete_action_triggered(const QString& path) {
         if (answer != QMessageBox::Yes) {
           return;
         }
-        QFile(path).remove();
+        QDir(path + "/..").rmdir(dir.dirName());
       }
     }
     else {
