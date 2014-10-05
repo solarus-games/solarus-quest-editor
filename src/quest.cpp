@@ -290,6 +290,28 @@ QString Quest::get_tileset_path(
 }
 
 /**
+ * @brief Returns the path to a tileset tiles image file.
+ * @param tileset_id Id of a tileset.
+ * @return The path to the tileset tiles image file.
+ */
+QString Quest::get_tileset_tiles_image_path(
+    const QString& tileset_id) const {
+
+  return get_data_path() + "/tilesets/" + tileset_id + ".tiles.png";
+}
+
+/**
+ * @brief Returns the path to a tileset entities image file.
+ * @param tileset_id Id of a tileset.
+ * @return The path to the tileset entities image file.
+ */
+QString Quest::get_tileset_entities_image_path(
+    const QString& tileset_id) const {
+
+  return get_data_path() + "/tilesets/" + tileset_id + ".entities.png";
+}
+
+/**
  * @brief Returns whether a path is under the quest path.
  * @param path The path to test.
  * @return @c true if this path is in the quest.

@@ -14,12 +14,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <gui/gui_tools.h>
 #include "gui/quest_tree_view.h"
 #include "gui/quest_files_model.h"
 #include <QContextMenuEvent>
-#include <QFileSystemModel>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QInputDialog>
 #include <QMenu>
+#include <QMessageBox>
 #include <QSignalMapper>
 
 using ResourceType = Solarus::ResourceType;
@@ -478,5 +482,111 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
  * @param path The path to delete.
  */
 void QuestTreeView::delete_action_triggered(const QString& path) {
-  // TODO
+
+  Quest& quest = model->get_quest();
+  QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
+
+  Solarus::ResourceType resource_type;
+  QString element_id;
+  if (quest.is_resource_element(path, resource_type, element_id)) {
+    // This is a resource element.
+
+    QuestResources& resources = quest.get_resources();
+    const QString& resource_friendly_name_for_id =
+        resources.get_friendly_name_for_id(resource_type);
+    QMessageBox::StandardButton answer = QMessageBox::question(
+          this,
+          tr("Delete confirmation"),
+          tr("Do you really want to delete %1 '%2'?").
+                 arg(resource_friendly_name_for_id).arg(element_id),
+          QMessageBox::Yes | QMessageBox::No);
+
+    if (answer != QMessageBox::Yes) {
+      return;
+    }
+
+    bool success = false;
+    if (QFileInfo(path).isDir()) {
+      // Some resource elements are directories (languages).
+      success = QDir(path).removeRecursively();
+    }
+    else {
+      // Remove the main resource file.
+      success = QFile(path).remove();
+
+      // Some resource type have additional files.
+      QFile additional_file;
+      switch (resource_type) {
+
+      case ResourceType::MAP:
+        // Also delete the map script.
+        additional_file.setFileName(quest.get_map_script_path(element_id));
+        if (additional_file.exists()) {
+          success &= additional_file.remove();
+        }
+        break;
+
+      case ResourceType::TILESET:
+        // Also delete the tileset images.
+        additional_file.setFileName(quest.get_tileset_tiles_image_path(element_id));
+        if (additional_file.exists()) {
+          success &= additional_file.remove();
+        }
+        additional_file.setFileName(quest.get_tileset_entities_image_path(element_id));
+        if (additional_file.exists()) {
+          success &= additional_file.remove();
+        }
+        break;
+
+      default:
+        break;
+      }
+    }
+
+    if (!success) {
+      return;
+    }
+
+    // The file was successfully removed from the filesystem.
+    // Also temove it from the resource list.
+    resources.remove(resource_type, element_id);
+    resources.save();
+  }
+
+  else {
+    // This is a regular file or directory.
+    if (QFileInfo(path).isDir()) {
+      QDir dir(path);
+      if (dir.count() != 0) {
+        // TODO we could remove directoriers recursively,
+        // but we have to take of resources they contain.
+        GuiTools::warningDialog(tr("Directory is not empty"));
+      }
+      else {
+        QMessageBox::StandardButton answer = QMessageBox::question(
+              this,
+              tr("Delete confirmation"),
+              tr("Do you really want to delete folder '%1'?").arg(path_from_data),
+              QMessageBox::Yes | QMessageBox::No);
+
+        if (answer != QMessageBox::Yes) {
+          return;
+        }
+        QFile(path).remove();
+      }
+    }
+    else {
+      // Not a directory and not a resource.
+      QMessageBox::StandardButton answer = QMessageBox::question(
+            this,
+            tr("Delete confirmation"),
+            tr("Do you really want to delete file '%1'?").arg(path_from_data),
+            QMessageBox::Yes | QMessageBox::No);
+
+      if (answer != QMessageBox::Yes) {
+        return;
+      }
+      QFile(path).remove();
+    }
+  }
 }

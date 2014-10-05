@@ -38,9 +38,23 @@ public:
   void save() const;
 
   bool exists(ResourceType type, const QString& id) const;
+  bool add(
+      ResourceType resource_type,
+      const QString& id,
+      const QString& description
+  );
+  bool remove(
+      ResourceType resource_type,
+      const QString& id
+  );
+  bool rename(
+      ResourceType resource_type,
+      const QString& old_id,
+      const QString& new_id
+  );
   QString get_description(
       ResourceType type, const QString& id) const;
-  void set_description(
+  bool set_description(
       ResourceType type, const QString& id, const QString& description);
 
   QString get_lua_name(ResourceType resource_type) const;
@@ -54,7 +68,7 @@ signals:
       ResourceType type, const QString& id, const QString& description);
   void element_removed(
       ResourceType type, const QString& id);
-  void element_id_changed(
+  void element_renamed(
       ResourceType type, const QString& old_id, const QString& new_id);
   void element_description_changed(
       ResourceType type, const QString& id, const QString& new_description);

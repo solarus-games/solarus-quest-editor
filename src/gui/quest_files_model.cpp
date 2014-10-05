@@ -17,7 +17,7 @@
 #include "gui/quest_files_model.h"
 #include "quest.h"
 #include "quest_resources.h"
-#include "solarus/QuestResources.h"
+#include <solarus/QuestResources.h>
 #include <QFileSystemModel>
 
 /**

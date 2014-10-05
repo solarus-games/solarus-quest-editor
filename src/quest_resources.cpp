@@ -141,6 +141,68 @@ bool QuestResources::exists(ResourceType type, const QString& id) const {
 }
 
 /**
+ * @brief Adds a resource element to the list.
+ * @param resource_type A type of resource.
+ * @param id Id of the element to add.
+ * @param description Description the element to add.
+ * @return @c true if the element was added, @c false if an element with
+ * this id already exists.
+ */
+bool QuestResources::add(
+    ResourceType resource_type,
+    const QString& id,
+    const QString& description
+) {
+
+  if (!resources.add(resource_type, id.toStdString(), description.toStdString())) {
+    return false;
+  }
+  emit element_added(resource_type, id, description);
+  return true;
+}
+
+/**
+ * @brief Removes a resource element from the list.
+ * @param resource_type A type of resource.
+ * @param id Id of the element to remove.
+ * @return @c true if the element was removed, @c false if such an element
+ * did not exist.
+ */
+bool QuestResources::remove(
+    ResourceType resource_type,
+    const QString& id
+) {
+
+  if (!resources.remove(resource_type, id.toStdString())) {
+    return false;
+  }
+  emit element_removed(resource_type, id);
+  return true;
+}
+
+/**
+ * @brief Changes the id of a resource element from the list.
+ * @param resource_ A type of resource.
+ * @param old_id Id of the element to change.
+ * @param new_id The new id to set.
+ * @return @c true in case of success, @c false if such an element does not
+ * exist.
+ */
+bool QuestResources::rename(
+    ResourceType resource_type,
+    const QString& old_id,
+    const QString& new_id
+) {
+
+  if (!resources.rename(resource_type, old_id.toStdString(),
+                        new_id.toStdString())) {
+    return false;
+  }
+  emit element_renamed(resource_type, old_id, new_id);
+  return true;
+}
+
+/**
  * @brief Returns the description of a resource element.
  * @param type A type of resource.
  * @param id Id of the element to get.
@@ -159,13 +221,17 @@ QString QuestResources::get_description(
  * @param type A type of resource.
  * @param id Id of the element to change.
  * @param description The new description to set.
+ * @return @c true in case of success, @c false if such an element does not
+ * exist.
  */
-void QuestResources::set_description(
+bool QuestResources::set_description(
     ResourceType type, const QString& id, const QString& description) {
 
-  resources.set_description(type, id.toStdString(), description.toStdString());
-  // TODO resources.save_to_file();
+  if (!resources.set_description(type, id.toStdString(), description.toStdString())) {
+    return false;
+  }
   emit element_description_changed(type, id, description);
+  return true;
 }
 
 /**
