@@ -18,6 +18,7 @@
 #include "gui/quest_files_model.h"
 #include <QContextMenuEvent>
 #include <QFileSystemModel>
+#include <QInputDialog>
 #include <QMenu>
 #include <QSignalMapper>
 
@@ -435,7 +436,29 @@ void QuestTreeView::rename_action_triggered(const QString& path) {
  * @param path The path of the resource to change.
  */
 void QuestTreeView::change_description_action_triggered(const QString& path) {
-  // TODO
+
+  Quest& quest = model->get_quest();
+  QuestResources& resources = quest.get_resources();
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id)) {
+    return;
+  }
+
+  QString resource_friendly_type_name = QuestResources::get_friendly_name(resource_type);
+  QString old_description = resources.get_description(resource_type, element_id);
+  bool ok;
+  QString new_description = QInputDialog::getText(
+        this,
+        tr("Change description"),
+        tr("New description for  %1 '%2':").arg(resource_friendly_type_name, element_id),
+        QLineEdit::Normal,
+        old_description,
+        &ok);
+
+  if (ok && !new_description.isEmpty()) {
+    // TODO
+  }
 }
 
 /**
