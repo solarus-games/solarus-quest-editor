@@ -283,6 +283,7 @@ bool QuestFilesModel::setData(
   }
 
   quest.get_resources().set_description(resource_type, element_id, value.toString());
+  quest.get_resources().save();
   emit dataChanged(index, index);
 
   return true;

@@ -137,9 +137,9 @@ void TextEditor::save() {
     throw EditorException("Cannot open file '" + get_file_name() + "' for writing");
   }
 
-  QTextStream in(&file);
-  in.setCodec("UTF-8");
-  in << text_widget->toPlainText();
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+  out << text_widget->toPlainText();
   text_widget->document()->setModified(false);
 }
 

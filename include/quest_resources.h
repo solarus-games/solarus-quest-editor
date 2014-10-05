@@ -34,6 +34,8 @@ public:
 
   explicit QuestResources(Quest& quest);
 
+  void save() const;
+
   bool exists(ResourceType type, const QString& id) const;
   QString get_description(
       ResourceType type, const QString& id) const;

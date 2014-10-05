@@ -457,7 +457,8 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
         &ok);
 
   if (ok && !new_description.isEmpty()) {
-    // TODO
+    resources.set_description(resource_type, element_id, new_description);
+    resources.save();
   }
 }
 

@@ -14,9 +14,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QFile>
 #include <QMap>
+#include <QTextStream>
 
 namespace {
 
@@ -60,6 +63,48 @@ void QuestResources::reload() {
   if (quest.is_valid()) {
     resources.load_from_file(quest.get_resource_list_path().toStdString());
     // TODO throw an exception in case of error
+  }
+}
+
+/**
+ * @brief Saves the resource list to the project_db.dat file of the quest.
+ * @throws EditorException If the save operation failed.
+ */
+void QuestResources::save() const {
+
+  if (!quest.is_valid()) {
+    throw EditorException("No quest");
+  }
+
+  QString file_name = quest.get_resource_list_path();
+  QFile file(file_name);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    throw EditorException("Cannot open file '" + file_name + "' for writing");
+  }
+
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+
+  // Save each resource.
+  const std::map<ResourceType, std::string> resource_type_names =
+      Solarus::QuestResources::get_resource_type_names();
+  for (const auto& kvp: resource_type_names) {
+
+    const Solarus::QuestResources::ResourceMap& resource =
+        resources.get_elements(kvp.first);
+    for (const auto& element: resource) {
+
+      const std::string& id = element.first;
+      const std::string& description = element.second;
+
+      out << QString::fromStdString(kvp.second)
+          << "{ id = \""
+          << QString::fromStdString(id.c_str())
+          << "\", description = \""
+          << QString::fromStdString(description.c_str())
+          << "\" }\n";
+    }
+    out << "\n";
   }
 }
 
