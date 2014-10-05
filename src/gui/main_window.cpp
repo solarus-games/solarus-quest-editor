@@ -112,7 +112,11 @@ void MainWindow::on_actionSave_triggered() {
  */
 void MainWindow::on_actionClose_triggered() {
 
-  ui->tabWidget->close_file_requested(ui->tabWidget->currentIndex());
+  int index = ui->tabWidget->currentIndex();
+  if (index == -1) {
+    return;
+  }
+  ui->tabWidget->close_file_requested(index);
 }
 
 /**

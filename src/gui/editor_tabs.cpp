@@ -218,9 +218,13 @@ void EditorTabs::remove_editor(int index) {
 /**
  * @brief Returns the editor at the specified index.
  * @param index An editor index.
- * @return The editor at this index in the tab bar.
+ * @return The editor at this index in the tab bar or nullptr.
  */
 Editor* EditorTabs::get_editor(int index) {
+
+  if (index == -1 || index >= count()) {
+    return nullptr;
+  }
 
   return static_cast<Editor*>(widget(index));
 }
@@ -309,12 +313,12 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
 
 /**
  * @brief Slot called when the user attempts to close a tab.
- * @param index Index of the tab to closed.
+ * @param index Index of the tab to close.
  */
 void EditorTabs::close_file_requested(int index) {
 
   Editor* editor = get_editor(index);
-  if (editor->confirm_close()) {
+  if (editor != nullptr && editor->confirm_close()) {
     removeTab(index);
   }
 }
