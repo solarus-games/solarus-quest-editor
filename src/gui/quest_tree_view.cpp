@@ -560,7 +560,7 @@ void QuestTreeView::delete_action_triggered() {
         QDir dir(path);
         bool empty_dir = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() == 0;
         if (!empty_dir) {
-          // TODO we could remove directoriers recursively,
+          // TODO we could remove directories recursively,
           // but we have to take of resources they contain.
           GuiTools::warningDialog(tr("Directory is not empty"));
         }
