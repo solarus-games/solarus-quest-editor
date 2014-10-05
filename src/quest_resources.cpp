@@ -27,16 +27,16 @@ namespace {
  * Description of each resource type.
  */
 const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
-  { Solarus::ResourceType::MAP,      "Map"           },
-  { Solarus::ResourceType::TILESET,  "Tileset"       },
-  { Solarus::ResourceType::SPRITE,   "Sprite"        },
-  { Solarus::ResourceType::MUSIC,    "Music"         },
-  { Solarus::ResourceType::SOUND,    "Sound"         },
-  { Solarus::ResourceType::ITEM,     "Item"          },
-  { Solarus::ResourceType::ENEMY,    "Enemy"         },
-  { Solarus::ResourceType::ENTITY,   "Custom entity" },
-  { Solarus::ResourceType::LANGUAGE, "Language"      },
-  { Solarus::ResourceType::FONT,     "Font"          },
+  { Solarus::ResourceType::MAP,      QuestResources::tr("Map")           },
+  { Solarus::ResourceType::TILESET,  QuestResources::tr("Tileset")       },
+  { Solarus::ResourceType::SPRITE,   QuestResources::tr("Sprite")        },
+  { Solarus::ResourceType::MUSIC,    QuestResources::tr("Music")         },
+  { Solarus::ResourceType::SOUND,    QuestResources::tr("Sound")         },
+  { Solarus::ResourceType::ITEM,     QuestResources::tr("Item")          },
+  { Solarus::ResourceType::ENEMY,    QuestResources::tr("Enemy")         },
+  { Solarus::ResourceType::ENTITY,   QuestResources::tr("Custom entity") },
+  { Solarus::ResourceType::LANGUAGE, QuestResources::tr("Language")      },
+  { Solarus::ResourceType::FONT,     QuestResources::tr("Font")          },
 };
 
 }

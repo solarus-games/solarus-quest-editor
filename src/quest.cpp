@@ -172,7 +172,7 @@ QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
 
   auto it = resource_dirs.find(resource_type);
   if (it == resource_dirs.end()) {
-    qWarning() << "Unknown resource type";
+    qWarning() << tr("Unknown resource type");
     return "";
   }
 

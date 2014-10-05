@@ -92,7 +92,7 @@ void MainWindow::on_actionLoad_quest_triggered() {
   QString quest_path = file_names.first();
   if (!quest_manager.set_quest(quest_path)) {
     GuiTools::errorDialog(
-          "No quest was found in directory\n'" + quest_path + "'");
+          tr("No quest was found in directory\n'%1'").arg(quest_path));
   }
 }
 
@@ -189,7 +189,8 @@ void MainWindow::on_actionRun_quest_triggered() {
   }
   catch (const Solarus::SolarusFatal& ex) {
     // The run did not end well.
-    std::cout << "Quest terminated unexpectedly: " << ex.what() << std::endl;
+    std::cout << tr("Quest terminated unexpectedly: %1").arg(ex.what()).toStdString()
+              << std::endl;
   }
 }
 
@@ -205,7 +206,7 @@ void MainWindow::current_quest_changed(Quest& /* quest */) {
  */
 void MainWindow::update_title() {
 
-  QString title = "Solarus Quest Editor";
+  QString title = tr("Solarus Quest Editor");
   QString quest_name = quest_manager.get_quest().get_name();
   if (!quest_name.isEmpty()) {
     title = quest_name + " - " + title;

@@ -136,13 +136,13 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
     switch (section) {
 
     case FILE_COLUMN:
-      return "Resource";
+      return tr("Resource");
 
     case DESCRIPTION_COLUMN:
-      return "Description";
+      return tr("Description");
 
     case TYPE_COLUMN:
-      return "Type";
+      return tr("Type");
     }
     return QVariant();
   }
@@ -198,17 +198,18 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     case TYPE_COLUMN:  // Type
       if (is_quest_data_index(source_index)) {
         // Quest data directory (top-level item).
-        return "Quest";
+        return tr("Quest");
       }
 
       if (file_path == quest.get_main_script_path()) {
         // main.lua
-        return "Main Lua script";
+        return tr("Main Lua script");
       }
 
       if (quest.is_resource_path(file_path, resource_type)) {
         // A resource element folder.
-        return QuestResources::get_friendly_name(resource_type) + " folder";
+        return tr("%1 folder %2").
+            arg(QuestResources::get_friendly_name(resource_type)).arg("");
       }
 
       if (quest.is_resource_element(file_path, resource_type, element_id)) {
@@ -218,7 +219,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
       if (file_name.endsWith(".lua")) {
         // An arbitrary Lua script.
-        return "Lua script";
+        return tr("Lua script");
       }
 
       // Not a file managed by Solarus.

@@ -61,7 +61,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   QFile file(file_path);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    throw EditorException("Cannot open file '" + file_path + "'");
+    throw EditorException(tr("Cannot open file '%1'").arg(file_path));
   }
   QTextStream out(&file);
   out.setCodec("UTF-8");
@@ -134,7 +134,7 @@ void TextEditor::save() {
 
   QFile file(get_file_path());
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    throw EditorException("Cannot open file '" + get_file_name() + "' for writing");
+    throw EditorException(tr("Cannot open file '%1' for writing").arg(get_file_name()));
   }
 
   QTextStream out(&file);
@@ -154,8 +154,8 @@ bool TextEditor::confirm_close() {
 
   QMessageBox::StandardButton answer = QMessageBox::question(
         nullptr,
-        "Save the modifications",
-        "File '" + get_file_name() + "' has been modified. Do you want to save it?",
+        tr("Save the modifications"),
+        tr("File '%1' has been modified. Do you want to save it?").arg(get_file_name()),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
         QMessageBox::Save
         );
