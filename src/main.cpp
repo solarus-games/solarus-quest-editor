@@ -18,6 +18,8 @@
 #include "gui/main_window.h"
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 /**
  * @brief Entry point of the quest editor.
@@ -37,6 +39,11 @@ int main(int argc, char* argv[]) {
 
   // Set up the GUI.
   QApplication application(argc, argv);
+
+  QTranslator translator;
+  translator.load("solarus_editor_" + QLocale::system().name());
+  application.installTranslator(&translator);
+
   QuestManager quest_manager;
   MainWindow window(nullptr, quest_manager);
 

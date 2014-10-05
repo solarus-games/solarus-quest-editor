@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_QUEST_RESOURCES_H
 
 #include <solarus/QuestResources.h>
+#include <QMap>
 #include <QObject>
 
 class Quest;
@@ -42,8 +43,8 @@ public:
   void set_description(
       ResourceType type, const QString& id, const QString& description);
 
-  static QString get_lua_name(ResourceType resource_type);
-  static QString get_friendly_name(ResourceType resource_type);
+  QString get_lua_name(ResourceType resource_type) const;
+  QString get_friendly_name(ResourceType resource_type) const;
 
 signals:
 
@@ -64,6 +65,8 @@ private:
 
   Quest& quest;                        /**< The quest. */
   Solarus::QuestResources resources;   /**< The wrapped data. */
+  QMap<Solarus::ResourceType, QString>
+      resource_type_friendly_names;    /**< Description of each resource type. */
 
 };
 

@@ -17,6 +17,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
 option(SOLARUS_USE_LUAJIT "Use LuaJIT instead of default Lua (recommended)" ON)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
 find_package(Solarus REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -31,6 +32,24 @@ if(SOLARUS_USE_LUAJIT)
 else()
   find_package(Lua51 REQUIRED)
 endif()
+
+# Include directories.
+include_directories(
+  "${CMAKE_SOURCE_DIR}/include"
+)
+
+include_directories(SYSTEM
+  "${SOLARUS_INCLUDE_DIR}"
+  "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
+  "${SDL2_INCLUDE_DIR}"
+  "${SDL2_TTF_INCLUDE_DIR}"
+  "${SDL2_IMAGE_INCLUDE_DIR}"
+  "${OPENAL_INCLUDE_DIR}"
+  "${VORBISFILE_INCLUDE_DIR}"
+  "${OGG_INCLUDE_DIR}"
+  "${LUA_INCLUDE_DIR}"
+  "${PHYSFS_INCLUDE_DIR}"
+)
 
 # Source files.
 set(solarus_quest_editor_SOURCES
@@ -83,29 +102,23 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
   ${solarus_quest_editor_RESOURCES}
 )
 
+# Translations.
+set(solarus_quest_editor_TRANSLATIONS
+  translations/solarus_editor_fr_FR.ts
+)
+qt5_create_translation(solarus_quest_editor_TRANSLATIONS_QM
+  ${solarus_quest_editor_SOURCES}
+  ${solarus_quest_editor_FORMS}
+  ${solarus_quest_editor_TRANSLATIONS}
+)
+
 # Main executable.
-
-include_directories(
-  "${CMAKE_SOURCE_DIR}/include"
-)
-
-include_directories(SYSTEM
-  "${SOLARUS_INCLUDE_DIR}"
-  "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
-  "${SDL2_INCLUDE_DIR}"
-  "${SDL2_TTF_INCLUDE_DIR}"
-  "${SDL2_IMAGE_INCLUDE_DIR}"
-  "${OPENAL_INCLUDE_DIR}"
-  "${VORBISFILE_INCLUDE_DIR}"
-  "${OGG_INCLUDE_DIR}"
-  "${LUA_INCLUDE_DIR}"
-  "${PHYSFS_INCLUDE_DIR}"
-)
 
 add_executable(solarus-quest-editor
   ${solarus_quest_editor_SOURCES}
   ${solarus_quest_editor_FORMS_HEADERS}
   ${solarus_quest_editor_RESOURCES_RCC}
+  ${solarus_quest_editor_TRANSLATIONS_QM}
 )
 
 target_link_libraries(solarus-quest-editor

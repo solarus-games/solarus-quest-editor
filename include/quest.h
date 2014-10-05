@@ -65,6 +65,7 @@ public:
   bool is_strings_file(const QString& path, QString& language_id) const;
 
   // Resources.
+  const QuestResources& get_resources() const;
   QuestResources& get_resources();
 
 signals:

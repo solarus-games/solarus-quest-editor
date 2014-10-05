@@ -164,6 +164,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         source_index.row(), FILE_COLUMN, source_index.parent());
   QString file_name = source_model->fileName(file_source_index);
   QString file_path = source_model->filePath(file_source_index);
+  const QuestResources& resources = quest.get_resources();
   Solarus::ResourceType resource_type;
   QString element_id;
 
@@ -193,7 +194,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (!quest.is_resource_element(file_path, resource_type, element_id)) {
         return QVariant();
       }
-      return quest.get_resources().get_description(resource_type, element_id);
+      return resources.get_description(resource_type, element_id);
 
     case TYPE_COLUMN:  // Type
       if (is_quest_data_index(source_index)) {
@@ -208,13 +209,13 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
       if (quest.is_resource_path(file_path, resource_type)) {
         // A resource element folder.
-        return tr("%1 folder %2").
-            arg(QuestResources::get_friendly_name(resource_type)).arg("");
+        return tr("%1 folder").
+            arg(resources.get_friendly_name(resource_type));
       }
 
       if (quest.is_resource_element(file_path, resource_type, element_id)) {
         // A declared resource element.
-        return QuestResources::get_friendly_name(resource_type);
+        return resources.get_friendly_name(resource_type);
       }
 
       if (file_name.endsWith(".lua")) {
@@ -238,7 +239,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (!quest.is_resource_element(file_path, resource_type, element_id)) {
         return QVariant();
       }
-      return quest.get_resources().get_description(resource_type, element_id);
+      return resources.get_description(resource_type, element_id);
     }
 
   case Qt::DecorationRole:

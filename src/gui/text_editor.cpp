@@ -97,7 +97,7 @@ QIcon TextEditor::get_icon() const {
   Solarus::ResourceType resource_type;
   QString element_id;
   if (get_quest().is_resource_element(path, resource_type, element_id)) {
-    QString resource_lua_name = QuestResources::get_lua_name(resource_type);
+    QString resource_lua_name = get_quest().get_resources().get_lua_name(resource_type);
     return QIcon(":/images/icon_resource_" + resource_lua_name + ".png");
   }
 

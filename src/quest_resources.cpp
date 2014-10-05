@@ -18,28 +18,7 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include <QFile>
-#include <QMap>
 #include <QTextStream>
-
-namespace {
-
-/**
- * Description of each resource type.
- */
-const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
-  { Solarus::ResourceType::MAP,      QuestResources::tr("Map")           },
-  { Solarus::ResourceType::TILESET,  QuestResources::tr("Tileset")       },
-  { Solarus::ResourceType::SPRITE,   QuestResources::tr("Sprite")        },
-  { Solarus::ResourceType::MUSIC,    QuestResources::tr("Music")         },
-  { Solarus::ResourceType::SOUND,    QuestResources::tr("Sound")         },
-  { Solarus::ResourceType::ITEM,     QuestResources::tr("Item")          },
-  { Solarus::ResourceType::ENEMY,    QuestResources::tr("Enemy")         },
-  { Solarus::ResourceType::ENTITY,   QuestResources::tr("Custom entity") },
-  { Solarus::ResourceType::LANGUAGE, QuestResources::tr("Language")      },
-  { Solarus::ResourceType::FONT,     QuestResources::tr("Font")          },
-};
-
-}
 
 /**
  * @brief Creates an empty resource list for the specified quest.
@@ -47,6 +26,20 @@ const QMap<Solarus::ResourceType, QString> resource_type_friendly_names = {
  */
 QuestResources::QuestResources(Quest& quest):
   quest(quest) {
+
+  // Friendly names are set dynamically because they are translated.
+  resource_type_friendly_names = {
+    { Solarus::ResourceType::MAP,      tr("Map")           },
+    { Solarus::ResourceType::TILESET,  tr("Tileset")       },
+    { Solarus::ResourceType::SPRITE,   tr("Sprite")        },
+    { Solarus::ResourceType::MUSIC,    tr("Music")         },
+    { Solarus::ResourceType::SOUND,    tr("Sound")         },
+    { Solarus::ResourceType::ITEM,     tr("Item")          },
+    { Solarus::ResourceType::ENEMY,    tr("Enemy")         },
+    { Solarus::ResourceType::ENTITY,   tr("Custom entity") },
+    { Solarus::ResourceType::LANGUAGE, tr("Language")      },
+    { Solarus::ResourceType::FONT,     tr("Font")          },
+  };
 
   connect(&quest, SIGNAL(root_path_changed(const QString&)),
           this, SLOT(reload()));
@@ -152,7 +145,7 @@ void QuestResources::set_description(
  * @param resource_type A type of resources.
  * @return The Lua name of this resource type.
  */
-QString QuestResources::get_lua_name(ResourceType resource_type) {
+QString QuestResources::get_lua_name(ResourceType resource_type) const {
   return QString::fromStdString(
         Solarus::QuestResources::get_resource_type_name(resource_type));
 }
@@ -162,6 +155,6 @@ QString QuestResources::get_lua_name(ResourceType resource_type) {
  * @param resource_type A type of resources.
  * @return The human-readable name of this resource type.
  */
-QString QuestResources::get_friendly_name(ResourceType resource_type) {
+QString QuestResources::get_friendly_name(ResourceType resource_type) const {
   return resource_type_friendly_names[resource_type];
 }

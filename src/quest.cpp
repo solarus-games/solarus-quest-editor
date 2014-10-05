@@ -526,6 +526,14 @@ bool Quest::is_strings_file(const QString& path, QString& language_id) const {
  * @brief Returns this resources declared in this quest.
  * @return The resources.
  */
+const QuestResources& Quest::get_resources() const {
+  return resources;
+}
+
+/**
+ * @brief Returns this resources declared in this quest.
+ * @return The resources.
+ */
 QuestResources& Quest::get_resources() {
   return resources;
 }

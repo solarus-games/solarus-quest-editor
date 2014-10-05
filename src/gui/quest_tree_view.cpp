@@ -143,6 +143,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   }
 
   Quest& quest = model->get_quest();
+  const QuestResources& resources = quest.get_resources();
   QAction* action = nullptr;
 
   Solarus::ResourceType resource_type;
@@ -153,8 +154,8 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
     connect(new_element_signal_mapper, SIGNAL(mapped(const QString&)),
             this, SLOT(new_element_action_triggered(const QString&)));
 
-    QString resource_type_lua_name = QuestResources::get_lua_name(resource_type);
-    QString resource_type_friendly_name = QuestResources::get_friendly_name(resource_type);
+    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
     action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
           tr("Create %1...").arg(resource_type_friendly_name),
@@ -207,6 +208,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   }
 
   Quest& quest = model->get_quest();
+  const QuestResources& resources = quest.get_resources();
   QAction* action = nullptr;
   QSignalMapper* signal_mapper = new QSignalMapper(this);  // To add the path parameter.
   connect(signal_mapper, SIGNAL(mapped(const QString&)),
@@ -217,8 +219,8 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // A resource element.
 
-    QString resource_type_lua_name = QuestResources::get_lua_name(resource_type);
-    QString resource_type_friendly_name = QuestResources::get_friendly_name(resource_type);
+    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
     QIcon icon(":/images/icon_resource_" + resource_type_lua_name + ".png");
 
     switch (resource_type) {
@@ -452,7 +454,7 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
     return;
   }
 
-  QString resource_friendly_type_name = QuestResources::get_friendly_name(resource_type);
+  QString resource_friendly_type_name = resources.get_friendly_name(resource_type);
   QString old_description = resources.get_description(resource_type, element_id);
   bool ok;
   QString new_description = QInputDialog::getText(
