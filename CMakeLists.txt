@@ -135,4 +135,3 @@ target_link_libraries(solarus-quest-editor
   "${OGG_LIBRARY}"
   "${MODPLUG_LIBRARY}"
 )
-

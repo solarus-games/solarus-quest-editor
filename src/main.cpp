@@ -37,9 +37,9 @@ int main(int argc, char* argv[]) {
     quest_path = argv[1];
   }
 
-  // Set up the GUI.
   QApplication application(argc, argv);
 
+  // Set up the translation.
   QTranslator translator;
   translator.load("solarus_editor_" + QLocale::system().name());
   application.installTranslator(&translator);
