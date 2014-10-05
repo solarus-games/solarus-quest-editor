@@ -273,10 +273,14 @@ bool EditorTabs::show_editor(const QString& path) {
 
 /**
  * @brief Slot called when the user attempts to open a file.
- * @param quest The quest that holes this file.
+ * @param quest The quest that holds this file.
  * @param file_path Path of the file to open.
  */
 void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
+
+  if (path.isEmpty()) {
+    return;
+  }
 
   if (!quest.is_in_root_path(path)) {
     // Not a file of this quest.

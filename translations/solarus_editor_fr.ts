@@ -388,91 +388,95 @@
 <context>
     <name>QuestTreeView</name>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="165"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="207"/>
         <source>Create %1...</source>
         <translation>Créer %1...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="181"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="222"/>
         <source>New folder...</source>
         <translation>Nouveau dossier...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="193"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="234"/>
         <source>New script...</source>
         <translation>Nouveau script...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="234"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="272"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="290"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="48"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="256"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="242"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="277"/>
         <source>Open Script</source>
         <translation>Ouvrir le Script</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="253"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="287"/>
         <source>Open Dialogs</source>
         <translation>Ouvrir les Dialogues</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="259"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="290"/>
         <source>Open Strings</source>
         <translation>Ouvrir les Textes</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="329"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="351"/>
         <source>Rename...</source>
         <translation>Renommer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="341"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="363"/>
         <source>Change description...</source>
         <translation>Changer la description...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="380"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="42"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="465"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="49"/>
+        <source>Return</source>
+        <translation>Entrée</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/quest_tree_view.cpp" line="524"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="466"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="525"/>
         <source>New description for  %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos;:</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="499"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="568"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="582"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="570"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="641"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="655"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="500"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="571"/>
         <source>Do you really want to delete %1 &apos;%2&apos;?</source>
         <translation>Voulez-vous vraiment supprimer %1 &apos;%2&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="563"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="635"/>
         <source>Directory is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="569"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="642"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="583"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="656"/>
         <source>Do you really want to delete file &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le fichier &apos;%1&apos; ?</translation>
     </message>

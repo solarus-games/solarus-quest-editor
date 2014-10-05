@@ -35,6 +35,7 @@ public:
   explicit QuestTreeView(QWidget* parent = nullptr);
 
   void set_quest_manager(QuestManager& quest_manager);
+  QString get_selected_path() const;
 
 signals:
 
@@ -44,7 +45,9 @@ public slots:
 
   void current_quest_changed(Quest& quest);
 
-  void open_action_triggered(const QString& path);
+  void open_action_triggered();
+  void open_map_script_action_triggered();
+  void open_language_strings_action_triggered();
   void new_element_action_triggered(const QString& parent_path);
   void new_directory_action_triggered(const QString& parent_path);
   void new_script_action_triggered(const QString& parent_path);
@@ -65,7 +68,8 @@ private:
   void build_context_menu_delete(QMenu& menu, const QString& path);
 
   QuestFilesModel* model;         /**< The underlying model. */
-  QAction* delete_action;         /**< Action of deleting a file. */
+  QAction* open_action;           /**< Action of opening the selected file. */
+  QAction* delete_action;         /**< Action of deleting the selected file. */
 
 };
 

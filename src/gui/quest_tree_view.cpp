@@ -45,6 +45,12 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
           this, SLOT(delete_action_triggered()));
   addAction(delete_action);
 
+  open_action = new QAction(tr("Open"), this);
+  open_action->setShortcut(tr("Return"));
+  connect(open_action, SIGNAL(triggered()),
+          this, SLOT(open_action_triggered()));
+  addAction(open_action);
+
   // TODO other actions (new, rename, etc.) should also be here.
   // This allows to make keyboard shortcuts.
   // It is also much simpler to use the selected index instead of
@@ -93,6 +99,19 @@ void QuestTreeView::current_quest_changed(Quest& quest) {
 }
 
 /**
+ * @brief Returns the file path of the item selected if any.
+ * @return The selected file path or an empty string.
+ */
+QString QuestTreeView::get_selected_path() const {
+
+  QModelIndexList selected_indexes = selectedIndexes();
+  if (selected_indexes.isEmpty()) {
+    return "";
+  }
+  return model->get_file_path(selected_indexes.first());
+}
+
+/**
  * @brief Receives a double-click event.
  * @param event The event to handle.
  */
@@ -104,8 +123,7 @@ void QuestTreeView::mouseDoubleClickEvent(QMouseEvent* event) {
       !model->hasChildren(index) &&
       event->button() == Qt::LeftButton) {
     // Left double-click on leaf item: open the file.
-    QString path = model->get_file_path(index);
-    emit open_file_requested(model->get_quest(), path);
+    open_action_triggered();
     return;
   }
 
@@ -162,7 +180,19 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   const QuestResources& resources = quest.get_resources();
   QAction* action = nullptr;
 
+  if (!QFileInfo(path).isDir()) {
+    // Not a directory: don't show creation items.
+    return;
+  }
+
   Solarus::ResourceType resource_type;
+  QString element_id;
+  if (quest.is_resource_element(path, resource_type, element_id)) {
+    // Resource element implemented as a directory (language).
+    // Not considered as a directory for this view.
+    return;
+  }
+
   if (quest.is_resource_path(path, resource_type) ||
       (quest.is_in_resource_path(path, resource_type) && QFileInfo(path).isDir())) {
     // Resource directory or subdirectory: let the user create a new element in it.
@@ -183,32 +213,30 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
     menu.addSeparator();
   }
 
-  if (QFileInfo(path).isDir()) {
-    // Any directory: create directory and create script.
-    QSignalMapper* new_directory_signal_mapper = new QSignalMapper(this);
-    connect(new_directory_signal_mapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(new_directory_action_triggered(const QString&)));
-    action = new QAction(
-          QIcon(":/images/icon_folder_closed.png"),
-          tr("New folder..."),
-          this);
-    connect(action, SIGNAL(triggered()),
-            new_directory_signal_mapper, SLOT(map()));
-    new_directory_signal_mapper->setMapping(action, path);
-    menu.addAction(action);
+  // Any directory: create directory and create script.
+  QSignalMapper* new_directory_signal_mapper = new QSignalMapper(this);
+  connect(new_directory_signal_mapper, SIGNAL(mapped(const QString&)),
+          this, SLOT(new_directory_action_triggered(const QString&)));
+  action = new QAction(
+        QIcon(":/images/icon_folder_closed.png"),
+        tr("New folder..."),
+        this);
+  connect(action, SIGNAL(triggered()),
+          new_directory_signal_mapper, SLOT(map()));
+  new_directory_signal_mapper->setMapping(action, path);
+  menu.addAction(action);
 
-    QSignalMapper* new_script_signal_mapper = new QSignalMapper(this);
-    connect(new_script_signal_mapper, SIGNAL(mapped(const QString&)),
-            this, SLOT(new_script_action_triggered(const QString&)));
-    action = new QAction(
-          QIcon(":/images/icon_script.png"),
-          tr("New script..."),
-          this);
-    connect(action, SIGNAL(triggered()),
-            new_script_signal_mapper, SLOT(map()));
-    new_script_signal_mapper->setMapping(action, path);
-    menu.addAction(action);
-  }
+  QSignalMapper* new_script_signal_mapper = new QSignalMapper(this);
+  connect(new_script_signal_mapper, SIGNAL(mapped(const QString&)),
+          this, SLOT(new_script_action_triggered(const QString&)));
+  action = new QAction(
+        QIcon(":/images/icon_script.png"),
+        tr("New script..."),
+        this);
+  connect(action, SIGNAL(triggered()),
+          new_script_signal_mapper, SLOT(map()));
+  new_script_signal_mapper->setMapping(action, path);
+  menu.addAction(action);
 }
 
 /**
@@ -225,9 +253,8 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   Quest& quest = model->get_quest();
   const QuestResources& resources = quest.get_resources();
   QAction* action = nullptr;
-  QSignalMapper* signal_mapper = new QSignalMapper(this);  // To add the path parameter.
-  connect(signal_mapper, SIGNAL(mapped(const QString&)),
-          this, SLOT(open_action_triggered(const QString&)));
+  open_action->setText(tr("Open"));  // Restore the normal Open text and icon.
+  open_action->setIcon(QIcon());
 
   Solarus::ResourceType resource_type;
   QString element_id;
@@ -235,42 +262,34 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     // A resource element.
 
     QString resource_type_lua_name = resources.get_lua_name(resource_type);
-    QIcon icon(":/images/icon_resource_" + resource_type_lua_name + ".png");
+    open_action->setIcon(
+          QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"));
 
     switch (resource_type) {
 
     case ResourceType::MAP:
 
       // For a map, the user can open the map data file or the map script.
-      action = new QAction(icon, tr("Open"), this);
-      connect(action, SIGNAL(triggered()),
-              signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(action, path);
-      menu.addAction(action);
+      menu.addAction(open_action);
 
       action = new QAction(
             QIcon(":/images/icon_script.png"),
             tr("Open Script"),
             this);
       connect(action, SIGNAL(triggered()),
-              signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(action, quest.get_map_script_path(element_id));
+              this, SLOT(open_map_script_action_triggered()));
       menu.addAction(action);
       break;
 
     case ResourceType::LANGUAGE:
 
       // For a language, the user can open dialogs or strings.
-      action = new QAction(icon, tr("Open Dialogs"), this);
-      connect(action, SIGNAL(triggered()),
-              signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(action, quest.get_dialogs_path(element_id));
-      menu.addAction(action);
+      open_action->setText(tr("Open Dialogs"));
+      menu.addAction(open_action);
 
-      action = new QAction(icon, tr("Open Strings"), this);
+      action = new QAction(open_action->icon(), tr("Open Strings"), this);
       connect(action, SIGNAL(triggered()),
-              signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(action, quest.get_strings_path(element_id));
+              this, SLOT(open_language_strings_action_triggered()));
       menu.addAction(action);
       break;
 
@@ -280,11 +299,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     case ResourceType::ENEMY:
     case ResourceType::ENTITY:
       // Other editable resource types,
-      action = new QAction(icon, tr("Open"), this);
-      connect(action, SIGNAL(triggered()),
-              signal_mapper, SLOT(map()));
-      signal_mapper->setMapping(action, path);
-      menu.addAction(action);
+      menu.addAction(open_action);
       break;
 
     case ResourceType::MUSIC:
@@ -297,12 +312,8 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   }
   else if (path.endsWith(".lua")) {
     // Open a Lua script that is not a resource.
-    action = new QAction(
-          QIcon(":/images/icon_script.png"), tr("Open"), this);
-    connect(action, SIGNAL(triggered()),
-            signal_mapper, SLOT(map()));
-    signal_mapper->setMapping(action, path);
-    menu.addAction(action);
+    open_action->setIcon(QIcon(":/images/icon_script.png"));
+    menu.addAction(open_action);
   }
 }
 
@@ -386,12 +397,59 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
 }
 
 /**
- * @brief Slot called when the user wants to open a file.
- * @param path Path of the file to open.
+ * @brief Slot called when the user wants to open the selected file.
  */
-void QuestTreeView::open_action_triggered(const QString& path) {
+void QuestTreeView::open_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
 
   emit open_file_requested(model->get_quest(), path);
+}
+
+/**
+ * @brief Slot called when the user wants to open the script of a map.
+ */
+void QuestTreeView::open_map_script_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id) ||
+      resource_type != ResourceType::MAP) {
+    return;
+  }
+
+  emit open_file_requested(quest, quest.get_map_script_path(element_id));
+}
+
+/**
+ * @brief Slot called when the user wants to open the strings file of a
+ * language.
+ */
+void QuestTreeView::open_language_strings_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id) ||
+      resource_type != ResourceType::LANGUAGE) {
+    return;
+  }
+
+  emit open_file_requested(quest, quest.get_strings_path(element_id));
 }
 
 /**
@@ -483,11 +541,7 @@ void QuestTreeView::change_description_action_triggered(const QString& path) {
  */
 void QuestTreeView::delete_action_triggered() {
 
-  QModelIndexList selected_indexes = selectedIndexes();
-  if (selected_indexes.isEmpty()) {
-    return;
-  }
-  const QString& path = model->get_file_path(selected_indexes.first());
+  const QString& path = get_selected_path();
   Quest& quest = model->get_quest();
   if (path == quest.get_data_path()) {
     // We don't delete the data directory.
