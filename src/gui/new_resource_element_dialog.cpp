@@ -14,34 +14,32 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/closable_tab_bar.h"
-#include <QMouseEvent>
+#include "gui/new_resource_element_dialog.h"
+#include "ui_new_resource_element_dialog.h"
 
 /**
- * @brief Creates a closable tab bar.
- * @param parent The parent object or nullptr.
+ * @brief Creates a dialog for a new resource element.
+ * @param parent parent The parent widget or nullptr.
  */
-ClosableTabBar::ClosableTabBar(QWidget* parent) :
-  QTabBar(parent) {
+NewResourceElementDialog::NewResourceElementDialog(QWidget* parent) :
+  QDialog(parent),
+  ui(new Ui::NewResourceElementDialog) {
 
-  setTabsClosable(true);
+  ui->setupUi(this);
 }
 
 /**
- * @brief Receives a mouse press event.
- * @param event The event to handle.
+ * @brief Executes the dialog with the specified parameters.
+ *
+ * The dialog is modal. This function returns when the dialog is closed.
+ *
+ * @param resource_type The type of resource to create.
+ * @return The information input by the user.
  */
-void ClosableTabBar::mousePressEvent(QMouseEvent* event) {
+NewResourceElementDialog::Result NewResourceElementDialog::exec(
+    ResourceType resource_type) {
 
-  if (event->button() == Qt::MidButton) {
-    int index = tabAt(event->pos());
-    if (index != -1) {
-      // Middle mouse button on a tab: close it.
-      emit tabCloseRequested(index);
-      return;
-    }
-  }
-
-  // Default mouse press behavior otherwise.
-  QTabBar::mousePressEvent(event);
+  QDialog::exec();
+  // TODO
+  return Result();
 }

@@ -59,6 +59,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
   include/gui/main_window.h
+  include/gui/new_resource_element_dialog.h
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/text_editor.h
@@ -72,6 +73,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
+  src/gui/new_resource_element_dialog.cpp
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/text_editor.cpp
@@ -85,6 +87,7 @@ set(solarus_quest_editor_SOURCES
 # UI files.
 set(solarus_quest_editor_FORMS
   src/gui/main_window.ui
+  src/gui/new_resource_element_dialog.ui
 )
 
 # Generate .h from .ui.

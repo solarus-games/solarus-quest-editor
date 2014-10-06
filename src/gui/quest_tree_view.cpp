@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/gui_tools.h"
+#include "gui/new_resource_element_dialog.h"
 #include "gui/quest_tree_view.h"
 #include "gui/quest_files_model.h"
 #include "editor_exception.h"
@@ -395,62 +396,6 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
 }
 
 /**
- * @brief Slot called when the user wants to open the selected file.
- */
-void QuestTreeView::open_action_triggered() {
-
-  QString path = get_selected_path();
-  if (path.isEmpty()) {
-    return;
-  }
-
-  emit open_file_requested(model->get_quest(), path);
-}
-
-/**
- * @brief Slot called when the user wants to open the script of a map.
- */
-void QuestTreeView::open_map_script_action_triggered() {
-
-  QString path = get_selected_path();
-  if (path.isEmpty()) {
-    return;
-  }
-
-  Quest& quest = model->get_quest();
-  ResourceType resource_type;
-  QString element_id;
-  if (!quest.is_resource_element(path, resource_type, element_id) ||
-      resource_type != ResourceType::MAP) {
-    return;
-  }
-
-  emit open_file_requested(quest, quest.get_map_script_path(element_id));
-}
-
-/**
- * @brief Slot called when the user wants to open the strings file of a
- * language.
- */
-void QuestTreeView::open_language_strings_action_triggered() {
-
-  QString path = get_selected_path();
-  if (path.isEmpty()) {
-    return;
-  }
-
-  Quest& quest = model->get_quest();
-  ResourceType resource_type;
-  QString element_id;
-  if (!quest.is_resource_element(path, resource_type, element_id) ||
-      resource_type != ResourceType::LANGUAGE) {
-    return;
-  }
-
-  emit open_file_requested(quest, quest.get_strings_path(element_id));
-}
-
-/**
  * @brief Slot called when the user wants to create a new resource element
  * under the selected resource top-level directory.
  *
@@ -476,6 +421,9 @@ void QuestTreeView::new_element_action_triggered() {
     QuestResources& resources = quest.get_resources();
     QString resource_type_friendly_name_for_id =
         resources.get_friendly_name_for_id(resource_type);
+
+    NewResourceElementDialog* dialog = new NewResourceElementDialog;
+    dialog->exec(resource_type);
 
     if (ok) {
       // TODO Quest::check_valid_file_name(element_id);
@@ -571,6 +519,62 @@ void QuestTreeView::new_script_action_triggered() {
     ex.show_dialog();
   }
 
+}
+
+/**
+ * @brief Slot called when the user wants to open the selected file.
+ */
+void QuestTreeView::open_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  emit open_file_requested(model->get_quest(), path);
+}
+
+/**
+ * @brief Slot called when the user wants to open the script of a map.
+ */
+void QuestTreeView::open_map_script_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id) ||
+      resource_type != ResourceType::MAP) {
+    return;
+  }
+
+  emit open_file_requested(quest, quest.get_map_script_path(element_id));
+}
+
+/**
+ * @brief Slot called when the user wants to open the strings file of a
+ * language.
+ */
+void QuestTreeView::open_language_strings_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id) ||
+      resource_type != ResourceType::LANGUAGE) {
+    return;
+  }
+
+  emit open_file_requested(quest, quest.get_strings_path(element_id));
 }
 
 /**
