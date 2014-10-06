@@ -46,6 +46,7 @@ public:
   QString get_main_script_path() const;
   QString get_resource_list_path() const;
   QString get_resource_path(ResourceType resource_type) const;
+  QString get_resource_element_path(ResourceType resource_type, const QString& element_id) const;
   QString get_dialogs_path(const QString& language_id) const;
   QString get_enemy_script_path(const QString& enemy_id) const;
   QString get_entity_script_path(const QString& custom_entity_id) const;

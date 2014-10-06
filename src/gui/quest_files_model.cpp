@@ -437,3 +437,17 @@ QString QuestFilesModel::get_file_path(const QModelIndex& index) const {
         source_index.row(), FILE_COLUMN, source_index.parent());
   return source_model->filePath(file_source_index);
 }
+
+/**
+ * @brief Returns the index of the specified path.
+ *
+ * The column of the returned index is always FILE_COLUMN.
+ *
+ * @param path Path of a file.
+ * @return The corresponding index. An invalid index is returned if the path
+ * does not exist in the model.
+ */
+QModelIndex QuestFilesModel::get_file_index(const QString& path) const {
+
+  return mapFromSource(source_model->index(path, 0));
+}

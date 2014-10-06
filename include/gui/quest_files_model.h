@@ -42,6 +42,7 @@ public:
   Quest& get_quest();
   QModelIndex get_quest_root_index() const;
   QString get_file_path(const QModelIndex& index) const;
+  QModelIndex get_file_index(const QString& path) const;
 
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;

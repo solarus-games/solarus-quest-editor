@@ -115,6 +115,22 @@ QString QuestTreeView::get_selected_path() const {
 }
 
 /**
+ * @brief Selects the item corresponding to the specified file path.
+ * @param The file path to selected. An empty string unselects any previous
+ * path.
+ */
+void QuestTreeView::set_selected_path(const QString& path) const {
+
+  QModelIndex index = model->get_file_index(path);
+  if (!index.isValid()) {
+    selectionModel()->clear();
+  }
+  else {
+    selectionModel()->select(index, QItemSelectionModel::Select);
+  }
+}
+
+/**
  * @brief Receives a double-click event.
  * @param event The event to handle.
  */
@@ -498,8 +514,11 @@ void QuestTreeView::rename_action_triggered() {
             element_id,
             &ok);
 
-      if (ok && !new_id.isEmpty()) {
-        quest.rename_resource_element(resource_type, element_id, new_id);  // TODO
+      if (ok && !new_id.isEmpty() && new_id != element_id) {
+        quest.rename_resource_element(resource_type, element_id, new_id);
+
+        // Select the new file instead of the old one.
+        set_selected_path(quest.get_resource_element_path(resource_type, new_id));
       }
     }
     else {
@@ -510,6 +529,7 @@ void QuestTreeView::rename_action_triggered() {
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
+
 }
 
 /**

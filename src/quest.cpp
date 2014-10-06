@@ -22,22 +22,24 @@
 #include <QFileInfo>
 #include <QMap>
 
+using ResourceType = Solarus::ResourceType;
+
 namespace {
 
 /**
  * Directory name of each resource type, relative to the quest data diretory.
  */
-const QMap<Solarus::ResourceType, QString> resource_dirs = {
-  { Solarus::ResourceType::MAP,      "maps"      },
-  { Solarus::ResourceType::TILESET,  "tilesets"  },
-  { Solarus::ResourceType::SPRITE,   "sprites"   },
-  { Solarus::ResourceType::MUSIC,    "musics"    },
-  { Solarus::ResourceType::SOUND,    "sounds"    },
-  { Solarus::ResourceType::ITEM,     "items"     },
-  { Solarus::ResourceType::ENEMY,    "enemies"   },
-  { Solarus::ResourceType::ENTITY,   "entities"  },
-  { Solarus::ResourceType::LANGUAGE, "languages" },
-  { Solarus::ResourceType::FONT,     "fonts"     },
+const QMap<ResourceType, QString> resource_dirs = {
+  { ResourceType::MAP,      "maps"      },
+  { ResourceType::TILESET,  "tilesets"  },
+  { ResourceType::SPRITE,   "sprites"   },
+  { ResourceType::MUSIC,    "musics"    },
+  { ResourceType::SOUND,    "sounds"    },
+  { ResourceType::ITEM,     "items"     },
+  { ResourceType::ENEMY,    "enemies"   },
+  { ResourceType::ENTITY,   "entities"  },
+  { ResourceType::LANGUAGE, "languages" },
+  { ResourceType::FONT,     "fonts"     },
 };
 
 }
@@ -170,7 +172,7 @@ QString Quest::get_resource_list_path() const {
  * @param resource_type A Solarus quest resource type.
  * @return The path to the directory of this resource.
  */
-QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
+QString Quest::get_resource_path(ResourceType resource_type) const {
 
   auto it = resource_dirs.find(resource_type);
   if (it == resource_dirs.end()) {
@@ -180,6 +182,50 @@ QString Quest::get_resource_path(Solarus::ResourceType resource_type) const {
 
   const QString& dir_name = *it;
   return get_data_path() + '/' + dir_name;
+}
+
+/**
+ * @brief Returns the path to the main file of a resource element.
+ * @param resource_type A Solarus quest resource type.
+ * @param element_id A resource element id.
+ * @return The path to the main file of this resource element.
+ */
+QString Quest::get_resource_element_path(ResourceType resource_type, const QString& element_id) const {
+
+  // TODO get_resource_element_paths?
+  switch (resource_type) {
+
+  case ResourceType::LANGUAGE:
+    return get_language_path(element_id);
+
+  case ResourceType::MAP:
+    return get_map_data_file_path(element_id);
+
+  case ResourceType::TILESET:
+    return get_tileset_data_file_path(element_id);
+
+  case ResourceType::SPRITE:
+    return get_sprite_path(element_id);
+
+  case ResourceType::MUSIC:
+    return get_music_path(element_id);
+
+  case ResourceType::SOUND:
+    return get_sound_path(element_id);
+
+  case ResourceType::ITEM:
+    return get_item_script_path(element_id);
+
+  case ResourceType::ENEMY:
+    return get_enemy_script_path(element_id);
+
+  case ResourceType::ENTITY:
+    return get_entity_script_path(element_id);
+
+  case ResourceType::FONT:
+    return get_font_path(element_id);
+  }
+
 }
 
 /**
@@ -392,7 +438,7 @@ bool Quest::is_in_root_path(const QString& path) const {
  * @param resource_type The resource type found if any.
  * @return @c true if this is a resource path.
  */
-bool Quest::is_resource_path(const QString& path, Solarus::ResourceType& resource_type) const {
+bool Quest::is_resource_path(const QString& path, ResourceType& resource_type) const {
 
   for (auto it = resource_dirs.begin(); it != resource_dirs.end(); ++it) {
     if (path == get_resource_path(it.key())) {
@@ -410,7 +456,7 @@ bool Quest::is_resource_path(const QString& path, Solarus::ResourceType& resourc
  * @param resource_type The resource type found if any.
  * @return @c true if this path is under a resource path.
  */
-bool Quest::is_in_resource_path(const QString& path, Solarus::ResourceType& resource_type) const {
+bool Quest::is_in_resource_path(const QString& path, ResourceType& resource_type) const {
 
   for (auto it = resource_dirs.begin(); it != resource_dirs.end(); ++it) {
     if (path.startsWith(get_resource_path(it.key()) + "/")) {
@@ -430,7 +476,7 @@ bool Quest::is_in_resource_path(const QString& path, Solarus::ResourceType& reso
  * @return @c true if this path is a resource element.
  */
 bool Quest::is_resource_element(
-    const QString& path, Solarus::ResourceType& resource_type, QString& element_id) const {
+    const QString& path, ResourceType& resource_type, QString& element_id) const {
 
   if (!is_in_resource_path(path, resource_type)) {
     // We are not in a resource directory.
@@ -447,36 +493,36 @@ bool Quest::is_resource_element(
   QString path_from_resource = path.right(path.size() - resource_path.size() - 1);
   QStringList extensions;
   switch (resource_type) {
-  case Solarus::ResourceType::MAP:
-  case Solarus::ResourceType::TILESET:
-  case Solarus::ResourceType::SPRITE:
+  case ResourceType::MAP:
+  case ResourceType::TILESET:
+  case ResourceType::SPRITE:
     extensions << ".dat";
     break;
 
-  case Solarus::ResourceType::MUSIC:
+  case ResourceType::MUSIC:
     extensions << ".ogg" << ".it" << ".spc";
     break;
 
-  case Solarus::ResourceType::SOUND:
+  case ResourceType::SOUND:
     extensions << ".ogg";
     break;
 
-  case Solarus::ResourceType::ITEM:
-  case Solarus::ResourceType::ENEMY:
-  case Solarus::ResourceType::ENTITY:
+  case ResourceType::ITEM:
+  case ResourceType::ENEMY:
+  case ResourceType::ENTITY:
     extensions << ".lua";
     break;
 
-  case Solarus::ResourceType::FONT:
+  case ResourceType::FONT:
     extensions << ".ttf" << ".ttc" << ".fon";
     break;
 
-  case Solarus::ResourceType::LANGUAGE:
+  case ResourceType::LANGUAGE:
     // No extension.
     break;
   }
 
-  if (resource_type == Solarus::ResourceType::LANGUAGE) {
+  if (resource_type == ResourceType::LANGUAGE) {
     element_id = path_from_resource;
   }
   else {
@@ -514,7 +560,7 @@ bool Quest::is_resource_element(
  */
 bool Quest::is_map_script(const QString& path, QString& map_id) const {
 
-  QString maps_path = get_resource_path(Solarus::ResourceType::MAP);
+  QString maps_path = get_resource_path(ResourceType::MAP);
   if (!path.startsWith(maps_path + "/")) {
     // We are not in the maps directory.
     return false;
@@ -529,7 +575,7 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
 
   // Remove the extension.
   map_id = path_from_maps.section('.', 0, -2);
-  if (!resources.exists(Solarus::ResourceType::MAP, map_id)) {
+  if (!resources.exists(ResourceType::MAP, map_id)) {
     // Valid map id, but not declared in the resource list.
     return false;
   }
@@ -549,7 +595,7 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
  */
 bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
 
-  QString languages_path = get_resource_path(Solarus::ResourceType::LANGUAGE);
+  QString languages_path = get_resource_path(ResourceType::LANGUAGE);
   if (!path.startsWith(languages_path + "/")) {
     // We are not in the languages directory.
     return false;
@@ -565,7 +611,7 @@ bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
 
   // Remove "/text/dialogs.dat" to determine the language id.
   language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
-  if (!resources.exists(Solarus::ResourceType::LANGUAGE, language_id)) {
+  if (!resources.exists(ResourceType::LANGUAGE, language_id)) {
     // Language id not declared in the resource list.
     return false;
   }
@@ -585,7 +631,7 @@ bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
  */
 bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 
-  QString languages_path = get_resource_path(Solarus::ResourceType::LANGUAGE);
+  QString languages_path = get_resource_path(ResourceType::LANGUAGE);
   if (!path.startsWith(languages_path + "/")) {
     // We are not in the languages directory.
     return false;
@@ -601,7 +647,7 @@ bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 
   // Remove "/text/strings.dat" to determine the language id.
   language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
-  if (!resources.exists(Solarus::ResourceType::LANGUAGE, language_id)) {
+  if (!resources.exists(ResourceType::LANGUAGE, language_id)) {
     // Language id not declared in the resource list.
     return false;
   }
@@ -783,6 +829,10 @@ void Quest::rename_resource_element(
     ResourceType resource_type, const QString& old_id, const QString& new_id) {
 
   // Sanity checks.
+  if (new_id == old_id) {
+    throw EditorException(tr("Same source and destination id").arg(new_id));
+  }
+
   if (resources.exists(resource_type, old_id) && resources.exists(resource_type, new_id)) {
     throw EditorException(tr("A resource with id '%1' already exists").arg(new_id));
   }
