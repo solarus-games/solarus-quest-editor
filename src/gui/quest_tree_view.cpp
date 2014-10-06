@@ -461,7 +461,36 @@ void QuestTreeView::new_element_action_triggered() {
  * The directory name will be prompted to the user.
  */
 void QuestTreeView::new_directory_action_triggered() {
-  // TODO
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  try {
+    bool ok;
+    QString dir_name = QInputDialog::getText(
+          this,
+          tr("New folder"),
+          tr("Folder name:"),
+          QLineEdit::Normal,
+          "",
+          &ok);
+
+    if (ok && !dir_name.isEmpty()) {
+
+      model->get_quest().create_dir(path, dir_name);
+
+      // Select the directory created.
+      QString dir_path = QFileInfo(path).path() + '/' + dir_name;
+      set_selected_path(dir_path);
+    }
+  }
+
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+
 }
 
 /**
