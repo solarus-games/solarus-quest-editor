@@ -558,8 +558,8 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
     return false;
   }
 
-  if (!path.endsWith(".lua")) {
-    // Not a script.
+  if (!is_script(path)) {
+    // Not a .lua file.
     return false;
   }
 

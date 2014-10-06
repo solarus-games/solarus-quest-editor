@@ -305,7 +305,7 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
   else if (quest.is_strings_file(path, element_id)) {
     open_strings_editor(quest, path);
   }
-  else if (path.endsWith(".lua")) {
+  else if (quest.is_script(path)) {
     // A Lua script that is not a resource element.
     open_text_editor(quest, path);
   }

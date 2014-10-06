@@ -44,7 +44,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   setFont(font);
 
   // Activate syntax coloring for Lua scripts.
-  if (file_path.endsWith(".lua")) {
+  if (quest.is_script(".lua")) {
     new LuaSyntaxHighlighter(text_widget->document());
   }
 
@@ -113,7 +113,7 @@ QIcon TextEditor::get_icon() const {
     return QIcon(":/images/icon_resource_language.png");
   }
 
-  if (get_file_path().endsWith(".lua")) {
+  if (get_quest().is_script(path)) {
     // A Lua script.
     return QIcon(":/images/icon_script.png");
   }

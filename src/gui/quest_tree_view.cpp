@@ -319,7 +319,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     }
 
   }
-  else if (path.endsWith(".lua")) {
+  else if (quest.is_script(path)) {
     // Open a Lua script that is not a resource.
     open_action->setIcon(QIcon(":/images/icon_script.png"));
     menu.addAction(open_action);
@@ -339,7 +339,7 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
 
   Quest& quest = model->get_quest();
   if (path == quest.get_data_path()) {
-    // We don't to rename the data directory.
+    // We don't want to rename the data directory.
     return;
   }
 
@@ -676,8 +676,6 @@ void QuestTreeView::delete_action_triggered() {
     // - a resource element,
     // - a directory,
     // - a file.
-
-    // TODO close the tab if any
 
     QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
     QString element_id;

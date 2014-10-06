@@ -217,7 +217,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         return resources.get_friendly_name(resource_type);
       }
 
-      if (file_name.endsWith(".lua")) {
+      if (quest.is_script(file_path)) {
         // An arbitrary Lua script.
         return tr("Lua script");
       }
@@ -331,7 +331,7 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
   }
 
   // Lua script icon.
-  if (file_name.endsWith(".lua")) {
+  if (quest.is_script(file_name)) {
     return "icon_script.png";
   }
 
