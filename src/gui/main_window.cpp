@@ -17,6 +17,7 @@
 #include "gui/editor.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "quest.h"
 #include "quest_manager.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
@@ -201,8 +202,14 @@ void MainWindow::on_actionRun_quest_triggered() {
 /**
  * @brief Slot called when the user opens another quest.
  */
-void MainWindow::current_quest_changed(Quest& /* quest */) {
+void MainWindow::current_quest_changed(Quest& quest) {
+
   update_title();
+
+  connect(&quest, SIGNAL(file_renamed(const QString&, const QString&)),
+          ui->tabWidget, SLOT(file_renamed(const QString&, const QString&)));
+  connect(&quest, SIGNAL(file_deleted(const QString&)),
+          ui->tabWidget, SLOT(file_deleted(const QString&)));
 }
 
 /**

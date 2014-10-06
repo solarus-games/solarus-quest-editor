@@ -324,6 +324,37 @@ void EditorTabs::close_file_requested(int index) {
 }
 
 /**
+ * @brief Slot called when a quest file of has been renamed.
+ *
+ * The corresponding tab is closed if any.
+ *
+ * @param old_path Old path of the file.
+ * @param new_path New path after renaming.
+ */
+void EditorTabs::file_renamed(const QString& old_path, const QString& new_path) {
+
+  int index = find_editor(old_path);
+  if (index != -1) {
+    removeTab(index);
+  }
+}
+
+/**
+ * @brief Slot called when a quest file of has been deleted.
+ *
+ * The corresponding tab is closed if any.
+ *
+ * @param path Path of the deleted file.
+ */
+void EditorTabs::file_deleted(const QString& path) {
+
+  int index = find_editor(path);
+  if (index != -1) {
+    removeTab(index);
+  }
+}
+
+/**
  * @brief Function called when the user wants to close all editors.
  *
  * The user can save files if necessary.
