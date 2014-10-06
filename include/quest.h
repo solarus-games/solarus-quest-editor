@@ -65,6 +65,8 @@ public:
   QString get_tileset_tiles_image_path(const QString& tileset_id) const;
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
+  static bool is_valid_file_name(const QString& file_name);
+  static void check_valid_file_name(const QString& file_name);
   bool is_in_root_path(const QString& path) const;
   void check_is_in_root_path(const QString& path) const;
   bool exists(const QString& path) const;

@@ -84,7 +84,7 @@ bool Quest::exists() const {
     return false;
   }
 
-  return QFileInfo(get_data_path() + "/quest.dat").exists();
+  return exists(get_data_path() + "/quest.dat");
 }
 
 /**
@@ -424,8 +424,8 @@ QString Quest::get_tileset_entities_image_path(
 
 /**
  * @brief Returns whether a path is a resource path.
- * @param path The path to test.
- * @param resource_type The resource type found if any.
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
  * @return @c true if this is a resource path.
  */
 bool Quest::is_resource_path(const QString& path, ResourceType& resource_type) const {
@@ -442,8 +442,8 @@ bool Quest::is_resource_path(const QString& path, ResourceType& resource_type) c
 
 /**
  * @brief Returns whether a path is under a resource path.
- * @param path The path to test.
- * @param resource_type The resource type found if any.
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
  * @return @c true if this path is under a resource path, even if it does not
  * exist yet.
  */
@@ -664,6 +664,59 @@ QuestResources& Quest::get_resources() {
 }
 
 /**
+ * @brief Returns whether a string is a valid file name for creation.
+ *
+ * You should call this function to check the name before creating or renaming
+ * a file.
+ * Note: slashes are allowed but ".." sequences are not.
+ *
+ * @param name The name to test (assumed without a full path).
+ * @return @c true if this is a valid file name.
+ */
+bool Quest::is_valid_file_name(const QString& name) {
+
+  if (
+      name.isEmpty() ||                // The file name should not be empty.
+      name.contains('\\') ||           // The path separator should be '/'.
+      name == "." ||                   // Current directory.
+      name == ".." ||                  // Don't go up in the file hierarchy.
+      name.startsWith("../") ||
+      name.endsWith("/..") ||
+      name.contains("/../") ||
+      name.trimmed() != name           // The file name should not begin or
+                                       // end with whitespaces.
+      ) {
+    return false;
+  }
+
+  // This does not mean it is okay, but we have at least eliminated some
+  // nasty situations.
+  return true;
+}
+
+/**
+ * @brief Checks that a string is a valid file name for creation.
+ *
+ * You should call this function to check the name before creating or renaming
+ * a file.
+ * Note: slashes are allowed but ".." sequences are not.
+ *
+ * @param name The name to test (assumed without a full path).
+ * @throws EditorException If this is not a valid file name.
+ */
+void Quest::check_valid_file_name(const QString& name) {
+
+  if (!is_valid_file_name(name)) {
+    if (name.isEmpty()) {
+      throw EditorException(tr("Empty file name: '%1'").arg(name));
+    }
+    else {
+      throw EditorException(tr("Invalid file name: '%1'").arg(name));
+    }
+  }
+}
+
+/**
  * @brief Returns whether a path is under the quest path.
  * @param path The path to test.
  * @return @c true if this path is in the quest.
@@ -795,7 +848,9 @@ void Quest::create_dir(const QString& path) {
 
   QString parent_path(path + "/..");
   check_exists(parent_path);
-  if (!QDir(parent_path).mkdir(QDir(path).dirName())) {
+  QString dir_name = QDir(path).dirName();
+  check_valid_file_name(dir_name);
+  if (!QDir(parent_path).mkdir(dir_name)) {
     throw EditorException(tr("Cannot create directory '%1'").arg(path));
   }
 }
@@ -825,8 +880,10 @@ void Quest::create_dir_if_not_exists(const QString& path) {
  */
 void Quest::create_dir(const QString& parent_path, const QString& dir_name) {
 
+  check_valid_file_name(dir_name);
   check_exists(parent_path);
   check_is_dir(parent_path);
+  check_not_exists(parent_path + '/' + dir_name);
 
   if (!QDir(parent_path).mkdir(dir_name)) {
     throw EditorException(tr("Cannot create directory '%1'").arg(dir_name));
@@ -863,6 +920,7 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
 void Quest::create_file(const QString& path) {
 
   check_is_in_root_path(path);
+  check_not_exists(path);
 
   if (!QFile(path).open(QIODevice::WriteOnly)) {
     throw EditorException(tr("Cannot create file '%1'").arg(path));
@@ -1055,6 +1113,8 @@ void Quest::rename_resource_element(
   if (new_id == old_id) {
     throw EditorException(tr("Same source and destination id").arg(new_id));
   }
+
+  check_valid_file_name(new_id);
 
   if (resources.exists(resource_type, old_id) && resources.exists(resource_type, new_id)) {
     throw EditorException(tr("A resource with id '%1' already exists").arg(new_id));

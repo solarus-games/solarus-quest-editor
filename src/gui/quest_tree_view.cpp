@@ -465,12 +465,31 @@ void QuestTreeView::new_element_action_triggered() {
 
   Quest& quest = model->get_quest();
   ResourceType resource_type;
-  if (!quest.is_resource_path(path, resource_type)) {
-    // We expect built-in resource directories.
+  if (!quest.is_resource_path(path, resource_type) &&
+      !quest.is_in_resource_path(path, resource_type)) {
+    // We expect a built-in resource directory or a subdirectory or it.
     return;
   }
 
-  // TODO
+  try {
+    bool ok = false;
+    QuestResources& resources = quest.get_resources();
+    QString resource_type_friendly_name_for_id =
+        resources.get_friendly_name_for_id(resource_type);
+
+    if (ok) {
+      // TODO Quest::check_valid_file_name(element_id);
+
+      // TODO model->get_quest().create_resource_element();
+
+      // TODO Select the resource created.
+    }
+  }
+
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+
 }
 
 /**
@@ -487,7 +506,7 @@ void QuestTreeView::new_directory_action_triggered() {
   }
 
   try {
-    bool ok;
+    bool ok = false;
     QString dir_name = QInputDialog::getText(
           this,
           tr("New folder"),
@@ -496,8 +515,8 @@ void QuestTreeView::new_directory_action_triggered() {
           "",
           &ok);
 
-    if (ok && !dir_name.isEmpty()) {
-
+    if (ok) {
+      Quest::check_valid_file_name(dir_name);
       model->get_quest().create_dir(path, dir_name);
 
       // Select the directory created.
@@ -526,7 +545,7 @@ void QuestTreeView::new_script_action_triggered() {
   }
 
   try {
-    bool ok;
+    bool ok = false;
     QString file_name = QInputDialog::getText(
           this,
           tr("New Lua script"),
@@ -535,8 +554,8 @@ void QuestTreeView::new_script_action_triggered() {
           "",
           &ok);
 
-    if (ok && !file_name.isEmpty()) {
-
+    if (ok) {
+      Quest::check_valid_file_name(file_name);
       Quest& quest = model->get_quest();
       QString script_path = parent_path + '/' + file_name;
       quest.create_script(script_path);
@@ -585,7 +604,7 @@ void QuestTreeView::rename_action_triggered() {
       // Change the filename (and thereforce the id) of a resource element.
 
       QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
-      bool ok;
+      bool ok = false;
       QString new_id = QInputDialog::getText(
             this,
             tr("Rename resource"),
@@ -594,7 +613,8 @@ void QuestTreeView::rename_action_triggered() {
             element_id,
             &ok);
 
-      if (ok && !new_id.isEmpty() && new_id != element_id) {
+      if (ok && new_id != element_id) {
+        Quest::check_valid_file_name(new_id);
         quest.rename_resource_element(resource_type, element_id, new_id);
 
         // Select the new file instead of the old one.
@@ -603,7 +623,7 @@ void QuestTreeView::rename_action_triggered() {
     }
     else {
       // Rename a regular file or directory.
-      bool ok;
+      bool ok = false;
       QString file_name = QFileInfo(path).fileName();
       QString new_file_name = QInputDialog::getText(
             this,
@@ -613,8 +633,9 @@ void QuestTreeView::rename_action_triggered() {
             file_name,
             &ok);
 
-      if (ok && !new_file_name.isEmpty() && new_file_name != file_name) {
+      if (ok && new_file_name != file_name) {
 
+        Quest::check_valid_file_name(file_name);
         QString new_path = QFileInfo(path).path() + '/' + new_file_name;
         quest.rename_file(path, new_path);
 
@@ -653,7 +674,7 @@ void QuestTreeView::change_description_action_triggered() {
 
   QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
   QString old_description = resources.get_description(resource_type, element_id);
-  bool ok;
+  bool ok = false;
   QString new_description = QInputDialog::getText(
         this,
         tr("Change description"),
@@ -662,9 +683,17 @@ void QuestTreeView::change_description_action_triggered() {
         old_description,
         &ok);
 
-  if (ok && !new_description.isEmpty()) {
-    resources.set_description(resource_type, element_id, new_description);
-    resources.save();
+  if (ok) {
+    try {
+      if (new_description.isEmpty()) {
+        throw EditorException("Empty description");
+      }
+      resources.set_description(resource_type, element_id, new_description);
+      resources.save();
+    }
+    catch (const EditorException& ex) {
+      ex.show_dialog();
+    }
   }
 }
 
