@@ -45,7 +45,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   addAction(open_action);
 
   rename_action = new QAction(
-        QIcon(":/images/icon_rename.ong"), tr("Rename..."), this);
+        QIcon(":/images/icon_rename.png"), tr("Rename..."), this);
   rename_action->setShortcut(tr("F2"));
   connect(rename_action, SIGNAL(triggered()),
           this, SLOT(rename_action_triggered()));
