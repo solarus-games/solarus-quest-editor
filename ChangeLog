@@ -24,7 +24,8 @@ At this moment, it is in a very early stage, so almost everything that is
 possible with the old editor is still to be done in the new one.
 
 * Create a new quest.
-* Add, remove or rename resources.
+* Create resources.
+* Create Lua scripts.
 * Edit maps.
 * Edit tilesets.
 * Edit sprites.

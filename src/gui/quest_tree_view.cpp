@@ -523,7 +523,24 @@ void QuestTreeView::rename_action_triggered() {
     }
     else {
       // Rename a regular file or directory.
-      // TODO
+      bool ok;
+      QString file_name = QFileInfo(path).fileName();
+      QString new_file_name = QInputDialog::getText(
+            this,
+            tr("Rename file"),
+            tr("New name for file '%1':").arg(file_name),
+            QLineEdit::Normal,
+            file_name,
+            &ok);
+
+      if (ok && !new_file_name.isEmpty() && new_file_name != file_name) {
+
+        QString new_path = QFileInfo(path).path() + '/' + new_file_name;
+        quest.rename_file(path, new_path);
+
+        // Select the new file instead of the old one.
+        set_selected_path(new_path);
+      }
     }
   }
   catch (const EditorException& ex) {
