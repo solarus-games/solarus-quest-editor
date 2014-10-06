@@ -453,6 +453,19 @@ void QuestTreeView::open_language_strings_action_triggered() {
  * The id and description of the element will be prompted to the user.
  */
 void QuestTreeView::new_element_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  if (!quest.is_resource_path(path, resource_type)) {
+    // We expect built-in resource directories.
+    return;
+  }
+
   // TODO
 }
 
