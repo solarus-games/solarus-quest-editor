@@ -23,6 +23,8 @@
 
 /**
  * @brief A Solarus project that can be open with the editor.
+ *
+ * This class handles the various paths of all files in the project.
  */
 class Quest: public QObject {
   Q_OBJECT
@@ -64,7 +66,13 @@ public:
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
   bool is_in_root_path(const QString& path) const;
-  void check_in_root_path(const QString& path) const;
+  void check_is_in_root_path(const QString& path) const;
+  bool exists(const QString& path) const;
+  void check_exists(const QString& path) const;
+  void check_not_exists(const QString& path) const;
+  bool is_dir(const QString& path) const;
+  void check_is_dir(const QString& path) const;
+  void check_not_is_dir(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_resource_element(
@@ -80,6 +88,10 @@ public:
   void rename_resource_element(ResourceType resource_type, const QString& old_id, const QString& new_id);
   void delete_resource_element(ResourceType resource_type, const QString& element_id);
 
+  void create_dir(const QString& path);
+  void create_dir_if_not_exists(const QString& path);
+  void create_dir(const QString& parent_path, const QString& dir_name);
+  void create_dir_if_not_exists(const QString& parent_path, const QString& dir_name);
   void rename_file(const QString& old_path, const QString& new_path);
   void rename_file_if_exists(const QString& old_path, const QString& new_path);
   void delete_file(const QString& path);

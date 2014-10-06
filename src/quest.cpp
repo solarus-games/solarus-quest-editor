@@ -423,16 +423,6 @@ QString Quest::get_tileset_entities_image_path(
 }
 
 /**
- * @brief Returns whether a path is under the quest path.
- * @param path The path to test.
- * @return @c true if this path is in the quest.
- */
-bool Quest::is_in_root_path(const QString& path) const {
-
-  return path.startsWith(get_root_path());
-}
-
-/**
  * @brief Returns whether a path is a resource path.
  * @param path The path to test.
  * @param resource_type The resource type found if any.
@@ -672,13 +662,169 @@ QuestResources& Quest::get_resources() {
 }
 
 /**
+ * @brief Returns whether a path is under the quest path.
+ * @param path The path to test.
+ * @return @c true if this path is in the quest.
+ */
+bool Quest::is_in_root_path(const QString& path) const {
+
+  return path.startsWith(get_root_path());
+}
+
+/**
  * @brief Checks that a path is under the quest path.
+ *
+ * It is okay if such a file does not exist yet.
+ *
  * @throws EditorException If the path is not in this quest path.
  */
-void Quest::check_in_root_path(const QString& path) const {
+void Quest::check_is_in_root_path(const QString& path) const {
 
   if (!is_in_root_path(path)) {
     throw EditorException(tr("File '%1' is not in this quest").arg(path));
+  }
+}
+
+/**
+ * @brief Returns whether a path refers to an existing file or directory
+ * of this quest.
+ * @param path The path to test.
+ * @return @c true if this path exists and is in this quest.
+ */
+bool Quest::exists(const QString& path) const {
+
+  return is_in_root_path(path) && QFileInfo(path).exists();
+}
+
+/**
+ * @brief Checks that a path refers to an existing file or directory of
+ * this quest.
+ * @throws EditorException If the path does not exist or is outside the quest.
+ */
+void Quest::check_exists(const QString& path) const {
+
+  if (!exists(path)) {
+    throw EditorException(tr("File '%1' does not exist").arg(path));
+  }
+}
+
+/**
+ * @brief Checks that no file or directory exists in a path of this quest.
+ * @throws EditorException If the path already exists or is outside the quest.
+ */
+void Quest::check_not_exists(const QString& path) const {
+
+  check_is_in_root_path(path);
+
+  if (exists(path)) {
+    throw EditorException(tr("File '%1' already exists").arg(path));
+  }
+}
+
+/**
+ * @brief Returns whether a path exists and is a directory of this quest.
+ * @param path The path to test.
+ * @return @c true if this path exists and is in the quest.
+ */
+bool Quest::is_dir(const QString& path) const {
+
+  return exists(path) && QFileInfo(path).exists();
+}
+
+/**
+ * @brief Checks that a path exists and is a directory of this quest.
+ * @throws EditorException If the path is not a directory.
+ */
+void Quest::check_is_dir(const QString& path) const {
+
+  check_exists(path);
+
+  if (!QFileInfo(path).isDir()) {
+    throw EditorException(tr("File '%1' is not a directory").arg(path));
+  }
+}
+
+/**
+ * @brief Checks that a path exists and is not a directory.
+ * @throws EditorException If the path is a directory.
+ */
+void Quest::check_not_is_dir(const QString& path) const {
+
+  check_exists(path);
+
+  if (QFileInfo(path).isDir()) {
+    throw EditorException(tr("File '%1' is a directory").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to create a directory in this quest.
+ * @param path Path of the directory to create. It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_dir(const QString& path) {
+
+  check_is_in_root_path(path);
+
+  QString parent_path(path + "/..");
+  check_exists(parent_path);
+  if (!QDir(parent_path).mkdir(QDir(path).dirName())) {
+    throw EditorException(tr("Cannot create directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete a directory in this quest if it does not exist
+ * yet.
+ * @param path Path of the directory to create. If it already exists, it must
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_dir_if_not_exists(const QString& path) {
+
+  if (exists(path)) {
+    check_is_dir(path);
+  }
+  else {
+    create_dir(path);
+  }
+}
+
+/**
+ * @brief Attempts to create a directory in this quest.
+ * @param parent_path Path of an existing directory.
+ * @param dir_name Name of the new directory to create there. It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_dir(const QString& parent_path, const QString& dir_name) {
+
+  check_exists(parent_path);
+  check_is_dir(parent_path);
+
+  if (!QDir(parent_path).mkdir(dir_name)) {
+    throw EditorException(tr("Cannot create directory '%1'").arg(dir_name));
+  }
+}
+
+/**
+ * @brief Attempts to create a directory in this quest if it does not exist
+ * yet.
+ * @param parent_path Path of an existing directory.
+ * @param dir_name Name of the new directory to create there. If it already
+ * exists, it must be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& dir_name) {
+
+  check_exists(parent_path);
+  check_is_dir(parent_path);
+
+  QString path = parent_path + '/' + dir_name;
+  if (exists(path)) {
+    check_is_dir(path);
+  }
+  else {
+    create_dir(parent_path, dir_name);
   }
 }
 
@@ -690,19 +836,10 @@ void Quest::check_in_root_path(const QString& path) const {
  */
 void Quest::rename_file(const QString& old_path, const QString& new_path) {
 
-  check_in_root_path(old_path);
-  check_in_root_path(new_path);
+  check_exists(old_path);
+  check_not_exists(new_path);
 
-  QFile old_file(old_path);
-  QFile new_file(new_path);
-
-  if (!old_file.exists(old_path)) {
-    throw EditorException(tr("File '%1' does not exist").arg(old_path));
-  }
-  if (new_file.exists(new_path)) {
-    throw EditorException(tr("File '%1' already exists").arg(old_path));
-  }
-  if (!old_file.rename(new_path)) {
+  if (!QFile(old_path).rename(new_path)) {
     throw EditorException(tr("Cannot rename file '%1'").arg(old_path));
   }
 }
@@ -717,32 +854,25 @@ void Quest::rename_file(const QString& old_path, const QString& new_path) {
  */
 void Quest::rename_file_if_exists(const QString& old_path, const QString& new_path) {
 
-  QFile old_file(old_path);
-  QFile new_file(new_path);
-
-  if (old_file.exists()) {
-
-    if (new_file.exists()) {
-      throw EditorException(tr("File '%1' already exists").arg(new_path));
-    }
-    rename_file(old_path, new_path);
+  if (!exists(old_path)) {
+    // The old file does not exist anymore.
+    check_exists(new_path);
   }
   else {
-    // The old file does not exist anymore.
-    if (!new_file.exists()) {
-      throw EditorException(tr("File '%1' does not exist").arg(old_path));
-    }
+    // Normal case: the old file still exists.
+    check_not_exists(new_path);
+    rename_file(old_path, new_path);
   }
 }
 
 /**
  * @brief Attempts to delete a file of this quest.
- * @param path Path of the file to delete.
+ * @param path Path of the file to delete. It must not be a directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_file(const QString& path) {
 
-  check_in_root_path(path);
+  check_not_is_dir(path);
 
   if (!QFile(path).remove()) {
     throw EditorException(tr("Cannot delete file '%1'").arg(path));
@@ -751,50 +881,53 @@ void Quest::delete_file(const QString& path) {
 
 /**
  * @brief Attempts to delete a file of this quest if it exists.
- * @param path Path of the file to delete.
+ * @param path Path of the file to delete. If it exists, it must not be a
+ * directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_file_if_exists(const QString& path) {
 
-  if (QFile(path).exists()) {
+  if (exists(path)) {
     delete_file(path);
   }
 }
 
 /**
  * @brief Attempts to delete an empty directory of this quest.
- * @param path Path of the empty directory to delete.
+ * @param path Path of the empty directory to delete. It must be a directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_dir(const QString& path) {
 
-  check_in_root_path(path);
+  check_is_dir(path);
 
-  if (!QDir(path + "/..").rmdir(QDir(path).dirName())) {
+  QString parent_path(path + "/..");
+  if (!QDir(parent_path).rmdir(QDir(path).dirName())) {
     throw EditorException(tr("Cannot delete directory '%1'").arg(path));
   }
 }
 
 /**
  * @brief Attempts to delete an empty directory of this quest if it exists.
- * @param path Path of the empty directory to delete.
+ * @param path Path of the empty directory to delete. If it exists, if must
+ * be a directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_dir_if_exists(const QString& path) {
 
-  if (QFile(path).exists()) {
+  if (exists(path)) {
     delete_dir(path);
   }
 }
 
 /**
  * @brief Attempts to delete a directory of this quest and all its content.
- * @param path Path of the directory to delete.
+ * @param path Path of the directory to delete. It must be a directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_dir_recursive(const QString& path) {
 
-  check_in_root_path(path);
+  check_is_dir(path);
 
   if (!QDir(path).removeRecursively()) {
     throw EditorException(tr("Cannot delete directory '%1'").arg(path));
@@ -804,12 +937,13 @@ void Quest::delete_dir_recursive(const QString& path) {
 /**
  * @brief Attempts to delete a directory of this quest and all its content if
  * it exists.
- * @param path Path of the directory to delete.
+ * @param path Path of the directory to delete. If it exists, if must
+ * be a directory.
  * @throws EditorException In case of error.
  */
 void Quest::delete_dir_recursive_if_exists(const QString& path) {
 
-  if (QFile(path).exists()) {
+  if (exists(path)) {
     delete_dir_recursive(path);
   }
 }
