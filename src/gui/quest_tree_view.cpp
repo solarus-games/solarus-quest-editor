@@ -465,7 +465,51 @@ void QuestTreeView::new_script_action_triggered() {
  * The new name will be prompted to the user.
  */
 void QuestTreeView::rename_action_triggered() {
-  // TODO
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  Quest& quest = model->get_quest();
+  if (path == quest.get_data_path()) {
+    // We don't want to rename the data directory.
+    return;
+  }
+  ResourceType resource_type;
+  if (quest.is_resource_path(path, resource_type)) {
+    // Don't rename built-in resource directories.
+    return;
+  }
+
+  try {
+    QuestResources& resources = quest.get_resources();
+    QString element_id;
+    if (quest.is_resource_element(path, resource_type, element_id)) {
+      // Change the filename (and thereforce the id) of a resource element.
+
+      QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
+      bool ok;
+      QString new_id = QInputDialog::getText(
+            this,
+            tr("Rename resource"),
+            tr("New id for %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
+            QLineEdit::Normal,
+            element_id,
+            &ok);
+
+      if (ok && !new_id.isEmpty()) {
+        quest.rename_resource_element(resource_type, element_id, new_id);  // TODO
+      }
+    }
+    else {
+      // Rename a regular file or directory.
+      // TODO
+    }
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**
@@ -496,7 +540,7 @@ void QuestTreeView::change_description_action_triggered() {
   QString new_description = QInputDialog::getText(
         this,
         tr("Change description"),
-        tr("New description for  %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
+        tr("New description for %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
         QLineEdit::Normal,
         old_description,
         &ok);
@@ -518,10 +562,10 @@ void QuestTreeView::delete_action_triggered() {
   const QString& path = get_selected_path();
   Quest& quest = model->get_quest();
   if (path == quest.get_data_path()) {
-    // We don't delete the data directory.
+    // We don't want to delete the data directory.
     return;
   }
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   if (quest.is_resource_path(path, resource_type)) {
     // Don't delete resource directories.
     return;
@@ -593,7 +637,7 @@ void QuestTreeView::delete_action_triggered() {
       }
     }
   }
-  catch (EditorException& ex) {
+  catch (const EditorException& ex) {
     ex.show_dialog();
   }
 }

@@ -63,6 +63,7 @@ public:
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
   bool is_in_root_path(const QString& path) const;
+  void check_in_root_path(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_resource_element(
@@ -75,12 +76,17 @@ public:
   const QuestResources& get_resources() const;
   QuestResources& get_resources();
 
+  void rename_resource_element(ResourceType resource_type, const QString& old_id, const QString& new_id);
   void delete_resource_element(ResourceType resource_type, const QString& element_id);
 
+  void rename_file(const QString& old_path, const QString& new_path);
+  void rename_file_if_exists(const QString& old_path, const QString& new_path);
   void delete_file(const QString& path);
   void delete_file_if_exists(const QString& path);
   void delete_dir(const QString& path);
+  void delete_dir_if_exists(const QString& path);
   void delete_dir_recursive(const QString& path);
+  void delete_dir_recursive_if_exists(const QString& path);
 
 signals:
 

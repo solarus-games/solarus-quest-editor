@@ -626,15 +626,77 @@ QuestResources& Quest::get_resources() {
 }
 
 /**
+ * @brief Checks that a path is under the quest path.
+ * @throws EditorException If the path is not in this quest path.
+ */
+void Quest::check_in_root_path(const QString& path) const {
+
+  if (!is_in_root_path(path)) {
+    throw EditorException(tr("File '%1' is not in this quest").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to rename a file or directory of this quest.
+ * @param old_path Path of the file to rename. It must exist.
+ * @param new_path The new path. It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::rename_file(const QString& old_path, const QString& new_path) {
+
+  check_in_root_path(old_path);
+  check_in_root_path(new_path);
+
+  QFile old_file(old_path);
+  QFile new_file(new_path);
+
+  if (!old_file.exists(old_path)) {
+    throw EditorException(tr("File '%1' does not exist").arg(old_path));
+  }
+  if (new_file.exists(new_path)) {
+    throw EditorException(tr("File '%1' already exists").arg(old_path));
+  }
+  if (!old_file.rename(new_path)) {
+    throw EditorException(tr("Cannot rename file '%1'").arg(old_path));
+  }
+}
+
+/**
+ * @brief Attempts to rename a file or directory of this quest if it exists.
+ * @param old_path Path of the file to rename. If it no longer exists, then
+ * the new file must exist.
+ * @param new_path The new path. If it already exists, then the old file must
+ * no longer exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::rename_file_if_exists(const QString& old_path, const QString& new_path) {
+
+  QFile old_file(old_path);
+  QFile new_file(new_path);
+
+  if (old_file.exists()) {
+
+    if (new_file.exists()) {
+      throw EditorException(tr("File '%1' already exists").arg(new_path));
+    }
+    rename_file(old_path, new_path);
+  }
+  else {
+    // The old file does not exist anymore.
+    if (!new_file.exists()) {
+      throw EditorException(tr("File '%1' does not exist").arg(old_path));
+    }
+  }
+}
+
+/**
  * @brief Attempts to delete a file of this quest.
  * @param path Path of the file to delete.
  * @throws EditorException In case of error.
  */
 void Quest::delete_file(const QString& path) {
 
-  if (!is_in_root_path(path)) {
-    throw EditorException(tr("File '%1' is not in this quest").arg(path));
-  }
+  check_in_root_path(path);
 
   if (!QFile(path).remove()) {
     throw EditorException(tr("Cannot delete file '%1'").arg(path));
@@ -648,17 +710,8 @@ void Quest::delete_file(const QString& path) {
  */
 void Quest::delete_file_if_exists(const QString& path) {
 
-  if (!is_in_root_path(path)) {
-    throw EditorException(tr("File '%1' is not in this quest").arg(path));
-  }
-
-  QFile file(path);
-  if (!file.exists()) {
-    return;
-  }
-
-  if (!file.remove()) {
-    throw EditorException(tr("Cannot delete file '%1'").arg(path));
+  if (QFile(path).exists()) {
+    delete_file(path);
   }
 }
 
@@ -669,12 +722,22 @@ void Quest::delete_file_if_exists(const QString& path) {
  */
 void Quest::delete_dir(const QString& path) {
 
-  if (!is_in_root_path(path)) {
-    throw EditorException(tr("File '%1' is not in this quest").arg(path));
-  }
+  check_in_root_path(path);
 
   if (!QDir(path + "/..").rmdir(QDir(path).dirName())) {
     throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete an empty directory of this quest if it exists.
+ * @param path Path of the empty directory to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_if_exists(const QString& path) {
+
+  if (QFile(path).exists()) {
+    delete_dir(path);
   }
 }
 
@@ -685,9 +748,7 @@ void Quest::delete_dir(const QString& path) {
  */
 void Quest::delete_dir_recursive(const QString& path) {
 
-  if (!is_in_root_path(path)) {
-    throw EditorException(tr("File '%1' is not in this quest").arg(path));
-  }
+  check_in_root_path(path);
 
   if (!QDir(path).removeRecursively()) {
     throw EditorException(tr("Cannot delete directory '%1'").arg(path));
@@ -695,10 +756,110 @@ void Quest::delete_dir_recursive(const QString& path) {
 }
 
 /**
+ * @brief Attempts to delete a directory of this quest and all its content if
+ * it exists.
+ * @param path Path of the directory to delete.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_recursive_if_exists(const QString& path) {
+
+  if (QFile(path).exists()) {
+    delete_dir_recursive(path);
+  }
+}
+
+/**
+ * @brief Renames a resource element in filesystem and in the resource list.
+ *
+ * It is okay if the renaming is already done in the filesystem.
+ * It is okay too if the resource element has already the new id in the resource list.
+ *
+ * @param resource_type A type of resource.
+ * @param old_id Id of the element to rename.
+ * @param new_id The new id to set.
+ * @throws EditorException If an error occured.
+ */
+void Quest::rename_resource_element(
+    ResourceType resource_type, const QString& old_id, const QString& new_id) {
+
+  // Sanity checks.
+  if (resources.exists(resource_type, old_id) && resources.exists(resource_type, new_id)) {
+    throw EditorException(tr("A resource with id '%1' already exists").arg(new_id));
+  }
+
+  if (!resources.exists(resource_type, old_id) && !resources.exists(resource_type, new_id)) {
+    throw EditorException(tr("No such resource: '%1'").arg(old_id));
+  }
+
+  switch (resource_type) {
+
+  case ResourceType::LANGUAGE:
+    // A language is a directory.
+    rename_file_if_exists(get_language_path(old_id), get_language_path(new_id));
+    break;
+
+  case ResourceType::MAP:
+    // Rename the map data file.
+    rename_file_if_exists(get_map_data_file_path(old_id), get_map_data_file_path(new_id));
+
+    // Also rename the map script.
+    rename_file_if_exists(get_map_script_path(old_id), get_map_script_path(new_id));
+    break;
+
+  case ResourceType::TILESET:
+    // Rename the tileset data file.
+    rename_file_if_exists(get_tileset_data_file_path(old_id), get_tileset_data_file_path(new_id));
+
+    // Also delete the two tileset images.
+    rename_file_if_exists(get_tileset_tiles_image_path(old_id), get_tileset_tiles_image_path(new_id));
+    rename_file_if_exists(get_tileset_entities_image_path(old_id), get_tileset_entities_image_path(new_id));
+    break;
+
+  case ResourceType::SPRITE:
+    rename_file_if_exists(get_sprite_path(old_id), get_sprite_path(new_id));
+    break;
+
+  case ResourceType::MUSIC:
+    rename_file_if_exists(get_music_path(old_id), get_music_path(new_id));
+    break;
+
+  case ResourceType::SOUND:
+    rename_file_if_exists(get_sound_path(old_id), get_sound_path(new_id));
+    break;
+
+  case ResourceType::ITEM:
+    rename_file_if_exists(get_item_script_path(old_id), get_item_script_path(new_id));
+    break;
+
+  case ResourceType::ENEMY:
+    rename_file_if_exists(get_enemy_script_path(old_id), get_enemy_script_path(new_id));
+    break;
+
+  case ResourceType::ENTITY:
+    rename_file_if_exists(get_entity_script_path(old_id), get_entity_script_path(new_id));
+    break;
+
+  case ResourceType::FONT:
+    rename_file_if_exists(get_font_path(old_id), get_font_path(new_id));
+    break;
+  }
+
+  // The file was successfully renamed on the filesystem.
+  // Also rename it in the resource list.
+  if (resources.exists(resource_type, old_id)) {
+    resources.rename(resource_type, old_id, new_id);
+    resources.save();
+  }
+}
+
+/**
  * @brief Deletes a resource element from the filesystem and from the resource list.
+ *
+ * It is okay if some of its files are already removed.
+ * It is okay too if the resource element was already removed from the resource list.
+ *
  * @param resource_type A type of resource.
  * @param id Id of the element to remove.
- * @return @c true in case of success.
  * @throws EditorException If an error occured.
  */
 void Quest::delete_resource_element(
@@ -708,12 +869,12 @@ void Quest::delete_resource_element(
 
   case ResourceType::LANGUAGE:
     // A language is a directory.
-    delete_dir_recursive(get_language_path(element_id));
+    delete_dir_recursive_if_exists(get_language_path(element_id));
     break;
 
   case ResourceType::MAP:
     // Remove the map data file.
-    delete_file(get_map_data_file_path(element_id));
+    delete_file_if_exists(get_map_data_file_path(element_id));
 
     // Also delete the map script.
     delete_file_if_exists(get_map_script_path(element_id));
@@ -721,7 +882,7 @@ void Quest::delete_resource_element(
 
   case ResourceType::TILESET:
     // Remove the tileset data file.
-    delete_file(get_tileset_data_file_path(element_id));
+    delete_file_if_exists(get_tileset_data_file_path(element_id));
 
     // Also delete the two tileset images.
     delete_file_if_exists(get_tileset_tiles_image_path(element_id));
@@ -729,36 +890,38 @@ void Quest::delete_resource_element(
     break;
 
   case ResourceType::SPRITE:
-    delete_file(get_sprite_path(element_id));
+    delete_file_if_exists(get_sprite_path(element_id));
     break;
 
   case ResourceType::MUSIC:
-    delete_file(get_music_path(element_id));
+    delete_file_if_exists(get_music_path(element_id));
     break;
 
   case ResourceType::SOUND:
-    delete_file(get_sound_path(element_id));
+    delete_file_if_exists(get_sound_path(element_id));
     break;
 
   case ResourceType::ITEM:
-    delete_file(get_item_script_path(element_id));
+    delete_file_if_exists(get_item_script_path(element_id));
     break;
 
   case ResourceType::ENEMY:
-    delete_file(get_enemy_script_path(element_id));
+    delete_file_if_exists(get_enemy_script_path(element_id));
     break;
 
   case ResourceType::ENTITY:
-    delete_file(get_entity_script_path(element_id));
+    delete_file_if_exists(get_entity_script_path(element_id));
     break;
 
   case ResourceType::FONT:
-    delete_file(get_font_path(element_id));
+    delete_file_if_exists(get_font_path(element_id));
     break;
   }
 
   // The file was successfully removed from the filesystem.
   // Also remove it from the resource list.
-  resources.remove(resource_type, element_id);
-  resources.save();
+  if (resources.exists(resource_type, element_id)) {
+    resources.remove(resource_type, element_id);
+    resources.save();
+  }
 }
