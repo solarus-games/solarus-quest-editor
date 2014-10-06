@@ -73,7 +73,7 @@ private:
   void add_editor(Editor* editor);
   void remove_editor(int index);
 
-  QMap<QString, Editor*> editors;     /**< All editors currently open,
+  QMap<QString, Editor*> editors;      /**< All editors currently open,
                                         * indexed by their file path. */
 };
 

@@ -867,6 +867,7 @@ void Quest::create_file(const QString& path) {
   if (!QFile(path).open(QIODevice::WriteOnly)) {
     throw EditorException(tr("Cannot create file '%1'").arg(path));
   }
+  emit file_created(path);
 }
 
 /**
@@ -928,6 +929,7 @@ void Quest::rename_file(const QString& old_path, const QString& new_path) {
   if (!QFile(old_path).rename(new_path)) {
     throw EditorException(tr("Cannot rename file '%1'").arg(old_path));
   }
+  emit file_renamed(old_path, new_path);
 }
 
 /**
@@ -963,6 +965,7 @@ void Quest::delete_file(const QString& path) {
   if (!QFile(path).remove()) {
     throw EditorException(tr("Cannot delete file '%1'").arg(path));
   }
+  emit file_deleted(path);
 }
 
 /**

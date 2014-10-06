@@ -110,6 +110,9 @@ public:
 signals:
 
   void root_path_changed(const QString& root_path);
+  void file_created(const QString& path);
+  void file_renamed(const QString& old_path, const QString& new_path);
+  void file_deleted(const QString& path);
 
 private:
 
