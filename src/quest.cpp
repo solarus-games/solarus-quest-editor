@@ -27,7 +27,7 @@ using ResourceType = Solarus::ResourceType;
 namespace {
 
 /**
- * Directory name of each resource type, relative to the quest data diretory.
+ * @brief Directory name of each resource type, relative to the quest data diretory.
  */
 const QMap<ResourceType, QString> resource_dirs = {
   { ResourceType::MAP,      "maps"      },
