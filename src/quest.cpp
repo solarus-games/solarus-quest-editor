@@ -444,7 +444,8 @@ bool Quest::is_resource_path(const QString& path, ResourceType& resource_type) c
  * @brief Returns whether a path is under a resource path.
  * @param path The path to test.
  * @param resource_type The resource type found if any.
- * @return @c true if this path is under a resource path.
+ * @return @c true if this path is under a resource path, even if it does not
+ * exist yet.
  */
 bool Quest::is_in_resource_path(const QString& path, ResourceType& resource_type) const {
 
@@ -463,7 +464,8 @@ bool Quest::is_in_resource_path(const QString& path, ResourceType& resource_type
  * @param[in] path The path to test.
  * @param[out] resource_type The resource type found if any.
  * @param[out] element_id Id of the resource element if any.
- * @return @c true if this path is a resource element.
+ * @return @c true if this path is a resource element declared in the resource
+ * list, even if its files do not exist yet.
  */
 bool Quest::is_resource_element(
     const QString& path, ResourceType& resource_type, QString& element_id) const {
@@ -546,7 +548,7 @@ bool Quest::is_resource_element(
  *
  * @param[in] path The path to test.
  * @param[out] map_id Id of the map if it is a map script.
- * @return @c true if this path is a map script.
+ * @return @c true if this path is a map script, even if it does not exist yet.
  */
 bool Quest::is_map_script(const QString& path, QString& map_id) const {
 
@@ -580,8 +582,8 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
  * is_resource_element()) is the language directory, not the dialogs file.
  *
  * @param[in] path The path to test.
- * @param[out] map_id Id of the map if it is a map script.
- * @return @c true if this path is a map script.
+ * @param[out] language_id Language of the dialogs if it is a dialog file.
+ * @return @c true if this path is a dialogs file, even if it does not exist yet.
  */
 bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
 
@@ -616,8 +618,8 @@ bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
  * is_resource_element()) is the language directory, not the strings file.
  *
  * @param[in] path The path to test.
- * @param[out] map_id Id of the map if it is a map script.
- * @return @c true if this path is a map script.
+ * @param[out] language_id Language of the strings if it is a dialog file.
+ * @return @c true if this path is a strings file, even if it does not exist yet.
  */
 bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 
@@ -758,6 +760,31 @@ void Quest::check_not_is_dir(const QString& path) const {
 }
 
 /**
+ * @brief Returns whether a path of this quest corresponds to a Lua script.
+ * @param path The path to test.
+ * @return @c true if this path ends with ".lua", even if it does not exist yet.
+ */
+bool Quest::is_script(const QString& path) const {
+
+  return is_in_root_path(path) && path.endsWith(".lua");
+}
+
+/**
+ * @brief Checks that a path of this quest corresponds to a Lua script.
+ *
+ * It is okay if the script does not exist yet.
+ *
+ * @throws EditorException If the path does not end with ".lua".
+ */
+void Quest::check_is_script(const QString& path) const {
+
+  if (!is_script(path)) {
+    QString file_name(QFileInfo(path).fileName());
+    throw EditorException(tr("Wrong script name: '%1' (should end with '.lua')").arg(file_name));
+  }
+}
+
+/**
  * @brief Attempts to create a directory in this quest.
  * @param path Path of the directory to create. It must not exist.
  * @throws EditorException In case of error.
@@ -825,6 +852,65 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
   }
   else {
     create_dir(parent_path, dir_name);
+  }
+}
+
+/**
+ * @brief Attempts to create an empty file in this quest.
+ * @param path Path of the file to create. It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file(const QString& path) {
+
+  check_is_in_root_path(path);
+
+  if (!QFile(path).open(QIODevice::WriteOnly)) {
+    throw EditorException(tr("Cannot create file '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to create a file in this quest if it does not exist yet.
+ * @param path Path of the file to create. If it already exists, it must not
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file_if_not_exists(const QString& path) {
+
+  if (exists(path)) {
+    check_not_is_dir(path);
+  }
+  else {
+    create_file(path);
+  }
+}
+
+/**
+ * @brief Attempts to create an empty Lua script file in this quest.
+ * @param path Path of the file to create. It must end with ".lua".
+ * It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_script(const QString& path) {
+
+  // Check that the file name ends with ".lua" and create it as an empty file.
+  check_is_script(path);
+  create_file(path);
+}
+
+/**
+ * @brief Attempts to create a file in this quest if it does not exist yet.
+ * @param path Path of the file to create. If it already exists, it must not
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_script_if_not_exists(const QString& path) {
+
+  if (exists(path)) {
+    check_is_script(path);
+  }
+  else {
+    create_script(path);
   }
 }
 

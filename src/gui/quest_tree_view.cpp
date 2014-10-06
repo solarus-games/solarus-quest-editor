@@ -121,11 +121,13 @@ QString QuestTreeView::get_selected_path() const {
  */
 void QuestTreeView::set_selected_path(const QString& path) const {
 
-  QModelIndex index = model->get_file_index(path);
-  if (!index.isValid()) {
-    selectionModel()->clear();
+  if (get_selected_path() == path) {
+    return;
   }
-  else {
+
+  selectionModel()->clear();
+  QModelIndex index = model->get_file_index(path);
+  if (index.isValid()) {
     selectionModel()->select(index, QItemSelectionModel::Select);
   }
 }
@@ -482,7 +484,7 @@ void QuestTreeView::new_directory_action_triggered() {
       model->get_quest().create_dir(path, dir_name);
 
       // Select the directory created.
-      QString dir_path = QFileInfo(path).path() + '/' + dir_name;
+      QString dir_path = path + '/' + dir_name;
       set_selected_path(dir_path);
     }
   }
@@ -500,7 +502,39 @@ void QuestTreeView::new_directory_action_triggered() {
  * The file name will be prompted to the user.
  */
 void QuestTreeView::new_script_action_triggered() {
-  // TODO
+
+  QString parent_path = get_selected_path();
+  if (parent_path.isEmpty()) {
+    return;
+  }
+
+  try {
+    bool ok;
+    QString file_name = QInputDialog::getText(
+          this,
+          tr("New Lua script"),
+          tr("File name:"),
+          QLineEdit::Normal,
+          "",
+          &ok);
+
+    if (ok && !file_name.isEmpty()) {
+
+      Quest& quest = model->get_quest();
+      QString script_path = parent_path + '/' + file_name;
+      quest.create_script(script_path);
+
+      // Select the file created.
+      set_selected_path(script_path);
+
+      // Open it.
+      open_file_requested(quest, script_path);
+    }
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+
 }
 
 /**
@@ -642,6 +676,9 @@ void QuestTreeView::delete_action_triggered() {
     // - a resource element,
     // - a directory,
     // - a file.
+
+    // TODO close the tab if any
+
     QString path_from_data = path.right(path.length() - quest.get_data_path().length() - 1);
     QString element_id;
     if (quest.is_resource_element(path, resource_type, element_id)) {

@@ -73,6 +73,8 @@ public:
   bool is_dir(const QString& path) const;
   void check_is_dir(const QString& path) const;
   void check_not_is_dir(const QString& path) const;
+  bool is_script(const QString& path) const;
+  void check_is_script(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_resource_element(
@@ -88,6 +90,10 @@ public:
   void rename_resource_element(ResourceType resource_type, const QString& old_id, const QString& new_id);
   void delete_resource_element(ResourceType resource_type, const QString& element_id);
 
+  void create_file(const QString& path);
+  void create_file_if_not_exists(const QString& path);
+  void create_script(const QString& path);
+  void create_script_if_not_exists(const QString& path);
   void create_dir(const QString& path);
   void create_dir_if_not_exists(const QString& path);
   void create_dir(const QString& parent_path, const QString& dir_name);
