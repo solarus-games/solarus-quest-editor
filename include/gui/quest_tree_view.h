@@ -36,7 +36,7 @@ public:
 
   void set_quest_manager(QuestManager& quest_manager);
   QString get_selected_path() const;
-  void set_selected_path(const QString& path) const;
+  void set_selected_path(const QString& path);
 
 signals:
 

@@ -116,10 +116,13 @@ QString QuestTreeView::get_selected_path() const {
 
 /**
  * @brief Selects the item corresponding to the specified file path.
+ *
+ * Also ensures the parent of the item to make it visible.
+ *
  * @param The file path to selected. An empty string unselects any previous
  * path.
  */
-void QuestTreeView::set_selected_path(const QString& path) const {
+void QuestTreeView::set_selected_path(const QString& path) {
 
   if (get_selected_path() == path) {
     return;
@@ -129,6 +132,7 @@ void QuestTreeView::set_selected_path(const QString& path) const {
   QModelIndex index = model->get_file_index(path);
   if (index.isValid()) {
     selectionModel()->select(index, QItemSelectionModel::Select);
+    expand(index.parent());
   }
 }
 
