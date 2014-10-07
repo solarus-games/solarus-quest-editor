@@ -31,8 +31,6 @@ class Quest: public QObject {
 
 public:
 
-  using ResourceType = Solarus::ResourceType;
-
   Quest();
   explicit Quest(const QString& root_path);
 

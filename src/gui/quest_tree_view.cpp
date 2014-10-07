@@ -27,8 +27,6 @@
 #include <QMenu>
 #include <QMessageBox>
 
-using ResourceType = Solarus::ResourceType;
-
 /**
  * @brief Creates a quest tree view.
  * @param parent The parent or nullptr.
@@ -422,8 +420,8 @@ void QuestTreeView::new_element_action_triggered() {
     QString resource_type_friendly_name_for_id =
         resources.get_friendly_name_for_id(resource_type);
 
-    NewResourceElementDialog* dialog = new NewResourceElementDialog;
-    dialog->exec(resource_type);
+    NewResourceElementDialog dialog(resource_type, parentWidget());
+    int result = dialog.exec();
 
     if (ok) {
       // TODO Quest::check_valid_file_name(element_id);

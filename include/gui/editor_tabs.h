@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_EDITOR_TABS_H
 #define SOLARUSEDITOR_EDITOR_TABS_H
 
-#include <solarus/ResourceType.h>
+#include "quest_resources.h"
 #include <QMap>
 #include <QTabWidget>
 
@@ -32,8 +32,6 @@ class EditorTabs : public QTabWidget {
   Q_OBJECT
 
 public:
-
-  using ResourceType = Solarus::ResourceType;
 
   EditorTabs(QWidget* parent = nullptr);
 

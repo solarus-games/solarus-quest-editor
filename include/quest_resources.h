@@ -21,6 +21,8 @@
 #include <QMap>
 #include <QObject>
 
+using ResourceType = Solarus::ResourceType;
+
 class Quest;
 
 /**
@@ -30,8 +32,6 @@ class QuestResources : public QObject {
   Q_OBJECT
 
 public:
-
-  using ResourceType = Solarus::ResourceType;
 
   explicit QuestResources(Quest& quest);
 

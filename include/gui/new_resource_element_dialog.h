@@ -17,37 +17,37 @@
 #ifndef SOLARUSEDITOR_NEW_RESOURCE_ELEMENT_DIALOG_H
 #define SOLARUSEDITOR_NEW_RESOURCE_ELEMENT_DIALOG_H
 
+#include "quest_resources.h"
 #include "ui_new_resource_element_dialog.h"
-#include <solarus/ResourceType.h>
 #include <QDialog>
 #include <QPair>
 
 /**
  * @brief Dialog shown when creating a new resource element in the quest.
+ *
+ * This dialog does not create any resource element.
+ * It only shows input widgets and provides the text entered by the user.
  */
 class NewResourceElementDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  using ResourceType = Solarus::ResourceType;
+  NewResourceElementDialog(ResourceType resource_type, QWidget* parent = nullptr);
 
-  /**
-   * @brief Information entered by the user.
-   */
-  struct Result {
-    bool validated;          /**< Whether the user has validated or canceled. */
-    QString id;              /**< Id entered by the user. */
-    QString description;     /**< Description entered by the user. */
-  };
+  ResourceType get_resource_type() const;
+  QString get_element_id() const;
+  QString get_element_description() const;
 
-  NewResourceElementDialog(QWidget* parent = nullptr);
+public slots:
 
-  Result exec(ResourceType resource_type);
+  virtual void done(int result) override;
 
 private:
 
   Ui::NewResourceElementDialog ui;
+
+  ResourceType resource_type;
 
 };
 

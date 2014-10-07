@@ -22,8 +22,6 @@
 #include <QFileInfo>
 #include <QMap>
 
-using ResourceType = Solarus::ResourceType;
-
 namespace {
 
 /**
