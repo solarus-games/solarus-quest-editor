@@ -15,7 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/new_resource_element_dialog.h"
-#include "ui_new_resource_element_dialog.h"
 
 /**
  * @brief Creates a dialog for a new resource element.
@@ -23,9 +22,9 @@
  */
 NewResourceElementDialog::NewResourceElementDialog(QWidget* parent) :
   QDialog(parent),
-  ui(new Ui::NewResourceElementDialog) {
+  ui() {
 
-  ui->setupUi(this);
+  ui.setupUi(this);
 }
 
 /**

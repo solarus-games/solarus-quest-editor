@@ -35,20 +35,20 @@
  */
 MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   QMainWindow(parent),
-  ui(new Ui::MainWindow),
+  ui(),
   quest_manager(quest_manager) {
 
-  ui->setupUi(this);
+  ui.setupUi(this);
 
   // Set up children.
-  ui->quest_tree_view->set_quest_manager(quest_manager);
+  ui.quest_tree_view->set_quest_manager(quest_manager);
 
   int tree_width = 300;
-  ui->splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
+  ui.splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
   // Connect children.
-  connect(ui->quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
-          ui->tabWidget, SLOT(open_file_requested(Quest&, const QString&)));
+  connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
+          ui.tabWidget, SLOT(open_file_requested(Quest&, const QString&)));
 
   // Connect to external signals.
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
@@ -102,7 +102,7 @@ void MainWindow::on_actionLoad_quest_triggered() {
  */
 void MainWindow::on_actionSave_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->save();
   }
@@ -113,11 +113,11 @@ void MainWindow::on_actionSave_triggered() {
  */
 void MainWindow::on_actionClose_triggered() {
 
-  int index = ui->tabWidget->currentIndex();
+  int index = ui.tabWidget->currentIndex();
   if (index == -1) {
     return;
   }
-  ui->tabWidget->close_file_requested(index);
+  ui.tabWidget->close_file_requested(index);
 }
 
 /**
@@ -125,7 +125,7 @@ void MainWindow::on_actionClose_triggered() {
  */
 void MainWindow::on_actionUndo_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->undo();
   }
@@ -136,7 +136,7 @@ void MainWindow::on_actionUndo_triggered() {
  */
 void MainWindow::on_actionRedo_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->redo();
   }
@@ -147,7 +147,7 @@ void MainWindow::on_actionRedo_triggered() {
  */
 void MainWindow::on_actionCut_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->cut();
   }
@@ -158,7 +158,7 @@ void MainWindow::on_actionCut_triggered() {
  */
 void MainWindow::on_actionCopy_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->copy();
   }
@@ -169,7 +169,7 @@ void MainWindow::on_actionCopy_triggered() {
  */
 void MainWindow::on_actionPaste_triggered() {
 
-  Editor* editor = ui->tabWidget->get_editor();
+  Editor* editor = ui.tabWidget->get_editor();
   if (editor != nullptr) {
     editor->paste();
   }
@@ -207,9 +207,9 @@ void MainWindow::current_quest_changed(Quest& quest) {
   update_title();
 
   connect(&quest, SIGNAL(file_renamed(const QString&, const QString&)),
-          ui->tabWidget, SLOT(file_renamed(const QString&, const QString&)));
+          ui.tabWidget, SLOT(file_renamed(const QString&, const QString&)));
   connect(&quest, SIGNAL(file_deleted(const QString&)),
-          ui->tabWidget, SLOT(file_deleted(const QString&)));
+          ui.tabWidget, SLOT(file_deleted(const QString&)));
 }
 
 /**
@@ -249,5 +249,5 @@ void MainWindow::closeEvent(QCloseEvent* event) {
  */
 bool MainWindow::confirm_close() {
 
-  return ui->tabWidget->confirm_close();
+  return ui.tabWidget->confirm_close();
 }

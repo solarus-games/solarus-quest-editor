@@ -21,7 +21,6 @@
 #include <solarus/ResourceType.h>
 #include <QDialog>
 #include <QPair>
-#include <memory>
 
 /**
  * @brief Dialog shown when creating a new resource element in the quest.
@@ -48,8 +47,8 @@ public:
 
 private:
 
-  std::unique_ptr<Ui::NewResourceElementDialog> ui;
+  Ui::NewResourceElementDialog ui;
 
 };
 
-#endif // NEW_RESOURCE_ELEMENT_DIALOG_H
+#endif

@@ -19,7 +19,6 @@
 
 #include "ui_main_window.h"
 #include <QMainWindow>
-#include <memory>
 
 class Quest;
 class QuestManager;
@@ -61,7 +60,7 @@ private:
   bool confirm_close();
   void update_title();
 
-  std::unique_ptr<Ui::MainWindow> ui;
+  Ui::MainWindow ui;
   QuestManager& quest_manager;
 
 };
