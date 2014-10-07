@@ -61,6 +61,32 @@ Quest::Quest(const QString& root_path):
 }
 
 /**
+ * @brief Returns the path of this quest.
+ * @return The root path (above the data directory).
+ */
+QString Quest::get_root_path() const {
+  return root_path;
+}
+
+/**
+ * @brief Sets the path of this quest.
+ * @param root_path The root path (above the data directory).
+ * An empty string means an invalid quest.
+ */
+void Quest::set_root_path(const QString& root_path) {
+
+  QFileInfo file_info(root_path);
+  if (file_info.exists()) {
+    this->root_path = file_info.canonicalFilePath();
+  }
+  else {
+    this->root_path = root_path;
+  }
+
+  emit root_path_changed(root_path);
+}
+
+/**
  * @brief Returns whether this quest object is initialized.
  * @return @c false if this is no quest.
  */
@@ -86,29 +112,19 @@ bool Quest::exists() const {
 }
 
 /**
- * @brief Returns the path of this quest.
- * @return The root path (above the data directory).
+ * @brief Returns this resources declared in this quest.
+ * @return The resources.
  */
-QString Quest::get_root_path() const {
-  return root_path;
+const QuestResources& Quest::get_resources() const {
+  return resources;
 }
 
 /**
- * @brief Sets the path of this quest.
- * @param root_path The root path (above the data directory).
- * An empty string means an invalid quest.
+ * @brief Returns this resources declared in this quest.
+ * @return The resources.
  */
-void Quest::set_root_path(const QString& root_path) {
-
-  QFileInfo file_info(root_path);
-  if (file_info.exists()) {
-    this->root_path = file_info.canonicalFilePath();
-  }
-  else {
-    this->root_path = root_path;
-  }
-
-  emit root_path_changed(root_path);
+QuestResources& Quest::get_resources() {
+  return resources;
 }
 
 /**
@@ -646,22 +662,6 @@ bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 }
 
 /**
- * @brief Returns this resources declared in this quest.
- * @return The resources.
- */
-const QuestResources& Quest::get_resources() const {
-  return resources;
-}
-
-/**
- * @brief Returns this resources declared in this quest.
- * @return The resources.
- */
-QuestResources& Quest::get_resources() {
-  return resources;
-}
-
-/**
  * @brief Returns whether a string is a valid file name for creation.
  *
  * You should call this function to check the name before creating or renaming
@@ -836,6 +836,67 @@ void Quest::check_is_script(const QString& path) const {
 }
 
 /**
+ * @brief Attempts to create an empty file in this quest.
+ * @param path Path of the file to create. It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file(const QString& path) {
+
+  check_is_in_root_path(path);
+  check_not_exists(path);
+
+  if (!QFile(path).open(QIODevice::WriteOnly)) {
+    throw EditorException(tr("Cannot create file '%1'").arg(path));
+  }
+  emit file_created(path);
+}
+
+/**
+ * @brief Attempts to create a file in this quest if it does not exist yet.
+ * @param path Path of the file to create. If it already exists, it must not
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file_if_not_exists(const QString& path) {
+
+  if (exists(path)) {
+    check_not_is_dir(path);
+  }
+  else {
+    create_file(path);
+  }
+}
+
+/**
+ * @brief Attempts to create an empty Lua script file in this quest.
+ * @param path Path of the file to create. It must end with ".lua".
+ * It must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_script(const QString& path) {
+
+  // Check that the file name ends with ".lua" and create it as an empty file.
+  check_is_script(path);
+  create_file(path);
+}
+
+/**
+ * @brief Attempts to create a file in this quest if it does not exist yet.
+ * @param path Path of the file to create. If it already exists, it must not
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_script_if_not_exists(const QString& path) {
+
+  if (exists(path)) {
+    check_is_script(path);
+  }
+  else {
+    create_script(path);
+  }
+}
+
+/**
  * @brief Attempts to create a directory in this quest.
  * @param path Path of the directory to create. It must not exist.
  * @throws EditorException In case of error.
@@ -911,64 +972,22 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
 }
 
 /**
- * @brief Attempts to create an empty file in this quest.
- * @param path Path of the file to create. It must not exist.
- * @throws EditorException In case of error.
+ * @brief Creates a resource element on filesystem and in the resource list.
+ *
+ * It is okay if a file for this element already exists in the filesystem.
+ * Otherwise, it will be created if it is an editable type (map, tileset,
+ * sprite, language...).
+ * It is okay too if the resource element is already declared in the resource
+ * list.
+ *
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element to create.
+ * @param description Description of the element to create.
+ * @throws EditorException If an error occured.
  */
-void Quest::create_file(const QString& path) {
+void Quest::create_resource_element(ResourceType resource_type,
+                                    const QString& element_id, const QString& description) {
 
-  check_is_in_root_path(path);
-  check_not_exists(path);
-
-  if (!QFile(path).open(QIODevice::WriteOnly)) {
-    throw EditorException(tr("Cannot create file '%1'").arg(path));
-  }
-  emit file_created(path);
-}
-
-/**
- * @brief Attempts to create a file in this quest if it does not exist yet.
- * @param path Path of the file to create. If it already exists, it must not
- * be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::create_file_if_not_exists(const QString& path) {
-
-  if (exists(path)) {
-    check_not_is_dir(path);
-  }
-  else {
-    create_file(path);
-  }
-}
-
-/**
- * @brief Attempts to create an empty Lua script file in this quest.
- * @param path Path of the file to create. It must end with ".lua".
- * It must not exist.
- * @throws EditorException In case of error.
- */
-void Quest::create_script(const QString& path) {
-
-  // Check that the file name ends with ".lua" and create it as an empty file.
-  check_is_script(path);
-  create_file(path);
-}
-
-/**
- * @brief Attempts to create a file in this quest if it does not exist yet.
- * @param path Path of the file to create. If it already exists, it must not
- * be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::create_script_if_not_exists(const QString& path) {
-
-  if (exists(path)) {
-    check_is_script(path);
-  }
-  else {
-    create_script(path);
-  }
 }
 
 /**
@@ -1010,91 +1029,7 @@ void Quest::rename_file_if_exists(const QString& old_path, const QString& new_pa
 }
 
 /**
- * @brief Attempts to delete a file of this quest.
- * @param path Path of the file to delete. It must not be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_file(const QString& path) {
-
-  check_not_is_dir(path);
-
-  if (!QFile(path).remove()) {
-    throw EditorException(tr("Cannot delete file '%1'").arg(path));
-  }
-  emit file_deleted(path);
-}
-
-/**
- * @brief Attempts to delete a file of this quest if it exists.
- * @param path Path of the file to delete. If it exists, it must not be a
- * directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_file_if_exists(const QString& path) {
-
-  if (exists(path)) {
-    delete_file(path);
-  }
-}
-
-/**
- * @brief Attempts to delete an empty directory of this quest.
- * @param path Path of the empty directory to delete. It must be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_dir(const QString& path) {
-
-  check_is_dir(path);
-
-  QString parent_path(path + "/..");
-  if (!QDir(parent_path).rmdir(QDir(path).dirName())) {
-    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
-  }
-}
-
-/**
- * @brief Attempts to delete an empty directory of this quest if it exists.
- * @param path Path of the empty directory to delete. If it exists, if must
- * be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_dir_if_exists(const QString& path) {
-
-  if (exists(path)) {
-    delete_dir(path);
-  }
-}
-
-/**
- * @brief Attempts to delete a directory of this quest and all its content.
- * @param path Path of the directory to delete. It must be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_dir_recursive(const QString& path) {
-
-  check_is_dir(path);
-
-  if (!QDir(path).removeRecursively()) {
-    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
-  }
-}
-
-/**
- * @brief Attempts to delete a directory of this quest and all its content if
- * it exists.
- * @param path Path of the directory to delete. If it exists, if must
- * be a directory.
- * @throws EditorException In case of error.
- */
-void Quest::delete_dir_recursive_if_exists(const QString& path) {
-
-  if (exists(path)) {
-    delete_dir_recursive(path);
-  }
-}
-
-/**
- * @brief Renames a resource element in filesystem and in the resource list.
+ * @brief Renames a resource element on the filesystem and in the resource list.
  *
  * It is okay if the renaming is already done in the filesystem.
  * It is okay too if the resource element has already the new id in the resource list.
@@ -1180,6 +1115,90 @@ void Quest::rename_resource_element(
   if (resources.exists(resource_type, old_id)) {
     resources.rename(resource_type, old_id, new_id);
     resources.save();
+  }
+}
+
+/**
+ * @brief Attempts to delete a file of this quest.
+ * @param path Path of the file to delete. It must not be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_file(const QString& path) {
+
+  check_not_is_dir(path);
+
+  if (!QFile(path).remove()) {
+    throw EditorException(tr("Cannot delete file '%1'").arg(path));
+  }
+  emit file_deleted(path);
+}
+
+/**
+ * @brief Attempts to delete a file of this quest if it exists.
+ * @param path Path of the file to delete. If it exists, it must not be a
+ * directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_file_if_exists(const QString& path) {
+
+  if (exists(path)) {
+    delete_file(path);
+  }
+}
+
+/**
+ * @brief Attempts to delete an empty directory of this quest.
+ * @param path Path of the empty directory to delete. It must be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir(const QString& path) {
+
+  check_is_dir(path);
+
+  QString parent_path(path + "/..");
+  if (!QDir(parent_path).rmdir(QDir(path).dirName())) {
+    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete an empty directory of this quest if it exists.
+ * @param path Path of the empty directory to delete. If it exists, if must
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_if_exists(const QString& path) {
+
+  if (exists(path)) {
+    delete_dir(path);
+  }
+}
+
+/**
+ * @brief Attempts to delete a directory of this quest and all its content.
+ * @param path Path of the directory to delete. It must be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_recursive(const QString& path) {
+
+  check_is_dir(path);
+
+  if (!QDir(path).removeRecursively()) {
+    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  }
+}
+
+/**
+ * @brief Attempts to delete a directory of this quest and all its content if
+ * it exists.
+ * @param path Path of the directory to delete. If it exists, if must
+ * be a directory.
+ * @throws EditorException In case of error.
+ */
+void Quest::delete_dir_recursive_if_exists(const QString& path) {
+
+  if (exists(path)) {
+    delete_dir_recursive(path);
   }
 }
 

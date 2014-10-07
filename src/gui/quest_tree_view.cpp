@@ -395,7 +395,7 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
 
 /**
  * @brief Slot called when the user wants to create a new resource element
- * under the selected resource top-level directory.
+ * under the selected resource directory.
  *
  * The id and description of the element will be prompted to the user.
  */
@@ -419,16 +419,36 @@ void QuestTreeView::new_element_action_triggered() {
     QuestResources& resources = quest.get_resources();
     QString resource_type_friendly_name_for_id =
         resources.get_friendly_name_for_id(resource_type);
+    QString resource_path = quest.get_resource_path(resource_type);
+
+    // Put the directory clicked as initial id value in the dialog.
+    QString initial_id_value = "";
+    if (path != resource_path) {
+      initial_id_value = path.right(path.size() - resource_path.length() - 1) + '/';
+    }
 
     NewResourceElementDialog dialog(resource_type, parentWidget());
+    dialog.set_element_id(initial_id_value);
     int result = dialog.exec();
 
-    if (ok) {
-      // TODO Quest::check_valid_file_name(element_id);
+    if (result != QDialog::Accepted) {
+      return;
+    }
 
-      // TODO model->get_quest().create_resource_element();
+    QString element_id = dialog.get_element_id();
+    QString description = dialog.get_element_description();
+    Quest::check_valid_file_name(element_id);
 
-      // TODO Select the resource created.
+    model->get_quest().create_resource_element(
+          resource_type, element_id, description);
+
+    QString created_path = quest.get_resource_element_path(resource_type, element_id);
+    if (quest.exists(created_path)) {
+      // Select the resource created.
+      set_selected_path(created_path);
+
+      // Open it.
+      open_file_requested(quest, created_path);
     }
   }
 

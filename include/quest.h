@@ -40,7 +40,10 @@ public:
   bool is_valid() const;
   bool exists() const;
 
-  // Paths.
+  const QuestResources& get_resources() const;
+  QuestResources& get_resources();
+
+  // Get paths.
   QString get_name() const;
   QString get_data_path() const;
   QString get_main_script_path() const;
@@ -63,6 +66,7 @@ public:
   QString get_tileset_tiles_image_path(const QString& tileset_id) const;
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
+  // Check path properties.
   static bool is_valid_file_name(const QString& file_name);
   static void check_valid_file_name(const QString& file_name);
   bool is_in_root_path(const QString& path) const;
@@ -83,13 +87,7 @@ public:
   bool is_dialogs_file(const QString& path, QString& language_id) const;
   bool is_strings_file(const QString& path, QString& language_id) const;
 
-  // Resources.
-  const QuestResources& get_resources() const;
-  QuestResources& get_resources();
-
-  void rename_resource_element(ResourceType resource_type, const QString& old_id, const QString& new_id);
-  void delete_resource_element(ResourceType resource_type, const QString& element_id);
-
+  // Create, rename and delete paths.
   void create_file(const QString& path);
   void create_file_if_not_exists(const QString& path);
   void create_script(const QString& path);
@@ -98,14 +96,20 @@ public:
   void create_dir_if_not_exists(const QString& path);
   void create_dir(const QString& parent_path, const QString& dir_name);
   void create_dir_if_not_exists(const QString& parent_path, const QString& dir_name);
+  void create_resource_element(ResourceType resource_type,
+                               const QString& element_id, const QString& description);
   void rename_file(const QString& old_path, const QString& new_path);
   void rename_file_if_exists(const QString& old_path, const QString& new_path);
+  void rename_resource_element(ResourceType resource_type,
+                               const QString& old_id, const QString& new_id);
   void delete_file(const QString& path);
   void delete_file_if_exists(const QString& path);
   void delete_dir(const QString& path);
   void delete_dir_if_exists(const QString& path);
   void delete_dir_recursive(const QString& path);
   void delete_dir_recursive_if_exists(const QString& path);
+  void delete_resource_element(ResourceType resource_type,
+                               const QString& element_id);
 
 signals:
 
