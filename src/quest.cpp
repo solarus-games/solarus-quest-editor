@@ -200,46 +200,80 @@ QString Quest::get_resource_path(ResourceType resource_type) const {
 
 /**
  * @brief Returns the path to the main file of a resource element.
+ *
+ * For languages, the path returned is a directory.
+ *
  * @param resource_type A Solarus quest resource type.
  * @param element_id A resource element id.
  * @return The path to the main file of this resource element.
  */
-QString Quest::get_resource_element_path(ResourceType resource_type, const QString& element_id) const {
+QString Quest::get_resource_element_path(ResourceType resource_type,
+                                         const QString& element_id) const {
 
-  // TODO get_resource_element_paths?
+  return get_resource_element_paths(resource_type, element_id).first();
+}
+
+/**
+ * @brief Returns the paths to the files of a resource element.
+ *
+ * Indeed, some resource types have several files.
+ * For languages, only one path is returned: the language directory.
+ *
+ * @param resource_type A Solarus quest resource type.
+ * @param element_id A resource element id.
+ * @return The paths to the files of this resource element.
+ * The first element of the list is considered as the main file.
+ */
+QStringList Quest::get_resource_element_paths(ResourceType resource_type,
+                                              const QString& element_id) const {
+  QStringList paths;
   switch (resource_type) {
 
   case ResourceType::LANGUAGE:
-    return get_language_path(element_id);
+    paths << get_language_path(element_id);
+    break;
 
   case ResourceType::MAP:
-    return get_map_data_file_path(element_id);
+    paths << get_map_data_file_path(element_id)
+          << get_map_script_path(element_id);
+    break;
 
   case ResourceType::TILESET:
-    return get_tileset_data_file_path(element_id);
+    paths << get_tileset_data_file_path(element_id)
+          << get_tileset_tiles_image_path(element_id)
+          << get_tileset_entities_image_path(element_id);
+    break;
 
   case ResourceType::SPRITE:
-    return get_sprite_path(element_id);
+    paths << get_sprite_path(element_id);
+    break;
 
   case ResourceType::MUSIC:
-    return get_music_path(element_id);
+    paths << get_music_path(element_id);
+    break;
 
   case ResourceType::SOUND:
-    return get_sound_path(element_id);
+    paths << get_sound_path(element_id);
+    break;
 
   case ResourceType::ITEM:
-    return get_item_script_path(element_id);
+    paths << get_item_script_path(element_id);
+    break;
 
   case ResourceType::ENEMY:
-    return get_enemy_script_path(element_id);
+    paths << get_enemy_script_path(element_id);
+    break;
 
   case ResourceType::ENTITY:
-    return get_entity_script_path(element_id);
+    paths << get_entity_script_path(element_id);
+    break;
 
   case ResourceType::FONT:
-    return get_font_path(element_id);
+    paths << get_font_path(element_id);
+    break;
   }
 
+  return paths;
 }
 
 /**
@@ -781,7 +815,7 @@ void Quest::check_not_exists(const QString& path) const {
  */
 bool Quest::is_dir(const QString& path) const {
 
-  return exists(path) && QFileInfo(path).exists();
+  return exists(path) && QFileInfo(path).isDir();
 }
 
 /**
@@ -979,6 +1013,8 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
  * sprite, language...).
  * It is okay too if the resource element is already declared in the resource
  * list.
+ * However, it is not okay if it is already present in both the filesystem and
+ * the resource list.
  *
  * @param resource_type A type of resource.
  * @param element_id Id of the element to create.
@@ -988,6 +1024,7 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
 void Quest::create_resource_element(ResourceType resource_type,
                                     const QString& element_id, const QString& description) {
 
+  Quest::check_valid_file_name(element_id);
 }
 
 /**
@@ -1033,6 +1070,7 @@ void Quest::rename_file_if_exists(const QString& old_path, const QString& new_pa
  *
  * It is okay if the renaming is already done in the filesystem.
  * It is okay too if the resource element has already the new id in the resource list.
+ * However, it is not okay if it is already done in both.
  *
  * @param resource_type A type of resource.
  * @param old_id Id of the element to rename.
@@ -1049,72 +1087,53 @@ void Quest::rename_resource_element(
 
   check_valid_file_name(new_id);
 
-  if (resources.exists(resource_type, old_id) && resources.exists(resource_type, new_id)) {
+  if (resources.exists(resource_type, old_id) &&
+      resources.exists(resource_type, new_id)) {
     throw EditorException(tr("A resource with id '%1' already exists").arg(new_id));
   }
 
-  if (!resources.exists(resource_type, old_id) && !resources.exists(resource_type, new_id)) {
+  if (!resources.exists(resource_type, old_id) &&
+      !resources.exists(resource_type, new_id)) {
     throw EditorException(tr("No such resource: '%1'").arg(old_id));
   }
 
-  switch (resource_type) {
+  // Rename files from the filesystem.
+  bool renamed_on_filesystem = false;
+  QStringList old_paths = get_resource_element_paths(resource_type, old_id);
+  QStringList new_paths = get_resource_element_paths(resource_type, new_id);
+  for (int i = 0; i < old_paths.size(); ++i) {
+    QString old_path = old_paths.at(i);
+    QString new_path = new_paths.at(i);
 
-  case ResourceType::LANGUAGE:
-    // A language is a directory.
-    rename_file_if_exists(get_language_path(old_id), get_language_path(new_id));
-    break;
+    // Take care of not changing the extension for musics and fonts.
+    QString extension = QFileInfo(old_path).suffix();
+    QFileInfo new_path_info(new_path);
+    if (new_path_info.suffix() != extension) {
+      // For example when renaming music 'temple' to 'dungeon':
+      // the old path was /some/quest/data/musics/temple.it
+      // and the new path was initialized by default with
+      // /some/quest/data/musics/dungeon.ogg
+      new_path = new_path_info.path() + '/' +
+          new_path_info.completeBaseName() + '/' + extension;
+    }
 
-  case ResourceType::MAP:
-    // Rename the map data file.
-    rename_file_if_exists(get_map_data_file_path(old_id), get_map_data_file_path(new_id));
-
-    // Also rename the map script.
-    rename_file_if_exists(get_map_script_path(old_id), get_map_script_path(new_id));
-    break;
-
-  case ResourceType::TILESET:
-    // Rename the tileset data file.
-    rename_file_if_exists(get_tileset_data_file_path(old_id), get_tileset_data_file_path(new_id));
-
-    // Also delete the two tileset images.
-    rename_file_if_exists(get_tileset_tiles_image_path(old_id), get_tileset_tiles_image_path(new_id));
-    rename_file_if_exists(get_tileset_entities_image_path(old_id), get_tileset_entities_image_path(new_id));
-    break;
-
-  case ResourceType::SPRITE:
-    rename_file_if_exists(get_sprite_path(old_id), get_sprite_path(new_id));
-    break;
-
-  case ResourceType::MUSIC:
-    rename_file_if_exists(get_music_path(old_id), get_music_path(new_id));
-    break;
-
-  case ResourceType::SOUND:
-    rename_file_if_exists(get_sound_path(old_id), get_sound_path(new_id));
-    break;
-
-  case ResourceType::ITEM:
-    rename_file_if_exists(get_item_script_path(old_id), get_item_script_path(new_id));
-    break;
-
-  case ResourceType::ENEMY:
-    rename_file_if_exists(get_enemy_script_path(old_id), get_enemy_script_path(new_id));
-    break;
-
-  case ResourceType::ENTITY:
-    rename_file_if_exists(get_entity_script_path(old_id), get_entity_script_path(new_id));
-    break;
-
-  case ResourceType::FONT:
-    rename_file_if_exists(get_font_path(old_id), get_font_path(new_id));
-    break;
+    if (exists(old_path)) {
+      renamed_on_filesystem = true;
+      rename_file(old_path, new_path);
+    }
   }
 
-  // The file was successfully renamed on the filesystem.
+  // Also remove it from the resource list.
+  bool renamed_in_resource_list = false;
   // Also rename it in the resource list.
   if (resources.exists(resource_type, old_id)) {
     resources.rename(resource_type, old_id, new_id);
     resources.save();
+  }
+
+  if (!renamed_on_filesystem && !renamed_in_resource_list) {
+    // Nothing was renamed. This must be an error.
+    throw EditorException("Nothing to rename");
   }
 }
 
@@ -1203,10 +1222,14 @@ void Quest::delete_dir_recursive_if_exists(const QString& path) {
 }
 
 /**
- * @brief Deletes a resource element from the filesystem and from the resource list.
+ * @brief Deletes a resource element from the filesystem and from the resource
+ * list.
  *
- * It is okay if some of its files are already removed.
- * It is okay too if the resource element was already removed from the resource list.
+ * It is okay if some of its files (or all its files) are already removed from
+ * the filesystem.
+ * It is okay too if the element is already gone from the resource list.
+ * However, it is not okay if both all files are removed and the element is
+ * gone from the resource list.
  *
  * @param resource_type A type of resource.
  * @param id Id of the element to remove.
@@ -1215,63 +1238,30 @@ void Quest::delete_dir_recursive_if_exists(const QString& path) {
 void Quest::delete_resource_element(
     ResourceType resource_type, const QString& element_id) {
 
-  switch (resource_type) {
-
-  case ResourceType::LANGUAGE:
-    // A language is a directory.
-    delete_dir_recursive_if_exists(get_language_path(element_id));
-    break;
-
-  case ResourceType::MAP:
-    // Remove the map data file.
-    delete_file_if_exists(get_map_data_file_path(element_id));
-
-    // Also delete the map script.
-    delete_file_if_exists(get_map_script_path(element_id));
-    break;
-
-  case ResourceType::TILESET:
-    // Remove the tileset data file.
-    delete_file_if_exists(get_tileset_data_file_path(element_id));
-
-    // Also delete the two tileset images.
-    delete_file_if_exists(get_tileset_tiles_image_path(element_id));
-    delete_file_if_exists(get_tileset_entities_image_path(element_id));
-    break;
-
-  case ResourceType::SPRITE:
-    delete_file_if_exists(get_sprite_path(element_id));
-    break;
-
-  case ResourceType::MUSIC:
-    delete_file_if_exists(get_music_path(element_id));
-    break;
-
-  case ResourceType::SOUND:
-    delete_file_if_exists(get_sound_path(element_id));
-    break;
-
-  case ResourceType::ITEM:
-    delete_file_if_exists(get_item_script_path(element_id));
-    break;
-
-  case ResourceType::ENEMY:
-    delete_file_if_exists(get_enemy_script_path(element_id));
-    break;
-
-  case ResourceType::ENTITY:
-    delete_file_if_exists(get_entity_script_path(element_id));
-    break;
-
-  case ResourceType::FONT:
-    delete_file_if_exists(get_font_path(element_id));
-    break;
+  // Delete files from the filesystem.
+  bool found_in_filesystem = false;
+  QStringList paths = get_resource_element_paths(resource_type, element_id);
+  for (const QString& path: paths) {
+    if (is_dir(path)) {
+      found_in_filesystem = true;
+      delete_dir_recursive(path);
+    }
+    else if (exists(path)) {
+      found_in_filesystem = true;
+      delete_file(path);
+    }
   }
 
-  // The file was successfully removed from the filesystem.
   // Also remove it from the resource list.
+  bool found_in_resource_list = false;
   if (resources.exists(resource_type, element_id)) {
     resources.remove(resource_type, element_id);
     resources.save();
+    found_in_resource_list = true;
+  }
+
+  if (!found_in_filesystem && !found_in_resource_list) {
+    // Nothing was done. This must be an error.
+    throw EditorException(tr("Nothing to delete"));
   }
 }
