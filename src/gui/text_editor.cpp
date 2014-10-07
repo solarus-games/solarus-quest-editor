@@ -44,7 +44,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   setFont(font);
 
   // Activate syntax coloring for Lua scripts.
-  if (quest.is_script(".lua")) {
+  if (quest.is_script(file_path)) {
     new LuaSyntaxHighlighter(text_widget->document());
   }
 
