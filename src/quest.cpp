@@ -346,6 +346,26 @@ QString Quest::get_language_path(const QString& language_id) const {
 }
 
 /**
+ * @brief Returns the path to the images directory of a language.
+ * @param language_id Id of a language.
+ * @return The path to the images directory of this language.
+ */
+QString Quest::get_language_images_path(const QString& language_id) const {
+
+  return get_language_path(language_id) + "/images";
+}
+
+/**
+ * @brief Returns the path to the text directory of a language.
+ * @param language_id Id of a language.
+ * @return The path to the text directory of this language.
+ */
+QString Quest::get_language_text_path(const QString& language_id) const {
+
+  return get_language_path(language_id) + "/text";
+}
+
+/**
  * @brief Returns the path to a map data file.
  * @param map_id Id of a map.
  * @return The path to the map data file.
@@ -890,15 +910,17 @@ void Quest::create_file(const QString& path) {
  * @param path Path of the file to create. If it already exists, it must not
  * be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
  */
-void Quest::create_file_if_not_exists(const QString& path) {
+bool Quest::create_file_if_not_exists(const QString& path) {
 
   if (exists(path)) {
     check_not_is_dir(path);
+    return false;
   }
-  else {
-    create_file(path);
-  }
+
+  create_file(path);
+  return true;
 }
 
 /**
@@ -919,15 +941,17 @@ void Quest::create_script(const QString& path) {
  * @param path Path of the file to create. If it already exists, it must not
  * be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
  */
-void Quest::create_script_if_not_exists(const QString& path) {
+bool Quest::create_script_if_not_exists(const QString& path) {
 
   if (exists(path)) {
     check_is_script(path);
+    return false;
   }
-  else {
-    create_script(path);
-  }
+
+  create_script(path);
+  return true;
 }
 
 /**
@@ -954,15 +978,17 @@ void Quest::create_dir(const QString& path) {
  * @param path Path of the directory to create. If it already exists, it must
  * be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the directory was created, @c false if it already existed.
  */
-void Quest::create_dir_if_not_exists(const QString& path) {
+bool Quest::create_dir_if_not_exists(const QString& path) {
 
   if (exists(path)) {
     check_is_dir(path);
+    return false;
   }
-  else {
-    create_dir(path);
-  }
+
+  create_dir(path);
+  return true;
 }
 
 /**
@@ -990,8 +1016,9 @@ void Quest::create_dir(const QString& parent_path, const QString& dir_name) {
  * @param dir_name Name of the new directory to create there. If it already
  * exists, it must be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the directory was created, @c false if it already existed.
  */
-void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& dir_name) {
+bool Quest::create_dir_if_not_exists(const QString& parent_path, const QString& dir_name) {
 
   check_exists(parent_path);
   check_is_dir(parent_path);
@@ -999,10 +1026,11 @@ void Quest::create_dir_if_not_exists(const QString& parent_path, const QString& 
   QString path = parent_path + '/' + dir_name;
   if (exists(path)) {
     check_is_dir(path);
+    return false;
   }
-  else {
-    create_dir(parent_path, dir_name);
-  }
+
+  create_dir(parent_path, dir_name);
+  return true;
 }
 
 /**
@@ -1029,11 +1057,57 @@ void Quest::create_resource_element(ResourceType resource_type,
   // Make sure the top-level directory of the resource type exists.
   create_dir_if_not_exists(get_resource_path(resource_type));
 
-  bool found_on_filesystem = false;
+  bool done_on_filesystem = false;
 
   QStringList paths = get_resource_element_paths(resource_type, element_id);
-  // TODO special cases of languages, musics, fonts, sounds
-  // TODO add to the resource list
+
+  switch (resource_type) {
+
+  case ResourceType::MAP:
+  case ResourceType::ITEM:
+  case ResourceType::SPRITE:
+  case ResourceType::ENEMY:
+  case ResourceType::ENTITY:
+    // For these type of resources, files to create are simply blank text files.
+    for (QString path: paths) {
+      done_on_filesystem |= create_file_if_not_exists(path);
+    }
+    break;
+
+  case ResourceType::TILESET:
+    // Text file and two blank images.
+    done_on_filesystem |= create_file_if_not_exists(get_tileset_data_file_path(element_id));
+    // TODO create the two images
+    break;
+
+  case ResourceType::LANGUAGE:
+    // Directory with several files.
+    done_on_filesystem |= create_dir_if_not_exists(get_language_path(element_id));
+    done_on_filesystem |= create_dir_if_not_exists(get_language_images_path(element_id));
+    done_on_filesystem |= create_dir_if_not_exists(get_language_text_path(element_id));
+    done_on_filesystem |= create_file_if_not_exists(get_dialogs_path(element_id));
+    done_on_filesystem |= create_file_if_not_exists(get_strings_path(element_id));
+    break;
+
+  case ResourceType::MUSIC:
+  case ResourceType::SOUND:
+  case ResourceType::FONT:
+    // We don't create any file for the user in these formats.
+    break;
+
+  }
+
+  // Also declare it in the resource list.
+  bool done_in_resource_list = false;
+  if (!resources.exists(resource_type, element_id)) {
+    resources.add(resource_type, element_id, description);
+    resources.save();
+  }
+
+  if (!done_on_filesystem && !done_in_resource_list) {
+    // Nothing was added. This must be an error.
+    throw EditorException("Nothing to create");
+  }
 }
 
 /**
@@ -1060,18 +1134,21 @@ void Quest::rename_file(const QString& old_path, const QString& new_path) {
  * @param new_path The new path. If it already exists, then the old file must
  * no longer exist.
  * @throws EditorException In case of error.
+ * @return @c true if the file was renamed, @c false if the renaming was
+ * already done.
  */
-void Quest::rename_file_if_exists(const QString& old_path, const QString& new_path) {
+bool Quest::rename_file_if_exists(const QString& old_path, const QString& new_path) {
 
   if (!exists(old_path)) {
     // The old file does not exist anymore.
     check_exists(new_path);
+    return false;
   }
-  else {
-    // Normal case: the old file still exists.
-    check_not_exists(new_path);
-    rename_file(old_path, new_path);
-  }
+
+  // Normal case: the old file still exists.
+  check_not_exists(new_path);
+  rename_file(old_path, new_path);
+  return true;
 }
 
 /**
@@ -1132,9 +1209,8 @@ void Quest::rename_resource_element(
     }
   }
 
-  // Also remove it from the resource list.
-  bool renamed_in_resource_list = false;
   // Also rename it in the resource list.
+  bool renamed_in_resource_list = false;
   if (resources.exists(resource_type, old_id)) {
     resources.rename(resource_type, old_id, new_id);
     resources.save();
@@ -1166,12 +1242,16 @@ void Quest::delete_file(const QString& path) {
  * @param path Path of the file to delete. If it exists, it must not be a
  * directory.
  * @throws EditorException In case of error.
+ * @return @c true if the file could be deleted, @c false if was already gone.
  */
-void Quest::delete_file_if_exists(const QString& path) {
+bool Quest::delete_file_if_exists(const QString& path) {
 
-  if (exists(path)) {
-    delete_file(path);
+  if (!exists(path)) {
+    return false;
   }
+
+  delete_file(path);
+  return true;
 }
 
 /**
@@ -1194,12 +1274,16 @@ void Quest::delete_dir(const QString& path) {
  * @param path Path of the empty directory to delete. If it exists, if must
  * be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the file could be deleted, @c false if was already gone.
  */
-void Quest::delete_dir_if_exists(const QString& path) {
+bool Quest::delete_dir_if_exists(const QString& path) {
 
-  if (exists(path)) {
-    delete_dir(path);
+  if (!exists(path)) {
+    return false;
   }
+
+  delete_dir(path);
+  return true;
 }
 
 /**
@@ -1222,12 +1306,16 @@ void Quest::delete_dir_recursive(const QString& path) {
  * @param path Path of the directory to delete. If it exists, if must
  * be a directory.
  * @throws EditorException In case of error.
+ * @return @c true if the file could be deleted, @c false if was already gone.
  */
-void Quest::delete_dir_recursive_if_exists(const QString& path) {
+bool Quest::delete_dir_recursive_if_exists(const QString& path) {
 
-  if (exists(path)) {
-    delete_dir_recursive(path);
+  if (!exists(path)) {
+    return false;
   }
+
+  delete_dir_recursive(path);
+  return true;
 }
 
 /**

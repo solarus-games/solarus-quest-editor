@@ -31,8 +31,8 @@ NewResourceElementDialog::NewResourceElementDialog(
   ui.setupUi(this);
 
   // Determine the text to show.
-  // A switch is the best way make ensure at compile time that we don't
-  // forget resource types, and to handle translations correctly.
+  // A switch is the best way to ensure at compile time that we don't
+  // forget resource types, and to also handle translations correctly.
   QString title;
   QString id_text;
   switch (resource_type) {
