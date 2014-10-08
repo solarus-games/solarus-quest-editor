@@ -1100,6 +1100,7 @@ void Quest::create_resource_element(ResourceType resource_type,
   // Also declare it in the resource list.
   bool done_in_resource_list = false;
   if (!resources.exists(resource_type, element_id)) {
+    done_in_resource_list = true;
     resources.add(resource_type, element_id, description);
     resources.save();
   }
@@ -1212,6 +1213,7 @@ void Quest::rename_resource_element(
   // Also rename it in the resource list.
   bool renamed_in_resource_list = false;
   if (resources.exists(resource_type, old_id)) {
+    renamed_in_resource_list = true;
     resources.rename(resource_type, old_id, new_id);
     resources.save();
   }
@@ -1352,9 +1354,9 @@ void Quest::delete_resource_element(
   // Also remove it from the resource list.
   bool found_in_resource_list = false;
   if (resources.exists(resource_type, element_id)) {
+    found_in_resource_list = true;
     resources.remove(resource_type, element_id);
     resources.save();
-    found_in_resource_list = true;
   }
 
   if (!found_in_filesystem && !found_in_resource_list) {
