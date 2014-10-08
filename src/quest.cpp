@@ -1025,6 +1025,15 @@ void Quest::create_resource_element(ResourceType resource_type,
                                     const QString& element_id, const QString& description) {
 
   Quest::check_valid_file_name(element_id);
+
+  // Make sure the top-level directory of the resource type exists.
+  create_dir_if_not_exists(get_resource_path(resource_type));
+
+  bool found_on_filesystem = false;
+
+  QStringList paths = get_resource_element_paths(resource_type, element_id);
+  // TODO special cases of languages, musics, fonts, sounds
+  // TODO add to the resource list
 }
 
 /**
