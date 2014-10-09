@@ -25,8 +25,6 @@ class Quest;
  * \brief Abstract class for a widget that can edit something in Solarus.
  *
  * It has to support common operations like saving and closing.
- * This widget is initialized with a layout and margins, so that
- * subclasses can add a child widget of their choice.
  */
 class Editor : public QWidget {
   Q_OBJECT

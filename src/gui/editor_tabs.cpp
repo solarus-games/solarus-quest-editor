@@ -18,6 +18,7 @@
 #include "gui/editor_tabs.h"
 #include "gui/gui_tools.h"
 #include "gui/text_editor.h"
+#include "gui/tileset_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
 
@@ -150,7 +151,25 @@ void EditorTabs::open_map_editor(
 void EditorTabs::open_tileset_editor(
     Quest& quest, const QString& path) {
 
-  // TODO tileset editor.
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new TilesetEditor(quest, path));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**

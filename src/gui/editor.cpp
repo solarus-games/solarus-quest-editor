@@ -29,9 +29,6 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   quest(quest),
   file_path(file_path) {
 
-  QVBoxLayout* layout = new QVBoxLayout();
-  layout->setContentsMargins(0, 0, 0, 0);
-  setLayout(layout);
 }
 
 /**

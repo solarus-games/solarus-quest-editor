@@ -63,6 +63,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/text_editor.h
+  include/gui/tileset_editor.h
   include/editor_exception.h
   include/quest.h
   include/quest_manager.h
@@ -77,6 +78,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/text_editor.cpp
+  src/gui/tileset_editor.cpp
   src/editor_exception.cpp
   src/main.cpp
   src/quest.cpp
@@ -88,6 +90,7 @@ set(solarus_quest_editor_SOURCES
 set(solarus_quest_editor_FORMS
   src/gui/main_window.ui
   src/gui/new_resource_element_dialog.ui
+  src/gui/tileset_editor.ui
 )
 
 # Generate .h from .ui.

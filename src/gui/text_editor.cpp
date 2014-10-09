@@ -34,8 +34,12 @@
 TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) :
   Editor(quest, file_path, parent) {
 
-  text_widget= new QPlainTextEdit(file_path);
-  layout()->addWidget(text_widget);
+  QVBoxLayout* layout = new QVBoxLayout();
+  layout->setContentsMargins(0, 0, 0, 0);
+  setLayout(layout);
+
+  text_widget = new QPlainTextEdit(file_path);
+  layout->addWidget(text_widget);
 
   // Use a monospace font.
   QFont font("DejaVu Sans Mono");
