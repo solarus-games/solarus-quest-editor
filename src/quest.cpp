@@ -963,7 +963,11 @@ void Quest::create_dir(const QString& path) {
 
   check_is_in_root_path(path);
 
-  QString parent_path(path + "/..");
+  QString full_path = path;
+  if (full_path.endsWith('/')) {
+    full_path = full_path.left(path.length() - 1);
+  }
+  QString parent_path = full_path.section('/', 0, -2);
   check_exists(parent_path);
   QString dir_name = QDir(path).dirName();
   check_valid_file_name(dir_name);
