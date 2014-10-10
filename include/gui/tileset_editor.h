@@ -41,9 +41,15 @@ public:
   virtual void copy() override;
   virtual void paste() override;
 
+private slots:
+
+  void update_description_to_gui();
+  void set_description_from_gui();
+
 private:
 
-  Ui::TilesetEditor ui;
+  Ui::TilesetEditor ui;      /**< The tileset editor widgets. */
+  QString tileset_id;        /**< Id of the tileset being edited. */
 
 };
 

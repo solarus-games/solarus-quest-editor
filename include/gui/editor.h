@@ -20,6 +20,7 @@
 #include <QWidget>
 
 class Quest;
+class QuestResources;
 
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
@@ -34,6 +35,9 @@ public:
   Editor(Quest& quest, const QString& path, QWidget* parent = nullptr);
 
   const Quest& get_quest() const;
+  Quest& get_quest();
+  const QuestResources& get_resources() const;
+  QuestResources& get_resources();
   QString get_file_path() const;
   QString get_file_name() const;
   QString get_file_name_without_extension() const;

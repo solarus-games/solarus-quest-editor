@@ -40,6 +40,36 @@ const Quest& Editor::get_quest() const {
 }
 
 /**
+ * @brief Returns the quest the edited file belongs to.
+ *
+ * Non-const version.
+ *
+ * @return The quest.
+ */
+Quest& Editor::get_quest() {
+  return quest;
+}
+
+/**
+ * @brief Returns the list of resources of the quest.
+ * @return The quest resources.
+ */
+const QuestResources& Editor::get_resources() const {
+  return quest.get_resources();
+}
+
+/**
+ * @brief Returns the list of resources of the quest.
+ *
+ * Non-const version.
+ *
+ * @return The quest resources.
+ */
+QuestResources& Editor::get_resources() {
+  return quest.get_resources();
+}
+
+/**
  * @brief Returns the path of the file being edited.
  * @return The file path.
  */

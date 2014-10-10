@@ -29,7 +29,7 @@
  * @param quest The quest containing the file.
  * @param file_path Path of the file to open.
  * @param parent The parent object or nullptr.
- * @throws QuestEditorException If the file could not be opened.
+ * @throws EditorException If the file could not be opened.
  */
 TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) :
   Editor(quest, file_path, parent) {
