@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_FILES_MODEL_H
 #define SOLARUSEDITOR_QUEST_FILES_MODEL_H
 
+#include "quest_resources.h"
 #include <QSortFilterProxyModel>
 
 class Quest;
@@ -61,6 +62,11 @@ protected:
 
   virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
   virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+
+private slots:
+
+  void resource_element_description_changed(
+      ResourceType resource_type, const QString& element_id, const QString& description);
 
 private:
 

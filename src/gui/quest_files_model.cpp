@@ -16,8 +16,6 @@
  */
 #include "gui/quest_files_model.h"
 #include "quest.h"
-#include "quest_resources.h"
-#include <solarus/QuestResources.h>
 #include <QFileSystemModel>
 
 /**
@@ -29,9 +27,14 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
   quest(quest),
   source_model(new QFileSystemModel) {
 
+  // Watch changes on the filesystem.
   source_model->setRootPath(quest.get_data_path());  // Only watch changes in the data directory.
   source_model->setReadOnly(false);
   setSourceModel(source_model);
+
+  // Watch changes in resources.
+  connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
+          this, SLOT(resource_element_description_changed(ResourceType, const QString&, const QString&)));
 }
 
 /**
@@ -288,6 +291,20 @@ bool QuestFilesModel::setData(
   emit dataChanged(index, index);
 
   return true;
+}
+
+/**
+ * @brief Slot called when the description of a resource element changes.
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element whose description has changed.
+ * @param description The new description.
+ */
+void QuestFilesModel::resource_element_description_changed(
+    ResourceType resource_type, const QString& element_id, const QString& /* description */) {
+
+  QModelIndex index = get_file_index(quest.get_resource_element_path(resource_type, element_id));
+  index = createIndex(index.row(), DESCRIPTION_COLUMN);
+  emit dataChanged(index, index);
 }
 
 /**
