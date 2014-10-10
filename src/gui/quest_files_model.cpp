@@ -303,7 +303,7 @@ void QuestFilesModel::resource_element_description_changed(
     ResourceType resource_type, const QString& element_id, const QString& /* description */) {
 
   QModelIndex index = get_file_index(quest.get_resource_element_path(resource_type, element_id));
-  index = createIndex(index.row(), DESCRIPTION_COLUMN);
+  index = this->index(index.row(), DESCRIPTION_COLUMN, index.parent());
   emit dataChanged(index, index);
 }
 
