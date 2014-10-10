@@ -59,17 +59,33 @@ QString Editor::get_file_name() const {
 }
 
 /**
+ * @brief Returns the name of the file being edited, without extension.
+ *
+ * The file name is the last component of the path.
+ *
+ * @return The file name without extension.
+ */
+QString Editor::get_file_name_without_extension() const {
+  return get_file_name().section('.', 0, -2);
+}
+
+/**
  * @fn Editor::get_title
  * @brief Returns a user-friendly title for this editor.
  *
  * It is used in the tab label.
  * An asterisk is automatically added in the tab title if the file is modified.
  *
+ * The default title is the file name (without its directories).
+ *
  * @return A title describing the file edited.
  */
+QString Editor::get_title() const {
+  return get_file_name();
+}
 
 /**
- * @fn Editor::get_title
+ * @fn Editor::get_icon
  * @brief Returns an icon representing this editor.
  *
  * It is used in the tab bar.

@@ -35,8 +35,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
  */
 QString TilesetEditor::get_title() const {
 
-  // TODO
-  return "Tileset";
+  return "Tileset " + get_file_name_without_extension();
 }
 
 /**

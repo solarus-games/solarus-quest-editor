@@ -31,13 +31,14 @@ class Editor : public QWidget {
 
 public:
 
-  Editor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
+  Editor(Quest& quest, const QString& path, QWidget* parent = nullptr);
 
   const Quest& get_quest() const;
   QString get_file_path() const;
   QString get_file_name() const;
+  QString get_file_name_without_extension() const;
 
-  virtual QString get_title() const = 0;
+  virtual QString get_title() const;
   virtual QIcon get_icon() const = 0;
   virtual bool is_modified() const = 0;
   virtual void save() = 0;

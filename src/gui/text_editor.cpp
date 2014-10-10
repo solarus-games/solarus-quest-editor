@@ -89,7 +89,7 @@ QString TextEditor::get_title() const {
     return get_file_name() + " (" + language_id + ')';
   }
 
-  return get_file_name();
+  return Editor::get_title();
 }
 
 /**
