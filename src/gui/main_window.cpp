@@ -26,6 +26,7 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QUndoGroup>
 #include <iostream>
 
 /**
@@ -45,6 +46,13 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
 
   const int tree_width = 300;
   ui.splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
+
+  QUndoGroup& undo_group = ui.tabWidget->get_undo_group();
+  QAction* undo_action = undo_group.createUndoAction(this);
+  QAction* redo_action = undo_group.createRedoAction(this);
+  ui.menuEdit->insertAction(ui.actionCut, undo_action);
+  ui.menuEdit->insertAction(ui.actionCut, redo_action);
+  ui.menuEdit->insertSeparator(ui.actionCut);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
@@ -118,28 +126,6 @@ void MainWindow::on_actionClose_triggered() {
     return;
   }
   ui.tabWidget->close_file_requested(index);
-}
-
-/**
- * @brief Slot called when the user triggers the "Undo" action.
- */
-void MainWindow::on_actionUndo_triggered() {
-
-  Editor* editor = ui.tabWidget->get_editor();
-  if (editor != nullptr) {
-    editor->undo();
-  }
-}
-
-/**
- * @brief Slot called when the user triggers the "Redo" action.
- */
-void MainWindow::on_actionRedo_triggered() {
-
-  Editor* editor = ui.tabWidget->get_editor();
-  if (editor != nullptr) {
-    editor->redo();
-  }
 }
 
 /**

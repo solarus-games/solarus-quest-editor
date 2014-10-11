@@ -21,13 +21,16 @@
 #include "gui/tileset_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include <QUndoGroup>
+#include <QUndoStack>
 
 /**
  * @brief Creates an editor tab widget.
  * @param parent The parent object or nullptr.
  */
 EditorTabs::EditorTabs(QWidget* parent):
-  QTabWidget(parent) {
+  QTabWidget(parent),
+  undo_group(new QUndoGroup(this)) {
 
   setMovable(true);
 
@@ -44,6 +47,14 @@ EditorTabs::EditorTabs(QWidget* parent):
 void EditorTabs::set_quest_manager(QuestManager& /* quest_manager */) {
   // Not used for now.
   // Tabs are independant of the current quest.
+}
+
+/**
+ * @brief Returns the undo/redo group of all open files.
+ * @return The undo/redo group of all open files.
+ */
+QUndoGroup& EditorTabs::get_undo_group() {
+  return *undo_group;
 }
 
 /**
@@ -218,8 +229,12 @@ void EditorTabs::add_editor(Editor* editor) {
   setTabToolTip(index, editor->get_file_path());
   setCurrentIndex(index);
 
+  QUndoStack* undo_stack = &editor->get_undo_stack();
+  undo_group->addStack(undo_stack);
+  undo_group->setActiveStack(undo_stack);
+
   // Show asterisk in tab title when a file is modified.
-  connect(editor, SIGNAL(modification_state_changed(bool)),
+  connect(undo_stack, SIGNAL(cleanChanged(bool)),
           this, SLOT(modification_state_changed(bool)));
 }
 
@@ -230,6 +245,9 @@ void EditorTabs::add_editor(Editor* editor) {
 void EditorTabs::remove_editor(int index) {
 
   Editor* editor = get_editor(index);
+
+  undo_group->removeStack(&editor->get_undo_stack());
+
   editors.remove(editor->get_file_path());
   removeTab(index);
 }
@@ -394,20 +412,19 @@ bool EditorTabs::confirm_close() {
 }
 
 /**
- * @brief Slot called when the is-modified state of a file has changed.
- * @param modified @c true if the file is now modified, @c false if it is now
- * saved.
+ * @brief Slot called when the is-modified state of the current tab has changed.
+ * @param clean @c true if the file is now clean, @c false if it is now
+ * modified.
  */
-void EditorTabs::modification_state_changed(bool modified) {
+void EditorTabs::modification_state_changed(bool clean) {
 
-  Editor* editor = dynamic_cast<Editor*>(sender());
-  if (editor == nullptr) {
+  if (count() == 0) {
     return;
   }
 
-  QString title = editor->get_title();
-  if (modified) {
+  QString title = get_editor()->get_title();
+  if (!clean) {
     title += '*';
   }
-  setTabText(indexOf(editor), title);
+  setTabText(currentIndex(), title);
 }

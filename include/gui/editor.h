@@ -21,6 +21,7 @@
 
 class Quest;
 class QuestResources;
+class QUndoStack;
 
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
@@ -41,26 +42,21 @@ public:
   QString get_file_path() const;
   QString get_file_name() const;
   QString get_file_name_without_extension() const;
+  QUndoStack& get_undo_stack();
 
   virtual QString get_title() const;
   virtual QIcon get_icon() const = 0;
-  virtual bool is_modified() const = 0;
   virtual void save() = 0;
   virtual bool confirm_close() = 0;
-  virtual void undo() = 0;
-  virtual void redo() = 0;
   virtual void cut() = 0;
   virtual void copy() = 0;
   virtual void paste() = 0;
 
-signals:
-
-  void modification_state_changed(bool modified);
-
 private:
 
-  Quest& quest;        /**< The quest the edited file belongs to. */
-  QString file_path;   /**< Path of the edited file. */
+  Quest& quest;              /**< The quest the edited file belongs to. */
+  QString file_path;         /**< Path of the edited file. */
+  QUndoStack* undo_stack;    /**< The undo/redo history of editing this file. */
 
 };
 

@@ -16,6 +16,7 @@
  */
 #include "gui/editor.h"
 #include "quest.h"
+#include <QUndoStack>
 #include <QVBoxLayout>
 
 /**
@@ -27,7 +28,8 @@
 Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   QWidget(parent),
   quest(quest),
-  file_path(file_path) {
+  file_path(file_path),
+  undo_stack(new QUndoStack(this)) {
 
 }
 
@@ -100,6 +102,14 @@ QString Editor::get_file_name_without_extension() const {
 }
 
 /**
+ * @brief Returns the undo/redo history of editing this file.
+ * @return The undo/redo history.
+ */
+QUndoStack& Editor::get_undo_stack() {
+  return *undo_stack;
+}
+
+/**
  * @fn Editor::get_title
  * @brief Returns a user-friendly title for this editor.
  *
@@ -124,12 +134,6 @@ QString Editor::get_title() const {
  */
 
 /**
- * @fn Editor::is_modified
- * @brief Returns whether the file being edited has been modified.
- * @return @c true if the file is modified, @c false if it is saved.
- */
-
-/**
  * @fn Editor::save
  * @brief Saves the file.
  */
@@ -141,16 +145,6 @@ QString Editor::get_title() const {
  * If the file is not saved, you should propose to save it.
  *
  * @return @c false to cancel the closing operation.
- */
-
-/**
- * @fn Editor::undo
- * @brief Undoes the last action.
- */
-
-/**
- * @fn Editor::redo
- * @brief Redoes the previous undone action.
  */
 
 /**

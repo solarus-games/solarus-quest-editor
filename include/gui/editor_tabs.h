@@ -24,6 +24,7 @@
 class Editor;
 class Quest;
 class QuestManager;
+class QUndoGroup;
 
 /**
  * \brief The main tab widget with all editors currently open.
@@ -36,6 +37,7 @@ public:
   EditorTabs(QWidget* parent = nullptr);
 
   void set_quest_manager(QuestManager& quest_manager);
+  QUndoGroup& get_undo_group();
 
   void open_resource(
       Quest& quest, ResourceType resource_type, const QString& id);
@@ -75,6 +77,7 @@ private:
 
   QMap<QString, Editor*> editors;      /**< All editors currently open,
                                         * indexed by their file path. */
+  QUndoGroup* undo_group;              /**< Undo/redo stacks of open files. */
 };
 
 #endif

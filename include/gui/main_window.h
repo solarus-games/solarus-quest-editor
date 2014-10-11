@@ -44,8 +44,6 @@ private slots:
   void on_actionLoad_quest_triggered();
   void on_actionSave_triggered();
   void on_actionClose_triggered();
-  void on_actionUndo_triggered();
-  void on_actionRedo_triggered();
   void on_actionCut_triggered();
   void on_actionCopy_triggered();
   void on_actionPaste_triggered();
@@ -63,8 +61,8 @@ private:
   bool confirm_close();
   void update_title();
 
-  Ui::MainWindow ui;
-  QuestManager& quest_manager;
+  Ui::MainWindow ui;              /**< The main window widgets. */
+  QuestManager& quest_manager;    /**< Holds the current quest. */
 
 };
 

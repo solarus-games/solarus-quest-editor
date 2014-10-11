@@ -19,6 +19,7 @@
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QUndoStack>
 
 /**
  * @brief Creates a tileset editor.
@@ -48,6 +49,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   ui.tileset_id_field->setText(tileset_id);
   update_description_to_gui();
+  get_undo_stack().setClean();
 
   // Make connections.
   connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
@@ -73,15 +75,6 @@ QIcon TilesetEditor::get_icon() const {
 }
 
 /**
- * @copydoc Editor::is_modified
- */
-bool TilesetEditor::is_modified() const {
-
-  // TOOD
-  return false;
-}
-
-/**
  * @copydoc Editor::save
  */
 void TilesetEditor::save() {
@@ -96,22 +89,6 @@ bool TilesetEditor::confirm_close() {
 
   // TOOD
   return true;
-}
-
-/**
- * @copydoc Editor::undo
- */
-void TilesetEditor::undo() {
-
-  // TOOD
-}
-
-/**
- * @copydoc Editor::redo
- */
-void TilesetEditor::redo() {
-
-  // TOOD
 }
 
 /**

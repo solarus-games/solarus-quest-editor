@@ -125,13 +125,6 @@ QIcon TextEditor::get_icon() const {
 }
 
 /**
- * @copydoc Editor::is_modified
- */
-bool TextEditor::is_modified() const {
-  return text_widget->document()->isModified();
-}
-
-/**
  * @copydoc Editor::save
  */
 void TextEditor::save() {
@@ -184,22 +177,6 @@ bool TextEditor::confirm_close() {
     return false;
   }
 
-}
-
-/**
- * @copydoc Editor::undo
- */
-void TextEditor::undo() {
-
-  text_widget->undo();
-}
-
-/**
- * @copydoc Editor::redo
- */
-void TextEditor::redo() {
-
-  text_widget->redo();
 }
 
 /**
