@@ -63,6 +63,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/text_editor.h
+  include/gui/text_editor_widget.h
   include/gui/tileset_editor.h
   include/editor_exception.h
   include/quest.h
@@ -78,6 +79,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/text_editor.cpp
+  src/gui/text_editor_widget.cpp
   src/gui/tileset_editor.cpp
   src/editor_exception.cpp
   src/main.cpp

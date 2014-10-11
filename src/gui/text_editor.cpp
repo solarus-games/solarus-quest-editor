@@ -16,10 +16,12 @@
  */
 #include "gui/lua_syntax_highlighter.h"
 #include "gui/text_editor.h"
+#include "gui/text_editor_widget.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include <QIcon>
 #include <QLayout>
+#include <QList>
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QTextStream>
@@ -38,7 +40,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   layout->setContentsMargins(0, 0, 0, 0);
   setLayout(layout);
 
-  text_widget = new QPlainTextEdit(file_path);
+  text_widget = new TextEditorWidget(file_path, *this);
   layout->addWidget(text_widget);
 
   // Use a monospace font.

@@ -19,7 +19,7 @@
 
 #include "gui/editor.h"
 
-class QPlainTextEdit;
+class TextEditorWidget;
 
 /**
  * \brief A plain text edition widget.
@@ -41,7 +41,9 @@ public:
 
 private:
 
-  QPlainTextEdit* text_widget;    /**< The text editing area contained. */
+  void initialize_undo_redo();
+
+  TextEditorWidget* text_widget;    /**< The text editing area contained. */
 
 };
 
