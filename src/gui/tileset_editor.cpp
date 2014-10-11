@@ -43,6 +43,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   // Prepare the gui.
   ui.setupUi(this);
   layout()->addWidget(ui.splitter);
+  const int side_width = 300;
+  ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
 
   ui.tileset_id_field->setText(tileset_id);
   update_description_to_gui();
