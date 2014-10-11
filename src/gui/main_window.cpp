@@ -39,9 +39,9 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   ui(),
   quest_manager(quest_manager) {
 
+  // Set up children widgets.
   ui.setupUi(this);
 
-  // Set up children.
   ui.quest_tree_view->set_quest_manager(quest_manager);
 
   const int tree_width = 300;
@@ -53,6 +53,18 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   ui.menuEdit->insertAction(ui.actionCut, undo_action);
   ui.menuEdit->insertAction(ui.actionCut, redo_action);
   ui.menuEdit->insertSeparator(ui.actionCut);
+
+  // Set standard keyboard shortcuts.
+  ui.actionNew_quest->setShortcut(QKeySequence::New);
+  ui.actionLoad_quest->setShortcut(QKeySequence::Open);
+  ui.actionClose->setShortcut(QKeySequence::Close);
+  ui.actionSave->setShortcut(QKeySequence::Save);
+  ui.actionExit->setShortcut(QKeySequence::Quit);
+  undo_action->setShortcut(QKeySequence::Undo);
+  redo_action->setShortcut(QKeySequence::Redo);
+  ui.actionCut->setShortcut(QKeySequence::Cut);
+  ui.actionCopy->setShortcut(QKeySequence::Copy);
+  ui.actionPaste->setShortcut(QKeySequence::Paste);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
