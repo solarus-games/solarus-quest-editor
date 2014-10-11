@@ -227,6 +227,16 @@ void MainWindow::update_title() {
 }
 
 /**
+ * @brief Opens a file of a quest if it exists.
+ * @param quest A quest.
+ * @param path The file to open.
+ */
+void MainWindow::open_file(Quest& quest, const QString& path) {
+
+  ui.tabWidget->open_file_requested(quest, path);
+}
+
+/**
  * @brief Receives a window close event.
  * @param event The event to handle.
  */

@@ -35,6 +35,8 @@ public:
 
   QuestManager& get_quest_manager();
 
+  void open_file(Quest& quest, const QString& path);
+
 private slots:
 
   // Menu actions.
@@ -51,6 +53,7 @@ private slots:
 
   // Quest.
   void current_quest_changed(Quest& quest);
+
 protected:
 
   virtual void closeEvent(QCloseEvent* event) override;

@@ -24,7 +24,7 @@
 /**
  * @brief Entry point of the quest editor.
  *
- * The argument if any is the path of the quest to load.
+ * Arguments: [quest_path [file_path]]
  *
  * @param argc Number of arguments of the command line.
  * @param argv Command-line arguments.
@@ -33,8 +33,14 @@
 int main(int argc, char* argv[]) {
 
   QString quest_path;
+  QString file_path;
   if (argc > 1) {
+    // Quest to open initially.
     quest_path = argv[1];
+    if (argc > 2) {
+      // File to open in this quest.
+      file_path = argv[2];
+    }
   }
 
   QApplication application(argc, argv);
@@ -64,6 +70,10 @@ int main(int argc, char* argv[]) {
 
   // Open the quest.
   quest_manager.set_quest(quest_path);
+
+  if (!file_path.isEmpty()) {
+    window.open_file(quest_manager.get_quest(), file_path);
+  }
 
   window.show();
 
