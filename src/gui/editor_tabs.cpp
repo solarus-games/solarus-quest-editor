@@ -38,6 +38,8 @@ EditorTabs::EditorTabs(QWidget* parent):
   setTabBar(tab_bar);
   connect(tab_bar, SIGNAL(tabCloseRequested(int)),
           this, SLOT(close_file_requested(int)));
+  connect(tab_bar, SIGNAL(currentChanged(int)),
+          this, SLOT(current_editor_changed(int)));
 }
 
 /**
@@ -222,16 +224,15 @@ void EditorTabs::open_strings_editor(
  */
 void EditorTabs::add_editor(Editor* editor) {
 
+  QUndoStack* undo_stack = &editor->get_undo_stack();
+  undo_group->addStack(undo_stack);
+
   QString path = editor->get_file_path();
   editors.insert(path, editor);
   addTab(editor, editor->get_icon(), editor->get_title());
   int index = count() - 1;
   setTabToolTip(index, editor->get_file_path());
   setCurrentIndex(index);
-
-  QUndoStack* undo_stack = &editor->get_undo_stack();
-  undo_group->addStack(undo_stack);
-  undo_group->setActiveStack(undo_stack);
 
   // Show asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
@@ -356,7 +357,7 @@ void EditorTabs::close_file_requested(int index) {
 
   Editor* editor = get_editor(index);
   if (editor != nullptr && editor->confirm_close()) {
-    removeTab(index);
+    remove_editor(index);
   }
 }
 
@@ -372,7 +373,7 @@ void EditorTabs::file_renamed(const QString& old_path, const QString& new_path) 
 
   int index = find_editor(old_path);
   if (index != -1) {
-    removeTab(index);
+    remove_editor(index);
   }
 }
 
@@ -387,7 +388,7 @@ void EditorTabs::file_deleted(const QString& path) {
 
   int index = find_editor(path);
   if (index != -1) {
-    removeTab(index);
+    remove_editor(index);
   }
 }
 
@@ -409,6 +410,21 @@ bool EditorTabs::confirm_close() {
   }
 
   return true;
+}
+
+/**
+ * @brief Slot called when the curren tab changes.
+ * @param index Index of the new current tab.
+ */
+void EditorTabs::current_editor_changed(int index) {
+
+  Editor* editor = get_editor();
+  if (editor == nullptr) {
+    get_undo_group().setActiveStack(nullptr);
+  }
+  else {
+    get_undo_group().setActiveStack(&editor->get_undo_stack());
+  }
 }
 
 /**

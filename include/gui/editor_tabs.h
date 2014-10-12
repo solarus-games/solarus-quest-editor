@@ -68,6 +68,10 @@ public slots:
   void open_file_requested(Quest& quest, const QString& path);
   void file_renamed(const QString& old_path, const QString& new_path);
   void file_deleted(const QString& path);
+
+private slots:
+
+  void current_editor_changed(int index);
   void modification_state_changed(bool modified);
 
 private:
