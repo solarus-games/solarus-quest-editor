@@ -60,24 +60,10 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
 }
 
 /**
- * @brief Sets the quest manager observed by this view.
- * @param quest_manager The quest manager.
+ * @brief Sets the quest to represent in this tree view.
+ * @param quest The quest.
  */
-void QuestTreeView::set_quest_manager(QuestManager& quest_manager) {
-
-  // TODO replace by set_quest. This will allow several quest trees to live
-  // at the same time.
-
-  // Connect to the quest manager.
-  connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
-          this, SLOT(current_quest_changed(Quest&)));
-}
-
-/**
- * @brief Slot called when the user loads another quest.
- * @param quest The current quest.
- */
-void QuestTreeView::current_quest_changed(Quest& quest) {
+void QuestTreeView::set_quest(Quest& quest) {
 
   // Clean the old tree.
   setModel(nullptr);

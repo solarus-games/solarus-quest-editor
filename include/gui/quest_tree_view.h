@@ -25,7 +25,7 @@ class QuestFilesModel;
 class MainWindow;
 
 /**
- * @brief A view of the quest files.
+ * @brief A hierachical view of files of a quest.
  */
 class QuestTreeView : public QTreeView {
   Q_OBJECT
@@ -34,7 +34,7 @@ public:
 
   explicit QuestTreeView(QWidget* parent = nullptr);
 
-  void set_quest_manager(QuestManager& quest_manager);
+  void set_quest(Quest& quest);
   QString get_selected_path() const;
   void set_selected_path(const QString& path);
 
@@ -43,8 +43,6 @@ signals:
   void open_file_requested(Quest& quest, const QString& path);
 
 public slots:
-
-  void current_quest_changed(Quest& quest);
 
   void new_element_action_triggered();
   void new_directory_action_triggered();

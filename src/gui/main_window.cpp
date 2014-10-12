@@ -42,8 +42,6 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   // Set up children widgets.
   ui.setupUi(this);
 
-  ui.quest_tree_view->set_quest_manager(quest_manager);
-
   const int tree_width = 300;
   ui.splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
@@ -203,6 +201,8 @@ void MainWindow::on_action_run_quest_triggered() {
 void MainWindow::current_quest_changed(Quest& quest) {
 
   update_title();
+
+  ui.quest_tree_view->set_quest(quest);
 
   connect(&quest, SIGNAL(file_renamed(const QString&, const QString&)),
           ui.tab_widget, SLOT(file_renamed(const QString&, const QString&)));
