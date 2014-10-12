@@ -195,7 +195,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
     return;
   }
 
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // Resource element implemented as a directory (language).
@@ -254,7 +254,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   open_action->setText(tr("Open"));  // Restore the normal Open text and icon.
   open_action->setIcon(QIcon());
 
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // A resource element.
@@ -332,7 +332,7 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
     return;
   }
 
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_path(path, resource_type)) {
     // Nothing good can come from renaming built-in resource directories.
@@ -369,7 +369,7 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
     return;
   }
 
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   if (quest.is_resource_path(path, resource_type)) {
     // Don't delete resource directories.
     return;

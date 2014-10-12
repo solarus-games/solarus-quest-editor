@@ -329,7 +329,7 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     return;
   }
 
-  Solarus::ResourceType resource_type;
+  ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // A resource element declared in the quest.

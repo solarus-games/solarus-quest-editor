@@ -82,9 +82,9 @@ private:
   Quest& quest;                                  /**< The quest. */
   Solarus::QuestResources resources;             /**< The wrapped data. */
 
-  QMap<Solarus::ResourceType, QString>
+  QMap<ResourceType, QString>
       resource_type_friendly_names;              /**< Human-readable name of each resource type. */
-  QMap<Solarus::ResourceType, QString>
+  QMap<ResourceType, QString>
       resource_type_friendly_names_for_id;       /**< Human-readable name of each resource type,
                                                   * to be followed by an element id.
                                                   * For example the string "Tileset" in
@@ -92,7 +92,7 @@ private:
                                                   * This makes a difference in languages where a
                                                   * determiner is needed, like in French:
                                                   * "Voulez-vous sauvegarder le Tileset 'House'?" */
-  QMap<Solarus::ResourceType, QString>
+  QMap<ResourceType, QString>
       resource_type_directory_friendly_names;    /**< Human-readable name describing the directory
                                                   * of each resource type. */
 };
