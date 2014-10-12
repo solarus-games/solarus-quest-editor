@@ -47,28 +47,28 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   const int tree_width = 300;
   ui.splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
 
-  QUndoGroup& undo_group = ui.tabWidget->get_undo_group();
+  QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
   QAction* redo_action = undo_group.createRedoAction(this);
-  ui.menuEdit->insertAction(ui.actionCut, undo_action);
-  ui.menuEdit->insertAction(ui.actionCut, redo_action);
-  ui.menuEdit->insertSeparator(ui.actionCut);
+  ui.menu_edit->insertAction(ui.action_cut, undo_action);
+  ui.menu_edit->insertAction(ui.action_cut, redo_action);
+  ui.menu_edit->insertSeparator(ui.action_cut);
 
   // Set standard keyboard shortcuts.
-  ui.actionNew_quest->setShortcut(QKeySequence::New);
-  ui.actionLoad_quest->setShortcut(QKeySequence::Open);
-  ui.actionClose->setShortcut(QKeySequence::Close);
-  ui.actionSave->setShortcut(QKeySequence::Save);
-  ui.actionExit->setShortcut(QKeySequence::Quit);
+  ui.action_new_quest->setShortcut(QKeySequence::New);
+  ui.action_load_quest->setShortcut(QKeySequence::Open);
+  ui.action_close->setShortcut(QKeySequence::Close);
+  ui.action_save->setShortcut(QKeySequence::Save);
+  ui.action_exit->setShortcut(QKeySequence::Quit);
   undo_action->setShortcut(QKeySequence::Undo);
   redo_action->setShortcut(QKeySequence::Redo);
-  ui.actionCut->setShortcut(QKeySequence::Cut);
-  ui.actionCopy->setShortcut(QKeySequence::Copy);
-  ui.actionPaste->setShortcut(QKeySequence::Paste);
+  ui.action_cut->setShortcut(QKeySequence::Cut);
+  ui.action_copy->setShortcut(QKeySequence::Copy);
+  ui.action_paste->setShortcut(QKeySequence::Paste);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
-          ui.tabWidget, SLOT(open_file_requested(Quest&, const QString&)));
+          ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
 
   // Connect to external signals.
   connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
@@ -84,19 +84,9 @@ QuestManager& MainWindow::get_quest_manager() {
 }
 
 /**
- * @brief Slot called when the user triggers the "Exit" action.
- */
-void MainWindow::on_actionExit_triggered() {
-
-  if (confirm_close()) {
-    QApplication::exit(0);
-  }
-}
-
-/**
  * @brief Slot called when the user triggers the "Load quest" action.
  */
-void MainWindow::on_actionLoad_quest_triggered() {
+void MainWindow::on_action_load_quest_triggered() {
 
   QFileDialog dialog(nullptr, tr("Select quest directory"));
   dialog.setFileMode(QFileDialog::Directory);
@@ -120,9 +110,9 @@ void MainWindow::on_actionLoad_quest_triggered() {
 /**
  * @brief Slot called when the user triggers the "Save" action.
  */
-void MainWindow::on_actionSave_triggered() {
+void MainWindow::on_action_save_triggered() {
 
-  Editor* editor = ui.tabWidget->get_editor();
+  Editor* editor = ui.tab_widget->get_editor();
   if (editor != nullptr) {
     editor->save();
   }
@@ -131,21 +121,31 @@ void MainWindow::on_actionSave_triggered() {
 /**
  * @brief Slot called when the user triggers the "Close" action.
  */
-void MainWindow::on_actionClose_triggered() {
+void MainWindow::on_action_close_triggered() {
 
-  int index = ui.tabWidget->currentIndex();
+  int index = ui.tab_widget->currentIndex();
   if (index == -1) {
     return;
   }
-  ui.tabWidget->close_file_requested(index);
+  ui.tab_widget->close_file_requested(index);
+}
+
+/**
+ * @brief Slot called when the user triggers the "Exit" action.
+ */
+void MainWindow::on_action_exit_triggered() {
+
+  if (confirm_close()) {
+    QApplication::exit(0);
+  }
 }
 
 /**
  * @brief Slot called when the user triggers the "Cut" action.
  */
-void MainWindow::on_actionCut_triggered() {
+void MainWindow::on_action_cut_triggered() {
 
-  Editor* editor = ui.tabWidget->get_editor();
+  Editor* editor = ui.tab_widget->get_editor();
   if (editor != nullptr) {
     editor->cut();
   }
@@ -154,9 +154,9 @@ void MainWindow::on_actionCut_triggered() {
 /**
  * @brief Slot called when the user triggers the "Copy" action.
  */
-void MainWindow::on_actionCopy_triggered() {
+void MainWindow::on_action_copy_triggered() {
 
-  Editor* editor = ui.tabWidget->get_editor();
+  Editor* editor = ui.tab_widget->get_editor();
   if (editor != nullptr) {
     editor->copy();
   }
@@ -165,9 +165,9 @@ void MainWindow::on_actionCopy_triggered() {
 /**
  * @brief Slot called when the user triggers the "Paste" action.
  */
-void MainWindow::on_actionPaste_triggered() {
+void MainWindow::on_action_paste_triggered() {
 
-  Editor* editor = ui.tabWidget->get_editor();
+  Editor* editor = ui.tab_widget->get_editor();
   if (editor != nullptr) {
     editor->paste();
   }
@@ -176,7 +176,7 @@ void MainWindow::on_actionPaste_triggered() {
 /**
  * @brief Slot called when the user triggers the "Run quest" action.
  */
-void MainWindow::on_actionRun_quest_triggered() {
+void MainWindow::on_action_run_quest_triggered() {
 
   QString quest_path = quest_manager.get_quest().get_root_path();
   if (quest_path.isEmpty()) {
@@ -205,9 +205,9 @@ void MainWindow::current_quest_changed(Quest& quest) {
   update_title();
 
   connect(&quest, SIGNAL(file_renamed(const QString&, const QString&)),
-          ui.tabWidget, SLOT(file_renamed(const QString&, const QString&)));
+          ui.tab_widget, SLOT(file_renamed(const QString&, const QString&)));
   connect(&quest, SIGNAL(file_deleted(const QString&)),
-          ui.tabWidget, SLOT(file_deleted(const QString&)));
+          ui.tab_widget, SLOT(file_deleted(const QString&)));
 }
 
 /**
@@ -231,7 +231,7 @@ void MainWindow::update_title() {
  */
 void MainWindow::open_file(Quest& quest, const QString& path) {
 
-  ui.tabWidget->open_file_requested(quest, path);
+  ui.tab_widget->open_file_requested(quest, path);
 }
 
 /**
@@ -257,5 +257,5 @@ void MainWindow::closeEvent(QCloseEvent* event) {
  */
 bool MainWindow::confirm_close() {
 
-  return ui.tabWidget->confirm_close();
+  return ui.tab_widget->confirm_close();
 }

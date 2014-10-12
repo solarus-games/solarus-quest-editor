@@ -40,14 +40,14 @@ public:
 private slots:
 
   // Menu actions.
-  void on_actionExit_triggered();
-  void on_actionLoad_quest_triggered();
-  void on_actionSave_triggered();
-  void on_actionClose_triggered();
-  void on_actionCut_triggered();
-  void on_actionCopy_triggered();
-  void on_actionPaste_triggered();
-  void on_actionRun_quest_triggered();
+  void on_action_load_quest_triggered();
+  void on_action_save_triggered();
+  void on_action_close_triggered();
+  void on_action_exit_triggered();
+  void on_action_cut_triggered();
+  void on_action_copy_triggered();
+  void on_action_paste_triggered();
+  void on_action_run_quest_triggered();
 
   // Quest.
   void current_quest_changed(Quest& quest);

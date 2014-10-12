@@ -171,7 +171,7 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <layout class="QHBoxLayout" name="horizontal_layout_2">
                <item>
                 <widget class="QLabel" name="pattern_id_value">
                  <property name="text">
@@ -187,7 +187,7 @@
                 </widget>
                </item>
                <item>
-                <spacer name="horizontalSpacer">
+                <spacer name="horizontal_spacer">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
@@ -250,7 +250,7 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <layout class="QHBoxLayout" name="horizontal_layout_5">
                <item>
                 <widget class="QComboBox" name="animation_type_field">
                  <property name="sizePolicy">
