@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Tileset editor</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -36,7 +36,7 @@
        <item>
         <widget class="QGroupBox" name="tileset_properties_group_box">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -69,17 +69,13 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="num_tiles_label">
-            <property name="text">
-             <string>Number of tiles</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLabel" name="num_tiles_field">
-            <property name="text">
-             <string/>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="description_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
            </widget>
           </item>
@@ -117,13 +113,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="description_field">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="4" column="0">
+           <widget class="QLabel" name="num_tiles_label">
+            <property name="text">
+             <string>Patterns</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="num_tiles_field">
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>

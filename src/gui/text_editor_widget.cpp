@@ -333,6 +333,7 @@ void TextEditorWidget::contextMenuEvent(QContextMenuEvent* event) {
             this, SLOT(paste()));
   }
 
+  // Select all.
   menu.addAction(action);
   menu.addSeparator();
   action = new QAction(tr("Select all"), this);
