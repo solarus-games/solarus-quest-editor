@@ -82,7 +82,7 @@ void QuestResources::reload() {
   resources.clear();
 
   if (quest.is_valid()) {
-    resources.load_from_file(quest.get_resource_list_path().toStdString());
+    resources.import_from_file(quest.get_resource_list_path().toStdString());
     // TODO throw an exception in case of error
   }
 }
@@ -98,34 +98,8 @@ void QuestResources::save() const {
   }
 
   QString file_name = quest.get_resource_list_path();
-  QFile file(file_name);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    throw EditorException("Cannot open file '" + file_name + "' for writing");
-  }
-
-  QTextStream out(&file);
-  out.setCodec("UTF-8");
-
-  // Save each resource.
-  const std::map<ResourceType, std::string> resource_type_names =
-      Solarus::QuestResources::get_resource_type_names();
-  for (const auto& kvp: resource_type_names) {
-
-    const Solarus::QuestResources::ResourceMap& resource =
-        resources.get_elements(kvp.first);
-    for (const auto& element: resource) {
-
-      const std::string& id = element.first;
-      const std::string& description = element.second;
-
-      out << QString::fromStdString(kvp.second)
-          << "{ id = \""
-          << QString::fromStdString(id.c_str())
-          << "\", description = \""
-          << QString::fromStdString(description.c_str())
-          << "\" }\n";
-    }
-    out << "\n";
+  if (!resources.export_to_file(file_name.toStdString())) {
+    throw EditorException("Cannot write file '" + file_name + "'");
   }
 }
 
