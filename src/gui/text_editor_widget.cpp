@@ -287,11 +287,61 @@ void TextEditorWidget::line_number_area_paint_event(QPaintEvent* event) {
  */
 void TextEditorWidget::contextMenuEvent(QContextMenuEvent* event) {
 
-  /* TODO create our own context menu with correct undo/redo actions.
+  // Create our own context menu with correct undo/redo actions.
   QMenu menu;
+  QAction* action = nullptr;
+
+  // Undo/Redo actions that use the undo stack.
+  action = undo_stack.createUndoAction(this);
+  action->setShortcut(QKeySequence::Undo);
+  menu.addAction(action);
+  action = undo_stack.createRedoAction(this);
+  action->setShortcut(QKeySequence::Redo);
+  menu.addAction(action);
+
+  // Cut/Copy/Paste.
+  menu.addSeparator();
+  action = new QAction(tr("Cut"), this);
+  action->setShortcut(QKeySequence::Cut);
+  if (textCursor().selectedText().isEmpty()) {
+    action->setEnabled(false);
+  }
+  else {
+    connect(action, SIGNAL(triggered()),
+            this, SLOT(cut()));
+  }
+  menu.addAction(action);
+
+  action = new QAction(tr("Copy"), this);
+  action->setShortcut(QKeySequence::Copy);
+  if (textCursor().selectedText().isEmpty()) {
+    action->setEnabled(false);
+  }
+  else {
+    connect(action, SIGNAL(triggered()),
+            this, SLOT(copy()));
+  }
+  menu.addAction(action);
+
+  action = new QAction(tr("Paste"), this);
+  action->setShortcut(QKeySequence::Paste);
+  if (!canPaste()) {
+    action->setEnabled(false);
+  }
+  else {
+    connect(action, SIGNAL(triggered()),
+            this, SLOT(paste()));
+  }
+
+  menu.addAction(action);
+  menu.addSeparator();
+  action = new QAction(tr("Select all"), this);
+  action->setShortcut(QKeySequence::SelectAll);
+  connect(action, SIGNAL(triggered()),
+          this, SLOT(selectAll()));
+  menu.addAction(action);
 
   menu.exec(event->globalPos());
-  */
 }
 
 /**
