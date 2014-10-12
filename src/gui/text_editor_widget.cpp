@@ -17,6 +17,8 @@
 #include "gui/text_editor.h"
 #include "gui/text_editor_widget.h"
 #include <QMenu>
+#include <QPainter>
+#include <QTextBlock>
 #include <QUndoStack>
 
 namespace {
@@ -76,6 +78,45 @@ private:
   bool first_time;                          /**< \c true if redo has not been called yet.*/
 };
 
+/**
+ * @brief Vertical widget showing line numbers.
+ */
+class LineNumberArea : public QWidget {
+
+public:
+
+  /**
+   * @brief Constructor.
+   * @param text_editor_widget The text editor to show line numbers of.
+   */
+  LineNumberArea(TextEditorWidget& text_editor_widget) :
+    QWidget(&text_editor_widget),
+    text_editor_widget(text_editor_widget) {
+  }
+
+  /**
+   * @brief Returns an appropriate size for this line number area.
+   * @return The size hint.
+   */
+  QSize sizeHint() const {
+    return QSize(text_editor_widget.get_line_number_area_width(), 0);
+  }
+
+protected:
+
+  /**
+   * @brief Draws this line number area.
+   * @param event The paint event to handle.
+   */
+  void paintEvent(QPaintEvent* event) {
+    text_editor_widget.line_number_area_paint_event(event);
+  }
+
+private:
+
+  TextEditorWidget& text_editor_widget;     /**< The text editor to show line numbers of. */
+};
+
 }
 
 /**
@@ -85,10 +126,23 @@ private:
  */
 TextEditorWidget::TextEditorWidget(const QString& file_path, TextEditor& editor):
   QPlainTextEdit(file_path, &editor),
-  undo_stack(editor.get_undo_stack()) {
+  undo_stack(editor.get_undo_stack()),
+  line_number_area(new LineNumberArea(*this)) {
 
+  // Undo/redo system.
   connect(document(), SIGNAL(undoCommandAdded()),
           this, SLOT(undo_command_added()));
+
+  // Line number displaying.
+  connect(this, SIGNAL(blockCountChanged(int)),
+          this, SLOT(update_line_number_area_width(int)));
+  connect(this, SIGNAL(updateRequest(const QRect&, int)),
+          this, SLOT(update_line_number_area(const QRect&, int)));
+  connect(this, SIGNAL(cursorPositionChanged()),
+          this, SLOT(highlight_current_line()));
+
+  update_line_number_area_width(0);
+  highlight_current_line();
 }
 
 /**
@@ -100,6 +154,127 @@ TextEditorWidget::TextEditorWidget(const QString& file_path, TextEditor& editor)
 void TextEditorWidget::undo_command_added() {
 
   undo_stack.push(new UndoCommandProxy(*this));
+}
+
+/**
+ * @brief Returns the width needed for the line number area.
+ *
+ * It depends on the number of lines.
+ *
+ * @return The line number area width.
+ */
+int TextEditorWidget::get_line_number_area_width() {
+
+  int digits = 1;
+  int max = qMax(1, blockCount());
+  while (max >= 10) {
+    max /= 10;
+    ++digits;
+  }
+
+  ++digits;  // Add space equivalent to an extra digit to the right.
+
+  int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+
+  return space;
+}
+
+/**
+ * @brief Slot called when the number of blocks has changed.
+ *
+ * Updates the viewport margin depending on the line number area width.
+ *
+ * @param new_block_count The new block count.
+ */
+void TextEditorWidget::update_line_number_area_width(int /* new_block_count */) {
+  setViewportMargins(get_line_number_area_width(), 0, 0, 0);
+}
+
+/**
+ * @brief Called when the viewport has been scrolled.
+ * @param rect Region to be redrawn.
+ * @param dy Number of pixels scrolled vertically.
+ */
+void TextEditorWidget::update_line_number_area(const QRect& rect, int dy) {
+
+  if (dy != 0) {
+    line_number_area->scroll(0, dy);
+  }
+  else {
+    line_number_area->update(0, rect.y(), line_number_area->width(), rect.height());
+  }
+
+  if (rect.contains(viewport()->rect())) {
+    update_line_number_area_width(0);
+  }
+}
+
+/**
+ * @brief Receives a resize event.
+ *
+ * Updates the line number area.
+ *
+ * @param event The event to handle.
+ */
+void TextEditorWidget::resizeEvent(QResizeEvent* event) {
+  QPlainTextEdit::resizeEvent(event);
+
+  QRect contents_rect = contentsRect();
+  line_number_area->setGeometry(
+        QRect(contents_rect.left(), contents_rect.top(),
+              get_line_number_area_width(), contents_rect.height()
+              )
+        );
+}
+
+/**
+ * @brief Highlights the current line of text.
+ */
+void TextEditorWidget::highlight_current_line() {
+
+  QList<QTextEdit::ExtraSelection> extraSelections;
+
+  if (!isReadOnly()) {
+    QTextEdit::ExtraSelection selection;
+
+    QColor line_color = QColor(Qt::yellow).lighter(160);
+
+    selection.format.setBackground(line_color);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+    extraSelections.append(selection);
+  }
+
+  setExtraSelections(extraSelections);
+}
+
+/**
+ * @brief Draws the line number area.
+ * @param event The paint event to handle.
+ */
+void TextEditorWidget::line_number_area_paint_event(QPaintEvent* event) {
+
+  QPainter painter(line_number_area);
+
+  QTextBlock block = firstVisibleBlock();
+  int block_number = block.blockNumber();
+  int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+  int bottom = top + (int) blockBoundingRect(block).height();
+
+  while (block.isValid() && top <= event->rect().bottom()) {
+    if (block.isVisible() && bottom >= event->rect().top()) {
+      QString number = QString::number(block_number + 1) + " ";
+      painter.setPen(Qt::black);
+      painter.drawText(0, top, line_number_area->width(), fontMetrics().height(),
+                       Qt::AlignRight, number);
+    }
+
+    block = block.next();
+    top = bottom;
+    bottom = top + (int) blockBoundingRect(block).height();
+    ++block_number;
+  }
 }
 
 /**

@@ -19,7 +19,11 @@
 class TextEditor;
 
 /**
- * @brief Customization of QPlainTextEdit to work with QUndoGroup.
+ * @brief Customization of QPlainTextEdit to add line numbers and undo/redo.
+ *
+ * The line number displaying system is highly inspired from the Qt
+ * code editor example:
+ * http://qt-project.org/doc/qt-4.8/widgets-codeeditor.html
  *
  * This implementation allows the undo/redo system of QPlainTextEdit to work
  * with an existing QUndoStack, and therefore with a QUndoGroup if wanted.
@@ -38,15 +42,23 @@ public:
 
   TextEditorWidget(const QString& file_path, TextEditor& editor);
 
-  void contextMenuEvent(QContextMenuEvent* event);
-  void keyPressEvent(QKeyEvent* event);
+  void line_number_area_paint_event(QPaintEvent* event);
+  int get_line_number_area_width();
+
+  virtual void contextMenuEvent(QContextMenuEvent* event) override;
+  virtual void keyPressEvent(QKeyEvent* event) override;
+  virtual void resizeEvent(QResizeEvent* event) override;
 
 private slots:
 
   void undo_command_added();
+  void update_line_number_area_width(int new_block_count);
+  void highlight_current_line();
+  void update_line_number_area(const QRect& rect, int dy);
 
 private:
 
+  QWidget* line_number_area;
   QUndoStack& undo_stack;    /**< The undo/redo history to use. */
 
 };
