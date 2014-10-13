@@ -64,6 +64,7 @@ public:
 
 public slots:
 
+  void save_file_requested(int index);
   void close_file_requested(int index);
   void open_file_requested(Quest& quest, const QString& path);
   void file_renamed(const QString& old_path, const QString& new_path);

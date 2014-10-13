@@ -110,10 +110,11 @@ void MainWindow::on_action_load_quest_triggered() {
  */
 void MainWindow::on_action_save_triggered() {
 
-  Editor* editor = ui.tab_widget->get_editor();
-  if (editor != nullptr) {
-    editor->save();
+  int index = ui.tab_widget->currentIndex();
+  if (index == -1) {
+    return;
   }
+  ui.tab_widget->save_file_requested(index);
 }
 
 /**

@@ -16,6 +16,7 @@
  */
 #include "gui/editor.h"
 #include "quest.h"
+#include <QMessageBox>
 #include <QUndoStack>
 #include <QVBoxLayout>
 
@@ -102,14 +103,6 @@ QString Editor::get_file_name_without_extension() const {
 }
 
 /**
- * @brief Returns the undo/redo history of editing this file.
- * @return The undo/redo history.
- */
-QUndoStack& Editor::get_undo_stack() {
-  return *undo_stack;
-}
-
-/**
  * @fn Editor::get_title
  * @brief Returns a user-friendly title for this editor.
  *
@@ -133,19 +126,67 @@ QString Editor::get_title() const {
  * @return An icon representing the file edited.
  */
 
+
+/**
+ * @brief Returns the undo/redo history of editing this file.
+ * @return The undo/redo history.
+ */
+QUndoStack& Editor::get_undo_stack() {
+  return *undo_stack;
+}
 /**
  * @fn Editor::save
  * @brief Saves the file.
+ *
+ * You don't have to call QUndoStack::setClean() from your save() function:
+ * this is automatically done if the save operation is successful.
+ *
+ * @throws EditorException In case of failure.
  */
 
 /**
- * @fn Editor::confirm_close
  * @brief Function called when the user wants to close the editor.
  *
- * If the file is not saved, you should propose to save it.
+ * If the file is not saved, a dialog proposes to save it.
  *
  * @return @c false to cancel the closing operation.
  */
+bool Editor::confirm_close() {
+
+  if (get_undo_stack().isClean()) {
+    // The file is saved.
+    return true;
+  }
+
+  QMessageBox::StandardButton answer = QMessageBox::question(
+        nullptr,
+        tr("Save the modifications"),
+        tr("File '%1' has been modified. Do you want to save it?").arg(get_file_name()),
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+        QMessageBox::Save
+        );
+
+  switch (answer) {
+
+  case QMessageBox::Save:
+    // Save and close.
+    save();
+    return true;
+
+  case QMessageBox::Discard:
+    // Close without saving.
+    return true;
+
+  case QMessageBox::Cancel:
+  case QMessageBox::Escape:
+    // Don't close.
+    return false;
+
+  default:
+    return false;
+  }
+
+}
 
 /**
  * @fn Editor::cut

@@ -43,11 +43,11 @@ public:
   QString get_file_name() const;
   QString get_file_name_without_extension() const;
   QUndoStack& get_undo_stack();
+  bool confirm_close();
 
   virtual QString get_title() const;
   virtual QIcon get_icon() const = 0;
   virtual void save() = 0;
-  virtual bool confirm_close() = 0;
   virtual void cut() = 0;
   virtual void copy() = 0;
   virtual void paste() = 0;

@@ -148,20 +148,28 @@ QIcon TilesetEditor::get_icon() const {
 }
 
 /**
+ * @brief Loads the tileset file into the gui.
+ */
+void TilesetEditor::load() {
+
+  QString path = get_file_path();
+
+  if (!tileset.import_from_file(path.toStdString())) {
+    throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
+  }
+  update();  // Fill the gui.
+}
+
+/**
  * @copydoc Editor::save
  */
 void TilesetEditor::save() {
 
-  // TOOD
-}
+  QString path = get_file_path();
 
-/**
- * @copydoc Editor::confirm_close
- */
-bool TilesetEditor::confirm_close() {
-
-  // TOOD
-  return true;
+  if (!tileset.export_to_file(path.toStdString())) {
+    throw EditorException(tr("Cannot save tileset data file '%1'").arg(path));
+  }
 }
 
 /**
@@ -186,19 +194,6 @@ void TilesetEditor::copy() {
 void TilesetEditor::paste() {
 
   // TOOD
-}
-
-/**
- * @brief Loads the tileset file into the gui.
- */
-void TilesetEditor::load() {
-
-  QString path = get_quest().get_tileset_data_file_path(tileset_id);
-
-  if (!tileset.import_from_file(path.toStdString())) {
-    throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
-  }
-  update();
 }
 
 /**

@@ -22,7 +22,6 @@
 #include <QIcon>
 #include <QLayout>
 #include <QList>
-#include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QTextStream>
 
@@ -136,45 +135,6 @@ void TextEditor::save() {
   out.setCodec("UTF-8");
   out << text_widget->toPlainText();
   text_widget->document()->setModified(false);
-}
-
-/**
- * @copydoc Editor::confirm_close
- */
-bool TextEditor::confirm_close() {
-
-  if (!text_widget->document()->isModified()) {
-    return true;
-  }
-
-  QMessageBox::StandardButton answer = QMessageBox::question(
-        nullptr,
-        tr("Save the modifications"),
-        tr("File '%1' has been modified. Do you want to save it?").arg(get_file_name()),
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-        QMessageBox::Save
-        );
-
-  switch (answer) {
-
-  case QMessageBox::Save:
-    // Save and close.
-    save();
-    return true;
-
-  case QMessageBox::Discard:
-    // Close without saving.
-    return true;
-
-  case QMessageBox::Cancel:
-  case QMessageBox::Escape:
-    // Don't close.
-    return false;
-
-  default:
-    return false;
-  }
-
 }
 
 /**

@@ -34,7 +34,6 @@ public:
   virtual QString get_title() const override;
   virtual QIcon get_icon() const override;
   virtual void save() override;
-  virtual bool confirm_close() override;
   virtual void cut() override;
   virtual void copy() override;
   virtual void paste() override;

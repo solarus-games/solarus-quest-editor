@@ -314,6 +314,26 @@ bool EditorTabs::show_editor(const QString& path) {
 }
 
 /**
+ * @brief Slot called when the user attempts to save a file.
+ * @param index Index of the tab to save.
+ */
+void EditorTabs::save_file_requested(int index) {
+
+  Editor* editor = get_editor(index);
+  if (editor == nullptr) {
+    return;
+  }
+
+  try {
+    editor->save();
+    editor->get_undo_stack().setClean();
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+}
+
+/**
  * @brief Slot called when the user attempts to open a file.
  * @param quest The quest that holds this file.
  * @param file_path Path of the file to open.
