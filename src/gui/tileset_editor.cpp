@@ -29,7 +29,8 @@
  * @throws EditorException If the file could not be opened.
  */
 TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent) :
-  Editor(quest, path, parent) {
+  Editor(quest, path, parent),
+  tileset() {
 
   // Get the tileset.
   ResourceType resource_type;
@@ -47,8 +48,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   const int side_width = 300;
   ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
 
-  ui.tileset_id_field->setText(tileset_id);
-  update_description_to_gui();
+  // Open the file.
+  load();
   get_undo_stack().setClean();
 
   // Make connections.
@@ -113,6 +114,54 @@ void TilesetEditor::copy() {
 void TilesetEditor::paste() {
 
   // TOOD
+}
+
+/**
+ * @brief Loads the tileset file into the gui.
+ */
+void TilesetEditor::load() {
+
+  QString path = get_quest().get_tileset_data_file_path(tileset_id);
+
+  if (!tileset.import_from_file(path.toStdString())) {
+    throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
+  }
+  update();
+}
+
+/**
+ * @brief Updates everything in the gui.
+ */
+void TilesetEditor::update() {
+
+  ui.tileset_id_field->setText(tileset_id);
+  update_description_to_gui();
+  update_background_color();
+  ui.num_tiles_field->setText(QString::number(tileset.get_num_patterns()));
+}
+
+/**
+ * @brief Updates the background color button from the one of the tileset.
+ */
+void TilesetEditor::update_background_color() {
+
+  QString style_sheet =
+      "QPushButton {\n"
+      "    background-color: %1;\n"
+      "    border-style: outset;\n"
+      "    border-width: 2px;\n"
+      "    border-radius: 5px;\n"
+      "    border-color: gray;\n"
+      "    min-width: 1em;\n"
+      "    padding: 1px;\n"
+      "}\n"
+      "QPushButton:pressed {\n"
+      "    border-style: inset;\n"
+      "}";
+  uint8_t r, g, b, a;
+  tileset.get_background_color().get_components(r, g, b, a);
+  ui.background_button->setStyleSheet(
+        style_sheet.arg(QColor(r, g, b, a).name()));
 }
 
 /**

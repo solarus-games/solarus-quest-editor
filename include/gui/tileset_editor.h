@@ -19,6 +19,9 @@
 
 #include "gui/editor.h"
 #include "ui_tileset_editor.h"
+#include <solarus/entities/TilesetData.h>
+
+using TilesetData = Solarus::TilesetData;
 
 /**
  * \brief A widget to edit graphically a tileset file.
@@ -40,13 +43,18 @@ public:
 
 private slots:
 
+  void update();
+  void update_background_color();
   void update_description_to_gui();
   void set_description_from_gui();
 
 private:
 
+  void load();
+
   Ui::TilesetEditor ui;      /**< The tileset editor widgets. */
   QString tileset_id;        /**< Id of the tileset being edited. */
+  TilesetData tileset;       /**< The tileset being edited. */
 
 };
 
