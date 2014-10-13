@@ -41,8 +41,6 @@ public:
 
 private:
 
-  void initialize_undo_redo();
-
   TextEditorWidget* text_widget;    /**< The text editing area contained. */
 
 };
