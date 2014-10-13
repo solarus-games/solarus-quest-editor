@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/editor.h"
+#include "editor_exception.h"
 #include "quest.h"
 #include <QMessageBox>
 #include <QUndoStack>
@@ -30,8 +31,12 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   QWidget(parent),
   quest(quest),
   file_path(file_path),
+  title(get_file_name()),
   undo_stack(new QUndoStack(this)) {
 
+  // Default close confirmation message.
+  set_close_confirm_message(
+        tr("File '%1' has been modified. Save changes?").arg(get_file_name()));
 }
 
 /**
@@ -114,18 +119,54 @@ QString Editor::get_file_name_without_extension() const {
  * @return A title describing the file edited.
  */
 QString Editor::get_title() const {
-  return get_file_name();
+  return title;
 }
 
 /**
- * @fn Editor::get_icon
+ * @brief Sets the title of this editor.
+ * @param title The title to set.
+ */
+void Editor::set_title(const QString& title) {
+  this->title = title;
+}
+
+/**
  * @brief Returns an icon representing this editor.
  *
  * It is used in the tab bar.
  *
  * @return An icon representing the file edited.
  */
+QIcon Editor::get_icon() const {
+  return icon;
+}
 
+/**
+ * @brief Sets the icon representing this editor.
+ *
+ * It is used in the tab bar.
+ *
+ * @param icon An icon representing the file edited.
+ */
+void Editor::set_icon(const QIcon& icon) {
+  this->icon = icon;
+}
+
+/**
+ * @brief Returns the message proposing to save changes when closing.
+ * @return The closing confirmation message.
+ */
+QString Editor::get_close_confirm_message() const {
+  return close_confirm_message;
+}
+
+/**
+ * @brief Returns the message proposing to save changes when closing.
+ * @param message The closing confirmation message.
+ */
+void Editor::set_close_confirm_message(const QString& message) {
+  this->close_confirm_message = message;
+}
 
 /**
  * @brief Returns the undo/redo history of editing this file.
@@ -160,8 +201,8 @@ bool Editor::confirm_close() {
 
   QMessageBox::StandardButton answer = QMessageBox::question(
         nullptr,
-        tr("Save the modifications"),
-        tr("File '%1' has been modified. Do you want to save it?").arg(get_file_name()),
+        tr("Save changes"),
+        get_close_confirm_message(),
         QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
         QMessageBox::Save
         );
@@ -170,8 +211,15 @@ bool Editor::confirm_close() {
 
   case QMessageBox::Save:
     // Save and close.
-    save();
-    return true;
+    try {
+      save();
+      get_undo_stack().setClean();
+      return true;
+    }
+    catch (const EditorException& ex) {
+      ex.show_dialog();
+      return false;
+    }
 
   case QMessageBox::Discard:
     // Close without saving.

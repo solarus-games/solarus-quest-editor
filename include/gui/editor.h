@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_EDITOR_H
 #define SOLARUSEDITOR_EDITOR_H
 
+#include <QIcon>
 #include <QWidget>
 
 class Quest;
@@ -42,20 +43,32 @@ public:
   QString get_file_path() const;
   QString get_file_name() const;
   QString get_file_name_without_extension() const;
+  QString get_title() const;
+  QIcon get_icon() const;
   QUndoStack& get_undo_stack();
   bool confirm_close();
 
-  virtual QString get_title() const;
-  virtual QIcon get_icon() const = 0;
   virtual void save() = 0;
   virtual void cut() = 0;
   virtual void copy() = 0;
   virtual void paste() = 0;
 
+protected:
+
+  void set_title(const QString& title);
+  void set_icon(const QIcon& icon);
+
+  QString get_close_confirm_message() const;
+  void set_close_confirm_message(const QString& message);
+
 private:
 
   Quest& quest;              /**< The quest the edited file belongs to. */
   QString file_path;         /**< Path of the edited file. */
+  QString title;             /**< Title of the file. */
+  QIcon icon;                /**< Icon representing the file. */
+  QString
+      close_confirm_message; /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;    /**< The undo/redo history of editing this file. */
 
 };

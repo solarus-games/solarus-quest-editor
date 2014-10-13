@@ -35,8 +35,6 @@ public:
 
   TilesetData& get_tileset();
 
-  virtual QString get_title() const override;
-  virtual QIcon get_icon() const override;
   virtual void save() override;
   virtual void cut() override;
   virtual void copy() override;

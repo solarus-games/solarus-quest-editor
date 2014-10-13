@@ -104,6 +104,12 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   }
   this->tileset_id = tileset_id;
 
+  // Editor properties.
+  set_title("Tileset " + get_file_name_without_extension());
+  set_icon(QIcon(":/images/icon_resource_tileset.png"));
+  set_close_confirm_message(
+        tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
+
   // Prepare the gui.
   ui.setupUi(this);
   layout()->addWidget(ui.splitter);
@@ -129,22 +135,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
  */
 TilesetData& TilesetEditor::get_tileset() {
   return tileset;
-}
-
-/**
- * @copydoc Editor::get_title
- */
-QString TilesetEditor::get_title() const {
-
-  return "Tileset " + get_file_name_without_extension();
-}
-
-/**
- * @copydoc Editor::get_icon
- */
-QIcon TilesetEditor::get_icon() const {
-
-  return QIcon(":/images/icon_resource_tileset.png");
 }
 
 /**

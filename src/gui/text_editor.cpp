@@ -35,6 +35,9 @@
 TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) :
   Editor(quest, file_path, parent) {
 
+  set_title(create_title());
+  set_icon(create_icon());
+
   QVBoxLayout* layout = new QVBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
   setLayout(layout);
@@ -71,9 +74,10 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 }
 
 /**
- * @copydoc Editor::get_title
+ * @brief Chooses an appropriate title for this editor.
+ * @return A title.
  */
-QString TextEditor::get_title() const {
+QString TextEditor::create_title() const {
 
   QString path = get_file_path();
   QString language_id;
@@ -90,9 +94,10 @@ QString TextEditor::get_title() const {
 }
 
 /**
- * @copydoc Editor::get_icon
+ * @brief Chooses an appropriate icon for this editor.
+ * @return An icon.
  */
-QIcon TextEditor::get_icon() const {
+QIcon TextEditor::create_icon() const {
 
   QString path = get_file_path();
   ResourceType resource_type;

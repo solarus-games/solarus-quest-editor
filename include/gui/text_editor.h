@@ -31,8 +31,9 @@ public:
 
   TextEditor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
 
-  virtual QString get_title() const override;
-  virtual QIcon get_icon() const override;
+  QString create_title() const;
+  QIcon create_icon() const;
+
   virtual void save() override;
   virtual void cut() override;
   virtual void copy() override;
