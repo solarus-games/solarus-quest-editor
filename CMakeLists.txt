@@ -68,6 +68,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
   include/gui/tileset_editor.h
+  include/color.h
   include/editor_exception.h
   include/quest.h
   include/quest_manager.h
@@ -84,6 +85,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/text_editor.cpp
   src/gui/text_editor_widget.cpp
   src/gui/tileset_editor.cpp
+  src/color.cpp
   src/editor_exception.cpp
   src/main.cpp
   src/quest.cpp

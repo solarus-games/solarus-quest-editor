@@ -33,6 +33,8 @@ public:
 
   TilesetEditor(Quest& quest, const QString& path, QWidget* parent = nullptr);
 
+  TilesetData& get_tileset();
+
   virtual QString get_title() const override;
   virtual QIcon get_icon() const override;
   virtual void save() override;
@@ -41,10 +43,13 @@ public:
   virtual void copy() override;
   virtual void paste() override;
 
-private slots:
+public slots:
 
   void update();
+
   void update_background_color();
+  void background_button_clicked();
+
   void update_description_to_gui();
   void set_description_from_gui();
 

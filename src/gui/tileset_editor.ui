@@ -97,15 +97,12 @@
             <property name="styleSheet">
              <string notr="true"> QPushButton {
      background-color: white;
-     border-style: outset;
+     border-style: inset;
      border-width: 2px;
-     border-radius: 5px;
+/*     border-radius: 5px; */
      border-color: gray;
      min-width: 1em;
      padding: 1px;
- }
- QPushButton:pressed {
-     border-style: inset;
  }</string>
             </property>
             <property name="text">

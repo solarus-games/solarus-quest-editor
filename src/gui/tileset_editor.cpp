@@ -16,10 +16,72 @@
  */
 #include "gui/gui_tools.h"
 #include "gui/tileset_editor.h"
+#include "color.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QColorDialog>
 #include <QUndoStack>
+
+namespace {
+
+/**
+ * @brief Parent class of all undoable commands of the tileset editor.
+ */
+class TilesetEditorCommand : public QUndoCommand {
+
+public:
+
+  TilesetEditorCommand(TilesetEditor& editor) :
+    QUndoCommand(TilesetEditor::tr("Background color")),
+    editor(editor) {
+  }
+
+  TilesetEditor& get_editor() const {
+    return editor;
+  }
+
+  TilesetData& get_tileset() const {
+    return editor.get_tileset();
+  }
+
+private:
+
+  TilesetEditor& editor;
+
+};
+
+/**
+ * @brief Changing the background color of the tileset.
+ */
+class SetBackgroundCommand : public TilesetEditorCommand {
+
+public:
+
+  SetBackgroundCommand(TilesetEditor& editor, const QColor& color) :
+    TilesetEditorCommand(editor),
+    color_before(Color::to_qcolor(get_tileset().get_background_color())),
+    color_after(color) {
+  }
+
+  virtual void undo() override {
+    get_tileset().set_background_color(Color::to_solarus_color(color_before));
+    get_editor().update_background_color();
+  }
+
+  virtual void redo() override {
+    get_tileset().set_background_color(Color::to_solarus_color(color_after));
+    get_editor().update_background_color();
+  }
+
+private:
+
+  QColor color_before;
+  QColor color_after;
+
+};
+
+}
 
 /**
  * @brief Creates a tileset editor.
@@ -57,6 +119,16 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
+  connect(ui.background_button, SIGNAL(clicked()),
+          this, SLOT(background_button_clicked()));
+}
+
+/**
+ * @brief Returns the tileset data being edited.
+ * @return The tileset.
+ */
+TilesetData& TilesetEditor::get_tileset() {
+  return tileset;
 }
 
 /**
@@ -148,20 +220,15 @@ void TilesetEditor::update_background_color() {
   QString style_sheet =
       "QPushButton {\n"
       "    background-color: %1;\n"
-      "    border-style: outset;\n"
+      "    border-style: inset;\n"
       "    border-width: 2px;\n"
-      "    border-radius: 5px;\n"
       "    border-color: gray;\n"
       "    min-width: 1em;\n"
       "    padding: 1px;\n"
-      "}\n"
-      "QPushButton:pressed {\n"
-      "    border-style: inset;\n"
       "}";
-  uint8_t r, g, b, a;
-  tileset.get_background_color().get_components(r, g, b, a);
+  QColor background_color = Color::to_qcolor(tileset.get_background_color());
   ui.background_button->setStyleSheet(
-        style_sheet.arg(QColor(r, g, b, a).name()));
+        style_sheet.arg(background_color.name()));
 }
 
 /**
@@ -173,6 +240,20 @@ void TilesetEditor::update_description_to_gui() {
   if (ui.description_field->text() != description) {
     ui.description_field->setText(description);
   }
+}
+
+/**
+ * @brief Slot called when the user clicks the background color button.
+ */
+void TilesetEditor::background_button_clicked() {
+
+  QColor color = QColorDialog::getColor(
+        Color::to_qcolor(tileset.get_background_color()), this, "Select tileset background color");
+  if (!color.isValid()) {
+    return;
+  }
+
+  get_undo_stack().push(new SetBackgroundCommand(*this, color));
 }
 
 /**
