@@ -261,7 +261,12 @@ void TilesetEditor::set_description_from_gui() {
   }
 
   blockSignals(true);  // TODO scoped blocker
-  get_resources().set_description(ResourceType::TILESET, tileset_id, description);
-  get_resources().save();
+  try {
+    get_resources().set_description(ResourceType::TILESET, tileset_id, description);
+    get_resources().save();
+  }
+  catch (const EditorException& ex) {
+    ex.print_message();
+  }
   blockSignals(false);
 }

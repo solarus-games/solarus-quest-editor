@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <editor_exception.h>
 #include "gui/gui_tools.h"
+#include "editor_exception.h"
+#include <iostream>
 
 /**
  * @brief Creates a quest editor exception.
@@ -44,6 +45,14 @@ const char* EditorException::what() const noexcept {
 
   message_utf8 = message.toUtf8();
   return message_utf8.constData();
+}
+
+/**
+ * @brief Prints the error message on stderr->
+ */
+void EditorException::print_message() const {
+
+  std::cerr << message.toStdString() << std::endl;
 }
 
 /**

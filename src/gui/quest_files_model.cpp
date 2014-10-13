@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/quest_files_model.h"
+#include "editor_exception.h"
 #include "quest.h"
 #include <QFileSystemModel>
 
@@ -286,11 +287,16 @@ bool QuestFilesModel::setData(
     return false;
   }
 
-  quest.get_resources().set_description(resource_type, element_id, value.toString());
-  quest.get_resources().save();
-  emit dataChanged(index, index);
-
-  return true;
+  try {
+    quest.get_resources().set_description(resource_type, element_id, value.toString());
+    quest.get_resources().save();
+    emit dataChanged(index, index);
+    return true;
+  }
+  catch (const EditorException& ex) {
+    ex.print_message();
+    return false;
+  }
 }
 
 /**
