@@ -126,8 +126,8 @@ private:
  */
 TextEditorWidget::TextEditorWidget(const QString& file_path, TextEditor& editor):
   QPlainTextEdit(file_path, &editor),
-  undo_stack(editor.get_undo_stack()),
-  line_number_area(new LineNumberArea(*this)) {
+  line_number_area(new LineNumberArea(*this)),
+  undo_stack(editor.get_undo_stack()) {
 
   // Undo/redo system.
   connect(document(), SIGNAL(undoCommandAdded()),

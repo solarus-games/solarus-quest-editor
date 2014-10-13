@@ -401,7 +401,6 @@ void QuestTreeView::new_element_action_triggered() {
   }
 
   try {
-    bool ok = false;
     QuestResources& resources = quest.get_resources();
     QString resource_type_friendly_name_for_id =
         resources.get_friendly_name_for_id(resource_type);

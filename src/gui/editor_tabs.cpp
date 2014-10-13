@@ -151,7 +151,7 @@ void EditorTabs::open_text_editor(
  * @param path Path of the map data file to open.
  */
 void EditorTabs::open_map_editor(
-    Quest& quest, const QString& path) {
+    Quest& /* quest */, const QString& /* path */) {
 
   // TODO map editor.
 }
@@ -369,7 +369,7 @@ void EditorTabs::close_file_requested(int index) {
  * @param old_path Old path of the file.
  * @param new_path New path after renaming.
  */
-void EditorTabs::file_renamed(const QString& old_path, const QString& new_path) {
+void EditorTabs::file_renamed(const QString& old_path, const QString& /* new_path */) {
 
   int index = find_editor(old_path);
   if (index != -1) {
@@ -416,7 +416,7 @@ bool EditorTabs::confirm_close() {
  * @brief Slot called when the curren tab changes.
  * @param index Index of the new current tab.
  */
-void EditorTabs::current_editor_changed(int index) {
+void EditorTabs::current_editor_changed(int /* index */) {
 
   Editor* editor = get_editor();
   if (editor == nullptr) {

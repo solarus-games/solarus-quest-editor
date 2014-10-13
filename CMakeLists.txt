@@ -13,6 +13,9 @@ set(CMAKE_AUTOMOC ON)
 # Compile as C++11.
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
+# In debug, set strict warnings for developers.
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
+
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
 option(SOLARUS_USE_LUAJIT "Use LuaJIT instead of default Lua (recommended)" ON)

@@ -36,7 +36,7 @@ class TextEditor;
  * undo/redo actions and implement our own actions instead using the QUndoStack.
  */
 class TextEditorWidget: public QPlainTextEdit {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
 
