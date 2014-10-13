@@ -2,10 +2,23 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>Editor</name>
+    <message>
+        <location filename="../src/gui/editor.cpp" line="39"/>
+        <source>File &apos;%1&apos; has been modified. Save changes?</source>
+        <translation>Le fichier &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/editor.cpp" line="204"/>
+        <source>Save changes</source>
+        <translation>Enregistrer les changements</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="218"/>
+        <location filename="../src/gui/main_window.cpp" line="219"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
@@ -94,7 +107,7 @@
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="193"/>
+        <location filename="../src/gui/main_window.cpp" line="194"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -333,32 +346,32 @@
 <context>
     <name>QuestFilesModel</name>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="142"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="143"/>
         <source>Resource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="145"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="146"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="148"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="149"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="205"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="206"/>
         <source>Quest</source>
         <translation>Quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="210"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="211"/>
         <source>Main Lua script</source>
         <translation>Script Lua principal</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="225"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="226"/>
         <source>Lua script</source>
         <translation>Script Lua</translation>
     </message>
@@ -602,79 +615,79 @@
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="463"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="462"/>
         <source>New folder</source>
         <translation>Nouveau dossier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="464"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="463"/>
         <source>Folder name:</source>
         <translation>Nom du dossier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="502"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="501"/>
         <source>New Lua script</source>
         <translation>Nouveau script Lua</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="503"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="502"/>
         <source>File name:</source>
         <translation>Nom de fichier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="617"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="616"/>
         <source>Rename resource</source>
         <translation>Renommer la ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="618"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="617"/>
         <source>New id for %1 &apos;%2&apos;:</source>
         <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="637"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="636"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="638"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="637"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="687"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="686"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="688"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="687"/>
         <source>New description for %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="743"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="769"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="783"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="742"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="768"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="782"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="744"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="743"/>
         <source>Do you really want to delete %1 &apos;%2&apos;?</source>
         <translation>Voulez-vous vraiment supprimer %1 &apos;%2&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="763"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="762"/>
         <source>Directory is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="770"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="769"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="784"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="783"/>
         <source>Do you really want to delete file &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le fichier &apos;%1&apos; ?</translation>
     </message>
@@ -682,24 +695,22 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="66"/>
+        <location filename="../src/gui/text_editor.cpp" line="68"/>
         <source>Cannot open file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="132"/>
+        <location filename="../src/gui/text_editor.cpp" line="136"/>
         <source>Cannot open file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos; en écriture</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="152"/>
         <source>Save the modifications</source>
-        <translation>Enregistrer les modifications</translation>
+        <translation type="vanished">Enregistrer les modifications</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="153"/>
         <source>File &apos;%1&apos; has been modified. Do you want to save it?</source>
-        <translation>Le fichier &apos;%1&apos; a été modifié. Voulez-vous l&apos;enregistrer ?</translation>
+        <translation type="vanished">Le fichier &apos;%1&apos; a été modifié. Voulez-vous l&apos;enregistrer ?</translation>
     </message>
 </context>
 <context>
@@ -757,44 +768,64 @@
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="119"/>
+        <location filename="../src/gui/tileset_editor.ui" line="116"/>
         <source>Patterns</source>
         <translation>Motifs</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="145"/>
+        <location filename="../src/gui/tileset_editor.ui" line="142"/>
         <source>Tile pattern properties</source>
         <translation>Propriétés du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="154"/>
+        <location filename="../src/gui/tileset_editor.ui" line="151"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="185"/>
+        <location filename="../src/gui/tileset_editor.ui" line="182"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="210"/>
+        <location filename="../src/gui/tileset_editor.ui" line="207"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="227"/>
+        <location filename="../src/gui/tileset_editor.ui" line="224"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="282"/>
+        <location filename="../src/gui/tileset_editor.ui" line="279"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="303"/>
+        <location filename="../src/gui/tileset_editor.ui" line="300"/>
         <source>TODO tileset view</source>
         <translation>TODO tileset view</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="36"/>
+        <source>Background color</source>
+        <translation>Couleur de fond</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="111"/>
+        <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
+        <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="148"/>
+        <source>Cannot open tileset data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;ouvrir le fichier de tileset &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="161"/>
+        <source>Cannot save tileset data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;enregistrer le fichier de tileset &apos;%1&apos;</translation>
     </message>
 </context>
 </TS>
