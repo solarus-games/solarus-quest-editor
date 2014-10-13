@@ -128,7 +128,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListView" name="tiles_list_view"/>
+        <widget class="TilePatternsListView" name="patterns_list_view"/>
        </item>
        <item>
         <widget class="QGroupBox" name="pattern_properties_group_box">
@@ -304,6 +304,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TilePatternsListView</class>
+   <extends>QListView</extends>
+   <header>gui/tile_patterns_list_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

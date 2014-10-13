@@ -94,6 +94,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   Editor(quest, path, parent),
   tileset() {
 
+  ui.setupUi(this);
+
   // Get the tileset.
   ResourceType resource_type;
   QString tileset_id;
@@ -110,15 +112,15 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
 
-  // Prepare the gui.
-  ui.setupUi(this);
-  layout()->addWidget(ui.splitter);
-  const int side_width = 300;
-  ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
-
   // Open the file.
   load();
   get_undo_stack().setClean();
+
+  // Prepare the gui.
+  layout()->addWidget(ui.splitter);
+  const int side_width = 400;
+  ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
+  ui.patterns_list_view->set_tileset(&tileset);
 
   // Make connections.
   connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
