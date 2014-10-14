@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/tile_patterns_list_model.h"
 #include "gui/tile_patterns_list_view.h"
 
 /**
@@ -22,31 +21,10 @@
  * @param parent The parent object or nullptr.
  */
 TilePatternsListView::TilePatternsListView(QWidget* parent) :
-  QListView(parent),
-  tileset(nullptr),
-  model(nullptr) {
+  QListView(parent) {
 
   setIconSize(QSize(48, 48));
   setUniformItemSizes(true);
   setViewMode(IconMode);
   setResizeMode(Adjust);
-}
-
-/**
- * @brief Returns the tileset represented in this list view.
- * @return The tileset.
- */
-const TilesetData* TilePatternsListView::get_tileset() const {
-  return tileset;
-}
-
-/**
- * @brief Sets the tileset represented in this list view.
- * @param tileset The tileset.
- */
-void TilePatternsListView::set_tileset(TilesetData* tileset) {
-
-  this->tileset = tileset;
-  this->model = new TilePatternsListModel(*tileset, this);
-  setModel(this->model);
 }

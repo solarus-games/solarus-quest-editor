@@ -16,7 +16,7 @@
  */
 #include "gui/gui_tools.h"
 #include "gui/tileset_editor.h"
-#include "color.h"
+#include "gui/tileset_model.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
@@ -41,8 +41,8 @@ public:
     return editor;
   }
 
-  TilesetData& get_tileset() const {
-    return editor.get_tileset();
+  TilesetModel& get_model() const {
+    return editor.get_model();
   }
 
 private:
@@ -60,18 +60,16 @@ public:
 
   SetBackgroundCommand(TilesetEditor& editor, const QColor& color) :
     TilesetEditorCommand(editor),
-    color_before(Color::to_qcolor(get_tileset().get_background_color())),
+    color_before(get_model().get_background_color()),
     color_after(color) {
   }
 
   virtual void undo() override {
-    get_tileset().set_background_color(Color::to_solarus_color(color_before));
-    get_editor().update_background_color();
+    get_model().set_background_color(color_before);
   }
 
   virtual void redo() override {
-    get_tileset().set_background_color(Color::to_solarus_color(color_after));
-    get_editor().update_background_color();
+    get_model().set_background_color(color_after);
   }
 
 private:
@@ -92,7 +90,7 @@ private:
  */
 TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
-  tileset() {
+  model(nullptr) {
 
   ui.setupUi(this);
 
@@ -113,14 +111,15 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
 
   // Open the file.
-  load();
+  model = new TilesetModel(quest, tileset_id, this);
   get_undo_stack().setClean();
 
   // Prepare the gui.
   layout()->addWidget(ui.splitter);
   const int side_width = 400;
   ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
-  ui.patterns_list_view->set_tileset(&tileset);
+  ui.patterns_list_view->setModel(model);
+  update();
 
   // Make connections.
   connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
@@ -129,27 +128,16 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(set_description_from_gui()));
   connect(ui.background_button, SIGNAL(clicked()),
           this, SLOT(background_button_clicked()));
+  connect(model, SIGNAL(background_color_changed(const QColor&)),
+          this, SLOT(update_background_color()));
 }
 
 /**
- * @brief Returns the tileset data being edited.
- * @return The tileset.
+ * @brief Returns the tileset model being edited.
+ * @return The tileset model.
  */
-TilesetData& TilesetEditor::get_tileset() {
-  return tileset;
-}
-
-/**
- * @brief Loads the tileset file into the gui.
- */
-void TilesetEditor::load() {
-
-  QString path = get_file_path();
-
-  if (!tileset.import_from_file(path.toStdString())) {
-    throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
-  }
-  update();  // Fill the gui.
+TilesetModel& TilesetEditor::get_model() {
+  return *model;
 }
 
 /**
@@ -157,11 +145,7 @@ void TilesetEditor::load() {
  */
 void TilesetEditor::save() {
 
-  QString path = get_file_path();
-
-  if (!tileset.export_to_file(path.toStdString())) {
-    throw EditorException(tr("Cannot save tileset data file '%1'").arg(path));
-  }
+  model->save();
 }
 
 /**
@@ -196,7 +180,7 @@ void TilesetEditor::update() {
   ui.tileset_id_field->setText(tileset_id);
   update_description_to_gui();
   update_background_color();
-  ui.num_tiles_field->setText(QString::number(tileset.get_num_patterns()));
+  ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
 }
 
 /**
@@ -213,7 +197,7 @@ void TilesetEditor::update_background_color() {
       "    min-width: 1em;\n"
       "    padding: 1px;\n"
       "}";
-  QColor background_color = Color::to_qcolor(tileset.get_background_color());
+  QColor background_color = model->get_background_color();
   ui.background_button->setStyleSheet(
         style_sheet.arg(background_color.name()));
 }
@@ -235,7 +219,7 @@ void TilesetEditor::update_description_to_gui() {
 void TilesetEditor::background_button_clicked() {
 
   QColor color = QColorDialog::getColor(
-        Color::to_qcolor(tileset.get_background_color()), this, "Select tileset background color");
+        model->get_background_color(), this, "Select tileset background color");
   if (!color.isValid()) {
     return;
   }

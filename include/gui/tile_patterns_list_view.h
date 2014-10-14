@@ -17,12 +17,7 @@
 #ifndef SOLARUSEDITOR_TILE_PATTERNS_LIST_VIEW_H
 #define SOLARUSEDITOR_TILE_PATTERNS_LIST_VIEW_H
 
-#include <solarus/entities/TilesetData.h>
 #include <QListView>
-
-using TilesetData = Solarus::TilesetData;
-
-class TilePatternsListModel;
 
 /**
  * @brief List view of patterns of a tileset.
@@ -33,14 +28,6 @@ class TilePatternsListView : public QListView {
 public:
 
   TilePatternsListView(QWidget* parent = nullptr);
-
-  const TilesetData* get_tileset() const;
-  void set_tileset(TilesetData* tileset);
-
-private:
-
-  TilesetData* tileset;            /**< The tileset represented in this view. */
-  TilePatternsListModel* model;    /**< The list model or nullptr. */
 
 };
 
