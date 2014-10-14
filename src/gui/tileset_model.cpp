@@ -20,6 +20,8 @@
 #include "quest.h"
 #include <QIcon>
 
+using TilePatternData = Solarus::TilePatternData;
+
 /**
  * @brief Creates a tileset model.
  * @param quest The quest.
@@ -42,6 +44,8 @@ TilesetModel::TilesetModel(
   if (!tileset.import_from_file(path.toStdString())) {
     throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
   }
+
+  build_index_map();
 }
 
 /**
@@ -79,8 +83,7 @@ QVariant TilesetModel::data(const QModelIndex& index, int role) const {
   switch (role) {
 
   case Qt::DisplayRole:
-    // TODO show the id
-    return "Pattern " + QString::number(index.row());
+    return get_pattern_id(index.row());
     break;
 
   case Qt::DecorationRole:
@@ -93,6 +96,41 @@ QVariant TilesetModel::data(const QModelIndex& index, int role) const {
   }
 
   return QVariant();
+}
+
+/**
+ * @brief Creates internal mappings that gives fast access to patterns ids
+ * and indexes.
+ *
+ * The tile patterns are indexed by string ids, but the model also treats them
+ * as a linear list, so we need an additional integer index.
+ * boost::multi_index_container could do that for use, but this feels a bit
+ * overkill to add a boost dependency just for this use case.
+ */
+void TilesetModel::build_index_map() {
+
+  indexes_to_ids.clear();
+  ids_to_indexes.clear();
+
+  // This is a bit tricky because we change the order of
+  // by the map from the Solarus library to use natural order instead.
+
+  const std::map<std::string, TilePatternData>& patterns =
+      tileset.get_patterns();
+  // First, put the string keys to have natural sort.
+  for (const auto& kvp : patterns) {
+    QString pattern_id = QString::fromStdString(kvp.first);
+    ids_to_indexes.insert(std::make_pair(pattern_id, 0));
+  }
+
+  // Then, put the integer value and fill the second structure.
+  int index = 0;
+  for (const auto& kvp : ids_to_indexes) {
+    QString pattern_id = kvp.first;
+    indexes_to_ids.append(pattern_id);
+    ids_to_indexes[pattern_id] = index;
+    ++index;
+  }
 }
 
 /**
@@ -128,4 +166,34 @@ void TilesetModel::set_background_color(const QColor& background_color) {
 int TilesetModel::get_num_patterns() const {
 
   return tileset.get_num_patterns();
+}
+
+/**
+ * \brief Returns the list index of the specified pattern.
+ * \param id Id of a tile pattern
+ * \return The corresponding index in the list.
+ * Returns -1 there is no pattern with this id.
+ */
+int TilesetModel::get_pattern_index(const QString& id) const {
+
+  auto it = ids_to_indexes.find(id);
+  if (it == ids_to_indexes.end()) {
+    return -1;
+  }
+  return it->second;
+}
+
+/**
+ * \brief Returns the id of the pattern at the specified place.
+ * \param index An index in the list of patterns.
+ * \return The corresponding pattern id.
+ * Returns an empty string if there is no pattern at this index.
+ */
+QString TilesetModel::get_pattern_id(int pattern_index) const {
+
+  if (pattern_index < 0 || pattern_index >= indexes_to_ids.size()) {
+    return "";
+  }
+
+  return indexes_to_ids.at(pattern_index);
 }

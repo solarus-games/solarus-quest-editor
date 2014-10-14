@@ -10,8 +10,9 @@ New features
 
 * French translation available.
 * The quest can now be run from the editor.
-* Support undo/redo in the tileset editor.
-* Support undo/redo in the sprite editor.
+* Tileset editor: undo/redo is now supported.
+* Tileset editor: tile pattern ids are now visible in the pattern list.
+* Sprite editor: undo/redo is now supported.
 * The quest tree now automatically refreshes after changes in the filesystem.
 * A file to open can now be passed on the command line.
 * Editor tabs now show an icon representing the kind of file open.
