@@ -78,8 +78,7 @@ void TilesetScene::build() {
     // Maybe this is a recently created tileset.
     QString path = get_quest().get_tileset_tiles_image_path(model.get_tileset_id());
     path = path.right(path.length() - get_quest().get_data_path().length() - 1);
-    QGraphicsTextItem* item = addText(tr("Missing tileset image '%1'").arg(path));
-    item->setTextWidth(width());  // Don't exceed the scene width.
+    addText(tr("Missing tileset image '%1'").arg(path));
     return;
   }
 
