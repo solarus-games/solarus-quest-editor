@@ -16,6 +16,7 @@
  */
 #include "gui/tileset_view.h"
 #include "gui/tileset_model.h"
+#include "quest.h"
 #include <QGraphicsPixmapItem>
 
 /**
@@ -28,7 +29,6 @@ TilesetView::TilesetView(QWidget* parent) :
   setBackgroundBrush(palette().window());
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
   setDragMode(QGraphicsView::RubberBandDrag);
-  scale(2.0, 2.0);  // Initial zoom: x2.
 }
 
 /**
@@ -49,11 +49,18 @@ void TilesetView::set_model(TilesetModel* model) {
  */
 void TilesetView::drawBackground(QPainter* painter, const QRectF& /* rect */) {
 
+  if (model == nullptr) {
+    return;
+  }
+
   // Draw the background color.
   painter->fillRect(painter->viewport(), palette().window());
 
   // Draw the full PNG image of the tileset.
-  painter->drawImage(0, 0, model->get_patterns_image());
+  const QImage& patterns_image = model->get_patterns_image();
+  if (!patterns_image.isNull()) {
+    painter->drawImage(0, 0, patterns_image);
+  }
 }
 
 /**
@@ -69,6 +76,13 @@ void TilesetView::build() {
   QGraphicsScene* scene = new QGraphicsScene(this);
   setScene(scene);
 
+  if (model->get_patterns_image().isNull()) {
+    QString path = model->get_quest().get_tileset_data_file_path(model->get_tileset_id());
+    scene->addText(tr("Missing tileset image '%1'").arg(path));
+    return;
+  }
+
+  scale(2.0, 2.0);  // Initial zoom: x2.
   scene->setSceneRect(QRectF(QPoint(0, 0), model->get_patterns_image().size()));
   const QMap<QString, QRect>& patterns_frame = model->get_patterns_frame();
   for (auto it = patterns_frame.constBegin(); it != patterns_frame.constEnd(); ++it) {

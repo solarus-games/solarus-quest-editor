@@ -51,6 +51,21 @@ TilesetModel::TilesetModel(
 }
 
 /**
+ * @brief Returns the quest.
+ */
+Quest& TilesetModel::get_quest() {
+  return quest;
+}
+
+/**
+ * @brief Returns the id of the tileset managed by this model.
+ * @return
+ */
+QString TilesetModel::get_tileset_id() const {
+  return tileset_id;
+}
+
+/**
  * @brief Saves the tileset to its data file.
  * @throws EditorException If the file could not be saved.
  */

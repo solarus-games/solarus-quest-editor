@@ -66,6 +66,9 @@ public:
   TilesetModel(
       Quest& quest, const QString& tileset_id, QObject* parent = nullptr);
 
+  Quest& get_quest();
+  QString get_tileset_id() const;
+
   // QAbstractListModel interface.
   virtual int rowCount(const QModelIndex& parent) const override;
   virtual QVariant data(const QModelIndex& index, int role) const override;
