@@ -14,29 +14,37 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_TILESET_VIEW_H
-#define SOLARUSEDITOR_TILESET_VIEW_H
+#ifndef SOLARUSEDITOR_TILESET_SCENE_H
+#define SOLARUSEDITOR_TILESET_SCENE_H
 
-#include <QGraphicsView>
-#include <QPointer>
+#include <QGraphicsScene>
 
+class Quest;
 class TilesetModel;
 
 /**
- * @brief Graphical view of the tileset image, allowing to manage tile patterns.
+ * @brief The scene containing all patterns in the tileset main view.
  */
-class TilesetView : public QGraphicsView {
+class TilesetScene : public QGraphicsScene {
   Q_OBJECT
 
 public:
 
-  TilesetView(QWidget* parent = nullptr);
+  TilesetScene(TilesetModel& model, QObject* parent);
 
-  void set_model(TilesetModel& tileset);
+  const TilesetModel& get_model() const;
+  const Quest& get_quest() const;
+
+protected:
+
+  virtual void drawBackground(QPainter* painter, const QRectF& rect ) override;
 
 private:
 
-  QPointer<TilesetModel> model;   /**< The tileset viewed. */
+  void build();
+
+  TilesetModel& model;       /**< The tileset represented. */
+
 };
 
 #endif

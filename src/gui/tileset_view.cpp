@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/tileset_view.h"
 #include "gui/tileset_model.h"
-#include "quest.h"
-#include <QGraphicsPixmapItem>
+#include "gui/tileset_scene.h"
+#include "gui/tileset_view.h"
 
 /**
  * @brief Creates a tileset view.
@@ -26,72 +25,24 @@
 TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent) {
 
-  setBackgroundBrush(palette().window());
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
   setDragMode(QGraphicsView::RubberBandDrag);
+  setBackgroundBrush(palette().window());
 }
 
 /**
  * @brief Sets the tileset to represent in this view.
  * @param model The tileset model.
  */
-void TilesetView::set_model(TilesetModel* model) {
+void TilesetView::set_model(TilesetModel& model) {
 
-  this->model = model;
+  this->model = &model;
 
-  build();  // Create the scene from the model.
-}
+  // Create the scene from the model.
+  setScene(new TilesetScene(model, this));
 
-/**
- * @brief Draws the tileset image as background.
- * @param painter The painter.
- * @param rect The exposed rectangle.
- */
-void TilesetView::drawBackground(QPainter* painter, const QRectF& /* rect */) {
-
-  if (model == nullptr) {
-    return;
-  }
-
-  // Draw the background color.
-  painter->fillRect(painter->viewport(), palette().window());
-
-  // Draw the full PNG image of the tileset.
-  const QImage& patterns_image = model->get_patterns_image();
-  if (!patterns_image.isNull()) {
-    painter->drawImage(0, 0, patterns_image);
-  }
-}
-
-/**
- * @brief Create all patterns items in the view.
- */
-void TilesetView::build() {
-
-  if (model == nullptr) {
-    setScene(nullptr);
-    return;
-  }
-
-  QGraphicsScene* scene = new QGraphicsScene(this);
-  setScene(scene);
-
-  if (model->get_patterns_image().isNull()) {
-    QString path = model->get_quest().get_tileset_data_file_path(model->get_tileset_id());
-    scene->addText(tr("Missing tileset image '%1'").arg(path));
-    return;
-  }
-
-  scale(2.0, 2.0);  // Initial zoom: x2.
-  scene->setSceneRect(QRectF(QPoint(0, 0), model->get_patterns_image().size()));
-  const QMap<QString, QRect>& patterns_frame = model->get_patterns_frame();
-  for (auto it = patterns_frame.constBegin(); it != patterns_frame.constEnd(); ++it) {
-    const QString& pattern_id = it.key();
-    const QRect& frame = it.value();
-    QPixmap pattern_image = model->get_pattern_image(pattern_id);
-    QGraphicsPixmapItem* pattern_item = scene->addPixmap(pattern_image);
-    pattern_item->setPos(frame.topLeft());
-    pattern_item->setFlags(
-          QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
+  if (!model.get_patterns_image().isNull()) {
+    // Enable zoom features if there is an image.
+    scale(2.0, 2.0);  // Initial zoom: x2.
   }
 }

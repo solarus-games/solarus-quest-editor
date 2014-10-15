@@ -70,6 +70,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tile_patterns_list_view.h
   include/gui/tileset_editor.h
   include/gui/tileset_model.h
+  include/gui/tileset_scene.h
   include/gui/tileset_view.h
   include/color.h
   include/editor_exception.h
@@ -90,6 +91,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tile_patterns_list_view.cpp
   src/gui/tileset_editor.cpp
   src/gui/tileset_model.cpp
+  src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
