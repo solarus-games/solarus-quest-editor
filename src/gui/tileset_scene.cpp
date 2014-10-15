@@ -54,10 +54,10 @@ const Quest& TilesetScene::get_quest() const {
  * @param painter The painter.
  * @param rect The exposed rectangle.
  */
-void TilesetScene::drawBackground(QPainter* painter, const QRectF& /* rect */) {
+void TilesetScene::drawBackground(QPainter* painter, const QRectF& rect) {
 
   // Draw the background color.
-  painter->fillRect(sceneRect(), palette().window());
+  painter->fillRect(rect, palette().window());
 
   // Draw the full PNG image of the tileset.
   const QImage& patterns_image = model.get_patterns_image();

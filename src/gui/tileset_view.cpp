@@ -27,8 +27,6 @@ TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
-  setDragMode(QGraphicsView::RubberBandDrag);
-  setBackgroundBrush(palette().window());
 }
 
 /**
@@ -46,7 +44,8 @@ void TilesetView::set_model(TilesetModel& model) {
     return;
   }
 
-  // Enable zoom features if there is an image.
+  // Enable useful features if there is an image.
+  setDragMode(QGraphicsView::RubberBandDrag);
   scale(2.0, 2.0);  // Initial zoom: x2.
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
