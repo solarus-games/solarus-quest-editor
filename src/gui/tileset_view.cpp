@@ -42,6 +42,20 @@ void TilesetView::set_model(TilesetModel* model) {
 }
 
 /**
+ * @brief Draws the tileset image as background.
+ * @param painter The painter.
+ * @param rect The exposed rectangle.
+ */
+void TilesetView::drawBackground(QPainter* painter, const QRectF& /* rect */) {
+
+  // Draw the background color.
+  painter->fillRect(painter->viewport(), palette().window());
+
+  // Draw the full PNG image of the tileset.
+  painter->drawImage(0, 0, model->get_patterns_image());
+}
+
+/**
  * @brief Create all patterns items in the view.
  */
 void TilesetView::build() {
@@ -54,6 +68,7 @@ void TilesetView::build() {
   QGraphicsScene* scene = new QGraphicsScene(this);
   setScene(scene);
 
+  scene->setSceneRect(QRectF(QPoint(0, 0), model->get_patterns_image().size()));
   const QMap<QString, QRect>& patterns_frame = model->get_patterns_frame();
   for (auto it = patterns_frame.constBegin(); it != patterns_frame.constEnd(); ++it) {
     const QString& pattern_id = it.key();

@@ -33,6 +33,10 @@ public:
 
   void set_model(TilesetModel* model);
 
+protected:
+
+  virtual void drawBackground(QPainter* painter, const QRectF& rect) override;
+
 private:
 
   void build();

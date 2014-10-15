@@ -208,6 +208,15 @@ QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
 }
 
 /**
+ * @brief Returns the PNG image of all tile patterns.
+ * @return The patterns image.
+ * Returns a null image if the tileset image is not loaded.
+ */
+QImage TilesetModel::get_patterns_image() const {
+  return patterns_image;
+}
+
+/**
  * @brief Returns the tileset's background color.
  * @return The background color.
  */

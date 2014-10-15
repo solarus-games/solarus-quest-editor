@@ -77,8 +77,9 @@ public:
   bool pattern_exists(const QString& pattern_id) const;
   QRect get_pattern_frame(const QString& pattern_id) const;
   QMap<QString, QRect> get_patterns_frame() const;
-  QPixmap get_pattern_icon(const QString& pattern_id) const;
   QPixmap get_pattern_image(const QString& pattern_id) const;
+  QPixmap get_pattern_icon(const QString& pattern_id) const;
+  QImage get_patterns_image() const;
 
   int get_pattern_index(const QString& pattern_id) const;
   QString get_pattern_id(int index) const;
