@@ -163,19 +163,20 @@ QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
   // Lazily create the icon.
   QRect frame = get_pattern_frame(pattern_id);
   QImage image = patterns_image.copy(frame);
-  if (image.height() < 16) {
-    // Vertically center the pattern in an image with height 16 pixels.
-    int dy = (16 - image.height()) / 2;
-    image = image.copy(0, -dy, image.width(), image.height() + dy);
-  }
-  icon = QPixmap::fromImage(image);
 
-  if (icon.height() <= 16) {
-    icon = icon.scaledToHeight(icon.height() * 2);
+  if (image.height() <= 16) {
+    image = image.scaledToHeight(image.height() * 2);
   }
-  else if (icon.height() > 32) {
-    icon = icon.scaledToHeight(32);
+  else if (image.height() > 32) {
+    image = image.scaledToHeight(32);
   }
+
+  // Center the pattern in a 32x32 pixmap.
+  int dx = (32 - image.width()) / 2;
+  int dy = (32 - image.height()) / 2;
+  image = image.copy(-dx, -dy, 32, 32);
+
+  icon = QPixmap::fromImage(image);
   patterns_icons.insert(pattern_id, icon);
   return icon;
 }
