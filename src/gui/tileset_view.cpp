@@ -27,6 +27,7 @@ TilesetView::TilesetView(QWidget* parent) :
 
   setBackgroundBrush(palette().window());
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
+  setDragMode(QGraphicsView::RubberBandDrag);
   scale(2.0, 2.0);  // Initial zoom: x2.
 }
 
@@ -76,5 +77,7 @@ void TilesetView::build() {
     QPixmap pattern_image = model->get_pattern_image(pattern_id);
     QGraphicsPixmapItem* pattern_item = scene->addPixmap(pattern_image);
     pattern_item->setPos(frame.topLeft());
+    pattern_item->setFlags(
+          QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
   }
 }
