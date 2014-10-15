@@ -34,10 +34,21 @@ public:
 
   void set_model(TilesetModel& tileset);
 
+protected:
+
+  virtual void mousePressEvent(QMouseEvent* event) override;
+  virtual void mouseReleaseEvent(QMouseEvent* event) override;
+  virtual void mouseMoveEvent(QMouseEvent* event) override;
+
 private:
 
   QPointer<TilesetModel> model;   /**< The tileset viewed. */
 
+  // TODO move the panning code to a reusable class,
+  // because other views also need it.
+  QPoint pan_initial_point;      /**< Point initially clicked when panning
+                                   * the view, in scrolling-independent
+                                   * coordinates. */
 };
 
 #endif

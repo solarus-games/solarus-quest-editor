@@ -17,6 +17,9 @@
 #include "gui/tileset_model.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
+#include <QApplication>
+#include <QGraphicsItem>
+#include <QMouseEvent>
 #include <QScrollBar>
 
 /**
@@ -49,4 +52,65 @@ void TilesetView::set_model(TilesetModel& model) {
   scale(2.0, 2.0);  // Initial zoom: x2.
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
+}
+
+/**
+ * @brief Receives a mouse press event.
+ *
+ * Reimplemented to scroll the view when the middle mouse button is pressed.
+ *
+ * @param event The event to handle.
+ */
+void TilesetView::mousePressEvent(QMouseEvent* event) {
+
+  if (event->button() == Qt::MidButton) {
+    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
+    pan_initial_point = QPoint(
+          horizontalScrollBar()->value() + event->x(),
+          verticalScrollBar()->value() + event->y()
+          );
+    return;
+  }
+
+  QGraphicsView::mousePressEvent(event);
+}
+
+/**
+ * @brief Receives a mouse release event.
+ *
+ * Reimplemented to scroll the view when the middle mouse button is pressed.
+ *
+ * @param event The event to handle.
+ */
+void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
+
+  if (event->button() == Qt::MidButton) {
+    QApplication::restoreOverrideCursor();
+    return;
+  }
+
+  QGraphicsView::mouseReleaseEvent(event);
+}
+
+/**
+ * @brief Receives a mouse move event.
+ *
+ * Reimplemented to scroll the view when the middle mouse button is pressed.
+ *
+ * @param event The event to handle.
+ */
+void TilesetView::mouseMoveEvent(QMouseEvent* event) {
+
+  if ((event->buttons() & Qt::MidButton) == Qt::MidButton) {
+
+    QPoint scroll_point(
+          pan_initial_point.x() - event->x(),
+          pan_initial_point.y() - event->y()
+    );
+    horizontalScrollBar()->setValue(scroll_point.x());
+    verticalScrollBar()->setValue(scroll_point.y());
+    return;
+  }
+
+  QGraphicsView::mouseMoveEvent(event);
 }
