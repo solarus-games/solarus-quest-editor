@@ -17,6 +17,7 @@
 #include "gui/tileset_model.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
+#include <QScrollBar>
 
 /**
  * @brief Creates a tileset view.
@@ -41,8 +42,12 @@ void TilesetView::set_model(TilesetModel& model) {
   // Create the scene from the model.
   setScene(new TilesetScene(model, this));
 
-  if (!model.get_patterns_image().isNull()) {
-    // Enable zoom features if there is an image.
-    scale(2.0, 2.0);  // Initial zoom: x2.
+  if (model.get_patterns_image().isNull()) {
+    return;
   }
+
+  // Enable zoom features if there is an image.
+  scale(2.0, 2.0);  // Initial zoom: x2.
+  horizontalScrollBar()->setValue(0);
+  verticalScrollBar()->setValue(0);
 }
