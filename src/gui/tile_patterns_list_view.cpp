@@ -23,8 +23,9 @@
 TilePatternsListView::TilePatternsListView(QWidget* parent) :
   QListView(parent) {
 
-  setIconSize(QSize(48, 48));
+  setIconSize(QSize(32, 32));
   setUniformItemSizes(true);
   setViewMode(IconMode);
   setResizeMode(Adjust);
+  setSpacing(10);
 }

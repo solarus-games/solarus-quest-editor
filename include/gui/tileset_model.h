@@ -20,6 +20,8 @@
 #include <solarus/entities/TilesetData.h>
 #include <QAbstractItemModel>
 #include <QCollator>
+#include <QImage>
+#include <QPixmap>
 #include <map>
 
 class Quest;
@@ -72,6 +74,9 @@ public:
   QColor get_background_color() const;
   void set_background_color(const QColor& background_color);
   int get_num_patterns() const;
+  bool pattern_exists(const QString& pattern_id) const;
+  QRect get_pattern_frame(const QString& pattern_id) const;
+
   int get_pattern_index(const QString& pattern_id) const;
   QString get_pattern_id(int index) const;
 
@@ -86,6 +91,7 @@ public slots:
 private:
 
   void build_index_map();
+  QPixmap get_pattern_icon(const QString& pattern_id) const;
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString tileset_id;       /**< Id of the tileset. */
@@ -95,6 +101,9 @@ private:
   std::map<QString, int, NaturalComparator>
       ids_to_indexes;             /**< Index in the list of each pattern. */
 
+  QImage patterns_image;          /**< PNG image of all tile patterns. */
+  mutable QHash<QString, QPixmap>
+      patterns_icons;             /**< Icon of each tile pattern, created on-demand. */
 };
 
 #endif
