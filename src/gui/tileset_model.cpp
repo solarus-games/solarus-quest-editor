@@ -136,13 +136,16 @@ void TilesetModel::build_index_map() {
 }
 
 /**
- * @brief Returns an icon representing the specified pattern.
+ * @brief Returns an image representing the specified pattern.
+ *
+ * The image has the size of the pattern.
+ *
  * @param pattern_id Id of a tile pattern.
- * @return The corresponding icon.
+ * @return The corresponding image.
  * Returns a null pixmap if the pattern does not exists or if the
  * tileset image is not loaded.
  */
-QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
+QPixmap TilesetModel::get_pattern_image(const QString& pattern_id) const {
 
   if (!pattern_exists(pattern_id)) {
     // No such pattern.
@@ -154,15 +157,38 @@ QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
     return QPixmap();
   }
 
-  QPixmap icon = patterns_icons.value(pattern_id, QPixmap());
-  if (!icon.isNull()) {
-    // Icon already created.
-    return icon;
+  QPixmap pixmap = patterns_images.value(pattern_id, QPixmap());
+  if (!pixmap.isNull()) {
+    // Image already created.
+    return pixmap;
   }
 
-  // Lazily create the icon.
+  // Lazily create the image.
   QRect frame = get_pattern_frame(pattern_id);
   QImage image = patterns_image.copy(frame);
+
+  pixmap = QPixmap::fromImage(image);
+  patterns_images.insert(pattern_id, pixmap);
+  return pixmap;
+}
+
+/**
+ * @brief Returns a 32x32 icon representing the specified pattern.
+ * @param pattern_id Id of a tile pattern.
+ * @return The corresponding icon.
+ * Returns a null pixmap if the pattern does not exists or if the
+ * tileset image is not loaded.
+ */
+QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
+
+  QPixmap pixmap = get_pattern_image(pattern_id);
+
+  if (pixmap.isNull()) {
+    // No image available.
+    return QPixmap();
+  }
+
+  QImage image = pixmap.toImage();
 
   if (image.height() <= 16) {
     image = image.scaledToHeight(image.height() * 2);
@@ -176,7 +202,7 @@ QPixmap TilesetModel::get_pattern_icon(const QString& pattern_id) const {
   int dy = (32 - image.height()) / 2;
   image = image.copy(-dx, -dy, 32, 32);
 
-  icon = QPixmap::fromImage(image);
+  QPixmap icon = QPixmap::fromImage(image);
   patterns_icons.insert(pattern_id, icon);
   return icon;
 }
@@ -241,6 +267,24 @@ QRect TilesetModel::get_pattern_frame(const QString& pattern_id) const {
 
   const Solarus::Rectangle& frame = tileset.get_pattern(pattern_id.toStdString()).get_frame();
   return QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height());
+}
+
+/**
+ * @brief Returns all patterns' frame coordinates in the tileset image.
+ * @return The frame of each pattern, indexed by the pattern id.
+ * For multi-frame patterns, only the first frame is returned.
+ */
+QMap<QString, QRect> TilesetModel::get_patterns_frame() const {
+
+  QMap<QString, QRect> patterns_frame;
+
+  for (const auto& kvp : tileset.get_patterns()) {
+    const QString& pattern_id = QString::fromStdString(kvp.first);
+    const Solarus::Rectangle& frame = kvp.second.get_frame();
+    patterns_frame.insert(pattern_id, QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height()));
+  }
+
+  return patterns_frame;
 }
 
 /**

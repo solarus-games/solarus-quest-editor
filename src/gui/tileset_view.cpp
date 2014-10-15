@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/tileset_view.h"
+#include "gui/tileset_model.h"
+#include <QGraphicsPixmapItem>
 
 /**
  * @brief Creates a tileset view.
@@ -23,4 +25,41 @@
 TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent) {
 
+  setBackgroundBrush(palette().window());
+  setAlignment(Qt::AlignTop | Qt::AlignLeft);
+  scale(2.0, 2.0);  // Initial zoom: x2.
+}
+
+/**
+ * @brief Sets the tileset to represent in this view.
+ * @param model The tileset model.
+ */
+void TilesetView::set_model(TilesetModel* model) {
+
+  this->model = model;
+
+  build();  // Create the scene from the model.
+}
+
+/**
+ * @brief Create all patterns items in the view.
+ */
+void TilesetView::build() {
+
+  if (model == nullptr) {
+    setScene(nullptr);
+    return;
+  }
+
+  QGraphicsScene* scene = new QGraphicsScene(this);
+  setScene(scene);
+
+  const QMap<QString, QRect>& patterns_frame = model->get_patterns_frame();
+  for (auto it = patterns_frame.constBegin(); it != patterns_frame.constEnd(); ++it) {
+    const QString& pattern_id = it.key();
+    const QRect& frame = it.value();
+    QPixmap pattern_image = model->get_pattern_image(pattern_id);
+    QGraphicsPixmapItem* pattern_item = scene->addPixmap(pattern_image);
+    pattern_item->setPos(frame.topLeft());
+  }
 }

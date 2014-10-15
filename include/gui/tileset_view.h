@@ -18,15 +18,26 @@
 #define SOLARUSEDITOR_TILESET_VIEW_H
 
 #include <QGraphicsView>
+#include <QPointer>
+
+class TilesetModel;
 
 /**
- * @brief TODO
+ * @brief Graphical view of the tileset image, allowing to manage tile patterns.
  */
 class TilesetView : public QGraphicsView {
 
 public:
 
   TilesetView(QWidget* parent = nullptr);
+
+  void set_model(TilesetModel* model);
+
+private:
+
+  void build();
+
+  QPointer<TilesetModel> model;
 
 };
 

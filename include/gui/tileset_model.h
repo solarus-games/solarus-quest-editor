@@ -76,6 +76,9 @@ public:
   int get_num_patterns() const;
   bool pattern_exists(const QString& pattern_id) const;
   QRect get_pattern_frame(const QString& pattern_id) const;
+  QMap<QString, QRect> get_patterns_frame() const;
+  QPixmap get_pattern_icon(const QString& pattern_id) const;
+  QPixmap get_pattern_image(const QString& pattern_id) const;
 
   int get_pattern_index(const QString& pattern_id) const;
   QString get_pattern_id(int index) const;
@@ -91,7 +94,6 @@ public slots:
 private:
 
   void build_index_map();
-  QPixmap get_pattern_icon(const QString& pattern_id) const;
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString tileset_id;       /**< Id of the tileset. */
@@ -102,8 +104,14 @@ private:
       ids_to_indexes;             /**< Index in the list of each pattern. */
 
   QImage patterns_image;          /**< PNG image of all tile patterns. */
+
+  // TODO make a class to store pattern data instead of several mappings.
   mutable QHash<QString, QPixmap>
-      patterns_icons;             /**< Icon of each tile pattern, created on-demand. */
+      patterns_images;            /**< Image of each tile pattern,
+                                   * created on-demand. */
+  mutable QHash<QString, QPixmap>
+      patterns_icons;             /**< 32x32 image of each tile pattern,
+                                   * created on-demand. */
 };
 
 #endif
