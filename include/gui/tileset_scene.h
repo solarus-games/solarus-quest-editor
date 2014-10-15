@@ -22,6 +22,7 @@
 class Quest;
 class TilesetModel;
 class QGraphicsPixmapItem;
+class QItemSelection;
 
 /**
  * @brief The scene containing all patterns in the tileset main view.
@@ -39,6 +40,12 @@ public:
 protected:
 
   virtual void drawBackground(QPainter* painter, const QRectF& rect) override;
+
+private slots:
+
+  void update_selection_to_scene(
+      const QItemSelection& selected, const QItemSelection& deselected);
+  void set_selection_from_scene();
 
 private:
 

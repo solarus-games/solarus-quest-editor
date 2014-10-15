@@ -37,6 +37,7 @@ public:
 private:
 
   QPointer<TilesetModel> model;   /**< The tileset viewed. */
+
 };
 
 #endif

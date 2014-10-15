@@ -36,7 +36,7 @@ TilesetModel::TilesetModel(
   QAbstractListModel(parent),
   quest(quest),
   tileset_id(tileset_id),
-  tileset() {
+  selection(this) {
 
   // Load the tileset data file.
   QString path = quest.get_tileset_data_file_path(tileset_id);
@@ -328,4 +328,12 @@ QString TilesetModel::index_to_id(int index) const {
   }
 
   return patterns.at(index).id;
+}
+
+/**
+ * @brief Returns the selection model of the tileset.
+ * @return The selection info.
+ */
+QItemSelectionModel& TilesetModel::get_selection() {
+  return selection;
 }

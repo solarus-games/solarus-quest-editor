@@ -21,6 +21,7 @@
 #include <QAbstractItemModel>
 #include <QCollator>
 #include <QImage>
+#include <QItemSelectionModel>
 #include <QPixmap>
 #include <map>
 
@@ -54,8 +55,7 @@ private:
  * for performance.
  * Signals are sent when something changes in the wrapped tileset.
  * This model can be used as a model for a list view of tile patterns.
- *
- * TODO add selection info to this class.
+ * It also stores the selection information.
  */
 class TilesetModel : public QAbstractListModel {
   Q_OBJECT
@@ -102,6 +102,9 @@ public:
   int id_to_index(const QString& pattern_id) const;
   QString index_to_id(int index) const;
 
+  // Selected patterns.
+  QItemSelectionModel& get_selection();
+
 signals:
 
   void background_color_changed(const QColor& background_color);
@@ -124,6 +127,8 @@ private:
                                    * The order is determined here. */
   QList<PatternModel>
       patterns;                   /**< All patterns. */
+
+  QItemSelectionModel selection;  /**< Patterns currently selected. */
 };
 
 #endif

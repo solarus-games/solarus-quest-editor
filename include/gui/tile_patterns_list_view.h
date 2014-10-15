@@ -19,6 +19,8 @@
 
 #include <QListView>
 
+class TilesetModel;
+
 /**
  * @brief List view of patterns of a tileset.
  */
@@ -28,6 +30,8 @@ class TilePatternsListView : public QListView {
 public:
 
   TilePatternsListView(QWidget* parent = nullptr);
+
+  void set_model(TilesetModel& tileset);
 
 };
 

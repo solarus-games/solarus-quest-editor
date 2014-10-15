@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/tile_patterns_list_view.h"
+#include "gui/tileset_model.h"
 
 /**
  * @brief Creates an empty tile patterns list view.
@@ -28,4 +29,16 @@ TilePatternsListView::TilePatternsListView(QWidget* parent) :
   setViewMode(IconMode);
   setResizeMode(Adjust);
   setSpacing(10);
+  setSelectionMode(QAbstractItemView::ExtendedSelection);
+}
+
+/**
+ * @brief Sets the tileset to represent in this view.
+ * @param model The tileset model.
+ */
+void TilePatternsListView::set_model(TilesetModel& model) {
+
+  QListView::setModel(&model);
+  selectionModel()->deleteLater();
+  setSelectionModel(&model.get_selection());
 }

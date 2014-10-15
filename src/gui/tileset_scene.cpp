@@ -31,6 +31,12 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
   model(model) {
 
   build();
+
+  // Synchronize the scene selection with the tileset selection model.
+  connect(&model.get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+          this, SLOT(update_selection_to_scene(QItemSelection, QItemSelection)));
+  connect(this, SIGNAL(selectionChanged()),
+          this, SLOT(set_selection_from_scene()));
 }
 
 /**
@@ -88,11 +94,58 @@ void TilesetScene::build() {
   for (int i = 0; i < model.get_num_patterns(); ++i) {
     QPixmap image = model.get_pattern_image(i);
     QRect frame = model.get_pattern_frame(i);
+
+    // TODO make a function to create an item.
     QGraphicsPixmapItem* pattern_item = addPixmap(image);
     pattern_item->setPos(frame.topLeft());
     pattern_item->setFlags(
           QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
+    pattern_item->setData(0, i);
     pattern_items.append(pattern_item);
   }
 
+}
+
+/**
+ * @brief Slot called when the tileset selection has changed.
+ *
+ * The selection on the scene is updated.
+ *
+ * @param selected Items that have just been selected.
+ * @param deselected Item that have just been deselected.
+ */
+void TilesetScene::update_selection_to_scene(
+    const QItemSelection& selected, const QItemSelection& deselected) {
+
+  // Update the scene with the change.
+  for (const QModelIndex& model_index: selected.indexes()) {
+    int index = model_index.row();
+    if (model.pattern_exists(index)) {
+      pattern_items[index]->setSelected(true);
+    }
+  }
+
+  for (const QModelIndex& model_index: deselected.indexes()) {
+    int index = model_index.row();
+    if (model.pattern_exists(index)) {
+      pattern_items[index]->setSelected(false);
+    }
+  }
+}
+
+/**
+ * @brief Slot called when the scene selection has changed.
+ *
+ * The new selection is forwarded to the tileset model.
+ */
+void TilesetScene::set_selection_from_scene() {
+
+  // Forward the change to the tileset.
+  QItemSelection selection;
+  for (QGraphicsItem* item : selectedItems()) {
+    QModelIndex index = model.index(item->data(0).toInt());
+    selection.select(index, index);
+  }
+
+  model.get_selection().select(selection, QItemSelectionModel::ClearAndSelect);
 }
