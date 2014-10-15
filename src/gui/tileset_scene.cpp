@@ -52,7 +52,8 @@ const Quest& TilesetScene::get_quest() const {
 /**
  * @brief Draws the tileset image as background.
  * @param painter The painter.
- * @param rect The exposed rectangle.
+ * @param rect The exposed rectangle in scene coordinates.
+ * It may be larger than the scene.
  */
 void TilesetScene::drawBackground(QPainter* painter, const QRectF& rect) {
 
@@ -72,6 +73,7 @@ void TilesetScene::drawBackground(QPainter* painter, const QRectF& rect) {
 void TilesetScene::build() {
 
   clear();
+  pattern_items.clear();
 
   if (model.get_patterns_image().isNull()) {
     // The tileset image does not exist yet.
@@ -83,14 +85,14 @@ void TilesetScene::build() {
   }
 
   setSceneRect(QRectF(QPoint(0, 0), model.get_patterns_image().size()));
-  const QMap<QString, QRect>& patterns_frame = model.get_patterns_frame();
-  for (auto it = patterns_frame.constBegin(); it != patterns_frame.constEnd(); ++it) {
-    const QString& pattern_id = it.key();
-    const QRect& frame = it.value();
-    QPixmap pattern_image = model.get_pattern_image(pattern_id);
-    QGraphicsPixmapItem* pattern_item = addPixmap(pattern_image);
+  for (int i = 0; i < model.get_num_patterns(); ++i) {
+    QPixmap image = model.get_pattern_image(i);
+    QRect frame = model.get_pattern_frame(i);
+    QGraphicsPixmapItem* pattern_item = addPixmap(image);
     pattern_item->setPos(frame.topLeft());
     pattern_item->setFlags(
           QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
+    pattern_items.append(pattern_item);
   }
+
 }

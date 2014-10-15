@@ -21,6 +21,7 @@
 
 class Quest;
 class TilesetModel;
+class QGraphicsPixmapItem;
 
 /**
  * @brief The scene containing all patterns in the tileset main view.
@@ -43,7 +44,10 @@ private:
 
   void build();
 
-  TilesetModel& model;       /**< The tileset represented. */
+  TilesetModel& model;            /**< The tileset represented. */
+  QList<QGraphicsPixmapItem*>
+      pattern_items;              /**< Each pattern item in the scene,
+                                   * ordered as in the model. */
 
 };
 

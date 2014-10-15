@@ -26,8 +26,6 @@
 
 class Quest;
 
-using TilesetData = Solarus::TilesetData;
-
 // TODO move to a separate file
 class NaturalComparator {
 
@@ -52,6 +50,8 @@ private:
  *
  * It makes the link between the editor and the tileset data of the
  * Solarus library.
+ * Each tile pattern is identified by both its string id and an integer index
+ * for performance.
  * Signals are sent when something changes in the wrapped tileset.
  * This model can be used as a model for a list view of tile patterns.
  *
@@ -61,6 +61,22 @@ class TilesetModel : public QAbstractListModel {
   Q_OBJECT
 
 public:
+
+  /**
+   * @brief Data of a specific tile pattern.
+   */
+  struct PatternModel {
+
+  public:
+
+    PatternModel(const QString& id) :
+      id(id) {
+    }
+
+    QString id;                   /**< String id of the pattern. */
+    mutable QPixmap image;        /**< Full-size image of the pattern. */
+    mutable QPixmap icon;         /**< 32x32 icon of the pattern. */
+  };
 
   // Creation.
   TilesetModel(
@@ -77,15 +93,14 @@ public:
   QColor get_background_color() const;
   void set_background_color(const QColor& background_color);
   int get_num_patterns() const;
-  bool pattern_exists(const QString& pattern_id) const;
-  QRect get_pattern_frame(const QString& pattern_id) const;
-  QMap<QString, QRect> get_patterns_frame() const;
-  QPixmap get_pattern_image(const QString& pattern_id) const;
-  QPixmap get_pattern_icon(const QString& pattern_id) const;
+  bool pattern_exists(int index) const;
+  QRect get_pattern_frame(int index) const;
+  QPixmap get_pattern_image(int index) const;
+  QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
 
-  int get_pattern_index(const QString& pattern_id) const;
-  QString get_pattern_id(int index) const;
+  int id_to_index(const QString& pattern_id) const;
+  QString index_to_id(int index) const;
 
 signals:
 
@@ -101,21 +116,14 @@ private:
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString tileset_id;       /**< Id of the tileset. */
-  TilesetData tileset;            /**< Tileset data wrapped by this model. */
-
-  QStringList indexes_to_ids;     /**< Id of each pattern in the list. */
-  std::map<QString, int, NaturalComparator>
-      ids_to_indexes;             /**< Index in the list of each pattern. */
-
+  Solarus::TilesetData tileset;   /**< Tileset data wrapped by this model. */
   QImage patterns_image;          /**< PNG image of all tile patterns. */
 
-  // TODO make a class to store pattern data instead of several mappings.
-  mutable QHash<QString, QPixmap>
-      patterns_images;            /**< Image of each tile pattern,
-                                   * created on-demand. */
-  mutable QHash<QString, QPixmap>
-      patterns_icons;             /**< 32x32 image of each tile pattern,
-                                   * created on-demand. */
+  std::map<QString, int, NaturalComparator>
+      ids_to_indexes;             /**< Index in the list of each pattern.
+                                   * The order is determined here. */
+  QList<PatternModel>
+      patterns;                   /**< All patterns. */
 };
 
 #endif
