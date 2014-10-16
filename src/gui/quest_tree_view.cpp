@@ -759,7 +759,7 @@ void QuestTreeView::delete_action_triggered() {
         if (!empty_dir) {
           // TODO we could remove directories recursively,
           // but we have to take of resources they contain.
-          GuiTools::warningDialog(tr("Directory is not empty"));
+          GuiTools::warning_dialog(tr("Directory is not empty"));
         }
         else {
           // Empty directory.

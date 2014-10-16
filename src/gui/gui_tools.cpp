@@ -24,7 +24,7 @@ namespace GuiTools {
  * @brief Shows a modal dialog box with an information message.
  * @param message The message to show.
  */
-void informationDialog(const QString& message) {
+void information_dialog(const QString& message) {
 
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Information);
@@ -37,7 +37,7 @@ void informationDialog(const QString& message) {
  * @brief Shows a modal dialog box with a warning message.
  * @param message The message to show.
  */
-void warningDialog(const QString& message) {
+void warning_dialog(const QString& message) {
 
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Warning);
@@ -50,7 +50,7 @@ void warningDialog(const QString& message) {
  * @brief Shows a modal dialog box with an error message.
  * @param message The message to show.
  */
-void errorDialog(const QString& message) {
+void error_dialog(const QString& message) {
 
   QMessageBox messageBox;
   messageBox.setIcon(QMessageBox::Critical);

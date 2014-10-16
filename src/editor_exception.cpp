@@ -60,5 +60,5 @@ void EditorException::print_message() const {
  */
 void EditorException::show_dialog() const {
 
-  GuiTools::errorDialog(message);
+  GuiTools::error_dialog(message);
 }

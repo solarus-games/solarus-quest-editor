@@ -24,9 +24,9 @@ class QString;
 
 namespace GuiTools {
 
-void informationDialog(const QString& message);
-void warningDialog(const QString& message);
-void errorDialog(const QString& message);
+void information_dialog(const QString& message);
+void warning_dialog(const QString& message);
+void error_dialog(const QString& message);
 
 void draw_rectangle_outline(QPainter& painter,
                             const QRect& where,

@@ -146,17 +146,17 @@ void NewResourceElementDialog::done(int result) {
   if (result == QDialog::Accepted) {
 
     if (get_element_id().isEmpty()) {
-      GuiTools::errorDialog("Empty resource id");
+      GuiTools::error_dialog("Empty resource id");
       return;
     }
 
     if (!Quest::is_valid_file_name(get_element_id())) {
-      GuiTools::errorDialog("Invalid resource id");
+      GuiTools::error_dialog("Invalid resource id");
       return;
     }
 
     if (get_element_description().isEmpty()) {
-      GuiTools::errorDialog("Empty resource description");
+      GuiTools::error_dialog("Empty resource description");
       return;
     }
   }

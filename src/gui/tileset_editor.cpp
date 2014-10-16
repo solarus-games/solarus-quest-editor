@@ -242,7 +242,7 @@ void TilesetEditor::set_description_from_gui() {
   }
 
   if (description.isEmpty()) {
-    GuiTools::errorDialog("Invalid description");
+    GuiTools::error_dialog("Invalid description");
     update_description_to_gui();
     return;
   }

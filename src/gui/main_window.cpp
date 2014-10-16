@@ -100,7 +100,7 @@ void MainWindow::on_action_load_quest_triggered() {
 
   QString quest_path = file_names.first();
   if (!quest_manager.set_quest(quest_path)) {
-    GuiTools::errorDialog(
+    GuiTools::error_dialog(
           tr("No quest was found in directory\n'%1'").arg(quest_path));
   }
 }
