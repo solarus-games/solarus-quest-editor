@@ -39,6 +39,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
 
   open_action = new QAction(tr("Open"), this);
   open_action->setShortcut(tr("Return"));
+  open_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(open_action, SIGNAL(triggered()),
           this, SLOT(open_action_triggered()));
   addAction(open_action);
@@ -46,6 +47,8 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   rename_action = new QAction(
         QIcon(":/images/icon_rename.png"), tr("Rename..."), this);
   rename_action->setShortcut(tr("F2"));
+  rename_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  rename_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(rename_action, SIGNAL(triggered()),
           this, SLOT(rename_action_triggered()));
   addAction(rename_action);
@@ -53,6 +56,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   delete_action = new QAction(
         QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
   delete_action->setShortcut(QKeySequence::Delete);
+  delete_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(delete_action, SIGNAL(triggered()),
           this, SLOT(delete_action_triggered()));
   addAction(delete_action);

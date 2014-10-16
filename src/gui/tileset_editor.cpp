@@ -287,8 +287,9 @@ void TilesetEditor::update_pattern_view() {
  */
 void TilesetEditor::update_pattern_id_field() {
 
+  // Get the id of the selected pattern
+  // (an empty string if no pattern is selected or if multiple patterns are).
   QString pattern_id = model->index_to_id(model->get_selected_index());
-  // Possibly an empty string.
   ui.pattern_id_value->setText(pattern_id);
 }
 
@@ -296,27 +297,26 @@ void TilesetEditor::update_pattern_id_field() {
  * @brief Updates the ground selector from the model.
  */
 void TilesetEditor::update_ground_field() {
-
+  // TODO
 }
 
 /**
  * @brief Updates the animation type selector from the model.
  */
 void TilesetEditor::update_animation_type_field() {
-
+  // TODO
 }
 
 /**
  * @brief Updates the animation separation selector from the model.
  */
 void TilesetEditor::update_animation_separation_field() {
-
+  // TODO
 }
 
 /**
  * @brief Updates the default layer selector from the model.
  */
 void TilesetEditor::update_default_layer_field() {
-
+  // TODO
 }
-
