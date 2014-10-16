@@ -186,6 +186,7 @@ void TilesetEditor::update() {
   update_description_to_gui();
   update_background_color();
   ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
+  update_pattern_view();
 }
 
 /**
