@@ -247,7 +247,7 @@ void TilesetEditor::set_description_from_gui() {
     return;
   }
 
-  blockSignals(true);  // TODO scoped blocker
+  QSignalBlocker(this);
   try {
     get_resources().set_description(ResourceType::TILESET, tileset_id, description);
     get_resources().save();
@@ -255,5 +255,4 @@ void TilesetEditor::set_description_from_gui() {
   catch (const EditorException& ex) {
     ex.print_message();
   }
-  blockSignals(false);
 }
