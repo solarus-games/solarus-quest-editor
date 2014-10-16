@@ -44,6 +44,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="tileset_id_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Tileset id</string>
             </property>
@@ -51,6 +54,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QLabel" name="tileset_id_field">
+            <property name="toolTip">
+             <string>Filename of the tileset (without extension)</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -58,6 +64,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="description_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Description</string>
             </property>
@@ -71,10 +80,16 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>User friendly description to show in the editor</string>
+            </property>
            </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="background_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Background</string>
             </property>
@@ -87,6 +102,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Background color applied to maps usings this tileset</string>
             </property>
             <property name="styleSheet">
              <string notr="true"> QPushButton {
@@ -106,6 +124,9 @@
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="num_tiles_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Patterns</string>
             </property>
@@ -113,6 +134,9 @@
           </item>
           <item row="4" column="1">
            <widget class="QLabel" name="num_tiles_field">
+            <property name="toolTip">
+             <string>Number of existing tile patterns in the tileset</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -141,6 +165,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QLabel" name="pattern_id_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Pattern id</string>
             </property>
@@ -165,6 +192,9 @@
               <layout class="QHBoxLayout" name="horizontal_layout_2">
                <item>
                 <widget class="QLabel" name="pattern_id_value">
+                 <property name="toolTip">
+                  <string>Name identifying the pattern</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -172,8 +202,18 @@
                </item>
                <item>
                 <widget class="QToolButton" name="pattern_id_button">
+                 <property name="toolTip">
+                  <string>Rename</string>
+                 </property>
                  <property name="text">
-                  <string>...</string>
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../resources/resources.qrc">
+                   <normaloff>:/images/icon_edit.png</normaloff>:/images/icon_edit.png</iconset>
+                 </property>
+                 <property name="shortcut">
+                  <string>F2</string>
                  </property>
                 </widget>
                </item>
@@ -197,6 +237,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="ground_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Ground</string>
             </property>
@@ -210,10 +253,16 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>Terrain of the pattern</string>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="animation_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Animation</string>
             </property>
@@ -250,6 +299,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="toolTip">
+                  <string>Kind of animation of the pattern</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -260,6 +312,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="toolTip">
+                  <string>Horizontal or vertical separation (only for multi-frame patterns)</string>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -269,6 +324,9 @@
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="default_layer_label">
+            <property name="toolTip">
+             <string/>
+            </property>
             <property name="text">
              <string>Default layer</string>
             </property>
@@ -281,6 +339,9 @@
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Layer to initially apply to tiles using this pattern on maps</string>
             </property>
            </widget>
           </item>
@@ -306,6 +367,8 @@
    <header>gui/tileset_view.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
