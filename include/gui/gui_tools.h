@@ -17,6 +17,9 @@
 #ifndef SOLARUSEDITOR_GUI_TOOLS_H
 #define SOLARUSEDITOR_GUI_TOOLS_H
 
+class QColor;
+class QPainter;
+class QRect;
 class QString;
 
 namespace GuiTools {
@@ -24,6 +27,10 @@ namespace GuiTools {
 void informationDialog(const QString& message);
 void warningDialog(const QString& message);
 void errorDialog(const QString& message);
+
+void draw_rectangle_outline(QPainter& painter,
+                            const QRect& where,
+                            const QColor& color);
 
 }
 

@@ -14,12 +14,48 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/gui_tools.h"
 #include "gui/tileset_model.h"
 #include "gui/tileset_scene.h"
 #include "quest.h"
 #include <QGraphicsPixmapItem>
 #include <QPainter>
 #include <QPalette>
+#include <QStyleOptionGraphicsItem>
+
+/**
+ * @brief Graphic item representing a tile pattern.
+ */
+class PatternItem : public QGraphicsPixmapItem {
+
+public:
+
+  PatternItem(TilesetModel& model, int index);
+
+  // Enable the use of qgraphicsitem_cast with this item.
+  enum {
+    Type = UserType + 1
+  };
+
+  virtual int type() const override {
+    return Type;
+  }
+
+  int get_index() const;
+  void set_index(int index);
+
+protected:
+
+  virtual void paint(QPainter* painter,
+                     const QStyleOptionGraphicsItem* option,
+                     QWidget* widget = nullptr) override;
+
+private:
+
+  TilesetModel& model;            /**< The tileset this pattern belongs to. */
+  int index;                      /**< Index of the pattern in the tileset. */
+
+};
 
 /**
  * @brief TilesetScene Creates a tileset scene.
@@ -92,15 +128,10 @@ void TilesetScene::build() {
 
   setSceneRect(QRectF(QPoint(0, 0), model.get_patterns_image().size()));
   for (int i = 0; i < model.get_num_patterns(); ++i) {
-    QPixmap image = model.get_pattern_image(i);
-    QRect frame = model.get_pattern_frame(i);
 
     // TODO make a function to create an item.
-    QGraphicsPixmapItem* pattern_item = addPixmap(image);
-    pattern_item->setPos(frame.topLeft());
-    pattern_item->setFlags(
-          QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable);
-    pattern_item->setData(0, i);
+    PatternItem* pattern_item = new PatternItem(model, i);
+    addItem(pattern_item);
     pattern_items.append(pattern_item);
   }
 
@@ -143,9 +174,72 @@ void TilesetScene::set_selection_from_scene() {
   // Forward the change to the tileset.
   QItemSelection selection;
   for (QGraphicsItem* item : selectedItems()) {
-    QModelIndex index = model.index(item->data(0).toInt());
-    selection.select(index, index);
+    PatternItem* pattern_item = qgraphicsitem_cast<PatternItem*>(item);
+    if (pattern_item != nullptr) {
+      QModelIndex index = model.index(pattern_item->get_index());
+      selection.select(index, index);
+    }
   }
 
   model.get_selection().select(selection, QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Creates a pattern item.
+ * @param model The tileset.
+ * @param index Index of the pattern in the tileset.
+ */
+PatternItem::PatternItem(TilesetModel& model, int index) :
+  QGraphicsPixmapItem(model.get_pattern_image(index)),
+  model(model),
+  index(index) {
+
+  QRect frame = model.get_pattern_frame(index);
+  setPos(frame.topLeft());
+  setFlags(ItemIsSelectable | ItemIsFocusable);
+}
+
+/**
+ * @brief Returns the index of the pattern in the tileset.
+ * @return The pattern index.
+ */
+int PatternItem::get_index() const {
+  return index;
+}
+
+/**
+ * @brief Sets the index of the pattern in the tileset.
+ * @param index The new index.
+ */
+void PatternItem::set_index(int index) {
+  this->index = index;
+}
+
+/**
+ * @brief Paints the pattern item.
+ *
+ * Reimplemented to draw our own selection marker.
+ *
+ * @param painter The painter.
+ * @param option Style option of the item.
+ * @param widget The widget being painted or nullptr.
+ */
+void PatternItem::paint(QPainter* painter,
+                        const QStyleOptionGraphicsItem* option,
+                        QWidget* widget) {
+
+  const bool selected = option->state & QStyle::State_Selected;
+
+  // First, paint the item like if there was no selection, thus avoiding
+  // Qt's built-in selection marker.
+  QStyleOptionGraphicsItem option_deselected = *option;
+  option_deselected.state &= ~QStyle::State_Selected;
+  QGraphicsPixmapItem::paint(painter, &option_deselected, widget);
+
+  // Add our selection marker.
+  if (selected) {
+    QRect frame = model.get_pattern_frame(index);
+    QRect frame_size(QPoint(0, 0), QSize(frame.size()));
+    GuiTools::draw_rectangle_outline(*painter, frame_size, Qt::blue);
+  }
 }

@@ -19,9 +19,9 @@
 
 #include <QGraphicsScene>
 
+class PatternItem;
 class Quest;
 class TilesetModel;
-class QGraphicsPixmapItem;
 class QItemSelection;
 
 /**
@@ -52,7 +52,7 @@ private:
   void build();
 
   TilesetModel& model;            /**< The tileset represented. */
-  QList<QGraphicsPixmapItem*>
+  QList<PatternItem*>
       pattern_items;              /**< Each pattern item in the scene,
                                    * ordered as in the model. */
 

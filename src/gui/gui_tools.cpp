@@ -16,6 +16,7 @@
  */
 #include "gui/gui_tools.h"
 #include <QMessageBox>
+#include <QPainter>
 
 namespace GuiTools {
 
@@ -56,6 +57,31 @@ void errorDialog(const QString& message) {
   messageBox.setText(message);
   messageBox.setWindowTitle(QMessageBox::tr("Error"));
   messageBox.exec();
+}
+
+/**
+ * @brief Draws a rectangle outline.
+ *
+ * Unlike QPainter::drawRect(), this function draws the outline entirely
+ * inside the rectangle and does not involves half-pixels.
+ *
+ * @param painter The painter.
+ * @param where Rectangle to draw the outline to.
+ * @param color Color to use.
+ */
+void draw_rectangle_outline(QPainter& painter,
+                            const QRect& where,
+                            const QColor& color) {
+  const int x = where.x();
+  const int y = where.y();
+  const int w = where.width();
+  const int h = where.height();
+  QBrush brush(color);
+  painter.fillRect(QRect(        x,         y, w, 1), brush);
+  painter.fillRect(QRect(        x, y + h - 1, w, 1), brush);
+  painter.fillRect(QRect(        x,         y, 1, h), brush);
+  painter.fillRect(QRect(x + w - 1,         y, 1, h), brush);
+
 }
 
 }
