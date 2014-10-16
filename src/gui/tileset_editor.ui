@@ -81,7 +81,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>User friendly description to show in the editor</string>
+             <string>User-friendly description to show in the editor</string>
             </property>
            </widget>
           </item>

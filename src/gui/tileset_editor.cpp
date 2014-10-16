@@ -182,12 +182,29 @@ void TilesetEditor::paste() {
  */
 void TilesetEditor::update() {
 
-  ui.tileset_id_field->setText(tileset_id);
+  update_tileset_id_field();
   update_description_to_gui();
   update_background_color();
-  ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
+  update_num_patterns_field();
   update_pattern_view();
 }
+
+/**
+ * @brief Updates the tileset id displaying.
+ */
+void TilesetEditor::update_tileset_id_field() {
+
+  ui.tileset_id_field->setText(tileset_id);
+}
+
+/**
+ * @brief Updates the pattern count displaying from the model.
+ */
+void TilesetEditor::update_num_patterns_field() {
+
+  ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
+}
+
 
 /**
  * @brief Updates the background color button from the one of the tileset.

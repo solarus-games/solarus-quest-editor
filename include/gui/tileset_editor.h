@@ -43,11 +43,14 @@ public slots:
 
   void update();
 
+  void update_tileset_id_field();
+  void update_num_patterns_field();
   void update_background_color();
   void background_button_clicked();
 
   void update_description_to_gui();
   void set_description_from_gui();
+
 
   void update_pattern_view();
   void update_pattern_id_field();
