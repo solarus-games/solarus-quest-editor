@@ -21,6 +21,7 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include <QColorDialog>
+#include <QItemSelectionModel>
 #include <QUndoStack>
 
 namespace {
@@ -131,6 +132,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(background_button_clicked()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
           this, SLOT(update_background_color()));
+  connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+          this, SLOT(update_pattern_view()));
+
 }
 
 /**
@@ -256,3 +260,63 @@ void TilesetEditor::set_description_from_gui() {
     ex.print_message();
   }
 }
+
+/**
+ * @brief Fills the tile pattern view.
+ *
+ * If a single pattern is selected, its properties are displayed in the tile
+ * pattern view.
+ * Otherwise, the tile pattern view becomes disabled.
+ */
+void TilesetEditor::update_pattern_view() {
+
+  update_pattern_id_field();
+  update_ground_field();
+  update_animation_type_field();
+  update_animation_separation_field();
+  update_default_layer_field();
+
+  // If no pattern is selected, or more than one pattern selected,
+  // disable the tile pattern view.
+  const int selected_index = model->get_selected_index();
+  ui.pattern_properties_group_box->setEnabled(selected_index != -1);
+}
+
+/**
+ * @brief Updates the pattern id field from the model.
+ */
+void TilesetEditor::update_pattern_id_field() {
+
+  QString pattern_id = model->index_to_id(model->get_selected_index());
+  // Possibly an empty string.
+  ui.pattern_id_value->setText(pattern_id);
+}
+
+/**
+ * @brief Updates the ground selector from the model.
+ */
+void TilesetEditor::update_ground_field() {
+
+}
+
+/**
+ * @brief Updates the animation type selector from the model.
+ */
+void TilesetEditor::update_animation_type_field() {
+
+}
+
+/**
+ * @brief Updates the animation separation selector from the model.
+ */
+void TilesetEditor::update_animation_separation_field() {
+
+}
+
+/**
+ * @brief Updates the default layer selector from the model.
+ */
+void TilesetEditor::update_default_layer_field() {
+
+}
+

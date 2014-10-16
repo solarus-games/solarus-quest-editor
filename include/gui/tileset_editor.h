@@ -49,6 +49,13 @@ public slots:
   void update_description_to_gui();
   void set_description_from_gui();
 
+  void update_pattern_view();
+  void update_pattern_id_field();
+  void update_ground_field();
+  void update_animation_type_field();
+  void update_animation_separation_field();
+  void update_default_layer_field();
+
 private:
 
   Ui::TilesetEditor ui;         /**< The tileset editor widgets. */

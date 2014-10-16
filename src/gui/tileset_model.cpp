@@ -337,3 +337,17 @@ QString TilesetModel::index_to_id(int index) const {
 QItemSelectionModel& TilesetModel::get_selection() {
   return selection;
 }
+
+/**
+ * @brief Returns the index of the selected pattern.
+ * @return The selected pattern index.
+ * Returns -1 if no pattern is selected or if multiple patterns are selected.
+ */
+int TilesetModel::get_selected_index() const {
+
+  QModelIndexList selected_indexes = selection.selectedIndexes();
+  if (selected_indexes.size() != 1) {
+    return -1;
+  }
+  return selected_indexes.first().row();
+}

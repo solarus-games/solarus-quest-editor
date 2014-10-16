@@ -104,6 +104,7 @@ public:
 
   // Selected patterns.
   QItemSelectionModel& get_selection();
+  int get_selected_index() const;
 
 signals:
 
