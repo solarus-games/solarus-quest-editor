@@ -760,7 +760,7 @@ void Quest::check_valid_file_name(const QString& name) {
 
   if (!is_valid_file_name(name)) {
     if (name.isEmpty()) {
-      throw EditorException(tr("Empty file name").arg(name));
+      throw EditorException(tr("Empty file name"));
     }
     else {
       throw EditorException(tr("Invalid file name: '%1'").arg(name));
