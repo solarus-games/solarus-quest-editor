@@ -33,22 +33,32 @@ public:
   TilesetView(QWidget* parent = nullptr);
 
   void set_model(TilesetModel& tileset);
+  double get_zoom() const;
+
+public slots:
+
+  void set_zoom(double zoom);
+  void zoom_in();
+  void zoom_out();
 
 protected:
 
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;
   virtual void mouseMoveEvent(QMouseEvent* event) override;
+  virtual void wheelEvent(QWheelEvent* event) override;
 
 private:
 
   QPointer<TilesetModel> model;   /**< The tileset viewed. */
 
   // TODO move the panning code to a reusable class,
-  // because other views also need it.
+  // because other views also need it. Use an event filter?
   QPoint pan_initial_point;      /**< Point initially clicked when panning
                                    * the view, in scrolling-independent
                                    * coordinates. */
+
+  double zoom;                   /**< Scale factor of the view. */
 };
 
 #endif

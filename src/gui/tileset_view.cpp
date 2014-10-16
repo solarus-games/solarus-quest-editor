@@ -27,7 +27,8 @@
  * @param parent The parent widget or nullptr.
  */
 TilesetView::TilesetView(QWidget* parent) :
-  QGraphicsView(parent) {
+  QGraphicsView(parent),
+  zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 }
@@ -49,9 +50,63 @@ void TilesetView::set_model(TilesetModel& model) {
 
   // Enable useful features if there is an image.
   setDragMode(QGraphicsView::RubberBandDrag);
-  scale(2.0, 2.0);  // Initial zoom: x2.
+  set_zoom(2.0);  // Initial zoom: x2.
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
+}
+
+/**
+ * @brief Returns the zoom level of the view.
+ * @return The zoom level.
+ */
+double TilesetView::get_zoom() const {
+  return zoom;
+}
+
+/**
+ * @brief Sets the zoom level of the view.
+ *
+ * Zooming will be anchored at the mouse position.
+ * The zoom value will be clamped between 0.25 and 4.0.
+ *
+ * @param zoom The zoom to set.
+ */
+void TilesetView::set_zoom(double zoom) {
+
+  zoom = qMin(4.0, qMax(0.25, zoom));
+
+  if (zoom == this->zoom) {
+    return;
+  }
+
+  setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+  scale(1.0 / this->zoom, 1.0 / this->zoom);
+  this->zoom = zoom;
+  scale(zoom, zoom);
+}
+
+/**
+ * @brief Scales the view by a factor of 2.
+ *
+ * Zooming will be anchored at the mouse position.
+ * The maximum zoom value is 4.0: this function does nothing if you try to
+ * zoom more.
+ */
+void TilesetView::zoom_in() {
+
+  set_zoom(get_zoom() * 2.0);
+}
+
+/**
+ * @brief Scales the view by a factor of 0.5.
+ *
+ * Zooming will be anchored at the mouse position.
+ * The maximum zoom value is 0.25: this function does nothing if you try to
+ * zoom less.
+ */
+void TilesetView::zoom_out() {
+
+  set_zoom(get_zoom() / 2.0);
 }
 
 /**
@@ -113,4 +168,24 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
   }
 
   QGraphicsView::mouseMoveEvent(event);
+}
+
+/**
+ * @brief Receives a mouse wheel event.
+ * @param event The event to handle.
+ */
+void TilesetView::wheelEvent(QWheelEvent* event) {
+
+  if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
+    // Control + wheel: zoom in or out.
+    if (event->delta() > 0) {
+      zoom_in();
+    }
+    else {
+      zoom_out();
+    }
+    return;  // Don't forward the event to the scrollbars.
+  }
+
+  QGraphicsView::wheelEvent(event);
 }
