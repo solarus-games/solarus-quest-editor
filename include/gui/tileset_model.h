@@ -27,6 +27,8 @@
 
 class Quest;
 
+using Ground = Solarus::Ground;
+
 // TODO move to a separate file
 class NaturalComparator {
 
@@ -95,6 +97,7 @@ public:
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
   QRect get_pattern_frame(int index) const;
+  Ground get_pattern_ground(int index) const;
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
@@ -130,6 +133,7 @@ private:
       patterns;                   /**< All patterns. */
 
   QItemSelectionModel selection;  /**< Patterns currently selected. */
+
 };
 
 #endif

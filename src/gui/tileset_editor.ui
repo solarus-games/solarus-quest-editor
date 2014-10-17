@@ -246,7 +246,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="ground_field">
+           <widget class="GroundSelector" name="ground_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -365,6 +365,11 @@
    <class>TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>gui/tileset_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GroundSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/ground_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources>

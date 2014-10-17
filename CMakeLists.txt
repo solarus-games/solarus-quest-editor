@@ -59,6 +59,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
+  include/gui/ground_selector.h
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
   include/gui/main_window.h
@@ -80,6 +81,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
+  src/gui/ground_selector.cpp
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp

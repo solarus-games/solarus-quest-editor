@@ -315,7 +315,16 @@ void TilesetEditor::update_pattern_id_field() {
  * @brief Updates the ground selector from the model.
  */
 void TilesetEditor::update_ground_field() {
-  // TODO
+
+  Ground ground;
+  int index = model->get_selected_index();
+  if (index == -1) {
+    ground = Ground::EMPTY;
+  }
+  else {
+    ground = model->get_pattern_ground(index);
+  }
+  ui.ground_field->set_selected_ground(ground);
 }
 
 /**

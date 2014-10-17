@@ -301,6 +301,18 @@ QRect TilesetModel::get_pattern_frame(int index) const {
 }
 
 /**
+ * @brief Returns the ground of a pattern.
+ * @param index A pattern index.
+ * @return The pattern's ground.
+ * Returns a default-constructed ground if the pattern does not exist.
+ */
+Ground TilesetModel::get_pattern_ground(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  return tileset.get_pattern(pattern_id).get_ground();
+}
+
+/**
  * @brief Returns the list index of the specified pattern.
  * @param pattern_id Id of a tile pattern
  * @return The corresponding index in the list.
