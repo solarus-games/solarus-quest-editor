@@ -33,8 +33,8 @@ class TilesetEditorCommand : public QUndoCommand {
 
 public:
 
-  TilesetEditorCommand(TilesetEditor& editor) :
-    QUndoCommand(TilesetEditor::tr("Background color")),
+  TilesetEditorCommand(TilesetEditor& editor, const QString& text) :
+    QUndoCommand(text),
     editor(editor) {
   }
 
@@ -60,7 +60,7 @@ class SetBackgroundCommand : public TilesetEditorCommand {
 public:
 
   SetBackgroundCommand(TilesetEditor& editor, const QColor& color) :
-    TilesetEditorCommand(editor),
+    TilesetEditorCommand(editor, TilesetEditor::tr("Background color")),
     color_before(get_model().get_background_color()),
     color_after(color) {
   }
@@ -77,6 +77,36 @@ private:
 
   QColor color_before;
   QColor color_after;
+
+};
+
+/**
+ * @brief Changing the ground of a tile pattern.
+ */
+class SetPatternGroundCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternGroundCommand(TilesetEditor& editor, int index, Ground ground) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Ground")),
+    index(index),
+    ground_before(get_model().get_pattern_ground(index)),
+    ground_after(ground) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_ground(index, ground_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_pattern_ground(index, ground_after);
+  }
+
+private:
+
+  int index;
+  Ground ground_before;
+  Ground ground_after;
 
 };
 
@@ -132,9 +162,12 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(background_button_clicked()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
           this, SLOT(update_background_color()));
+  connect(ui.ground_field, SIGNAL(activated(QString)),
+          this, SLOT(ground_selector_activated()));
+  connect(model, SIGNAL(pattern_ground_changed(int, Ground)),
+          this, SLOT(update_ground_field()));
   connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
-
 }
 
 /**
@@ -325,6 +358,26 @@ void TilesetEditor::update_ground_field() {
     ground = model->get_pattern_ground(index);
   }
   ui.ground_field->set_selected_ground(ground);
+}
+
+/**
+ * @brief Slot called when the user changes the ground in the selector.
+ */
+void TilesetEditor::ground_selector_activated() {
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    // No pattern selected.
+    return;
+  }
+
+  Ground ground = ui.ground_field->get_selected_ground();
+  if (ground == model->get_pattern_ground(index)) {
+    // No change.
+    return;
+  }
+
+  get_undo_stack().push(new SetPatternGroundCommand(*this, index, ground));
 }
 
 /**

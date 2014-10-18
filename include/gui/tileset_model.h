@@ -64,22 +64,6 @@ class TilesetModel : public QAbstractListModel {
 
 public:
 
-  /**
-   * @brief Data of a specific tile pattern.
-   */
-  struct PatternModel {
-
-  public:
-
-    PatternModel(const QString& id) :
-      id(id) {
-    }
-
-    QString id;                   /**< String id of the pattern. */
-    mutable QPixmap image;        /**< Full-size image of the pattern. */
-    mutable QPixmap icon;         /**< 32x32 icon of the pattern. */
-  };
-
   // Creation.
   TilesetModel(
       Quest& quest, const QString& tileset_id, QObject* parent = nullptr);
@@ -98,6 +82,7 @@ public:
   bool pattern_exists(int index) const;
   QRect get_pattern_frame(int index) const;
   Ground get_pattern_ground(int index) const;
+  void set_pattern_ground(int index, Ground ground);
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
@@ -112,12 +97,29 @@ public:
 signals:
 
   void background_color_changed(const QColor& background_color);
+  void pattern_ground_changed(int index, Ground ground);
 
 public slots:
 
   void save() const;
 
 private:
+
+  /**
+   * @brief Data of a specific tile pattern.
+   */
+  struct PatternModel {
+
+  public:
+
+    PatternModel(const QString& id) :
+      id(id) {
+    }
+
+    QString id;                   /**< String id of the pattern. */
+    mutable QPixmap image;        /**< Full-size image of the pattern. */
+    mutable QPixmap icon;         /**< 32x32 icon of the pattern. */
+  };
 
   void build_index_map();
 

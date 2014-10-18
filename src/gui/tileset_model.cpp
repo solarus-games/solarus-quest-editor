@@ -313,6 +313,24 @@ Ground TilesetModel::get_pattern_ground(int index) const {
 }
 
 /**
+ * @brief Sets the ground of a tile pattern.
+ *
+ * Emits pattern_ground_changed if there is a change.
+ *
+ * @param index A pattern index.
+ * @param ground The ground to set.
+ */
+void TilesetModel::set_pattern_ground(int index, Ground ground) {
+
+  Solarus::TilePatternData& pattern = tileset.get_pattern(index_to_id(index).toStdString());
+  if (ground == pattern.get_ground()) {
+    return;
+  }
+  pattern.set_ground(ground);
+  emit pattern_ground_changed(index, ground);
+}
+
+/**
  * @brief Returns the list index of the specified pattern.
  * @param pattern_id Id of a tile pattern
  * @return The corresponding index in the list.

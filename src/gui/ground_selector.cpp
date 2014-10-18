@@ -140,7 +140,7 @@ void GroundSelector::set_empty() {
  */
 Ground GroundSelector::get_selected_ground() const {
 
-  if (!is_with_none()) {
+  if (is_empty()) {
     return Ground();
   }
 
