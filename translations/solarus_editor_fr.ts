@@ -15,6 +15,113 @@
     </message>
 </context>
 <context>
+    <name>GroundSelector</name>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="46"/>
+        <source>Empty</source>
+        <translation>Vide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="47"/>
+        <source>Traversable</source>
+        <translation>Traversable</translation>
+    </message>
+    <message>
+        <source>Full obstacle</source>
+        <translation type="vanished">Tout obstacle</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="48"/>
+        <source>Wall</source>
+        <translation>Mur</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="49"/>
+        <source>Low wall</source>
+        <translation>Muret</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="50"/>
+        <source>Top right</source>
+        <translation>Haut droite</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="51"/>
+        <source>Top left</source>
+        <translation>Haut gauche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="52"/>
+        <source>Bottom left</source>
+        <translation>Bas gauche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="53"/>
+        <source>Bottom right</source>
+        <translation>Bas droite</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="54"/>
+        <source>Top right (water)</source>
+        <translation>Haut droite (eau)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="55"/>
+        <source>Top left (water)</source>
+        <translation>Haut gauche (eau)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="56"/>
+        <source>Bottom left (water)</source>
+        <translation>Bas gauche (eau)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="57"/>
+        <source>Bottom right (water)</source>
+        <translation>Bas droite (eau)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="58"/>
+        <source>Deep water</source>
+        <translation>Eau profonde</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="59"/>
+        <source>Shallow water</source>
+        <translation>Eau peu profonde</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="60"/>
+        <source>Grass</source>
+        <translation>Herbe</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="61"/>
+        <source>Hole</source>
+        <translation>Trou</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="62"/>
+        <source>Ice</source>
+        <translation>Glace</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="63"/>
+        <source>Ladder</source>
+        <translation>Échelle</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="64"/>
+        <source>Prickles</source>
+        <translation>Piquants</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/ground_selector.cpp" line="65"/>
+        <source>Lava</source>
+        <translation>Lave</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
@@ -828,6 +935,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="244"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="91"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
@@ -861,12 +969,12 @@
         <translation type="vanished">TODO tileset view</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="37"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="63"/>
         <source>Background color</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="112"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="142"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>

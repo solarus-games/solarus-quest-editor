@@ -45,7 +45,7 @@ void GroundSelector::initialize_translated_names() {
   ground_friendly_names = {
     { Ground::EMPTY,                   tr("Empty")                },
     { Ground::TRAVERSABLE,             tr("Traversable")          },
-    { Ground::WALL,                    tr("Full obstacle")        },
+    { Ground::WALL,                    tr("Wall")                 },
     { Ground::LOW_WALL,                tr("Low wall")             },
     { Ground::WALL_TOP_RIGHT,          tr("Top right")            },
     { Ground::WALL_TOP_LEFT,           tr("Top left")             },
