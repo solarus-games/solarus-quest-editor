@@ -28,6 +28,7 @@ using Ground = Solarus::Ground;
  * Each ground value is displayed with a user-friendly name and an icon.
  */
 class GroundSelector : public QComboBox {
+  Q_OBJECT
 
 public:
 
