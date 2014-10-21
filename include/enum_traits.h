@@ -14,14 +14,31 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_SELECTOR_H
-#define SOLARUSEDITOR_GROUND_SELECTOR_H
+#ifndef SOLARUSEDITOR_ENUM_TRAITS_H
+#define SOLARUSEDITOR_ENUM_TRAITS_H
 
-#include "gui/enum_selector.h"
-#include "ground_traits.h"
-#include <solarus/entities/Ground.h>
+#include <QIcon>
+#include <QMap>
+#include <QString>
 
-using Ground = Solarus::Ground;
-using GroundSelector = EnumSelector<Ground>;
+/**
+ * \brief Gives info about enumerated values of a type E.
+ *
+ * Specializations of this template class must implement the following
+ * public functions:
+ * - static QMap<E, QString> get_names();
+ * - static QString get_name(E value);
+ * - static QString get_friendly_name(E value);
+ * - static QIcon get_icon(E value);
+ */
+template<typename E>
+class EnumTraits {
+
+  static QMap<E, QString> get_names();
+  static QString get_name(E value);
+  static QString get_friendly_name(E value);
+  static QIcon get_icon(E value);
+
+};
 
 #endif

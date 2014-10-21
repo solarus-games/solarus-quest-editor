@@ -14,21 +14,44 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "ground_helper.h"
+#include "ground_traits.h"
+#include <solarus/entities/GroundInfo.h>
 #include <QApplication>
 
-namespace GroundHelper {
+/**
+ * @brief Returns the Lua name of each ground value.
+ * @return The Lua name of grounds.
+ */
+QMap<Ground, QString> EnumTraits<Ground>::get_names() {
+
+  QMap<Ground, QString> names;
+  for (const auto& kvp : Solarus::GroundInfo::get_ground_names()) {
+    Ground ground = kvp.first;
+    QString name = QString::fromStdString(kvp.second);
+    names.insert(ground, name);
+  }
+  return names;
+}
 
 /**
- * @brief Returns a user-friendly name for the specified ground value.
+ * @brief Returns the Lua name of a ground value.
+ * @param value A ground.
+ * @return The corresponding Lua name.
+ */
+QString EnumTraits<Ground>::get_name(Ground value) {
+  return QString::fromStdString(Solarus::GroundInfo::get_ground_name(value));
+}
+
+/**
+ * @brief Returns a user-friendly name describing a ground value.
  * @param ground A type of terrain.
  * @return The human-readable name of this ground in the current language.
  */
-QString get_ground_friendly_name(Ground ground) {
+QString EnumTraits<Ground>::get_friendly_name(Ground value) {
 
   // Use a switch to ensure we don't forget a value,
   // and also to translate names dynamically.
-  switch (ground) {
+  switch (value) {
 
   case Ground::EMPTY:
     return QApplication::tr("Empty");
@@ -95,4 +118,11 @@ QString get_ground_friendly_name(Ground ground) {
   return "";
 }
 
+/**
+ * @brief Returns an icon representing a ground value.
+ * @param ground A ground value.
+ * @return The corresponding icon.
+ */
+QIcon EnumTraits<Ground>::get_icon(Ground value) {
+  return QIcon(":/images/ground_" + get_name(value) + ".png");
 }

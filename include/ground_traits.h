@@ -14,14 +14,27 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_SELECTOR_H
-#define SOLARUSEDITOR_GROUND_SELECTOR_H
+#ifndef SOLARUSEDITOR_GROUND_TRAITS_H
+#define SOLARUSEDITOR_GROUND_TRAITS_H
 
-#include "gui/enum_selector.h"
-#include "ground_traits.h"
+#include "enum_traits.h"
 #include <solarus/entities/Ground.h>
 
 using Ground = Solarus::Ground;
-using GroundSelector = EnumSelector<Ground>;
+
+/**
+ * \brief Provides useful properties of ground enum values.
+ */
+template<>
+class EnumTraits<Ground> {
+
+public:
+
+  static QMap<Ground, QString> get_names();
+  static QString get_name(Ground value);
+  static QString get_friendly_name(Ground value);
+  static QIcon get_icon(Ground value);
+
+};
 
 #endif

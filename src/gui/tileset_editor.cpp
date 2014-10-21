@@ -357,7 +357,7 @@ void TilesetEditor::update_ground_field() {
   else {
     ground = model->get_pattern_ground(index);
   }
-  ui.ground_field->set_selected_ground(ground);
+  ui.ground_field->set_selected_value(ground);
 }
 
 /**
@@ -371,7 +371,7 @@ void TilesetEditor::ground_selector_activated() {
     return;
   }
 
-  Ground ground = ui.ground_field->get_selected_ground();
+  Ground ground = ui.ground_field->get_selected_value();
   if (ground == model->get_pattern_ground(index)) {
     // No change.
     return;

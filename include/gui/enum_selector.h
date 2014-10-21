@@ -14,21 +14,39 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_HELPER_H
-#define SOLARUSEDITOR_GROUND_HELPER_H
+#ifndef SOLARUSEDITOR_ENUM_SELECTOR_H
+#define SOLARUSEDITOR_ENUM_SELECTOR_H
 
-#include <QString>
-#include <solarus/entities/Ground.h>
-
-using Ground = Solarus::Ground;
+#include <QComboBox>
 
 /**
- * \brief Utility functions related to grounds.
+ * @brief Combobox to select a value from an enumerated type.
+ *
+ * The combobox is automatically filled with appropriate icons
+ * and translated names for type E as provided by EnumTraits<E>.
  */
-namespace GroundHelper {
+template<typename E>
+class EnumSelector : public QComboBox {
 
-QString get_ground_friendly_name(Ground ground);
+public:
 
-}
+  EnumSelector(QWidget* parent = nullptr);
+
+  bool is_with_none() const;
+  void set_with_none(bool with_none);
+
+  bool is_empty() const;
+  void set_empty();
+
+  E get_selected_value() const;
+  void set_selected_value(E value);
+
+private:
+
+  bool with_none;                 /**< Whether an empty option is included in the list. */
+
+};
+
+#include "gui/enum_selector.inl"
 
 #endif

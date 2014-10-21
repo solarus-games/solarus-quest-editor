@@ -59,6 +59,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
+  include/gui/enum_selector.h
+  include/gui/enum_selector.inl
   include/gui/ground_selector.h
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
@@ -75,14 +77,15 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_view.h
   include/color.h
   include/editor_exception.h
-  include/ground_helper.h
+  include/enum_traits.h
+  include/enum_traits.inl
+  include/ground_traits.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
-  src/gui/ground_selector.cpp
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
@@ -98,7 +101,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
-  src/ground_helper.cpp
+  src/ground_traits.cpp
   src/main.cpp
   src/quest.cpp
   src/quest_manager.cpp

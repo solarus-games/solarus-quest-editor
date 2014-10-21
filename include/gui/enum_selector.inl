@@ -14,24 +14,21 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/ground_selector.h"
-#include "ground_helper.h"
-#include <solarus/entities/GroundInfo.h>
+#include "gui/enum_selector.h"
+#include "enum_traits.h"
 
 /**
- * @brief Creates a ground selector.
+ * @brief Creates an enum selector.
  * @param parent The parent widget or nullptr.
  */
-GroundSelector::GroundSelector(QWidget* parent) :
+template<typename E>
+EnumSelector<E>::EnumSelector(QWidget* parent) :
   QComboBox(parent),
   with_none(false) {
 
-  for (const auto& kvp : Solarus::GroundInfo::get_ground_names()) {
-    Ground ground = kvp.first;
-    QString ground_name = QString::fromStdString(kvp.second);
-
-    addItem(QIcon(":/images/ground_" + ground_name + ".png"),
-            GroundHelper::get_ground_friendly_name(ground));
+  for (E element: EnumTraits<E>::get_names().keys()) {
+    addItem(EnumTraits<E>::get_icon(element),
+            EnumTraits<E>::get_friendly_name(element));
   }
 }
 
@@ -39,7 +36,8 @@ GroundSelector::GroundSelector(QWidget* parent) :
  * @brief Returns whether this selector includes an empty option.
  * @return @c true if an empty option is included.
  */
-bool GroundSelector::is_with_none() const {
+template<typename E>
+bool EnumSelector<E>::is_with_none() const {
   return with_none;
 }
 
@@ -47,7 +45,8 @@ bool GroundSelector::is_with_none() const {
  * @brief Sets whether this selector includes an empty option.
  * @param with_none @c true to include an empty option.
  */
-void GroundSelector::set_with_none(bool with_none) {
+template<typename E>
+void EnumSelector<E>::set_with_none(bool with_none) {
 
   if (with_none == this->with_none) {
     return;
@@ -63,24 +62,26 @@ void GroundSelector::set_with_none(bool with_none) {
 }
 
 /**
- * @brief Returns whether no ground is selected.
+ * @brief Returns whether no value is selected.
  *
  * Only possible if the selector includes an empty option.
  *
- * @return @c true if no ground is selected.
+ * @return @c true if no value is selected.
  */
-bool GroundSelector::is_empty() const {
+template<typename E>
+bool EnumSelector<E>::is_empty() const {
 
   return with_none && currentIndex() == 0;
 }
 
 /**
- * @brief Unselects any ground.
+ * @brief Unselects any value.
  *
  * Only possible if the selector includes an empty option
  * (otherwise this function has no effect).
  */
-void GroundSelector::set_empty() {
+template<typename E>
+void EnumSelector<E>::set_empty() {
 
   if (!is_with_none()) {
     return;
@@ -90,33 +91,35 @@ void GroundSelector::set_empty() {
 }
 
 /**
- * @brief Returns the selected ground.
+ * @brief Returns the selected value.
  *
- * It is an error to call this function is no ground is selected
- * (in this case a default-constructed ground value is returned).
+ * It is an error to call this function is no value is selected
+ * (in this case a default-constructed value is returned).
  *
- * @return The selected ground.
+ * @return The selected value.
  */
-Ground GroundSelector::get_selected_ground() const {
+template<typename E>
+E EnumSelector<E>::get_selected_value() const {
 
   if (is_empty()) {
-    return Ground();
+    return E();
   }
 
   int index = currentIndex();
   if (with_none) {
     --index;
   }
-  return static_cast<Ground>(index);
+  return static_cast<E>(index);
 }
 
 /**
- * @brief Changes the selected ground.
- * @param ground The ground to select.
+ * @brief Changes the selected value.
+ * @param value The value to select.
  */
-void GroundSelector::set_selected_ground(Ground ground) {
+template<typename E>
+void EnumSelector<E>::set_selected_value(E value) {
 
-  int index = static_cast<int>(ground);
+  int index = static_cast<int>(value);
   if (with_none) {
     ++index;
   }
