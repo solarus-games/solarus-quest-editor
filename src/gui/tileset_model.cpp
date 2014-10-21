@@ -154,6 +154,7 @@ void TilesetModel::build_index_map() {
  * @brief Returns an image representing the specified pattern.
  *
  * The image has the size of the pattern.
+ * If the pattern is multi-frame, the image of the first frame is returned.
  *
  * @param index Index of a tile pattern.
  * @return The corresponding image.
@@ -183,6 +184,46 @@ QPixmap TilesetModel::get_pattern_image(int index) const {
 
   pattern.image = QPixmap::fromImage(image);
   return pattern.image;
+}
+
+/**
+ * @brief Returns an image representing the specified pattern.
+ *
+ * If the pattern is multi-frame, the image returned contains all frames.
+ *
+ * @param index Index of a tile pattern.
+ * @return The corresponding image with all frames.
+ * Returns a null pixmap if the tileset image is not loaded.
+ */
+QPixmap TilesetModel::get_pattern_image_all_frames(int index) const {
+
+  if (!pattern_exists(index)) {
+    // No such pattern.
+    return QPixmap();
+  }
+
+  if (!is_pattern_multi_frame(index)) {
+    // Single frame pattern.
+    return get_pattern_image(index);
+  }
+
+  if (patterns_image.isNull()) {
+    // No tileset image.
+    return QPixmap();
+  }
+
+  const PatternModel& pattern = patterns.at(index);
+  if (!pattern.image_all_frames.isNull()) {
+    // Image already created.
+    return pattern.image_all_frames;
+  }
+
+  // Lazily create the image.
+  QRect frame = get_pattern_frames_bounding_box(index);
+  QImage image_all_frames = patterns_image.copy(frame);
+
+  pattern.image_all_frames = QPixmap::fromImage(image_all_frames);
+  return pattern.image_all_frames;
 }
 
 /**
@@ -314,6 +355,50 @@ QRect TilesetModel::get_pattern_frame(int index) const {
   const std::string& pattern_id = index_to_id(index).toStdString();
   const Solarus::Rectangle& frame = tileset.get_pattern(pattern_id).get_frame();
   return QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height());
+}
+
+/**
+ * @brief Returns the coordinates of all frames of a pattern in the tileset
+ * image.
+ * @param index A pattern index.
+ * @return The pattern's frames.
+ */
+QList<QRect> TilesetModel::get_pattern_frames(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  const std::vector<Solarus::Rectangle>& frames =
+      tileset.get_pattern(pattern_id).get_frames();
+
+  QList<QRect> result;
+  for (const Solarus::Rectangle& frame : frames) {
+    result << QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height());
+  }
+  return result;
+}
+
+/**
+ * @brief Returns the coordinates of the rectangle containing all frames of a
+ * pattern in the tileset image.
+ *
+ * For single-frame patterns, this gives the same result as get_pattern_frame().
+ *
+ * @param index A pattern index.
+ * @return The bounding box of the pattern's frames.
+ */
+QRect TilesetModel::get_pattern_frames_bounding_box(int index) const {
+
+  QRect bounding_box = get_pattern_frame(index);
+  if (!is_pattern_multi_frame(index)) {
+    return bounding_box;
+  }
+
+  if (get_pattern_separation(index) == TilePatternSeparation::HORIZONTAL) {
+    bounding_box.setWidth(bounding_box.width() * 3);
+  }
+  else {
+    bounding_box.setHeight(bounding_box.height() * 3);
+  }
+  return bounding_box;
 }
 
 /**

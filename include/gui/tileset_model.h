@@ -24,6 +24,7 @@
 #include <QCollator>
 #include <QImage>
 #include <QItemSelectionModel>
+#include <QList>
 #include <QPixmap>
 #include <map>
 
@@ -86,6 +87,8 @@ public:
   bool is_pattern_multi_frame(int index) const;
   int get_pattern_num_frames(int index) const;
   QRect get_pattern_frame(int index) const;
+  QList<QRect> get_pattern_frames(int index) const;
+  QRect get_pattern_frames_bounding_box(int index) const;
   Ground get_pattern_ground(int index) const;
   void set_pattern_ground(int index, Ground ground);
   Layer get_pattern_default_layer(int index) const;
@@ -95,6 +98,7 @@ public:
   TilePatternSeparation get_pattern_separation(int index) const;
   void set_pattern_separation(int index, TilePatternSeparation separation);
   QPixmap get_pattern_image(int index) const;
+  QPixmap get_pattern_image_all_frames(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
 
@@ -131,13 +135,17 @@ private:
     }
 
     QString id;                   /**< String id of the pattern. */
-    mutable QPixmap image;        /**< Full-size image of the pattern. */
+    mutable QPixmap image;        /**< Full-size image of the pattern,
+                                   * only of the first frame for
+                                   * multi-frame patterns. */
+    mutable QPixmap
+        image_all_frames;         /**< Full-size image of the pattern,
+                                   * with all frames for multi-frame
+                                   * patterns. */
     mutable QPixmap icon;         /**< 32x32 icon of the pattern. */
   };
 
   void build_index_map();
-  void merge_pattern_frames(int index);
-  void split_pattern_frame(int index, TilePatternSeparation separation);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString tileset_id;       /**< Id of the tileset. */

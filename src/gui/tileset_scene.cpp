@@ -73,6 +73,12 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
           this, SLOT(update_selection_to_scene(QItemSelection, QItemSelection)));
   connect(this, SIGNAL(selectionChanged()),
           this, SLOT(set_selection_from_scene()));
+
+  // Watch pattern geometry changes.
+  connect(&model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+          this, SLOT(update_pattern(int)));
+  connect(&model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
+          this, SLOT(update_pattern(int)));
 }
 
 /**
@@ -185,16 +191,26 @@ void TilesetScene::set_selection_from_scene() {
 }
 
 /**
+ * @brief Slot called when a pattern needs to be redrawn because it has changed.
+ * @param index Index of the pattern to update.
+ */
+void TilesetScene::update_pattern(int index) {
+
+  // Redraw the area containing the pattern.
+  update(model.get_pattern_frames_bounding_box(index));
+}
+
+/**
  * @brief Creates a pattern item.
  * @param model The tileset.
  * @param index Index of the pattern in the tileset.
  */
 PatternItem::PatternItem(TilesetModel& model, int index) :
-  QGraphicsPixmapItem(model.get_pattern_image(index)),
+  QGraphicsPixmapItem(model.get_pattern_image_all_frames(index)),
   model(model),
   index(index) {
 
-  QRect frame = model.get_pattern_frame(index);
+  QRect frame = model.get_pattern_frames_bounding_box(index);
   setPos(frame.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
@@ -230,7 +246,7 @@ void PatternItem::paint(QPainter* painter,
 
   const bool selected = option->state & QStyle::State_Selected;
 
-  // First, paint the item like if there was no selection, thus avoiding
+  // First, paint the item like if there was no selection, to avoid
   // Qt's built-in selection marker.
   QStyleOptionGraphicsItem option_deselected = *option;
   option_deselected.state &= ~QStyle::State_Selected;
@@ -238,8 +254,12 @@ void PatternItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    QRect frame = model.get_pattern_frame(index);
-    QRect frame_size(QPoint(0, 0), QSize(frame.size()));
-    GuiTools::draw_rectangle_outline(*painter, frame_size, Qt::blue);
+    QPoint top_left = model.get_pattern_frame(index).topLeft();
+    QList<QRect> frames = model.get_pattern_frames(index);
+
+    for (QRect frame : frames) {
+      frame.translate(-top_left);
+      GuiTools::draw_rectangle_outline(*painter, frame, Qt::blue);
+    }
   }
 }

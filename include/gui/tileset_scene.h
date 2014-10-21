@@ -46,6 +46,7 @@ private slots:
   void update_selection_to_scene(
       const QItemSelection& selected, const QItemSelection& deselected);
   void set_selection_from_scene();
+  void update_pattern(int index);
 
 private:
 
