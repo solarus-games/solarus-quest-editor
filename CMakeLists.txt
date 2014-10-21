@@ -78,7 +78,6 @@ set(solarus_quest_editor_SOURCES
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
-  include/enum_traits.inl
   include/ground_traits.h
   include/quest.h
   include/quest_manager.h
