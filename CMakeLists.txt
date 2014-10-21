@@ -71,7 +71,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/text_editor_widget.h
   include/gui/tile_patterns_list_view.h
   include/gui/tileset_editor.h
-  include/gui/tileset_model.h
   include/gui/tileset_scene.h
   include/gui/tileset_view.h
   include/color.h
@@ -86,6 +85,7 @@ set(solarus_quest_editor_SOURCES
   include/tile_pattern_animation_traits.h
   include/tile_pattern_separation.h
   include/tile_pattern_separation_traits.h
+  include/tileset_model.h
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
@@ -99,7 +99,6 @@ set(solarus_quest_editor_SOURCES
   src/gui/text_editor_widget.cpp
   src/gui/tile_patterns_list_view.cpp
   src/gui/tileset_editor.cpp
-  src/gui/tileset_model.cpp
   src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
   src/color.cpp
@@ -112,6 +111,7 @@ set(solarus_quest_editor_SOURCES
   src/quest_resources.cpp
   src/tile_pattern_animation_traits.cpp
   src/tile_pattern_separation_traits.cpp
+  src/tileset_model.cpp
 )
 
 # UI files.

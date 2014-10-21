@@ -16,10 +16,10 @@
  */
 #include "gui/gui_tools.h"
 #include "gui/tileset_editor.h"
-#include "gui/tileset_model.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "tileset_model.h"
 #include <QColorDialog>
 #include <QItemSelectionModel>
 #include <QUndoStack>

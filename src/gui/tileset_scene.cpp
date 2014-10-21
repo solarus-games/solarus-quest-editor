@@ -15,9 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/gui_tools.h"
-#include "gui/tileset_model.h"
 #include "gui/tileset_scene.h"
 #include "quest.h"
+#include "tileset_model.h"
 #include <QGraphicsPixmapItem>
 #include <QPainter>
 #include <QPalette>

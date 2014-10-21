@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/tile_patterns_list_view.h"
-#include "gui/tileset_model.h"
+#include "tileset_model.h"
 
 /**
  * @brief Creates an empty tile patterns list view.

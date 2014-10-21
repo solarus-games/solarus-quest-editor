@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/tileset_model.h"
 #include "color.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "tile_pattern_animation_traits.h"
+#include "tileset_model.h"
 #include <QIcon>
 
 using TilePatternData = Solarus::TilePatternData;
