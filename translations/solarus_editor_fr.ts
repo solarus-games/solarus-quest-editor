@@ -4,12 +4,12 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../src/gui/editor.cpp" line="39"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/editor.cpp" line="39"/>
         <source>File &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le fichier &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/editor.cpp" line="204"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/editor.cpp" line="204"/>
         <source>Save changes</source>
         <translation>Enregistrer les changements</translation>
     </message>
@@ -17,12 +17,12 @@
 <context>
     <name>GroundSelector</name>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="46"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="46"/>
         <source>Empty</source>
         <translation>Vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="47"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="47"/>
         <source>Traversable</source>
         <translation>Traversable</translation>
     </message>
@@ -31,92 +31,92 @@
         <translation type="vanished">Tout obstacle</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="48"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="48"/>
         <source>Wall</source>
         <translation>Mur</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="49"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="49"/>
         <source>Low wall</source>
         <translation>Muret</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="50"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="50"/>
         <source>Top right</source>
         <translation>Haut droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="51"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="51"/>
         <source>Top left</source>
         <translation>Haut gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="52"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="52"/>
         <source>Bottom left</source>
         <translation>Bas gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="53"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="53"/>
         <source>Bottom right</source>
         <translation>Bas droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="54"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="54"/>
         <source>Top right (water)</source>
         <translation>Haut droite (eau)</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="55"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="55"/>
         <source>Top left (water)</source>
         <translation>Haut gauche (eau)</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="56"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="56"/>
         <source>Bottom left (water)</source>
         <translation>Bas gauche (eau)</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="57"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="57"/>
         <source>Bottom right (water)</source>
         <translation>Bas droite (eau)</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="58"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="58"/>
         <source>Deep water</source>
         <translation>Eau profonde</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="59"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="59"/>
         <source>Shallow water</source>
         <translation>Eau peu profonde</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="60"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="60"/>
         <source>Grass</source>
         <translation>Herbe</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="61"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="61"/>
         <source>Hole</source>
         <translation>Trou</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="62"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="62"/>
         <source>Ice</source>
         <translation>Glace</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="63"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="63"/>
         <source>Ladder</source>
         <translation>Échelle</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="64"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="64"/>
         <source>Prickles</source>
         <translation>Piquants</translation>
     </message>
     <message>
-        <location filename="../src/gui/ground_selector.cpp" line="65"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="65"/>
         <source>Lava</source>
         <translation>Lave</translation>
     </message>
@@ -124,48 +124,48 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="219"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="14"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.cpp" line="219"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="69"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="69"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="81"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="81"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="90"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="90"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="101"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="101"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="106"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="106"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="111"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="111"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="116"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="116"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="119"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="119"/>
         <source>F9</source>
         <translation></translation>
     </message>
@@ -178,43 +178,43 @@
         <translation type="vanished">Rétablir</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="124"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="124"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="129"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="129"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="134"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="134"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="139"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="139"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="144"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="144"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="89"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.cpp" line="89"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="104"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.cpp" line="104"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="194"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.cpp" line="194"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -222,117 +222,117 @@
 <context>
     <name>NewResourceElementDialog</name>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.ui" line="14"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.ui" line="14"/>
         <source>Create resource</source>
         <translation>Nouvelle ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.ui" line="22"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.ui" line="22"/>
         <source>Resource id (filename):</source>
         <translation>Id de la ressource (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.ui" line="32"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.ui" line="32"/>
         <source>Description:</source>
         <translation>Description :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="41"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="41"/>
         <source>New map</source>
         <translation>Nouvelle map</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="42"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="42"/>
         <source>Map id (filename):</source>
         <translation>Id de la map (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="46"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="46"/>
         <source>New tileset</source>
         <translation>Nouveau tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="47"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="47"/>
         <source>Tileset id (filename):</source>
         <translation>Id du tileset (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="51"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="51"/>
         <source>New sprite</source>
         <translation>Nouveau sprite</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="52"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="52"/>
         <source>Sprite id (filename):</source>
         <translation>Id du sprite (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="56"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="56"/>
         <source>New music</source>
         <translation>Nouvelle musique</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="57"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="57"/>
         <source>Music id (filename):</source>
         <translation>Id de la musique (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="61"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="61"/>
         <source>New sound</source>
         <translation>Nouveau son</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="62"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="62"/>
         <source>Sound id (filename):</source>
         <translation>Id du son (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="66"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="66"/>
         <source>New item</source>
         <translation>Nouvel item</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="67"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="67"/>
         <source>Item id (filename):</source>
         <translation>Id de l&apos;item (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="71"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="71"/>
         <source>New enemy</source>
         <translation>Nouvel ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="72"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="72"/>
         <source>Enemy id (filename):</source>
         <translation>Id de l&apos;ennemi (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="76"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="76"/>
         <source>New custom entity</source>
         <translation>Nouvelle entité custom</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="77"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="77"/>
         <source>Custom entity id (filename):</source>
         <translation>Id de l&apos;entité custom (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="81"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="81"/>
         <source>New language</source>
         <translation>Nouvelle langue</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="82"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="82"/>
         <source>Language id (filename):</source>
         <translation>Id de la langue (nom de fichier) :</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="86"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="86"/>
         <source>New font</source>
         <translation>Nouvelle police</translation>
     </message>
     <message>
-        <location filename="../src/gui/new_resource_element_dialog.cpp" line="87"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="87"/>
         <source>Font id (filename):</source>
         <translation>Id de la police (nom de fichier) :</translation>
     </message>
@@ -340,17 +340,17 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../src/gui/gui_tools.cpp" line="32"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/gui_tools.cpp" line="32"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../src/gui/gui_tools.cpp" line="45"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/gui_tools.cpp" line="45"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../src/gui/gui_tools.cpp" line="58"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/gui_tools.cpp" line="58"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -358,94 +358,94 @@
 <context>
     <name>Quest</name>
     <message>
-        <location filename="../src/quest.cpp" line="193"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="193"/>
         <source>Unknown resource type</source>
         <translation>Type de ressource inconnu</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="766"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="766"/>
         <source>Invalid file name: &apos;%1&apos;</source>
         <translation>Nom de fichier invalide : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="814"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="814"/>
         <source>File &apos;%1&apos; does not exist</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="827"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="827"/>
         <source>File &apos;%1&apos; already exists</source>
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="850"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="850"/>
         <source>File &apos;%1&apos; is not a directory</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="863"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="863"/>
         <source>File &apos;%1&apos; is a directory</source>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="888"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="888"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="975"/>
-        <location filename="../src/quest.cpp" line="1012"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="975"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1012"/>
         <source>Cannot create directory &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1368"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1368"/>
         <source>Nothing to delete</source>
         <translation>Aucun élément à supprimer</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="903"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="903"/>
         <source>Cannot create file &apos;%1&apos;</source>
         <translation>Impossible de créer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="763"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="763"/>
         <source>Empty file name</source>
         <translation>Nom de fichier vide</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1130"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1130"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1241"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1241"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1176"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1176"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1183"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1183"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1188"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1188"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="791"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="791"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1274"/>
-        <location filename="../src/quest.cpp" line="1305"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1274"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest.cpp" line="1305"/>
         <source>Cannot delete directory &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
@@ -453,32 +453,32 @@
 <context>
     <name>QuestFilesModel</name>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="143"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="143"/>
         <source>Resource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="146"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="146"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="149"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="149"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="206"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="206"/>
         <source>Quest</source>
         <translation>Quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="211"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="211"/>
         <source>Main Lua script</source>
         <translation>Script Lua principal</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="226"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_files_model.cpp" line="226"/>
         <source>Lua script</source>
         <translation>Script Lua</translation>
     </message>
@@ -486,174 +486,174 @@
 <context>
     <name>QuestResources</name>
     <message>
-        <location filename="../src/quest_resources.cpp" line="33"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="33"/>
         <source>Map</source>
         <comment>resource_type</comment>
         <extracomment>To describe the type of resource itself like: New Map.</extracomment>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="34"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="34"/>
         <source>Tileset</source>
         <comment>resource_type</comment>
         <translation>Tileset</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="35"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="35"/>
         <source>Sprite</source>
         <comment>resource_type</comment>
         <translation>Sprite</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="36"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="36"/>
         <source>Music</source>
         <comment>resource_type</comment>
         <translation>Musique</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="37"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="37"/>
         <source>Sound</source>
         <comment>resource_type</comment>
         <translation>Son</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="38"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="38"/>
         <source>Item</source>
         <comment>resource_type</comment>
         <translation>Item</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="39"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="39"/>
         <source>Enemy</source>
         <comment>resource_type</comment>
         <translation>Ennemi</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="40"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="40"/>
         <source>Custom entity</source>
         <comment>resource_type</comment>
         <translation>Entité custom</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="41"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="41"/>
         <source>Language</source>
         <comment>resource_type</comment>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="42"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="42"/>
         <source>Font</source>
         <comment>resource_type</comment>
         <translation>Police</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="47"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="47"/>
         <source>Map</source>
         <comment>resource_element</comment>
         <extracomment>To be used with a specific element id like: Rename Map X.</extracomment>
         <translation>la Map</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="48"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="48"/>
         <source>Tileset</source>
         <comment>resource_element</comment>
         <translation>le Tileset</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="49"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="49"/>
         <source>Sprite</source>
         <comment>resource_element</comment>
         <translation>le Sprite</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="50"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="50"/>
         <source>Music</source>
         <comment>resource_element</comment>
         <translation>la Musique</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="51"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="51"/>
         <source>Sound</source>
         <comment>resource_element</comment>
         <translation>le Son</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="52"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="52"/>
         <source>Item</source>
         <comment>resource_element</comment>
         <translation>l&apos;Item</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="53"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="53"/>
         <source>Enemy</source>
         <comment>resource_element</comment>
         <translation>l&apos;Ennemi</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="54"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="54"/>
         <source>Custom entity</source>
         <comment>resource_element</comment>
         <translation>l&apos;Entité custom</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="55"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="55"/>
         <source>Language</source>
         <comment>resource_element</comment>
         <translation>la Langue</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="56"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="56"/>
         <source>Font</source>
         <comment>resource_element</comment>
         <translation>la Police</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="60"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="60"/>
         <source>Map folder</source>
         <translation>Dossier des Maps</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="61"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="61"/>
         <source>Tileset folder</source>
         <translation>Dossier des Tilesets</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="62"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="62"/>
         <source>Sprite folder</source>
         <translation>Dossier des Sprites</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="63"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="63"/>
         <source>Music folder</source>
         <translation>Dossier des Musiques</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="64"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="64"/>
         <source>Sound folder</source>
         <translation>Dossier des Sons</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="65"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="65"/>
         <source>Item folder</source>
         <translation>Dossier des Items</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="66"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="66"/>
         <source>Enemy folder</source>
         <translation>Dossier des Ennemis</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="67"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="67"/>
         <source>Custom entity folder</source>
         <translation>Dossier des Entités custom</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="68"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="68"/>
         <source>Language folder</source>
         <translation>Dossier des Langues</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="69"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/quest_resources.cpp" line="69"/>
         <source>Font folder</source>
         <translation>Dossier des Polices</translation>
     </message>
@@ -661,140 +661,140 @@
 <context>
     <name>QuestTreeView</name>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="218"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="218"/>
         <source>Create %1...</source>
         <translation>Créer %1...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="229"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="229"/>
         <source>New folder...</source>
         <translation>Nouveau dossier...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="237"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="237"/>
         <source>New script...</source>
         <translation>Nouveau script...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="41"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="258"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="41"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="258"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="279"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="279"/>
         <source>Open Script</source>
         <translation>Ouvrir le Script</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="289"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="289"/>
         <source>Open Dialogs</source>
         <translation>Ouvrir les Dialogues</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="292"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="292"/>
         <source>Open Strings</source>
         <translation>Ouvrir les Textes</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="49"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="49"/>
         <source>Rename...</source>
         <translation>Renommer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="351"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="351"/>
         <source>Change description...</source>
         <translation>Changer la description...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="57"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="57"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="42"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="42"/>
         <source>Return</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="50"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="50"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="466"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="466"/>
         <source>New folder</source>
         <translation>Nouveau dossier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="467"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="467"/>
         <source>Folder name:</source>
         <translation>Nom du dossier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="505"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="505"/>
         <source>New Lua script</source>
         <translation>Nouveau script Lua</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="506"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="506"/>
         <source>File name:</source>
         <translation>Nom de fichier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="620"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="620"/>
         <source>Rename resource</source>
         <translation>Renommer la ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="621"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="621"/>
         <source>New id for %1 &apos;%2&apos;:</source>
         <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="640"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="640"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="641"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="641"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="690"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="690"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="691"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="691"/>
         <source>New description for %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="746"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="772"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="786"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="746"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="772"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="786"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="747"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="747"/>
         <source>Do you really want to delete %1 &apos;%2&apos;?</source>
         <translation>Voulez-vous vraiment supprimer %1 &apos;%2&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="766"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="766"/>
         <source>Directory is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="773"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="773"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="787"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/quest_tree_view.cpp" line="787"/>
         <source>Do you really want to delete file &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le fichier &apos;%1&apos; ?</translation>
     </message>
@@ -802,12 +802,12 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="68"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor.cpp" line="68"/>
         <source>Cannot open file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="136"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor.cpp" line="136"/>
         <source>Cannot open file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos; en écriture</translation>
     </message>
@@ -823,22 +823,22 @@
 <context>
     <name>TextEditorWidget</name>
     <message>
-        <location filename="../src/gui/text_editor_widget.cpp" line="304"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor_widget.cpp" line="304"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor_widget.cpp" line="315"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor_widget.cpp" line="315"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor_widget.cpp" line="326"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor_widget.cpp" line="326"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor_widget.cpp" line="339"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/text_editor_widget.cpp" line="339"/>
         <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
@@ -846,52 +846,57 @@
 <context>
     <name>TilesetEditor</name>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="14"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="14"/>
         <source>Tileset editor</source>
         <translation>Éditeur de tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="39"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="39"/>
         <source>Tileset properties</source>
         <translation>Propriétés du tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="51"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="51"/>
         <source>Tileset id</source>
         <translation>Id du tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="58"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="58"/>
         <source>Filename of the tileset (without extension)</source>
         <translation>Nom de fichier du tileset (sans extension)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="71"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="71"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="84"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="84"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="196"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="107"/>
+        <source>Background color applied to maps using this tileset</source>
+        <translation>Couleur de fond pour les maps utilisant ce tileset</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="196"/>
         <source>Name identifying the pattern</source>
         <translation>Nom pour identifier le motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="206"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="206"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="216"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="216"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="344"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="344"/>
         <source>Layer to initially apply to tiles using this pattern on maps</source>
         <translation>Couche initialement appliquée aux tiles créés avec ce motif</translation>
     </message>
@@ -900,32 +905,31 @@
         <translation type="obsolete">Nombre de motifs</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="94"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="94"/>
         <source>Background</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="107"/>
         <source>Background color applied to maps usings this tileset</source>
-        <translation>Couleur de fond pour les maps utilisant ce tileset</translation>
+        <translation type="vanished">Couleur de fond pour les maps utilisant ce tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="131"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="131"/>
         <source>Patterns</source>
         <translation>Motifs</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="138"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="138"/>
         <source>Number of existing tile patterns in the tileset</source>
         <translation>Nombre total de motifs dans le tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="160"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="160"/>
         <source>Tile pattern properties</source>
         <translation>Propriétés du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="172"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="172"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
@@ -934,33 +938,33 @@
         <translation type="vanished">...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="244"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="91"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="244"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="91"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="257"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="257"/>
         <source>Terrain of the pattern</source>
         <translation>Type de terrain du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="267"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="267"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="303"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="303"/>
         <source>Kind of animation of the pattern</source>
         <translation>Type d&apos;animation du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="316"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="316"/>
         <source>Horizontal or vertical separation (only for multi-frame patterns)</source>
         <translation>Séparation horizontale ou verticale (motifs multi-images uniquement)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="331"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="331"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
@@ -969,12 +973,12 @@
         <translation type="vanished">TODO tileset view</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="63"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="63"/>
         <source>Background color</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="142"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="142"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
@@ -990,12 +994,12 @@
 <context>
     <name>TilesetModel</name>
     <message>
-        <location filename="../src/gui/tileset_model.cpp" line="45"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_model.cpp" line="45"/>
         <source>Cannot open tileset data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de tileset &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_model.cpp" line="77"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_model.cpp" line="77"/>
         <source>Cannot save tileset data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;enregistrer le fichier de tileset &apos;%1&apos;</translation>
     </message>
@@ -1003,7 +1007,7 @@
 <context>
     <name>TilesetScene</name>
     <message>
-        <location filename="../src/gui/tileset_scene.cpp" line="125"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_scene.cpp" line="125"/>
         <source>Missing tileset image &apos;%1&apos;</source>
         <translation>Image de tileset manquante : &apos;%1&apos;</translation>
     </message>

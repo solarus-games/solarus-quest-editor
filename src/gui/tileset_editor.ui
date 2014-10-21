@@ -104,7 +104,7 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>Background color applied to maps usings this tileset</string>
+             <string>Background color applied to maps using this tileset</string>
             </property>
             <property name="styleSheet">
              <string notr="true"> QPushButton {
