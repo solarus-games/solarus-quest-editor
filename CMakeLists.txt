@@ -67,7 +67,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/new_resource_element_dialog.h
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
-  include/gui/selectors.h
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
   include/gui/tile_patterns_list_view.h
@@ -79,6 +78,7 @@ set(solarus_quest_editor_SOURCES
   include/editor_exception.h
   include/enum_traits.h
   include/ground_traits.h
+  include/layer_traits.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
@@ -105,6 +105,7 @@ set(solarus_quest_editor_SOURCES
   src/color.cpp
   src/editor_exception.cpp
   src/ground_traits.cpp
+  src/layer_traits.cpp
   src/main.cpp
   src/quest.cpp
   src/quest_manager.cpp

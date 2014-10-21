@@ -333,7 +333,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QComboBox" name="default_layer_field">
+           <widget class="EnumSelector&lt;Layer&gt;" name="default_layer_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -380,6 +380,11 @@
    <class>EnumSelector&lt;TilePatternSeparation&gt;</class>
    <extends>QComboBox</extends>
    <header>tile_pattern_separation_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;Layer&gt;</class>
+   <extends>QComboBox</extends>
+   <header>layer_traits.h</header>
   </customwidget>
  </customwidgets>
  <resources>
