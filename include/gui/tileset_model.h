@@ -17,6 +17,8 @@
 #ifndef SOLARUSEDITOR_TILESET_MODEL_H
 #define SOLARUSEDITOR_TILESET_MODEL_H
 
+#include "tile_pattern_animation.h"
+#include "tile_pattern_separation.h"
 #include <solarus/entities/TilesetData.h>
 #include <QAbstractItemModel>
 #include <QCollator>
@@ -81,11 +83,17 @@ public:
   void set_background_color(const QColor& background_color);
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
+  bool is_pattern_multi_frame(int index) const;
+  int get_pattern_num_frames(int index) const;
   QRect get_pattern_frame(int index) const;
   Ground get_pattern_ground(int index) const;
   void set_pattern_ground(int index, Ground ground);
   Layer get_pattern_default_layer(int index) const;
   void set_pattern_default_layer(int index, Layer default_layer);
+  TilePatternAnimation get_pattern_animation(int index) const;
+  void set_pattern_animation(int index, TilePatternAnimation animation);
+  TilePatternSeparation get_pattern_separation(int index) const;
+  void set_pattern_separation(int index, TilePatternSeparation separation);
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
@@ -102,6 +110,8 @@ signals:
   void background_color_changed(const QColor& background_color);
   void pattern_ground_changed(int index, Ground ground);
   void pattern_default_layer_changed(int index, Layer default_layer);
+  void pattern_animation_changed(int index, TilePatternAnimation animation);
+  void pattern_separation_changed(int index, TilePatternSeparation separation);
 
 public slots:
 
@@ -126,6 +136,8 @@ private:
   };
 
   void build_index_map();
+  void merge_pattern_frames(int index);
+  void split_pattern_frame(int index, TilePatternSeparation separation);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString tileset_id;       /**< Id of the tileset. */

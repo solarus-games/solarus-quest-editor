@@ -19,6 +19,9 @@
 
 #include "enum_traits.h"
 #include "tile_pattern_animation.h"
+#include <solarus/entities/TilesetData.h>
+
+using TilePatternAnimationTraits = EnumTraits<TilePatternAnimation>;
 
 /**
  * \brief Provides useful properties of tile pattern animation enum values.
@@ -31,6 +34,10 @@ public:
   static QList<TilePatternAnimation> get_values();
   static QString get_friendly_name(TilePatternAnimation value);
   static QIcon get_icon(TilePatternAnimation value);
+
+  static bool is_multi_frame(TilePatternAnimation value);
+  static int get_num_frames(TilePatternAnimation value);
+  static Solarus::TileScrolling get_scrolling(TilePatternAnimation value);
 
 };
 

@@ -79,3 +79,67 @@ QIcon EnumTraits<TilePatternAnimation>::get_icon(TilePatternAnimation /* value *
   // No icon for now.
   return QIcon();
 }
+
+/**
+ * @brief Returns whether a pattern is a multi-frame pattern.
+ * @param index A pattern index.
+ * @return @c true if this is a multi-frame pattern.
+ * Returns @c falseif the pattern does not exist.
+ */
+bool EnumTraits<TilePatternAnimation>::is_multi_frame(TilePatternAnimation value) {
+
+  return get_num_frames(value) > 1;
+}
+
+/**
+ * @brief Returns the number of frames of an animation type.
+ * @param value A pattern animation.
+ * @return The number of frames (1, 3 or 4).
+ */
+int EnumTraits<TilePatternAnimation>::get_num_frames(TilePatternAnimation value) {
+
+  switch (value) {
+
+  case TilePatternAnimation::NONE:
+  case TilePatternAnimation::SELF_SCROLLING:
+  case TilePatternAnimation::PARALLAX_SCROLLING:
+    return 1;
+
+  case TilePatternAnimation::SEQUENCE_012:
+  case TilePatternAnimation::SEQUENCE_012_PARALLAX:
+    return 2;
+
+  case TilePatternAnimation::SEQUENCE_0121:
+  case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
+    return 3;
+  }
+
+  return 1;
+}
+
+/**
+ * @brief Returns the scrolling property of an animation type.
+ * @param value A pattern animation.
+ * @return The scrolling property.
+ */
+Solarus::TileScrolling EnumTraits<TilePatternAnimation>::get_scrolling(TilePatternAnimation value) {
+
+  switch (value) {
+
+  case TilePatternAnimation::NONE:
+  case TilePatternAnimation::SEQUENCE_012:
+  case TilePatternAnimation::SEQUENCE_0121:
+    return Solarus::TileScrolling::NONE;
+
+  case TilePatternAnimation::SELF_SCROLLING:
+    return Solarus::TileScrolling::SELF;
+
+  case TilePatternAnimation::PARALLAX_SCROLLING:
+  case TilePatternAnimation::SEQUENCE_012_PARALLAX:
+  case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
+    return Solarus::TileScrolling::PARALLAX;
+
+  }
+
+  return Solarus::TileScrolling::NONE;
+}

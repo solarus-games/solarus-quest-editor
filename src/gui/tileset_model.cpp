@@ -18,6 +18,7 @@
 #include "color.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include "tile_pattern_animation_traits.h"
 #include <QIcon>
 
 using TilePatternData = Solarus::TilePatternData;
@@ -156,8 +157,7 @@ void TilesetModel::build_index_map() {
  *
  * @param index Index of a tile pattern.
  * @return The corresponding image.
- * Returns a null pixmap if the pattern does not exists or if the
- * tileset image is not loaded.
+ * Returns a null pixmap if the tileset image is not loaded.
  */
 QPixmap TilesetModel::get_pattern_image(int index) const {
 
@@ -189,8 +189,7 @@ QPixmap TilesetModel::get_pattern_image(int index) const {
  * @brief Returns a 32x32 icon representing the specified pattern.
  * @param index Index of a tile pattern.
  * @return The corresponding icon.
- * Returns a null pixmap if the pattern does not exists or if the
- * tileset image is not loaded.
+ * Returns a null pixmap if the tileset image is not loaded.
  */
 QPixmap TilesetModel::get_pattern_icon(int index) const {
 
@@ -283,17 +282,34 @@ bool TilesetModel::pattern_exists(int index) const {
 }
 
 /**
+ * @brief Returns whether a pattern is a multi-frame pattern.
+ * @param index A pattern index.
+ * @return @c true if this is a multi-frame pattern.
+ */
+bool TilesetModel::is_pattern_multi_frame(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  return tileset.get_pattern(pattern_id).is_multi_frame();
+}
+
+/**
+ * @brief Returns the number of frames of a pattern.
+ * @param index A pattern index.
+ * @return The number of frames in the tileset (1, 3 or 4).
+ */
+int TilesetModel::get_pattern_num_frames(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  return tileset.get_pattern(pattern_id).get_num_frames();
+}
+
+/**
  * @brief Returns the coordinates of a pattern's frame in the tileset image.
  * @param index A pattern index.
  * @return The pattern's frame.
  * If this is a multi-frame pattern, the first frame is returned.
- * Returns a null rectangle if the pattern does not exist.
  */
 QRect TilesetModel::get_pattern_frame(int index) const {
-
-  if (!pattern_exists(index)) {
-    return QRect();
-  }
 
   const std::string& pattern_id = index_to_id(index).toStdString();
   const Solarus::Rectangle& frame = tileset.get_pattern(pattern_id).get_frame();
@@ -304,7 +320,6 @@ QRect TilesetModel::get_pattern_frame(int index) const {
  * @brief Returns the ground of a pattern.
  * @param index A pattern index.
  * @return The pattern's ground.
- * Returns a default-constructed ground if the pattern does not exist.
  */
 Ground TilesetModel::get_pattern_ground(int index) const {
 
@@ -315,7 +330,7 @@ Ground TilesetModel::get_pattern_ground(int index) const {
 /**
  * @brief Sets the ground of a tile pattern.
  *
- * Emits pattern_ground_changed if there is a change.
+ * Emits pattern_ground_changed() if there is a change.
  *
  * @param index A pattern index.
  * @param ground The ground to set.
@@ -334,7 +349,6 @@ void TilesetModel::set_pattern_ground(int index, Ground ground) {
  * @brief Returns the default layer of a pattern.
  * @param index A pattern index.
  * @return The pattern's default layer.
- * Returns a default-constructed layer if the layer does not exist.
  */
 Layer TilesetModel::get_pattern_default_layer(int index) const {
 
@@ -345,7 +359,7 @@ Layer TilesetModel::get_pattern_default_layer(int index) const {
 /**
  * @brief Sets the default layer of a tile pattern.
  *
- * Emits pattern_default_layer_changed if there is a change.
+ * Emits pattern_default_layer_changed() if there is a change.
  *
  * @param index A pattern index.
  * @param default_layer The default layer to set.
@@ -358,6 +372,252 @@ void TilesetModel::set_pattern_default_layer(int index, Layer default_layer) {
   }
   pattern.set_default_layer(default_layer);
   emit pattern_default_layer_changed(index, default_layer);
+}
+
+/**
+ * @brief Returns the animation property of a pattern.
+ * @param index A pattern index.
+ * @return The pattern's animation.
+ */
+TilePatternAnimation TilesetModel::get_pattern_animation(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  const Solarus::TilePatternData& pattern = tileset.get_pattern(pattern_id);
+
+  switch (pattern.get_scrolling()) {
+
+  case Solarus::TileScrolling::NONE:
+    if (!pattern.is_multi_frame()) {
+      // No scrolling, single-frame.
+      return TilePatternAnimation::NONE;
+    }
+    // No scrolling, multi-frame.
+    if (pattern.get_num_frames() == 3) {
+      return TilePatternAnimation::SEQUENCE_012;
+    }
+    return TilePatternAnimation::SEQUENCE_0121;
+
+  case Solarus::TileScrolling::PARALLAX:
+    // Parallax scrolling, single-frame.
+    if (!pattern.is_multi_frame()) {
+      return TilePatternAnimation::PARALLAX_SCROLLING;
+    }
+    // Parallax scrolling, multi-frame.
+    if (pattern.get_num_frames() == 3) {
+      return TilePatternAnimation::SEQUENCE_012_PARALLAX;
+    }
+    return TilePatternAnimation::SEQUENCE_0121_PARALLAX;
+
+  case Solarus::TileScrolling::SELF:
+    // Scrolling on itself (single-frame only).
+    return TilePatternAnimation::SELF_SCROLLING;
+
+  }
+
+  return TilePatternAnimation();
+}
+
+/**
+ * @brief Sets the animation property of a pattern.
+ *
+ * Emits pattern_animation_changed() if there is a change.
+ *
+ * If the new animation makes multi-frame a pattern that was single-frame,
+ * then the existing frame is splitted in 3 parts.
+ * The width or height must therefore be divisible by 3*8, otherwise an
+ * EditorException is thrown.
+ * (In patterns that have 4 frames, frame 1 and frame 3 are identical
+ * so multi-frame patterns actually always have 3 distinct frames.)
+ *
+ * If the new animation makes single-frame a pattern that was multi-frame,
+ * then the existing 3 frames are merged into a single big frame.
+ *
+ * @param index A pattern index.
+ * @return The pattern's animation.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_pattern_animation(int index, TilePatternAnimation animation) {
+
+  TilePatternAnimation old_animation = get_pattern_animation(index);
+  if (animation == old_animation) {
+    return;
+  }
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  Solarus::TilePatternData& pattern = tileset.get_pattern(pattern_id);
+
+  // Set the scrolling.
+  pattern.set_scrolling(TilePatternAnimationTraits::get_scrolling(animation));
+
+  // Set the frames.
+  if (TilePatternAnimationTraits::is_multi_frame(old_animation) &&
+      !TilePatternAnimationTraits::is_multi_frame(animation)) {
+    // Multi-frame to single-frame: merge the 3 frames into one.
+    TilePatternSeparation separation = get_pattern_separation(index);
+    Solarus::Rectangle frame = pattern.get_frame();  // Get the first frame.
+    if (separation == TilePatternSeparation::HORIZONTAL) {
+      frame.set_width(frame.get_width() * 3);
+    }
+    else {
+      frame.set_height(frame.get_height() * 3);
+    }
+    pattern.set_frame(frame);
+  }
+  else if (!TilePatternAnimationTraits::is_multi_frame(old_animation) &&
+      TilePatternAnimationTraits::is_multi_frame(animation)) {
+
+    // Single-frame to multi-frame: split the pattern in 3 frames.
+    const Solarus::Rectangle& initial_frame = pattern.get_frame();
+    int width = initial_frame.get_width();
+    int height = initial_frame.get_height();
+
+    TilePatternSeparation separation = TilePatternSeparation::HORIZONTAL;
+    if (width % 24 == 0) {
+      if (height % 24 == 0) {
+        // Divisible both horizontally or vertically.
+        separation = width >= height ?
+              TilePatternSeparation::HORIZONTAL :
+              TilePatternSeparation::VERTICAL;
+      }
+      else {
+        // Only divisible horizontally.
+        separation = TilePatternSeparation::HORIZONTAL;
+      }
+    }
+    else if (height % 24 == 0) {
+      // Only divisible vertically.
+      separation = TilePatternSeparation::VERTICAL;
+    }
+    else {
+      // This pattern is not divisible.
+      throw EditorException(tr("Cannot divide the pattern in 3 frames : "
+                               "the size of each frame must be a multiple of 8 pixels"));
+    }
+
+    std::vector<Solarus::Rectangle> frames;
+    if (separation == TilePatternSeparation::HORIZONTAL) {
+      width = width / 3;
+      for (int i = 0; i < 3; ++i) {
+        frames.emplace_back(
+              initial_frame.get_x() + i * width,
+              initial_frame.get_y(),
+              width,
+              height
+              );
+      }
+    }
+    else {
+      height = height / 3;
+      for (int i = 0; i < 3; ++i) {
+        frames.emplace_back(
+              initial_frame.get_x(),
+              initial_frame.get_y() + i * height,
+              width,
+              height
+              );
+      }
+    }
+    pattern.set_frames(frames);
+  }
+
+  emit pattern_animation_changed(index, animation);
+}
+
+/**
+ * @brief Returns the separation of the frames if the pattern is multi-frame.
+ * @return The type of separation of the frames.
+ * Returns TilePatternSeparation::HORIZONTAL if the pattern is single-frame.
+ */
+TilePatternSeparation TilesetModel::get_pattern_separation(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  const Solarus::TilePatternData& pattern = tileset.get_pattern(pattern_id);
+
+  const std::vector<Solarus::Rectangle>& frames = pattern.get_frames();
+  if (frames.size() == 1) {
+    return TilePatternSeparation::HORIZONTAL;
+  }
+
+  if (frames[0].get_y() == frames[1].get_y()) {
+    return TilePatternSeparation::HORIZONTAL;
+  }
+  return TilePatternSeparation::VERTICAL;
+}
+
+/**
+ * Sets the type of separation of the frames if the tile pattern is multi-frame.
+ *
+ * Emits pattern_separation_changed() if there is a change.
+ *
+ * Nothing is done if the tile pattern is single-frame.
+ *
+ * @param separation The type of separation of the frames.
+ * @throws EditorException If the separation is not valid, i.e. if the size of
+ * each frame after separation is not divisible by 8.
+ */
+void TilesetModel::set_pattern_separation(int index, TilePatternSeparation separation) {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  Solarus::TilePatternData& pattern = tileset.get_pattern(pattern_id);
+
+  if (!pattern.is_multi_frame()) {
+    // Nothing to do.
+    return;
+  }
+
+  TilePatternSeparation old_separation = get_pattern_separation(index);
+  if (separation == old_separation) {
+    // No change.
+    return;
+  }
+
+  Solarus::Rectangle first_frame = pattern.get_frame();
+  int width = first_frame.get_width();
+  int height = first_frame.get_height();
+  std::vector<Solarus::Rectangle> frames;
+  if (separation == TilePatternSeparation::HORIZONTAL) {
+    // Vertical to horizontal separation.
+    if (width % 24 != 0) {
+      throw EditorException(tr("Cannot divide the pattern in 3 frames : "
+                               "the size of each frame must be a multiple of 8 pixels"));
+    }
+    height *= 3;
+    width /= 3;
+    first_frame.set_width(width);
+    first_frame.set_height(height);
+
+    for (int i = 0; i < 3; ++i) {
+      frames.emplace_back(
+            first_frame.get_x() + i * width,
+            first_frame.get_y(),
+            width,
+            height
+            );
+    }
+  }
+  else {
+    // Horizontal to vertical separation.
+    if (height % 24 != 0) {
+      throw EditorException(tr("Cannot divide the pattern in 3 frames : "
+                               "the size of each frame must be a multiple of 8 pixels"));
+    }
+    height /= 3;
+    width *= 3;
+    first_frame.set_width(width);
+    first_frame.set_height(height);
+
+    for (int i = 0; i < 3; ++i) {
+      frames.emplace_back(
+            first_frame.get_x(),
+            first_frame.get_y() + i * height,
+            width,
+            height
+            );
+    }
+  }
+  pattern.set_frames(frames);
+
+  emit pattern_separation_changed(index, separation);
 }
 
 /**
