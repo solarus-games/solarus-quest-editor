@@ -17,9 +17,96 @@
 #include "gui/editor.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include <solarus/SolarusFatal.h>
 #include <QMessageBox>
 #include <QUndoStack>
 #include <QVBoxLayout>
+#include <iostream>
+
+namespace {
+
+/**
+ * @brief Undo command that wraps another one and does nothing the first time.
+ *
+ * This allows to use a command that was already executed once before being
+ * pushed on a QUndoStack.
+ *
+ * Once a command is in a QUndoStack, redo() and undo() should never throw
+ * exceptions, because it would let the history in an undefined state
+ * (with a command partially done).
+ * However, if it happens anyway, this class catches the exception and prints
+ * an error message.
+ */
+class UndoCommandSkipFirst : public QUndoCommand {
+
+public:
+
+  /**
+   * @brief Constructor.
+   * @param undo_stack The undo stack.
+   * @param wrapped_command The undo command to wrap.
+   */
+  UndoCommandSkipFirst(std::unique_ptr<QUndoCommand> wrapped_command):
+    QUndoCommand(wrapped_command->text()),
+    wrapped_command(std::move(wrapped_command)),
+    first_time(true) {
+
+  }
+
+  /**
+   * @brief Calls undo() on the wrapped command.
+   *
+   * The wrapped undo() should not throw exceptions: if it does, this function
+   * catches it because it is better than a crash, but the undo stack is then
+   * unrecoverable.
+   */
+  virtual void undo() override {
+
+    try {
+      wrapped_command->undo();
+    }
+    catch (const std::exception& ex) {
+      // This is a bug in the editor.
+      std::cerr << "Error in undo(): " << ex.what() << std::endl;
+    }
+  }
+
+  /**
+   * @brief Calls redo() on the wrapped command.
+   *
+   * Does nothing the first time, because the command was already done
+   * from the constructor.
+   *
+   * The wrapped redo() should not throw exceptions if it did not the first
+   * time. If it does anyway, this function catches it because it is better
+   * than a crash, but the undo stack is then unrecoverable.
+   */
+  virtual void redo() override {
+
+    if (first_time) {
+      // Not a real redo.
+      first_time = false;
+      return;
+    }
+
+    try {
+      wrapped_command->redo();
+    }
+    catch (const std::exception& ex) {
+      // This is a bug in the editor.
+      std::cerr << "Error in redo(): " << ex.what() << std::endl;
+    }
+  }
+
+private:
+
+  std::unique_ptr<QUndoCommand>
+      wrapped_command;     /**< The text editor widget to
+                            * forward undo/redo commands to. */
+  bool first_time;         /**< \c true if redo has not been called yet. */
+};
+
+}
 
 /**
  * @brief Creates an editor.
@@ -175,6 +262,45 @@ void Editor::set_close_confirm_message(const QString& message) {
 QUndoStack& Editor::get_undo_stack() {
   return *undo_stack;
 }
+
+/**
+ * @brief Attempts to execute a command.
+ *
+ * Only adds it to the undo/redo history if everything is okay.
+ * Otherwise, shows an error dialog if an exception occurs.
+ *
+ * @param command The command to do.
+ * This function takes ownership of the pointer.
+ * @return @c true in case of success, @c false if an exception occurred.
+ */
+bool Editor::try_command(QUndoCommand* command) {
+
+  std::unique_ptr<QUndoCommand> command_ptr(command);
+  try {
+    command_ptr->redo();  // Exceptions are allowed here.
+    // Now we know that the command succeeds.
+    // Unfortunately, we cannot directly add it to the undo stack because
+    // the undo stack would execute it again.
+    // So let's wrap it in a special command.
+    get_undo_stack().push(new UndoCommandSkipFirst(std::move(command_ptr)));
+    return true;
+  }
+  catch (const EditorException& ex) {
+    // Error from the user.
+    ex.show_dialog();
+  }
+  catch (const Solarus::SolarusFatal& ex) {
+    // Internal error of the Solarus library.
+    std::cerr << ex.what() << std::endl;
+  }
+  catch (const std::exception& ex) {
+    // Other error.
+    std::cerr << ex.what() << std::endl;
+  }
+
+  return false;
+}
+
 /**
  * @fn Editor::save
  * @brief Saves the file.

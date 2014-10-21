@@ -390,7 +390,7 @@ void TilesetEditor::background_button_clicked() {
     return;
   }
 
-  get_undo_stack().push(new SetBackgroundCommand(*this, color));
+  try_command(new SetBackgroundCommand(*this, color));
 }
 
 /**
@@ -487,7 +487,7 @@ void TilesetEditor::ground_selector_activated() {
     return;
   }
 
-  get_undo_stack().push(new SetPatternGroundCommand(*this, index, ground));
+  try_command(new SetPatternGroundCommand(*this, index, ground));
 }
 
 /**
@@ -530,7 +530,10 @@ void TilesetEditor::animation_type_selector_activated() {
     return;
   }
 
-  get_undo_stack().push(new SetPatternAnimationCommand(*this, index, animation));
+  if (!try_command(new SetPatternAnimationCommand(*this, index, animation))) {
+    // In case of failure, restore the selector.
+    update_animation_type_field();
+  }
 }
 
 /**
@@ -566,7 +569,10 @@ void TilesetEditor::animation_separation_selector_activated() {
     return;
   }
 
-  get_undo_stack().push(new SetPatternSeparationCommand(*this, index, separation));
+  if (!try_command(new SetPatternSeparationCommand(*this, index, separation))) {
+    // In case of failure, restore the selector.
+    update_animation_type_field();
+  }
 }
 
 /**
@@ -602,5 +608,5 @@ void TilesetEditor::default_layer_selector_activated() {
     return;
   }
 
-  get_undo_stack().push(new SetPatternDefaultLayerCommand(*this, index, default_layer));
+  try_command(new SetPatternDefaultLayerCommand(*this, index, default_layer));
 }

@@ -19,9 +19,11 @@
 
 #include <QIcon>
 #include <QWidget>
+#include <memory>
 
 class Quest;
 class QuestResources;
+class QUndoCommand;
 class QUndoStack;
 
 /**
@@ -46,6 +48,7 @@ public:
   QString get_title() const;
   QIcon get_icon() const;
   QUndoStack& get_undo_stack();
+  bool try_command(QUndoCommand* command);
   bool confirm_close();
 
   virtual void save() = 0;
