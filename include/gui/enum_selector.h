@@ -24,6 +24,8 @@
  *
  * The combobox is automatically filled with appropriate icons
  * and translated names for type E as provided by EnumTraits<E>.
+ * Values of the enumerated type E must be indexed from 0 to n-1
+ * where n is the number of values.
  */
 template<typename E>
 class EnumSelector : public QComboBox {

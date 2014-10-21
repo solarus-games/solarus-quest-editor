@@ -19,9 +19,7 @@
 
 #include "gui/enum_selector.h"
 #include "ground_traits.h"
-#include <solarus/entities/Ground.h>
 
-using Ground = Solarus::Ground;
 using GroundSelector = EnumSelector<Ground>;
 
 #endif

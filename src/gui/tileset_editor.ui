@@ -292,7 +292,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontal_layout_5">
                <item>
-                <widget class="QComboBox" name="animation_type_field">
+                <widget class="TilePatternAnimationSelector" name="animation_type_field">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -370,6 +370,11 @@
    <class>GroundSelector</class>
    <extends>QComboBox</extends>
    <header>gui/ground_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TilePatternAnimationSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/tile_pattern_animation_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -14,27 +14,21 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_TRAITS_H
-#define SOLARUSEDITOR_GROUND_TRAITS_H
-
-#include "enum_traits.h"
-#include <solarus/entities/Ground.h>
-
-using Ground = Solarus::Ground;
+#ifndef SOLARUSEDITOR_TILE_PATTERN_ANIMATION_H
+#define SOLARUSEDITOR_TILE_PATTERN_ANIMATION_H
 
 /**
- * \brief Provides useful properties of ground enum values.
+ * \brief The possible kinds of animations for a pattern in a tileset.
  */
-template<>
-class EnumTraits<Ground> {
+enum class TilePatternAnimation {
 
-public:
-
-  static QList<Ground> get_values();
-  static QString get_friendly_name(Ground value);
-  static QIcon get_icon(Ground value);
-
-  static QString get_lua_name(Ground value);
+  NONE,
+  SEQUENCE_012,
+  SEQUENCE_0121,
+  SELF_SCROLLING,
+  PARALLAX_SCROLLING,
+  SEQUENCE_012_PARALLAX,
+  SEQUENCE_0121_PARALLAX
 
 };
 

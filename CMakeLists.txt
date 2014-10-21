@@ -70,6 +70,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/quest_tree_view.h
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
+  include/gui/tile_pattern_animation_selector.h
   include/gui/tile_patterns_list_view.h
   include/gui/tileset_editor.h
   include/gui/tileset_model.h
@@ -82,6 +83,8 @@ set(solarus_quest_editor_SOURCES
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
+  include/tile_pattern_animation.h
+  include/tile_pattern_animation_traits.h
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
@@ -105,6 +108,7 @@ set(solarus_quest_editor_SOURCES
   src/quest.cpp
   src/quest_manager.cpp
   src/quest_resources.cpp
+  src/tile_pattern_animation_traits.cpp
 )
 
 # UI files.

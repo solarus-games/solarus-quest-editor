@@ -19,33 +19,23 @@
 #include <QApplication>
 
 /**
- * @brief Returns the Lua name of each ground value.
- * @return The Lua name of grounds.
+ * @brief Returns all values.
+ * @return The existing values.
  */
-QMap<Ground, QString> EnumTraits<Ground>::get_names() {
+QList<Ground> EnumTraits<Ground>::get_values() {
 
-  QMap<Ground, QString> names;
+  QList<Ground> grounds;
   for (const auto& kvp : Solarus::GroundInfo::get_ground_names()) {
     Ground ground = kvp.first;
-    QString name = QString::fromStdString(kvp.second);
-    names.insert(ground, name);
+    grounds.append(ground);
   }
-  return names;
+  return grounds;
 }
 
 /**
- * @brief Returns the Lua name of a ground value.
- * @param value A ground.
- * @return The corresponding Lua name.
- */
-QString EnumTraits<Ground>::get_name(Ground value) {
-  return QString::fromStdString(Solarus::GroundInfo::get_ground_name(value));
-}
-
-/**
- * @brief Returns a user-friendly name describing a ground value.
- * @param ground A type of terrain.
- * @return The human-readable name of this ground in the current language.
+ * @brief Returns a user-friendly name describing a value.
+ * @param value A value.
+ * @return The human-readable name of this value in the current language.
  */
 QString EnumTraits<Ground>::get_friendly_name(Ground value) {
 
@@ -119,10 +109,19 @@ QString EnumTraits<Ground>::get_friendly_name(Ground value) {
 }
 
 /**
- * @brief Returns an icon representing a ground value.
- * @param ground A ground value.
+ * @brief Returns an icon representing a value.
+ * @param value A value.
  * @return The corresponding icon.
  */
 QIcon EnumTraits<Ground>::get_icon(Ground value) {
-  return QIcon(":/images/ground_" + get_name(value) + ".png");
+  return QIcon(":/images/ground_" + get_lua_name(value) + ".png");
+}
+
+/**
+ * @brief Returns the Lua name of a ground value.
+ * @param value A ground value.
+ * @return The corresponding Lua name.
+ */
+QString EnumTraits<Ground>::get_lua_name(Ground value) {
+  return QString::fromStdString(Solarus::GroundInfo::get_ground_name(value));
 }

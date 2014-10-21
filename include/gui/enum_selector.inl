@@ -26,9 +26,9 @@ EnumSelector<E>::EnumSelector(QWidget* parent) :
   QComboBox(parent),
   with_none(false) {
 
-  for (E element: EnumTraits<E>::get_names().keys()) {
-    addItem(EnumTraits<E>::get_icon(element),
-            EnumTraits<E>::get_friendly_name(element));
+  for (E value: EnumTraits<E>::get_values()) {
+    addItem(EnumTraits<E>::get_icon(value),
+            EnumTraits<E>::get_friendly_name(value));
   }
 }
 

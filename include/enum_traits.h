@@ -18,24 +18,22 @@
 #define SOLARUSEDITOR_ENUM_TRAITS_H
 
 #include <QIcon>
-#include <QMap>
+#include <QList>
 #include <QString>
 
 /**
  * \brief Gives info about enumerated values of a type E.
  *
- * Specializations of this template class must implement the following
- * public functions:
- * - static QMap<E, QString> get_names();
- * - static QString get_name(E value);
+ * Specializations of this template class should implement at least the
+ * following public functions:
+ * - static QList<E> get_values();
  * - static QString get_friendly_name(E value);
  * - static QIcon get_icon(E value);
  */
 template<typename E>
 class EnumTraits {
 
-  static QMap<E, QString> get_names();
-  static QString get_name(E value);
+  static QList<E> get_values();
   static QString get_friendly_name(E value);
   static QIcon get_icon(E value);
 
