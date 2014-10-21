@@ -15,7 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/enum_selector.h"
-#include "enum_traits.h"
+
+template<typename E>
+class EnumTraits;
 
 /**
  * @brief Creates an enum selector.

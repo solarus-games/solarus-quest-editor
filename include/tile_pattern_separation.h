@@ -14,12 +14,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_SELECTOR_H
-#define SOLARUSEDITOR_GROUND_SELECTOR_H
+#ifndef SOLARUSEDITOR_TILE_PATTERN_SEPARATION_H
+#define SOLARUSEDITOR_TILE_PATTERN_SEPARATION_H
 
-#include "gui/enum_selector.h"
-#include "ground_traits.h"
+/**
+ * \brief The possible kinds of separation for an animated tile pattern.
+ */
+enum class TilePatternSeparation {
 
-using GroundSelector = EnumSelector<Ground>;
+  HORIZONTAL,
+  VERTICAL
+
+};
 
 #endif

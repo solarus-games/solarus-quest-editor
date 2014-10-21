@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_ENUM_TRAITS_H
 #define SOLARUSEDITOR_ENUM_TRAITS_H
 
+#include "gui/enum_selector.h"  // To help QtDesigner build selectors using a single include.
 #include <QIcon>
 #include <QList>
 #include <QString>
@@ -32,10 +33,6 @@
  */
 template<typename E>
 class EnumTraits {
-
-  static QList<E> get_values();
-  static QString get_friendly_name(E value);
-  static QIcon get_icon(E value);
 
 };
 
