@@ -15,7 +15,6 @@ New features
 * Sprite editor: undo/redo is now supported.
 * The quest tree now automatically refreshes after changes in the filesystem.
 * A file to open can now be passed on the command line.
-* Editor tabs now show an icon representing the kind of file open.
 * Show an appropriate icon in tabs.
 * Show an asterisk in the tab of files that are changed.
 * The window now shows the Solarus icon.
