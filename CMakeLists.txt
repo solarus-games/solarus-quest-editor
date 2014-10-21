@@ -75,6 +75,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_view.h
   include/color.h
   include/editor_exception.h
+  include/ground_helper.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
@@ -97,6 +98,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
+  src/ground_helper.cpp
   src/main.cpp
   src/quest.cpp
   src/quest_manager.cpp

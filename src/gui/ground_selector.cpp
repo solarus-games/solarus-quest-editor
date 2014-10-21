@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/ground_selector.h"
+#include "ground_helper.h"
 #include <solarus/entities/GroundInfo.h>
 
 /**
@@ -25,55 +26,13 @@ GroundSelector::GroundSelector(QWidget* parent) :
   QComboBox(parent),
   with_none(false) {
 
-  initialize_translated_names();
-
   for (const auto& kvp : Solarus::GroundInfo::get_ground_names()) {
     Ground ground = kvp.first;
     QString ground_name = QString::fromStdString(kvp.second);
 
     addItem(QIcon(":/images/ground_" + ground_name + ".png"),
-            get_ground_friendly_name(ground));
+            GroundHelper::get_ground_friendly_name(ground));
   }
-}
-
-/**
- * @brief Sets the user-friendly names managed by this model.
- */
-void GroundSelector::initialize_translated_names() {
-
-  // Friendly names are set dynamically because they are translated.
-  ground_friendly_names = {
-    { Ground::EMPTY,                   tr("Empty")                },
-    { Ground::TRAVERSABLE,             tr("Traversable")          },
-    { Ground::WALL,                    tr("Wall")                 },
-    { Ground::LOW_WALL,                tr("Low wall")             },
-    { Ground::WALL_TOP_RIGHT,          tr("Top right")            },
-    { Ground::WALL_TOP_LEFT,           tr("Top left")             },
-    { Ground::WALL_BOTTOM_LEFT,        tr("Bottom left")          },
-    { Ground::WALL_BOTTOM_RIGHT,       tr("Bottom right")         },
-    { Ground::WALL_TOP_RIGHT_WATER,    tr("Top right (water)")    },
-    { Ground::WALL_TOP_LEFT_WATER,     tr("Top left (water)")     },
-    { Ground::WALL_BOTTOM_LEFT_WATER,  tr("Bottom left (water)")  },
-    { Ground::WALL_BOTTOM_RIGHT_WATER, tr("Bottom right (water)") },
-    { Ground::DEEP_WATER,              tr("Deep water")           },
-    { Ground::SHALLOW_WATER,           tr("Shallow water")        },
-    { Ground::GRASS,                   tr("Grass")                },
-    { Ground::HOLE,                    tr("Hole")                 },
-    { Ground::ICE,                     tr("Ice")                  },
-    { Ground::LADDER,                  tr("Ladder")               },
-    { Ground::PRICKLE,                 tr("Prickles")             },
-    { Ground::LAVA,                    tr("Lava")                 }
-  };
-
-}
-
-/**
- * @brief Returns a user-friendly name for the specified ground value.
- * @param ground A type of terrain.
- * @return The human-readable name of this ground.
- */
-QString GroundSelector::get_ground_friendly_name(Ground ground) const {
-  return ground_friendly_names[ground];
 }
 
 /**

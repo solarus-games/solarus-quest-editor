@@ -15,113 +15,6 @@
     </message>
 </context>
 <context>
-    <name>GroundSelector</name>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="46"/>
-        <source>Empty</source>
-        <translation>Vide</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="47"/>
-        <source>Traversable</source>
-        <translation>Traversable</translation>
-    </message>
-    <message>
-        <source>Full obstacle</source>
-        <translation type="vanished">Tout obstacle</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="48"/>
-        <source>Wall</source>
-        <translation>Mur</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="49"/>
-        <source>Low wall</source>
-        <translation>Muret</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="50"/>
-        <source>Top right</source>
-        <translation>Haut droite</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="51"/>
-        <source>Top left</source>
-        <translation>Haut gauche</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="52"/>
-        <source>Bottom left</source>
-        <translation>Bas gauche</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="53"/>
-        <source>Bottom right</source>
-        <translation>Bas droite</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="54"/>
-        <source>Top right (water)</source>
-        <translation>Haut droite (eau)</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="55"/>
-        <source>Top left (water)</source>
-        <translation>Haut gauche (eau)</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="56"/>
-        <source>Bottom left (water)</source>
-        <translation>Bas gauche (eau)</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="57"/>
-        <source>Bottom right (water)</source>
-        <translation>Bas droite (eau)</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="58"/>
-        <source>Deep water</source>
-        <translation>Eau profonde</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="59"/>
-        <source>Shallow water</source>
-        <translation>Eau peu profonde</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="60"/>
-        <source>Grass</source>
-        <translation>Herbe</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="61"/>
-        <source>Hole</source>
-        <translation>Trou</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="62"/>
-        <source>Ice</source>
-        <translation>Glace</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="63"/>
-        <source>Ladder</source>
-        <translation>Échelle</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="64"/>
-        <source>Prickles</source>
-        <translation>Piquants</translation>
-    </message>
-    <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/ground_selector.cpp" line="65"/>
-        <source>Lava</source>
-        <translation>Lave</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="14"/>
@@ -168,14 +61,6 @@
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="119"/>
         <source>F9</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation type="vanished">Annuler</translation>
-    </message>
-    <message>
-        <source>Redo</source>
-        <translation type="vanished">Rétablir</translation>
     </message>
     <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/main_window.ui" line="124"/>
@@ -335,6 +220,109 @@
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/new_resource_element_dialog.cpp" line="87"/>
         <source>Font id (filename):</source>
         <translation>Id de la police (nom de fichier) :</translation>
+    </message>
+</context>
+<context>
+    <name>QApplication</name>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="34"/>
+        <source>Empty</source>
+        <translation>Vide</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="37"/>
+        <source>Traversable</source>
+        <translation>Traversable</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="40"/>
+        <source>Wall</source>
+        <translation>Mur</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="43"/>
+        <source>Low wall</source>
+        <translation>Muret</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="46"/>
+        <source>Top right</source>
+        <translation>Haut droite</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="49"/>
+        <source>Top left</source>
+        <translation>Haut gauche</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="52"/>
+        <source>Bottom left</source>
+        <translation>Bas gauche</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="55"/>
+        <source>Bottom right</source>
+        <translation>Bas droite</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="58"/>
+        <source>Top right (water)</source>
+        <translation>Haut droite (eau)</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="61"/>
+        <source>Top left (water)</source>
+        <translation>Haut gauche (eau)</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="64"/>
+        <source>Bottom left (water)</source>
+        <translation>Bas gauche (eau)</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="67"/>
+        <source>Bottom right (water)</source>
+        <translation>Bas droite (eau)</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="70"/>
+        <source>Deep water</source>
+        <translation>Eau profonde</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="73"/>
+        <source>Shallow water</source>
+        <translation>Eau peu profonde</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="76"/>
+        <source>Grass</source>
+        <translation>Herbe</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="79"/>
+        <source>Hole</source>
+        <translation>Trou</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="82"/>
+        <source>Ice</source>
+        <translation>Glace</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="85"/>
+        <source>Ladder</source>
+        <translation>Échelle</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="88"/>
+        <source>Prickles</source>
+        <translation>Piquants</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/ground_helper.cpp" line="91"/>
+        <source>Lava</source>
+        <translation>Lave</translation>
     </message>
 </context>
 <context>
@@ -811,14 +799,6 @@
         <source>Cannot open file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos; en écriture</translation>
     </message>
-    <message>
-        <source>Save the modifications</source>
-        <translation type="vanished">Enregistrer les modifications</translation>
-    </message>
-    <message>
-        <source>File &apos;%1&apos; has been modified. Do you want to save it?</source>
-        <translation type="vanished">Le fichier &apos;%1&apos; a été modifié. Voulez-vous l&apos;enregistrer ?</translation>
-    </message>
 </context>
 <context>
     <name>TextEditorWidget</name>
@@ -901,17 +881,9 @@
         <translation>Couche initialement appliquée aux tiles créés avec ce motif</translation>
     </message>
     <message>
-        <source>Number of tiles</source>
-        <translation type="obsolete">Nombre de motifs</translation>
-    </message>
-    <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="94"/>
         <source>Background</source>
         <translation>Couleur de fond</translation>
-    </message>
-    <message>
-        <source>Background color applied to maps usings this tileset</source>
-        <translation type="vanished">Couleur de fond pour les maps utilisant ce tileset</translation>
     </message>
     <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="131"/>
@@ -932,10 +904,6 @@
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="172"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="vanished">...</translation>
     </message>
     <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="244"/>
@@ -969,10 +937,6 @@
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <source>TODO tileset view</source>
-        <translation type="vanished">TODO tileset view</translation>
-    </message>
-    <message>
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="63"/>
         <source>Background color</source>
         <translation>Couleur de fond</translation>
@@ -981,14 +945,6 @@
         <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="142"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
-    </message>
-    <message>
-        <source>Cannot open tileset data file &apos;%1&apos;</source>
-        <translation type="vanished">Impossible d&apos;ouvrir le fichier de tileset &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Cannot save tileset data file &apos;%1&apos;</source>
-        <translation type="vanished">Impossible d&apos;enregistrer le fichier de tileset &apos;%1&apos;</translation>
     </message>
 </context>
 <context>

@@ -14,39 +14,21 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GROUND_SELECTOR_H
-#define SOLARUSEDITOR_GROUND_SELECTOR_H
+#ifndef SOLARUSEDITOR_GROUND_HELPER_H
+#define SOLARUSEDITOR_GROUND_HELPER_H
 
+#include <QString>
 #include <solarus/entities/Ground.h>
-#include <QComboBox>
 
 using Ground = Solarus::Ground;
 
 /**
- * @brief A combobox to select a Solarus ground value.
- *
- * Each ground value is displayed with a user-friendly name and an icon.
+ * \brief Utility functions related to grounds.
  */
-class GroundSelector : public QComboBox {
-  Q_OBJECT
+namespace GroundHelper {
 
-public:
+QString get_ground_friendly_name(Ground ground);
 
-  GroundSelector(QWidget* parent = nullptr);
-
-  bool is_with_none() const;
-  void set_with_none(bool with_none);
-
-  bool is_empty() const;
-  void set_empty();
-
-  Ground get_selected_ground() const;
-  void set_selected_ground(Ground ground);
-
-private:
-
-  bool with_none;                 /**< Whether an empty option is included in the list. */
-
-};
+}
 
 #endif
