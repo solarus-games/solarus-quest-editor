@@ -290,7 +290,7 @@
               <number>0</number>
              </property>
              <item>
-              <layout class="QHBoxLayout" name="horizontal_layout_5">
+              <layout class="QVBoxLayout" name="verticalLayout">
                <item>
                 <widget class="EnumSelector&lt;TilePatternAnimation&gt;" name="animation_type_field">
                  <property name="sizePolicy">

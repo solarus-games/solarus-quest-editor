@@ -107,11 +107,11 @@ int EnumTraits<TilePatternAnimation>::get_num_frames(TilePatternAnimation value)
 
   case TilePatternAnimation::SEQUENCE_012:
   case TilePatternAnimation::SEQUENCE_012_PARALLAX:
-    return 2;
+    return 3;
 
   case TilePatternAnimation::SEQUENCE_0121:
   case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
-    return 3;
+    return 4;
   }
 
   return 1;

@@ -140,6 +140,68 @@ private:
 
 };
 
+/**
+ * @brief Changing the animation property of a tile pattern.
+ */
+class SetPatternAnimationCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternAnimationCommand(
+      TilesetEditor& editor, int index, TilePatternAnimation animation) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Animation")),
+    index(index),
+    animation_before(get_model().get_pattern_animation(index)),
+    animation_after(animation) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_animation(index, animation_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_pattern_animation(index, animation_after);
+  }
+
+private:
+
+  int index;
+  TilePatternAnimation animation_before;
+  TilePatternAnimation animation_after;
+
+};
+
+/**
+ * @brief Changing the animation property of a tile pattern.
+ */
+class SetPatternSeparationCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternSeparationCommand(
+      TilesetEditor& editor, int index, TilePatternSeparation separation) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Animation separation")),
+    index(index),
+    separation_before(get_model().get_pattern_separation(index)),
+    separation_after(separation) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_separation(index, separation_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_pattern_separation(index, separation_after);
+  }
+
+private:
+
+  int index;
+  TilePatternSeparation separation_before;
+  TilePatternSeparation separation_after;
+
+};
+
 }
 
 /**
@@ -188,18 +250,32 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
+
   connect(ui.background_button, SIGNAL(clicked()),
           this, SLOT(background_button_clicked()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
           this, SLOT(update_background_color()));
+
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
   connect(model, SIGNAL(pattern_ground_changed(int, Ground)),
           this, SLOT(update_ground_field()));
+
   connect(ui.default_layer_field, SIGNAL(activated(QString)),
           this, SLOT(default_layer_selector_activated()));
   connect(model, SIGNAL(pattern_default_layer_changed(int, Layer)),
           this, SLOT(update_default_layer_field()));
+
+  connect(ui.animation_type_field, SIGNAL(activated(QString)),
+          this, SLOT(animation_type_selector_activated()));
+  connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+          this, SLOT(update_animation_type_field()));
+
+  connect(ui.animation_separation_field, SIGNAL(activated(QString)),
+          this, SLOT(animation_separation_selector_activated()));
+  connect(model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
+          this, SLOT(update_animation_separation_field()));
+
   connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
 }
@@ -418,28 +494,79 @@ void TilesetEditor::ground_selector_activated() {
  * @brief Updates the animation type selector from the model.
  */
 void TilesetEditor::update_animation_type_field() {
-  // TODO
+
+  TilePatternAnimation animation;
+  int index = model->get_selected_index();
+  if (index == -1) {
+    animation = TilePatternAnimation::NONE;
+  }
+  else {
+    animation = model->get_pattern_animation(index);
+  }
+  ui.animation_type_field->set_selected_value(animation);
+
+  if (TilePatternAnimationTraits::is_multi_frame(animation)) {
+    ui.animation_separation_field->setEnabled(true);
+  }
+  else {
+    ui.animation_separation_field->setEnabled(false);
+  }
 }
 
 /**
  * @brief Slot called when the user changes the animation kind in the selector.
  */
 void TilesetEditor::animation_type_selector_activated() {
-  // TODO
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    // No pattern selected.
+    return;
+  }
+
+  TilePatternAnimation animation = ui.animation_type_field->get_selected_value();
+  if (animation == model->get_pattern_animation(index)) {
+    // No change.
+    return;
+  }
+
+  get_undo_stack().push(new SetPatternAnimationCommand(*this, index, animation));
 }
 
 /**
  * @brief Updates the animation separation selector from the model.
  */
 void TilesetEditor::update_animation_separation_field() {
-  // TODO
+
+  TilePatternSeparation separation;
+  int index = model->get_selected_index();
+  if (index == -1) {
+    separation = TilePatternSeparation::HORIZONTAL;
+  }
+  else {
+    separation = model->get_pattern_separation(index);
+  }
+  ui.animation_separation_field->set_selected_value(separation);
 }
 
 /**
  * @brief Slot called when the user changes the animation separation in the selector.
  */
 void TilesetEditor::animation_separation_selector_activated() {
-  // TODO
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    // No pattern selected.
+    return;
+  }
+
+  TilePatternSeparation separation = ui.animation_separation_field->get_selected_value();
+  if (separation == model->get_pattern_separation(index)) {
+    // No change.
+    return;
+  }
+
+  get_undo_stack().push(new SetPatternSeparationCommand(*this, index, separation));
 }
 
 /**

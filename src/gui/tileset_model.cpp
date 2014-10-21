@@ -424,8 +424,7 @@ TilePatternAnimation TilesetModel::get_pattern_animation(int index) const {
  *
  * If the new animation makes multi-frame a pattern that was single-frame,
  * then the existing frame is splitted in 3 parts.
- * The width or height must therefore be divisible by 3*8, otherwise an
- * EditorException is thrown.
+ * The width or height must therefore be divisible by 3*8.
  * (In patterns that have 4 frames, frame 1 and frame 3 are identical
  * so multi-frame patterns actually always have 3 distinct frames.)
  *
@@ -450,8 +449,11 @@ void TilesetModel::set_pattern_animation(int index, TilePatternAnimation animati
   pattern.set_scrolling(TilePatternAnimationTraits::get_scrolling(animation));
 
   // Set the frames.
-  if (TilePatternAnimationTraits::is_multi_frame(old_animation) &&
-      !TilePatternAnimationTraits::is_multi_frame(animation)) {
+  const int old_num_frames = TilePatternAnimationTraits::get_num_frames(old_animation);
+  const int num_frames = TilePatternAnimationTraits::get_num_frames(animation);
+
+  if (old_num_frames > 1 &&
+      num_frames == 1) {
     // Multi-frame to single-frame: merge the 3 frames into one.
     TilePatternSeparation separation = get_pattern_separation(index);
     Solarus::Rectangle frame = pattern.get_frame();  // Get the first frame.
@@ -463,9 +465,8 @@ void TilesetModel::set_pattern_animation(int index, TilePatternAnimation animati
     }
     pattern.set_frame(frame);
   }
-  else if (!TilePatternAnimationTraits::is_multi_frame(old_animation) &&
-      TilePatternAnimationTraits::is_multi_frame(animation)) {
-
+  else if (old_num_frames == 1 &&
+           num_frames > 1) {
     // Single-frame to multi-frame: split the pattern in 3 frames.
     const Solarus::Rectangle& initial_frame = pattern.get_frame();
     int width = initial_frame.get_width();
@@ -516,6 +517,20 @@ void TilesetModel::set_pattern_animation(int index, TilePatternAnimation animati
               height
               );
       }
+    }
+    pattern.set_frames(frames);
+  }
+
+  // Set 3 or 4 frames for multi-frame patterns.
+  if (num_frames > 1 && num_frames != old_num_frames) {
+    std::vector<Solarus::Rectangle> frames = pattern.get_frames();
+    if (num_frames == 4 && frames.size() == 3) {
+      // Sequence 0-1-2-1: get back to frame 1 after frame 2.
+      frames.emplace_back(frames[1]);
+    }
+    else if (num_frames == 3 && frames.size() == 4) {
+      // Sequence 0-1-2: get back to frame 0 after frame 2.
+      frames.resize(3);
     }
     pattern.set_frames(frames);
   }
@@ -614,6 +629,11 @@ void TilesetModel::set_pattern_separation(int index, TilePatternSeparation separ
             height
             );
     }
+  }
+  const int num_frames = TilePatternAnimationTraits::get_num_frames(get_pattern_animation(index));
+  if (num_frames == 4) {
+    // Sequence 0-1-2-1: get back to frame 1 after frame 2.
+    frames.emplace_back(frames[1]);
   }
   pattern.set_frames(frames);
 
