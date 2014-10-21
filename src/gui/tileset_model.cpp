@@ -331,6 +331,36 @@ void TilesetModel::set_pattern_ground(int index, Ground ground) {
 }
 
 /**
+ * @brief Returns the default layer of a pattern.
+ * @param index A pattern index.
+ * @return The pattern's default layer.
+ * Returns a default-constructed layer if the layer does not exist.
+ */
+Layer TilesetModel::get_pattern_default_layer(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  return tileset.get_pattern(pattern_id).get_default_layer();
+}
+
+/**
+ * @brief Sets the default layer of a tile pattern.
+ *
+ * Emits pattern_default_layer_changed if there is a change.
+ *
+ * @param index A pattern index.
+ * @param default_layer The default layer to set.
+ */
+void TilesetModel::set_pattern_default_layer(int index, Layer default_layer) {
+
+  Solarus::TilePatternData& pattern = tileset.get_pattern(index_to_id(index).toStdString());
+  if (default_layer == pattern.get_default_layer()) {
+    return;
+  }
+  pattern.set_default_layer(default_layer);
+  emit pattern_default_layer_changed(index, default_layer);
+}
+
+/**
  * @brief Returns the list index of the specified pattern.
  * @param pattern_id Id of a tile pattern
  * @return The corresponding index in the list.

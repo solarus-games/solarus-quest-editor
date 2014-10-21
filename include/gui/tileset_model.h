@@ -28,6 +28,7 @@
 class Quest;
 
 using Ground = Solarus::Ground;
+using Layer = Solarus::Layer;
 
 // TODO move to a separate file
 class NaturalComparator {
@@ -83,6 +84,8 @@ public:
   QRect get_pattern_frame(int index) const;
   Ground get_pattern_ground(int index) const;
   void set_pattern_ground(int index, Ground ground);
+  Layer get_pattern_default_layer(int index) const;
+  void set_pattern_default_layer(int index, Layer default_layer);
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
@@ -98,6 +101,7 @@ signals:
 
   void background_color_changed(const QColor& background_color);
   void pattern_ground_changed(int index, Ground ground);
+  void pattern_default_layer_changed(int index, Layer default_layer);
 
 public slots:
 

@@ -56,8 +56,11 @@ public slots:
   void update_ground_field();
   void ground_selector_activated();
   void update_animation_type_field();
+  void animation_type_selector_activated();
   void update_animation_separation_field();
+  void animation_separation_selector_activated();
   void update_default_layer_field();
+  void default_layer_selector_activated();
 
 private:
 

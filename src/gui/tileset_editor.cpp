@@ -110,6 +110,36 @@ private:
 
 };
 
+/**
+ * @brief Changing the default layer of a tile pattern.
+ */
+class SetPatternDefaultLayerCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternDefaultLayerCommand(TilesetEditor& editor, int index, Layer layer) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Default layer")),
+    index(index),
+    layer_before(get_model().get_pattern_default_layer(index)),
+    layer_after(layer) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_default_layer(index, layer_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_pattern_default_layer(index, layer_after);
+  }
+
+private:
+
+  int index;
+  Layer layer_before;
+  Layer layer_after;
+
+};
+
 }
 
 /**
@@ -166,6 +196,10 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(ground_selector_activated()));
   connect(model, SIGNAL(pattern_ground_changed(int, Ground)),
           this, SLOT(update_ground_field()));
+  connect(ui.default_layer_field, SIGNAL(activated(QString)),
+          this, SLOT(default_layer_selector_activated()));
+  connect(model, SIGNAL(pattern_default_layer_changed(int, Layer)),
+          this, SLOT(update_default_layer_field()));
   connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
 }
@@ -388,6 +422,13 @@ void TilesetEditor::update_animation_type_field() {
 }
 
 /**
+ * @brief Slot called when the user changes the animation kind in the selector.
+ */
+void TilesetEditor::animation_type_selector_activated() {
+  // TODO
+}
+
+/**
  * @brief Updates the animation separation selector from the model.
  */
 void TilesetEditor::update_animation_separation_field() {
@@ -395,8 +436,44 @@ void TilesetEditor::update_animation_separation_field() {
 }
 
 /**
+ * @brief Slot called when the user changes the animation separation in the selector.
+ */
+void TilesetEditor::animation_separation_selector_activated() {
+  // TODO
+}
+
+/**
  * @brief Updates the default layer selector from the model.
  */
 void TilesetEditor::update_default_layer_field() {
-  // TODO
+
+  Layer layer;
+  int index = model->get_selected_index();
+  if (index == -1) {
+    layer = Solarus::LAYER_LOW;
+  }
+  else {
+    layer = model->get_pattern_default_layer(index);
+  }
+  ui.default_layer_field->set_selected_value(layer);
+}
+
+/**
+ * @brief Slot called when the user changes the layer in the selector.
+ */
+void TilesetEditor::default_layer_selector_activated() {
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    // No pattern selected.
+    return;
+  }
+
+  Layer default_layer = ui.default_layer_field->get_selected_value();
+  if (default_layer == model->get_pattern_default_layer(index)) {
+    // No change.
+    return;
+  }
+
+  get_undo_stack().push(new SetPatternDefaultLayerCommand(*this, index, default_layer));
 }
