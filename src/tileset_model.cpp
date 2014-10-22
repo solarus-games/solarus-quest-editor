@@ -232,13 +232,16 @@ void TilesetModel::build_index_map() {
 /**
  * @brief Changes the string id of a pattern.
  *
- * The index of the pattern also changes since the order of the pattern in
- * the list can change.
+ * The index of the pattern in the pattern list may also change, since patterns
+ * are sorted alphabetically.
+ * In this case, emits rowsAboutToBeMoved(), changes the index
+ * and then emits rowsMoved(), as required by QAbstractItemModel.
  *
- * Though many indexes can change, the selection is preserved and updated with
- * new indexes. Appropriate selection signals are sent.
+ * Then, emits pattern_id_changed(), no matter if the index has also changed.
  *
- * Finally emits pattern_id_changed() if a change was made.
+ * The selection is preserved, though the index of many patterns can change.
+ * The selection cleared before the operations and restored after,
+ * updated with the new indexes.
  *
  * @param index Index of an existing pattern.
  * @param new_id The new id to set.
@@ -274,16 +277,35 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   }
   selection.clear();
 
-  // Make the change.
+  // Change the id in the tileset file.
   tileset.set_pattern_id(old_id.toStdString(), new_id.toStdString());
 
-  // Integer indexes have changed: rebuild the index map.
+  // Change the index in the list model (if the order has changed).
   build_index_map();
   int new_index = id_to_index(new_id);
 
-  // Update our pattern model list.
-  patterns.move(index, new_index);
+  // Call beginMoveRows() if the index changes, as requested by
+  // QAbstractItemModel.
+  if (new_index != index) {
+    int above_row = new_index;
+    if (new_index > index) {
+      ++above_row;
+    }
+    beginMoveRows(QModelIndex(), index, index,
+                  QModelIndex(), above_row);
+
+    // Update our pattern model list.
+    patterns.move(index, new_index);
+  }
+
   patterns[new_index].id = new_id;
+
+  // Notify people before restoring the selection, so that they have a
+  // chance to know new indexes before receiving selection signals.
+  if (new_index != index) {
+    endMoveRows();
+  }
+  emit pattern_id_changed(index, old_id, new_index, new_id);
 
   // Restore the selection.
   for (QString pattern_id : old_selection_ids) {
@@ -293,8 +315,6 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
     int new_index = id_to_index(pattern_id);
     selection.select(this->index(new_index), QItemSelectionModel::Select);
   }
-
-  emit pattern_id_changed(index, old_id, new_index, new_id);
 
   return new_index;
 }

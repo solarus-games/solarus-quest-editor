@@ -222,11 +222,9 @@ void TilesetScene::pattern_id_changed(
   // Keep the items list ordered as patterns in the model.
   pattern_items.move(old_index, new_index);
 
-  // Rebuild the selection.
-  QSignalBlocker blocker(this);
+  // Each item stores its order, so we need to update them.
   for (int i = 0; i < pattern_items.size(); ++i) {
     pattern_items[i]->set_index(i);
-    pattern_items[i]->setSelected(model.is_selected(i));
   }
 }
 
