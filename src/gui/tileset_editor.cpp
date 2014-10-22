@@ -290,7 +290,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(update_background_color()));
 
   connect(ui.pattern_id_button, SIGNAL(clicked()),
-          this, SLOT(pattern_id_button_clicked()));
+          this, SLOT(change_selected_pattern_id_requested()));
+  connect(ui.tileset_view, SIGNAL(change_selected_pattern_id_requested()),
+          this, SLOT(change_selected_pattern_id_requested()));
   connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(update_pattern_id_field()));
 
@@ -313,6 +315,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(animation_separation_selector_activated()));
   connect(model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
           this, SLOT(update_animation_separation_field()));
+
+  connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
+          this, SLOT(delete_selected_patterns_requested()));
 
   connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
@@ -493,9 +498,10 @@ void TilesetEditor::update_pattern_id_field() {
 }
 
 /**
- * @brief Slot called when the user clicks the change pattern id button.
+ * @brief Slot called when the user wants to change the id of the selected
+ * pattern.
  */
-void TilesetEditor::pattern_id_button_clicked() {
+void TilesetEditor::change_selected_pattern_id_requested() {
 
   int old_index = model->get_selected_index();
   if (old_index == -1) {
@@ -674,4 +680,13 @@ void TilesetEditor::default_layer_selector_activated() {
   }
 
   try_command(new SetPatternDefaultLayerCommand(*this, index, default_layer));
+}
+
+/**
+ * @brief Slot called when the user wants to delete the selected patterns.
+ */
+void TilesetEditor::delete_selected_patterns_requested() {
+
+  GuiTools::warning_dialog(tr("Not implemented yet!"));
+  // TODO confirm suppression
 }

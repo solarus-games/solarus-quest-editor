@@ -212,9 +212,6 @@
                   <iconset resource="../../resources/resources.qrc">
                    <normaloff>:/images/icon_edit.png</normaloff>:/images/icon_edit.png</iconset>
                  </property>
-                 <property name="shortcut">
-                  <string>F2</string>
-                 </property>
                 </widget>
                </item>
                <item>

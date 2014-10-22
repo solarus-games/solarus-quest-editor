@@ -33,6 +33,23 @@ TilesetView::TilesetView(QWidget* parent) :
   zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+  change_pattern_id_action = new QAction(
+        QIcon(":/images/icon_edit.png"), tr("Change id..."), this);
+  change_pattern_id_action->setShortcut(tr("F2"));
+  change_pattern_id_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(change_pattern_id_action, SIGNAL(triggered()),
+          this, SIGNAL(change_selected_pattern_id_requested()));
+  addAction(change_pattern_id_action);
+
+  delete_patterns_action = new QAction(
+        QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
+  delete_patterns_action->setShortcut(QKeySequence::Delete);
+  delete_patterns_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(delete_patterns_action, SIGNAL(triggered()),
+          this, SIGNAL(delete_selected_patterns_requested()));
+  addAction(delete_patterns_action);
+
 }
 
 /**
@@ -235,24 +252,12 @@ void TilesetView::show_context_menu(const QPoint& where) {
   // - Change id (except when multi-selection)
   // - Delete
   QMenu* menu = new QMenu(this);
-  QAction* action = nullptr;
+//  QAction* action = nullptr;
 
   menu->addSeparator();
-  action = new QAction(
-        QIcon(":/images/icon_delete.png"),
-        tr("Delete"),
-        this);
-  connect(action, SIGNAL(triggered()),
-          this, SLOT(delete_action_triggered()));
-  menu->addAction(action);
+  menu->addAction(change_pattern_id_action);
+  menu->addSeparator();
+  menu->addAction(delete_patterns_action);
 
   menu->popup(viewport()->mapToGlobal(where));
-}
-
-/**
- * @brief Slot called when the user wants to delete the selected patterns.
- */
-void TilesetView::delete_action_triggered() {
-
-  // TODO
 }

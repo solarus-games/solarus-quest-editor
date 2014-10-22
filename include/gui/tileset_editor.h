@@ -53,7 +53,6 @@ public slots:
 
   void update_pattern_view();
   void update_pattern_id_field();
-  void pattern_id_button_clicked();
   void update_ground_field();
   void ground_selector_activated();
   void update_animation_type_field();
@@ -62,6 +61,9 @@ public slots:
   void animation_separation_selector_activated();
   void update_default_layer_field();
   void default_layer_selector_activated();
+
+  void change_selected_pattern_id_requested();
+  void delete_selected_patterns_requested();
 
 private:
 

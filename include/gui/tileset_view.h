@@ -21,6 +21,7 @@
 #include <QPointer>
 
 class TilesetModel;
+class QAction;
 
 /**
  * @brief Graphical view of the tileset image, allowing to manage tile patterns.
@@ -35,6 +36,11 @@ public:
   void set_model(TilesetModel& tileset);
   double get_zoom() const;
 
+signals:
+
+  void change_selected_pattern_id_requested();
+  void delete_selected_patterns_requested();
+
 public slots:
 
   void set_zoom(double zoom);
@@ -48,23 +54,22 @@ protected:
   virtual void mouseMoveEvent(QMouseEvent* event) override;
   virtual void wheelEvent(QWheelEvent* event) override;
 
-private slots:
-
-  void delete_action_triggered();
-
 private:
 
   void show_context_menu(const QPoint& where);
 
-  QPointer<TilesetModel> model;   /**< The tileset viewed. */
+  QPointer<TilesetModel> model;        /**< The tileset viewed. */
+  QAction* change_pattern_id_action;   /**< Action of changing a pattern id. */
+  QAction* delete_patterns_action;     /**< Action of deleting the selected
+                                        * patterns. */
 
   // TODO move the panning code to a reusable class,
   // because other views also need it. Use an event filter?
-  QPoint pan_initial_point;       /**< Point initially clicked when panning
-                                   * the view, in scrolling-independent
-                                   * coordinates. */
+  QPoint pan_initial_point;            /**< Point initially clicked when panning
+                                        * the view, in scrolling-independent
+                                        * coordinates. */
 
-  double zoom;                    /**< Scale factor of the view. */
+  double zoom;                         /**< Scale factor of the view. */
 };
 
 #endif
