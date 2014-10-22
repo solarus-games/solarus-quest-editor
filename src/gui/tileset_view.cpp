@@ -255,6 +255,7 @@ void TilesetView::show_context_menu(const QPoint& where) {
 //  QAction* action = nullptr;
 
   menu->addSeparator();
+  change_pattern_id_action->setEnabled(model->get_selected_index() != -1);
   menu->addAction(change_pattern_id_action);
   menu->addSeparator();
   menu->addAction(delete_patterns_action);
