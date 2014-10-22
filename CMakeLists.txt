@@ -78,6 +78,7 @@ set(solarus_quest_editor_SOURCES
   include/enum_traits.h
   include/ground_traits.h
   include/layer_traits.h
+  include/natural_comparator.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h

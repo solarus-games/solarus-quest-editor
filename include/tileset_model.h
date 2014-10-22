@@ -17,11 +17,11 @@
 #ifndef SOLARUSEDITOR_TILESET_MODEL_H
 #define SOLARUSEDITOR_TILESET_MODEL_H
 
+#include "natural_comparator.h"
 #include "tile_pattern_animation.h"
 #include "tile_pattern_separation.h"
 #include <solarus/entities/TilesetData.h>
 #include <QAbstractItemModel>
-#include <QCollator>
 #include <QImage>
 #include <QItemSelectionModel>
 #include <QList>
@@ -32,25 +32,6 @@ class Quest;
 
 using Ground = Solarus::Ground;
 using Layer = Solarus::Layer;
-
-// TODO move to a separate file
-class NaturalComparator {
-
-public:
-
-  NaturalComparator() {
-    collator.setNumericMode(true);
-  }
-
-  bool operator() (const QString& lhs, const QString& rhs) const {
-    return collator.compare(lhs, rhs) < 0;
-  }
-
-private:
-
-  QCollator collator;
-
-};
 
 /**
  * @brief Model that wraps a tileset.
