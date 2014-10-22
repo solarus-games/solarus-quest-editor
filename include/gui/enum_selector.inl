@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/enum_selector.h"
-
 template<typename E>
 class EnumTraits;
 
@@ -28,7 +26,7 @@ EnumSelector<E>::EnumSelector(QWidget* parent) :
   QComboBox(parent),
   with_none(false) {
 
-  for (E value: EnumTraits<E>::get_values()) {
+  for (const E& value: EnumTraits<E>::get_values()) {
     addItem(EnumTraits<E>::get_icon(value),
             EnumTraits<E>::get_friendly_name(value));
   }
@@ -119,7 +117,7 @@ E EnumSelector<E>::get_selected_value() const {
  * @param value The value to select.
  */
 template<typename E>
-void EnumSelector<E>::set_selected_value(E value) {
+void EnumSelector<E>::set_selected_value(const E& value) {
 
   int index = static_cast<int>(value);
   if (with_none) {

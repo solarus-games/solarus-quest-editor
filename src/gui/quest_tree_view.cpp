@@ -175,7 +175,7 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     delete menu;
   }
   else {
-    menu->popup(viewport()->mapToGlobal(position));
+    menu->popup(viewport()->mapToGlobal(position) + QPoint(1, 1));
   }
 }
 

@@ -14,8 +14,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/enum_menus.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
+#include "ground_traits.h"
+#include "tile_pattern_animation_traits.h"
+#include "tile_pattern_separation_traits.h"
 #include "tileset_model.h"
 #include <QAction>
 #include <QApplication>
@@ -259,7 +263,7 @@ void TilesetView::show_context_menu(const QPoint& where) {
   // - Change id (except when multi-selection)
   // - Delete
   QMenu* menu = new QMenu(this);
-//  QAction* action = nullptr;
+  EnumMenus<Ground>::create_actions(menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
 
   menu->addSeparator();
   change_pattern_id_action->setEnabled(model->get_selected_index() != -1);
@@ -267,5 +271,6 @@ void TilesetView::show_context_menu(const QPoint& where) {
   menu->addSeparator();
   menu->addAction(delete_patterns_action);
 
-  menu->popup(viewport()->mapToGlobal(where));
+  // Create the menu at 1,1 to avoid the cursor being already in the first item.
+  menu->popup(viewport()->mapToGlobal(where) + QPoint(1, 1));
 }

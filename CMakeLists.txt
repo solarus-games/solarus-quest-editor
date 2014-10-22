@@ -59,6 +59,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
+  include/gui/enum_menus.h
+  include/gui/enum_menus.inl
   include/gui/enum_selector.h
   include/gui/enum_selector.inl
   include/gui/gui_tools.h

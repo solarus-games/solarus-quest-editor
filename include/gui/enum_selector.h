@@ -41,7 +41,7 @@ public:
   void set_empty();
 
   E get_selected_value() const;
-  void set_selected_value(E value);
+  void set_selected_value(const E& value);
 
 private:
 
