@@ -145,7 +145,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
           );
     return;
   }
-  else if (event->button() == Qt::RightButton) {
+  else if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
     // Select and show context menu if an item was clicked.
     QGraphicsItem* item = itemAt(event->pos());
 
@@ -155,7 +155,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       keep_selected = true;
     }
     else if (item != nullptr && item->isSelected()) {
-      // When right-clicking an already selected item, keep the selection too.
+      // When clicking an already selected item, keep the selection too.
       keep_selected = true;
     }
 
@@ -167,15 +167,22 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       item->setSelected(true);
     }
 
-    // Show a context menu if at least one item is selected.
-    QList<QGraphicsItem*> selected_items = scene()->selectedItems();
-    if (!selected_items.empty()) {
-      show_context_menu(event->pos());
-      return;
+    // On a right click, trace a selection rectangle if clicking outside items.
+    if (event->button() == Qt::LeftButton) {
+      if (item == nullptr) {
+        // TODO start tracing a selection rectangle.
+      }
+    }
+
+    // On a right click, show a context menu if at least one item is selected.
+    else if (event->button() == Qt::RightButton) {
+      QList<QGraphicsItem*> selected_items = scene()->selectedItems();
+      if (!selected_items.empty()) {
+        show_context_menu(event->pos());
+        return;
+      }
     }
   }
-
-  QGraphicsView::mousePressEvent(event);
 }
 
 /**
