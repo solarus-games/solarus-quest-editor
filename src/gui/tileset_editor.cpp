@@ -21,6 +21,7 @@
 #include "quest_resources.h"
 #include "tileset_model.h"
 #include <QColorDialog>
+#include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QUndoStack>
 
@@ -77,6 +78,38 @@ private:
 
   QColor color_before;
   QColor color_after;
+
+};
+
+/**
+ * @brief Changing the id of a tile pattern.
+ */
+class SetPatternIdCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternIdCommand(TilesetEditor& editor, int old_index, const QString& new_id) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Pattern id")),
+    index_before(old_index),
+    index_after(-1),
+    id_before(get_model().index_to_id(old_index)),
+    id_after(new_id) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_id(index_after, id_before);
+  }
+
+  virtual void redo() override {
+    index_after = get_model().set_pattern_id(index_before, id_after);
+  }
+
+private:
+
+  int index_before;
+  int index_after;
+  QString id_before;
+  QString id_after;
 
 };
 
@@ -255,6 +288,11 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(background_button_clicked()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
           this, SLOT(update_background_color()));
+
+  connect(ui.pattern_id_button, SIGNAL(clicked()),
+          this, SLOT(pattern_id_button_clicked()));
+  connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
+          this, SLOT(update_pattern_id_field()));
 
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
@@ -452,6 +490,32 @@ void TilesetEditor::update_pattern_id_field() {
   // (an empty string if no pattern is selected or if multiple patterns are).
   QString pattern_id = model->index_to_id(model->get_selected_index());
   ui.pattern_id_value->setText(pattern_id);
+}
+
+/**
+ * @brief Slot called when the user clicks the change pattern id button.
+ */
+void TilesetEditor::pattern_id_button_clicked() {
+
+  int old_index = model->get_selected_index();
+  if (old_index == -1) {
+    // No pattern selected or several pattern selected.
+    return;
+  }
+
+  QString old_id = model->index_to_id(old_index);
+  bool ok = false;
+  QString new_id = QInputDialog::getText(
+        this,
+        tr("Rename tile pattern"),
+        tr("New id for pattern '%1':").arg(old_id),
+        QLineEdit::Normal,
+        old_id,
+        &ok);
+
+  if (ok && new_id != old_id) {
+    try_command(new SetPatternIdCommand(*this, old_index, new_id));
+  }
 }
 
 /**

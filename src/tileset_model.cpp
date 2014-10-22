@@ -45,7 +45,12 @@ TilesetModel::TilesetModel(
   if (!tileset.import_from_file(path.toStdString())) {
     throw EditorException(tr("Cannot open tileset data file '%1'").arg(path));
   }
+
   build_index_map();
+  for (const auto& kvp : ids_to_indexes) {
+    const QString& pattern_id = kvp.first;
+    patterns.append(PatternModel(pattern_id));
+  }
 
   // Load the tileset image.
   patterns_image = QImage(quest.get_tileset_tiles_image_path(tileset_id));
@@ -77,6 +82,32 @@ void TilesetModel::save() const {
   if (!tileset.export_to_file(path.toStdString())) {
     throw EditorException(tr("Cannot save tileset data file '%1'").arg(path));
   }
+}
+
+/**
+ * @brief Returns the tileset's background color.
+ * @return The background color.
+ */
+QColor TilesetModel::get_background_color() const {
+
+  return Color::to_qcolor(tileset.get_background_color());
+}
+
+/**
+ * @brief Sets the tileset's background color.
+ *
+ * Emits background_color_changed if there is a change.
+ *
+ * @param background_color The background color.
+ */
+void TilesetModel::set_background_color(const QColor& background_color) {
+
+  const Solarus::Color solarus_color = Color::to_solarus_color(background_color);
+  if (solarus_color == tileset.get_background_color()) {
+    return;
+  }
+  tileset.set_background_color(solarus_color);
+  emit background_color_changed(background_color);
 }
 
 /**
@@ -117,193 +148,6 @@ QVariant TilesetModel::data(const QModelIndex& index, int role) const {
 }
 
 /**
- * @brief Creates internal mappings that gives fast access to patterns ids
- * and indexes.
- *
- * The tile patterns are indexed by string ids, but the model also treats them
- * as a linear list, so we need an additional integer index.
- * boost::multi_index_container could do that for us, but this feels a bit
- * overkill to add a boost dependency just for this use case.
- */
-void TilesetModel::build_index_map() {
-
-  ids_to_indexes.clear();
-
-  // This is a bit tricky because we change the order of
-  // the map from the Solarus library to use natural order instead.
-
-  const std::map<std::string, TilePatternData>& pattern_map =
-      tileset.get_patterns();
-  // First, put the string keys to have natural sort.
-  for (const auto& kvp : pattern_map) {
-    QString pattern_id = QString::fromStdString(kvp.first);
-    ids_to_indexes.insert(std::make_pair(pattern_id, 0));
-  }
-
-  // Then, put the integer value and fill the second structure.
-  int index = 0;
-  for (const auto& kvp : ids_to_indexes) {
-    QString pattern_id = kvp.first;
-    ids_to_indexes[pattern_id] = index;
-    patterns.append(PatternModel(pattern_id));
-    ++index;
-  }
-}
-
-/**
- * @brief Returns an image representing the specified pattern.
- *
- * The image has the size of the pattern.
- * If the pattern is multi-frame, the image of the first frame is returned.
- *
- * @param index Index of a tile pattern.
- * @return The corresponding image.
- * Returns a null pixmap if the tileset image is not loaded.
- */
-QPixmap TilesetModel::get_pattern_image(int index) const {
-
-  if (!pattern_exists(index)) {
-    // No such pattern.
-    return QPixmap();
-  }
-
-  if (patterns_image.isNull()) {
-    // No tileset image.
-    return QPixmap();
-  }
-
-  const PatternModel& pattern = patterns.at(index);
-  if (!pattern.image.isNull()) {
-    // Image already created.
-    return pattern.image;
-  }
-
-  // Lazily create the image.
-  QRect frame = get_pattern_frame(index);
-  QImage image = patterns_image.copy(frame);
-
-  pattern.image = QPixmap::fromImage(image);
-  return pattern.image;
-}
-
-/**
- * @brief Returns an image representing the specified pattern.
- *
- * If the pattern is multi-frame, the image returned contains all frames.
- *
- * @param index Index of a tile pattern.
- * @return The corresponding image with all frames.
- * Returns a null pixmap if the tileset image is not loaded.
- */
-QPixmap TilesetModel::get_pattern_image_all_frames(int index) const {
-
-  if (!pattern_exists(index)) {
-    // No such pattern.
-    return QPixmap();
-  }
-
-  if (!is_pattern_multi_frame(index)) {
-    // Single frame pattern.
-    return get_pattern_image(index);
-  }
-
-  if (patterns_image.isNull()) {
-    // No tileset image.
-    return QPixmap();
-  }
-
-  const PatternModel& pattern = patterns.at(index);
-  if (!pattern.image_all_frames.isNull()) {
-    // Image already created.
-    return pattern.image_all_frames;
-  }
-
-  // Lazily create the image.
-  QRect frame = get_pattern_frames_bounding_box(index);
-  QImage image_all_frames = patterns_image.copy(frame);
-
-  pattern.image_all_frames = QPixmap::fromImage(image_all_frames);
-  return pattern.image_all_frames;
-}
-
-/**
- * @brief Returns a 32x32 icon representing the specified pattern.
- * @param index Index of a tile pattern.
- * @return The corresponding icon.
- * Returns a null pixmap if the tileset image is not loaded.
- */
-QPixmap TilesetModel::get_pattern_icon(int index) const {
-
-  QPixmap pixmap = get_pattern_image(index);
-
-  if (pixmap.isNull()) {
-    // No image available.
-    return QPixmap();
-  }
-
-  const PatternModel& pattern = patterns.at(index);
-  if (!pattern.icon.isNull()) {
-    // Icon already created.
-    return pattern.icon;
-  }
-
-  // Lazily create the icon.
-  QImage image = pixmap.toImage();
-  // Make sure we have an alpha channel.
-  image = image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
-
-  if (image.height() <= 16) {
-    image = image.scaledToHeight(image.height() * 2);
-  }
-  else if (image.height() > 32) {
-    image = image.scaledToHeight(32);
-  }
-
-  // Center the pattern in a 32x32 pixmap.
-  int dx = (32 - image.width()) / 2;
-  int dy = (32 - image.height()) / 2;
-  image = image.copy(-dx, -dy, 32, 32);
-
-  pattern.icon = QPixmap::fromImage(image);
-  return pattern.icon;
-}
-
-/**
- * @brief Returns the PNG image of all tile patterns.
- * @return The patterns image.
- * Returns a null image if the tileset image is not loaded.
- */
-QImage TilesetModel::get_patterns_image() const {
-  return patterns_image;
-}
-
-/**
- * @brief Returns the tileset's background color.
- * @return The background color.
- */
-QColor TilesetModel::get_background_color() const {
-
-  return Color::to_qcolor(tileset.get_background_color());
-}
-
-/**
- * @brief Sets the tileset's background color.
- *
- * Emits background_color_changed if there is a change.
- *
- * @param background_color The background color.
- */
-void TilesetModel::set_background_color(const QColor& background_color) {
-
-  const Solarus::Color solarus_color = Color::to_solarus_color(background_color);
-  if (solarus_color == tileset.get_background_color()) {
-    return;
-  }
-  tileset.set_background_color(solarus_color);
-  emit background_color_changed(background_color);
-}
-
-/**
  * @brief Returns the number of patterns in the tileset.
  * @return The number of patterns.
  */
@@ -320,6 +164,126 @@ int TilesetModel::get_num_patterns() const {
 bool TilesetModel::pattern_exists(int index) const {
 
   return index >= 0 && index < patterns.size();
+}
+
+/**
+ * @brief Returns the list index of the specified pattern.
+ * @param pattern_id Id of a tile pattern
+ * @return The corresponding index in the list.
+ * Returns -1 there is no pattern with this id.
+ */
+int TilesetModel::id_to_index(const QString& pattern_id) const {
+
+  auto it = ids_to_indexes.find(pattern_id);
+  if (it == ids_to_indexes.end()) {
+    return -1;
+  }
+  return it->second;
+}
+
+/**
+ * @brief Returns the string id of the pattern at the specified list index.
+ * @param index An index in the list of patterns.
+ * @return The corresponding pattern id.
+ * Returns an empty string if there is no pattern at this index.
+ */
+QString TilesetModel::index_to_id(int index) const {
+
+  if (!pattern_exists(index)) {
+    return "";
+  }
+
+  return patterns.at(index).id;
+}
+
+/**
+ * @brief Builds or rebuilds the internal mapping that gives indexes from ids.
+ *
+ * Tile patterns are indexed by string ids, but the model also treats them
+ * as a linear list, so we need an additional integer index.
+ */
+void TilesetModel::build_index_map() {
+
+  // boost::multi_index_container could do that for us, but this feels a bit
+  // overkill to add a boost dependency just for this use case.
+
+  ids_to_indexes.clear();
+
+  // This is a bit tricky because we change the order of
+  // the map from the Solarus library to use natural order instead.
+
+  const std::map<std::string, TilePatternData>& pattern_map =
+      tileset.get_patterns();
+  // First, put the string keys to have natural sort.
+  for (const auto& kvp : pattern_map) {
+    QString pattern_id = QString::fromStdString(kvp.first);
+    ids_to_indexes.insert(std::make_pair(pattern_id, 0));
+  }
+
+  // Then, we can put the integer value.
+  int index = 0;
+  for (const auto& kvp : ids_to_indexes) {
+    QString pattern_id = kvp.first;
+    ids_to_indexes[pattern_id] = index;
+    ++index;
+  }
+}
+
+/**
+ * @brief Changes the string id of a pattern.
+ *
+ * The index of the pattern also changes since the order of the pattern in
+ * the list can change.
+ *
+ * Though many indexes can change, the selection is preserved and updated with
+ * new indexes. Appropriate selection signals are sent.
+ *
+ * Finally emits pattern_id_changed() if a change was made.
+ *
+ * @param index Index of an existing pattern.
+ * @param new_id The new id to set.
+ * @return The new index of the pattern.
+ * @throws EditorException in case of error.
+ */
+int TilesetModel::set_pattern_id(int index, const QString& new_id) {
+
+  QString old_id = index_to_id(index);
+  if (new_id == old_id) {
+    // Nothing to do.
+    return index;
+  }
+
+  // Save and clear the selection since a lot of indexes may change.
+  QModelIndexList old_selected_indexes = selection.selection().indexes();
+  QStringList old_selection_ids;
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+    old_selection_ids << index_to_id(old_selected_index.row());
+  }
+  selection.clear();
+
+  // Make the change.
+  tileset.set_pattern_id(old_id.toStdString(), new_id.toStdString());
+
+  // Integer indexes have changed: rebuild the index map.
+  build_index_map();
+  int new_index = id_to_index(new_id);
+
+  // Update our pattern model list.
+  patterns.move(index, new_index);
+  patterns[new_index].id = new_id;
+
+  // Restore the selection.
+  for (QString pattern_id : old_selection_ids) {
+    if (pattern_id == old_id) {
+      pattern_id = new_id;
+    }
+    int new_index = id_to_index(pattern_id);
+    selection.select(this->index(new_index), QItemSelectionModel::Select);
+  }
+
+  emit pattern_id_changed(index, old_id, new_index, new_id);
+
+  return new_index;
 }
 
 /**
@@ -726,33 +690,130 @@ void TilesetModel::set_pattern_separation(int index, TilePatternSeparation separ
 }
 
 /**
- * @brief Returns the list index of the specified pattern.
- * @param pattern_id Id of a tile pattern
- * @return The corresponding index in the list.
- * Returns -1 there is no pattern with this id.
+ * @brief Returns an image representing the specified pattern.
+ *
+ * The image has the size of the pattern.
+ * If the pattern is multi-frame, the image of the first frame is returned.
+ *
+ * @param index Index of a tile pattern.
+ * @return The corresponding image.
+ * Returns a null pixmap if the tileset image is not loaded.
  */
-int TilesetModel::id_to_index(const QString& pattern_id) const {
+QPixmap TilesetModel::get_pattern_image(int index) const {
 
-  auto it = ids_to_indexes.find(pattern_id);
-  if (it == ids_to_indexes.end()) {
-    return -1;
+  if (!pattern_exists(index)) {
+    // No such pattern.
+    return QPixmap();
   }
-  return it->second;
+
+  if (patterns_image.isNull()) {
+    // No tileset image.
+    return QPixmap();
+  }
+
+  const PatternModel& pattern = patterns.at(index);
+  if (!pattern.image.isNull()) {
+    // Image already created.
+    return pattern.image;
+  }
+
+  // Lazily create the image.
+  QRect frame = get_pattern_frame(index);
+  QImage image = patterns_image.copy(frame);
+
+  pattern.image = QPixmap::fromImage(image);
+  return pattern.image;
 }
 
 /**
- * @brief Returns the string id of the pattern at the specified list index.
- * @param index An index in the list of patterns.
- * @return The corresponding pattern id.
- * Returns an empty string if there is no pattern at this index.
+ * @brief Returns an image representing the specified pattern.
+ *
+ * If the pattern is multi-frame, the image returned contains all frames.
+ *
+ * @param index Index of a tile pattern.
+ * @return The corresponding image with all frames.
+ * Returns a null pixmap if the tileset image is not loaded.
  */
-QString TilesetModel::index_to_id(int index) const {
+QPixmap TilesetModel::get_pattern_image_all_frames(int index) const {
 
   if (!pattern_exists(index)) {
-    return "";
+    // No such pattern.
+    return QPixmap();
   }
 
-  return patterns.at(index).id;
+  if (!is_pattern_multi_frame(index)) {
+    // Single frame pattern.
+    return get_pattern_image(index);
+  }
+
+  if (patterns_image.isNull()) {
+    // No tileset image.
+    return QPixmap();
+  }
+
+  const PatternModel& pattern = patterns.at(index);
+  if (!pattern.image_all_frames.isNull()) {
+    // Image already created.
+    return pattern.image_all_frames;
+  }
+
+  // Lazily create the image.
+  QRect frame = get_pattern_frames_bounding_box(index);
+  QImage image_all_frames = patterns_image.copy(frame);
+
+  pattern.image_all_frames = QPixmap::fromImage(image_all_frames);
+  return pattern.image_all_frames;
+}
+
+/**
+ * @brief Returns a 32x32 icon representing the specified pattern.
+ * @param index Index of a tile pattern.
+ * @return The corresponding icon.
+ * Returns a null pixmap if the tileset image is not loaded.
+ */
+QPixmap TilesetModel::get_pattern_icon(int index) const {
+
+  QPixmap pixmap = get_pattern_image(index);
+
+  if (pixmap.isNull()) {
+    // No image available.
+    return QPixmap();
+  }
+
+  const PatternModel& pattern = patterns.at(index);
+  if (!pattern.icon.isNull()) {
+    // Icon already created.
+    return pattern.icon;
+  }
+
+  // Lazily create the icon.
+  QImage image = pixmap.toImage();
+  // Make sure we have an alpha channel.
+  image = image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
+
+  if (image.height() <= 16) {
+    image = image.scaledToHeight(image.height() * 2);
+  }
+  else if (image.height() > 32) {
+    image = image.scaledToHeight(32);
+  }
+
+  // Center the pattern in a 32x32 pixmap.
+  int dx = (32 - image.width()) / 2;
+  int dy = (32 - image.height()) / 2;
+  image = image.copy(-dx, -dy, 32, 32);
+
+  pattern.icon = QPixmap::fromImage(image);
+  return pattern.icon;
+}
+
+/**
+ * @brief Returns the PNG image of all tile patterns.
+ * @return The patterns image.
+ * Returns a null image if the tileset image is not loaded.
+ */
+QImage TilesetModel::get_patterns_image() const {
+  return patterns_image;
 }
 
 /**
@@ -775,4 +836,14 @@ int TilesetModel::get_selected_index() const {
     return -1;
   }
   return selected_indexes.first().row();
+}
+
+/**
+ * @brief Returns whether a pattern is selected.
+ * @param index A pattern index.
+ * @return @c true if this pattern is selected.
+ */
+bool TilesetModel::is_selected(int index) const {
+
+  return selection.isSelected(this->index(index));
 }

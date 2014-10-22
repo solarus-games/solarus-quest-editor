@@ -56,15 +56,20 @@ public:
   Quest& get_quest();
   QString get_tileset_id() const;
 
+  // Tileset data.
+  QColor get_background_color() const;
+  void set_background_color(const QColor& background_color);
+
   // QAbstractListModel interface.
   virtual int rowCount(const QModelIndex& parent) const override;
   virtual QVariant data(const QModelIndex& index, int role) const override;
 
-  // Tileset data.
-  QColor get_background_color() const;
-  void set_background_color(const QColor& background_color);
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
+  int id_to_index(const QString& pattern_id) const;
+  QString index_to_id(int index) const;
+  int set_pattern_id(int index, const QString& new_id);
+
   bool is_pattern_multi_frame(int index) const;
   int get_pattern_num_frames(int index) const;
   QRect get_pattern_frame(int index) const;
@@ -83,16 +88,16 @@ public:
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
 
-  int id_to_index(const QString& pattern_id) const;
-  QString index_to_id(int index) const;
-
   // Selected patterns.
   QItemSelectionModel& get_selection();
   int get_selected_index() const;
+  bool is_selected(int index) const;
 
 signals:
 
   void background_color_changed(const QColor& background_color);
+  void pattern_id_changed(int old_index, const QString& old_id,
+                          int new_index, const QString& new_id);
   void pattern_ground_changed(int index, Ground ground);
   void pattern_default_layer_changed(int index, Layer default_layer);
   void pattern_animation_changed(int index, TilePatternAnimation animation);
