@@ -244,6 +244,14 @@ void PatternItem::paint(QPainter* painter,
                         const QStyleOptionGraphicsItem* option,
                         QWidget* widget) {
 
+  QRect box = model.get_pattern_frames_bounding_box(index);
+  QPoint top_left = box.topLeft();
+  box.translate(-top_left);
+
+  // Start with an opaque background, to erase anything below
+  // if the pattern has transparency.
+  painter->fillRect(box, widget->palette().window());
+
   const bool selected = option->state & QStyle::State_Selected;
 
   // First, paint the item like if there was no selection, to avoid
@@ -254,7 +262,6 @@ void PatternItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    QPoint top_left = model.get_pattern_frame(index).topLeft();
     QList<QRect> frames = model.get_pattern_frames(index);
 
     for (QRect frame : frames) {
