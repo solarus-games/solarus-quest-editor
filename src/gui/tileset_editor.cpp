@@ -514,6 +514,7 @@ void TilesetEditor::pattern_id_button_clicked() {
         &ok);
 
   if (ok && new_id != old_id) {
+    // TODO update references in existing maps
     try_command(new SetPatternIdCommand(*this, old_index, new_id));
   }
 }

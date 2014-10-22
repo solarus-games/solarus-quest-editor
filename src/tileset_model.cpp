@@ -253,6 +253,19 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
     return index;
   }
 
+  // Make some checks first.
+  if (old_id.isEmpty()) {
+      throw EditorException(tr("Invalid tile pattern index: %1").arg(index));
+  }
+
+  if (!is_valid_pattern_id(new_id)) {
+      throw EditorException(tr("Invalid tile pattern id: '%1'").arg(new_id));
+  }
+
+  if (id_to_index(new_id) != -1) {
+      throw EditorException(tr("Tile pattern '%1' already exists").arg(new_id));
+  }
+
   // Save and clear the selection since a lot of indexes may change.
   QModelIndexList old_selected_indexes = selection.selection().indexes();
   QStringList old_selection_ids;
@@ -284,6 +297,30 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   emit pattern_id_changed(index, old_id, new_index, new_id);
 
   return new_index;
+}
+
+/**
+ * @brief Returns whether a string is a valid tile pattern id.
+ * @param pattern_id The id to check.
+ * @return @c true if this id is legal.
+ */
+bool TilesetModel::is_valid_pattern_id(const QString& pattern_id) {
+
+  if (pattern_id.isEmpty()) {
+      return false;
+  }
+
+  if (
+      pattern_id.contains('\"') ||
+      pattern_id.contains('\'') ||
+      pattern_id.contains('\\') ||
+      pattern_id.contains('\n') ||
+      pattern_id.contains('\r')
+      ) {
+    return false;
+  }
+
+  return true;
 }
 
 /**

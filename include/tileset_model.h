@@ -69,6 +69,7 @@ public:
   int id_to_index(const QString& pattern_id) const;
   QString index_to_id(int index) const;
   int set_pattern_id(int index, const QString& new_id);
+  static bool is_valid_pattern_id(const QString& pattern_id);
 
   bool is_pattern_multi_frame(int index) const;
   int get_pattern_num_frames(int index) const;
