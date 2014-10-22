@@ -203,7 +203,7 @@
                <item>
                 <widget class="QToolButton" name="pattern_id_button">
                  <property name="toolTip">
-                  <string>Rename</string>
+                  <string>Rename (F2)</string>
                  </property>
                  <property name="text">
                   <string/>

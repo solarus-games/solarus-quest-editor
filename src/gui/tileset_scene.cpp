@@ -80,6 +80,10 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
           this, SLOT(update_pattern(int)));
   connect(&model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
           this, SLOT(update_pattern(int)));
+
+  // Watch patterns ordering changes.
+  connect(&model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
+          this, SLOT(pattern_id_changed(int, QString, int, QString)));
 }
 
 /**
@@ -199,6 +203,31 @@ void TilesetScene::update_pattern(int index) {
 
   // Redraw the area containing the pattern.
   update(model.get_pattern_frames_bounding_box(index));
+}
+
+/**
+ * @brief Slot called when the id of a pattern changes.
+ *
+ * This changes its order in the items list.
+ *
+ * @param old_index Index of the pattern before the change.
+ * @param old_id Id of the pattern before the change.
+ * @param new_index Index of the pattern after the change.
+ * @param new_id Id of the pattern after the change.
+ */
+void TilesetScene::pattern_id_changed(
+    int old_index, const QString& /* old_id */,
+    int new_index, const QString& /* new_id */) {
+
+  // Keep the items list ordered as patterns in the model.
+  pattern_items.move(old_index, new_index);
+
+  // Rebuild the selection.
+  QSignalBlocker blocker(this);
+  for (int i = 0; i < pattern_items.size(); ++i) {
+    pattern_items[i]->set_index(i);
+    pattern_items[i]->setSelected(model.is_selected(i));
+  }
 }
 
 /**
