@@ -17,8 +17,10 @@
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
 #include "tileset_model.h"
+#include <QAction>
 #include <QApplication>
 #include <QGraphicsItem>
+#include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
 
@@ -126,6 +128,35 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
           );
     return;
   }
+  else if (event->button() == Qt::RightButton) {
+    // Select and show context menu if an item was clicked.
+    QGraphicsItem* item = itemAt(event->pos());
+
+    bool keep_selected = false;
+    if ((event->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier))) {
+      // If ctrl or shift is pressed, keep the selection.
+      keep_selected = true;
+    }
+    else if (item != nullptr && item->isSelected()) {
+      // When right-clicking an already selected item, keep the selection too.
+      keep_selected = true;
+    }
+
+    if (!keep_selected) {
+      scene()->clearSelection();
+    }
+
+    if (item != nullptr && !item->isSelected()) {
+      item->setSelected(true);
+    }
+
+    // Show a context menu if at least one item is selected.
+    QList<QGraphicsItem*> selected_items = scene()->selectedItems();
+    if (!selected_items.empty()) {
+      show_context_menu(event->pos());
+      return;
+    }
+  }
 
   QGraphicsView::mousePressEvent(event);
 }
@@ -188,4 +219,40 @@ void TilesetView::wheelEvent(QWheelEvent* event) {
   }
 
   QGraphicsView::wheelEvent(event);
+}
+
+/**
+ * @brief Shows a context menu with actions relative to the selected patterns.
+ * @param where Where to show the menu, in view coordinates.
+ */
+void TilesetView::show_context_menu(const QPoint& where) {
+
+  // TODO context menu with
+  // - Ground
+  // - Animation
+  // - Animation separation
+  // - Default layer
+  // - Change id (except when multi-selection)
+  // - Delete
+  QMenu* menu = new QMenu(this);
+  QAction* action = nullptr;
+
+  menu->addSeparator();
+  action = new QAction(
+        QIcon(":/images/icon_delete.png"),
+        tr("Delete"),
+        this);
+  connect(action, SIGNAL(triggered()),
+          this, SLOT(delete_action_triggered()));
+  menu->addAction(action);
+
+  menu->popup(viewport()->mapToGlobal(where));
+}
+
+/**
+ * @brief Slot called when the user wants to delete the selected patterns.
+ */
+void TilesetView::delete_action_triggered() {
+
+  // TODO
 }

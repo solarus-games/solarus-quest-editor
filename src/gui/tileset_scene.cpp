@@ -18,6 +18,7 @@
 #include "gui/tileset_scene.h"
 #include "quest.h"
 #include "tileset_model.h"
+#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QPainter>
 #include <QPalette>

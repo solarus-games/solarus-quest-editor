@@ -48,17 +48,23 @@ protected:
   virtual void mouseMoveEvent(QMouseEvent* event) override;
   virtual void wheelEvent(QWheelEvent* event) override;
 
+private slots:
+
+  void delete_action_triggered();
+
 private:
+
+  void show_context_menu(const QPoint& where);
 
   QPointer<TilesetModel> model;   /**< The tileset viewed. */
 
   // TODO move the panning code to a reusable class,
   // because other views also need it. Use an event filter?
-  QPoint pan_initial_point;      /**< Point initially clicked when panning
+  QPoint pan_initial_point;       /**< Point initially clicked when panning
                                    * the view, in scrolling-independent
                                    * coordinates. */
 
-  double zoom;                   /**< Scale factor of the view. */
+  double zoom;                    /**< Scale factor of the view. */
 };
 
 #endif
