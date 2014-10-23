@@ -92,6 +92,7 @@ public:
   // Selected patterns.
   QItemSelectionModel& get_selection();
   int get_selected_index() const;
+  QList<int> get_selected_indexes() const;
   bool is_selected(int index) const;
 
 signals:

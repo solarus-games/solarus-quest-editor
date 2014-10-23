@@ -255,6 +255,11 @@ void TilesetView::wheelEvent(QWheelEvent* event) {
  */
 void TilesetView::show_context_menu(const QPoint& where) {
 
+  QList<int> selected_indexes = model->get_selected_indexes();
+  if (selected_indexes.empty()) {
+    return;
+  }
+
   // TODO context menu with
   // - Ground
   // - Animation
@@ -263,11 +268,33 @@ void TilesetView::show_context_menu(const QPoint& where) {
   // - Change id (except when multi-selection)
   // - Delete
   QMenu* menu = new QMenu(this);
-  EnumMenus<Ground>::create_actions(menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
 
+
+  // Ground.
+  bool common_ground = true;
+  Ground ground = model->get_pattern_ground(selected_indexes.first());
+  for (int index : selected_indexes) {
+    if (model->get_pattern_ground(index) != ground) {
+      common_ground = false;
+      break;
+    }
+  }
+
+  EnumMenus<Ground>::create_actions(menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
+  if (common_ground) {
+    int ground_index = static_cast<int>(ground);
+    QAction* checked_action = menu->actions()[ground_index];
+    checked_action->setChecked(true);
+    // Add a checkmark (there is none when there is already an icon).
+    checked_action->setText("\u2714 " + checked_action->text());
+  }
+
+  // Change pattern id.
   menu->addSeparator();
   change_pattern_id_action->setEnabled(model->get_selected_index() != -1);
   menu->addAction(change_pattern_id_action);
+
+  // Delete patterns.
   menu->addSeparator();
   menu->addAction(delete_patterns_action);
 

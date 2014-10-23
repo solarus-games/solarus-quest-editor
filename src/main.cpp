@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLibraryInfo>
+#include <QStyleFactory>
 #include <QTranslator>
 
 /**

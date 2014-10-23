@@ -896,6 +896,19 @@ int TilesetModel::get_selected_index() const {
 }
 
 /**
+ * @brief Returns all selected pattern indexes.
+ * @return The selected pattern indexes.
+ */
+QList<int> TilesetModel::get_selected_indexes() const {
+
+  QList<int> result;
+  for (const QModelIndex& index : selection.selectedIndexes()) {
+    result << index.row();
+  }
+  return result;
+}
+
+/**
  * @brief Returns whether a pattern is selected.
  * @param index A pattern index.
  * @return @c true if this pattern is selected.

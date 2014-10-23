@@ -45,18 +45,27 @@ QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 template<typename E>
 QList<QAction*> EnumMenus<E>::create_actions(QWidget* parent, EnumMenuCheckableOption checkable) {
 
+  QObject* action_parent = parent;
+  QActionGroup* group = nullptr;
+  if (checkable == EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE) {
+    group = new QActionGroup(parent);
+    action_parent = group;
+  }
+
   QList<QAction*> actions;
   for (const E& value : EnumTraits<E>::get_values()) {
     const QIcon& icon = EnumTraits<E>::get_icon(value);
     const QString& text = EnumTraits<E>::get_friendly_name(value);
-    QAction* action = new QAction(icon, text, parent);
+    QAction* action = new QAction(icon, text, action_parent);
     action->setData(static_cast<int>(value));
     if (checkable != EnumMenuCheckableOption::NON_CHECKABLE) {
       action->setCheckable(true);
     }
-    if ((int)value == 2) action->setChecked(true);
-    parent->addAction(action);
+
     actions << action;
   }
+
+  parent->addActions(actions);
+
   return actions;
 }
