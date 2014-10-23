@@ -114,123 +114,187 @@ private:
 };
 
 /**
- * @brief Changing the ground of a tile pattern.
+ * @brief Changing the ground of tile patterns.
  */
-class SetPatternGroundCommand : public TilesetEditorCommand {
+class SetPatternsGroundCommand : public TilesetEditorCommand {
 
 public:
 
-  SetPatternGroundCommand(TilesetEditor& editor, int index, Ground ground) :
+  SetPatternsGroundCommand(
+      TilesetEditor& editor, const QList<int>& indexes, Ground ground) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Ground")),
-    index(index),
-    ground_before(get_model().get_pattern_ground(index)),
+    indexes(indexes),
     ground_after(ground) {
+
+    for (int index : indexes) {
+      grounds_before << get_model().get_pattern_ground(index);
+    }
+  }
+
+  // Single-pattern overload.
+  SetPatternsGroundCommand(TilesetEditor& editor, int index, Ground ground) :
+    SetPatternsGroundCommand(editor, QList<int>() << index, ground) {
   }
 
   virtual void undo() override {
-    get_model().set_pattern_ground(index, ground_before);
+
+    int i = 0;
+    for (int index : indexes) {
+      get_model().set_pattern_ground(index, grounds_before[i]);
+      ++i;
+    }
   }
 
   virtual void redo() override {
-    get_model().set_pattern_ground(index, ground_after);
+
+    for (int index : indexes) {
+      get_model().set_pattern_ground(index, ground_after);
+    }
   }
 
 private:
 
-  int index;
-  Ground ground_before;
+  QList<int> indexes;
+  QList<Ground> grounds_before;
   Ground ground_after;
 
 };
 
 /**
- * @brief Changing the default layer of a tile pattern.
+ * @brief Changing the default layer of tile patterns.
  */
-class SetPatternDefaultLayerCommand : public TilesetEditorCommand {
+class SetPatternsDefaultLayerCommand : public TilesetEditorCommand {
 
 public:
 
-  SetPatternDefaultLayerCommand(TilesetEditor& editor, int index, Layer layer) :
+  SetPatternsDefaultLayerCommand(TilesetEditor& editor, const QList<int>& indexes, Layer layer) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Default layer")),
-    index(index),
-    layer_before(get_model().get_pattern_default_layer(index)),
+    indexes(indexes),
     layer_after(layer) {
+
+    for (int index : indexes) {
+      layers_before << get_model().get_pattern_default_layer(index);
+    }
+  }
+
+  // Single-pattern overload.
+  SetPatternsDefaultLayerCommand(TilesetEditor& editor, int index, Layer layer) :
+    SetPatternsDefaultLayerCommand(editor, QList<int>() << index, layer) {
   }
 
   virtual void undo() override {
-    get_model().set_pattern_default_layer(index, layer_before);
+
+    int i = 0;
+    for (int index : indexes) {
+      get_model().set_pattern_default_layer(index, layers_before[i]);
+      ++i;
+    }
   }
 
   virtual void redo() override {
-    get_model().set_pattern_default_layer(index, layer_after);
+
+    for (int index : indexes) {
+      get_model().set_pattern_default_layer(index, layer_after);
+    }
   }
 
 private:
 
-  int index;
-  Layer layer_before;
+  QList<int> indexes;
+  QList<Layer> layers_before;
   Layer layer_after;
 
 };
 
 /**
- * @brief Changing the animation property of a tile pattern.
+ * @brief Changing the animation property of tile patterns.
  */
-class SetPatternAnimationCommand : public TilesetEditorCommand {
+class SetPatternsAnimationCommand : public TilesetEditorCommand {
 
 public:
 
-  SetPatternAnimationCommand(
-      TilesetEditor& editor, int index, TilePatternAnimation animation) :
+  SetPatternsAnimationCommand(
+      TilesetEditor& editor, const QList<int>& indexes, TilePatternAnimation animation) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Animation")),
-    index(index),
-    animation_before(get_model().get_pattern_animation(index)),
+    indexes(indexes),
     animation_after(animation) {
+
+    for (int index : indexes) {
+      animations_before << get_model().get_pattern_animation(index);
+    }
+  }
+
+  // Single-pattern overload.
+  SetPatternsAnimationCommand(TilesetEditor& editor, int index, TilePatternAnimation animation) :
+    SetPatternsAnimationCommand(editor, QList<int>() << index, animation) {
   }
 
   virtual void undo() override {
-    get_model().set_pattern_animation(index, animation_before);
+
+    int i = 0;
+    for (int index : indexes) {
+      get_model().set_pattern_animation(index, animations_before[i]);
+      ++i;
+    }
   }
 
   virtual void redo() override {
-    get_model().set_pattern_animation(index, animation_after);
+
+    for (int index : indexes) {
+      get_model().set_pattern_animation(index, animation_after);
+    }
   }
 
 private:
 
-  int index;
-  TilePatternAnimation animation_before;
+  QList<int> indexes;
+  QList<TilePatternAnimation> animations_before;
   TilePatternAnimation animation_after;
 
 };
 
 /**
- * @brief Changing the animation property of a tile pattern.
+ * @brief Changing the animation property of tile patterns.
  */
-class SetPatternSeparationCommand : public TilesetEditorCommand {
+class SetPatternsSeparationCommand : public TilesetEditorCommand {
 
 public:
 
-  SetPatternSeparationCommand(
-      TilesetEditor& editor, int index, TilePatternSeparation separation) :
+  SetPatternsSeparationCommand(
+      TilesetEditor& editor, const QList<int>& indexes, TilePatternSeparation separation) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Animation separation")),
-    index(index),
-    separation_before(get_model().get_pattern_separation(index)),
+    indexes(indexes),
     separation_after(separation) {
+
+    for (int index : indexes) {
+      separations_before << get_model().get_pattern_separation(index);
+    }
+  }
+
+  // Single-pattern overload.
+  SetPatternsSeparationCommand(TilesetEditor& editor, int index, TilePatternSeparation separation) :
+    SetPatternsSeparationCommand(editor, QList<int>() << index, separation) {
   }
 
   virtual void undo() override {
-    get_model().set_pattern_separation(index, separation_before);
+
+    int i = 0;
+    for (int index : indexes) {
+      get_model().set_pattern_separation(index, separations_before[i]);
+    }
   }
 
   virtual void redo() override {
-    get_model().set_pattern_separation(index, separation_after);
+
+    for (int index : indexes) {
+      get_model().set_pattern_separation(index, separation_after);
+    }
   }
 
 private:
 
-  int index;
-  TilePatternSeparation separation_before;
+  QList<int> indexes;
+  QList<TilePatternSeparation> separations_before;
   TilePatternSeparation separation_after;
 
 };
@@ -558,7 +622,7 @@ void TilesetEditor::ground_selector_activated() {
     return;
   }
 
-  try_command(new SetPatternGroundCommand(*this, index, ground));
+  try_command(new SetPatternsGroundCommand(*this, index, ground));
 }
 
 /**
@@ -601,7 +665,7 @@ void TilesetEditor::animation_type_selector_activated() {
     return;
   }
 
-  if (!try_command(new SetPatternAnimationCommand(*this, index, animation))) {
+  if (!try_command(new SetPatternsAnimationCommand(*this, index, animation))) {
     // In case of failure, restore the selector.
     update_animation_type_field();
   }
@@ -640,7 +704,7 @@ void TilesetEditor::animation_separation_selector_activated() {
     return;
   }
 
-  if (!try_command(new SetPatternSeparationCommand(*this, index, separation))) {
+  if (!try_command(new SetPatternsSeparationCommand(*this, index, separation))) {
     // In case of failure, restore the selector.
     update_animation_type_field();
   }
@@ -679,7 +743,7 @@ void TilesetEditor::default_layer_selector_activated() {
     return;
   }
 
-  try_command(new SetPatternDefaultLayerCommand(*this, index, default_layer));
+  try_command(new SetPatternsDefaultLayerCommand(*this, index, default_layer));
 }
 
 /**

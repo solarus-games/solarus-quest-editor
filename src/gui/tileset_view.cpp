@@ -184,7 +184,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
         }
       }
       else {
-        // Left click outside items:, trace a selection rectangle.
+        // Left click outside items: trace a selection rectangle.
         // TODO
       }
     }
