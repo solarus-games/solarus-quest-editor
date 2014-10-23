@@ -142,24 +142,27 @@ void TilesetView::zoom_out() {
 void TilesetView::mousePressEvent(QMouseEvent* event) {
 
   if (event->button() == Qt::MidButton) {
+    // Middle button: pan the view.
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
     pan_initial_point = QPoint(
           horizontalScrollBar()->value() + event->x(),
           verticalScrollBar()->value() + event->y()
           );
-    return;
   }
   else if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
-    // Select and show context menu if an item was clicked.
+
+    // Left or right button: possibly change the selection.
     QGraphicsItem* item = itemAt(event->pos());
 
+    bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+
     bool keep_selected = false;
-    if ((event->modifiers() & (Qt::ShiftModifier | Qt::ControlModifier))) {
-      // If ctrl or shift is pressed, keep the selection.
+    if (control_or_shift) {
+      // If ctrl or shift is pressed, keep the existing selection.
       keep_selected = true;
     }
     else if (item != nullptr && item->isSelected()) {
-      // When clicking an already selected item, keep the selection too.
+      // When clicking an already selected item, keep the existing selection too.
       keep_selected = true;
     }
 
@@ -167,19 +170,35 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       scene()->clearSelection();
     }
 
-    if (item != nullptr && !item->isSelected()) {
-      item->setSelected(true);
-    }
-
-    // On a right click, trace a selection rectangle if clicking outside items.
     if (event->button() == Qt::LeftButton) {
-      if (item == nullptr) {
-        // TODO start tracing a selection rectangle.
+
+      if (item != nullptr) {
+
+        if (control_or_shift) {
+          // Left-clicking an item while pressing control or shift: toggle it.
+          item->setSelected(!item->isSelected());
+        }
+        else if (!item->isSelected()) {
+          // Select the item.
+          item->setSelected(true);
+        }
+      }
+      else {
+        // Left click outside items:, trace a selection rectangle.
+        // TODO
       }
     }
 
-    // On a right click, show a context menu if at least one item is selected.
     else if (event->button() == Qt::RightButton) {
+
+      if (item != nullptr) {
+        if (!item->isSelected()) {
+          // Select the right-clicked item.
+          item->setSelected(true);
+        }
+      }
+
+      // Show a context menu if at least one item is selected.
       QList<QGraphicsItem*> selected_items = scene()->selectedItems();
       if (!selected_items.empty()) {
         show_context_menu(event->pos());
