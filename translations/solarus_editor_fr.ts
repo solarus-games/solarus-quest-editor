@@ -930,17 +930,15 @@
         <translation>Nom pour identifier le motif</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="206"/>
         <source>Rename</source>
-        <translation>Renommer</translation>
+        <translation type="vanished">Renommer</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="216"/>
         <source>F2</source>
-        <translation>F2</translation>
+        <translation type="vanished">F2</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="344"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="341"/>
         <source>Layer to initially apply to tiles using this pattern on maps</source>
         <translation>Couche initialement appliquée aux tiles créés avec ce motif</translation>
     </message>
@@ -971,35 +969,40 @@
         <translation>Id du motif</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="244"/>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="124"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="206"/>
+        <source>Rename (F2)</source>
+        <translation>Renommer (F2)</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="241"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="125"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="257"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="254"/>
         <source>Terrain of the pattern</source>
         <translation>Type de terrain du motif</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="267"/>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="185"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="264"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="218"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="303"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="300"/>
         <source>Kind of animation of the pattern</source>
         <translation>Type d&apos;animation du motif</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="316"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="313"/>
         <source>Horizontal or vertical separation (only for multi-frame patterns)</source>
         <translation>Séparation horizontale ou verticale (motifs multi-images uniquement)</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="331"/>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="154"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.ui" line="328"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="171"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
@@ -1009,24 +1012,29 @@
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="216"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="265"/>
         <source>Animation separation</source>
         <translation>Séparation d&apos;animation</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="267"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="331"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="510"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="580"/>
         <source>Rename tile pattern</source>
         <translation>Renommer un motif</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="511"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="581"/>
         <source>New id for pattern &apos;%1&apos;:</source>
         <translation>Nouvel id du motif &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_editor.cpp" line="754"/>
+        <source>Not implemented yet!</source>
+        <translation>Opération non disponible</translation>
     </message>
 </context>
 <context>
@@ -1042,9 +1050,24 @@
         <translation>Impossible d&apos;enregistrer le fichier de tileset &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="543"/>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="645"/>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="665"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="261"/>
+        <source>Invalid tile pattern index: %1</source>
+        <translation>Index de motif non valide : %1</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="265"/>
+        <source>Invalid tile pattern id: &apos;%1&apos;</source>
+        <translation>Id de motif non valide : &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="269"/>
+        <source>Tile pattern &apos;%1&apos; already exists</source>
+        <translation>Le motif &apos;%1&apos; existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="600"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="702"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/tileset_model.cpp" line="722"/>
         <source>Cannot divide the pattern in 3 frames : the size of each frame must be a multiple of 8 pixels</source>
         <translation>Impossible de diviser le motif en 3 images : la taille de chaque image doit être un multiple de 8 pixels</translation>
     </message>
@@ -1052,9 +1075,27 @@
 <context>
     <name>TilesetScene</name>
     <message>
-        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_scene.cpp" line="131"/>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_scene.cpp" line="136"/>
         <source>Missing tileset image &apos;%1&apos;</source>
         <translation>Image de tileset manquante : &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>TilesetView</name>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_view.cpp" line="42"/>
+        <source>Change id...</source>
+        <translation>Changer l&apos;id...</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_view.cpp" line="43"/>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../dsk/ws-saumur1/local/users/cthiery/perso/jeux/solarus-quest-editor/src/gui/tileset_view.cpp" line="50"/>
+        <source>Delete...</source>
+        <translation>Supprimer...</translation>
     </message>
 </context>
 </TS>
