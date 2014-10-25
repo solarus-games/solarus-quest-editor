@@ -118,6 +118,10 @@ private:
 
   public:
 
+    /**
+     * @brief Creates a tile pattern model.
+     * @param id Id of the tile pattern to represent.
+     */
     PatternModel(const QString& id) :
       id(id) {
     }
