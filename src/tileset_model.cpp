@@ -316,6 +316,8 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
  *
  * @param index Index of the pattern to delete.
  * @throws EditorException in case of error.
+ *
+ * TODO make a function to delete several patterns at once.
  */
 void TilesetModel::delete_pattern(int index) {
 

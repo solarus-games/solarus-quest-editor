@@ -47,6 +47,7 @@ private slots:
       const QItemSelection& selected, const QItemSelection& deselected);
   void set_selection_from_scene();
   void update_pattern(int index);
+  void pattern_created(int new_index, const QString& new_id);
   void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
                           int new_index, const QString& new_id);

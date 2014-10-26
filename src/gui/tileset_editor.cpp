@@ -217,9 +217,15 @@ public:
   DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
 
-    // Store indexes as strings to keep them valid during the deletion loop.
     for (int index : indexes) {
-      pattern_ids << get_model().index_to_id(index);
+      Pattern pattern;
+      pattern.id =  get_model().index_to_id(index);
+      pattern.frames_bounding_box = get_model().get_pattern_frames_bounding_box(index);
+      pattern.ground = get_model().get_pattern_ground(index);
+      pattern.default_layer = get_model().get_pattern_default_layer(index);
+      pattern.animation = get_model().get_pattern_animation(index);
+      pattern.separation = get_model().get_pattern_separation(index);
+      patterns << pattern;
     }
   }
 
@@ -230,20 +236,35 @@ public:
 
   virtual void undo() override {
 
-    // TODO
+    for (const Pattern& pattern : patterns) {
+      int index = get_model().create_pattern(pattern.id, pattern.frames_bounding_box);
+      get_model().set_pattern_ground(index, pattern.ground);
+      get_model().set_pattern_default_layer(index, pattern.default_layer);
+      get_model().set_pattern_animation(index, pattern.animation);
+      get_model().set_pattern_separation(index, pattern.separation);
+    }
   }
 
   virtual void redo() override {
 
-    for (QString pattern_id : pattern_ids) {
-      int index = get_model().id_to_index(pattern_id);
+    for (const Pattern& pattern : patterns) {
+      int index = get_model().id_to_index(pattern.id);
       get_model().delete_pattern(index);
     }
   }
 
 private:
 
-  QStringList pattern_ids;
+  struct Pattern {
+    QString id;
+    QRect frames_bounding_box;
+    Ground ground;
+    Layer default_layer;
+    TilePatternAnimation animation;
+    TilePatternSeparation separation;
+  };
+
+  QList<Pattern> patterns;
 
 };
 
@@ -388,6 +409,11 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
+
+  connect(model, SIGNAL(pattern_created(int, QString)),
+          this, SLOT(update_num_patterns_field()));
+  connect(model, SIGNAL(pattern_deleted(int, QString)),
+          this, SLOT(update_num_patterns_field()));
 
   connect(ui.background_button, SIGNAL(clicked()),
           this, SLOT(background_button_clicked()));

@@ -83,6 +83,8 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
           this, SLOT(update_pattern(int)));
 
   // Watch changes in the pattern list.
+  connect(&model, SIGNAL(pattern_created(int, QString)),
+          this, SLOT(pattern_created(int, QString)));
   connect(&model, SIGNAL(pattern_deleted(int, QString)),
           this, SLOT(pattern_deleted(int, QString)));
   connect(&model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
@@ -206,6 +208,28 @@ void TilesetScene::update_pattern(int index) {
 
   // Redraw the area containing the pattern.
   update(model.get_pattern_frames_bounding_box(index));
+}
+
+/**
+ * @brief Slot called when a pattern is created.
+ *
+ * Elements are shifted in the items list.
+ *
+ * @param new_index Index of the newly created pattern.
+ * @param new_id Id of the pattern.
+ */
+void TilesetScene::pattern_created(
+    int new_index, const QString& /* new_id */) {
+
+  // Keep the items list in sync with patterns in the model.
+  PatternItem* pattern_item = new PatternItem(model, new_index);
+  addItem(pattern_item);
+  pattern_items.insert(new_index, pattern_item);
+
+  // Each item stores its order, so we need to update them.
+  for (int i = 0; i < pattern_items.size(); ++i) {
+    pattern_items[i]->set_index(i);
+  }
 }
 
 /**
