@@ -36,6 +36,9 @@
  */
 TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent),
+  change_pattern_id_action(nullptr),
+  delete_patterns_action(nullptr),
+  last_integer_pattern_id(0),
   state(State::NORMAL),
   current_area_item(nullptr),
   zoom(1.0) {
@@ -513,7 +516,13 @@ void TilesetView::end_state_drawing_rectangle() {
     QMenu menu;
     EnumMenus<Ground>::create_actions(
           menu, EnumMenuCheckableOption::NON_CHECKABLE, [=](Ground ground) {
-      emit create_pattern_requested("TODO", rectangle, ground);
+      QString pattern_id;
+      do {
+        ++last_integer_pattern_id;
+        pattern_id = QString::number(last_integer_pattern_id);
+      } while (model->id_to_index(pattern_id) != -1);
+
+      emit create_pattern_requested(pattern_id, rectangle, ground);
     });
 
     // Change each ground text to add the word "Create".
@@ -552,6 +561,7 @@ void TilesetView::set_current_area(const QRect& area) {
 
   scene()->clearSelection();
   if (state == State::DRAWING_RECTANGLE) {
+    // Select items stricly in the rectangle.
     QRect outline(
           area.topLeft() - QPoint(1, 1),
           area.size() + QSize(2, 2));

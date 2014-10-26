@@ -91,6 +91,7 @@ private:
   QAction* change_pattern_id_action;   /**< Action of changing a pattern id. */
   QAction* delete_patterns_action;     /**< Action of deleting the selected
                                         * patterns. */
+  int last_integer_pattern_id;         /**< Last auto-generated pattern id. */
   State state;                         /**< Current operation done by user. */
   QPoint dragging_start_point;         /**< In states DRAWING_NEW_PATTERN and
                                         * MOVING_PATTERN: point where the
