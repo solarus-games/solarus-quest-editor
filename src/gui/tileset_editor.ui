@@ -157,7 +157,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Tile pattern properties</string>
+          <string>Selection properties</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="fieldGrowthPolicy">
