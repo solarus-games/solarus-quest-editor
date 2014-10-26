@@ -99,10 +99,12 @@ public:
 
   virtual void undo() override {
     get_model().set_pattern_id(index_after, id_before);
+    get_model().set_selected_index(index_before);
   }
 
   virtual void redo() override {
     index_after = get_model().set_pattern_id(index_before, id_after);
+    get_model().set_selected_index(index_after);
   }
 
 private:
@@ -144,6 +146,7 @@ public:
       get_model().set_pattern_ground(index, grounds_before[i]);
       ++i;
     }
+    get_model().set_selected_indexes(indexes);
   }
 
   virtual void redo() override {
@@ -151,6 +154,7 @@ public:
     for (int index : indexes) {
       get_model().set_pattern_ground(index, ground_after);
     }
+    get_model().set_selected_indexes(indexes);
   }
 
 private:
@@ -190,6 +194,7 @@ public:
       get_model().set_pattern_default_layer(index, layers_before[i]);
       ++i;
     }
+    get_model().set_selected_indexes(indexes);
   }
 
   virtual void redo() override {
@@ -197,6 +202,7 @@ public:
     for (int index : indexes) {
       get_model().set_pattern_default_layer(index, layer_after);
     }
+    get_model().set_selected_indexes(indexes);
   }
 
 private:
@@ -204,67 +210,6 @@ private:
   QList<int> indexes;
   QList<Layer> layers_before;
   Layer layer_after;
-
-};
-
-/**
- * @brief Deleting tile patterns.
- */
-class DeletePatternsCommand : public TilesetEditorCommand {
-
-public:
-
-  DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
-    TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
-
-    for (int index : indexes) {
-      Pattern pattern;
-      pattern.id =  get_model().index_to_id(index);
-      pattern.frames_bounding_box = get_model().get_pattern_frames_bounding_box(index);
-      pattern.ground = get_model().get_pattern_ground(index);
-      pattern.default_layer = get_model().get_pattern_default_layer(index);
-      pattern.animation = get_model().get_pattern_animation(index);
-      pattern.separation = get_model().get_pattern_separation(index);
-      patterns << pattern;
-    }
-  }
-
-  // Single-pattern overload.
-  DeletePatternsCommand(TilesetEditor& editor, int index) :
-    DeletePatternsCommand(editor, QList<int>() << index) {
-  }
-
-  virtual void undo() override {
-
-    for (const Pattern& pattern : patterns) {
-      int index = get_model().create_pattern(pattern.id, pattern.frames_bounding_box);
-      get_model().set_pattern_ground(index, pattern.ground);
-      get_model().set_pattern_default_layer(index, pattern.default_layer);
-      get_model().set_pattern_animation(index, pattern.animation);
-      get_model().set_pattern_separation(index, pattern.separation);
-    }
-  }
-
-  virtual void redo() override {
-
-    for (const Pattern& pattern : patterns) {
-      int index = get_model().id_to_index(pattern.id);
-      get_model().delete_pattern(index);
-    }
-  }
-
-private:
-
-  struct Pattern {
-    QString id;
-    QRect frames_bounding_box;
-    Ground ground;
-    Layer default_layer;
-    TilePatternAnimation animation;
-    TilePatternSeparation separation;
-  };
-
-  QList<Pattern> patterns;
 
 };
 
@@ -298,6 +243,7 @@ public:
       get_model().set_pattern_animation(index, animations_before[i]);
       ++i;
     }
+    get_model().set_selected_indexes(indexes);
   }
 
   virtual void redo() override {
@@ -305,6 +251,7 @@ public:
     for (int index : indexes) {
       get_model().set_pattern_animation(index, animation_after);
     }
+    get_model().set_selected_indexes(indexes);
   }
 
 private:
@@ -344,6 +291,7 @@ public:
     for (int index : indexes) {
       get_model().set_pattern_separation(index, separations_before[i]);
     }
+    get_model().set_selected_indexes(indexes);
   }
 
   virtual void redo() override {
@@ -351,6 +299,7 @@ public:
     for (int index : indexes) {
       get_model().set_pattern_separation(index, separation_after);
     }
+    get_model().set_selected_indexes(indexes);
   }
 
 private:
@@ -358,6 +307,73 @@ private:
   QList<int> indexes;
   QList<TilePatternSeparation> separations_before;
   TilePatternSeparation separation_after;
+
+};
+
+/**
+ * @brief Deleting tile patterns.
+ */
+class DeletePatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
+
+    for (int index : indexes) {
+      Pattern pattern;
+      pattern.id =  get_model().index_to_id(index);
+      pattern.frames_bounding_box = get_model().get_pattern_frames_bounding_box(index);
+      pattern.ground = get_model().get_pattern_ground(index);
+      pattern.default_layer = get_model().get_pattern_default_layer(index);
+      pattern.animation = get_model().get_pattern_animation(index);
+      pattern.separation = get_model().get_pattern_separation(index);
+      patterns << pattern;
+    }
+  }
+
+  // Single-pattern overload.
+  DeletePatternsCommand(TilesetEditor& editor, int index) :
+    DeletePatternsCommand(editor, QList<int>() << index) {
+  }
+
+  virtual void undo() override {
+
+    for (const Pattern& pattern : patterns) {
+      int index = get_model().create_pattern(pattern.id, pattern.frames_bounding_box);
+      get_model().set_pattern_ground(index, pattern.ground);
+      get_model().set_pattern_default_layer(index, pattern.default_layer);
+      get_model().set_pattern_animation(index, pattern.animation);
+      get_model().set_pattern_separation(index, pattern.separation);
+    }
+
+    QList<int> indexes;
+    for (const Pattern& pattern : patterns) {
+      indexes << get_model().id_to_index(pattern.id);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+  virtual void redo() override {
+
+    for (const Pattern& pattern : patterns) {
+      int index = get_model().id_to_index(pattern.id);
+      get_model().delete_pattern(index);
+    }
+  }
+
+private:
+
+  struct Pattern {
+    QString id;
+    QRect frames_bounding_box;
+    Ground ground;
+    Layer default_layer;
+    TilePatternAnimation animation;
+    TilePatternSeparation separation;
+  };
+
+  QList<Pattern> patterns;
 
 };
 
