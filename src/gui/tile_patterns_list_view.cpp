@@ -40,5 +40,5 @@ void TilePatternsListView::set_model(TilesetModel& model) {
 
   QListView::setModel(&model);
   selectionModel()->deleteLater();
-  setSelectionModel(&model.get_selection());
+  setSelectionModel(&model.get_selection_model());
 }

@@ -93,10 +93,16 @@ public:
   QImage get_patterns_image() const;
 
   // Selected patterns.
-  QItemSelectionModel& get_selection();
+  QItemSelectionModel& get_selection_model();
   int get_selected_index() const;
   QList<int> get_selected_indexes() const;
+  void set_selected_index(int index);
+  void set_selected_indexes(const QList<int> indexes);
+  void add_to_selected(int index);
+  void add_to_selected(const QList<int> index);
   bool is_selected(int index) const;
+  void toggle_selected(int index);
+  void clear_selection();
 
 signals:
 
@@ -155,7 +161,8 @@ private:
   QList<PatternModel>
       patterns;                   /**< All patterns. */
 
-  QItemSelectionModel selection;  /**< Patterns currently selected. */
+  QItemSelectionModel
+      selection_model;            /**< Patterns currently selected. */
 
 };
 

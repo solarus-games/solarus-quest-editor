@@ -450,7 +450,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
 
-  connect(&model->get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+  connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
 }
 

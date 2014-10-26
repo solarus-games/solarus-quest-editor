@@ -71,7 +71,7 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
   build();
 
   // Synchronize the scene selection with the tileset selection model.
-  connect(&model.get_selection(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+  connect(&model.get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_selection_to_scene(QItemSelection, QItemSelection)));
   connect(this, SIGNAL(selectionChanged()),
           this, SLOT(set_selection_from_scene()));
@@ -188,16 +188,15 @@ void TilesetScene::update_selection_to_scene(
 void TilesetScene::set_selection_from_scene() {
 
   // Forward the change to the tileset.
-  QItemSelection selection;
+  QList<int> indexes;
   for (QGraphicsItem* item : selectedItems()) {
     PatternItem* pattern_item = qgraphicsitem_cast<PatternItem*>(item);
     if (pattern_item != nullptr) {
-      QModelIndex index = model.index(pattern_item->get_index());
-      selection.select(index, index);
+      indexes << pattern_item->get_index();
     }
   }
 
-  model.get_selection().select(selection, QItemSelectionModel::ClearAndSelect);
+  model.set_selected_indexes(indexes);
 }
 
 /**
