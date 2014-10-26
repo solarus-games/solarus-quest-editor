@@ -17,7 +17,6 @@
 #include "gui/enum_menus.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
-#include "ground_traits.h"
 #include "tile_pattern_animation_traits.h"
 #include "tile_pattern_separation_traits.h"
 #include "tileset_model.h"
@@ -285,9 +284,17 @@ void TilesetView::show_context_menu(const QPoint& where) {
   // Ground.
   build_context_menu_ground(*menu, selected_indexes);
 
-  // TODO Default layer
-  // TODO Animation
-  // TODO Animation separation
+  // Default layer.
+  QMenu* layer_menu = new QMenu(tr("Default layer"), this);
+  build_context_menu_layer(*layer_menu, selected_indexes);
+  menu->addSeparator();
+  menu->addMenu(layer_menu);
+
+  // Animation.
+  QMenu* animation_menu = new QMenu(tr("Animation"), this);
+  build_context_menu_animation(*animation_menu, selected_indexes);
+  menu->addSeparator();
+  menu->addMenu(animation_menu);
 
   // Change pattern id.
   menu->addSeparator();
@@ -304,11 +311,15 @@ void TilesetView::show_context_menu(const QPoint& where) {
 
 /**
  * @brief Builds the ground part of a context menu for patterns.
- * @param menu The context menu being created.
+ * @param menu The menu to fill.
  * @param indexes Patterns to build a context menu for.
  */
 void TilesetView::build_context_menu_ground(
     QMenu& menu, const QList<int>& indexes) {
+
+  if (indexes.empty()) {
+    return;
+  }
 
   // See if the ground is common.
   bool common_ground = true;
@@ -334,5 +345,109 @@ void TilesetView::build_context_menu_ground(
     checked_action->setChecked(true);
     // Add a checkmark (there is none when there is already an icon).
     checked_action->setText("\u2714 " + checked_action->text());
+  }
+}
+
+/**
+ * @brief Builds the default layer part of a context menu for patterns.
+ * @param menu The menu to fill.
+ * @param indexes Patterns to build a context menu for.
+ */
+void TilesetView::build_context_menu_layer(
+    QMenu& menu, const QList<int>& indexes) {
+
+  if (indexes.empty()) {
+    return;
+  }
+
+  // See if the default layer is common.
+  bool common_layer = true;
+  Layer layer = model->get_pattern_default_layer(indexes.first());
+  for (int index : indexes) {
+    if (model->get_pattern_default_layer(index) != layer) {
+      common_layer = false;
+      break;
+    }
+  }
+
+  // Add layer actions to the menu.
+  QList<QAction*> layer_actions = EnumMenus<Layer>::create_actions(
+        menu,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](Layer layer) {
+    emit change_selected_patterns_default_layer_requested(layer);
+  });
+
+  if (common_layer) {
+    int layer_index = static_cast<int>(layer);
+    QAction* checked_action = layer_actions[layer_index];
+    checked_action->setChecked(true);
+  }
+}
+
+/**
+ * @brief Builds the animation layer part of a context menu for patterns.
+ * @param menu The menu to fill.
+ * @param indexes Patterns to build a context menu for.
+ */
+void TilesetView::build_context_menu_animation(
+    QMenu& menu, const QList<int>& indexes) {
+
+  if (indexes.empty()) {
+    return;
+  }
+
+  // See if the animation and the separation are common.
+  bool common_animation = true;
+  bool common_separation = true;
+  bool enable_separation = true;
+  TilePatternAnimation animation = model->get_pattern_animation(indexes.first());
+  TilePatternSeparation separation = model->get_pattern_separation(indexes.first());
+  for (int index : indexes) {
+    if (model->get_pattern_animation(index) != animation) {
+      common_animation = false;
+    }
+    if (model->get_pattern_separation(index) != separation) {
+      common_separation = false;
+    }
+    if (!TilePatternAnimationTraits::is_multi_frame(animation)) {
+      enable_separation = false;
+    }
+  }
+
+  // Add actions to the menu.
+  QList<QAction*> animation_actions = EnumMenus<TilePatternAnimation>::create_actions(
+        menu,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](TilePatternAnimation animation) {
+    emit change_selected_patterns_animation_requested(animation);
+  });
+  menu.addSeparator();
+  QList<QAction*> separation_actions = EnumMenus<TilePatternSeparation>::create_actions(
+        menu,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](TilePatternSeparation separation) {
+    emit change_selected_patterns_separation_requested(separation);
+  });
+
+  if (common_animation) {
+    int animation_index = static_cast<int>(animation);
+    QAction* checked_action = animation_actions[animation_index];
+    checked_action->setChecked(true);
+  }
+
+  if (enable_separation) {
+    if (common_separation) {
+      int separation_index = static_cast<int>(separation);
+      QAction* checked_action = separation_actions[separation_index];
+      checked_action->setChecked(true);
+      // Add a checkmark (there is none when there is already an icon).
+      checked_action->setText("\u2714 " + checked_action->text());
+    }
+  }
+  else {
+    for (QAction* action : separation_actions) {
+      action->setEnabled(false);
+    }
   }
 }

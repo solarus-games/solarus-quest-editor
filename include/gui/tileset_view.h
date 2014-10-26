@@ -18,6 +18,9 @@
 #define SOLARUSEDITOR_TILESET_VIEW_H
 
 #include "ground_traits.h"
+#include "layer_traits.h"
+#include "tile_pattern_animation.h"
+#include "tile_pattern_separation.h"
 #include <QGraphicsView>
 #include <QPointer>
 
@@ -42,6 +45,9 @@ signals:
   void change_selected_pattern_id_requested();
   void delete_selected_patterns_requested();
   void change_selected_patterns_ground_requested(Ground ground);
+  void change_selected_patterns_default_layer_requested(Layer layer);
+  void change_selected_patterns_animation_requested(TilePatternAnimation animation);
+  void change_selected_patterns_separation_requested(TilePatternSeparation separation);
 
 public slots:
 
@@ -60,6 +66,8 @@ private:
 
   void show_context_menu(const QPoint& where);
   void build_context_menu_ground(QMenu& menu, const QList<int>& indexes);
+  void build_context_menu_layer(QMenu& menu, const QList<int>& indexes);
+  void build_context_menu_animation(QMenu& menu, const QList<int>& indexes);
 
   QPointer<TilesetModel> model;        /**< The tileset viewed. */
   QAction* change_pattern_id_action;   /**< Action of changing a pattern id. */
