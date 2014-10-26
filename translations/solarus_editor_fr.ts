@@ -956,7 +956,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="172"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="93"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="367"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
@@ -967,7 +967,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="241"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="128"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="94"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
@@ -978,7 +978,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="264"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="215"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="181"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
@@ -994,7 +994,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="328"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="171"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="137"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
@@ -1004,42 +1004,47 @@
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="260"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="226"/>
         <source>Animation separation</source>
         <translation>Séparation d&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="302"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="269"/>
+        <source>Create pattern</source>
+        <translation>Nouveau motif</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="305"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="385"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="422"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="651"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="690"/>
         <source>Rename tile pattern</source>
         <translation>Renommer un motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="652"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="691"/>
         <source>New id for pattern &apos;%1&apos;:</source>
         <translation>Nouvel id du motif &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="895"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="947"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="899"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="951"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="905"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="957"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
@@ -1098,29 +1103,44 @@
 <context>
     <name>TilesetView</name>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="42"/>
+        <location filename="../src/gui/tileset_view.cpp" line="49"/>
         <source>Change id...</source>
         <translation>Changer l&apos;id...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="43"/>
+        <location filename="../src/gui/tileset_view.cpp" line="50"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="50"/>
+        <location filename="../src/gui/tileset_view.cpp" line="57"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="288"/>
+        <location filename="../src/gui/tileset_view.cpp" line="338"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="294"/>
+        <location filename="../src/gui/tileset_view.cpp" line="344"/>
         <source>Animation</source>
         <translation>Animation</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_view.cpp" line="531"/>
+        <source>New pattern (more options)</source>
+        <translation>Nouveau motif (plus d&apos;options)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_view.cpp" line="537"/>
+        <source>New pattern (%1)</source>
+        <translation>Nouveau motif (%1)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_view.cpp" line="548"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
     </message>
 </context>
 </TS>
