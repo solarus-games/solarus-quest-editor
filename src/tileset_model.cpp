@@ -1060,7 +1060,7 @@ QList<int> TilesetModel::get_selected_indexes() const {
  */
 void TilesetModel::set_selected_index(int index) {
 
-  set_selected_indexes(QList<int>() << index);
+  set_selected_indexes({ index });
 }
 
 /**
@@ -1084,7 +1084,7 @@ void TilesetModel::set_selected_indexes(const QList<int> indexes) {
  */
 void TilesetModel::add_to_selected(int index) {
 
-  add_to_selected(QList<int>() << index);
+  add_to_selected({ index });
 }
 
 /**

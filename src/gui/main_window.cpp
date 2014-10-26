@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   ui.setupUi(this);
 
   const int tree_width = 300;
-  ui.splitter->setSizes(QList<int>() << tree_width << width() - tree_width);
+  ui.splitter->setSizes({ tree_width, width() - tree_width });
 
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);

@@ -312,11 +312,6 @@ public:
     }
   }
 
-  // Single-pattern overload.
-  DeletePatternsCommand(TilesetEditor& editor, int index) :
-    DeletePatternsCommand(editor, QList<int>() << index) {
-  }
-
   virtual void undo() override {
 
     for (const Pattern& pattern : patterns) {
@@ -395,7 +390,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   // Prepare the gui.
   layout()->addWidget(ui.splitter);
   const int side_width = 400;
-  ui.splitter->setSizes(QList<int>() << side_width << width() - side_width);
+  ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
   ui.tileset_view->set_model(*model);
   update();
