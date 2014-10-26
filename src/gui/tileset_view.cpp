@@ -188,7 +188,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       }
       else {
         // Left click outside items: trace a selection rectangle.
-        start_state_drawing_new_pattern(event->pos());
+        start_state_drawing_rectangle(event->pos());
       }
     }
 
@@ -225,7 +225,7 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
     return;
   }
 
-  if (state == State::DRAWING_NEW_PATTERN) {
+  if (state == State::DRAWING_RECTANGLE) {
     start_state_normal();
   }
 
@@ -252,7 +252,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
     return;
   }
 
-  if (state == State::DRAWING_NEW_PATTERN) {
+  if (state == State::DRAWING_RECTANGLE) {
 
     // Compute the selected area.
     QPoint dragging_previous_point = dragging_current_point;
@@ -486,13 +486,14 @@ void TilesetView::start_state_normal() {
 }
 
 /**
- * @brief Sets the state to drawing a new tile pattern area.
+ * @brief Moves to the state of drawing a rectangle for a selection or a
+ * new pattern.
  * @param initial_point Where the user starts drawing the rectangle,
  * in view coordinates.
  */
-void TilesetView::start_state_drawing_new_pattern(const QPoint& initial_point) {
+void TilesetView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
-  this->state = State::DRAWING_NEW_PATTERN;
+  this->state = State::DRAWING_RECTANGLE;
   this->dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
 }
 
@@ -513,7 +514,7 @@ void TilesetView::set_current_area(const QRect& area) {
 
   current_area_item->setRect(area);
 
-  if (state == State::DRAWING_NEW_PATTERN) {
+  if (state == State::DRAWING_RECTANGLE) {
     QPainterPath path;
     path.addRect(area);
     scene()->setSelectionArea(path);

@@ -69,7 +69,8 @@ private:
    */
   enum class State {
       NORMAL,                   /**< Can click on patterns. */
-      DRAWING_NEW_PATTERN,      /**< Drawing a rectangle for a new pattern. */
+      DRAWING_RECTANGLE,        /**< Drawing a rectangle for a selection or
+                                 * a new pattern. */
       MOVING_PATTERN            /**< Moving an existing pattern to another
                                  * place in the PNG image. */
   };
@@ -80,7 +81,7 @@ private:
   void build_context_menu_animation(QMenu& menu, const QList<int>& indexes);
 
   void start_state_normal();
-  void start_state_drawing_new_pattern(const QPoint& initial_point);
+  void start_state_drawing_rectangle(const QPoint& initial_point);
   void set_current_area(const QRect& area);
 
   QPointer<TilesetModel> model;        /**< The tileset viewed. */
