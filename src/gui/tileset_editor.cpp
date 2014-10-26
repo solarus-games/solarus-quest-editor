@@ -23,6 +23,7 @@
 #include <QColorDialog>
 #include <QInputDialog>
 #include <QItemSelectionModel>
+#include <QMessageBox>
 #include <QUndoStack>
 
 namespace {
@@ -203,6 +204,40 @@ private:
   QList<int> indexes;
   QList<Layer> layers_before;
   Layer layer_after;
+
+};
+
+/**
+ * @brief Deleting tile patterns.
+ */
+class DeletePatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete")),
+    indexes(indexes) {
+
+  }
+
+  // Single-pattern overload.
+  DeletePatternsCommand(TilesetEditor& editor, int index) :
+    DeletePatternsCommand(editor, QList<int>() << index) {
+  }
+
+  virtual void undo() override {
+
+    // TODO
+  }
+
+  virtual void redo() override {
+
+    // TODO
+  }
+
+private:
+
+  QList<int> indexes;
 
 };
 
@@ -751,6 +786,32 @@ void TilesetEditor::default_layer_selector_activated() {
  */
 void TilesetEditor::delete_selected_patterns_requested() {
 
-  GuiTools::warning_dialog(tr("Not implemented yet!"));
-  // TODO confirm suppression
+  QList<int> indexes = model->get_selected_indexes();
+
+  if (indexes.empty()) {
+    return;
+  }
+
+  QString question_text;
+  if (indexes.size() == 1) {
+    QString pattern_id = model->index_to_id(indexes.first());
+    question_text = tr("Do you really want to delete pattern '%1'?").
+        arg(pattern_id);
+  }
+  else {
+    question_text = tr("Do you really want to delete these %1 patterns?").
+        arg(indexes.size());
+  }
+
+  QMessageBox::StandardButton answer = QMessageBox::question(
+        this,
+        tr("Delete confirmation"),
+        question_text,
+        QMessageBox::Yes | QMessageBox::No);
+
+  if (answer != QMessageBox::Yes) {
+    return;
+  }
+
+  try_command(new DeletePatternsCommand(*this, indexes));
 }

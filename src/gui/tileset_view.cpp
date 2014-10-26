@@ -288,7 +288,6 @@ void TilesetView::show_context_menu(const QPoint& where) {
   // - Delete
   QMenu* menu = new QMenu(this);
 
-
   // Ground.
   bool common_ground = true;
   Ground ground = model->get_pattern_ground(selected_indexes.first());
