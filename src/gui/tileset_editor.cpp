@@ -452,16 +452,22 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(ui.default_layer_field, SIGNAL(activated(QString)),
           this, SLOT(default_layer_selector_activated()));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_default_layer_requested(Layer)),
+          this, SLOT(change_selected_patterns_default_layer_requested(Layer)));
   connect(model, SIGNAL(pattern_default_layer_changed(int, Layer)),
           this, SLOT(update_default_layer_field()));
 
   connect(ui.animation_type_field, SIGNAL(activated(QString)),
           this, SLOT(animation_type_selector_activated()));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_animation_requested(TilePatternAnimation)),
+          this, SLOT(change_selected_patterns_animation_requested(TilePatternAnimation)));
   connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
           this, SLOT(update_animation_type_field()));
 
   connect(ui.animation_separation_field, SIGNAL(activated(QString)),
           this, SLOT(animation_separation_selector_activated()));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_separation_requested(TilePatternSeparation)),
+          this, SLOT(change_selected_patterns_separation_requested(TilePatternSeparation)));
   connect(model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
           this, SLOT(update_animation_separation_field()));
 
@@ -770,6 +776,19 @@ void TilesetEditor::animation_type_selector_activated() {
 }
 
 /**
+ * @brief Slot called when the user changes the animation of selected patterns.
+ * @param animation The new animation.
+ */
+void TilesetEditor::change_selected_patterns_animation_requested(TilePatternAnimation animation) {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  try_command(new SetPatternsAnimationCommand(*this, model->get_selected_indexes(), animation));
+}
+
+/**
  * @brief Updates the animation separation selector from the model.
  */
 void TilesetEditor::update_animation_separation_field() {
@@ -809,6 +828,22 @@ void TilesetEditor::animation_separation_selector_activated() {
 }
 
 /**
+ * @brief Slot called when the user changes the separation of selected patterns.
+ * @param separation The new separation.
+ */
+void TilesetEditor::change_selected_patterns_separation_requested(TilePatternSeparation separation) {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  if (!try_command(new SetPatternsSeparationCommand(*this, model->get_selected_indexes(), separation))) {
+    // In case of failure, restore the selector.
+    update_animation_separation_field();
+  }
+}
+
+/**
  * @brief Updates the default layer selector from the model.
  */
 void TilesetEditor::update_default_layer_field() {
@@ -842,6 +877,19 @@ void TilesetEditor::default_layer_selector_activated() {
   }
 
   try_command(new SetPatternsDefaultLayerCommand(*this, index, default_layer));
+}
+
+/**
+ * @brief Slot called when the user changes the default layer of selected patterns.
+ * @param default_layer The new default layer.
+ */
+void TilesetEditor::change_selected_patterns_default_layer_requested(Layer default_layer) {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  try_command(new SetPatternsDefaultLayerCommand(*this, model->get_selected_indexes(), default_layer));
 }
 
 /**
