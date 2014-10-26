@@ -552,7 +552,10 @@ void TilesetView::set_current_area(const QRect& area) {
 
   scene()->clearSelection();
   if (state == State::DRAWING_RECTANGLE) {
-    QList<QGraphicsItem*> items = scene()->items(area, Qt::ContainsItemBoundingRect);
+    QRect outline(
+          area.topLeft() - QPoint(1, 1),
+          area.size() + QSize(2, 2));
+    QList<QGraphicsItem*> items = scene()->items(outline, Qt::ContainsItemBoundingRect);
     for (QGraphicsItem* item : items) {
       item->setSelected(true);
     }
