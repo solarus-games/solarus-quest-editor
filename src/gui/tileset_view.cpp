@@ -156,7 +156,11 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
   else if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
 
     // Left or right button: possibly change the selection.
-    QGraphicsItem* item = itemAt(event->pos());
+    QList<QGraphicsItem*> items_under_mouse = items(
+          QRect(event->pos(), QSize(1, 1)),
+          Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+          );
+    QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
 
     bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
 
