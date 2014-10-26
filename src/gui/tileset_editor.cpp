@@ -134,11 +134,6 @@ public:
     }
   }
 
-  // Single-pattern overload.
-  SetPatternsGroundCommand(TilesetEditor& editor, int index, Ground ground) :
-    SetPatternsGroundCommand(editor, QList<int>() << index, ground) {
-  }
-
   virtual void undo() override {
 
     int i = 0;
@@ -180,11 +175,6 @@ public:
     for (int index : indexes) {
       layers_before << get_model().get_pattern_default_layer(index);
     }
-  }
-
-  // Single-pattern overload.
-  SetPatternsDefaultLayerCommand(TilesetEditor& editor, int index, Layer layer) :
-    SetPatternsDefaultLayerCommand(editor, QList<int>() << index, layer) {
   }
 
   virtual void undo() override {
@@ -231,11 +221,6 @@ public:
     }
   }
 
-  // Single-pattern overload.
-  SetPatternsAnimationCommand(TilesetEditor& editor, int index, TilePatternAnimation animation) :
-    SetPatternsAnimationCommand(editor, QList<int>() << index, animation) {
-  }
-
   virtual void undo() override {
 
     int i = 0;
@@ -278,11 +263,6 @@ public:
     for (int index : indexes) {
       separations_before << get_model().get_pattern_separation(index);
     }
-  }
-
-  // Single-pattern overload.
-  SetPatternsSeparationCommand(TilesetEditor& editor, int index, TilePatternSeparation separation) :
-    SetPatternsSeparationCommand(editor, QList<int>() << index, separation) {
   }
 
   virtual void undo() override {
@@ -713,7 +693,7 @@ void TilesetEditor::ground_selector_activated() {
     return;
   }
 
-  try_command(new SetPatternsGroundCommand(*this, index, ground));
+  try_command(new SetPatternsGroundCommand(*this, { index }, ground));
 }
 
 /**
@@ -769,7 +749,7 @@ void TilesetEditor::animation_type_selector_activated() {
     return;
   }
 
-  if (!try_command(new SetPatternsAnimationCommand(*this, index, animation))) {
+  if (!try_command(new SetPatternsAnimationCommand(*this,  { index }, animation))) {
     // In case of failure, restore the selector.
     update_animation_type_field();
   }
@@ -821,7 +801,7 @@ void TilesetEditor::animation_separation_selector_activated() {
     return;
   }
 
-  if (!try_command(new SetPatternsSeparationCommand(*this, index, separation))) {
+  if (!try_command(new SetPatternsSeparationCommand(*this,  { index }, separation))) {
     // In case of failure, restore the selector.
     update_animation_type_field();
   }
@@ -876,7 +856,7 @@ void TilesetEditor::default_layer_selector_activated() {
     return;
   }
 
-  try_command(new SetPatternsDefaultLayerCommand(*this, index, default_layer));
+  try_command(new SetPatternsDefaultLayerCommand(*this,  { index }, default_layer));
 }
 
 /**
