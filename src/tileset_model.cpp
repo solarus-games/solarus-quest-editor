@@ -571,6 +571,29 @@ Ground TilesetModel::get_pattern_ground(int index) const {
 }
 
 /**
+ * @brief Gets the ground of the specified patterns if it is the same.
+ * @param[in] indexes A list of pattern indexes.
+ * @param[out] ground The common ground if any.
+ * @return @c true if all specified patterns have the same ground.
+ * If the list is empty, @c false is returned.
+ */
+bool TilesetModel::is_common_pattern_ground(const QList<int>& indexes, Ground& ground) const {
+
+  if (indexes.empty()) {
+    return false;
+  }
+
+  ground = get_pattern_ground(indexes.first());
+  for (int index : indexes) {
+    if (get_pattern_ground(index) != ground) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
  * @brief Sets the ground of a tile pattern.
  *
  * Emits pattern_ground_changed() if there is a change.
@@ -597,6 +620,29 @@ Layer TilesetModel::get_pattern_default_layer(int index) const {
 
   const std::string& pattern_id = index_to_id(index).toStdString();
   return tileset.get_pattern(pattern_id).get_default_layer();
+}
+
+/**
+ * @brief Gets the default layer of the specified patterns if it is the same.
+ * @param[in] indexes A list of pattern indexes.
+ * @param[out] default_layer The common default layer if any.
+ * @return @c true if all specified patterns have the same default layer.
+ * If the list is empty, @c false is returned.
+ */
+bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, Layer& default_layer) const {
+
+  if (indexes.empty()) {
+    return false;
+  }
+
+  default_layer = get_pattern_default_layer(indexes.first());
+  for (int index : indexes) {
+    if (get_pattern_default_layer(index) != default_layer) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -658,6 +704,29 @@ TilePatternAnimation TilesetModel::get_pattern_animation(int index) const {
   }
 
   return TilePatternAnimation();
+}
+
+/**
+ * @brief Gets the animation of the specified patterns if it is the same.
+ * @param[in] indexes A list of pattern indexes.
+ * @param[out] animation The common animation if any.
+ * @return @c true if all specified patterns have the same animation.
+ * If the list is empty, @c false is returned.
+ */
+bool TilesetModel::is_common_pattern_animation(const QList<int>& indexes, TilePatternAnimation& animation) const {
+
+  if (indexes.empty()) {
+    return false;
+  }
+
+  animation = get_pattern_animation(indexes.first());
+  for (int index : indexes) {
+    if (get_pattern_animation(index) != animation) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -800,6 +869,29 @@ TilePatternSeparation TilesetModel::get_pattern_separation(int index) const {
     return TilePatternSeparation::HORIZONTAL;
   }
   return TilePatternSeparation::VERTICAL;
+}
+
+/**
+ * @brief Gets the separation of the specified patterns if it is the same.
+ * @param[in] indexes A list of pattern indexes.
+ * @param[out] separation The common separation if any.
+ * @return @c true if all specified patterns have the same separation.
+ * If the list is empty, @c false is returned.
+ */
+bool TilesetModel::is_common_pattern_separation(const QList<int>& indexes, TilePatternSeparation& separation) const {
+
+  if (indexes.empty()) {
+    return false;
+  }
+
+  separation = get_pattern_separation(indexes.first());
+  for (int index : indexes) {
+    if (get_pattern_separation(index) != separation) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**

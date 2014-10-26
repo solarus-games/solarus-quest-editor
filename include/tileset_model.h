@@ -79,12 +79,16 @@ public:
   QList<QRect> get_pattern_frames(int index) const;
   QRect get_pattern_frames_bounding_box(int index) const;
   Ground get_pattern_ground(int index) const;
+  bool is_common_pattern_ground(const QList<int>& indexes, Ground& ground) const;
   void set_pattern_ground(int index, Ground ground);
   Layer get_pattern_default_layer(int index) const;
+  bool is_common_pattern_default_layer(const QList<int>& indexes, Layer& default_layer) const;
   void set_pattern_default_layer(int index, Layer default_layer);
   TilePatternAnimation get_pattern_animation(int index) const;
+  bool is_common_pattern_animation(const QList<int>& indexes, TilePatternAnimation& animation) const;
   void set_pattern_animation(int index, TilePatternAnimation animation);
   TilePatternSeparation get_pattern_separation(int index) const;
+  bool is_common_pattern_separation(const QList<int>& indexes, TilePatternSeparation& separation) const;
   void set_pattern_separation(int index, TilePatternSeparation separation);
 
   QPixmap get_pattern_image(int index) const;

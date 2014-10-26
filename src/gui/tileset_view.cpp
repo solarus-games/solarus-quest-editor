@@ -322,14 +322,8 @@ void TilesetView::build_context_menu_ground(
   }
 
   // See if the ground is common.
-  bool common_ground = true;
-  Ground ground = model->get_pattern_ground(indexes.first());
-  for (int index : indexes) {
-    if (model->get_pattern_ground(index) != ground) {
-      common_ground = false;
-      break;
-    }
-  }
+  Ground ground;
+  bool common = model->is_common_pattern_ground(indexes, ground);
 
   // Add ground actions to the menu.
   QList<QAction*> ground_actions = EnumMenus<Ground>::create_actions(
@@ -339,7 +333,7 @@ void TilesetView::build_context_menu_ground(
     emit change_selected_patterns_ground_requested(ground);
   });
 
-  if (common_ground) {
+  if (common) {
     int ground_index = static_cast<int>(ground);
     QAction* checked_action = ground_actions[ground_index];
     checked_action->setChecked(true);
@@ -361,14 +355,8 @@ void TilesetView::build_context_menu_layer(
   }
 
   // See if the default layer is common.
-  bool common_layer = true;
-  Layer layer = model->get_pattern_default_layer(indexes.first());
-  for (int index : indexes) {
-    if (model->get_pattern_default_layer(index) != layer) {
-      common_layer = false;
-      break;
-    }
-  }
+  Layer layer;
+  bool common = model->is_common_pattern_default_layer(indexes, layer);
 
   // Add layer actions to the menu.
   QList<QAction*> layer_actions = EnumMenus<Layer>::create_actions(
@@ -378,7 +366,7 @@ void TilesetView::build_context_menu_layer(
     emit change_selected_patterns_default_layer_requested(layer);
   });
 
-  if (common_layer) {
+  if (common) {
     int layer_index = static_cast<int>(layer);
     QAction* checked_action = layer_actions[layer_index];
     checked_action->setChecked(true);
@@ -398,22 +386,12 @@ void TilesetView::build_context_menu_animation(
   }
 
   // See if the animation and the separation are common.
-  bool common_animation = true;
-  bool common_separation = true;
-  bool enable_separation = true;
-  TilePatternAnimation animation = model->get_pattern_animation(indexes.first());
-  TilePatternSeparation separation = model->get_pattern_separation(indexes.first());
-  for (int index : indexes) {
-    if (model->get_pattern_animation(index) != animation) {
-      common_animation = false;
-    }
-    if (model->get_pattern_separation(index) != separation) {
-      common_separation = false;
-    }
-    if (!TilePatternAnimationTraits::is_multi_frame(animation)) {
-      enable_separation = false;
-    }
-  }
+  TilePatternAnimation animation;
+  TilePatternSeparation separation;
+  bool common_animation = model->is_common_pattern_animation(indexes, animation);
+  bool common_separation = model->is_common_pattern_separation(indexes, separation);
+  bool enable_separation = common_animation &&
+      TilePatternAnimationTraits::is_multi_frame(animation);
 
   // Add actions to the menu.
   QList<QAction*> animation_actions = EnumMenus<TilePatternAnimation>::create_actions(
