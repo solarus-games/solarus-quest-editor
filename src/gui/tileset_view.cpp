@@ -525,11 +525,22 @@ void TilesetView::end_state_drawing_rectangle() {
       emit create_pattern_requested(pattern_id, rectangle, ground);
     });
 
-    // Change each ground text to add the word "Create".
+    // Put most actions in a submenu to make the context menu smaller.
+    QMenu sub_menu(tr("New pattern (more options)"));
+    int i = 0;
     for (QAction* action : menu.actions()) {
       Ground ground = static_cast<Ground>(action->data().toInt());
-      action->setText(tr("Create (%1)").arg(GroundTraits::get_friendly_name(ground)));
+      if (ground == Ground::TRAVERSABLE ||
+          ground == Ground::WALL) {
+        action->setText(tr("New pattern (%1)").arg(GroundTraits::get_friendly_name(ground)));
+      }
+      else {
+        menu.removeAction(action);
+        sub_menu.addAction(action);
+      }
+      ++i;
     }
+    menu.addMenu(&sub_menu);
 
     menu.addSeparator();
     menu.addAction(tr("Cancel"));
