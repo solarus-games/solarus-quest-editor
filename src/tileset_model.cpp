@@ -230,17 +230,151 @@ void TilesetModel::build_index_map() {
 }
 
 /**
+ * @brief Creates a new pattern in this tileset with default properties.
+ *
+ * The index of multiple patterns in the pattern list may change, since
+ * patterns are sorted alphabetically.
+ * Emits rowsAboutToBeInserted(), adds the new pattern
+ * and then emits rowsInserted(), as required by QAbstractItemModel.
+ *
+ * Then, emits pattern_created().
+ *
+ * The newly created pattern is not initially selected.
+ * The existing selection is preserved, though the index of many patterns can
+ * change.
+ * The selection is cleared before the operations and restored after,
+ * updated with the new indexes.
+ *
+ * @param pattern_id Id of the pattern to create.
+ * @param frame Position of the pattern in the tileset image
+ * (it will be a single-frame pattern).
+ * @return Index of the created pattern.
+ * @throws EditorException in case of error.
+ */
+int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) {
+
+  // Make some checks first.
+  if (!is_valid_pattern_id(pattern_id)) {
+      throw EditorException(tr("Invalid tile pattern id: '%1'").arg(pattern_id));
+  }
+
+  if (id_to_index(pattern_id) != -1) {
+      throw EditorException(tr("Tile pattern '%1' already exists").arg(pattern_id));
+  }
+
+  // Save and clear the selection since a lot of indexes may change.
+  QModelIndexList old_selected_indexes = selection.selection().indexes();
+  QStringList old_selection_ids;
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+    old_selection_ids << index_to_id(old_selected_index.row());
+  }
+  selection.clear();
+
+  // Add the pattern to the tileset file.
+  TilePatternData pattern(Solarus::Rectangle(frame.x(), frame.y(), frame.width(), frame.height()));
+  tileset.add_pattern(pattern_id.toStdString(), pattern);
+
+  // Rebuild indexes in the list model (indexes were shifted).
+  build_index_map();
+  int index = id_to_index(pattern_id);
+
+  // Call beginInsertRows() as requested by QAbstractItemModel.
+  beginInsertRows(QModelIndex(), index, index);
+
+  // Update our pattern model list.
+  patterns.insert(index, PatternModel(pattern_id));
+
+  // Notify people before restoring the selection, so that they have a
+  // chance to know new indexes before receiving selection signals.
+  endInsertRows();
+  emit pattern_created(index, pattern_id);
+
+  // Restore the selection.
+  for (QString selected_pattern_id : old_selection_ids) {
+    int new_index = id_to_index(selected_pattern_id);
+    selection.select(this->index(new_index), QItemSelectionModel::Select);
+  }
+
+  return index;
+}
+
+/**
+ * @brief Deletes a tile pattern.
+ *
+ * The index of multiple patterns in the pattern list may change, since
+ * patterns are sorted alphabetically.
+ * Emits rowsAboutToBeRemoved(), removes the pattern
+ * and then emits rowsRemoved(), as required by QAbstractItemModel.
+ *
+ * Then, emits pattern_deleted().
+ *
+ * Except for the deleted pattern, the existing selection is preserved,
+ * though the index of many patterns can change.
+ * The selection is cleared before the operations and restored after,
+ * updated with the new indexes.
+ *
+ * @param index Index of the pattern to delete.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::delete_pattern(int index) {
+
+  QString pattern_id = index_to_id(index);
+
+  // Make some checks first.
+  if (pattern_id.isEmpty()) {
+      throw EditorException(tr("Invalid tile pattern index: %1").arg(index));
+  }
+
+  // Save and clear the selection since a lot of indexes may change.
+  QModelIndexList old_selected_indexes = selection.selection().indexes();
+  QStringList old_selection_ids;
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+    old_selection_ids << index_to_id(old_selected_index.row());
+  }
+  selection.clear();
+
+  // Delete the pattern in the tileset file.
+  tileset.remove_pattern(pattern_id.toStdString());
+
+  // Rebuild indexes in the list model (indexes were shifted).
+  build_index_map();
+
+  // Call beginRemoveRows() as requested by QAbstractItemModel.
+  beginRemoveRows(QModelIndex(), index, index);
+
+  // Update our pattern model list.
+  patterns.removeAt(index);
+
+  // Notify people before restoring the selection, so that they have a
+  // chance to know new indexes before receiving selection signals.
+  endRemoveRows();
+  emit pattern_deleted(index, pattern_id);
+
+  // Restore the selection.
+  for (QString selected_pattern_id : old_selection_ids) {
+
+    if (selected_pattern_id == pattern_id) {
+      // Exclude the deleted one.
+      continue;
+    }
+
+    int new_index = id_to_index(selected_pattern_id);
+    selection.select(this->index(new_index), QItemSelectionModel::Select);
+  }
+}
+
+/**
  * @brief Changes the string id of a pattern.
  *
- * The index of the pattern in the pattern list may also change, since patterns
- * are sorted alphabetically.
+ * The index of multiple patterns in the pattern list may change, since
+ * patterns are sorted alphabetically.
  * In this case, emits rowsAboutToBeMoved(), changes the index
  * and then emits rowsMoved(), as required by QAbstractItemModel.
  *
  * Then, emits pattern_id_changed(), no matter if the index has also changed.
  *
  * The selection is preserved, though the index of many patterns can change.
- * The selection cleared before the operations and restored after,
+ * The selection is cleared before the operations and restored after,
  * updated with the new indexes.
  *
  * @param index Index of an existing pattern.

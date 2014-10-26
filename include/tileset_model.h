@@ -68,6 +68,8 @@ public:
   bool pattern_exists(int index) const;
   int id_to_index(const QString& pattern_id) const;
   QString index_to_id(int index) const;
+  int create_pattern(const QString& pattern_id, const QRect& frame);
+  void delete_pattern(int index);
   int set_pattern_id(int index, const QString& new_id);
   static bool is_valid_pattern_id(const QString& pattern_id);
 
@@ -84,6 +86,7 @@ public:
   void set_pattern_animation(int index, TilePatternAnimation animation);
   TilePatternSeparation get_pattern_separation(int index) const;
   void set_pattern_separation(int index, TilePatternSeparation separation);
+
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_image_all_frames(int index) const;
   QPixmap get_pattern_icon(int index) const;
@@ -98,6 +101,8 @@ public:
 signals:
 
   void background_color_changed(const QColor& background_color);
+  void pattern_created(int new_index, const QString& new_id);
+  void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
                           int new_index, const QString& new_id);
   void pattern_ground_changed(int index, Ground ground);
