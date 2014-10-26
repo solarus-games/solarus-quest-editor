@@ -42,8 +42,9 @@ public:
 
 signals:
 
-  void change_selected_pattern_id_requested();
+  void create_pattern_requested(Ground ground);
   void delete_selected_patterns_requested();
+  void change_selected_pattern_id_requested();
   void change_selected_patterns_ground_requested(Ground ground);
   void change_selected_patterns_default_layer_requested(Layer layer);
   void change_selected_patterns_animation_requested(TilePatternAnimation animation);
@@ -82,6 +83,7 @@ private:
 
   void start_state_normal();
   void start_state_drawing_rectangle(const QPoint& initial_point);
+  void end_state_drawing_rectangle();
   void set_current_area(const QRect& area);
 
   QPointer<TilesetModel> model;        /**< The tileset viewed. */

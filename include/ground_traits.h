@@ -21,6 +21,7 @@
 #include <solarus/entities/Ground.h>
 
 using Ground = Solarus::Ground;
+using GroundTraits = EnumTraits<Ground>;
 
 /**
  * \brief Provides useful properties of ground enum values.

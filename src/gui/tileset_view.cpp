@@ -18,6 +18,7 @@
 #include "gui/gui_tools.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
+#include "ground_traits.h"
 #include "tile_pattern_animation_traits.h"
 #include "tile_pattern_separation_traits.h"
 #include "tileset_model.h"
@@ -226,7 +227,7 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
   }
 
   if (state == State::DRAWING_RECTANGLE) {
-    start_state_normal();
+    end_state_drawing_rectangle();
   }
 
   QGraphicsView::mouseReleaseEvent(event);
@@ -478,11 +479,6 @@ void TilesetView::build_context_menu_animation(
 void TilesetView::start_state_normal() {
 
   this->state = State::NORMAL;
-  if (current_area_item != nullptr) {
-    scene()->removeItem(current_area_item);
-    delete current_area_item;
-    current_area_item = nullptr;
-  }
 }
 
 /**
@@ -495,6 +491,43 @@ void TilesetView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   this->state = State::DRAWING_RECTANGLE;
   this->dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
+
+  current_area_item = new QGraphicsRectItem();
+  current_area_item->setPen(QPen(Qt::yellow));
+  scene()->addItem(current_area_item);
+}
+
+/**
+ * @brief Finishes drawing a rectangle.
+ */
+void TilesetView::end_state_drawing_rectangle() {
+
+  QRect rectangle = current_area_item->rect().toRect();
+  if (!rectangle.isEmpty() &&
+      model->is_selection_empty()) {
+    // Context menu to create a pattern.
+    QMenu menu;
+    EnumMenus<Ground>::create_actions(
+          menu, EnumMenuCheckableOption::NON_CHECKABLE, [=](Ground ground) {
+      emit create_pattern_requested(ground);
+    });
+
+    // Change each ground text to add the word "Create".
+    for (QAction* action : menu.actions()) {
+      Ground ground = static_cast<Ground>(action->data().toInt());
+      action->setText(tr("Create (%1)").arg(GroundTraits::get_friendly_name(ground)));
+    }
+
+    menu.addSeparator();
+    menu.addAction(tr("Cancel"));
+    menu.exec(cursor().pos() + QPoint(1, 1));
+  }
+
+  scene()->removeItem(current_area_item);
+  delete current_area_item;
+  current_area_item = nullptr;
+
+  start_state_normal();
 }
 
 /**
@@ -505,12 +538,6 @@ void TilesetView::start_state_drawing_rectangle(const QPoint& initial_point) {
  * @param new_area new position of the pattern.
  */
 void TilesetView::set_current_area(const QRect& area) {
-
-  if (current_area_item == nullptr) {
-    current_area_item = new QGraphicsRectItem(area);
-    current_area_item->setPen(QPen(Qt::yellow));
-    scene()->addItem(current_area_item);
-  }
 
   current_area_item->setRect(area);
 
