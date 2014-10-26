@@ -64,15 +64,40 @@ protected:
 
 private:
 
+  /**
+   * @brief Possible operation the user is doing on this view.
+   */
+  enum class State {
+      NORMAL,                   /**< Can click on patterns. */
+      DRAWING_NEW_PATTERN,      /**< Drawing a rectangle for a new pattern. */
+      MOVING_PATTERN            /**< Moving an existing pattern to another
+                                 * place in the PNG image. */
+  };
+
   void show_context_menu(const QPoint& where);
   void build_context_menu_ground(QMenu& menu, const QList<int>& indexes);
   void build_context_menu_layer(QMenu& menu, const QList<int>& indexes);
   void build_context_menu_animation(QMenu& menu, const QList<int>& indexes);
 
+  void start_state_normal();
+  void start_state_drawing_new_pattern(const QPoint& initial_point);
+  void set_current_area(const QRect& area);
+
   QPointer<TilesetModel> model;        /**< The tileset viewed. */
   QAction* change_pattern_id_action;   /**< Action of changing a pattern id. */
   QAction* delete_patterns_action;     /**< Action of deleting the selected
                                         * patterns. */
+  State state;                         /**< Current operation done by user. */
+  QPoint dragging_start_point;         /**< In states DRAWING_NEW_PATTERN and
+                                        * MOVING_PATTERN: point where the
+                                        * dragging started, in scene coordinates.*/
+  QPoint dragging_current_point;       /**< In states DRAWING_NEW_PATTERN and
+                                        * MOVING_PATTERN: point where the
+                                        * dragging is currently, in scene coordinates. */
+  QGraphicsRectItem*
+      current_area_item;               /**< In states DRAWING_NEW_PATTERN and
+                                        * MOVING_PATTERN: graphic item of the
+                                        * rectangle the user is drawing. */
 
   // TODO move the panning code to a reusable class,
   // because other views also need it. Use an event filter?

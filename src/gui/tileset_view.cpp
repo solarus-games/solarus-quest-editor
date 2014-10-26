@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/enum_menus.h"
+#include "gui/gui_tools.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
 #include "tile_pattern_animation_traits.h"
@@ -34,6 +35,8 @@
  */
 TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent),
+  state(State::NORMAL),
+  current_area_item(nullptr),
   zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -185,7 +188,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       }
       else {
         // Left click outside items: trace a selection rectangle.
-        // TODO
+        start_state_drawing_new_pattern(event->pos());
       }
     }
 
@@ -222,6 +225,10 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
     return;
   }
 
+  if (state == State::DRAWING_NEW_PATTERN) {
+    start_state_normal();
+  }
+
   QGraphicsView::mouseReleaseEvent(event);
 }
 
@@ -243,6 +250,41 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
     horizontalScrollBar()->setValue(scroll_point.x());
     verticalScrollBar()->setValue(scroll_point.y());
     return;
+  }
+
+  if (state == State::DRAWING_NEW_PATTERN) {
+
+    // Compute the selected area.
+    QPoint dragging_previous_point = dragging_current_point;
+    dragging_current_point = mapToScene(event->pos()).toPoint();
+
+    dragging_current_point = dragging_current_point / 8 * 8;
+
+    if (dragging_current_point != dragging_previous_point) {
+
+        QRect new_pattern_area;
+
+        // The area has changed: recalculate the rectangle.
+        if (dragging_start_point.x() < dragging_current_point.x()) {
+            new_pattern_area.setX(dragging_start_point.x());
+            new_pattern_area.setWidth(dragging_current_point.x() - dragging_start_point.x());
+        }
+        else {
+            new_pattern_area.setX(dragging_current_point.x());
+            new_pattern_area.setWidth(dragging_start_point.x() - dragging_current_point.x());
+        }
+
+        if (dragging_start_point.y() < dragging_current_point.y()) {
+            new_pattern_area.setY(dragging_start_point.y());
+            new_pattern_area.setHeight(dragging_current_point.y() - dragging_start_point.y());
+        }
+        else {
+            new_pattern_area.setY(dragging_current_point.y());
+            new_pattern_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
+        }
+
+        set_current_area(new_pattern_area);
+    }
   }
 
   QGraphicsView::mouseMoveEvent(event);
@@ -429,3 +471,46 @@ void TilesetView::build_context_menu_animation(
     }
   }
 }
+
+/**
+ * @brief Sets the normal state.
+ */
+void TilesetView::start_state_normal() {
+
+  this->state = State::NORMAL;
+  if (current_area_item != nullptr) {
+    scene()->removeItem(current_area_item);
+    delete current_area_item;
+    current_area_item = nullptr;
+  }
+}
+
+/**
+ * @brief Sets the state to drawing a new tile pattern area.
+ * @param initial_point Where the user starts drawing the rectangle,
+ * in view coordinates.
+ */
+void TilesetView::start_state_drawing_new_pattern(const QPoint& initial_point) {
+
+  this->state = State::DRAWING_NEW_PATTERN;
+  this->dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
+}
+
+/**
+ * @brief Changes the position of the pattern the user is creating or moving.
+ *
+ * If the specified area is the same than before, nothing is done.
+ *
+ * @param new_area new position of the pattern.
+ */
+void TilesetView::set_current_area(const QRect& area) {
+
+  if (current_area_item == nullptr) {
+    current_area_item = new QGraphicsRectItem(area);
+    current_area_item->setPen(QPen(Qt::yellow));
+    scene()->addItem(current_area_item);
+  }
+
+  current_area_item->setRect(area);
+}
+
