@@ -18,6 +18,7 @@
 #include "gui/tileset_scene.h"
 #include "quest.h"
 #include "tileset_model.h"
+#include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsPixmapItem>
 #include <QPainter>
@@ -81,7 +82,9 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
   connect(&model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
           this, SLOT(update_pattern(int)));
 
-  // Watch patterns ordering changes.
+  // Watch changes in the pattern list.
+  connect(&model, SIGNAL(pattern_deleted(int, QString)),
+          this, SLOT(pattern_deleted(int, QString)));
   connect(&model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(pattern_id_changed(int, QString, int, QString)));
 }
@@ -206,6 +209,29 @@ void TilesetScene::update_pattern(int index) {
 }
 
 /**
+ * @brief Slot called when a pattern is deleted.
+ *
+ * Elements are shifted in the items list.
+ *
+ * @param old_index Index of the pattern before it was deleted.
+ * @param old_id Id of the deleted pattern.
+ */
+void TilesetScene::pattern_deleted(
+    int old_index, const QString& /* old_id */) {
+
+  // Keep the items list in sync with patterns in the model.
+  PatternItem* item = pattern_items.takeAt(old_index);
+
+  // Each item stores its order, so we need to update them.
+  for (int i = 0; i < pattern_items.size(); ++i) {
+    pattern_items[i]->set_index(i);
+  }
+
+  removeItem(item);
+  delete item;
+}
+
+/**
  * @brief Slot called when the id of a pattern changes.
  *
  * This changes its order in the items list.
@@ -271,6 +297,12 @@ void PatternItem::set_index(int index) {
 void PatternItem::paint(QPainter* painter,
                         const QStyleOptionGraphicsItem* option,
                         QWidget* widget) {
+
+  if (!model.pattern_exists(index)) {
+    // Bug in the editor.
+    qCritical() << TilesetScene::tr("No such pattern index: %1").arg(index);
+    return;
+  }
 
   QRect box = model.get_pattern_frames_bounding_box(index);
   QPoint top_left = box.topLeft();

@@ -215,9 +215,12 @@ class DeletePatternsCommand : public TilesetEditorCommand {
 public:
 
   DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
-    TilesetEditorCommand(editor, TilesetEditor::tr("Delete")),
-    indexes(indexes) {
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
 
+    // Store indexes as strings to keep them valid during the deletion loop.
+    for (int index : indexes) {
+      pattern_ids << get_model().index_to_id(index);
+    }
   }
 
   // Single-pattern overload.
@@ -232,12 +235,15 @@ public:
 
   virtual void redo() override {
 
-    // TODO
+    for (QString pattern_id : pattern_ids) {
+      int index = get_model().id_to_index(pattern_id);
+      get_model().delete_pattern(index);
+    }
   }
 
 private:
 
-  QList<int> indexes;
+  QStringList pattern_ids;
 
 };
 
