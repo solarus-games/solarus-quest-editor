@@ -17,6 +17,7 @@
 #include "color.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include "rectangle.h"
 #include "tile_pattern_animation_traits.h"
 #include "tileset_model.h"
 #include <QIcon>
@@ -271,7 +272,7 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
   selection.clear();
 
   // Add the pattern to the tileset file.
-  TilePatternData pattern(Solarus::Rectangle(frame.x(), frame.y(), frame.width(), frame.height()));
+  TilePatternData pattern(Rectangle::to_solarus_rect(frame));
   tileset.add_pattern(pattern_id.toStdString(), pattern);
 
   // Rebuild indexes in the list model (indexes were shifted).
@@ -509,7 +510,7 @@ QRect TilesetModel::get_pattern_frame(int index) const {
 
   const std::string& pattern_id = index_to_id(index).toStdString();
   const Solarus::Rectangle& frame = tileset.get_pattern(pattern_id).get_frame();
-  return QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height());
+  return Rectangle::to_qrect(frame);
 }
 
 /**
@@ -526,7 +527,7 @@ QList<QRect> TilesetModel::get_pattern_frames(int index) const {
 
   QList<QRect> result;
   for (const Solarus::Rectangle& frame : frames) {
-    result << QRect(frame.get_x(), frame.get_y(), frame.get_width(), frame.get_height());
+    result << Rectangle::to_qrect(frame);
   }
   return result;
 }

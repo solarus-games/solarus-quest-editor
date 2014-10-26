@@ -84,6 +84,7 @@ set(solarus_quest_editor_SOURCES
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
+  include/rectangle.h
   include/tile_pattern_animation.h
   include/tile_pattern_animation_traits.h
   include/tile_pattern_separation.h
@@ -109,6 +110,7 @@ set(solarus_quest_editor_SOURCES
   src/ground_traits.cpp
   src/layer_traits.cpp
   src/main.cpp
+  src/rectangle.cpp
   src/quest.cpp
   src/quest_manager.cpp
   src/quest_resources.cpp
