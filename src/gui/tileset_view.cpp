@@ -27,6 +27,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QSignalMapper>
 
 /**
  * @brief Creates a tileset view.
@@ -279,33 +280,14 @@ void TilesetView::show_context_menu(const QPoint& where) {
     return;
   }
 
-  // TODO context menu with
-  // - Ground
-  // - Animation
-  // - Animation separation
-  // - Default layer
-  // - Change id (except when multi-selection)
-  // - Delete
   QMenu* menu = new QMenu(this);
 
   // Ground.
-  bool common_ground = true;
-  Ground ground = model->get_pattern_ground(selected_indexes.first());
-  for (int index : selected_indexes) {
-    if (model->get_pattern_ground(index) != ground) {
-      common_ground = false;
-      break;
-    }
-  }
+  build_context_menu_ground(*menu, selected_indexes);
 
-  EnumMenus<Ground>::create_actions(menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
-  if (common_ground) {
-    int ground_index = static_cast<int>(ground);
-    QAction* checked_action = menu->actions()[ground_index];
-    checked_action->setChecked(true);
-    // Add a checkmark (there is none when there is already an icon).
-    checked_action->setText("\u2714 " + checked_action->text());
-  }
+  // TODO Default layer
+  // TODO Animation
+  // TODO Animation separation
 
   // Change pattern id.
   menu->addSeparator();
@@ -318,4 +300,44 @@ void TilesetView::show_context_menu(const QPoint& where) {
 
   // Create the menu at 1,1 to avoid the cursor being already in the first item.
   menu->popup(viewport()->mapToGlobal(where) + QPoint(1, 1));
+}
+
+/**
+ * @brief Builds the ground part of a context menu for patterns.
+ * @param menu The context menu being created.
+ * @param indexes Patterns to build a context menu for.
+ */
+void TilesetView::build_context_menu_ground(
+    QMenu& menu, const QList<int>& indexes) {
+
+  // See if the ground is common.
+  bool common_ground = true;
+  Ground ground = model->get_pattern_ground(indexes.first());
+  for (int index : indexes) {
+    if (model->get_pattern_ground(index) != ground) {
+      common_ground = false;
+      break;
+    }
+  }
+
+  // Add ground actions to the menu.
+  QList<QAction*> ground_actions = EnumMenus<Ground>::create_actions(
+        menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
+  if (common_ground) {
+    int ground_index = static_cast<int>(ground);
+    QAction* checked_action = ground_actions[ground_index];
+    checked_action->setChecked(true);
+    // Add a checkmark (there is none when there is already an icon).
+    checked_action->setText("\u2714 " + checked_action->text());
+  }
+
+  // Connect each action to setting the corresponding ground.
+  for (QAction* ground_action : ground_actions) {
+    int ground_index = ground_action->data().toInt();
+    connect(ground_action, &QAction::triggered,
+            [=]() {
+      Ground ground = static_cast<Ground>(ground_index);
+      emit change_selected_patterns_ground_requested(ground);
+    });
+  }
 }

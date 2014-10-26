@@ -41,7 +41,7 @@ class EnumMenus {
 public:
 
   static QMenu* create_menu(EnumMenuCheckableOption checkable);
-  static QList<QAction*> create_actions(QWidget* parent, EnumMenuCheckableOption checkable);
+  static QList<QAction*> create_actions(QWidget& parent, EnumMenuCheckableOption checkable);
 
   // TODO create_toolbar()
 };

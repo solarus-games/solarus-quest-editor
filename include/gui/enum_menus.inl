@@ -29,7 +29,7 @@ template<typename E>
 QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 
   QMenu* menu = new QMenu();
-  QList<QAction*> actions = create_actions(menu, checkable);
+  QList<QAction*> actions = create_actions(*menu, checkable);
   for (QAction* action : actions) {
     menu->addAction(action);
   }
@@ -38,17 +38,20 @@ QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 
 /**
  * @brief Creates actions corresponding to all values of the enum.
+ *
+ * The data() of each action is the enum value converted as an integer.
+ *
  * @param parent Parent of actions to create. They will be added to this widget.
  * @param checkable How checkable actions should be.
  * @param The created actions. They have no parent.
  */
 template<typename E>
-QList<QAction*> EnumMenus<E>::create_actions(QWidget* parent, EnumMenuCheckableOption checkable) {
+QList<QAction*> EnumMenus<E>::create_actions(QWidget& parent, EnumMenuCheckableOption checkable) {
 
-  QObject* action_parent = parent;
+  QObject* action_parent = &parent;
   QActionGroup* group = nullptr;
   if (checkable == EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE) {
-    group = new QActionGroup(parent);
+    group = new QActionGroup(&parent);
     action_parent = group;
   }
 
@@ -65,7 +68,7 @@ QList<QAction*> EnumMenus<E>::create_actions(QWidget* parent, EnumMenuCheckableO
     actions << action;
   }
 
-  parent->addActions(actions);
+  parent.addActions(actions);
 
   return actions;
 }

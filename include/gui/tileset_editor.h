@@ -55,6 +55,7 @@ public slots:
   void update_pattern_id_field();
   void update_ground_field();
   void ground_selector_activated();
+  void change_selected_patterns_ground_requested(Ground ground);
   void update_animation_type_field();
   void animation_type_selector_activated();
   void update_animation_separation_field();

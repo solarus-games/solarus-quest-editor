@@ -445,6 +445,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_ground_requested(Ground)),
+          this, SLOT(change_selected_patterns_ground_requested(Ground)));
   connect(model, SIGNAL(pattern_ground_changed(int, Ground)),
           this, SLOT(update_ground_field()));
 
@@ -706,6 +708,19 @@ void TilesetEditor::ground_selector_activated() {
   }
 
   try_command(new SetPatternsGroundCommand(*this, index, ground));
+}
+
+/**
+ * @brief Slot called when the user changes the ground of selected patterns.
+ * @param ground The new ground.
+ */
+void TilesetEditor::change_selected_patterns_ground_requested(Ground ground) {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  try_command(new SetPatternsGroundCommand(*this, model->get_selected_indexes(), ground));
 }
 
 /**

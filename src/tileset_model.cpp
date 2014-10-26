@@ -1019,6 +1019,15 @@ QItemSelectionModel& TilesetModel::get_selection_model() {
 }
 
 /**
+ * @brief Returns whether no patterns are selected.
+ * @return @c true if the selection is empty.
+ */
+bool TilesetModel::is_selection_empty() const {
+
+  return selection_model.selection().isEmpty();
+}
+
+/**
  * @brief Returns the index of the selected pattern.
  * @return The selected pattern index.
  * Returns -1 if no pattern is selected or if multiple patterns are selected.
