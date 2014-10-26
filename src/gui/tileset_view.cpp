@@ -499,7 +499,7 @@ void TilesetView::start_state_drawing_new_pattern(const QPoint& initial_point) {
 /**
  * @brief Changes the position of the pattern the user is creating or moving.
  *
- * If the specified area is the same than before, nothing is done.
+ * If the specified area is the same as before, nothing is done.
  *
  * @param new_area new position of the pattern.
  */
@@ -512,5 +512,11 @@ void TilesetView::set_current_area(const QRect& area) {
   }
 
   current_area_item->setRect(area);
+
+  if (state == State::DRAWING_NEW_PATTERN) {
+    QPainterPath path;
+    path.addRect(area);
+    scene()->setSelectionArea(path);
+  }
 }
 
