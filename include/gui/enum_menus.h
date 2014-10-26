@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_ENUM_MENUS_H
 
 #include <QList>
+#include <functional>
 
 class QAction;
 class QWidget;
@@ -41,7 +42,11 @@ class EnumMenus {
 public:
 
   static QMenu* create_menu(EnumMenuCheckableOption checkable);
-  static QList<QAction*> create_actions(QWidget& parent, EnumMenuCheckableOption checkable);
+
+  static QList<QAction*> create_actions(
+      QWidget& parent,
+      EnumMenuCheckableOption checkable,
+      std::function<void (const E&)> on_triggered = std::function<void (const E&)>());
 
   // TODO create_toolbar()
 };

@@ -322,22 +322,17 @@ void TilesetView::build_context_menu_ground(
 
   // Add ground actions to the menu.
   QList<QAction*> ground_actions = EnumMenus<Ground>::create_actions(
-        menu, EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE);
+        menu,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](Ground ground) {
+    emit change_selected_patterns_ground_requested(ground);
+  });
+
   if (common_ground) {
     int ground_index = static_cast<int>(ground);
     QAction* checked_action = ground_actions[ground_index];
     checked_action->setChecked(true);
     // Add a checkmark (there is none when there is already an icon).
     checked_action->setText("\u2714 " + checked_action->text());
-  }
-
-  // Connect each action to setting the corresponding ground.
-  for (QAction* ground_action : ground_actions) {
-    int ground_index = ground_action->data().toInt();
-    connect(ground_action, &QAction::triggered,
-            [=]() {
-      Ground ground = static_cast<Ground>(ground_index);
-      emit change_selected_patterns_ground_requested(ground);
-    });
   }
 }

@@ -43,18 +43,26 @@ QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
  *
  * @param parent Parent of actions to create. They will be added to this widget.
  * @param checkable How checkable actions should be.
- * @param The created actions. They have no parent.
+ * @param on_triggered Optional function to call when an action is triggered.
+ * The function takes the enum value as parameter.
+ * @return The created actions. They have no parent.
  */
 template<typename E>
-QList<QAction*> EnumMenus<E>::create_actions(QWidget& parent, EnumMenuCheckableOption checkable) {
+QList<QAction*> EnumMenus<E>::create_actions(
+    QWidget& parent,
+    EnumMenuCheckableOption checkable,
+    std::function<void (const E&)> on_triggered) {
 
   QObject* action_parent = &parent;
+
+  // Create a group if actions should be exclusive.
   QActionGroup* group = nullptr;
   if (checkable == EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE) {
     group = new QActionGroup(&parent);
     action_parent = group;
   }
 
+  // Create the actions.
   QList<QAction*> actions;
   for (const E& value : EnumTraits<E>::get_values()) {
     const QIcon& icon = EnumTraits<E>::get_icon(value);
@@ -63,6 +71,13 @@ QList<QAction*> EnumMenus<E>::create_actions(QWidget& parent, EnumMenuCheckableO
     action->setData(static_cast<int>(value));
     if (checkable != EnumMenuCheckableOption::NON_CHECKABLE) {
       action->setCheckable(true);
+    }
+
+    // Connect to the provided callback if any.
+    if (on_triggered) {
+      QObject::connect(action, &QAction::triggered, [=] {
+        on_triggered(value);
+      });
     }
 
     actions << action;
