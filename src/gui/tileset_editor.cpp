@@ -233,6 +233,7 @@ public:
 
   virtual void redo() override {
 
+    // TODO don't do anything if one fails.
     for (int index : indexes) {
       get_model().set_pattern_animation(index, animation_after);
     }
@@ -438,6 +439,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(change_selected_patterns_animation_requested(TilePatternAnimation)));
   connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
           this, SLOT(update_animation_type_field()));
+  connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+          this, SLOT(update_animation_separation_field()));
 
   connect(ui.animation_separation_field, SIGNAL(activated(QString)),
           this, SLOT(animation_separation_selector_activated()));
@@ -610,10 +613,8 @@ void TilesetEditor::update_pattern_view() {
   update_animation_separation_field();
   update_default_layer_field();
 
-  // If no pattern is selected, or more than one pattern selected,
-  // disable the tile pattern view.
-  const int selected_index = model->get_selected_index();
-  ui.pattern_properties_group_box->setEnabled(selected_index != -1);
+  // If no pattern is selected, disable the tile pattern view.
+  ui.pattern_properties_group_box->setEnabled(!model->is_selection_empty());
 }
 
 /**
@@ -625,6 +626,10 @@ void TilesetEditor::update_pattern_id_field() {
   // (an empty string if no pattern is selected or if multiple patterns are).
   QString pattern_id = model->index_to_id(model->get_selected_index());
   ui.pattern_id_value->setText(pattern_id);
+
+  bool enable = !pattern_id.isEmpty();
+  ui.pattern_id_label->setEnabled(enable);
+  ui.pattern_id_field->setEnabled(enable);
 }
 
 /**
@@ -660,15 +665,16 @@ void TilesetEditor::change_selected_pattern_id_requested() {
  */
 void TilesetEditor::update_ground_field() {
 
-  Ground ground;
-  int index = model->get_selected_index();
-  if (index == -1) {
-    ground = Ground::EMPTY;
+  Ground ground = Ground::EMPTY;
+  bool enable = model->is_common_pattern_ground(
+        model->get_selected_indexes(), ground);
+
+  ui.ground_label->setEnabled(enable);
+  ui.ground_field->setEnabled(enable);
+
+  if (enable) {
+    ui.ground_field->set_selected_value(ground);
   }
-  else {
-    ground = model->get_pattern_ground(index);
-  }
-  ui.ground_field->set_selected_value(ground);
 }
 
 /**
@@ -676,19 +682,20 @@ void TilesetEditor::update_ground_field() {
  */
 void TilesetEditor::ground_selector_activated() {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected.
+  if (model->is_selection_empty()) {
     return;
   }
 
-  Ground ground = ui.ground_field->get_selected_value();
-  if (ground == model->get_pattern_ground(index)) {
+  QList<int> indexes = model->get_selected_indexes();
+  Ground new_ground = ui.ground_field->get_selected_value();
+  Ground old_common_ground;
+  if (model->is_common_pattern_ground(indexes, old_common_ground) &&
+      new_ground == old_common_ground) {
     // No change.
     return;
   }
 
-  try_command(new SetPatternsGroundCommand(*this, { index }, ground));
+  try_command(new SetPatternsGroundCommand(*this, indexes, new_ground));
 }
 
 /**
@@ -709,21 +716,15 @@ void TilesetEditor::change_selected_patterns_ground_requested(Ground ground) {
  */
 void TilesetEditor::update_animation_type_field() {
 
-  TilePatternAnimation animation;
-  int index = model->get_selected_index();
-  if (index == -1) {
-    animation = TilePatternAnimation::NONE;
-  }
-  else {
-    animation = model->get_pattern_animation(index);
-  }
-  ui.animation_type_field->set_selected_value(animation);
+  TilePatternAnimation animation = TilePatternAnimation::NONE;
+  bool enable = model->is_common_pattern_animation(
+        model->get_selected_indexes(), animation);
 
-  if (TilePatternAnimationTraits::is_multi_frame(animation)) {
-    ui.animation_separation_field->setEnabled(true);
-  }
-  else {
-    ui.animation_separation_field->setEnabled(false);
+  ui.animation_label->setEnabled(enable);
+  ui.animation_type_field->setEnabled(enable);
+
+  if (enable) {
+    ui.animation_type_field->set_selected_value(animation);
   }
 }
 
@@ -732,19 +733,20 @@ void TilesetEditor::update_animation_type_field() {
  */
 void TilesetEditor::animation_type_selector_activated() {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected.
+  if (model->is_selection_empty()) {
     return;
   }
 
-  TilePatternAnimation animation = ui.animation_type_field->get_selected_value();
-  if (animation == model->get_pattern_animation(index)) {
+  QList<int> indexes = model->get_selected_indexes();
+  TilePatternAnimation new_animation = ui.animation_type_field->get_selected_value();
+  TilePatternAnimation old_common_animation;
+  if (model->is_common_pattern_animation(indexes, old_common_animation) &&
+      new_animation == old_common_animation) {
     // No change.
     return;
   }
 
-  if (!try_command(new SetPatternsAnimationCommand(*this,  { index }, animation))) {
+  if (!try_command(new SetPatternsAnimationCommand(*this,  indexes, new_animation))) {
     // In case of failure, restore the selector.
     update_animation_type_field();
   }
@@ -768,15 +770,21 @@ void TilesetEditor::change_selected_patterns_animation_requested(TilePatternAnim
  */
 void TilesetEditor::update_animation_separation_field() {
 
-  TilePatternSeparation separation;
-  int index = model->get_selected_index();
-  if (index == -1) {
-    separation = TilePatternSeparation::HORIZONTAL;
+  TilePatternAnimation animation = TilePatternAnimation::NONE;
+  bool multi_frame =
+      model->is_common_pattern_animation(model->get_selected_indexes(), animation) &&
+      TilePatternAnimationTraits::is_multi_frame(animation);
+
+  TilePatternSeparation separation = TilePatternSeparation::HORIZONTAL;
+  bool enable = multi_frame && model->is_common_pattern_separation(
+        model->get_selected_indexes(), separation);
+
+  ui.animation_separation_field->setEnabled(enable);
+
+  if (enable) {
+    ui.animation_separation_field->set_selected_value(separation);
   }
-  else {
-    separation = model->get_pattern_separation(index);
-  }
-  ui.animation_separation_field->set_selected_value(separation);
+
 }
 
 /**
@@ -784,21 +792,22 @@ void TilesetEditor::update_animation_separation_field() {
  */
 void TilesetEditor::animation_separation_selector_activated() {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected.
+  if (model->is_selection_empty()) {
     return;
   }
 
-  TilePatternSeparation separation = ui.animation_separation_field->get_selected_value();
-  if (separation == model->get_pattern_separation(index)) {
+  QList<int> indexes = model->get_selected_indexes();
+  TilePatternSeparation new_separation = ui.animation_separation_field->get_selected_value();
+  TilePatternSeparation old_common_separation;
+  if (model->is_common_pattern_separation(indexes, old_common_separation) &&
+      new_separation == old_common_separation) {
     // No change.
     return;
   }
 
-  if (!try_command(new SetPatternsSeparationCommand(*this,  { index }, separation))) {
+  if (!try_command(new SetPatternsSeparationCommand(*this,  indexes, new_separation))) {
     // In case of failure, restore the selector.
-    update_animation_type_field();
+    update_animation_separation_field();
   }
 }
 
@@ -823,15 +832,16 @@ void TilesetEditor::change_selected_patterns_separation_requested(TilePatternSep
  */
 void TilesetEditor::update_default_layer_field() {
 
-  Layer layer;
-  int index = model->get_selected_index();
-  if (index == -1) {
-    layer = Solarus::LAYER_LOW;
+  Layer default_layer = Solarus::LAYER_LOW;
+  bool enable = model->is_common_pattern_default_layer(
+        model->get_selected_indexes(), default_layer);
+
+  ui.default_layer_label->setEnabled(enable);
+  ui.default_layer_field->setEnabled(enable);
+
+  if (enable) {
+    ui.default_layer_field->set_selected_value(default_layer);
   }
-  else {
-    layer = model->get_pattern_default_layer(index);
-  }
-  ui.default_layer_field->set_selected_value(layer);
 }
 
 /**
@@ -839,19 +849,20 @@ void TilesetEditor::update_default_layer_field() {
  */
 void TilesetEditor::default_layer_selector_activated() {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected.
+  if (model->is_selection_empty()) {
     return;
   }
 
-  Layer default_layer = ui.default_layer_field->get_selected_value();
-  if (default_layer == model->get_pattern_default_layer(index)) {
+  QList<int> indexes = model->get_selected_indexes();
+  Layer new_default_layer = ui.default_layer_field->get_selected_value();
+  Layer old_common_default_layer;
+  if (model->is_common_pattern_default_layer(indexes, old_common_default_layer) &&
+      new_default_layer == old_common_default_layer) {
     // No change.
     return;
   }
 
-  try_command(new SetPatternsDefaultLayerCommand(*this,  { index }, default_layer));
+  try_command(new SetPatternsDefaultLayerCommand(*this, indexes, new_default_layer));
 }
 
 /**
