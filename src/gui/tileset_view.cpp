@@ -539,12 +539,19 @@ void TilesetView::end_state_drawing_rectangle() {
  */
 void TilesetView::set_current_area(const QRect& area) {
 
+  if (current_area_item->rect() == area) {
+    // No change.
+    return;
+  }
+
   current_area_item->setRect(area);
 
+  scene()->clearSelection();
   if (state == State::DRAWING_RECTANGLE) {
-    QPainterPath path;
-    path.addRect(area);
-    scene()->setSelectionArea(path);
+    QList<QGraphicsItem*> items = scene()->items(area, Qt::ContainsItemBoundingRect);
+    for (QGraphicsItem* item : items) {
+      item->setSelected(true);
+    }
   }
 }
 
