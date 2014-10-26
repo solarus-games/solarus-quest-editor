@@ -83,40 +83,6 @@ private:
 };
 
 /**
- * @brief Changing the id of a tile pattern.
- */
-class SetPatternIdCommand : public TilesetEditorCommand {
-
-public:
-
-  SetPatternIdCommand(TilesetEditor& editor, int old_index, const QString& new_id) :
-    TilesetEditorCommand(editor, TilesetEditor::tr("Pattern id")),
-    index_before(old_index),
-    index_after(-1),
-    id_before(get_model().index_to_id(old_index)),
-    id_after(new_id) {
-  }
-
-  virtual void undo() override {
-    get_model().set_pattern_id(index_after, id_before);
-    get_model().set_selected_index(index_before);
-  }
-
-  virtual void redo() override {
-    index_after = get_model().set_pattern_id(index_before, id_after);
-    get_model().set_selected_index(index_after);
-  }
-
-private:
-
-  int index_before;
-  int index_after;
-  QString id_before;
-  QString id_after;
-
-};
-
-/**
  * @brief Changing the ground of tile patterns.
  */
 class SetPatternsGroundCommand : public TilesetEditorCommand {
@@ -292,6 +258,43 @@ private:
 };
 
 /**
+ * @brief Creating a tile pattern.
+ */
+class CreatePatternCommand : public TilesetEditorCommand {
+
+public:
+
+  CreatePatternCommand(TilesetEditor& editor, const QString& pattern_id,
+                       const QRect& frame, Ground ground) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Create pattern")),
+    index(-1),
+    pattern_id(pattern_id),
+    frame(frame),
+    ground(ground) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_pattern(index);
+  }
+
+  virtual void redo() override {
+
+    index = get_model().create_pattern(pattern_id, frame);
+    get_model().set_pattern_ground(index, ground);
+    get_model().add_to_selected(index);
+  }
+
+private:
+
+  int index;
+  QString pattern_id;
+  QRect frame;
+  Ground ground;
+
+};
+
+/**
  * @brief Deleting tile patterns.
  */
 class DeletePatternsCommand : public TilesetEditorCommand {
@@ -353,6 +356,40 @@ private:
 
 };
 
+/**
+ * @brief Changing the id of a tile pattern.
+ */
+class SetPatternIdCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternIdCommand(TilesetEditor& editor, int old_index, const QString& new_id) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Pattern id")),
+    index_before(old_index),
+    index_after(-1),
+    id_before(get_model().index_to_id(old_index)),
+    id_after(new_id) {
+  }
+
+  virtual void undo() override {
+    get_model().set_pattern_id(index_after, id_before);
+    get_model().set_selected_index(index_before);
+  }
+
+  virtual void redo() override {
+    index_after = get_model().set_pattern_id(index_before, id_after);
+    get_model().set_selected_index(index_after);
+  }
+
+private:
+
+  int index_before;
+  int index_after;
+  QString id_before;
+  QString id_after;
+
+};
+
 }
 
 /**
@@ -402,11 +439,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
 
-  connect(model, SIGNAL(pattern_created(int, QString)),
-          this, SLOT(update_num_patterns_field()));
-  connect(model, SIGNAL(pattern_deleted(int, QString)),
-          this, SLOT(update_num_patterns_field()));
-
   connect(ui.background_button, SIGNAL(clicked()),
           this, SLOT(background_button_clicked()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
@@ -449,6 +481,13 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
           this, SLOT(update_animation_separation_field()));
 
+  connect(model, SIGNAL(pattern_created(int, QString)),
+          this, SLOT(update_num_patterns_field()));
+  connect(ui.tileset_view, SIGNAL(create_pattern_requested(QString, QRect, Ground)),
+          this, SLOT(create_pattern_requested(QString, QRect, Ground)));
+
+  connect(model, SIGNAL(pattern_deleted(int, QString)),
+          this, SLOT(update_num_patterns_field()));
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
 
@@ -876,6 +915,19 @@ void TilesetEditor::change_selected_patterns_default_layer_requested(Layer defau
   }
 
   try_command(new SetPatternsDefaultLayerCommand(*this, model->get_selected_indexes(), default_layer));
+}
+
+/**
+ * @brief Slot called when the user wants to create a pattern.
+ * @param paterrn_id Id of the pattern to create.
+ * @param frame Position of the frame in the tileset image
+ * (it will be a single-frame pattern).
+ * @param ground Ground to set.
+ */
+void TilesetEditor::create_pattern_requested(
+    const QString& pattern_id, const QRect& frame, Ground ground) {
+
+  try_command(new CreatePatternCommand(*this, pattern_id, frame, ground));
 }
 
 /**

@@ -509,7 +509,7 @@ void TilesetView::end_state_drawing_rectangle() {
     QMenu menu;
     EnumMenus<Ground>::create_actions(
           menu, EnumMenuCheckableOption::NON_CHECKABLE, [=](Ground ground) {
-      emit create_pattern_requested(ground);
+      emit create_pattern_requested("TODO", rectangle, ground);
     });
 
     // Change each ground text to add the word "Create".

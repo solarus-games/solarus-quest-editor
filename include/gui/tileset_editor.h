@@ -66,8 +66,10 @@ public slots:
   void default_layer_selector_activated();
   void change_selected_patterns_default_layer_requested(Layer layer);
 
-  void change_selected_pattern_id_requested();
+  void create_pattern_requested(
+      const QString& pattern_id, const QRect& frame, Ground ground);
   void delete_selected_patterns_requested();
+  void change_selected_pattern_id_requested();
 
 private:
 

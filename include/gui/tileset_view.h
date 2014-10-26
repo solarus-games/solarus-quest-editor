@@ -42,7 +42,8 @@ public:
 
 signals:
 
-  void create_pattern_requested(Ground ground);
+  void create_pattern_requested(
+      const QString& pattern_id, const QRect& frame, Ground ground);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
   void change_selected_patterns_ground_requested(Ground ground);
