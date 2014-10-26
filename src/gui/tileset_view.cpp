@@ -511,7 +511,9 @@ void TilesetView::end_state_drawing_rectangle() {
 
   QRect rectangle = current_area_item->rect().toRect();
   if (!rectangle.isEmpty() &&
+      get_items_intersecting_current_area().isEmpty() &&
       model->is_selection_empty()) {
+
     // Context menu to create a pattern.
     QMenu menu;
     EnumMenus<Ground>::create_actions(
@@ -573,13 +575,39 @@ void TilesetView::set_current_area(const QRect& area) {
   scene()->clearSelection();
   if (state == State::DRAWING_RECTANGLE) {
     // Select items stricly in the rectangle.
-    QRect outline(
-          area.topLeft() - QPoint(1, 1),
-          area.size() + QSize(2, 2));
-    QList<QGraphicsItem*> items = scene()->items(outline, Qt::ContainsItemBoundingRect);
+    QList<QGraphicsItem*> items = get_items_in_current_area();
     for (QGraphicsItem* item : items) {
       item->setSelected(true);
     }
   }
 }
 
+/**
+ * @brief Returns all items fully contained in the rectangle drawn by the user.
+ * @return The items in the drawn rectangle.
+ */
+QList<QGraphicsItem*> TilesetView::get_items_in_current_area() const {
+
+  const QRect& area = current_area_item->rect().toRect();
+  QRect outline(
+      area.topLeft() - QPoint(1, 1),
+      area.size() + QSize(2, 2));
+  QList<QGraphicsItem*> items = scene()->items(outline, Qt::ContainsItemBoundingRect);
+  items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
+  return items;
+}
+
+/**
+ * @brief Returns all items that intersect the rectangle drawn by the user.
+ * @return The items thet intersect the drawn rectangle.
+ */
+QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
+
+  QRect area = current_area_item->rect().toRect();
+  area = QRect(
+      area.topLeft() + QPoint(1, 1),
+      area.size() - QSize(2, 2));
+  QList<QGraphicsItem*> items = scene()->items(area, Qt::IntersectsItemBoundingRect);
+  items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
+  return items;
+}

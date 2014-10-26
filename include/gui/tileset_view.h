@@ -86,6 +86,8 @@ private:
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void end_state_drawing_rectangle();
   void set_current_area(const QRect& area);
+  QList<QGraphicsItem*> get_items_in_current_area() const;
+  QList<QGraphicsItem*> get_items_intersecting_current_area() const;
 
   QPointer<TilesetModel> model;        /**< The tileset viewed. */
   QAction* change_pattern_id_action;   /**< Action of changing a pattern id. */
