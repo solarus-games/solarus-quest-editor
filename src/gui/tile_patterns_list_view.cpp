@@ -16,6 +16,7 @@
  */
 #include "gui/tile_patterns_list_view.h"
 #include "tileset_model.h"
+#include <QAction>
 
 /**
  * @brief Creates an empty tile patterns list view.
@@ -30,6 +31,23 @@ TilePatternsListView::TilePatternsListView(QWidget* parent) :
   setResizeMode(Adjust);
   setSpacing(10);
   setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+  QAction* action;
+
+  action = new QAction(tr("Delete..."), this);
+  action->setShortcut(QKeySequence::Delete);
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(action, SIGNAL(triggered()),
+          this, SIGNAL(delete_selected_patterns_requested()));
+  addAction(action);
+
+  action = new QAction(tr("Change id..."), this);
+  action->setShortcut(tr("F2"));
+  action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(action, SIGNAL(triggered()),
+          this, SIGNAL(change_selected_pattern_id_requested()));
+  addAction(action);
+
 }
 
 /**

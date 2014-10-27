@@ -33,6 +33,11 @@ public:
 
   void set_model(TilesetModel& tileset);
 
+signals:
+
+  void delete_selected_patterns_requested();
+  void change_selected_pattern_id_requested();
+
 };
 
 #endif

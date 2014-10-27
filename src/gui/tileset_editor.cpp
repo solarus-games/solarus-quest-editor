@@ -482,6 +482,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(change_selected_pattern_id_requested()));
   connect(ui.tileset_view, SIGNAL(change_selected_pattern_id_requested()),
           this, SLOT(change_selected_pattern_id_requested()));
+  connect(ui.patterns_list_view, SIGNAL(change_selected_pattern_id_requested()),
+          this, SLOT(change_selected_pattern_id_requested()));
   connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(update_pattern_id_field()));
 
@@ -525,6 +527,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(model, SIGNAL(pattern_deleted(int, QString)),
           this, SLOT(update_num_patterns_field()));
+  connect(ui.patterns_list_view, SIGNAL(delete_selected_patterns_requested()),
+          this, SLOT(delete_selected_patterns_requested()));
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
 

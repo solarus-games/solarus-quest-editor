@@ -370,4 +370,3 @@ void TextEditorWidget::keyPressEvent(QKeyEvent* event) {
 
   QPlainTextEdit::keyPressEvent(event);
 }
-
