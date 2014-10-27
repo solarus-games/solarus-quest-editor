@@ -656,10 +656,10 @@ void TilesetView::set_current_area(const QRect& area) {
   if (state == State::DRAWING_RECTANGLE) {
     // Select items strictly in the rectangle.
     scene->clearSelection();
-    QList<QGraphicsItem*> items = get_items_in_current_area();
-    for (QGraphicsItem* item : items) {
-      item->setSelected(true);
-    }
+    QPainterPath path;
+    path.addRect(QRect(area.topLeft() - QPoint(1, 1),
+                       area.size() + QSize(2, 2)));
+    scene()->setSelectionArea(path, Qt::ContainsItemBoundingRect);
   }
 }
 
