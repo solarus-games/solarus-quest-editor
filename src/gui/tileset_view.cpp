@@ -541,6 +541,7 @@ void TilesetView::end_state_drawing_rectangle() {
 
   QRect rectangle = current_area_item->rect().toRect();
   if (!rectangle.isEmpty() &&
+      sceneRect().contains(rectangle) &&
       get_items_intersecting_current_area().isEmpty() &&
       model->is_selection_empty()) {
 
@@ -613,6 +614,7 @@ void TilesetView::end_state_moving_pattern() {
 
   QRect rectangle = current_area_item->rect().toRect();
   if (!rectangle.isEmpty() &&
+      sceneRect().contains(rectangle) &&
       get_items_intersecting_current_area().isEmpty() &&
       model->get_selection_count() == 1) {
 
