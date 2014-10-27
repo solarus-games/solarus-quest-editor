@@ -578,9 +578,11 @@ void TilesetModel::set_pattern_position(int index, const QPoint& position) {
   const std::string& pattern_id = index_to_id(index).toStdString();
   std::vector<Solarus::Rectangle> frames = tileset.get_pattern(pattern_id).get_frames();
 
+  int old_x = frames[0].get_x();
+  int old_y = frames[0].get_y();
   for (Solarus::Rectangle& frame : frames) {
-    int dx = frame.get_x() - frames[0].get_x();
-    int dy = frame.get_y() - frames[0].get_y();
+    int dx = frame.get_x() - old_x;
+    int dy = frame.get_y() - old_y;
     frame.set_xy(position.x() + dx, position.y() + dy);
   }
 

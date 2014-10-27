@@ -598,8 +598,8 @@ void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
 
   state = State::MOVING_PATTERN;
   dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
-  const QRect& frame = model->get_pattern_frame(index);
-  current_area_item = new QGraphicsRectItem(frame);
+  const QRect& box = model->get_pattern_frames_bounding_box(index);
+  current_area_item = new QGraphicsRectItem(box);
   current_area_item->setPen(QPen(Qt::yellow));
   scene->addItem(current_area_item);
 }
@@ -609,9 +609,9 @@ void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
  */
 void TilesetView::end_state_moving_pattern() {
 
-  QRect frame = current_area_item->rect().toRect();
-  if (!frame.isEmpty() &&
-      sceneRect().contains(frame) &&
+  QRect box = current_area_item->rect().toRect();
+  if (!box.isEmpty() &&
+      sceneRect().contains(box) &&
       get_items_intersecting_current_area().isEmpty() &&
       model->get_selection_count() == 1) {
 
@@ -619,7 +619,7 @@ void TilesetView::end_state_moving_pattern() {
     QMenu menu;
     QAction* move_pattern_action = new QAction(tr("Move here"), this);
     connect(move_pattern_action, &QAction::triggered, [=] {
-      emit change_selected_pattern_position_requested(frame.topLeft());
+      emit change_selected_pattern_position_requested(box.topLeft());
     });
     menu.addAction(move_pattern_action);
     menu.addSeparator();
