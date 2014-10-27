@@ -888,6 +888,24 @@
     </message>
 </context>
 <context>
+    <name>TilePatternsListView</name>
+    <message>
+        <location filename="../src/gui/tile_patterns_list_view.cpp" line="37"/>
+        <source>Delete...</source>
+        <translation>Supprimer...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tile_patterns_list_view.cpp" line="44"/>
+        <source>Change id...</source>
+        <translation>Changer l&apos;id...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tile_patterns_list_view.cpp" line="45"/>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+</context>
+<context>
     <name>TilesetEditor</name>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="14"/>
@@ -956,7 +974,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="172"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="367"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="401"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
@@ -967,7 +985,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="241"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="94"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="128"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
@@ -978,7 +996,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="264"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="181"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="215"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
@@ -994,7 +1012,7 @@
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="328"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="137"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="171"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
@@ -1004,47 +1022,52 @@
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="226"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="94"/>
+        <source>Move pattern</source>
+        <translation>Déplacer le motif</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="260"/>
         <source>Animation separation</source>
         <translation>Séparation d&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="269"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="303"/>
         <source>Create pattern</source>
         <translation>Nouveau motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="305"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="339"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="422"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="456"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="690"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="721"/>
         <source>Rename tile pattern</source>
         <translation>Renommer un motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="691"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="722"/>
         <source>New id for pattern &apos;%1&apos;:</source>
         <translation>Nouvel id du motif &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="947"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="978"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="951"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="982"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="957"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="988"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
@@ -1080,9 +1103,9 @@
         <translation>Le motif &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/tileset_model.cpp" line="812"/>
-        <location filename="../src/tileset_model.cpp" line="939"/>
-        <location filename="../src/tileset_model.cpp" line="959"/>
+        <location filename="../src/tileset_model.cpp" line="849"/>
+        <location filename="../src/tileset_model.cpp" line="976"/>
+        <location filename="../src/tileset_model.cpp" line="996"/>
         <source>Cannot divide the pattern in 3 frames : the size of each frame must be a multiple of 8 pixels</source>
         <translation>Impossible de diviser le motif en 3 images : la taille de chaque image doit être un multiple de 8 pixels</translation>
     </message>
@@ -1090,12 +1113,12 @@
 <context>
     <name>TilesetScene</name>
     <message>
-        <location filename="../src/gui/tileset_scene.cpp" line="141"/>
+        <location filename="../src/gui/tileset_scene.cpp" line="158"/>
         <source>Missing tileset image &apos;%1&apos;</source>
         <translation>Image de tileset manquante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_scene.cpp" line="326"/>
+        <location filename="../src/gui/tileset_scene.cpp" line="359"/>
         <source>No such pattern index: %1</source>
         <translation>Index de motif inexistant : %1</translation>
     </message>
@@ -1103,44 +1126,50 @@
 <context>
     <name>TilesetView</name>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="49"/>
+        <location filename="../src/gui/tileset_view.cpp" line="50"/>
         <source>Change id...</source>
         <translation>Changer l&apos;id...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="50"/>
+        <location filename="../src/gui/tileset_view.cpp" line="51"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="57"/>
+        <location filename="../src/gui/tileset_view.cpp" line="58"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="338"/>
+        <location filename="../src/gui/tileset_view.cpp" line="368"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="344"/>
+        <location filename="../src/gui/tileset_view.cpp" line="374"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="531"/>
+        <location filename="../src/gui/tileset_view.cpp" line="562"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="537"/>
+        <location filename="../src/gui/tileset_view.cpp" line="568"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="548"/>
+        <location filename="../src/gui/tileset_view.cpp" line="579"/>
+        <location filename="../src/gui/tileset_view.cpp" line="629"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_view.cpp" line="623"/>
+        <source>Move here</source>
+        <translation>Déplacer ici</translation>
     </message>
 </context>
 </TS>
