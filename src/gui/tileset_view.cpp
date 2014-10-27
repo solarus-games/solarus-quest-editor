@@ -195,11 +195,9 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
             // Select the item.
             item->setSelected(true);
           }
-          else {
-            // Already selected: move it.
-            if (model->get_selection_count() == 1) {
-              start_state_moving_pattern(event->pos());
-            }
+          // Allow to move it.
+          if (model->get_selection_count() == 1) {
+            start_state_moving_pattern(event->pos());
           }
         }
       }
