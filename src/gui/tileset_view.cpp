@@ -659,7 +659,7 @@ void TilesetView::set_current_area(const QRect& area) {
     QPainterPath path;
     path.addRect(QRect(area.topLeft() - QPoint(1, 1),
                        area.size() + QSize(2, 2)));
-    scene()->setSelectionArea(path, Qt::ContainsItemBoundingRect);
+    scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
   }
 }
 
