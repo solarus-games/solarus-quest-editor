@@ -35,9 +35,6 @@ public:
   TilesetModel& get_model();
 
   virtual void save() override;
-  virtual void cut() override;
-  virtual void copy() override;
-  virtual void paste() override;
 
 public slots:
 

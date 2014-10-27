@@ -553,30 +553,6 @@ void TilesetEditor::save() {
 }
 
 /**
- * @copydoc Editor::cut
- */
-void TilesetEditor::cut() {
-
-  // TOOD
-}
-
-/**
- * @copydoc Editor::copy
- */
-void TilesetEditor::copy() {
-
-  // TOOD
-}
-
-/**
- * @copydoc Editor::paste
- */
-void TilesetEditor::paste() {
-
-  // TOOD
-}
-
-/**
  * @brief Updates everything in the gui.
  */
 void TilesetEditor::update() {

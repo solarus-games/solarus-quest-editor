@@ -363,16 +363,28 @@ bool Editor::confirm_close() {
 }
 
 /**
- * @fn Editor::cut
  * @brief Copies the selection to the clipboard and removes it.
+ *
+ * The default implementation does nothing, meaning that clipboard operations
+ * are not supported.
  */
+void Editor::cut() {
+}
 
 /**
- * @fn Editor::copy
  * @brief Copies the selection to the clipboard.
+ *
+ * The default implementation does nothing, meaning that clipboard operations
+ * are not supported.
  */
+void Editor::copy() {
+}
 
 /**
- * @fn Editor::paste
  * @brief Inserts the content of the clipboard.
+ *
+ * The default implementation does nothing, meaning that clipboard operations
+ * are not supported.
  */
+void Editor::paste() {
+}

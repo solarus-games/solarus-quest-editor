@@ -52,9 +52,9 @@ public:
   bool confirm_close();
 
   virtual void save() = 0;
-  virtual void cut() = 0;
-  virtual void copy() = 0;
-  virtual void paste() = 0;
+  virtual void cut();
+  virtual void copy();
+  virtual void paste();
 
 protected:
 
