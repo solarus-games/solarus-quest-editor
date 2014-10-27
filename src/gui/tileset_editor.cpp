@@ -211,7 +211,7 @@ class SetPatternsAnimationCommand : public TilesetEditorCommand {
 public:
 
   SetPatternsAnimationCommand(
-      TilesetEditor& editor, const QList<int>& indexes, TilePatternAnimation animation) :
+      TilesetEditor& editor, const QList<int>& indexes, PatternAnimation animation) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Animation")),
     indexes(indexes),
     animation_after(animation) {
@@ -243,8 +243,8 @@ public:
 private:
 
   QList<int> indexes;
-  QList<TilePatternAnimation> animations_before;
-  TilePatternAnimation animation_after;
+  QList<PatternAnimation> animations_before;
+  PatternAnimation animation_after;
 
 };
 
@@ -256,7 +256,7 @@ class SetPatternsSeparationCommand : public TilesetEditorCommand {
 public:
 
   SetPatternsSeparationCommand(
-      TilesetEditor& editor, const QList<int>& indexes, TilePatternSeparation separation) :
+      TilesetEditor& editor, const QList<int>& indexes, PatternSeparation separation) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Animation separation")),
     indexes(indexes),
     separation_after(separation) {
@@ -286,8 +286,8 @@ public:
 private:
 
   QList<int> indexes;
-  QList<TilePatternSeparation> separations_before;
-  TilePatternSeparation separation_after;
+  QList<PatternSeparation> separations_before;
+  PatternSeparation separation_after;
 
 };
 
@@ -382,8 +382,8 @@ private:
     QRect frames_bounding_box;
     Ground ground;
     Layer default_layer;
-    TilePatternAnimation animation;
-    TilePatternSeparation separation;
+    PatternAnimation animation;
+    PatternSeparation separation;
   };
 
   QList<Pattern> patterns;
@@ -506,18 +506,18 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(ui.animation_type_field, SIGNAL(activated(QString)),
           this, SLOT(animation_type_selector_activated()));
-  connect(ui.tileset_view, SIGNAL(change_selected_patterns_animation_requested(TilePatternAnimation)),
-          this, SLOT(change_selected_patterns_animation_requested(TilePatternAnimation)));
-  connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_animation_requested(PatternAnimation)),
+          this, SLOT(change_selected_patterns_animation_requested(PatternAnimation)));
+  connect(model, SIGNAL(pattern_animation_changed(int, PatternAnimation)),
           this, SLOT(update_animation_type_field()));
-  connect(model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+  connect(model, SIGNAL(pattern_animation_changed(int, PatternAnimation)),
           this, SLOT(update_animation_separation_field()));
 
   connect(ui.animation_separation_field, SIGNAL(activated(QString)),
           this, SLOT(animation_separation_selector_activated()));
-  connect(ui.tileset_view, SIGNAL(change_selected_patterns_separation_requested(TilePatternSeparation)),
-          this, SLOT(change_selected_patterns_separation_requested(TilePatternSeparation)));
-  connect(model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_separation_requested(PatternSeparation)),
+          this, SLOT(change_selected_patterns_separation_requested(PatternSeparation)));
+  connect(model, SIGNAL(pattern_separation_changed(int, PatternSeparation)),
           this, SLOT(update_animation_separation_field()));
 
   connect(model, SIGNAL(pattern_created(int, QString)),
@@ -786,7 +786,7 @@ void TilesetEditor::change_selected_patterns_ground_requested(Ground ground) {
  */
 void TilesetEditor::update_animation_type_field() {
 
-  TilePatternAnimation animation = TilePatternAnimation::NONE;
+  PatternAnimation animation = PatternAnimation::NONE;
   bool enable = model->is_common_pattern_animation(
         model->get_selected_indexes(), animation);
 
@@ -808,8 +808,8 @@ void TilesetEditor::animation_type_selector_activated() {
   }
 
   QList<int> indexes = model->get_selected_indexes();
-  TilePatternAnimation new_animation = ui.animation_type_field->get_selected_value();
-  TilePatternAnimation old_common_animation;
+  PatternAnimation new_animation = ui.animation_type_field->get_selected_value();
+  PatternAnimation old_common_animation;
   if (model->is_common_pattern_animation(indexes, old_common_animation) &&
       new_animation == old_common_animation) {
     // No change.
@@ -826,7 +826,7 @@ void TilesetEditor::animation_type_selector_activated() {
  * @brief Slot called when the user changes the animation of selected patterns.
  * @param animation The new animation.
  */
-void TilesetEditor::change_selected_patterns_animation_requested(TilePatternAnimation animation) {
+void TilesetEditor::change_selected_patterns_animation_requested(PatternAnimation animation) {
 
   if (model->is_selection_empty()) {
     return;
@@ -840,12 +840,12 @@ void TilesetEditor::change_selected_patterns_animation_requested(TilePatternAnim
  */
 void TilesetEditor::update_animation_separation_field() {
 
-  TilePatternAnimation animation = TilePatternAnimation::NONE;
+  PatternAnimation animation = PatternAnimation::NONE;
   bool multi_frame =
       model->is_common_pattern_animation(model->get_selected_indexes(), animation) &&
-      TilePatternAnimationTraits::is_multi_frame(animation);
+      PatternAnimationTraits::is_multi_frame(animation);
 
-  TilePatternSeparation separation = TilePatternSeparation::HORIZONTAL;
+  PatternSeparation separation = PatternSeparation::HORIZONTAL;
   bool enable = multi_frame && model->is_common_pattern_separation(
         model->get_selected_indexes(), separation);
 
@@ -867,8 +867,8 @@ void TilesetEditor::animation_separation_selector_activated() {
   }
 
   QList<int> indexes = model->get_selected_indexes();
-  TilePatternSeparation new_separation = ui.animation_separation_field->get_selected_value();
-  TilePatternSeparation old_common_separation;
+  PatternSeparation new_separation = ui.animation_separation_field->get_selected_value();
+  PatternSeparation old_common_separation;
   if (model->is_common_pattern_separation(indexes, old_common_separation) &&
       new_separation == old_common_separation) {
     // No change.
@@ -885,7 +885,7 @@ void TilesetEditor::animation_separation_selector_activated() {
  * @brief Slot called when the user changes the separation of selected patterns.
  * @param separation The new separation.
  */
-void TilesetEditor::change_selected_patterns_separation_requested(TilePatternSeparation separation) {
+void TilesetEditor::change_selected_patterns_separation_requested(PatternSeparation separation) {
 
   if (model->is_selection_empty()) {
     return;

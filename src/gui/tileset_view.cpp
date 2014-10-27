@@ -19,8 +19,8 @@
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
 #include "ground_traits.h"
-#include "tile_pattern_animation_traits.h"
-#include "tile_pattern_separation_traits.h"
+#include "pattern_animation_traits.h"
+#include "pattern_separation_traits.h"
 #include "tileset_model.h"
 #include <QAction>
 #include <QApplication>
@@ -464,25 +464,25 @@ void TilesetView::build_context_menu_animation(
   }
 
   // See if the animation and the separation are common.
-  TilePatternAnimation animation;
-  TilePatternSeparation separation;
+  PatternAnimation animation;
+  PatternSeparation separation;
   bool common_animation = model->is_common_pattern_animation(indexes, animation);
   bool common_separation = model->is_common_pattern_separation(indexes, separation);
   bool enable_separation = common_animation &&
-      TilePatternAnimationTraits::is_multi_frame(animation);
+      PatternAnimationTraits::is_multi_frame(animation);
 
   // Add actions to the menu.
-  QList<QAction*> animation_actions = EnumMenus<TilePatternAnimation>::create_actions(
+  QList<QAction*> animation_actions = EnumMenus<PatternAnimation>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](TilePatternAnimation animation) {
+        [=](PatternAnimation animation) {
     emit change_selected_patterns_animation_requested(animation);
   });
   menu.addSeparator();
-  QList<QAction*> separation_actions = EnumMenus<TilePatternSeparation>::create_actions(
+  QList<QAction*> separation_actions = EnumMenus<PatternSeparation>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](TilePatternSeparation separation) {
+        [=](PatternSeparation separation) {
     emit change_selected_patterns_separation_requested(separation);
   });
 

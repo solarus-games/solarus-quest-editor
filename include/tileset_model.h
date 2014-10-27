@@ -18,8 +18,8 @@
 #define SOLARUSEDITOR_TILESET_MODEL_H
 
 #include "natural_comparator.h"
-#include "tile_pattern_animation.h"
-#include "tile_pattern_separation.h"
+#include "pattern_animation.h"
+#include "pattern_separation.h"
 #include <solarus/entities/TilesetData.h>
 #include <QAbstractItemModel>
 #include <QImage>
@@ -85,12 +85,12 @@ public:
   Layer get_pattern_default_layer(int index) const;
   bool is_common_pattern_default_layer(const QList<int>& indexes, Layer& default_layer) const;
   void set_pattern_default_layer(int index, Layer default_layer);
-  TilePatternAnimation get_pattern_animation(int index) const;
-  bool is_common_pattern_animation(const QList<int>& indexes, TilePatternAnimation& animation) const;
-  void set_pattern_animation(int index, TilePatternAnimation animation);
-  TilePatternSeparation get_pattern_separation(int index) const;
-  bool is_common_pattern_separation(const QList<int>& indexes, TilePatternSeparation& separation) const;
-  void set_pattern_separation(int index, TilePatternSeparation separation);
+  PatternAnimation get_pattern_animation(int index) const;
+  bool is_common_pattern_animation(const QList<int>& indexes, PatternAnimation& animation) const;
+  void set_pattern_animation(int index, PatternAnimation animation);
+  PatternSeparation get_pattern_separation(int index) const;
+  bool is_common_pattern_separation(const QList<int>& indexes, PatternSeparation& separation) const;
+  void set_pattern_separation(int index, PatternSeparation separation);
 
   QPixmap get_pattern_image(int index) const;
   QPixmap get_pattern_image_all_frames(int index) const;
@@ -121,8 +121,8 @@ signals:
   void pattern_position_changed(int index, const QPoint& position);
   void pattern_ground_changed(int index, Ground ground);
   void pattern_default_layer_changed(int index, Layer default_layer);
-  void pattern_animation_changed(int index, TilePatternAnimation animation);
-  void pattern_separation_changed(int index, TilePatternSeparation separation);
+  void pattern_animation_changed(int index, PatternAnimation animation);
+  void pattern_separation_changed(int index, PatternSeparation separation);
 
 public slots:
 

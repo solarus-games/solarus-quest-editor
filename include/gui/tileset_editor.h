@@ -56,10 +56,10 @@ public slots:
   void change_selected_patterns_ground_requested(Ground ground);
   void update_animation_type_field();
   void animation_type_selector_activated();
-  void change_selected_patterns_animation_requested(TilePatternAnimation animation);
+  void change_selected_patterns_animation_requested(PatternAnimation animation);
   void update_animation_separation_field();
   void animation_separation_selector_activated();
-  void change_selected_patterns_separation_requested(TilePatternSeparation separation);
+  void change_selected_patterns_separation_requested(PatternSeparation separation);
   void update_default_layer_field();
   void default_layer_selector_activated();
   void change_selected_patterns_default_layer_requested(Layer layer);

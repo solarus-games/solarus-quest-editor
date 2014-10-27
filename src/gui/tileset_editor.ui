@@ -289,7 +289,7 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout">
                <item>
-                <widget class="EnumSelector&lt;TilePatternAnimation&gt;" name="animation_type_field">
+                <widget class="EnumSelector&lt;PatternAnimation&gt;" name="animation_type_field">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -302,7 +302,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="EnumSelector&lt;TilePatternSeparation&gt;" name="animation_separation_field">
+                <widget class="EnumSelector&lt;PatternSeparation&gt;" name="animation_separation_field">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -369,14 +369,14 @@
    <header>ground_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;TilePatternAnimation&gt;</class>
+   <class>EnumSelector&lt;PatternAnimation&gt;</class>
    <extends>QComboBox</extends>
-   <header>tile_pattern_animation_traits.h</header>
+   <header>pattern_animation_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;TilePatternSeparation&gt;</class>
+   <class>EnumSelector&lt;PatternSeparation&gt;</class>
    <extends>QComboBox</extends>
-   <header>tile_pattern_separation_traits.h</header>
+   <header>pattern_separation_traits.h</header>
   </customwidget>
   <customwidget>
    <class>EnumSelector&lt;Layer&gt;</class>

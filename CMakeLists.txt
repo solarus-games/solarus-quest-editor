@@ -81,14 +81,14 @@ set(solarus_quest_editor_SOURCES
   include/ground_traits.h
   include/layer_traits.h
   include/natural_comparator.h
+  include/pattern_animation.h
+  include/pattern_animation_traits.h
+  include/pattern_separation.h
+  include/pattern_separation_traits.h
   include/quest.h
   include/quest_manager.h
   include/quest_resources.h
   include/rectangle.h
-  include/tile_pattern_animation.h
-  include/tile_pattern_animation_traits.h
-  include/tile_pattern_separation.h
-  include/tile_pattern_separation_traits.h
   include/tileset_model.h
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
@@ -110,12 +110,12 @@ set(solarus_quest_editor_SOURCES
   src/ground_traits.cpp
   src/layer_traits.cpp
   src/main.cpp
-  src/rectangle.cpp
+  src/pattern_animation_traits.cpp
+  src/pattern_separation_traits.cpp
   src/quest.cpp
   src/quest_manager.cpp
   src/quest_resources.cpp
-  src/tile_pattern_animation_traits.cpp
-  src/tile_pattern_separation_traits.cpp
+  src/rectangle.cpp
   src/tileset_model.cpp
 )
 

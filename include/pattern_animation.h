@@ -14,23 +14,21 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_TILE_PATTERN_SEPARATION_TRAITS_H
-#define SOLARUSEDITOR_TILE_PATTERN_SEPARATION_TRAITS_H
-
-#include "enum_traits.h"
-#include "tile_pattern_separation.h"
+#ifndef SOLARUSEDITOR_PATTERN_ANIMATION_H
+#define SOLARUSEDITOR_PATTERN_ANIMATION_H
 
 /**
- * \brief Provides useful properties of tile pattern separation enum values.
+ * \brief The possible kinds of animations for a pattern in a tileset.
  */
-template<>
-class EnumTraits<TilePatternSeparation> {
+enum class PatternAnimation {
 
-public:
-
-  static QList<TilePatternSeparation> get_values();
-  static QString get_friendly_name(TilePatternSeparation value);
-  static QIcon get_icon(TilePatternSeparation value);
+  NONE,
+  SEQUENCE_012,
+  SEQUENCE_0121,
+  SELF_SCROLLING,
+  PARALLAX_SCROLLING,
+  SEQUENCE_012_PARALLAX,
+  SEQUENCE_0121_PARALLAX
 
 };
 

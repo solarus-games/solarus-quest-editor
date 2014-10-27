@@ -14,21 +14,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_TILE_PATTERN_ANIMATION_H
-#define SOLARUSEDITOR_TILE_PATTERN_ANIMATION_H
+#ifndef SOLARUSEDITOR_PATTERN_SEPARATION_H
+#define SOLARUSEDITOR_PATTERN_SEPARATION_H
 
 /**
- * \brief The possible kinds of animations for a pattern in a tileset.
+ * \brief The possible kinds of separation for an animated tile pattern.
  */
-enum class TilePatternAnimation {
+enum class PatternSeparation {
 
-  NONE,
-  SEQUENCE_012,
-  SEQUENCE_0121,
-  SELF_SCROLLING,
-  PARALLAX_SCROLLING,
-  SEQUENCE_012_PARALLAX,
-  SEQUENCE_0121_PARALLAX
+  HORIZONTAL,
+  VERTICAL
 
 };
 

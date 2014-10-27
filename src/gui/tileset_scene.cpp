@@ -79,9 +79,9 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
   // Watch pattern geometry changes.
   connect(&model, SIGNAL(pattern_position_changed(int, QPoint)),
           this, SLOT(update_pattern_position(int)));
-  connect(&model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
+  connect(&model, SIGNAL(pattern_animation_changed(int, PatternAnimation)),
           this, SLOT(update_pattern_animation(int)));
-  connect(&model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
+  connect(&model, SIGNAL(pattern_separation_changed(int, PatternSeparation)),
           this, SLOT(update_pattern_animation(int)));
 
   // Watch changes in the pattern list.

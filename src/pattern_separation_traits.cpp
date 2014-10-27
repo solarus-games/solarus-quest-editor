@@ -14,18 +14,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "tile_pattern_separation_traits.h"
+#include "pattern_separation_traits.h"
 #include <QApplication>
 
 /**
  * @brief Returns all values.
  * @return The existing values.
  */
-QList<TilePatternSeparation> EnumTraits<TilePatternSeparation>::get_values() {
+QList<PatternSeparation> EnumTraits<PatternSeparation>::get_values() {
 
-  return QList<TilePatternSeparation>()
-      << TilePatternSeparation::HORIZONTAL
-      << TilePatternSeparation::VERTICAL;
+  return QList<PatternSeparation>()
+      << PatternSeparation::HORIZONTAL
+      << PatternSeparation::VERTICAL;
 }
 
 /**
@@ -33,14 +33,14 @@ QList<TilePatternSeparation> EnumTraits<TilePatternSeparation>::get_values() {
  * @param value A value.
  * @return The human-readable name of this value in the current language.
  */
-QString EnumTraits<TilePatternSeparation>::get_friendly_name(TilePatternSeparation value) {
+QString EnumTraits<PatternSeparation>::get_friendly_name(PatternSeparation value) {
 
   switch (value) {
 
-  case TilePatternSeparation::HORIZONTAL:
+  case PatternSeparation::HORIZONTAL:
     return QApplication::tr("Horizontal");
 
-  case TilePatternSeparation::VERTICAL:
+  case PatternSeparation::VERTICAL:
     return QApplication::tr("Vertical");
 
   }
@@ -53,14 +53,14 @@ QString EnumTraits<TilePatternSeparation>::get_friendly_name(TilePatternSeparati
  * @param value A value.
  * @return The corresponding icon.
  */
-QIcon EnumTraits<TilePatternSeparation>::get_icon(TilePatternSeparation value) {
+QIcon EnumTraits<PatternSeparation>::get_icon(PatternSeparation value) {
 
   switch (value) {
 
-  case TilePatternSeparation::HORIZONTAL:
+  case PatternSeparation::HORIZONTAL:
     return QIcon(":/images/animation_separation_horizontal.png");
 
-  case TilePatternSeparation::VERTICAL:
+  case PatternSeparation::VERTICAL:
     return QIcon(":/images/animation_separation_vertical.png");
 
   }

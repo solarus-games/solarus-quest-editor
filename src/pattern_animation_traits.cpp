@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "tile_pattern_animation_traits.h"
+#include "pattern_animation_traits.h"
 #include <QApplication>
 
 /**
  * @brief Returns all values.
  * @return The existing values.
  */
-QList<TilePatternAnimation> EnumTraits<TilePatternAnimation>::get_values() {
+QList<PatternAnimation> EnumTraits<PatternAnimation>::get_values() {
 
-  return QList<TilePatternAnimation>()
-      << TilePatternAnimation::NONE
-      << TilePatternAnimation::SEQUENCE_012
-      << TilePatternAnimation::SEQUENCE_0121
-      << TilePatternAnimation::SELF_SCROLLING
-      << TilePatternAnimation::PARALLAX_SCROLLING
-      << TilePatternAnimation::SEQUENCE_012_PARALLAX
-      << TilePatternAnimation::SEQUENCE_0121_PARALLAX;
+  return QList<PatternAnimation>()
+      << PatternAnimation::NONE
+      << PatternAnimation::SEQUENCE_012
+      << PatternAnimation::SEQUENCE_0121
+      << PatternAnimation::SELF_SCROLLING
+      << PatternAnimation::PARALLAX_SCROLLING
+      << PatternAnimation::SEQUENCE_012_PARALLAX
+      << PatternAnimation::SEQUENCE_0121_PARALLAX;
 }
 
 /**
@@ -38,31 +38,31 @@ QList<TilePatternAnimation> EnumTraits<TilePatternAnimation>::get_values() {
  * @param value A value.
  * @return The human-readable name of this value in the current language.
  */
-QString EnumTraits<TilePatternAnimation>::get_friendly_name(TilePatternAnimation value) {
+QString EnumTraits<PatternAnimation>::get_friendly_name(PatternAnimation value) {
 
   // Use a switch to ensure we don't forget a value,
   // and also to translate names dynamically.
   switch (value) {
 
-  case TilePatternAnimation::NONE:
+  case PatternAnimation::NONE:
     return QApplication::tr("None", "Tile pattern animation");
 
-  case TilePatternAnimation::SEQUENCE_012:
+  case PatternAnimation::SEQUENCE_012:
     return QApplication::tr("Frames 1-2-3-1");
 
-  case TilePatternAnimation::SEQUENCE_0121:
+  case PatternAnimation::SEQUENCE_0121:
     return QApplication::tr("Frames 1-2-3-2-1");
 
-  case TilePatternAnimation::SELF_SCROLLING:
+  case PatternAnimation::SELF_SCROLLING:
     return QApplication::tr("Scrolling on itself");
 
-  case TilePatternAnimation::PARALLAX_SCROLLING:
+  case PatternAnimation::PARALLAX_SCROLLING:
     return QApplication::tr("Parallax scrolling");
 
-  case TilePatternAnimation::SEQUENCE_012_PARALLAX:
+  case PatternAnimation::SEQUENCE_012_PARALLAX:
     return QApplication::tr("Frames 1-2-3-1, parallax");
 
-  case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
+  case PatternAnimation::SEQUENCE_0121_PARALLAX:
     return QApplication::tr("Frames 1-2-3-2-1, parallax");
 
   }
@@ -75,7 +75,7 @@ QString EnumTraits<TilePatternAnimation>::get_friendly_name(TilePatternAnimation
  * @param value A value.
  * @return The corresponding icon.
  */
-QIcon EnumTraits<TilePatternAnimation>::get_icon(TilePatternAnimation /* value */) {
+QIcon EnumTraits<PatternAnimation>::get_icon(PatternAnimation /* value */) {
   // No icon for now.
   return QIcon();
 }
@@ -86,7 +86,7 @@ QIcon EnumTraits<TilePatternAnimation>::get_icon(TilePatternAnimation /* value *
  * @return @c true if this is a multi-frame pattern.
  * Returns @c falseif the pattern does not exist.
  */
-bool EnumTraits<TilePatternAnimation>::is_multi_frame(TilePatternAnimation value) {
+bool EnumTraits<PatternAnimation>::is_multi_frame(PatternAnimation value) {
 
   return get_num_frames(value) > 1;
 }
@@ -96,21 +96,21 @@ bool EnumTraits<TilePatternAnimation>::is_multi_frame(TilePatternAnimation value
  * @param value A pattern animation.
  * @return The number of frames (1, 3 or 4).
  */
-int EnumTraits<TilePatternAnimation>::get_num_frames(TilePatternAnimation value) {
+int EnumTraits<PatternAnimation>::get_num_frames(PatternAnimation value) {
 
   switch (value) {
 
-  case TilePatternAnimation::NONE:
-  case TilePatternAnimation::SELF_SCROLLING:
-  case TilePatternAnimation::PARALLAX_SCROLLING:
+  case PatternAnimation::NONE:
+  case PatternAnimation::SELF_SCROLLING:
+  case PatternAnimation::PARALLAX_SCROLLING:
     return 1;
 
-  case TilePatternAnimation::SEQUENCE_012:
-  case TilePatternAnimation::SEQUENCE_012_PARALLAX:
+  case PatternAnimation::SEQUENCE_012:
+  case PatternAnimation::SEQUENCE_012_PARALLAX:
     return 3;
 
-  case TilePatternAnimation::SEQUENCE_0121:
-  case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
+  case PatternAnimation::SEQUENCE_0121:
+  case PatternAnimation::SEQUENCE_0121_PARALLAX:
     return 4;
   }
 
@@ -122,21 +122,21 @@ int EnumTraits<TilePatternAnimation>::get_num_frames(TilePatternAnimation value)
  * @param value A pattern animation.
  * @return The scrolling property.
  */
-Solarus::TileScrolling EnumTraits<TilePatternAnimation>::get_scrolling(TilePatternAnimation value) {
+Solarus::TileScrolling EnumTraits<PatternAnimation>::get_scrolling(PatternAnimation value) {
 
   switch (value) {
 
-  case TilePatternAnimation::NONE:
-  case TilePatternAnimation::SEQUENCE_012:
-  case TilePatternAnimation::SEQUENCE_0121:
+  case PatternAnimation::NONE:
+  case PatternAnimation::SEQUENCE_012:
+  case PatternAnimation::SEQUENCE_0121:
     return Solarus::TileScrolling::NONE;
 
-  case TilePatternAnimation::SELF_SCROLLING:
+  case PatternAnimation::SELF_SCROLLING:
     return Solarus::TileScrolling::SELF;
 
-  case TilePatternAnimation::PARALLAX_SCROLLING:
-  case TilePatternAnimation::SEQUENCE_012_PARALLAX:
-  case TilePatternAnimation::SEQUENCE_0121_PARALLAX:
+  case PatternAnimation::PARALLAX_SCROLLING:
+  case PatternAnimation::SEQUENCE_012_PARALLAX:
+  case PatternAnimation::SEQUENCE_0121_PARALLAX:
     return Solarus::TileScrolling::PARALLAX;
 
   }
