@@ -545,18 +545,55 @@ QList<QRect> TilesetModel::get_pattern_frames(int index) const {
  */
 QRect TilesetModel::get_pattern_frames_bounding_box(int index) const {
 
-  QRect bounding_box = get_pattern_frame(index);
+  QRect box = get_pattern_frame(index);
   if (!is_pattern_multi_frame(index)) {
-    return bounding_box;
+    return box;
   }
 
   if (get_pattern_separation(index) == TilePatternSeparation::HORIZONTAL) {
-    bounding_box.setWidth(bounding_box.width() * 3);
+    box.setWidth(box.width() * 3);
   }
   else {
-    bounding_box.setHeight(bounding_box.height() * 3);
+    box.setHeight(box.height() * 3);
   }
-  return bounding_box;
+  return box;
+}
+
+/**
+ * @brief Sets the coordinates of the rectangle containing all frames of a
+ * pattern in the tileset image.
+ *
+ * Emits pattern_position_changed() if there is a change.
+ *
+ * @param index A pattern index.
+ * @param position Top-left position of the first frame of the pattern.
+ */
+void TilesetModel::set_pattern_position(int index, const QPoint& position) {
+
+  if (position == get_pattern_frame(index).topLeft()) {
+    // No change.
+    return;
+  }
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  std::vector<Solarus::Rectangle> frames = tileset.get_pattern(pattern_id).get_frames();
+
+  for (Solarus::Rectangle& frame : frames) {
+    int dx = frame.get_x() - frames[0].get_x();
+    int dy = frame.get_y() - frames[0].get_y();
+    frame.set_xy(position.x() + dx, position.y() + dy);
+  }
+
+  tileset.get_pattern(pattern_id).set_frames(frames);
+
+  // The icon has changed.
+  patterns[index].set_image_dirty();
+
+  // Notify people.
+  emit pattern_position_changed(index, position);
+
+  QModelIndex model_index = this->index(index);
+  emit dataChanged(model_index, model_index);
 }
 
 /**

@@ -53,6 +53,7 @@ public slots:
 
   void update_pattern_view();
   void update_pattern_id_field();
+  void change_selected_pattern_position_requested(const QPoint& position);
   void update_ground_field();
   void ground_selector_activated();
   void change_selected_patterns_ground_requested(Ground ground);

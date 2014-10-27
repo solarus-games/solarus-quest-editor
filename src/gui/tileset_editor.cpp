@@ -83,6 +83,40 @@ private:
 };
 
 /**
+ * @brief Moving a tile pattern.
+ */
+class SetPatternPositionCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternPositionCommand(
+      TilesetEditor& editor, int index, const QPoint& position) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Move pattern")),
+    index(index),
+    position_before(get_model().get_pattern_frame(index).topLeft()),
+    position_after(position) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_pattern_position(index, position_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_pattern_position(index, position_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  int index;
+  QPoint position_before;
+  QPoint position_after;
+};
+
+/**
  * @brief Changing the ground of tile patterns.
  */
 class SetPatternsGroundCommand : public TilesetEditorCommand {
@@ -451,6 +485,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(update_pattern_id_field()));
 
+  connect(ui.tileset_view, SIGNAL(change_selected_pattern_position_requested(QPoint)),
+          this, SLOT(change_selected_pattern_position_requested(QPoint)));
+
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
   connect(ui.tileset_view, SIGNAL(change_selected_patterns_ground_requested(Ground)),
@@ -657,6 +694,20 @@ void TilesetEditor::update_pattern_view() {
 }
 
 /**
+ * @brief Slot called when the user wants to move a tile pattern.
+ */
+void TilesetEditor::change_selected_pattern_position_requested(const QPoint& position) {
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    // No pattern selected or several patterns selected.
+    return;
+  }
+
+  try_command(new SetPatternPositionCommand(*this, index, position));
+}
+
+/**
  * @brief Updates the pattern id field from the model.
  */
 void TilesetEditor::update_pattern_id_field() {
@@ -679,7 +730,7 @@ void TilesetEditor::change_selected_pattern_id_requested() {
 
   int old_index = model->get_selected_index();
   if (old_index == -1) {
-    // No pattern selected or several pattern selected.
+    // No pattern selected or several patterns selected.
     return;
   }
 

@@ -47,6 +47,7 @@ signals:
       const QString& pattern_id, const QRect& frame, Ground ground);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
+  void change_selected_pattern_position_requested(const QPoint& position);
   void change_selected_patterns_ground_requested(Ground ground);
   void change_selected_patterns_default_layer_requested(Layer layer);
   void change_selected_patterns_animation_requested(TilePatternAnimation animation);

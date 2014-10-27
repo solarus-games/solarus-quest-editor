@@ -78,6 +78,7 @@ public:
   QRect get_pattern_frame(int index) const;
   QList<QRect> get_pattern_frames(int index) const;
   QRect get_pattern_frames_bounding_box(int index) const;
+  void set_pattern_position(int index, const QPoint& position);
   Ground get_pattern_ground(int index) const;
   bool is_common_pattern_ground(const QList<int>& indexes, Ground& ground) const;
   void set_pattern_ground(int index, Ground ground);
@@ -117,6 +118,7 @@ signals:
   void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
                           int new_index, const QString& new_id);
+  void pattern_position_changed(int index, const QPoint& position);
   void pattern_ground_changed(int index, Ground ground);
   void pattern_default_layer_changed(int index, Layer default_layer);
   void pattern_animation_changed(int index, TilePatternAnimation animation);
@@ -141,6 +143,15 @@ private:
      */
     PatternModel(const QString& id) :
       id(id) {
+    }
+
+    /**
+     * @brief Clears the image cache of this pattern.
+     */
+    void set_image_dirty() const {
+      image = QPixmap();
+      image_all_frames = QPixmap();
+      icon = QPixmap();
     }
 
     QString id;                   /**< String id of the pattern. */

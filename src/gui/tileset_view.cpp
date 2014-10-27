@@ -612,15 +612,19 @@ void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
  */
 void TilesetView::end_state_moving_pattern() {
 
-  QRect rectangle = current_area_item->rect().toRect();
-  if (!rectangle.isEmpty() &&
-      sceneRect().contains(rectangle) &&
+  QRect frame = current_area_item->rect().toRect();
+  if (!frame.isEmpty() &&
+      sceneRect().contains(frame) &&
       get_items_intersecting_current_area().isEmpty() &&
       model->get_selection_count() == 1) {
 
     // Context menu to move the pattern.
     QMenu menu;
-    menu.addAction(tr("Move here"));  // TODO
+    QAction* move_pattern_action = new QAction(tr("Move here"), this);
+    connect(move_pattern_action, &QAction::triggered, [=] {
+      emit change_selected_pattern_position_requested(frame.topLeft());
+    });
+    menu.addAction(move_pattern_action);
     menu.addSeparator();
     menu.addAction(tr("Cancel"));
     menu.exec(cursor().pos() + QPoint(1, 1));
