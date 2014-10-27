@@ -28,7 +28,6 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include <QSignalMapper>
 
 /**
  * @brief Creates a tileset view.
