@@ -646,7 +646,7 @@ void TilesetView::end_state_moving_pattern() {
  */
 void TilesetView::set_current_area(const QRect& area) {
 
-  if (current_area_item->rect() == area) {
+  if (current_area_item->rect().toRect() == area) {
     // No change.
     return;
   }
