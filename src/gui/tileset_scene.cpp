@@ -78,11 +78,11 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
 
   // Watch pattern geometry changes.
   connect(&model, SIGNAL(pattern_position_changed(int, QPoint)),
-          this, SLOT(update_pattern(int)));
+          this, SLOT(update_pattern_position(int)));
   connect(&model, SIGNAL(pattern_animation_changed(int, TilePatternAnimation)),
-          this, SLOT(update_pattern(int)));
+          this, SLOT(update_pattern_animation(int)));
   connect(&model, SIGNAL(pattern_separation_changed(int, TilePatternSeparation)),
-          this, SLOT(update_pattern(int)));
+          this, SLOT(update_pattern_animation(int)));
 
   // Watch changes in the pattern list.
   connect(&model, SIGNAL(pattern_created(int, QString)),
@@ -217,10 +217,10 @@ void TilesetScene::set_selection_from_scene() {
 }
 
 /**
- * @brief Slot called when a pattern needs to be redrawn because it has changed.
- * @param index Index of the pattern to update.
+ * @brief Slot called when the position of a pattern changes.
+ * @param index Index of the pattern changed.
  */
-void TilesetScene::update_pattern(int index) {
+void TilesetScene::update_pattern_position(int index) {
 
   const QRect& box = model.get_pattern_frames_bounding_box(index);
   PatternItem* pattern_item = qgraphicsitem_cast<PatternItem*>(pattern_items[index]);
@@ -228,8 +228,17 @@ void TilesetScene::update_pattern(int index) {
     pattern_item->setPos(box.topLeft());
     pattern_item->setPixmap(model.get_pattern_image_all_frames(index));
   }
+}
 
-  // Redraw the area containing the pattern.
+/**
+ * @brief Slot called when the animation of a pattern changes.
+ * @param index Index of the pattern changed.
+ */
+void TilesetScene::update_pattern_animation(int index) {
+
+  // Redraw the area containing the pattern: the selection marker may
+  // have changed.
+  const QRect& box = model.get_pattern_frames_bounding_box(index);
   update(box);
 }
 
