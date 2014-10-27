@@ -99,6 +99,7 @@ public:
   // Selected patterns.
   QItemSelectionModel& get_selection_model();
   bool is_selection_empty() const;
+  int get_selection_count() const;
   int get_selected_index() const;
   QList<int> get_selected_indexes() const;
   void set_selected_index(int index);

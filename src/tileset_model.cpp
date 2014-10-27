@@ -1128,6 +1128,15 @@ bool TilesetModel::is_selection_empty() const {
 }
 
 /**
+ * @brief Returns the number of selected patterns.
+ * @return The number of selected pattern.
+ */
+int TilesetModel::get_selection_count() const {
+
+  return selection_model.selection().count();
+}
+
+/**
  * @brief Returns the index of the selected pattern.
  * @return The selected pattern index.
  * Returns -1 if no pattern is selected or if multiple patterns are selected.

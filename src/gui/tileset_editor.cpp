@@ -694,7 +694,7 @@ void TilesetEditor::change_selected_pattern_id_requested() {
         &ok);
 
   if (ok && new_id != old_id) {
-    // TODO update references in existing maps
+    // TODO update references in existing maps (not as an undoable command).
     try_command(new SetPatternIdCommand(*this, old_index, new_id));
   }
 }

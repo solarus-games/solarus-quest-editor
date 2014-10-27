@@ -37,6 +37,8 @@ public:
   const TilesetModel& get_model() const;
   const Quest& get_quest() const;
 
+  int get_pattern_index(const QGraphicsItem* item);
+
 protected:
 
   virtual void drawBackground(QPainter* painter, const QRectF& rect) override;

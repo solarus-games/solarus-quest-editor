@@ -36,6 +36,7 @@
  */
 TilesetView::TilesetView(QWidget* parent) :
   QGraphicsView(parent),
+  scene(nullptr),
   change_pattern_id_action(nullptr),
   delete_patterns_action(nullptr),
   last_integer_pattern_id(0),
@@ -60,7 +61,6 @@ TilesetView::TilesetView(QWidget* parent) :
   connect(delete_patterns_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_patterns_requested()));
   addAction(delete_patterns_action);
-
 }
 
 /**
@@ -72,7 +72,8 @@ void TilesetView::set_model(TilesetModel& model) {
   this->model = &model;
 
   // Create the scene from the model.
-  setScene(new TilesetScene(model, this));
+  scene = new TilesetScene(model, this);
+  setScene(scene);
 
   if (model.get_patterns_image().isNull()) {
     return;
@@ -178,7 +179,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     }
 
     if (!keep_selected) {
-      scene()->clearSelection();
+      scene->clearSelection();
     }
 
     if (event->button() == Qt::LeftButton) {
@@ -189,9 +190,17 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
           // Left-clicking an item while pressing control or shift: toggle it.
           item->setSelected(!item->isSelected());
         }
-        else if (!item->isSelected()) {
-          // Select the item.
-          item->setSelected(true);
+        else {
+          if (!item->isSelected()) {
+            // Select the item.
+            item->setSelected(true);
+          }
+          else {
+            // Already selected: move it.
+            if (model->get_selection_count() == 1) {
+              start_state_moving_pattern(event->pos());
+            }
+          }
         }
       }
       else {
@@ -210,7 +219,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       }
 
       // Show a context menu if at least one item is selected.
-      QList<QGraphicsItem*> selected_items = scene()->selectedItems();
+      QList<QGraphicsItem*> selected_items = scene->selectedItems();
       if (!selected_items.empty()) {
         show_context_menu(event->pos());
         return;
@@ -236,6 +245,10 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
   if (state == State::DRAWING_RECTANGLE) {
     end_state_drawing_rectangle();
   }
+  else if (state == State::MOVING_PATTERN) {
+    end_state_moving_pattern();
+  }
+
 
   QGraphicsView::mouseReleaseEvent(event);
 }
@@ -264,9 +277,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
     // Compute the selected area.
     QPoint dragging_previous_point = dragging_current_point;
-    dragging_current_point = mapToScene(event->pos()).toPoint();
-
-    dragging_current_point = dragging_current_point / 8 * 8;
+    dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
 
     if (dragging_current_point != dragging_previous_point) {
 
@@ -292,6 +303,25 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
         }
 
         set_current_area(new_pattern_area);
+    }
+  }
+  else if (state == State::MOVING_PATTERN) {
+
+    int index = model->get_selected_index();
+    if (index == -1) {
+      // Tile was deselected: cancel the movement.
+      end_state_moving_pattern();
+    }
+    else {
+      dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
+
+      QRect new_pattern_area = current_area_item->rect().toRect();
+      QRect old_pattern_area = model->get_pattern_frame(index);
+      new_pattern_area.moveTopLeft(QPoint(
+            old_pattern_area.x() + dragging_current_point.x() - dragging_start_point.x(),
+            old_pattern_area.y() + dragging_current_point.y() - dragging_start_point.y()));
+
+      set_current_area(new_pattern_area);
     }
   }
 
@@ -501,7 +531,7 @@ void TilesetView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   current_area_item = new QGraphicsRectItem();
   current_area_item->setPen(QPen(Qt::yellow));
-  scene()->addItem(current_area_item);
+  scene->addItem(current_area_item);
 }
 
 /**
@@ -549,7 +579,52 @@ void TilesetView::end_state_drawing_rectangle() {
     menu.exec(cursor().pos() + QPoint(1, 1));
   }
 
-  scene()->removeItem(current_area_item);
+  scene->removeItem(current_area_item);
+  delete current_area_item;
+  current_area_item = nullptr;
+
+  start_state_normal();
+}
+
+/**
+ * @brief Moves to the state of moving the selected pattern.
+ * @param initial_point Where the user starts dragging the pattern,
+ * in view coordinates.
+ */
+void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
+
+  int index = model->get_selected_index();
+  if (index == -1) {
+    return;
+  }
+
+  state = State::MOVING_PATTERN;
+  dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
+  const QRect& frame = model->get_pattern_frame(index);
+  current_area_item = new QGraphicsRectItem(frame);
+  current_area_item->setPen(QPen(Qt::yellow));
+  scene->addItem(current_area_item);
+}
+
+/**
+ * @brief Finishes moving a pattern.
+ */
+void TilesetView::end_state_moving_pattern() {
+
+  QRect rectangle = current_area_item->rect().toRect();
+  if (!rectangle.isEmpty() &&
+      get_items_intersecting_current_area().isEmpty() &&
+      model->get_selection_count() == 1) {
+
+    // Context menu to move the pattern.
+    QMenu menu;
+    menu.addAction(tr("Move here"));  // TODO
+    menu.addSeparator();
+    menu.addAction(tr("Cancel"));
+    menu.exec(cursor().pos() + QPoint(1, 1));
+  }
+
+  scene->removeItem(current_area_item);
   delete current_area_item;
   current_area_item = nullptr;
 
@@ -572,9 +647,9 @@ void TilesetView::set_current_area(const QRect& area) {
 
   current_area_item->setRect(area);
 
-  scene()->clearSelection();
   if (state == State::DRAWING_RECTANGLE) {
-    // Select items stricly in the rectangle.
+    // Select items strictly in the rectangle.
+    scene->clearSelection();
     QList<QGraphicsItem*> items = get_items_in_current_area();
     for (QGraphicsItem* item : items) {
       item->setSelected(true);
@@ -592,7 +667,7 @@ QList<QGraphicsItem*> TilesetView::get_items_in_current_area() const {
   QRect outline(
       area.topLeft() - QPoint(1, 1),
       area.size() + QSize(2, 2));
-  QList<QGraphicsItem*> items = scene()->items(outline, Qt::ContainsItemBoundingRect);
+  QList<QGraphicsItem*> items = scene->items(outline, Qt::ContainsItemBoundingRect);
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
   return items;
 }
@@ -607,7 +682,7 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   area = QRect(
       area.topLeft() + QPoint(1, 1),
       area.size() - QSize(2, 2));
-  QList<QGraphicsItem*> items = scene()->items(area, Qt::IntersectsItemBoundingRect);
+  QList<QGraphicsItem*> items = scene->items(area, Qt::IntersectsItemBoundingRect);
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
   return items;
 }

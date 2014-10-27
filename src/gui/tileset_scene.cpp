@@ -108,6 +108,21 @@ const Quest& TilesetScene::get_quest() const {
 }
 
 /**
+ * @brief Returns the index of the pattern represented by an item.
+ * @param item A graphic item.
+ * @return The pattern index, or -1 if this is not a pattern item of the scene.
+ */
+int TilesetScene::get_pattern_index(const QGraphicsItem* item) {
+
+  const PatternItem* pattern_item = qgraphicsitem_cast<const PatternItem*>(item);
+  if (pattern_item == nullptr) {
+    return -1;
+  }
+
+  return pattern_item->get_index();
+}
+
+/**
  * @brief Draws the tileset image as background.
  * @param painter The painter.
  * @param rect The exposed rectangle in scene coordinates.
