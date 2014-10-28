@@ -95,7 +95,7 @@ void MainWindow::initialize_geometry_on_screen() {
 
   // Choose a comfortable initial size depending on the screen resolution.
   // The ui is designed to work well with a window size of 1280x680 and above.
-  int width = 1280;
+  int width = 1270;
   int height = 680;
   if (screen.width() >= 1920) {
     width = 1500;
@@ -106,8 +106,8 @@ void MainWindow::initialize_geometry_on_screen() {
   setGeometry(0, 0, qMin(width, screen.width()), qMin(height, screen.height()));
 
   // And center the window on the screen where the mouse is currently.
-  int x = screen.width() / 2 - frameGeometry().width() / 2 + screen.left();
-  int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top();
+  int x = screen.width() / 2 - frameGeometry().width() / 2 + screen.left() - 2;
+  int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top() - 10;
 
   move(qMax(0, x), qMax(0, y));
 }
