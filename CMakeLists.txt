@@ -134,6 +134,7 @@ qt5_wrap_ui(solarus_quest_editor_FORMS_HEADERS
 # Resources.
 set(solarus_quest_editor_RESOURCES
   resources/resources.qrc
+  resources/initial_quest.qrc
 )
 
 # Compile resource files.
