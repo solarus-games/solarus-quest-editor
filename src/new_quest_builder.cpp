@@ -75,7 +75,7 @@ void copy_recursive(const QString& src, const QString& dst) {
   }
   else {
     if (!QFile::copy(src, dst)) {
-      throw EditorException(QApplication::tr("Cannot create file '%1' to '%2'").arg(src, dst));
+      throw EditorException(QApplication::tr("Cannot copy file '%1' to '%2'").arg(src, dst));
     }
     // Files from resources are read-only. Set usual permissions now.
     QFile::setPermissions(dst,
