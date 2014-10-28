@@ -81,6 +81,7 @@ set(solarus_quest_editor_SOURCES
   include/ground_traits.h
   include/layer_traits.h
   include/natural_comparator.h
+  include/new_quest_builder.h
   include/pattern_animation.h
   include/pattern_animation_traits.h
   include/pattern_separation.h
@@ -110,6 +111,7 @@ set(solarus_quest_editor_SOURCES
   src/ground_traits.cpp
   src/layer_traits.cpp
   src/main.cpp
+  src/new_quest_builder.cpp
   src/pattern_animation_traits.cpp
   src/pattern_separation_traits.cpp
   src/quest.cpp

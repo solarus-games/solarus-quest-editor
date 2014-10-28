@@ -17,6 +17,8 @@
 #include "gui/editor.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "editor_exception.h"
+#include "new_quest_builder.h"
 #include "quest.h"
 #include "quest_manager.h"
 #include <solarus/Arguments.h>
@@ -108,6 +110,38 @@ void MainWindow::initialize_geometry_on_screen() {
   int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top();
 
   move(qMax(0, x), qMax(0, y));
+}
+
+/**
+ * @brief Slot called when the user triggers the "New quest" action.
+ */
+void MainWindow::on_action_new_quest_triggered() {
+
+  QString quest_path = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select quest directory"),
+        "",  // Initial value: current directory.
+        QFileDialog::ShowDirsOnly);
+
+  if (quest_path.isEmpty()) {
+    return;
+  }
+
+  try {
+    NewQuestBuilder::create_initial_quest_files(quest_path);
+    if (!quest_manager.set_quest(quest_path)) {
+      throw EditorException(tr("Failed to open the quest created in\n'%1'").arg(quest_path));
+    }
+
+    QMessageBox::information(this, tr("Quest created"), tr(
+                               "Quest successfully created!\n"
+                               "The next step is to manually edit your quest properties in quest.dat\n"
+                               "(sorry, this is not fully supported by the editor yet).\n"));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+
 }
 
 /**

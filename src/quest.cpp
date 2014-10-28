@@ -977,7 +977,7 @@ void Quest::create_dir(const QString& path) {
 }
 
 /**
- * @brief Attempts to delete a directory in this quest if it does not exist
+ * @brief Attempts to create a directory in this quest if it does not exist
  * yet.
  * @param path Path of the directory to create. If it already exists, it must
  * be a directory.

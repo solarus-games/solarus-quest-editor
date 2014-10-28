@@ -41,6 +41,7 @@ public:
 private slots:
 
   // Menu actions.
+  void on_action_new_quest_triggered();
   void on_action_load_quest_triggered();
   void on_action_save_triggered();
   void on_action_close_triggered();
