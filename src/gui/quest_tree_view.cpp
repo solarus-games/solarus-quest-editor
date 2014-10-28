@@ -73,21 +73,23 @@ void QuestTreeView::set_quest(Quest& quest) {
   setModel(nullptr);
   setSortingEnabled(false);
 
-  // Create a new model.
-  model = new QuestFilesModel(quest);
-  setModel(model);
-  setRootIndex(model->get_quest_root_index());
+  if (quest.exists()) {
+    // Create a new model.
+    model = new QuestFilesModel(quest);
+    setModel(model);
+    setRootIndex(model->get_quest_root_index());
 
-  if (model->hasChildren(rootIndex())) {
-    expand(rootIndex().child(0, 0));  // Expand the data directory.
+    if (model->hasChildren(rootIndex())) {
+      expand(rootIndex().child(0, 0));  // Expand the data directory.
+    }
+
+    sortByColumn(0, Qt::AscendingOrder);
+    setColumnWidth(QuestFilesModel::FILE_COLUMN, 200);
+    setColumnWidth(QuestFilesModel::DESCRIPTION_COLUMN, 200);
+
+    // It is better for performance to enable sorting only after the model is ready.
+    setSortingEnabled(true);
   }
-
-  sortByColumn(0, Qt::AscendingOrder);
-  setColumnWidth(QuestFilesModel::FILE_COLUMN, 200);
-  setColumnWidth(QuestFilesModel::DESCRIPTION_COLUMN, 200);
-
-  // It is better for performance to enable sorting only after the model is ready.
-  setSortingEnabled(true);
 }
 
 /**

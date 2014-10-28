@@ -36,6 +36,9 @@ Quest& QuestManager::get_quest() {
 
 /**
  * @brief Sets another quest as the current one.
+ *
+ * Emits current_quest_changed(), even if the new one was not found.
+ *
  * @param quest_path The quest path to open.
  * @return @c true if quest exists in this path.
  */
