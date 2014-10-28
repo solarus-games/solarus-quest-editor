@@ -86,19 +86,16 @@ QuestManager& MainWindow::get_quest_manager() {
  */
 void MainWindow::on_action_load_quest_triggered() {
 
-  QFileDialog dialog(nullptr, tr("Select quest directory"));
-  dialog.setFileMode(QFileDialog::Directory);
-  dialog.setOption(QFileDialog::ShowDirsOnly);
-  if (!dialog.exec()) {
+  QString quest_path = QFileDialog::getExistingDirectory(
+        this,
+        tr("Select quest directory"),
+        "",  // Initial value: current directory.
+        QFileDialog::ShowDirsOnly);
+
+  if (quest_path.isEmpty()) {
     return;
   }
 
-  QStringList file_names = dialog.selectedFiles();
-  if (file_names.empty()) {
-    return;
-  }
-
-  QString quest_path = file_names.first();
   if (!quest_manager.set_quest(quest_path)) {
     GuiTools::error_dialog(
           tr("No quest was found in directory\n'%1'").arg(quest_path));
