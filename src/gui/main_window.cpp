@@ -24,6 +24,7 @@
 #include <solarus/SolarusFatal.h>
 #include <solarus/lowlevel/Debug.h>
 #include <QCloseEvent>
+#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QUndoGroup>
@@ -79,6 +80,34 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
  */
 QuestManager& MainWindow::get_quest_manager() {
   return quest_manager;
+}
+
+/**
+ * @brief Set an appropriate size and centers the window on the screen having
+ * the mouse.
+ */
+void MainWindow::initialize_geometry_on_screen() {
+
+  QDesktopWidget* desktop = QApplication::desktop();
+  QRect screen = desktop->screenGeometry(desktop->screenNumber(QCursor::pos()));
+
+  // Choose a comfortable initial size depending on the screen resolution.
+  // The ui is designed to work well with a window size of 1280x680 and above.
+  int width = 1280;
+  int height = 680;
+  if (screen.width() >= 1920) {
+    width = 1500;
+  }
+  if (screen.height() >= 1024) {
+    height = 980;
+  }
+  setGeometry(0, 0, qMin(width, screen.width()), qMin(height, screen.height()));
+
+  // And center the window on the screen where the mouse is currently.
+  int x = screen.width() / 2 - frameGeometry().width() / 2 + screen.left();
+  int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top();
+
+  move(qMax(0, x), qMax(0, y));
 }
 
 /**

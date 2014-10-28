@@ -59,15 +59,8 @@ int main(int argc, char* argv[]) {
   QuestManager quest_manager;
   MainWindow window(nullptr, quest_manager);
 
-  // Center the window initially.
-  window.setGeometry(
-        QStyle::alignedRect(
-          Qt::LeftToRight,
-          Qt::AlignCenter,
-          window.size(),
-          application.desktop()->availableGeometry()
-          )
-        );
+  // Choose an appropriate initial window size and position.
+  window.initialize_geometry_on_screen();
 
   // Open the quest.
   quest_manager.set_quest(quest_path);

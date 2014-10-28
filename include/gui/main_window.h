@@ -35,6 +35,7 @@ public:
 
   QuestManager& get_quest_manager();
 
+  void initialize_geometry_on_screen();
   void open_file(Quest& quest, const QString& path);
 
 private slots:
