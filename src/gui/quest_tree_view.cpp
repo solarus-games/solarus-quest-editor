@@ -202,9 +202,15 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   const bool is_dir = QFileInfo(path).isDir();
 
   QAction* new_resource_element_action = nullptr;
-  QString new_resource_element_text;
 
-  if (is_potential_resource_element && !is_declared_resource_element) {
+  if (is_potential_resource_element) {
+
+    if (is_declared_resource_element) {
+      // No creation item on an existing resource element
+      // (even for languages, that are actually directories).
+      return;
+    }
+
     // File that looks like a resource element, but that is not declared in
     // the quest: let the user add it.
 
@@ -213,7 +219,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
 
     new_resource_element_action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
-          tr("Add as %1...").arg(resource_type_friendly_name),
+          tr("Add to quest as %1...").arg(resource_type_friendly_name),
           this);
   }
   else if (quest.is_resource_path(path, resource_type) ||
