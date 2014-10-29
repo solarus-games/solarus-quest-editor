@@ -1140,7 +1140,7 @@ void Quest::create_resource_element(ResourceType resource_type,
 
   if (!done_on_filesystem && !done_in_resource_list) {
     // Nothing was added. This must be an error.
-    throw EditorException("Nothing to create");
+    throw EditorException(tr("Resource '%1' already exists").arg(element_id));
   }
 }
 
@@ -1253,7 +1253,7 @@ void Quest::rename_resource_element(
 
   if (!renamed_on_filesystem && !renamed_in_resource_list) {
     // Nothing was renamed. This must be an error.
-    throw EditorException("Nothing to rename");
+    throw EditorException(tr("No such resource: '%1'").arg(old_id));
   }
 }
 
@@ -1395,6 +1395,6 @@ void Quest::delete_resource_element(
 
   if (!found_in_filesystem && !found_in_resource_list) {
     // Nothing was done. This must be an error.
-    throw EditorException(tr("Nothing to delete"));
+    throw EditorException(tr("No such resource: '%1'").arg(element_id));
   }
 }
