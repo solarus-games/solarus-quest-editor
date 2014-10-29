@@ -847,7 +847,7 @@ void Quest::check_is_dir(const QString& path) const {
   check_exists(path);
 
   if (!QFileInfo(path).isDir()) {
-    throw EditorException(tr("File '%1' is not a directory").arg(path));
+    throw EditorException(tr("File '%1' is not a folder").arg(path));
   }
 }
 
@@ -860,7 +860,7 @@ void Quest::check_not_is_dir(const QString& path) const {
   check_exists(path);
 
   if (QFileInfo(path).isDir()) {
-    throw EditorException(tr("File '%1' is a directory").arg(path));
+    throw EditorException(tr("File '%1' is a folder").arg(path));
   }
 }
 
@@ -962,17 +962,17 @@ bool Quest::create_script_if_not_exists(const QString& path) {
 void Quest::create_dir(const QString& path) {
 
   check_is_in_root_path(path);
+  check_not_exists(path);
 
-  QString full_path = path;
-  if (full_path.endsWith('/')) {
-    full_path = full_path.left(path.length() - 1);
+  QDir parent_dir(path);
+  if (!parent_dir.cdUp()) {
+    throw EditorException(tr("Cannot create folder '%1': parent folder does not exist").arg(path));
   }
-  QString parent_path = full_path.section('/', 0, -2);
-  check_exists(parent_path);
+
   QString dir_name = QDir(path).dirName();
   check_valid_file_name(dir_name);
-  if (!QDir(parent_path).mkdir(dir_name)) {
-    throw EditorException(tr("Cannot create directory '%1'").arg(path));
+  if (!parent_dir.mkdir(dir_name)) {
+    throw EditorException(tr("Cannot create folder '%1'").arg(path));
   }
 }
 
@@ -1009,7 +1009,7 @@ void Quest::create_dir(const QString& parent_path, const QString& dir_name) {
   check_not_exists(parent_path + '/' + dir_name);
 
   if (!QDir(parent_path).mkdir(dir_name)) {
-    throw EditorException(tr("Cannot create directory '%1'").arg(dir_name));
+    throw EditorException(tr("Cannot create folder '%1'").arg(dir_name));
   }
 }
 
@@ -1269,9 +1269,10 @@ void Quest::delete_dir(const QString& path) {
 
   check_is_dir(path);
 
-  QString parent_path(path + "/..");
-  if (!QDir(parent_path).rmdir(QDir(path).dirName())) {
-    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+  QDir parent_dir(path);
+  parent_dir.cdUp();
+  if (!parent_dir.rmdir(QDir(path).dirName())) {
+    throw EditorException(tr("Cannot delete folder '%1'").arg(path));
   }
 }
 
@@ -1302,7 +1303,7 @@ void Quest::delete_dir_recursive(const QString& path) {
   check_is_dir(path);
 
   if (!QDir(path).removeRecursively()) {
-    throw EditorException(tr("Cannot delete directory '%1'").arg(path));
+    throw EditorException(tr("Cannot delete folder '%1'").arg(path));
   }
 }
 
