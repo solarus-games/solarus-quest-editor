@@ -357,8 +357,8 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
     return "icon_script.png";
   }
 
-  // Generic file icon.
-  return "icon_file.png";
+  // Generic icon for a file not known by the quest.
+  return "icon_file_unknown.png";
 }
 
 /**
@@ -409,7 +409,7 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   QString file_name = source_model->fileName(source_index);
   QString file_path = source_model->filePath(source_index);
 
-  QString lua_extension = ".lua";
+  const QString lua_extension = ".lua";
   if (file_name.endsWith(lua_extension)) {
     // Keep all .lua scripts except map scripts.
     QString file_path_dat = file_path.replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
@@ -423,13 +423,15 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
     return true;
   }
 
-  // Keep resources.
+  // Keep resources, and also files that could be resources
+  // but are not declared in the resource list yet.
   ResourceType resource_type;
   QString element_id;
-  if (quest.is_resource_element(file_path, resource_type, element_id)) {
+  if (quest.is_potential_resource_element(file_path, resource_type, element_id)) {
     return true;
   }
 
+  // File not known by the quest.
   return false;
 }
 

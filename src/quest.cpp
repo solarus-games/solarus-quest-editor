@@ -528,14 +528,19 @@ bool Quest::is_in_resource_path(const QString& path, ResourceType& resource_type
 }
 
 /**
- * @brief Determines if a path is a resource element like a map, a tileset, etc.
+ * @brief Determines if a path can be a resource element like a map,
+ * a tileset, etc.
+ *
+ * Only the path string is tested: wWhether files actually exist does not
+ * matter.
+ *
  * @param[in] path The path to test.
  * @param[out] resource_type The resource type found if any.
  * @param[out] element_id Id of the resource element if any.
- * @return @c true if this path is a resource element declared in the resource
- * list, even if its files do not exist yet.
+ * @return @c true if this path can be a resource element, even if it is not
+ * declared in the resource list yet.
  */
-bool Quest::is_resource_element(
+bool Quest::is_potential_resource_element(
     const QString& path, ResourceType& resource_type, QString& element_id) const {
 
   if (!is_in_resource_path(path, resource_type)) {
@@ -597,6 +602,30 @@ bool Quest::is_resource_element(
 
   if (element_id.isEmpty()) {
     // Not an recognized extension.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a declared resource element like a map,
+ * a tileset, etc.
+ *
+ * Only the path string is tested: wWhether files actually exist does not
+ * matter.
+ *
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
+ * @param[out] element_id Id of the resource element if any.
+ * @return @c true if this path is a resource element declared in the resource
+ * list.
+ */
+bool Quest::is_resource_element(
+    const QString& path, ResourceType& resource_type, QString& element_id) const {
+
+  if (!is_potential_resource_element(path, resource_type, element_id)) {
+    // Not a potential resource element file.
     return false;
   }
 

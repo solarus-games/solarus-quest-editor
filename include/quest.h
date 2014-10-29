@@ -86,6 +86,8 @@ public:
   void check_is_script(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
+  bool is_potential_resource_element(
+      const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool is_resource_element(
       const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool is_map_script(const QString& path, QString& map_id) const;
