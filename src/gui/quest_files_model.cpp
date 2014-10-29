@@ -438,10 +438,12 @@ bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right
 bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const {
 
   QModelIndex source_index = source_model->index(source_row, FILE_COLUMN, source_parent);
+  QString file_name = source_model->fileName(source_index);
+  QString file_path = source_model->filePath(source_index);
 
   if (source_model->index(source_model->rootPath()).parent() == source_parent) {
     // This is a top-level item: only keep the quest data directory.
-    if (is_quest_data_index(index)) {
+    if (file_path == quest.get_data_path()) {
       return true;
     }
     return false;
@@ -451,9 +453,6 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
     // Keep all other directories.
     return true;
   }
-
-  QString file_name = source_model->fileName(source_index);
-  QString file_path = source_model->filePath(source_index);
 
   const QString lua_extension = ".lua";
   if (file_name.endsWith(lua_extension)) {
