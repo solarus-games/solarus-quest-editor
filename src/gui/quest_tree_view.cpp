@@ -194,53 +194,68 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
 
   Quest& quest = model->get_quest();
   const QuestResources& resources = quest.get_resources();
-  QAction* action = nullptr;
-
-  if (!QFileInfo(path).isDir()) {
-    // Not a directory: don't show creation items.
-    return;
-  }
 
   ResourceType resource_type;
   QString element_id;
-  if (quest.is_resource_element(path, resource_type, element_id)) {
-    // Resource element implemented as a directory (language).
-    // Not considered as a directory for this view.
-    return;
-  }
+  const bool is_potential_resource_element = quest.is_potential_resource_element(path, resource_type, element_id);
+  const bool is_declared_resource_element = is_potential_resource_element && resources.exists(resource_type, element_id);
+  const bool is_dir = QFileInfo(path).isDir();
 
-  if (quest.is_resource_path(path, resource_type) ||
-      (quest.is_in_resource_path(path, resource_type) && QFileInfo(path).isDir())) {
+  QAction* new_resource_element_action = nullptr;
+  QString new_resource_element_text;
 
-    // Resource directory or subdirectory: let the user create a new element in it.
-    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+  if (is_potential_resource_element && !is_declared_resource_element) {
+    // File that looks like a resource element, but that is not declared in
+    // the quest: let the user add it.
+
     QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
-    action = new QAction(
+    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+
+    new_resource_element_action = new QAction(
+          QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
+          tr("Add as %1...").arg(resource_type_friendly_name),
+          this);
+  }
+  else if (quest.is_resource_path(path, resource_type) ||
+           (is_dir && quest.is_in_resource_path(path, resource_type))) {
+    // Resource directory or subdirectory: let the user create a new element in it.
+
+    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
+    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+
+    new_resource_element_action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
           tr("Create %1...").arg(resource_type_friendly_name),
           this);
-    connect(action, SIGNAL(triggered()),
+  }
+
+  if (new_resource_element_action != nullptr) {
+
+    connect(new_resource_element_action, SIGNAL(triggered()),
             this, SLOT(new_element_action_triggered()));
-    menu.addAction(action);
+    menu.addAction(new_resource_element_action);
     menu.addSeparator();
   }
 
-  // Any directory: create directory and create script.
-  action = new QAction(
-        QIcon(":/images/icon_folder_closed.png"),
-        tr("New folder..."),
-        this);
-  connect(action, SIGNAL(triggered()),
-          this, SLOT(new_directory_action_triggered()));
-  menu.addAction(action);
+  if (is_dir) {
+    // Any directory: create directory and create script.
 
-  action = new QAction(
-        QIcon(":/images/icon_script.png"),
-        tr("New script..."),
-        this);
-  connect(action, SIGNAL(triggered()),
-          this, SLOT(new_script_action_triggered()));
-  menu.addAction(action);
+    QAction* action = new QAction(
+          QIcon(":/images/icon_folder_closed.png"),
+          tr("New folder..."),
+          this);
+    connect(action, SIGNAL(triggered()),
+            this, SLOT(new_directory_action_triggered()));
+    menu.addAction(action);
+
+    action = new QAction(
+          QIcon(":/images/icon_script.png"),
+          tr("New script..."),
+          this);
+    connect(action, SIGNAL(triggered()),
+            this, SLOT(new_script_action_triggered()));
+    menu.addAction(action);
+  }
 }
 
 /**
@@ -386,10 +401,12 @@ void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) 
 }
 
 /**
- * @brief Slot called when the user wants to create a new resource element
- * under the selected resource directory.
+ * @brief Slot called when the user wants to create a new resource element.
  *
- * The id and description of the element will be prompted to the user.
+ * The type of resource will be the one of the selected element.
+ * The id and description of the element will be prompted in a dialog.
+ * If the selected element is an existing file, then its id is initially
+ * proposed in the dialog.
  */
 void QuestTreeView::new_element_action_triggered() {
 
@@ -398,24 +415,33 @@ void QuestTreeView::new_element_action_triggered() {
     return;
   }
 
-  Quest& quest = model->get_quest();
-  ResourceType resource_type;
-  if (!quest.is_resource_path(path, resource_type) &&
-      !quest.is_in_resource_path(path, resource_type)) {
-    // We expect a built-in resource directory or a subdirectory or it.
-    return;
-  }
-
   try {
+    Quest& quest = model->get_quest();
     QuestResources& resources = quest.get_resources();
-    QString resource_type_friendly_name_for_id =
-        resources.get_friendly_name_for_id(resource_type);
-    QString resource_path = quest.get_resource_path(resource_type);
+    ResourceType resource_type;
+    QString initial_id_value;
 
-    // Put the directory clicked as initial id value in the dialog.
-    QString initial_id_value = "";
-    if (path != resource_path) {
-      initial_id_value = path.right(path.size() - resource_path.length() - 1) + '/';
+    if (quest.is_potential_resource_element(path, resource_type, initial_id_value)) {
+      if (resources.exists(resource_type, initial_id_value)) {
+        // The element already exists.
+        return;
+      }
+    }
+    else {
+      if (!quest.is_resource_path(path, resource_type) &&
+          !quest.is_in_resource_path(path, resource_type)) {
+        // We expect a built-in resource directory or a subdirectory or it.
+        return;
+      }
+
+      // Put the directory clicked as initial id value in the dialog.
+      QString resource_path = quest.get_resource_path(resource_type);
+      if (path != resource_path) {
+        initial_id_value = path.right(path.size() - resource_path.length() - 1) + '/';
+      }
+      else {
+        initial_id_value = "";  // Top-level resource directory.
+      }
     }
 
     NewResourceElementDialog dialog(resource_type, parentWidget());
