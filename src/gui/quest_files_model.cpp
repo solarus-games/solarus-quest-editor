@@ -354,7 +354,7 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
   }
 
   // Lua script icon.
-  if (quest.is_script(file_name)) {
+  if (quest.is_script(file_path)) {
     return "icon_script.png";
   }
 
