@@ -320,7 +320,6 @@ void QuestFilesModel::resource_element_description_changed(
  */
 QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_index) const {
 
-  QString file_name = source_model->fileName(source_index);
   QString file_path = source_model->filePath(source_index);
   ResourceType resource_type;
   QString element_id;
