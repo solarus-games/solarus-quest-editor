@@ -482,14 +482,12 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="850"/>
         <source>File &apos;%1&apos; is not a directory</source>
-        <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
+        <translation type="vanished">Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="863"/>
         <source>File &apos;%1&apos; is a directory</source>
-        <translation>Le fichier &apos;%1&apos; est un dossier</translation>
+        <translation type="vanished">Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
         <location filename="../src/quest.cpp" line="888"/>
@@ -497,13 +495,11 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="975"/>
-        <location filename="../src/quest.cpp" line="1012"/>
         <source>Cannot create directory &apos;%1&apos;</source>
-        <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
+        <translation type="vanished">Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1368"/>
+        <location filename="../src/quest.cpp" line="1369"/>
         <source>Nothing to delete</source>
         <translation>Aucun élément à supprimer</translation>
     </message>
@@ -518,6 +514,27 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Nom de fichier vide</translation>
     </message>
     <message>
+        <location filename="../src/quest.cpp" line="850"/>
+        <source>File &apos;%1&apos; is not a folder</source>
+        <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
+    </message>
+    <message>
+        <location filename="../src/quest.cpp" line="863"/>
+        <source>File &apos;%1&apos; is a folder</source>
+        <translation>Le fichier &apos;%1&apos; est un dossier</translation>
+    </message>
+    <message>
+        <location filename="../src/quest.cpp" line="969"/>
+        <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
+        <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
+    </message>
+    <message>
+        <location filename="../src/quest.cpp" line="975"/>
+        <location filename="../src/quest.cpp" line="1012"/>
+        <source>Cannot create folder &apos;%1&apos;</source>
+        <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
+    </message>
+    <message>
         <location filename="../src/quest.cpp" line="1130"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
@@ -526,6 +543,12 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <location filename="../src/quest.cpp" line="1241"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/quest.cpp" line="1275"/>
+        <location filename="../src/quest.cpp" line="1306"/>
+        <source>Cannot delete folder &apos;%1&apos;</source>
+        <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/quest.cpp" line="1176"/>
@@ -548,10 +571,8 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1274"/>
-        <location filename="../src/quest.cpp" line="1305"/>
         <source>Cannot delete directory &apos;%1&apos;</source>
-        <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
+        <translation type="vanished">Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -889,8 +910,12 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
     </message>
     <message>
         <location filename="../src/gui/quest_tree_view.cpp" line="768"/>
-        <source>Directory is not empty</source>
+        <source>Folder is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
+    </message>
+    <message>
+        <source>Directory is not empty</source>
+        <translation type="vanished">Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
         <location filename="../src/gui/quest_tree_view.cpp" line="775"/>
