@@ -301,9 +301,9 @@ QString Quest::get_entity_script_path(
 /**
  * @brief Returns the path to a font file.
  *
- * Several extensions are allowed for font.
+ * Several extensions are allowed for fonts.
  * The first existing file with an accepted extension is returned.
- * If such a file does not exist yet, the path corresponding to
+ * If no such file exists yet, the path corresponding to
  * the preferred extension is returned.
  *
  * @param font_id Id of a music.
@@ -403,7 +403,7 @@ QString Quest::get_sound_path(
  *
  * Several extensions are allowed for musics.
  * The first existing file with an accepted extension is returned.
- * If such a file does not exist yet, the path corresponding to
+ * If no such file exists yet, the path corresponding to
  * the preferred extension is returned.
  *
  * @param music_id Id of a music.
