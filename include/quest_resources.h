@@ -38,8 +38,6 @@ public:
   void save() const;
 
   bool exists(ResourceType type, const QString& id) const;
-  QStringList get_elements(ResourceType type) const;
-
   bool add(
       ResourceType resource_type,
       const QString& id,

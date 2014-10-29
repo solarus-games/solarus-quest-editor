@@ -26,13 +26,11 @@ class QFileSystemModel;
 /**
  * @brief A hierarchical model of files, resources and scripts of a quest.
  *
- * This models acts as a proxy to a filesytem model.
- * It filters, modifies and extends the files representation to present them
- * as quest resources.
+ * This models acts as a proxy to a filesytem model, filtering and modifying
+ * the files representation to present them as quest resources.
  *
  * Resources that are declared in the resource list but missing on the
  * filesystem appear in the model with a warning icon.
- *
  * Similarly, existing files whose name looks like a resource but that are no
  * declared in the resource list appear in the model with an interrogation mark
  * icon.
@@ -53,20 +51,10 @@ public:
   QString get_file_path(const QModelIndex& index) const;
   QModelIndex get_file_index(const QString& path) const;
 
-  // The proxy changes the underlying filesystem model a lot:
-  // rows and columns are added and removed.
-  // So we have to reimplement a lot of functions.
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex parent(const QModelIndex& index) const override;
-  virtual QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
-  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex mapToSource(const QModelIndex& proxy_index) const override;
-  // TODO mapSelectionToSource
-
-  // Data.
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
   virtual QVariant headerData(
       int section, Qt::Orientation orientation, int role = Qt::DisplayRole
       ) const override;
@@ -76,7 +64,6 @@ public:
   virtual bool setData(
       const QModelIndex& index, const QVariant& value, int role = Qt::EditRole
       ) override;
-
 
 protected:
 
@@ -93,7 +80,6 @@ private:
   QString get_quest_file_icon_name(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
-  QStringList get_missing_resource_elements(const QModelIndex& parent) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
