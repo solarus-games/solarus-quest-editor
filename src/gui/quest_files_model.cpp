@@ -34,8 +34,8 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
   setSourceModel(source_model);
 
   // Watch changes in resources.
-  connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
-          this, SLOT(resource_element_description_changed(ResourceType, const QString&, const QString&)));
+  connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
+          this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
 }
 
 /**
