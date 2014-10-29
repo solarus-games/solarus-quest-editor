@@ -91,5 +91,15 @@
         <file>images/icon_file.png</file>
         <file>images/icon_solarus_200.png</file>
         <file>images/icon_file_unknown.png</file>
+        <file>images/icon_resource_enemy_missing.png</file>
+        <file>images/icon_resource_entity_missing.png</file>
+        <file>images/icon_resource_font_missing.png</file>
+        <file>images/icon_resource_item_missing.png</file>
+        <file>images/icon_resource_language_missing.png</file>
+        <file>images/icon_resource_map_missing.png</file>
+        <file>images/icon_resource_music_missing.png</file>
+        <file>images/icon_resource_sound_missing.png</file>
+        <file>images/icon_resource_sprite_missing.png</file>
+        <file>images/icon_resource_tileset_missing.png</file>
     </qresource>
 </RCC>

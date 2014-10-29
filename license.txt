@@ -50,6 +50,7 @@ resources/images/icon_stop.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 
+resources/images/icon_file_unkown.png
 resources/images/icon_folder_open_enemy.png
 resources/images/icon_folder_open_entity.png
 resources/images/icon_folder_open_font.png
@@ -60,6 +61,16 @@ resources/images/icon_folder_open_sound.png
 resources/images/icon_folder_open_sprite.png
 resources/images/icon_folder_open_tileset.png
 resources/images/icon_resource_language.png
+resources/images/icon_resource_enemy_missing.png
+resources/images/icon_resource_entity_missing.png
+resources/images/icon_resource_font_missing.png
+resources/images/icon_resource_item_missing.png
+resources/images/icon_resource_language_missing.png
+resources/images/icon_resource_map_missing.png
+resources/images/icon_resource_music_missing.png
+resources/images/icon_resource_sound_missing.png
+resources/images/icon_resource_sprite_missing.png
+resources/images/icon_resource_tileset_missing.png
 
 - By Andrew Tyler:
 http://www.andrewtyler.net
