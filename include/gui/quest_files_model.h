@@ -79,7 +79,7 @@ private:
 
   QString get_quest_file_icon_name(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
-  bool is_quest_data_index(const QModelIndex& source_index) const;
+  bool is_quest_data_index(const QModelIndex& index) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */

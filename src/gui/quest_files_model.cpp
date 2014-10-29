@@ -195,7 +195,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     switch (index.column()) {
 
     case FILE_COLUMN:  // File name.
-      if (is_quest_data_index(source_index)) {
+      if (is_quest_data_index(index)) {
         // Data directory: show the quest name instead of "data".
         return quest.get_name();
       }
@@ -216,7 +216,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return resources.get_description(resource_type, element_id);
 
     case TYPE_COLUMN:  // Type
-      if (is_quest_data_index(source_index)) {
+      if (is_quest_data_index(index)) {
         // Quest data directory (top-level item).
         return tr("Quest");
       }
@@ -349,7 +349,7 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& index) cons
   QString element_id;
 
   // Quest data directory.
-  if (is_quest_data_index(source_index)) {
+  if (is_quest_data_index(index)) {
     return "icon_solarus.png";
   }
 
@@ -441,7 +441,7 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 
   if (source_model->index(source_model->rootPath()).parent() == source_parent) {
     // This is a top-level item: only keep the quest data directory.
-    if (is_quest_data_index(source_index)) {
+    if (is_quest_data_index(index)) {
       return true;
     }
     return false;
@@ -483,12 +483,15 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 
 /**
  * @brief Returns whether a source index is the index of the quest data directory.
- * @param source_index An index in the source model.
+ *
+ * This function returns @c true for all columns of the data directory row.
+ *
+ * @param source_index An index in the model.
  * @return \c true if this is the quest data directory.
  */
-bool QuestFilesModel::is_quest_data_index(const QModelIndex& source_index) const {
+bool QuestFilesModel::is_quest_data_index(const QModelIndex& index) const {
 
-  return source_model->filePath(source_index) == quest.get_data_path();
+  return get_file_path(index) == quest.get_data_path();
 }
 
 /**
