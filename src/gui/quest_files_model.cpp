@@ -70,6 +70,21 @@ int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
 }
 
 /**
+ * @brief Returns the number of rows under a parent item.
+ *
+ * Reimplemented to add rows with declared resource elements that are missing
+ * on the filesystem.
+ *
+ * @param parent Parent index.
+ * @return The number of rows under this parent.
+ */
+int QuestFilesModel::rowCount(const QModelIndex& parent) const {
+
+  // TODO
+  return QSortFilterProxyModel::rowCount(parent);
+}
+
+/**
  * @brief Returns the flags of an item.
  * @param index An item index.
  * @return The item flags.
@@ -248,9 +263,16 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   case Qt::DecorationRole:
     // Icon.
     if (index.column() == FILE_COLUMN) {
-      return QIcon(":/images/" + get_quest_file_icon_name(source_index));
+      return QIcon(":/images/" + get_quest_file_icon_name(index));
     }
     return QVariant();  // No icon in other columns.
+
+  case Qt::ToolTipRole:
+    // Tooltip.
+    if (index.column() == FILE_COLUMN) {
+      return get_quest_file_tooltip(index);
+    }
+    return QVariant();  // No tooltip in other columns.
 
   case Qt::TextAlignmentRole:
     // Remove the alignment done by QFileSystemModel.
@@ -315,11 +337,13 @@ void QuestFilesModel::resource_element_description_changed(
 
 /**
  * @brief Returns an appropriate icon for the specified quest file.
- * @param index Index of a file item in the source model.
- * @return An appropriate icon name to represent this file.
+ * @param index Index of a file item in the model.
+ * @return An appropriate icon name to represent this file, relative to the
+ * images directory of resources.
  */
-QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_index) const {
+QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& index) const {
 
+  QModelIndex source_index = mapToSource(index);
   QString file_path = source_model->filePath(source_index);
   ResourceType resource_type;
   QString element_id;
@@ -359,6 +383,28 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& source_inde
 
   // Generic icon for a file not known by the quest.
   return "icon_file_unknown.png";
+}
+
+/**
+ * @brief Returns an appropriate tooltip for the specified quest file.
+ * @param index Index of a file item in the model.
+ * @return An appropriate tooltip for this file item.
+ */
+QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const {
+
+  QModelIndex source_index = mapToSource(index);
+  QString path = source_model->filePath(source_index);
+  QString file_name = QFileInfo(path).fileName();
+  ResourceType resource_type;
+  QString element_id;
+
+  // Show a tooltip for resource elements because their item text is different
+  // from the physical file name.
+  if (quest.is_resource_element(path, resource_type, element_id)) {
+    return file_name;
+  }
+
+  return "";
 }
 
 /**

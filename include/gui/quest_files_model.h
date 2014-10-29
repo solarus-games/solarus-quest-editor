@@ -28,6 +28,12 @@ class QFileSystemModel;
  *
  * This models acts as a proxy to a filesytem model, filtering and modifying
  * the files representation to present them as quest resources.
+ *
+ * Resources that are declared in the resource list but missing on the
+ * filesystem appear in the model with a warning icon.
+ * Similarly, existing files whose name looks like a resource but that are no
+ * declared in the resource list appear in the model with an interrogation mark
+ * icon.
  */
 class QuestFilesModel : public QSortFilterProxyModel {
   Q_OBJECT
@@ -46,6 +52,7 @@ public:
   QModelIndex get_file_index(const QString& path) const;
 
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
   virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
   virtual QVariant headerData(
@@ -70,7 +77,8 @@ private slots:
 
 private:
 
-  QString get_quest_file_icon_name(const QModelIndex& source_index) const;
+  QString get_quest_file_icon_name(const QModelIndex& index) const;
+  QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& source_index) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
