@@ -19,6 +19,7 @@
 
 #include "quest_resources.h"
 #include <QSortFilterProxyModel>
+#include <set>
 
 class Quest;
 class QFileSystemModel;
@@ -47,6 +48,7 @@ public:
   static constexpr int TYPE_COLUMN = 2;          /**< Column index of the type info in the model. */
 
   explicit QuestFilesModel(Quest& quest);
+  virtual ~QuestFilesModel();
 
   Quest& get_quest();
   QModelIndex get_quest_root_index() const;
@@ -55,7 +57,10 @@ public:
 
   // The proxy changes the underlying filesystem model a lot:
   // rows and columns are added and removed.
-  // So we have to reimplement a lot of functions.
+  // We have to reimplement a lot of functions, in particular because
+  // adding extra rows breaks an assumption of QSortFilterProxyModel:
+  // the fact that a valid proxy index can always be mapped to a valid
+  // source index.
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -93,10 +98,18 @@ private:
   QString get_quest_file_icon_name(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
-  QStringList get_missing_resource_elements(const QModelIndex& parent) const;
+
+  bool is_extra_path(const QModelIndex& index, QString& path) const;
+  QStringList get_missing_resource_elements(
+      const QModelIndex& parent, ResourceType& resource_type) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
+  mutable std::set<QString*>
+      extra_paths;                     /**< Extra paths added by this model, but
+                                        * that don't exist in the source model.
+                                        * Stored as pointers in order to use
+                                        * QModelIndex::internalPointer(). */
 
 };
 
