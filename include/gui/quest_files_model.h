@@ -90,6 +90,12 @@ protected:
 
 private slots:
 
+  void resource_element_added(
+      ResourceType resource_type, const QString& element_id, const QString& description);
+  void resource_element_removed(
+      ResourceType resource_type, const QString& element_id);
+  void resource_element_renamed(
+      ResourceType resource_type, const QString& old_id, const QString& new_id);
   void resource_element_description_changed(
       ResourceType resource_type, const QString& element_id, const QString& description);
 

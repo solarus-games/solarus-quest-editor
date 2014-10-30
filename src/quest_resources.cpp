@@ -165,6 +165,7 @@ bool QuestResources::remove(
   if (!resources.remove(resource_type, id.toStdString())) {
     return false;
   }
+
   emit element_removed(resource_type, id);
   return true;
 }

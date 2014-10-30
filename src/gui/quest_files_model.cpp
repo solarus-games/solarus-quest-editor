@@ -34,6 +34,12 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
   setSourceModel(source_model);
 
   // Watch changes in resources.
+  connect(&quest.get_resources(), SIGNAL(element_added(ResourceType, QString, QString)),
+          this, SLOT(resource_element_added(ResourceType, QString, QString)));
+  connect(&quest.get_resources(), SIGNAL(element_removed(ResourceType, QString)),
+          this, SLOT(resource_element_removed(ResourceType, QString)));
+  connect(&quest.get_resources(), SIGNAL(element_renamed(ResourceType, QString, QString)),
+          this, SLOT(resource_element_renamed(ResourceType, QString, QString)));
   connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
 }
@@ -455,21 +461,6 @@ bool QuestFilesModel::setData(
 }
 
 /**
- * @brief Slot called when the description of a resource element changes.
- * @param resource_type A type of resource.
- * @param element_id Id of the element whose description has changed.
- * @param description The new description.
- */
-void QuestFilesModel::resource_element_description_changed(
-    ResourceType resource_type, const QString& element_id, const QString& /* description */) {
-
-  QModelIndex index =
-      get_file_index(quest.get_resource_element_path(resource_type, element_id));
-  index = this->index(index.row(), DESCRIPTION_COLUMN, index.parent());
-  emit dataChanged(index, index);
-}
-
-/**
  * @brief Returns an appropriate icon for the specified quest file.
  * @param index Index of a file item in the model.
  * @return An appropriate icon name to represent this file.
@@ -826,4 +817,129 @@ QStringList QuestFilesModel::get_missing_resource_elements(
   }
 
   return missing_element_ids;
+}
+
+/**
+ * @brief Slot called a resource element is added to the resource list.
+ *
+ * The corresponding files may or may not already exist on the filesystem.
+ *
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element that was added.
+ * @param description The element description.
+ */
+void QuestFilesModel::resource_element_added(
+    ResourceType resource_type, const QString& element_id, const QString& description) {
+
+  Q_UNUSED(description);
+
+  // If the file already exists, it automatically appears in the tree
+  // thanks to QFileSystemWatcher.
+  // Otherwise, since we include it in the tree anyway,
+  // so we need to notify people that there is a new row.
+
+  QString path = quest.get_resource_element_path(resource_type, element_id);
+  const QModelIndex& index = get_file_index(path);
+  const QModelIndex& parent_index = parent(index);
+
+  if (!quest.exists(path)) {
+    beginInsertRows(parent_index, index.row(), index.row());
+    endInsertRows();
+  }
+}
+
+/**
+ * @brief Slot called when a resource element is removed from the resource list.
+ *
+ * The corresponding files may or may not continue to exist on the filesystem.
+ *
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element that was removed.
+ */
+void QuestFilesModel::resource_element_removed(
+    ResourceType resource_type, const QString& element_id) {
+
+  // If the file existed, it automatically disappears from
+  // the tree thanks to QFileSystemWatcher.
+  // Otherwise, since it was it in the tree anyway, we need to notify people
+  // that there a row was removed.
+
+  QString path = quest.get_resource_element_path(resource_type, element_id);
+
+  // See if this was an extra path (not existing in the source model).
+  QString* extra_path_ptr = nullptr;
+  for (QString* current_extra_path : extra_paths) {
+    if (*current_extra_path == path) {
+      extra_path_ptr = current_extra_path;
+    }
+  }
+
+  if (extra_path_ptr == nullptr) {
+    // This was a regular path from the source model.
+    return;
+  }
+
+  // This was an extra path.
+
+  // Determine its directory.
+  QDir parent_dir(path);
+  if (!parent_dir.cdUp()) {
+    // The directory no longer exists either: nothing to do.
+    return;
+  }
+  const QModelIndex& parent_index = get_file_index(parent_dir.path());
+
+  // Determine the index it had under that directory.
+  int i = QSortFilterProxyModel::rowCount(parent_index);
+  QStringList missing_element_ids =
+      get_missing_resource_elements(parent_index, resource_type);
+  for (QString missing_element_id : missing_element_ids) {
+    if (missing_element_id < element_id) {
+      ++i;
+    }
+    else {
+      break;
+    }
+  }
+
+  // It was row i.
+  beginRemoveRows(parent_index, i, i);
+  extra_paths.erase(extra_path_ptr);
+  delete extra_path_ptr;
+  endRemoveRows();
+}
+
+/**
+ * @brief Slot called when the id of a resource element changes in the resource list.
+ *
+ * The corresponding files may or may not exist with the old or new file name
+ * on the filesystem.
+ *
+ * @param resource_type A type of resource.
+ * @param old_id Id of the element before the change.
+ * @param new_id New id of the element.
+ */
+void QuestFilesModel::resource_element_renamed(
+    ResourceType resource_type, const QString& old_id, const QString& new_id) {
+
+  // TODO
+  Q_UNUSED(resource_type);
+  Q_UNUSED(old_id);
+  Q_UNUSED(new_id);
+}
+
+/**
+ * @brief Slot called when the description of a resource element changes.
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element whose description has changed.
+ * @param description The new description.
+ */
+void QuestFilesModel::resource_element_description_changed(
+    ResourceType resource_type, const QString& element_id, const QString& description) {
+
+  Q_UNUSED(description);
+  QModelIndex index =
+      get_file_index(quest.get_resource_element_path(resource_type, element_id));
+  index = sibling(index.row(), DESCRIPTION_COLUMN, index);
+  emit dataChanged(index, index);
 }
