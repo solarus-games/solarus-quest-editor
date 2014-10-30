@@ -390,7 +390,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   case Qt::DecorationRole:
     // Icon.
     if (index.column() == FILE_COLUMN) {
-      return QIcon(":/images/" + get_quest_file_icon_name(index));
+      return get_quest_file_icon(index);
     }
     return QVariant();  // No icon in other columns.
 
@@ -472,50 +472,66 @@ void QuestFilesModel::resource_element_description_changed(
 /**
  * @brief Returns an appropriate icon for the specified quest file.
  * @param index Index of a file item in the model.
- * @return An appropriate icon name to represent this file, relative to the
- * images directory of resources.
+ * @return An appropriate icon name to represent this file.
  */
-QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& index) const {
+QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
 
+  QString icon_file_name;  // Relative to the icons directory.
   QString file_path = get_file_path(index);
   ResourceType resource_type;
   QString element_id;
 
   // Quest data directory.
   if (is_quest_data_index(index)) {
-    return "icon_solarus.png";
+    icon_file_name = "icon_solarus.png";
   }
 
   // Resource element (possibly a directory for languages).
-  if (quest.is_resource_element(file_path, resource_type, element_id)) {
-    const std::string& resource_type_name =
-        Solarus::QuestResources::get_resource_type_name(resource_type);
-    return "icon_resource_" +
-        QString::fromStdString(resource_type_name) +
-        ".png";
+  else if (quest.is_resource_element(file_path, resource_type, element_id)) {
+
+    QString resource_type_name = QString::fromStdString(
+          Solarus::QuestResources::get_resource_type_name(resource_type));
+
+    if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
+      // Resource declared and present on the filesystem.
+      icon_file_name = "icon_resource_" + resource_type_name + ".png";
+    }
+    else {
+      // Resource declared but whose file is missing.
+      icon_file_name = "icon_resource_" + resource_type_name + "_missing.png";
+    }
   }
 
   // Directory icon.
-  if (quest.is_dir(file_path)) {
+  else if (quest.is_dir(file_path)) {
 
     if (quest.is_resource_path(file_path, resource_type)) {
-      const std::string& resource_type_name =
-          Solarus::QuestResources::get_resource_type_name(resource_type);
-      return "icon_folder_open_" +
-          QString::fromStdString(resource_type_name) +
-          ".png";
-    }
 
-    return "icon_folder_open.png";
+      QString resource_type_name = QString::fromStdString(
+            Solarus::QuestResources::get_resource_type_name(resource_type));
+
+      icon_file_name = "icon_folder_open_" + resource_type_name + ".png";
+    }
+    else {
+      icon_file_name = "icon_folder_open.png";
+    }
   }
 
   // Lua script icon.
-  if (quest.is_script(file_path)) {
-    return "icon_script.png";
+  else if (quest.is_script(file_path)) {
+    icon_file_name = "icon_script.png";
   }
 
   // Generic icon for a file not known by the quest.
-  return "icon_file_unknown.png";
+  else {
+    icon_file_name = "icon_file_unknown.png";
+  }
+
+  if (icon_file_name.isEmpty()) {
+    return QIcon();
+  }
+
+  return QIcon(":/images/" + icon_file_name);
 }
 
 /**
@@ -525,16 +541,30 @@ QString QuestFilesModel::get_quest_file_icon_name(const QModelIndex& index) cons
  */
 QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const {
 
-  QModelIndex source_index = mapToSource(index);
-  QString path = source_model->filePath(source_index);
-  QString file_name = QFileInfo(path).fileName();
+  QString path = get_file_path(index);
   ResourceType resource_type;
   QString element_id;
 
   // Show a tooltip for resource elements because their item text is different
   // from the physical file name.
-  if (quest.is_resource_element(path, resource_type, element_id)) {
-    return file_name;
+  if (quest.is_potential_resource_element(path, resource_type, element_id)) {
+
+    QString file_name = QFileInfo(path).fileName();
+    if (quest.get_resources().exists(resource_type, element_id)) {
+      // Declared in the resource list.
+      if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
+        // Declared in the resource list and existing on the filesystem.
+        return file_name;
+      }
+      else {
+        // Declared in the resource list and not found on the filesystem.
+        return tr("%1 (file not found)").arg(file_name);
+      }
+    }
+    else {
+      // Found on the filesystem but not declared in the resource list.
+      return tr("%1 (not in the quest)").arg(file_name);
+    }
   }
 
   return "";

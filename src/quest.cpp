@@ -528,10 +528,10 @@ bool Quest::is_in_resource_path(const QString& path, ResourceType& resource_type
 }
 
 /**
- * @brief Determines if a path can be a resource element like a map,
+ * @brief Determines if a path can be valid for a resource element like a map,
  * a tileset, etc.
  *
- * Only the path string is tested: wWhether files actually exist does not
+ * Only the path string is tested: whether files actually exist does not
  * matter.
  *
  * @param[in] path The path to test.
@@ -612,7 +612,7 @@ bool Quest::is_potential_resource_element(
  * @brief Determines if a path is a declared resource element like a map,
  * a tileset, etc.
  *
- * Only the path string is tested: wWhether files actually exist does not
+ * Only the path string is tested: whether files actually exist does not
  * matter.
  *
  * @param[in] path The path to test.

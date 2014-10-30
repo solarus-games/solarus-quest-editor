@@ -95,7 +95,7 @@ private slots:
 
 private:
 
-  QString get_quest_file_icon_name(const QModelIndex& index) const;
+  QIcon get_quest_file_icon(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 
