@@ -216,6 +216,8 @@ bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
     return false;
   }
 
+  // TODO return true for an empty directory where resources are declared but are missing.
+
   return QSortFilterProxyModel::hasChildren(parent);
 }
 
@@ -922,10 +924,9 @@ void QuestFilesModel::resource_element_removed(
 void QuestFilesModel::resource_element_renamed(
     ResourceType resource_type, const QString& old_id, const QString& new_id) {
 
-  // TODO
-  Q_UNUSED(resource_type);
-  Q_UNUSED(old_id);
-  Q_UNUSED(new_id);
+  resource_element_removed(resource_type, old_id);
+  resource_element_added(resource_type, new_id,
+                         quest.get_resources().get_description(resource_type, new_id));
 }
 
 /**
