@@ -291,7 +291,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   QString element_id;
 
   QString path = get_file_path(index);
-  QString file_name = QFileInfo(path).baseName();
+  QString file_name = QFileInfo(path).fileName();
 
   switch (role) {
 
@@ -308,9 +308,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
       if (quest.is_resource_element(path, resource_type, element_id)) {
         // A resource element: show its id (remove the extension).
-        if (resource_type != ResourceType::LANGUAGE) {
-          return QFileInfo(file_name).completeBaseName();
-        }
+        return QFileInfo(path).completeBaseName();
       }
       return file_name;
 
