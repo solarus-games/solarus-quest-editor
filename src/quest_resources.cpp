@@ -115,6 +115,21 @@ bool QuestResources::exists(ResourceType type, const QString& id) const {
 }
 
 /**
+ * @brief Returns the ids of all elements of a resource type.
+ * @param type A type of resource.
+ * @return All ids declared for this resource type.
+ */
+QStringList QuestResources::get_elements(ResourceType type) const {
+
+  QStringList ids;
+  for (const auto& kvp : resources.get_elements(type)) {
+    ids << QString::fromStdString(kvp.first);
+  }
+
+  return ids;
+}
+
+/**
  * @brief Adds a resource element to the list.
  * @param resource_type A type of resource.
  * @param id Id of the element to add.
@@ -150,6 +165,7 @@ bool QuestResources::remove(
   if (!resources.remove(resource_type, id.toStdString())) {
     return false;
   }
+
   emit element_removed(resource_type, id);
   return true;
 }

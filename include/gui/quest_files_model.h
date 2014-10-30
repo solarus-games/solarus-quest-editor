@@ -19,6 +19,7 @@
 
 #include "quest_resources.h"
 #include <QSortFilterProxyModel>
+#include <set>
 
 class Quest;
 class QFileSystemModel;
@@ -26,11 +27,13 @@ class QFileSystemModel;
 /**
  * @brief A hierarchical model of files, resources and scripts of a quest.
  *
- * This models acts as a proxy to a filesytem model, filtering and modifying
- * the files representation to present them as quest resources.
+ * This models acts as a proxy to a filesytem model.
+ * It filters, modifies and extends the files representation to present them
+ * as quest resources.
  *
  * Resources that are declared in the resource list but missing on the
  * filesystem appear in the model with a warning icon.
+ *
  * Similarly, existing files whose name looks like a resource but that are no
  * declared in the resource list appear in the model with an interrogation mark
  * icon.
@@ -45,16 +48,30 @@ public:
   static constexpr int TYPE_COLUMN = 2;          /**< Column index of the type info in the model. */
 
   explicit QuestFilesModel(Quest& quest);
+  virtual ~QuestFilesModel();
 
   Quest& get_quest();
   QModelIndex get_quest_root_index() const;
   QString get_file_path(const QModelIndex& index) const;
   QModelIndex get_file_index(const QString& path) const;
 
+  // The proxy changes the underlying filesystem model a lot:
+  // rows and columns are added and removed.
+  // We have to reimplement a lot of functions, in particular because
+  // adding extra rows breaks an assumption of QSortFilterProxyModel:
+  // the fact that a valid proxy index can always be mapped to a valid
+  // source index.
   virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+  virtual QModelIndex parent(const QModelIndex& index) const override;
+  virtual QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
   virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+  virtual QModelIndex mapToSource(const QModelIndex& proxy_index) const override;
+  // TODO mapSelectionToSource
+
+  // Data.
+  virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
   virtual QVariant headerData(
       int section, Qt::Orientation orientation, int role = Qt::DisplayRole
       ) const override;
@@ -65,6 +82,7 @@ public:
       const QModelIndex& index, const QVariant& value, int role = Qt::EditRole
       ) override;
 
+
 protected:
 
   virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
@@ -72,17 +90,32 @@ protected:
 
 private slots:
 
+  void resource_element_added(
+      ResourceType resource_type, const QString& element_id, const QString& description);
+  void resource_element_removed(
+      ResourceType resource_type, const QString& element_id);
+  void resource_element_renamed(
+      ResourceType resource_type, const QString& old_id, const QString& new_id);
   void resource_element_description_changed(
       ResourceType resource_type, const QString& element_id, const QString& description);
 
 private:
 
-  QString get_quest_file_icon_name(const QModelIndex& index) const;
+  QIcon get_quest_file_icon(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 
+  bool is_extra_path(const QModelIndex& index, QString& path) const;
+  QStringList get_missing_resource_elements(
+      const QModelIndex& parent, ResourceType& resource_type) const;
+
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
+  mutable std::set<QString*>
+      extra_paths;                     /**< Extra paths added by this model, but
+                                        * that don't exist in the source model.
+                                        * Stored as pointers in order to use
+                                        * QModelIndex::internalPointer(). */
 
 };
 
