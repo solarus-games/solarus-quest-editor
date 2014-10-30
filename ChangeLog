@@ -28,9 +28,10 @@ The rewriting is currently in progress.
 At this moment, it is in a very early stage, so almost everything that is
 possible with the old editor is still to be done in the new one.
 
+* Upgrade quests to the latest format.
+* Tileset editor: update references in existing maps when renaming patterns.
 * Edit maps.
 * Edit sprites.
-* Upgrade quests to the latest format.
 
 Bug fixes
 ---------
