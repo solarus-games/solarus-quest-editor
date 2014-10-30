@@ -101,11 +101,18 @@ int QuestFilesModel::rowCount(const QModelIndex& parent) const {
 }
 
 /**
- * @brief TODO
- * @param row
- * @param column
- * @param parent
- * @return
+ * @brief Returns the index of an item.
+ *
+ * Reimplemented from QSortFilterProxyModel to create custom indexes
+ * for items that are not in the source model
+ * Such items represent files expected by the quest, shown in the model but
+ * that are missing on the filesystem.
+ *
+ * @param row Row of the item.
+ * @param column Column of the item.
+ * @param parent Parent of the item.
+ * @return The corresponding index. Returns an invalid index if there is no
+ * such item.
  */
 QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& parent) const {
 
@@ -144,9 +151,13 @@ QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& paren
 }
 
 /**
- * @brief TODO
- * @param index
- * @return
+ * @brief Returns the parent of the model item with the given index.
+ *
+ * Reimplemented from QSortFilterProxyModel to support extra indexes
+ * that do not exist in the source model.
+ *
+ * @param index Index to get the parent of.
+ * @return The parent index, or an invalid index if the item has no parent.
  */
 QModelIndex QuestFilesModel::parent(const QModelIndex& index) const {
 
@@ -165,13 +176,20 @@ QModelIndex QuestFilesModel::parent(const QModelIndex& index) const {
 }
 
 /**
- * @brief TODO
- * @param row
- * @param column
- * @param idx
- * @return
+ * @brief Returns the sibling at the given position of an item.
+ *
+ * Reimplemented from QSortFilterProxyModel to support extra indexes
+ * that do not exist in the source model.
+ *
+ * @param row Row of the index to get.
+ * @param column Column of the index to get.
+ * @param idx An existing index with the same parent as the wanted result.
+ * @return The sibling.
  */
 QModelIndex QuestFilesModel::sibling(int row, int column, const QModelIndex& idx) const {
+
+  // Reimplementation needed because QSortFilterProxyModel::sibling()
+  // assumes that indexes can always be mapped to the source model.
   return index(row, column, parent(idx));
 }
 
@@ -196,9 +214,14 @@ bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
 }
 
 /**
- * @brief TODO
- * @param proxy_index
- * @return
+ * @brief Converts an index of this model to an index in the source model.
+ *
+ * Reimplemented from QSortFilterProxyModel to peacefully return an invalid
+ * source index if the item does not exist in the source model.
+ *
+ * @param proxy_index An index in this model.
+ * @return The corresponding source index, or an invalid index if this is an
+ * extra index that does not exist in the source model.
  */
 QModelIndex QuestFilesModel::mapToSource(const QModelIndex& proxy_index) const {
 
@@ -319,7 +342,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       }
       return resources.get_description(resource_type, element_id);
 
-    case TYPE_COLUMN:  // Type
+    case TYPE_COLUMN:  // Type.
       if (is_quest_data_index(index)) {
         // Quest data directory (top-level item).
         return tr("Quest");
@@ -383,10 +406,13 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     return Qt::AlignLeft;
   }
 
-  // For other roles, rely on the standard settings.
-  if (index.internalId() == 42) {  // TODO
+  QString extra_path;
+  if (is_extra_path(index, extra_path)) {
+    // File expected by the quest but missing on the filesystem.
     return QVariant();
   }
+
+  // For other roles, rely on standard settings.
   return QSortFilterProxyModel::data(index, role);
 }
 
@@ -518,7 +544,7 @@ QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const 
  * @brief Compares two items for sorting purposes.
  * @param left An item index in the source model.
  * @param right Another item index in the source model.
- * @return \c true if the value of the first item is less than the second one.
+ * @return @c true if the value of the first item is less than the second one.
  */
 bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right) const {
 
@@ -540,7 +566,7 @@ bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right
  * @brief Returns whether a source row should be included in the model.
  * @param source_row A row in the source model.
  * @param source_parent Parent index of the row in the source model.
- * @return \c true to keep the row, \c false to filter it out.
+ * @return @c true to keep the row, @c false to filter it out.
  */
 bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const {
 
@@ -593,7 +619,7 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
  * This function returns @c true for all columns of the data directory row.
  *
  * @param source_index An index in the model.
- * @return \c true if this is the quest data directory.
+ * @return @c true if this is the quest data directory.
  */
 bool QuestFilesModel::is_quest_data_index(const QModelIndex& index) const {
 
