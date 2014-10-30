@@ -11,7 +11,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 # Compile as C++11.
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
 # In debug, set strict warnings for developers.
 set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
@@ -175,3 +175,15 @@ target_link_libraries(solarus-quest-editor
   "${OGG_LIBRARY}"
   "${MODPLUG_LIBRARY}"
 )
+
+# Platform specific.
+
+# Windows: disable the console.
+if(WIN32)
+  if(MSVC)
+    set_target_properties(solarus-quest-editor PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+  elseif(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "-mwindows ${CMAKE_CXX_FLAGS}")
+  endif()
+endif()
+
