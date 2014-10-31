@@ -20,6 +20,7 @@
 #include <quest_resources.h>
 #include <solarus/ResourceType.h>
 #include <QObject>
+#include <QSet>
 
 /**
  * @brief A Solarus project that can be open with the editor.
@@ -118,6 +119,14 @@ public:
   void delete_resource_element(ResourceType resource_type,
                                const QString& element_id);
 
+  // Tracking which files are currently open for edition by the user.
+  QSet<QString> get_open_paths() const;
+  bool is_path_open(const QString& path) const;
+  void set_path_open(const QString& path, bool open);
+  bool is_resource_element_open(
+      ResourceType resource_type, const QString& element_id) const;
+  bool is_resource_element_open(ResourceType resource_type) const;
+
 signals:
 
   void root_path_changed(const QString& root_path);
@@ -131,6 +140,8 @@ private:
                                     * An empty string means no quest. */
 
   QuestResources resources;        /**< Resources declared in project_db.dat. */
+  QSet<QString> open_paths;        /**< Files currently edited by the user. */
+
 };
 
 #endif

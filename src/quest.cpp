@@ -1398,3 +1398,72 @@ void Quest::delete_resource_element(
     throw EditorException(tr("No such resource: '%1'").arg(element_id));
   }
 }
+
+/**
+ * @brief Returns the list of files currently opened in this quest.
+ * @return Paths of the tiles currently edited.
+ */
+QSet<QString> Quest::get_open_paths() const {
+
+  return open_paths;
+}
+
+/**
+ * @brief Returns whether a file of this quest is currently open.
+ * @param path A file of this quest.
+ * @return @c true if the file is currently edited.
+ */
+bool Quest::is_path_open(const QString& path) const {
+
+  return open_paths.contains(path);
+}
+
+/**
+ * @brief Indicates whether a file of this quest is currently open.
+ *
+ * This function should be called whenever a file starts or ends being edited
+ * by the user.
+ *
+ * @param path A file of this quest.
+ * @return @c true if the file is currently edited.
+ */
+void Quest::set_path_open(const QString& path, bool open) {
+
+  if (open) {
+    open_paths.insert(path);
+  }
+  else {
+    open_paths.remove(path);
+  }
+}
+
+/**
+ * @brief Returns whether a resource element of this quest is currently open.
+ * @param resource_type A type of resource.
+ * @param element_id Id of the element to check
+ * @return @c true if a file of this element is currently edited.
+ */
+bool Quest::is_resource_element_open(ResourceType resource_type, const QString& element_id) const {
+
+  for (QString path : get_resource_element_paths(resource_type, element_id)) {
+    if (is_path_open(path)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @brief Returns whether any resource element of a particular type is currently open.
+ * @param resource_type A type of resource.
+ * @return @c true if any file of this type is currently edited.
+ */
+bool Quest::is_resource_element_open(ResourceType resource_type) const {
+
+  for (QString element_id : resources.get_elements(resource_type)) {
+    if (is_resource_element_open(resource_type, element_id)) {
+      return true;
+    }
+  }
+  return false;
+}

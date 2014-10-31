@@ -19,6 +19,7 @@
 
 #include "quest_resources.h"
 #include <QMap>
+#include <QPointer>
 #include <QTabWidget>
 
 class Editor;
@@ -36,7 +37,6 @@ public:
 
   EditorTabs(QWidget* parent = nullptr);
 
-  void set_quest_manager(QuestManager& quest_manager);
   QUndoGroup& get_undo_group();
 
   void open_resource(
@@ -83,6 +83,7 @@ private:
   QMap<QString, Editor*> editors;      /**< All editors currently open,
                                         * indexed by their file path. */
   QUndoGroup* undo_group;              /**< Undo/redo stacks of open files. */
+  QPointer<Quest> quest;               /**< The quest edited files belong to. */
 };
 
 #endif

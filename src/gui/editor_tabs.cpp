@@ -20,7 +20,7 @@
 #include "gui/text_editor.h"
 #include "gui/tileset_editor.h"
 #include "editor_exception.h"
-#include "quest.h"
+#include "quest_manager.h"
 #include <QUndoGroup>
 #include <QUndoStack>
 
@@ -30,7 +30,8 @@
  */
 EditorTabs::EditorTabs(QWidget* parent):
   QTabWidget(parent),
-  undo_group(new QUndoGroup(this)) {
+  undo_group(new QUndoGroup(this)),
+  quest(nullptr) {
 
   setMovable(true);
 
@@ -40,15 +41,6 @@ EditorTabs::EditorTabs(QWidget* parent):
           this, SLOT(close_file_requested(int)));
   connect(tab_bar, SIGNAL(currentChanged(int)),
           this, SLOT(current_editor_changed(int)));
-}
-
-/**
- * @brief Sets the quest manager observed by this view.
- * @param quest_manager The quest manager.
- */
-void EditorTabs::set_quest_manager(QuestManager& /* quest_manager */) {
-  // Not used for now.
-  // Tabs are independant of the current quest.
 }
 
 /**
@@ -234,6 +226,9 @@ void EditorTabs::add_editor(Editor* editor) {
   setTabToolTip(index, editor->get_file_path());
   setCurrentIndex(index);
 
+  // Tell the quest that this file is now open.
+  editor->get_quest().set_path_open(path, true);
+
   // Show asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
           this, SLOT(modification_state_changed(bool)));
@@ -246,11 +241,16 @@ void EditorTabs::add_editor(Editor* editor) {
 void EditorTabs::remove_editor(int index) {
 
   Editor* editor = get_editor(index);
+  QString path = editor->get_file_path();
 
   undo_group->removeStack(&editor->get_undo_stack());
 
-  editors.remove(editor->get_file_path());
+  // Tell the quest that this file is now closed.
+  editor->get_quest().set_path_open(path, false);
+
+  editors.remove(path);
   removeTab(index);
+
 }
 
 /**
