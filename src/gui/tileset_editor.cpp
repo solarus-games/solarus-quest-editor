@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/change_pattern_id_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/tileset_editor.h"
 #include "editor_exception.h"
@@ -715,18 +716,27 @@ void TilesetEditor::change_selected_pattern_id_requested() {
   }
 
   QString old_id = model->index_to_id(old_index);
-  bool ok = false;
-  QString new_id = QInputDialog::getText(
-        this,
-        tr("Rename tile pattern"),
-        tr("New id for pattern '%1':").arg(old_id),
-        QLineEdit::Normal,
-        old_id,
-        &ok);
+  ChangePatternIdDialog dialog(old_id, this);
+  int result = dialog.exec();
 
-  if (ok && new_id != old_id) {
-    // TODO update references in existing maps (not as an undoable command).
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString new_id = dialog.get_pattern_id();
+  if (new_id == old_id) {
+    // No change.
+    return;
+  }
+
+  if (!dialog.get_update_references()) {
+    // The change is only in the tileset file.
     try_command(new SetPatternIdCommand(*this, old_index, new_id));
+  }
+  else {
+    // Also update references in existing maps
+    // (not as an undoable command).
+    // TODO
   }
 }
 

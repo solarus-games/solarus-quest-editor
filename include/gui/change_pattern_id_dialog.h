@@ -16,7 +16,18 @@ class ChangePatternIdDialog : public QDialog {
 
 public:
 
-  explicit ChangePatternIdDialog(QWidget* parent = 0);
+  ChangePatternIdDialog(
+      const QString& initial_pattern_id, QWidget* parent = 0);
+
+  QString get_pattern_id() const;
+  void set_pattern_id(const QString& pattern_id);
+
+  bool get_update_references() const;
+  void set_update_references(bool update_references);
+
+public slots:
+
+  virtual void done(int result) override;
 
 private:
 

@@ -111,7 +111,7 @@ QString NewResourceElementDialog::get_element_id() const {
 }
 
 /**
- * @brief Sets the value id displayed in the resource element id text edit.
+ * @brief Sets the value displayed in the resource element id text edit.
  * @param value The value to set.
  */
 void NewResourceElementDialog::set_element_id(const QString& value) {
