@@ -61,6 +61,7 @@ include_directories(SYSTEM
 
 # Source files.
 set(solarus_quest_editor_SOURCES
+  include/gui/change_pattern_id_dialog.h
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
@@ -96,6 +97,7 @@ set(solarus_quest_editor_SOURCES
   include/quest_resources.h
   include/rectangle.h
   include/tileset_model.h
+  src/gui/change_pattern_id_dialog.cpp
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
@@ -128,6 +130,7 @@ set(solarus_quest_editor_SOURCES
 
 # UI files.
 set(solarus_quest_editor_FORMS
+  src/gui/change_pattern_id_dialog.ui
   src/gui/main_window.ui
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
