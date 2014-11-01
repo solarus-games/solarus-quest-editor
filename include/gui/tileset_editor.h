@@ -71,6 +71,11 @@ public slots:
 
 private:
 
+  void change_pattern_id_in_maps(
+      const QString& old_pattern_id, const QString& new_pattern_id);
+  void change_pattern_id_in_map(
+      const QString& map_id, const QString& old_pattern_id, const QString& new_pattern_id);
+
   Ui::TilesetEditor ui;         /**< The tileset editor widgets. */
   QString tileset_id;           /**< Id of the tileset being edited. */
   TilesetModel* model;          /**< Tileset model being edited. */
