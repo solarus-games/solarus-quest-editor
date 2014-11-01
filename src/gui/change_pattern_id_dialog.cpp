@@ -13,7 +13,6 @@ ChangePatternIdDialog::ChangePatternIdDialog(
 
   ui.setupUi(this);
 
-  setWindowTitle(tr("Rename tile pattern"));
   ui.pattern_id_label->setText(tr("New id for pattern '%1':").arg(initial_pattern_id));
   set_pattern_id(initial_pattern_id);
   ui.pattern_id_field->selectAll();

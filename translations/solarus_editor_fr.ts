@@ -2,6 +2,29 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>ChangePatternIdDialog</name>
+    <message>
+        <location filename="../src/gui/change_pattern_id_dialog.ui" line="24"/>
+        <source>New pattern id:</source>
+        <translation>Nouvel id du motif :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_pattern_id_dialog.ui" line="34"/>
+        <source>Update references in existing maps</source>
+        <translation>Mettre à jour les références dans les maps existantes</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_pattern_id_dialog.ui" line="14"/>
+        <source>Rename tile pattern</source>
+        <translation>Renommer un motif</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_pattern_id_dialog.cpp" line="16"/>
+        <source>New id for pattern &apos;%1&apos;:</source>
+        <translation>Nouvel id du motif &apos;%1&apos; :</translation>
+    </message>
+</context>
+<context>
     <name>Editor</name>
     <message>
         <location filename="../src/gui/editor.cpp" line="126"/>
@@ -482,25 +505,9 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <source>File &apos;%1&apos; is not a directory</source>
-        <translation type="vanished">Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
-    </message>
-    <message>
-        <source>File &apos;%1&apos; is a directory</source>
-        <translation type="vanished">Le fichier &apos;%1&apos; est un dossier</translation>
-    </message>
-    <message>
         <location filename="../src/quest.cpp" line="917"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
-    </message>
-    <message>
-        <source>Cannot create directory &apos;%1&apos;</source>
-        <translation type="vanished">Impossible de créer le dossier &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Nothing to delete</source>
-        <translation type="vanished">Aucun élément à supprimer</translation>
     </message>
     <message>
         <location filename="../src/quest.cpp" line="932"/>
@@ -575,10 +582,6 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <location filename="../src/quest.cpp" line="820"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
-    </message>
-    <message>
-        <source>Cannot delete directory &apos;%1&apos;</source>
-        <translation type="vanished">Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -935,10 +938,6 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <source>Directory is not empty</source>
-        <translation type="vanished">Le dossier n&apos;est pas vide</translation>
-    </message>
-    <message>
         <location filename="../src/gui/quest_tree_view.cpp" line="807"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
@@ -1072,7 +1071,7 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="172"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="401"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="405"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
@@ -1083,7 +1082,7 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="241"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="128"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="132"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
@@ -1094,7 +1093,7 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="264"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="215"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="219"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
@@ -1110,62 +1109,67 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="328"/>
-        <location filename="../src/gui/tileset_editor.cpp" line="171"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="175"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="65"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="69"/>
         <source>Background color</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="94"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="98"/>
         <source>Move pattern</source>
         <translation>Déplacer le motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="260"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="264"/>
         <source>Animation separation</source>
         <translation>Séparation d&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="303"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="307"/>
         <source>Create pattern</source>
         <translation>Nouveau motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="339"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="343"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="456"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="460"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="721"/>
-        <source>Rename tile pattern</source>
-        <translation>Renommer un motif</translation>
+        <location filename="../src/gui/tileset_editor.cpp" line="748"/>
+        <source>Please close all maps before updating tile pattern references.</source>
+        <translation>Veuillez fermer toutes les maps avant de mettre à jour les références des motifs.</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="722"/>
-        <source>New id for pattern &apos;%1&apos;:</source>
-        <translation>Nouvel id du motif &apos;%1&apos; :</translation>
+        <location filename="../src/gui/tileset_editor.cpp" line="799"/>
+        <source>Cannot open map file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="978"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="817"/>
+        <source>Cannot open map file &apos;%1&apos; for writing</source>
+        <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos; en écriture</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="1070"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="982"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1074"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="988"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1080"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
