@@ -15,11 +15,13 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/editor.h"
+#include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "file_tools.h"
+#include "new_quest_builder.h"
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
-#include "new_quest_builder.h"
 #include "quest.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
@@ -168,7 +170,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
 
     if (answer == QMessageBox::Ok) {
       try {
-        quest.upgrade();
+        upgrade_quest();
         quest.check_version();
         success = true;
       }
@@ -190,6 +192,45 @@ bool MainWindow::open_quest(const QString& quest_path) {
   ui.quest_tree_view->set_quest(quest);
 
   return false;
+}
+
+/**
+ * @brief Attempts to upgrade the quest to the latest version and shows the
+ * result in a dialog.
+ */
+void MainWindow::upgrade_quest() {
+
+  // First backup the files.
+  QString quest_version = quest.get_properties().get_solarus_version_without_patch();
+  QString root_path = quest.get_root_path();
+  QString backup_dir_name = "data." + quest_version + ".bak";
+  QString backup_path = root_path + "/" + backup_dir_name;
+
+  FileTools::delete_recursive(backup_path);  // Remove any previous backup.
+  FileTools::copy_recursive(quest.get_data_path(), backup_path);
+
+  // Upgrade data files.
+  ExternalScriptDialog dialog(
+        tr("Upgrading quest data files"),
+        ":/data_file_conversion/update_quest",
+        root_path);
+
+  dialog.exec();
+  bool upgrade_success = dialog.is_successful();
+
+  if (!upgrade_success) {
+    // The upgrade failed.
+    // Restore the backuped version.
+    QDir root_dir(root_path);
+    FileTools::delete_recursive(root_path + "/data.err");
+    root_dir.rename("data", "data.err");
+    FileTools::delete_recursive(root_path + "/data");
+    root_dir.rename(backup_dir_name, "data");
+
+    throw EditorException(
+          tr("An error occured while upgrading the quest.\n"
+             "Your quest was kept unchanged in format %1.").arg(quest_version));
+  }
 }
 
 /**

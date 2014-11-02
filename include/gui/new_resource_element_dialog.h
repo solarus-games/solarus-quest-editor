@@ -47,9 +47,9 @@ public slots:
 
 private:
 
-  Ui::NewResourceElementDialog ui;
+  Ui::NewResourceElementDialog ui;     /**< The widgets. */
 
-  ResourceType resource_type;
+  ResourceType resource_type;          /**< Type of resource to create. */
 
 };
 

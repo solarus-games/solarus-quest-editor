@@ -60,6 +60,7 @@ private:
 
   bool confirm_close();
   void update_title();
+  void upgrade_quest();
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */

@@ -47,7 +47,7 @@ public slots:
 
 private:
 
-  Ui::ChangePatternIdDialog ui;
+  Ui::ChangePatternIdDialog ui;   /**< The widgets. */
 
 };
 

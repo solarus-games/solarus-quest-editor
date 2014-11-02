@@ -29,18 +29,32 @@ class ExternalScriptDialog : public QDialog {
 public:
 
   ExternalScriptDialog(const QString& title, const QString& script_path,
-                       const QString& arg, QWidget* parent = 0);
+                       const QString& script_arg, QWidget* parent = 0);
 
   bool is_finished() const;
   bool is_successful() const;
+
+public slots:
+
+  virtual int exec() override;
 
 protected:
 
   virtual void closeEvent(QCloseEvent* event) override;
 
+private slots:
+
+  void run_script();
+
 private:
 
-  Ui::ExternalScriptDialog ui;
+  void set_finished(bool finished);
+
+  Ui::ExternalScriptDialog ui;         /**< The widgets. */
+  QString script_path;                 /**< Lua script to run, without extension. */
+  QString script_arg;                  /**< Optional argument to pass to the script. */
+  bool finished;                       /**< Whether the script is finished. */
+  bool successful;                     /**< Whether the script is successfully finished. */
 
 };
 

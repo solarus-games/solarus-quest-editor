@@ -43,7 +43,9 @@ public:
   bool exists() const;
 
   void check_version() const;
-  void upgrade();
+
+  const QuestProperties& get_properties() const;
+  QuestProperties& get_properties();
 
   const QuestResources& get_resources() const;
   QuestResources& get_resources();
