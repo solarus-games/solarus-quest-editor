@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/quest_converter">
+    <qresource prefix="/">
         <file>quest_converter/1.0_to_1.1/language_list_converter_1_0.lua</file>
         <file>quest_converter/1.0_to_1.1/quest_db_converter_1_0.lua</file>
         <file>quest_converter/1.0_to_1.1/quest_properties_converter_1_0.lua</file>

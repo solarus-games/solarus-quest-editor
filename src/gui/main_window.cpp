@@ -212,7 +212,7 @@ void MainWindow::upgrade_quest() {
   // Upgrade data files.
   ExternalScriptDialog dialog(
         tr("Upgrading quest data files"),
-        ":/data_file_conversion/update_quest",
+        ":/quest_converter/update_quest",
         root_path);
 
   dialog.exec();

@@ -15,8 +15,43 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/external_script_dialog.h"
+#include <QFileInfo>
 #include <QPushButton>
 #include <QTimer>
+#include <lua.hpp>
+#include <sstream>
+#include <string>
+
+namespace {
+
+/**
+ * @brief Custom loader for Lua to lookup files in Qt resources using require().
+ * @param l A Lua state.
+ * @return Number of values to return to Lua.
+ */
+int l_loader_from_qt_resource(lua_State* l) {
+
+  const std::string& script_name = luaL_checkstring(l, 1);
+  std::string path(std::string(":/") + script_name);
+  bool exists = false;
+
+  QFile script_file(QString::fromStdString(path));
+  if (script_file.open(QFileDevice::ReadOnly)) {
+    QByteArray buffer = script_file.readAll();
+    luaL_loadbuffer(l, buffer.constData(), buffer.size(), path.c_str());
+  }
+
+  if (!exists) {
+    std::ostringstream oss;
+    oss << std::endl << "\tno file ':/" << script_name
+        << ".lua' in Qt resources";
+    lua_pushstring(l, oss.str().c_str());
+  }
+
+  return 1;
+}
+
+}
 
 /**
  * Creates a script dialog.
@@ -40,7 +75,7 @@ ExternalScriptDialog::ExternalScriptDialog(
 
   set_finished(false);
   setWindowTitle(title);
-  ui.status_label->setText(title + "...");
+  ui.description_label->setText(title + "... ");
 }
 
 /**
@@ -95,6 +130,9 @@ void ExternalScriptDialog::closeEvent(QCloseEvent* event) {
  */
 int ExternalScriptDialog::exec() {
 
+  ui.status_label->setText(tr("In progress"));
+  ui.status_label->setStyleSheet("font-weight: bold; color: orange");
+
   // Use a timer to show the window before running the script.
   // The script will start at the next event loop iteration.
   // A thread could be used to show the output in real time,
@@ -109,10 +147,64 @@ int ExternalScriptDialog::exec() {
 
 /**
  * @brief Runs the script. Returns when the script is finished.
+ *
+ * This function does not throw exceptions, it outputs any error to the
+ * text widget.
  */
 void ExternalScriptDialog::run_script() {
 
-  // TODO
-  successful = true;
+  successful = false;
+  QString output;
+
+  lua_State* l = luaL_newstate();
+  luaL_openlibs(l);
+
+  QString path = script_path + ".lua";
+  QFile script_file(path);
+  if (!script_file.open(QFileDevice::ReadOnly)) {
+    output = tr("Cannot open file '%1'").arg(path);
+  }
+  else {
+    QByteArray buffer = script_file.readAll();
+    QByteArray chunk_name = path.toUtf8();
+    if (luaL_loadbuffer(l, buffer.constData(), buffer.size(), chunk_name.constData()) != 0) {
+      output = QString::fromStdString(std::string(lua_tostring(l, -1)));
+    }
+    else {
+
+      if (path.startsWith(":/")) {
+        // Make require able to find files inside Qt resources.
+        lua_pushcfunction(l, l_loader_from_qt_resource);
+        lua_setglobal(l, "loader_from_qt_resource");
+        luaL_dostring(l, "table.insert(package.loaders, 2, loader_from_qt_resource)");
+      }
+
+      int num_arguments = 0;
+      if (!script_arg.isEmpty()) {
+        num_arguments = 1;
+        lua_pushstring(l, script_arg.toUtf8().constData());
+      }
+      if (lua_pcall(l, num_arguments, 0, 0) != 0) {
+        output = QString::fromStdString(std::string(lua_tostring(l, -1)));
+      }
+      else {
+        // TODO
+        output = "success";
+        successful = true;
+      }
+    }
+  }
+
+  lua_close(l);
+  ui.output_field->appendPlainText(output);
+  if (successful) {
+    ui.status_label->setText(tr("Successful!"));
+    ui.status_label->setStyleSheet("font-weight: bold; color: green");
+  }
+  else {
+    ui.status_label->setText(tr("Failure"));
+    ui.status_label->setStyleSheet("font-weight: bold; color: red");
+  }
+
   set_finished(true);
 }

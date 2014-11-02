@@ -52,9 +52,9 @@ local function update_step(quest_path, old_format, new_format)
   local step_directory = old_format .. "_to_" .. new_format
   package.path = "./" .. step_directory .. "/?.lua;" .. package.path 
   local script_path = "./" .. step_directory .. "/update_quest.lua"
-  local update_script = loadfile(script_path)
+  local update_script, error_message = loadfile(script_path)
   if update_script == nil then
-    error("Cannot find script '" .. script_path .. "'")
+    error("Cannot find script '" .. script_path .. "': " .. error_message)
   end
   update_script(quest_path)
   package.path = old_package_path
@@ -96,6 +96,6 @@ end
 local success, error_message = pcall(update_quest, quest_path)
 if not success then
   write_info(error_message)
-  error(error_message)
+  error("Update failed.")
 end
 
