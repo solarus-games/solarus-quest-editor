@@ -19,8 +19,7 @@ end
 
 local quest_path = ...
 if quest_path == nil then
-  write_info("Usage: lua update_quest.lua path/to/your_quest")
-  os.exit(1)
+  error("Usage: lua update_quest.lua path/to/your_quest")
 end
 
 -- Determines and returns the format of a quest.
