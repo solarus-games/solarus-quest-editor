@@ -1,5 +1,3 @@
-#!/usr/bin/lua
-
 -- This script updates all data files of a solarus quest
 -- into the most recent format.
 -- Usage: lua update_quest.lua path/to/your_quest
