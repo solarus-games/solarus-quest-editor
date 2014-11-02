@@ -19,9 +19,16 @@
 
 class QString;
 
+/**
+ * \brief Utility functions on files and directories.
+ *
+ * These are general helper functions, not specific to Solarus.
+ * The Quest class contains file functions specialized to Solarus quests.
+ */
 namespace FileTools {
 
 void copy_recursive(const QString& src, const QString& dst);
+void delete_recursive(const QString& path);
 
 }
 

@@ -57,7 +57,7 @@ void copy_recursive(const QString& src, const QString& dst) {
     }
 
     if (!dst_dir.mkdir(dst_info.fileName())) {
-      throw EditorException(QApplication::tr("Cannot create directory '%1'").arg(dst));
+      throw EditorException(QApplication::tr("Cannot create folder '%1'").arg(dst));
     }
 
     QDir src_dir(src);
@@ -80,6 +80,37 @@ void copy_recursive(const QString& src, const QString& dst) {
                             QFile::ReadUser | QFile::WriteUser | QFile::ExeUser |
                             QFile::ReadGroup| QFile::ExeGroup |
                             QFile::ReadOther| QFile::ExeOther);
+    }
+  }
+}
+
+/**
+ * @brief Utility function to delete a file or a directory with its content.
+ *
+ * Does nothing if the file or directory does not exist.
+ *
+ * @param path The file or directory to delete.
+ * @throws EditorException if the deletion failed.
+ * In this case, it the path to delete was a directory, this function still
+ * tries to delete as much files as possible in the directory.
+ */
+void delete_recursive(const QString& path) {
+
+  QFileInfo info(path);
+  if (!info.exists()) {
+    return;
+  }
+
+  if (!info.isDir()) {
+    // Not a directory.
+    if (!QFile::remove(path)) {
+      throw EditorException(QApplication::tr("Failed to delete file '%1'").arg(path));
+    }
+  }
+  else {
+    // Directory.
+    if (!QDir(path).removeRecursively()) {
+      throw EditorException(QApplication::tr("Failed to delete folder '%1'").arg(path));
     }
   }
 }

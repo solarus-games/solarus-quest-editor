@@ -15,19 +15,67 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/external_script_dialog.h"
+#include <QPushButton>
 
 /**
  * Creates a script dialog.
  * @param title Title of the dialog box.
- * @param file_name The script to run, without extension.
+ * @param script_path The script to run, without extension.
  * @param arg An argument to pass to the script, or an empty string.
  * @param parent The parent object or nullptr.
  */
 ExternalScriptDialog::ExternalScriptDialog(
-    const QString& title, const QString& file_name, QWidget* parent) {
+    const QString& title,
+    const QString& script_path,
+    const QString& arg,
+    QWidget* parent) :
+  QDialog(parent) {
 
   // TODO
+  Q_UNUSED(arg);
   Q_UNUSED(title);
-  Q_UNUSED(file_name);
+  Q_UNUSED(script_path);
   Q_UNUSED(parent);
+
+  ui.setupUi(this);
+
+  // Disable the Ok button until the script is finished.
+  QPushButton* button = ui.button_box->button(QDialogButtonBox::Ok);
+  if (button != nullptr) {
+    button->setEnabled(false);
+  }
+  setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
+}
+
+/**
+ * @brief Returns whether the script is finished.
+ * @return @c true if the run is finished.
+ */
+bool ExternalScriptDialog::is_finished() const {
+  // TODO
+  return false;
+}
+
+/**
+ * @brief Returns whether the script ran successfully.
+ * @return @c true if the run was successful.
+ */
+bool ExternalScriptDialog::is_successful() const {
+  // TODO
+  return true;
+}
+
+/**
+ * @brief Receives a close event.
+ * @param event The event to handle.
+ */
+void ExternalScriptDialog::closeEvent(QCloseEvent* event) {
+
+  if (!is_finished()) {
+    // Don't allow to close the dialog while the script is running.
+    event->ignore();
+  }
+  else {
+    QDialog::closeEvent(event);
+  }
 }

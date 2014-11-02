@@ -28,7 +28,15 @@ class ExternalScriptDialog : public QDialog {
 
 public:
 
-  ExternalScriptDialog(const QString& title, const QString& file_name, QWidget* parent = 0);
+  ExternalScriptDialog(const QString& title, const QString& script_path,
+                       const QString& arg, QWidget* parent = 0);
+
+  bool is_finished() const;
+  bool is_successful() const;
+
+protected:
+
+  virtual void closeEvent(QCloseEvent* event) override;
 
 private:
 

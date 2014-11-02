@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/external_script_dialog.h"
+#include "file_tools.h"
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
@@ -153,10 +155,40 @@ void Quest::check_version() const {
 
 /**
  * @brief Upgrades the quest to the current Solarus format if it was obsolete.
+ * @throws EditorException If the upgrade failed.
  */
 void Quest::upgrade() {
 
-  // TODO
+  // First backup the files.
+  QString quest_version = properties.get_solarus_version_without_patch();
+  QString backup_dir_name = "data." + quest_version + ".bak";
+  QString backup_dir = get_root_path() + "/" + backup_dir_name;
+
+  FileTools::delete_recursive(backup_dir);  // Remove any previous backup.
+  FileTools::copy_recursive(get_data_path(), backup_dir);
+
+  // Upgrade data files.
+  ExternalScriptDialog dialog(
+        tr("Upgrading quest data files"),
+        ":/data_file_conversion/update_quest",
+        root_path);
+
+  dialog.exec();
+  bool upgrade_success = dialog.is_successful();
+
+  if (!upgrade_success) {
+    // The upgrade failed.
+    // Restore the backuped version.
+    QDir root_dir(root_path);
+    FileTools::delete_recursive(root_path + "/data.err");
+    root_dir.rename("data", "data.err");
+    FileTools::delete_recursive(root_path + "/data");
+    root_dir.rename(backup_dir_name, "data");
+
+    throw EditorException(
+          tr("An error occured while upgrading the quest.\n"
+             "Your quest was kept unchanged in format %1.").arg(quest_version));
+  }
 }
 
 /**
