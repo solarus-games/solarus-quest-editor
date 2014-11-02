@@ -134,17 +134,10 @@ void Quest::check_version() const {
       throw EditorException("Missing Solarus version is quest.dat");
   }
 
-  int dot_index_1 = quest_version.indexOf('.');
-  int dot_index_2 = quest_version.indexOf('.', dot_index_1 + 1);
-  if (dot_index_2 != -1) {
-    // Remove the patch version (it does not break compatibility).
-    quest_version = quest_version.section('.', 0, -2);
-  }
   int quest_major = quest_version.section('.', 0, 0).toInt();
   int quest_minor = quest_version.section('.', 1, 1).toInt();
 
-  QString solarus_version = SOLARUS_VERSION;
-  dot_index_1 = solarus_version.indexOf('.');
+  QString solarus_version = SOLARUS_VERSION_WITHOUT_PATCH;
   int editor_major = solarus_version.section('.', 0, 0).toInt();
   int editor_minor = solarus_version.section('.', 1, 1).toInt();
 

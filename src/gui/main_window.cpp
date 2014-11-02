@@ -162,8 +162,8 @@ bool MainWindow::open_quest(const QString& quest_path) {
           this,
           tr("Obsolete quest"),
           tr("The format of this quest (%1) is outdated.\n"
-             "Your data files will be automatically updated to Solarus %2").
-          arg(ex.get_quest_format(), SOLARUS_VERSION),
+             "Your data files will be automatically updated to Solarus %2.").
+          arg(ex.get_quest_format(), SOLARUS_VERSION_WITHOUT_PATCH),
           QMessageBox::Ok | QMessageBox::Cancel);
 
     if (answer == QMessageBox::Ok) {

@@ -26,7 +26,7 @@ ObsoleteQuestException::ObsoleteQuestException(const QString& quest_format) :
   EditorException(
     QApplication::tr(
       "The format of this quest (%1) is obsolete.\nPlease upgrade your quest "
-      " data files to Solarus %2.").arg(quest_format, SOLARUS_VERSION)
+      " data files to Solarus %2.").arg(quest_format, SOLARUS_VERSION_WITHOUT_PATCH)
     ),
   quest_format(quest_format) {
 

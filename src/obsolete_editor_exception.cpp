@@ -28,7 +28,7 @@ ObsoleteEditorException::ObsoleteEditorException(const QString& quest_format) :
       "The format of this quest (%1) is not supported by this version of the "
       "quest editor (%2).\nPlease download the latest version of the editor "
       "on www.solarus-games.org."
-    ).arg(quest_format, SOLARUS_VERSION)),
+    ).arg(quest_format, SOLARUS_VERSION_WITHOUT_PATCH)),
   quest_format(quest_format) {
 
 }

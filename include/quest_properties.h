@@ -35,6 +35,7 @@ public:
   void save() const;
 
   QString get_solarus_version() const;
+  QString get_solarus_version_without_patch() const;
 
 signals:
 
