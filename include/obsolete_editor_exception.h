@@ -14,32 +14,19 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_EDITOR_EXCEPTION_H
-#define SOLARUSEDITOR_EDITOR_EXCEPTION_H
+#ifndef SOLARUSEDITOR_OBSOLETE_EDITOR_EXCEPTION_H
+#define SOLARUSEDITOR_OBSOLETE_EDITOR_EXCEPTION_H
 
-#include <QString>
-#include <exception>
+#include "editor_exception.h"
 
 /**
- * @brief Exception thrown if something wrong happens in the quest editor.
+ * @brief Exception thrown if the quest has a too recent format for the editor.
  */
-class EditorException : public std::exception {
+class ObsoleteEditorException : public EditorException {
 
 public:
 
-  EditorException(const QString& message);
-  virtual ~EditorException() { }
-
-  QString get_message() const noexcept;
-  virtual const char* what() const noexcept override;
-
-  void print_message() const;
-  void show_dialog() const;
-
-private:
-
-  QString message;                     /**< The error message. */
-  mutable QByteArray message_utf8;     /**< The error message in UTF-8. */
+  ObsoleteEditorException(const QString& quest_format);
 
 };
 

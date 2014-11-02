@@ -17,7 +17,8 @@
 #include "gui/editor.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
-#include "editor_exception.h"
+#include "obsolete_editor_exception.h"
+#include "obsolete_quest_exception.h"
 #include "new_quest_builder.h"
 #include "quest.h"
 #include <solarus/Arguments.h>
@@ -105,6 +106,23 @@ Quest& MainWindow::get_quest() {
 }
 
 /**
+ * @brief Closes the current quest if any.
+ */
+void MainWindow::close_quest() {
+
+  if (quest.exists()) {
+    disconnect(&quest, SIGNAL(file_renamed(QString, QString)),
+               ui.tab_widget, SLOT(file_renamed(QString, QString)));
+    disconnect(&quest, SIGNAL(file_deleted(QString)),
+               ui.tab_widget, SLOT(file_deleted(QString)));
+  }
+
+  quest.set_root_path("");
+  update_title();
+  ui.quest_tree_view->set_quest(quest);
+}
+
+/**
  * @brief Opens a quest.
  *
  * Shows an error dialog if the quest could not be opened.
@@ -114,31 +132,39 @@ Quest& MainWindow::get_quest() {
  */
 bool MainWindow::open_quest(const QString& quest_path) {
 
-  if (quest.exists()) {
-    // Cleanup the previous quest.
-    disconnect(&quest, SIGNAL(file_renamed(QString, QString)),
-            ui.tab_widget, SLOT(file_renamed(QString, QString)));
-    disconnect(&quest, SIGNAL(file_deleted(QString)),
-            ui.tab_widget, SLOT(file_deleted(QString)));
-  }
+  // Close the previous quest.
+  close_quest();
 
   quest.set_root_path(quest_path);
-  update_title();
-  ui.quest_tree_view->set_quest(quest);
 
-  if (!quest.exists()) {
-    GuiTools::error_dialog(
-          tr("No quest was found in directory\n'%1'").arg(quest_path));
-    quest.set_root_path("");
-    return false;
+  try {
+    if (!quest.exists()) {
+      throw EditorException(tr("No quest was found in directory\n'%1'").arg(quest_path));
+    }
+    quest.check_version();
+
+    connect(&quest, SIGNAL(file_renamed(QString, const QString)),
+            ui.tab_widget, SLOT(file_renamed(QString, const QString)));
+    connect(&quest, SIGNAL(file_deleted(QString)),
+            ui.tab_widget, SLOT(file_deleted(QString)));
+
+    update_title();
+    ui.quest_tree_view->set_quest(quest);
+
+    return true;
+  }
+  catch (const ObsoleteEditorException& ex) {
+
+  }
+  catch (const ObsoleteQuestException& ex) {
+
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
   }
 
-  // TODO check quest version
-  connect(&quest, SIGNAL(file_renamed(QString, const QString)),
-          ui.tab_widget, SLOT(file_renamed(QString, const QString)));
-  connect(&quest, SIGNAL(file_deleted(QString)),
-          ui.tab_widget, SLOT(file_deleted(QString)));
-  return true;
+  quest.set_root_path("");
+  return false;
 }
 
 /**

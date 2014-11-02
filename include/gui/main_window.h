@@ -35,6 +35,7 @@ public:
 
   void initialize_geometry_on_screen();
   Quest& get_quest();
+  void close_quest();
   bool open_quest(const QString& quest_path);
   void open_file(Quest& quest, const QString& path);
 

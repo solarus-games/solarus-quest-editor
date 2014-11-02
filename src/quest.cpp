@@ -114,6 +114,32 @@ bool Quest::exists() const {
 }
 
 /**
+ * @brief Checks that the quest version is supported.
+ * @return @c true if the quest exists.
+ * @throw ObsoleteEditorException If the editor is too old for the quest
+ * (in this case, the user should download the latest version of the editor).
+ * @throw ObsoleteQuestException If the quest is too old for the editor
+ * (in this case, call upgrade() to upgrade quest data files automatically).
+ * @throw EditorException If another error occcurs.
+ */
+void Quest::check_version() const {
+
+  if (!is_valid()) {
+    throw EditorException(tr("No quest"));
+  }
+
+  // TODO
+}
+
+/**
+ * @brief Upgrades the quest to the current Solarus format if it was obsolete.
+ */
+void Quest::upgrade() {
+
+  // TODO
+}
+
+/**
  * @brief Returns this resources declared in this quest.
  * @return The resources.
  */

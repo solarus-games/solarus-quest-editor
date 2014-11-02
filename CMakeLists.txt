@@ -88,6 +88,8 @@ set(solarus_quest_editor_SOURCES
   include/layer_traits.h
   include/natural_comparator.h
   include/new_quest_builder.h
+  include/obsolete_editor_exception.h
+  include/obsolete_quest_exception.h
   include/pattern_animation.h
   include/pattern_animation_traits.h
   include/pattern_separation.h
@@ -119,6 +121,8 @@ set(solarus_quest_editor_SOURCES
   src/layer_traits.cpp
   src/main.cpp
   src/new_quest_builder.cpp
+  src/obsolete_editor_exception.cpp
+  src/obsolete_quest_exception.cpp
   src/pattern_animation_traits.cpp
   src/pattern_separation_traits.cpp
   src/quest.cpp

@@ -42,6 +42,9 @@ public:
   bool is_valid() const;
   bool exists() const;
 
+  void check_version() const;
+  void upgrade();
+
   const QuestResources& get_resources() const;
   QuestResources& get_resources();
 
