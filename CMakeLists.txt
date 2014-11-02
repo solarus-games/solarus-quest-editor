@@ -94,6 +94,7 @@ set(solarus_quest_editor_SOURCES
   include/pattern_separation_traits.h
   include/quest.h
   include/quest_manager.h
+  include/quest_properties.h
   include/quest_resources.h
   include/rectangle.h
   include/tileset_model.h
@@ -123,6 +124,7 @@ set(solarus_quest_editor_SOURCES
   src/pattern_separation_traits.cpp
   src/quest.cpp
   src/quest_manager.cpp
+  src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp
   src/tileset_model.cpp

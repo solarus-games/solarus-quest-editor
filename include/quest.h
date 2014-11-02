@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_H
 #define SOLARUSEDITOR_QUEST_H
 
+#include <quest_properties.h>
 #include <quest_resources.h>
 #include <solarus/ResourceType.h>
 #include <QObject>
@@ -47,6 +48,7 @@ public:
   // Get paths.
   QString get_name() const;
   QString get_data_path() const;
+  QString get_properties_path() const;
   QString get_main_script_path() const;
   QString get_resource_list_path() const;
   QString get_resource_path(ResourceType resource_type) const;
@@ -139,6 +141,7 @@ private:
   QString root_path;               /**< Root path of this quest.
                                     * An empty string means no quest. */
 
+  QuestProperties properties;      /**< Properties given in quest.dat. */
   QuestResources resources;        /**< Resources declared in project_db.dat. */
   QSet<QString> open_paths;        /**< Files currently edited by the user. */
 

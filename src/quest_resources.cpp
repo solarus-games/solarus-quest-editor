@@ -94,12 +94,12 @@ void QuestResources::reload() {
 void QuestResources::save() const {
 
   if (!quest.is_valid()) {
-    throw EditorException("No quest");
+    throw EditorException(tr("No quest"));
   }
 
   QString file_name = quest.get_resource_list_path();
   if (!resources.export_to_file(file_name.toStdString())) {
-    throw EditorException("Cannot write file '" + file_name + "'");
+    throw EditorException(tr("Cannot write file '%1'").arg(file_name));
   }
 }
 

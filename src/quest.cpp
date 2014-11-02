@@ -47,6 +47,7 @@ const QMap<ResourceType, QString> resource_dirs = {
  */
 Quest::Quest():
   root_path(),
+  properties(*this),
   resources(*this) {
 }
 
@@ -56,6 +57,7 @@ Quest::Quest():
  */
 Quest::Quest(const QString& root_path):
   root_path(),
+  properties(*this),
   resources(*this) {
   set_root_path(root_path);
 }
@@ -153,6 +155,19 @@ QString Quest::get_data_path() const {
   return get_root_path() + "/data";
 }
 
+/**
+ * @brief Returns the path of the quest properties file of this quest.
+ * @return The path to quest.dat.
+ * Returns an empty string if the quest is invalid.
+ */
+QString Quest::get_properties_path() const {
+
+  if (!is_valid()) {
+    return "";
+  }
+
+  return get_data_path() + "/quest.dat";
+}
 /**
  * @brief Returns the path to the main.lua script of this quest.
  * @return The path to the quest main script.
