@@ -65,6 +65,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
+  include/gui/external_script_dialog.h
   include/gui/enum_menus.h
   include/gui/enum_menus.inl
   include/gui/enum_selector.h
@@ -103,6 +104,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
+  src/gui/external_script_dialog.cpp
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
@@ -135,6 +137,7 @@ set(solarus_quest_editor_SOURCES
 # UI files.
 set(solarus_quest_editor_FORMS
   src/gui/change_pattern_id_dialog.ui
+  src/gui/external_script_dialog.ui
   src/gui/main_window.ui
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
