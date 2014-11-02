@@ -85,6 +85,7 @@ set(solarus_quest_editor_SOURCES
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
+  include/file_tools.h
   include/ground_traits.h
   include/layer_traits.h
   include/natural_comparator.h
@@ -119,6 +120,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
+  src/file_tools.cpp
   src/ground_traits.cpp
   src/layer_traits.cpp
   src/main.cpp
