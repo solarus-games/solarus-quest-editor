@@ -41,7 +41,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="279"/>
+        <location filename="../src/gui/main_window.cpp" line="339"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
@@ -111,24 +111,18 @@
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="122"/>
-        <location filename="../src/gui/main_window.cpp" line="154"/>
+        <location filename="../src/gui/main_window.cpp" line="202"/>
+        <location filename="../src/gui/main_window.cpp" line="232"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="133"/>
-        <source>Failed to open the quest created in
-&apos;%1&apos;</source>
-        <translation>Impossible d&apos;ouvrir la quête créée dans &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/main_window.cpp" line="136"/>
+        <location filename="../src/gui/main_window.cpp" line="213"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="136"/>
+        <location filename="../src/gui/main_window.cpp" line="213"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -138,13 +132,25 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="164"/>
+        <location filename="../src/gui/main_window.cpp" line="145"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="254"/>
+        <location filename="../src/gui/main_window.cpp" line="163"/>
+        <source>Obsolete quest</source>
+        <translation>Quête obsolète</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="164"/>
+        <source>The format of this quest (%1) is outdated.
+Your data files will be automatically updated to Solarus %2.</source>
+        <translation>Le format de cette quête (%1) is obsolète.
+Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="329"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -463,6 +469,20 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <source>Cannot copy file &apos;%1&apos; to &apos;%2&apos;</source>
         <translation>Impossible de copier le fichier &apos;%1&apos; vers &apos;%2&apos;</translation>
     </message>
+    <message>
+        <location filename="../src/obsolete_editor_exception.cpp" line="27"/>
+        <source>The format of this quest (%1) is not supported by this version of the quest editor (%2).
+Please download the latest version of the editor on www.solarus-games.org.</source>
+        <translation>Le format de cette quête (%1) n&apos;est pas supporté par cette version de l&apos;éditeur de quêtes (%2).
+Veuillez télécharger la dernière version de l&apos;éditeur sur www.solarus-games.org.</translation>
+    </message>
+    <message>
+        <location filename="../src/obsolete_quest_exception.cpp" line="27"/>
+        <source>The format of this quest (%1) is obsolete.
+Please upgrade your quest  data files to Solarus %2.</source>
+        <translation>Le format de cette quête (%1) est obsolète.
+Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
+    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -485,101 +505,106 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 <context>
     <name>Quest</name>
     <message>
-        <location filename="../src/quest.cpp" line="193"/>
+        <location filename="../src/quest.cpp" line="254"/>
         <source>Unknown resource type</source>
         <translation>Type de ressource inconnu</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="795"/>
+        <location filename="../src/quest.cpp" line="856"/>
         <source>Invalid file name: &apos;%1&apos;</source>
         <translation>Nom de fichier invalide : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="843"/>
+        <location filename="../src/quest.cpp" line="904"/>
         <source>File &apos;%1&apos; does not exist</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="856"/>
+        <location filename="../src/quest.cpp" line="917"/>
         <source>File &apos;%1&apos; already exists</source>
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="917"/>
+        <location filename="../src/quest.cpp" line="978"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="932"/>
+        <location filename="../src/quest.cpp" line="993"/>
         <source>Cannot create file &apos;%1&apos;</source>
         <translation>Impossible de créer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="792"/>
+        <location filename="../src/quest.cpp" line="853"/>
         <source>Empty file name</source>
         <translation>Nom de fichier vide</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="879"/>
+        <location filename="../src/quest.cpp" line="129"/>
+        <source>No quest</source>
+        <translation>Pas de quête</translation>
+    </message>
+    <message>
+        <location filename="../src/quest.cpp" line="940"/>
         <source>File &apos;%1&apos; is not a folder</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="892"/>
+        <location filename="../src/quest.cpp" line="953"/>
         <source>File &apos;%1&apos; is a folder</source>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="998"/>
+        <location filename="../src/quest.cpp" line="1059"/>
         <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
         <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1004"/>
-        <location filename="../src/quest.cpp" line="1041"/>
+        <location filename="../src/quest.cpp" line="1065"/>
+        <location filename="../src/quest.cpp" line="1102"/>
         <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1143"/>
+        <location filename="../src/quest.cpp" line="1204"/>
         <source>Resource &apos;%1&apos; already exists</source>
         <translation>La ressource &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1159"/>
+        <location filename="../src/quest.cpp" line="1220"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1270"/>
+        <location filename="../src/quest.cpp" line="1331"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1304"/>
-        <location filename="../src/quest.cpp" line="1335"/>
+        <location filename="../src/quest.cpp" line="1365"/>
+        <location filename="../src/quest.cpp" line="1396"/>
         <source>Cannot delete folder &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1205"/>
+        <location filename="../src/quest.cpp" line="1266"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1212"/>
+        <location filename="../src/quest.cpp" line="1273"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1217"/>
-        <location filename="../src/quest.cpp" line="1256"/>
-        <location filename="../src/quest.cpp" line="1398"/>
+        <location filename="../src/quest.cpp" line="1278"/>
+        <location filename="../src/quest.cpp" line="1317"/>
+        <location filename="../src/quest.cpp" line="1459"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="820"/>
+        <location filename="../src/quest.cpp" line="881"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
@@ -625,6 +650,19 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <location filename="../src/gui/quest_files_model.cpp" line="559"/>
         <source>%1 (not in the quest)</source>
         <translation>%1 (non inclus dans la quête)</translation>
+    </message>
+</context>
+<context>
+    <name>QuestProperties</name>
+    <message>
+        <location filename="../src/quest_properties.cpp" line="51"/>
+        <source>No quest</source>
+        <translation>Pas de quête</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_properties.cpp" line="56"/>
+        <source>Cannot write file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;écrire le fichier &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -801,149 +839,159 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <source>Font folder</source>
         <translation>Dossier des Polices</translation>
     </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="97"/>
+        <source>No quest</source>
+        <translation>Pas de quête</translation>
+    </message>
+    <message>
+        <location filename="../src/quest_resources.cpp" line="102"/>
+        <source>Cannot write file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;écrire le fichier &apos;%1&apos;</translation>
+    </message>
 </context>
 <context>
     <name>QuestTreeView</name>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="234"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="235"/>
         <source>Create %1...</source>
         <translation>Créer %1...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="251"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="252"/>
         <source>New folder...</source>
         <translation>Nouveau dossier...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="259"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="260"/>
         <source>New script...</source>
         <translation>Nouveau script...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="41"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="281"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="42"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="282"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="302"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="303"/>
         <source>Open Script</source>
         <translation>Ouvrir le Script</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="312"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="313"/>
         <source>Open Dialogs</source>
         <translation>Ouvrir les Dialogues</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="315"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="316"/>
         <source>Open Strings</source>
         <translation>Ouvrir les Textes</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="49"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="50"/>
         <source>Rename...</source>
         <translation>Renommer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="374"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="375"/>
         <source>Change description...</source>
         <translation>Changer la description...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="57"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="58"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="42"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="43"/>
         <source>Return</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="50"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="51"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="222"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="223"/>
         <source>Add to quest as %1...</source>
         <translation>Ajouter à la quête en tant que %1...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="500"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="501"/>
         <source>New folder</source>
         <translation>Nouveau dossier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="501"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="502"/>
         <source>Folder name:</source>
         <translation>Nom du dossier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="539"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="540"/>
         <source>New Lua script</source>
         <translation>Nouveau script Lua</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="540"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="541"/>
         <source>File name:</source>
         <translation>Nom de fichier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="654"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="655"/>
         <source>Rename resource</source>
         <translation>Renommer la ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="655"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="656"/>
         <source>New id for %1 &apos;%2&apos;:</source>
         <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="674"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="675"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="675"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="676"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="724"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="725"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="725"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="726"/>
         <source>New description for %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="780"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="806"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="820"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="781"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="807"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="821"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="781"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="782"/>
         <source>Do you really want to delete %1 &apos;%2&apos;?</source>
         <translation>Voulez-vous vraiment supprimer %1 &apos;%2&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="800"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="801"/>
         <source>Folder is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="807"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="808"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="821"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="822"/>
         <source>Do you really want to delete file &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le fichier &apos;%1&apos; ?</translation>
     </message>
@@ -1243,33 +1291,33 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="365"/>
+        <location filename="../src/gui/tileset_view.cpp" line="376"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="371"/>
+        <location filename="../src/gui/tileset_view.cpp" line="382"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="559"/>
+        <location filename="../src/gui/tileset_view.cpp" line="570"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="565"/>
+        <location filename="../src/gui/tileset_view.cpp" line="576"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="576"/>
-        <location filename="../src/gui/tileset_view.cpp" line="626"/>
+        <location filename="../src/gui/tileset_view.cpp" line="587"/>
+        <location filename="../src/gui/tileset_view.cpp" line="637"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="620"/>
+        <location filename="../src/gui/tileset_view.cpp" line="631"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>
