@@ -20,7 +20,7 @@
 #include "gui/text_editor.h"
 #include "gui/tileset_editor.h"
 #include "editor_exception.h"
-#include "quest_manager.h"
+#include "quest.h"
 #include <QUndoGroup>
 #include <QUndoStack>
 

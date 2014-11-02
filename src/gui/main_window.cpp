@@ -20,7 +20,6 @@
 #include "editor_exception.h"
 #include "new_quest_builder.h"
 #include "quest.h"
-#include "quest_manager.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
 #include <solarus/SolarusFatal.h>
@@ -35,12 +34,9 @@
 /**
  * @brief Creates a main window.
  * @param parent The parent widget or nullptr.
- * @param quest_manager The quest manager.
  */
-MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
-  QMainWindow(parent),
-  ui(),
-  quest_manager(quest_manager) {
+MainWindow::MainWindow(QWidget* parent) :
+  QMainWindow(parent) {
 
   // Set up children widgets.
   ui.setupUi(this);
@@ -70,18 +66,6 @@ MainWindow::MainWindow(QWidget* parent, QuestManager& quest_manager) :
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
           ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
-
-  // Connect to external signals.
-  connect(&quest_manager, SIGNAL(current_quest_changed(Quest&)),
-          this, SLOT(current_quest_changed(Quest&)));
-}
-
-/**
- * @brief Returns the quest manager.
- * @return The quest manager.
- */
-QuestManager& MainWindow::get_quest_manager() {
-  return quest_manager;
 }
 
 /**
@@ -113,6 +97,51 @@ void MainWindow::initialize_geometry_on_screen() {
 }
 
 /**
+ * @brief Returns the current quest open in the window.
+ * @return The current quest, or an invalid quest if no quest is open.
+ */
+Quest& MainWindow::get_quest() {
+  return quest;
+}
+
+/**
+ * @brief Opens a quest.
+ *
+ * Shows an error dialog if the quest could not be opened.
+ *
+ * @param quest_path Path of the quest to open.
+ * @return @c true if the quest was successfully opened.
+ */
+bool MainWindow::open_quest(const QString& quest_path) {
+
+  if (quest.exists()) {
+    // Cleanup the previous quest.
+    disconnect(&quest, SIGNAL(file_renamed(QString, QString)),
+            ui.tab_widget, SLOT(file_renamed(QString, QString)));
+    disconnect(&quest, SIGNAL(file_deleted(QString)),
+            ui.tab_widget, SLOT(file_deleted(QString)));
+  }
+
+  quest.set_root_path(quest_path);
+  update_title();
+  ui.quest_tree_view->set_quest(quest);
+
+  if (!quest.exists()) {
+    GuiTools::error_dialog(
+          tr("No quest was found in directory\n'%1'").arg(quest_path));
+    quest.set_root_path("");
+    return false;
+  }
+
+  // TODO check quest version
+  connect(&quest, SIGNAL(file_renamed(QString, const QString)),
+          ui.tab_widget, SLOT(file_renamed(QString, const QString)));
+  connect(&quest, SIGNAL(file_deleted(QString)),
+          ui.tab_widget, SLOT(file_deleted(QString)));
+  return true;
+}
+
+/**
  * @brief Slot called when the user triggers the "New quest" action.
  */
 void MainWindow::on_action_new_quest_triggered() {
@@ -129,14 +158,12 @@ void MainWindow::on_action_new_quest_triggered() {
 
   try {
     NewQuestBuilder::create_initial_quest_files(quest_path);
-    if (!quest_manager.set_quest(quest_path)) {
-      throw EditorException(tr("Failed to open the quest created in\n'%1'").arg(quest_path));
+    if (open_quest(quest_path)) {
+      QMessageBox::information(this, tr("Quest created"), tr(
+                                 "Quest successfully created!\n"
+                                 "The next step is to manually edit your quest properties in quest.dat\n"
+                                 "(sorry, this is not fully supported by the editor yet).\n"));
     }
-
-    QMessageBox::information(this, tr("Quest created"), tr(
-                               "Quest successfully created!\n"
-                               "The next step is to manually edit your quest properties in quest.dat\n"
-                               "(sorry, this is not fully supported by the editor yet).\n"));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -159,10 +186,7 @@ void MainWindow::on_action_load_quest_triggered() {
     return;
   }
 
-  if (!quest_manager.set_quest(quest_path)) {
-    GuiTools::error_dialog(
-          tr("No quest was found in directory\n'%1'").arg(quest_path));
-  }
+  open_quest(quest_path);
 }
 
 /**
@@ -237,7 +261,7 @@ void MainWindow::on_action_paste_triggered() {
  */
 void MainWindow::on_action_run_quest_triggered() {
 
-  QString quest_path = quest_manager.get_quest().get_root_path();
+  QString quest_path = quest.get_root_path();
   if (quest_path.isEmpty()) {
     return;
   }
@@ -257,27 +281,12 @@ void MainWindow::on_action_run_quest_triggered() {
 }
 
 /**
- * @brief Slot called when the user opens another quest.
- */
-void MainWindow::current_quest_changed(Quest& quest) {
-
-  update_title();
-
-  ui.quest_tree_view->set_quest(quest);
-
-  connect(&quest, SIGNAL(file_renamed(const QString&, const QString&)),
-          ui.tab_widget, SLOT(file_renamed(const QString&, const QString&)));
-  connect(&quest, SIGNAL(file_deleted(const QString&)),
-          ui.tab_widget, SLOT(file_deleted(const QString&)));
-}
-
-/**
  * @brief Updates the title of the window from the current quest.
  */
 void MainWindow::update_title() {
 
   QString title = tr("Solarus Quest Editor");
-  QString quest_name = quest_manager.get_quest().get_name();
+  QString quest_name = quest.get_name();
   if (!quest_name.isEmpty()) {
     title = quest_name + " - " + title;
   }

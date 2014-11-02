@@ -17,10 +17,10 @@
 #ifndef SOLARUSEDITOR_QUEST_TREE_VIEW_H
 #define SOLARUSEDITOR_QUEST_TREE_VIEW_H
 
-#include "quest_manager.h"
 #include <QPointer>
 #include <QTreeView>
 
+class Quest;
 class QuestFilesModel;
 class MainWindow;
 

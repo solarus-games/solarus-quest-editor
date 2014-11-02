@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "quest_manager.h"
 #include "gui/main_window.h"
 #include <QApplication>
 #include <QDesktopWidget>
@@ -56,17 +55,18 @@ int main(int argc, char* argv[]) {
   translator.load("solarus_editor_" + QLocale::system().name());
   application.installTranslator(&translator);
 
-  QuestManager quest_manager;
-  MainWindow window(nullptr, quest_manager);
+  MainWindow window(nullptr);
 
   // Choose an appropriate initial window size and position.
   window.initialize_geometry_on_screen();
 
   // Open the quest.
-  quest_manager.set_quest(quest_path);
+  if (!quest_path.isEmpty()) {
+    window.open_quest(quest_path);
 
-  if (!file_path.isEmpty()) {
-    window.open_file(quest_manager.get_quest(), file_path);
+    if (window.get_quest().is_valid() && !file_path.isEmpty()) {
+      window.open_file(window.get_quest(), file_path);
+    }
   }
 
   window.show();

@@ -17,10 +17,10 @@
 #ifndef SOLARUSEDITOR_MAIN_WINDOW_H
 #define SOLARUSEDITOR_MAIN_WINDOW_H
 
+#include "quest.h"
 #include "ui_main_window.h"
 #include <QMainWindow>
 
-class Quest;
 class QuestManager;
 
 /**
@@ -31,11 +31,11 @@ class MainWindow : public QMainWindow {
 
 public:
 
-  MainWindow(QWidget* parent, QuestManager& quest_manager);
-
-  QuestManager& get_quest_manager();
+  MainWindow(QWidget* parent);
 
   void initialize_geometry_on_screen();
+  Quest& get_quest();
+  bool open_quest(const QString& quest_path);
   void open_file(Quest& quest, const QString& path);
 
 private slots:
@@ -51,9 +51,6 @@ private slots:
   void on_action_paste_triggered();
   void on_action_run_quest_triggered();
 
-  // Quest.
-  void current_quest_changed(Quest& quest);
-
 protected:
 
   virtual void closeEvent(QCloseEvent* event) override;
@@ -64,7 +61,7 @@ private:
   void update_title();
 
   Ui::MainWindow ui;              /**< The main window widgets. */
-  QuestManager& quest_manager;    /**< Holds the current quest. */
+  Quest quest;                    /**< The current quest open if any. */
 
 };
 

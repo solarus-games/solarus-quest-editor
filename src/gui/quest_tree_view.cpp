@@ -19,6 +19,7 @@
 #include "gui/quest_tree_view.h"
 #include "gui/quest_files_model.h"
 #include "editor_exception.h"
+#include "quest.h"
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QFile>
