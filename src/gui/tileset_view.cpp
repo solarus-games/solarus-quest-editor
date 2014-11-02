@@ -214,13 +214,6 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
           item->setSelected(true);
         }
       }
-
-      // Show a context menu if at least one item is selected.
-      QList<QGraphicsItem*> selected_items = scene->selectedItems();
-      if (!selected_items.empty()) {
-        show_context_menu(event->pos());
-        return;
-      }
     }
   }
 }
@@ -343,6 +336,24 @@ void TilesetView::wheelEvent(QWheelEvent* event) {
   }
 
   QGraphicsView::wheelEvent(event);
+}
+
+/**
+ * @brief Receives a context menu event.
+ * @param event The event to handle.
+ */
+void TilesetView::contextMenuEvent(QContextMenuEvent* event) {
+
+  QPoint where;
+  if (event->pos() != QPoint(0, 0)) {
+    where = event->pos();
+  }
+  else {
+    QList<QGraphicsItem*> selected_items = scene->selectedItems();
+    where = mapFromScene(selected_items.first()->pos() + QPoint(8, 8));
+  }
+
+  show_context_menu(where);
 }
 
 /**
