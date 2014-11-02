@@ -15,12 +15,28 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "obsolete_editor_exception.h"
+#include <solarus/Common.h>
+#include <QApplication>
 
 /**
  * @brief Creates an obsolete editor exception.
  * @param quest_format Format of the quest.
  */
 ObsoleteEditorException::ObsoleteEditorException(const QString& quest_format) :
-  EditorException(quest_format) {
+  EditorException(
+    QApplication::tr(
+      "The format of this quest (%1) is not supported by this version of the "
+      "quest editor (%2).\nPlease download the latest version of the editor "
+      "on www.solarus-games.org."
+    ).arg(quest_format, SOLARUS_VERSION)),
+  quest_format(quest_format) {
 
+}
+
+/**
+ * @brief Returns the format of the too recent quest.
+ * @return The quest format.
+ */
+QString ObsoleteEditorException::get_quest_format() const {
+  return quest_format;
 }

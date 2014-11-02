@@ -56,3 +56,12 @@ void QuestProperties::save() const {
     throw EditorException(tr("Cannot write file '%1'").arg(file_name));
   }
 }
+
+/**
+ * @brief Returns the Solarus compatibility version of the quest.
+ * @return The Solarus version.
+ */
+QString QuestProperties::get_solarus_version() const {
+
+  return QString::fromStdString(properties.get_solarus_version());
+}

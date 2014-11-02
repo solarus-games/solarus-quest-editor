@@ -28,6 +28,12 @@ public:
 
   ObsoleteEditorException(const QString& quest_format);
 
+  QString get_quest_format() const;
+
+private:
+
+  QString quest_format;
+
 };
 
 #endif

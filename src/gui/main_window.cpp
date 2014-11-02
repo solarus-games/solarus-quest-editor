@@ -135,7 +135,10 @@ bool MainWindow::open_quest(const QString& quest_path) {
   // Close the previous quest.
   close_quest();
 
+  // Load the requested quest.
   quest.set_root_path(quest_path);
+
+  bool success = false;
 
   try {
     if (!quest.exists()) {
@@ -143,27 +146,49 @@ bool MainWindow::open_quest(const QString& quest_path) {
     }
     quest.check_version();
 
-    connect(&quest, SIGNAL(file_renamed(QString, const QString)),
-            ui.tab_widget, SLOT(file_renamed(QString, const QString)));
+    connect(&quest, SIGNAL(file_renamed(QString, QString)),
+            ui.tab_widget, SLOT(file_renamed(QString, QString)));
     connect(&quest, SIGNAL(file_deleted(QString)),
             ui.tab_widget, SLOT(file_deleted(QString)));
 
-    update_title();
-    ui.quest_tree_view->set_quest(quest);
-
-    return true;
+    success = true;
   }
   catch (const ObsoleteEditorException& ex) {
-
+    ex.show_dialog();
   }
   catch (const ObsoleteQuestException& ex) {
+    // Quest data files are obsolete: upgrade them and try again.
+    QMessageBox::StandardButton answer = QMessageBox::information(
+          this,
+          tr("Obsolete quest"),
+          tr("The format of this quest (%1) is outdated.\n"
+             "Your data files will be automatically updated to Solarus %2").
+          arg(ex.get_quest_format(), SOLARUS_VERSION),
+          QMessageBox::Ok | QMessageBox::Cancel);
 
+    if (answer == QMessageBox::Ok) {
+      try {
+        quest.upgrade();
+        quest.check_version();
+        success = true;
+      }
+      catch (const EditorException& ex) {
+        // Upgrade failed.
+        ex.show_dialog();
+      }
+    }
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
 
-  quest.set_root_path("");
+  if (!success) {
+    quest.set_root_path("");
+  }
+
+  update_title();
+  ui.quest_tree_view->set_quest(quest);
+
   return false;
 }
 

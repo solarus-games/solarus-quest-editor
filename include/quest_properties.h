@@ -34,6 +34,8 @@ public:
 
   void save() const;
 
+  QString get_solarus_version() const;
+
 signals:
 
   // TODO

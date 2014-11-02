@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "editor_exception.h"
+#include "obsolete_editor_exception.h"
+#include "obsolete_quest_exception.h"
 #include "quest.h"
 #include <QDir>
 #include <QDebug>
@@ -128,7 +129,33 @@ void Quest::check_version() const {
     throw EditorException(tr("No quest"));
   }
 
-  // TODO
+  QString quest_version = properties.get_solarus_version();
+  if (quest_version.isEmpty()) {
+      throw EditorException("Missing Solarus version is quest.dat");
+  }
+
+  int dot_index_1 = quest_version.indexOf('.');
+  int dot_index_2 = quest_version.indexOf('.', dot_index_1 + 1);
+  if (dot_index_2 != -1) {
+    // Remove the patch version (it does not break compatibility).
+    quest_version = quest_version.section('.', 0, -2);
+  }
+  int quest_major = quest_version.section('.', 0, 0).toInt();
+  int quest_minor = quest_version.section('.', 1, 1).toInt();
+
+  QString solarus_version = SOLARUS_VERSION;
+  dot_index_1 = solarus_version.indexOf('.');
+  int editor_major = solarus_version.section('.', 0, 0).toInt();
+  int editor_minor = solarus_version.section('.', 1, 1).toInt();
+
+  if (quest_major > editor_major ||
+      (quest_major == editor_major && quest_minor > editor_minor)) {
+    throw ObsoleteEditorException(quest_version);
+  }
+  else if (quest_major < editor_major ||
+           (quest_major == editor_major && quest_minor < editor_minor)) {
+    throw ObsoleteQuestException(quest_version);
+  }
 }
 
 /**
