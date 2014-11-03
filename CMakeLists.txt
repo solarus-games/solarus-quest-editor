@@ -179,9 +179,8 @@ add_executable(solarus-quest-editor
   ${solarus_quest_editor_TRANSLATIONS_QM}
 )
 
-qt5_use_modules(solarus-quest-editor Widgets)
-
 target_link_libraries(solarus-quest-editor
+  Qt5::Widgets
   "${SOLARUS_LIBRARIES}"
   "${SOL2MAIN_LIBRARY}"
   "${SDL2_LIBRARY}"
