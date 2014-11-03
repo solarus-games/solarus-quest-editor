@@ -1,5 +1,7 @@
 # Solarus Quest Editor
 
+[![Build Status](https://travis-ci.org/christopho/solarus-quest-editor.svg?branch=master)](https://travis-ci.org/christopho/solarus-quest-editor)
+
 Solarus Quest Editor is a GUI to create and modify quests for the
 [Solarus engine](https://github.com/christopho/solarus).
 
