@@ -13,8 +13,9 @@ before_install:
 install:
 # Install the dependencies.
   - sudo apt-get install -y gcc-4.8 g++-4.8
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
-  - sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libluajit-5.1-dev libphysfs-dev libopenal-dev libmodplug-dev libvorbis-dev qtdeclarative5-dev
+  - sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libluajit-5.1-dev libphysfs-dev libopenal-dev libmodplug-dev libvorbis-dev qtdeclarative5-dev qttools5-dev-tools
 # The Solarus library is also a dependency. Branch master of the editor is
 # supposed to compile with branch master of Solarus.
   - git clone https://github.com/christopho/solarus
