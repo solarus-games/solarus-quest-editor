@@ -16,7 +16,7 @@ install:
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
   - sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libluajit-5.1-dev libphysfs-dev libopenal-dev libmodplug-dev libvorbis-dev
 # Install Qt5 manually because we need Qt >= 5.2, which is not in usual backport PPAs.
-  - wget http://www.solarus-games.org/www/downloads/qt/qt-5.3.2.zip && unzip qt-5.3.2.zip -d "$HOME/qt"
+  - wget http://www.solarus-games.org/downloads/qt/qt-5.3.2.zip && unzip qt-5.3.2.zip -d "$HOME/qt"
 # The Solarus library is also a dependency. Branch master of the editor is
 # supposed to compile with branch master of Solarus.
   - git clone https://github.com/christopho/solarus
