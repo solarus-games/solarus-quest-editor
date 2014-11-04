@@ -20,7 +20,7 @@ New features
 * A file to open can now be passed on the command line.
 * Show an appropriate icon in tabs.
 * Show an asterisk in the tab of files that are changed.
-* The window now shows the Solarus icon.
+* The editor has an icon now.
 
 Missing features
 ----------------
