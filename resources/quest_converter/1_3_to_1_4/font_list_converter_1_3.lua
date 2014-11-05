@@ -6,7 +6,7 @@
 local converter = {}
 
 local function file_name_to_id(file_name)
-  return file_name:gsub("\.[a-zA-Z0-9]*$", ""):gsub("^.*[/\\]", "")
+  return file_name:gsub("%.[a-zA-Z0-9]*$", ""):gsub("^.*[/\\]", "")
 end
 
 function converter.convert(quest_path)
