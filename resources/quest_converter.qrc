@@ -1,28 +1,25 @@
 <RCC>
     <qresource prefix="/">
-        <file>quest_converter/1.0_to_1.1/language_list_converter_1_0.lua</file>
-        <file>quest_converter/1.0_to_1.1/quest_db_converter_1_0.lua</file>
-        <file>quest_converter/1.0_to_1.1/quest_properties_converter_1_0.lua</file>
-        <file>quest_converter/1.0_to_1.1/readme.txt</file>
-        <file>quest_converter/1.0_to_1.1/sprite_converter_1_0.lua</file>
-        <file>quest_converter/1.0_to_1.1/tileset_converter_1_0.lua</file>
-        <file>quest_converter/1.0_to_1.1/update_quest.lua</file>
-        <file>quest_converter/1.0_to_1.1/update_sprites.lua</file>
-        <file>quest_converter/1.1_to_1.2/map_converter_1_1.lua</file>
-        <file>quest_converter/1.1_to_1.2/quest_db_converter_1_1.lua</file>
-        <file>quest_converter/1.1_to_1.2/quest_properties_converter_1_1.lua</file>
-        <file>quest_converter/1.1_to_1.2/readme.txt</file>
-        <file>quest_converter/1.1_to_1.2/sound_converter_1_1.lua</file>
-        <file>quest_converter/1.1_to_1.2/strings_converter_1_1.lua</file>
-        <file>quest_converter/1.1_to_1.2/update_quest.lua</file>
-        <file>quest_converter/1.2_to_1.3/map_converter_1_2.lua</file>
-        <file>quest_converter/1.2_to_1.3/quest_db_converter_1_2.lua</file>
-        <file>quest_converter/1.2_to_1.3/quest_properties_converter_1_2.lua</file>
-        <file>quest_converter/1.2_to_1.3/update_quest.lua</file>
-        <file>quest_converter/1.3_to_1.4/font_list_converter_1_3.lua</file>
-        <file>quest_converter/1.3_to_1.4/quest_db_converter_1_3.lua</file>
-        <file>quest_converter/1.3_to_1.4/quest_properties_converter_1_3.lua</file>
-        <file>quest_converter/1.3_to_1.4/update_quest.lua</file>
+        <file>quest_converter/1_0_to_1_1/language_list_converter_1_0.lua</file>
+        <file>quest_converter/1_0_to_1_1/quest_db_converter_1_0.lua</file>
+        <file>quest_converter/1_0_to_1_1/quest_properties_converter_1_0.lua</file>
+        <file>quest_converter/1_0_to_1_1/sprite_converter_1_0.lua</file>
+        <file>quest_converter/1_0_to_1_1/tileset_converter_1_0.lua</file>
+        <file>quest_converter/1_1_to_1_2/map_converter_1_1.lua</file>
+        <file>quest_converter/1_1_to_1_2/quest_db_converter_1_1.lua</file>
+        <file>quest_converter/1_1_to_1_2/quest_properties_converter_1_1.lua</file>
+        <file>quest_converter/1_1_to_1_2/sound_converter_1_1.lua</file>
+        <file>quest_converter/1_1_to_1_2/strings_converter_1_1.lua</file>
+        <file>quest_converter/1_2_to_1_3/map_converter_1_2.lua</file>
+        <file>quest_converter/1_2_to_1_3/quest_db_converter_1_2.lua</file>
+        <file>quest_converter/1_2_to_1_3/quest_properties_converter_1_2.lua</file>
+        <file>quest_converter/1_3_to_1_4/font_list_converter_1_3.lua</file>
+        <file>quest_converter/1_3_to_1_4/quest_db_converter_1_3.lua</file>
+        <file>quest_converter/1_3_to_1_4/quest_properties_converter_1_3.lua</file>
+        <file>quest_converter/converter_1_0_to_1_1.lua</file>
+        <file>quest_converter/converter_1_1_to_1_2.lua</file>
+        <file>quest_converter/converter_1_2_to_1_3.lua</file>
+        <file>quest_converter/converter_1_3_to_1_4.lua</file>
         <file>quest_converter/update_quest.lua</file>
     </qresource>
 </RCC>
