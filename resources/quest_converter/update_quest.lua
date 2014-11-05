@@ -45,19 +45,12 @@ local function get_quest_format(quest_path)
   return quest_format
 end
 
--- Makes an upgrade step from the current format to the next one.
+-- Makes an upgrade step from a current format to the next one.
 local function update_step(quest_path, old_format, new_format)
 
-  local old_package_path = package.path
-  local step_directory = old_format .. "_to_" .. new_format
-  package.path = "./" .. step_directory .. "/?.lua;" .. package.path 
-  local script_path = "./" .. step_directory .. "/update_quest.lua"
-  local update_script, error_message = loadfile(script_path)
-  if update_script == nil then
-    error("Cannot find script '" .. script_path .. "': " .. error_message)
-  end
-  update_script(quest_path)
-  package.path = old_package_path
+  local converter_name = "converter_" .. old_format .. "_to_" .. new_format
+  local converter = require(converter_name)
+  converter.convert(quest_path)
 end
 
 -- Main function.

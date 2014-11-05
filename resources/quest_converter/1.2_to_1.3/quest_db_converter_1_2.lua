@@ -1,5 +1,6 @@
 -- This module reads a quest resource list file with the format of solarus 1.2
--- (project_db.dat) and returns a table with its content.
+-- (project_db.dat), declares potentially missing resources for switches
+-- and returns a table with all resources declared.
 
 local converter = {}
 

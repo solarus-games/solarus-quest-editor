@@ -1,8 +1,6 @@
--- Solarus 1.1 to 1.2.
--- Changes in the map syntax
--- - shop_item becomes shop_treasure.
--- - Destructibles are now customizable and no longer have hardcoded subtypes.
--- - Teletransporter now take a string for the transition property.
+-- Solarus 1.2 to 1.3.
+-- Changes in the map syntax:
+-- - Switches are more customizable.
 
 local converter = {}
 
