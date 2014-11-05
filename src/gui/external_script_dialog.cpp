@@ -217,7 +217,7 @@ void ExternalScriptDialog::run_script() {
         lua_pushstring(l, script_arg.toUtf8().constData());
       }
 
-      // Redirect io.write calls() to a temporary file.
+      // Redirect io.write() calls to a temporary file.
       QTemporaryFile log_file;
       log_file.open();   // Necessary to generate a name for the temporary file.
       log_file.close();  // But close it: is it actually Lua that will write it
