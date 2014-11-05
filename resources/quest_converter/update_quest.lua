@@ -91,6 +91,6 @@ end
 local success, error_message = pcall(update_quest, quest_path)
 if not success then
   write_info(error_message)
-  error("Update failed.")
+  error(error_message, 0)  -- Passing level 0 avoids an extra addition of file/line info.
 end
 
