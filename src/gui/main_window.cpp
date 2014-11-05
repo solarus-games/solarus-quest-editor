@@ -171,6 +171,9 @@ bool MainWindow::open_quest(const QString& quest_path) {
     if (answer == QMessageBox::Ok) {
       try {
         upgrade_quest();
+        // Reload the quest after upgrade.
+        quest.set_root_path("");
+        quest.set_root_path(quest_path);
         quest.check_version();
         success = true;
       }

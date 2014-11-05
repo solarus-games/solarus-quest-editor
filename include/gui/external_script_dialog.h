@@ -22,6 +22,14 @@
 
 /**
  * @brief A dialog that runs an external Lua script and shows its output.
+ *
+ * The script runs in a normal Lua environment with standard libraries.
+ * io.write() outputs in the text area of this dialog instead of stdout.
+ * For require(), everything works as if the current directory was the one
+ * containing the script file.
+ * This even works if the script file is located in Qt resources: in this
+ * case, the script can require() other scripts that are also Qt resources,
+ * using a relative path.
  */
 class ExternalScriptDialog : public QDialog {
   Q_OBJECT

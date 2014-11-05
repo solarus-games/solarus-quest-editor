@@ -15,39 +15,72 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/external_script_dialog.h"
+#include <lua.hpp>
+#include <QDebug>
+#include <QDir>
 #include <QFileInfo>
 #include <QPushButton>
+#include <QTemporaryFile>
 #include <QTimer>
-#include <lua.hpp>
-#include <sstream>
-#include <string>
 
 namespace {
 
 /**
- * @brief Custom loader for Lua to lookup files in Qt resources using require().
+ * @brief Custom loader for Lua to require() files from the script's directory.
+ *
+ * It also works if the script is inside Qt resources.
+ *
+ * This function expects an upvalue of type string indicating the path of the
+ * current script (necessary to know its directory).
+ *
  * @param l A Lua state.
  * @return Number of values to return to Lua.
  */
-int l_loader_from_qt_resource(lua_State* l) {
+int l_loader_from_current_dir(lua_State* l) {
 
-  const std::string& script_name = luaL_checkstring(l, 1);
-  std::string path(std::string(":/") + script_name);
-  bool exists = false;
+  QString current_script_path = QString::fromUtf8(lua_tostring(l, lua_upvalueindex(1)));
+  QString required_name = QString::fromUtf8(luaL_checkstring(l, 1));
 
-  QFile script_file(QString::fromStdString(path));
-  if (script_file.open(QFileDevice::ReadOnly)) {
-    QByteArray buffer = script_file.readAll();
-    luaL_loadbuffer(l, buffer.constData(), buffer.size(), path.c_str());
+  if (QFileInfo(required_name).isAbsolute()) {
+    // An absolute path was specified: not our job here (and it is not an error).
+    lua_pushnil(l);
+    return 1;
   }
 
-  if (!exists) {
-    std::ostringstream oss;
-    oss << std::endl << "\tno file ':/" << script_name
-        << ".lua' in Qt resources";
-    lua_pushstring(l, oss.str().c_str());
+  QDir parent_dir(current_script_path);
+  if (!parent_dir.cdUp()) {
+    // Something must be wrong in this C++ code.
+    qCritical() << ExternalScriptDialog::tr("Cannot determine the directory of script '%1'").arg(current_script_path);
+    lua_pushnil(l);
+    return 1;
   }
 
+  QString required_path = parent_dir.absolutePath() + "/" + required_name + ".lua";
+
+  QFile required_file(required_path);
+  if (!required_file.open(QFileDevice::ReadOnly)) {
+    // File was not found by this loader.
+    // This is not an error, but we should give information about what was
+    // searched, like standard loaders.
+
+    // Note that the information is not translated because Lua uses it
+    // to build a larger diagnostic in English.
+    QByteArray message;
+    if (required_path.startsWith(":/")) {
+      // Qt resource that was searched in the script's directory.
+      message = QString("\n\tno Qt resource file '%1'").arg(required_path).toUtf8();
+    }
+    else {
+      // Regular file that was searched in the script's directory.
+      message = QString("\n\tno file '%1'").arg(required_path).toUtf8();
+    }
+    lua_pushstring(l, message.constData());
+    return 1;
+  }
+
+  QByteArray buffer = required_file.readAll();
+  QByteArray required_path_utf8 = required_path.toUtf8();
+  luaL_loadbuffer(l, buffer.constData(), buffer.size(), required_path_utf8);
   return 1;
 }
 
@@ -166,32 +199,39 @@ void ExternalScriptDialog::run_script() {
   }
   else {
     QByteArray buffer = script_file.readAll();
-    QByteArray chunk_name = path.toUtf8();
-    if (luaL_loadbuffer(l, buffer.constData(), buffer.size(), chunk_name.constData()) != 0) {
+    QByteArray path_utf8 = path.toUtf8();
+    if (luaL_loadbuffer(l, buffer.constData(), buffer.size(), path_utf8.constData()) != 0) {
+      // Loading the script failed.
       output = QString::fromStdString(std::string(lua_tostring(l, -1)));
     }
     else {
-
-      if (path.startsWith(":/")) {
-        // Make require able to find files inside Qt resources.
-        lua_pushcfunction(l, l_loader_from_qt_resource);
-        lua_setglobal(l, "loader_from_qt_resource");
-        luaL_dostring(l, "table.insert(package.loaders, 2, loader_from_qt_resource)");
-      }
+      // Make require able to find files relative to the script's directory.
+      lua_pushstring(l, path_utf8.constData());
+      lua_pushcclosure(l, l_loader_from_current_dir, 1);
+      lua_setglobal(l, "loader_from_current_dir");
+      luaL_dostring(l, "table.insert(package.loaders, 2, loader_from_current_dir)");  // TODO clean this
 
       int num_arguments = 0;
       if (!script_arg.isEmpty()) {
         num_arguments = 1;
         lua_pushstring(l, script_arg.toUtf8().constData());
       }
-      if (lua_pcall(l, num_arguments, 0, 0) != 0) {
-        output = QString::fromStdString(std::string(lua_tostring(l, -1)));
-      }
-      else {
-        // TODO
-        output = "success";
+
+      // Redirect io.write calls() to a temporary file.
+      QTemporaryFile log_file;
+      log_file.open();   // Necessary to generate a name for the temporary file.
+      log_file.close();  // But close it: is it actually Lua that will write it
+                         // (we just wanted its name).
+      QByteArray lua_instruction_utf8 = ("io.output(\"" + log_file.fileName() + "\")").toUtf8();
+      luaL_dostring(l, lua_instruction_utf8.constData());
+
+      // Run the script.
+      if (lua_pcall(l, num_arguments, 0, 0) == 0) {
         successful = true;
       }
+
+      log_file.open();
+      output = QString::fromUtf8(log_file.readAll());
     }
   }
 
