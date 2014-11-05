@@ -19,7 +19,7 @@
         <translation>Renommer un motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/change_pattern_id_dialog.cpp" line="16"/>
+        <location filename="../src/gui/change_pattern_id_dialog.cpp" line="32"/>
         <source>New id for pattern &apos;%1&apos;:</source>
         <translation>Nouvel id du motif &apos;%1&apos; :</translation>
     </message>
@@ -38,10 +38,49 @@
     </message>
 </context>
 <context>
+    <name>ExternalScriptDialog</name>
+    <message>
+        <location filename="../src/gui/external_script_dialog.ui" line="14"/>
+        <source>Running script</source>
+        <translation>Exécution du script</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.ui" line="24"/>
+        <source>Running script...</source>
+        <translation>Exécution du script...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.ui" line="40"/>
+        <location filename="../src/gui/external_script_dialog.cpp" line="133"/>
+        <source>In progress</source>
+        <translation>en cours</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.ui" line="62"/>
+        <source>Status</source>
+        <translation>Statut</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.cpp" line="165"/>
+        <source>Cannot open file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.cpp" line="201"/>
+        <source>Successful!</source>
+        <translation>Succès !</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.cpp" line="205"/>
+        <source>Failure</source>
+        <translation>Erreur</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="339"/>
+        <location filename="../src/gui/main_window.cpp" line="380"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
@@ -111,18 +150,18 @@
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="202"/>
-        <location filename="../src/gui/main_window.cpp" line="232"/>
+        <location filename="../src/gui/main_window.cpp" line="243"/>
+        <location filename="../src/gui/main_window.cpp" line="273"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="213"/>
+        <location filename="../src/gui/main_window.cpp" line="254"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="213"/>
+        <location filename="../src/gui/main_window.cpp" line="254"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -132,25 +171,37 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="145"/>
+        <location filename="../src/gui/main_window.cpp" line="147"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="163"/>
+        <location filename="../src/gui/main_window.cpp" line="165"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="164"/>
+        <location filename="../src/gui/main_window.cpp" line="166"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="329"/>
+        <location filename="../src/gui/main_window.cpp" line="214"/>
+        <source>Upgrading quest data files</source>
+        <translation>Mise à jour des données de la quête</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="231"/>
+        <source>An error occured while upgrading the quest.
+Your quest was kept unchanged in format %1.</source>
+        <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
+Votre quête a été conservée inchangée au format %1.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="370"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -440,32 +491,46 @@ Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.
         <translation>Vertical</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="43"/>
+        <location filename="../src/file_tools.cpp" line="39"/>
         <source>No such file or directory: &apos;%1&apos;</source>
         <translation>Fichier ou dossier introuvable : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="47"/>
+        <location filename="../src/file_tools.cpp" line="43"/>
         <source>Source file cannot be read: &apos;%1&apos;</source>
         <translation>Fichier source non accessible en lecture : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="51"/>
+        <location filename="../src/file_tools.cpp" line="47"/>
         <source>Destination already exists: &apos;%1&apos;</source>
         <translation>La destination existe déjà : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="60"/>
+        <location filename="../src/file_tools.cpp" line="56"/>
         <source>No such directory: &apos;%1&apos;</source>
         <translation>Dossier introuvable : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="64"/>
-        <source>Cannot create directory &apos;%1&apos;</source>
+        <location filename="../src/file_tools.cpp" line="60"/>
+        <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/new_quest_builder.cpp" line="78"/>
+        <location filename="../src/file_tools.cpp" line="107"/>
+        <source>Failed to delete file &apos;%1&apos;</source>
+        <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/file_tools.cpp" line="113"/>
+        <source>Failed to delete folder &apos;%1&apos;</source>
+        <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Cannot create directory &apos;%1&apos;</source>
+        <translation type="vanished">Impossible de créer le dossier &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/file_tools.cpp" line="74"/>
         <source>Cannot copy file &apos;%1&apos; to &apos;%2&apos;</source>
         <translation>Impossible de copier le fichier &apos;%1&apos; vers &apos;%2&apos;</translation>
     </message>
@@ -505,37 +570,37 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>Quest</name>
     <message>
-        <location filename="../src/quest.cpp" line="254"/>
+        <location filename="../src/quest.cpp" line="262"/>
         <source>Unknown resource type</source>
         <translation>Type de ressource inconnu</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="856"/>
+        <location filename="../src/quest.cpp" line="864"/>
         <source>Invalid file name: &apos;%1&apos;</source>
         <translation>Nom de fichier invalide : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="904"/>
+        <location filename="../src/quest.cpp" line="912"/>
         <source>File &apos;%1&apos; does not exist</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="917"/>
+        <location filename="../src/quest.cpp" line="925"/>
         <source>File &apos;%1&apos; already exists</source>
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="978"/>
+        <location filename="../src/quest.cpp" line="986"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="993"/>
+        <location filename="../src/quest.cpp" line="1001"/>
         <source>Cannot create file &apos;%1&apos;</source>
         <translation>Impossible de créer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="853"/>
+        <location filename="../src/quest.cpp" line="861"/>
         <source>Empty file name</source>
         <translation>Nom de fichier vide</translation>
     </message>
@@ -545,66 +610,66 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Pas de quête</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="940"/>
+        <location filename="../src/quest.cpp" line="948"/>
         <source>File &apos;%1&apos; is not a folder</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="953"/>
+        <location filename="../src/quest.cpp" line="961"/>
         <source>File &apos;%1&apos; is a folder</source>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1059"/>
+        <location filename="../src/quest.cpp" line="1067"/>
         <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
         <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1065"/>
-        <location filename="../src/quest.cpp" line="1102"/>
+        <location filename="../src/quest.cpp" line="1073"/>
+        <location filename="../src/quest.cpp" line="1110"/>
         <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1204"/>
+        <location filename="../src/quest.cpp" line="1212"/>
         <source>Resource &apos;%1&apos; already exists</source>
         <translation>La ressource &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1220"/>
+        <location filename="../src/quest.cpp" line="1228"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1331"/>
+        <location filename="../src/quest.cpp" line="1339"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1365"/>
-        <location filename="../src/quest.cpp" line="1396"/>
+        <location filename="../src/quest.cpp" line="1373"/>
+        <location filename="../src/quest.cpp" line="1404"/>
         <source>Cannot delete folder &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1266"/>
+        <location filename="../src/quest.cpp" line="1274"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1273"/>
+        <location filename="../src/quest.cpp" line="1281"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1278"/>
-        <location filename="../src/quest.cpp" line="1317"/>
-        <location filename="../src/quest.cpp" line="1459"/>
+        <location filename="../src/quest.cpp" line="1286"/>
+        <location filename="../src/quest.cpp" line="1325"/>
+        <location filename="../src/quest.cpp" line="1467"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="881"/>
+        <location filename="../src/quest.cpp" line="889"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
