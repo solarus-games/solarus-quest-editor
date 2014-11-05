@@ -153,7 +153,7 @@ qt5_wrap_ui(solarus_quest_editor_FORMS_HEADERS
 
 # Resources.
 set(solarus_quest_editor_RESOURCES
-  resources/resources.qrc
+  resources/images.qrc
   resources/initial_quest.qrc
   resources/quest_converter.qrc
 )
