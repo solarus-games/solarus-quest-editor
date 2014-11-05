@@ -48,6 +48,8 @@ end
 -- Makes an upgrade step from a current format to the next one.
 local function update_step(quest_path, old_format, new_format)
 
+  old_format = old_format:gsub("%.", "_")
+  new_format = new_format:gsub("%.", "_")
   local converter_name = "converter_" .. old_format .. "_to_" .. new_format
   local converter = require(converter_name)
   converter.convert(quest_path)
