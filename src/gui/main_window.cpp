@@ -31,6 +31,7 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QToolButton>
 #include <QUndoGroup>
 #include <iostream>
 
@@ -58,6 +59,26 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, undo_action);
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
+
+  QToolButton* zoom_button = new QToolButton();
+  zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
+  ui.tool_bar->insertWidget(nullptr, zoom_button);
+
+  QMenu* zoom_menu = new QMenu();
+  std::vector<std::pair<QString, double>> zooms = {
+    { tr("25 %"), 0.25 },
+    { tr("50 %"), 0.5 },
+    { tr("100 %"), 1.0 },
+    { tr("200 %"), 2.0 },
+    { tr("400 %"), 4.0 }
+  };
+  for (const std::pair<QString, double>& zoom : zooms) {
+    QAction* action = new QAction(zoom.first, this);
+    // TODO connect to triggered(), make the current zoom checked
+    zoom_menu->addAction(action);
+  }
+  zoom_button->setMenu(zoom_menu);
+  zoom_button->setPopupMode(QToolButton::InstantPopup);
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);

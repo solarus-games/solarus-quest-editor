@@ -106,5 +106,6 @@
         <file>images/icon_save.png</file>
         <file>images/icon_cut.png</file>
         <file>images/icon_paste.png</file>
+        <file>images/icon_zoom.png</file>
     </qresource>
 </RCC>
