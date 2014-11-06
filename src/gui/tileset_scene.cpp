@@ -24,6 +24,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QStyleOptionGraphicsItem>
+#include <memory>
 
 /**
  * @brief Graphic item representing a tile pattern.
@@ -276,15 +277,15 @@ void TilesetScene::pattern_deleted(
     int old_index, const QString& /* old_id */) {
 
   // Keep the items list in sync with patterns in the model.
-  PatternItem* item = pattern_items.takeAt(old_index);
+  std::unique_ptr<PatternItem> item = std::unique_ptr<PatternItem>(
+        pattern_items.takeAt(old_index));
 
   // Each item stores its order, so we need to update them.
   for (int i = 0; i < pattern_items.size(); ++i) {
     pattern_items[i]->set_index(i);
   }
 
-  removeItem(item);
-  delete item;
+  removeItem(item.get());
 }
 
 /**
