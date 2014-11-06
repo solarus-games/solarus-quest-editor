@@ -96,6 +96,26 @@
    <addaction name="menu_run"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
+  <widget class="QToolBar" name="tool_bar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_save"/>
+   <addaction name="separator"/>
+   <addaction name="action_cut"/>
+   <addaction name="action_copy"/>
+   <addaction name="action_paste"/>
+   <addaction name="separator"/>
+  </widget>
   <action name="action_new_quest">
    <property name="text">
     <string>New quest...</string>
@@ -120,16 +140,28 @@
    </property>
   </action>
   <action name="action_cut">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_cut.png</normaloff>:/images/icon_cut.png</iconset>
+   </property>
    <property name="text">
     <string>Cut</string>
    </property>
   </action>
   <action name="action_copy">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_copy.png</normaloff>:/images/icon_copy.png</iconset>
+   </property>
    <property name="text">
     <string>Copy</string>
    </property>
   </action>
   <action name="action_paste">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_paste.png</normaloff>:/images/icon_paste.png</iconset>
+   </property>
    <property name="text">
     <string>Paste</string>
    </property>
@@ -140,6 +172,10 @@
    </property>
   </action>
   <action name="action_save">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_save.png</normaloff>:/images/icon_save.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>

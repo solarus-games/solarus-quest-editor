@@ -49,10 +49,14 @@ MainWindow::MainWindow(QWidget* parent) :
 
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
+  undo_action->setIcon(QIcon(":/images/icon_undo.png"));
   QAction* redo_action = undo_group.createRedoAction(this);
+  redo_action->setIcon(QIcon(":/images/icon_redo.png"));
   ui.menu_edit->insertAction(ui.action_cut, undo_action);
   ui.menu_edit->insertAction(ui.action_cut, redo_action);
   ui.menu_edit->insertSeparator(ui.action_cut);
+  ui.tool_bar->insertAction(nullptr, undo_action);
+  ui.tool_bar->insertAction(nullptr, redo_action);
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);

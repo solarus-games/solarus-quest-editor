@@ -20,6 +20,7 @@ resources/images/icon_add.png
 resources/images/icon_copy.png
 resources/images/icon_cross.png
 resources/images/icon_cross_small.png
+resources/images/icon_cut.png
 resources/images/icon_delete.png
 resources/images/icon_edit.png
 resources/images/icon_folder_closed.png
@@ -30,8 +31,10 @@ resources/images/icon_first.png
 resources/images/icon_last.png
 resources/images/icon_next.png
 resources/images/icon_open.png
+resources/images/icon_paste.png
 resources/images/icon_pause.png
 resources/images/icon_previous.png
+resources/images/icon_redo.png
 resources/images/icon_refresh.png
 resources/images/icon_remove.png
 resources/images/icon_rename.png
@@ -44,9 +47,11 @@ resources/images/icon_resource_music.png
 resources/images/icon_resource_sound.png
 resources/images/icon_resource_sprite.png
 resources/images/icon_resource_tileset.png
+resources/images/icon_save.png
 resources/images/icon_script.png
 resources/images/icon_start.png
 resources/images/icon_stop.png
+resources/images/icon_undo.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 
