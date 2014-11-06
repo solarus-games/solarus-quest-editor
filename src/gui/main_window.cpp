@@ -55,8 +55,9 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.menu_edit->insertAction(ui.action_cut, undo_action);
   ui.menu_edit->insertAction(ui.action_cut, redo_action);
   ui.menu_edit->insertSeparator(ui.action_cut);
-  ui.tool_bar->insertAction(nullptr, undo_action);
-  ui.tool_bar->insertAction(nullptr, redo_action);
+  ui.tool_bar->insertAction(ui.action_run_quest, undo_action);
+  ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
+  ui.tool_bar->insertSeparator(ui.action_run_quest);
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);

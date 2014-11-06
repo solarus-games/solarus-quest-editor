@@ -115,6 +115,8 @@
    <addaction name="action_copy"/>
    <addaction name="action_paste"/>
    <addaction name="separator"/>
+   <addaction name="action_run_quest"/>
+   <addaction name="separator"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">
@@ -132,6 +134,10 @@
    </property>
   </action>
   <action name="action_run_quest">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_start.png</normaloff>:/images/icon_start.png</iconset>
+   </property>
    <property name="text">
     <string>Run quest</string>
    </property>
