@@ -209,7 +209,7 @@
                   <string/>
                  </property>
                  <property name="icon">
-                  <iconset resource="../../resources/resources.qrc">
+                  <iconset resource="../../resources/images.qrc">
                    <normaloff>:/images/icon_edit.png</normaloff>:/images/icon_edit.png</iconset>
                  </property>
                 </widget>
@@ -385,7 +385,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/resources.qrc"/>
+  <include location="../../resources/images.qrc"/>
  </resources>
  <connections/>
 </ui>
