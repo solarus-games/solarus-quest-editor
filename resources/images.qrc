@@ -89,7 +89,7 @@
         <file>images/icon_start.png</file>
         <file>images/icon_stop.png</file>
         <file>images/icon_file.png</file>
-        <file>images/icon_solarus_200.png</file>
+        <file>images/icon_quest_editor_256.png</file>
         <file>images/icon_file_unknown.png</file>
         <file>images/icon_resource_enemy_missing.png</file>
         <file>images/icon_resource_entity_missing.png</file>
@@ -107,5 +107,8 @@
         <file>images/icon_cut.png</file>
         <file>images/icon_paste.png</file>
         <file>images/icon_zoom.png</file>
+        <file>images/icon_quest_editor_16.png</file>
+        <file>images/icon_quest_editor_32.png</file>
+        <file>images/icon_quest_editor_48.png</file>
     </qresource>
 </RCC>

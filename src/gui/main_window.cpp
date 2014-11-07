@@ -42,12 +42,22 @@
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent) {
 
-  // Set up children widgets.
+  // Set up widgets.
   ui.setupUi(this);
 
+  // Icon.
+  QStringList icon_sizes = { "16", "32", "48", "256" };
+  QIcon icon;
+  for (const QString size : icon_sizes) {
+    icon.addPixmap(":/images/icon_quest_editor_" + size + ".png");
+  }
+  setWindowIcon(icon);
+
+  // Main splitter.
   const int tree_width = 300;
   ui.splitter->setSizes({ tree_width, width() - tree_width });
 
+  // Menu and toolbar actions.
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
   undo_action->setIcon(QIcon(":/images/icon_undo.png"));

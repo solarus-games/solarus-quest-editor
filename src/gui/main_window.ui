@@ -13,10 +13,6 @@
   <property name="windowTitle">
    <string>Solarus Quest Editor</string>
   </property>
-  <property name="windowIcon">
-   <iconset resource="../../resources/images.qrc">
-    <normaloff>:/images/icon_solarus_200.png</normaloff>:/images/icon_solarus_200.png</iconset>
-  </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
