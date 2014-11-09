@@ -613,7 +613,7 @@ Ground TilesetModel::get_pattern_ground(int index) const {
  * @brief Gets the ground of the specified patterns if it is the same.
  * @param[in] indexes A list of pattern indexes.
  * @param[out] ground The common ground if any.
- * The value is left unchanged if the value is not common.
+ * The value is left unchanged if the ground is not common.
  * @return @c true if all specified patterns have the same ground.
  * If the list is empty, @c false is returned.
  */
@@ -667,7 +667,7 @@ Layer TilesetModel::get_pattern_default_layer(int index) const {
  * @brief Gets the default layer of the specified patterns if it is the same.
  * @param[in] indexes A list of pattern indexes.
  * @param[out] default_layer The common default layer if any.
- * The value is left unchanged if the value is not common.
+ * The value is left unchanged if the layer is not common.
  * @return @c true if all specified patterns have the same default layer.
  * If the list is empty, @c false is returned.
  */
@@ -753,7 +753,7 @@ PatternAnimation TilesetModel::get_pattern_animation(int index) const {
  * @brief Gets the animation of the specified patterns if it is the same.
  * @param[in] indexes A list of pattern indexes.
  * @param[out] animation The common animation if any.
- * The value is left unchanged if the value is not common.
+ * The value is left unchanged if the animation is not common.
  * @return @c true if all specified patterns have the same animation.
  * If the list is empty, @c false is returned.
  */
@@ -920,7 +920,7 @@ PatternSeparation TilesetModel::get_pattern_separation(int index) const {
  * @brief Gets the separation of the specified patterns if it is the same.
  * @param[in] indexes A list of pattern indexes.
  * @param[out] separation The common separation if any.
- * The value is left unchanged if the value is not common.
+ * The value is left unchanged if the separation is not common.
  * @return @c true if all specified patterns have the same separation.
  * If the list is empty, @c false is returned.
  */
