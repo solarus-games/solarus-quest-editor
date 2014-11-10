@@ -51,7 +51,7 @@
     </message>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="40"/>
-        <location filename="../src/gui/external_script_dialog.cpp" line="133"/>
+        <location filename="../src/gui/external_script_dialog.cpp" line="166"/>
         <source>In progress</source>
         <translation>en cours</translation>
     </message>
@@ -61,17 +61,22 @@
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../src/gui/external_script_dialog.cpp" line="165"/>
+        <location filename="../src/gui/external_script_dialog.cpp" line="53"/>
+        <source>Cannot determine the directory of script &apos;%1&apos;</source>
+        <translation>Impossible de déterminer le dossier du script &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/external_script_dialog.cpp" line="198"/>
         <source>Cannot open file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/external_script_dialog.cpp" line="201"/>
+        <location filename="../src/gui/external_script_dialog.cpp" line="241"/>
         <source>Successful!</source>
         <translation>Succès !</translation>
     </message>
     <message>
-        <location filename="../src/gui/external_script_dialog.cpp" line="205"/>
+        <location filename="../src/gui/external_script_dialog.cpp" line="245"/>
         <source>Failure</source>
         <translation>Erreur</translation>
     </message>
@@ -80,88 +85,93 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="380"/>
+        <location filename="../src/gui/main_window.cpp" line="419"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="69"/>
+        <location filename="../src/gui/main_window.ui" line="65"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="81"/>
+        <location filename="../src/gui/main_window.ui" line="77"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="90"/>
+        <location filename="../src/gui/main_window.ui" line="86"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="101"/>
+        <location filename="../src/gui/main_window.ui" line="97"/>
+        <source>toolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="119"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="106"/>
+        <location filename="../src/gui/main_window.ui" line="124"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="111"/>
+        <location filename="../src/gui/main_window.ui" line="129"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="116"/>
+        <location filename="../src/gui/main_window.ui" line="138"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="119"/>
+        <location filename="../src/gui/main_window.ui" line="141"/>
         <source>F9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="124"/>
+        <location filename="../src/gui/main_window.ui" line="150"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="129"/>
+        <location filename="../src/gui/main_window.ui" line="159"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="134"/>
+        <location filename="../src/gui/main_window.ui" line="168"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="139"/>
+        <location filename="../src/gui/main_window.ui" line="173"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="144"/>
+        <location filename="../src/gui/main_window.ui" line="182"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="243"/>
-        <location filename="../src/gui/main_window.cpp" line="273"/>
+        <location filename="../src/gui/main_window.cpp" line="282"/>
+        <location filename="../src/gui/main_window.cpp" line="312"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="254"/>
+        <location filename="../src/gui/main_window.cpp" line="293"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="254"/>
+        <location filename="../src/gui/main_window.cpp" line="293"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -171,37 +181,62 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="147"/>
+        <location filename="../src/gui/main_window.cpp" line="183"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="165"/>
+        <location filename="../src/gui/main_window.cpp" line="79"/>
+        <source>25 %</source>
+        <translation>25 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="80"/>
+        <source>50 %</source>
+        <translation>50 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="81"/>
+        <source>100 %</source>
+        <translation>100 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="82"/>
+        <source>200 %</source>
+        <translation>200 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="83"/>
+        <source>400 %</source>
+        <translation>400 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="201"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="166"/>
+        <location filename="../src/gui/main_window.cpp" line="202"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="214"/>
+        <location filename="../src/gui/main_window.cpp" line="253"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="231"/>
+        <location filename="../src/gui/main_window.cpp" line="270"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="370"/>
+        <location filename="../src/gui/main_window.cpp" line="409"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -905,12 +940,12 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Dossier des Polices</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="97"/>
+        <location filename="../src/quest_resources.cpp" line="98"/>
         <source>No quest</source>
         <translation>Pas de quête</translation>
     </message>
     <message>
-        <location filename="../src/quest_resources.cpp" line="102"/>
+        <location filename="../src/quest_resources.cpp" line="103"/>
         <source>Cannot write file &apos;%1&apos;</source>
         <translation>Impossible d&apos;écrire le fichier &apos;%1&apos;</translation>
     </message>
@@ -1328,12 +1363,12 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>TilesetScene</name>
     <message>
-        <location filename="../src/gui/tileset_scene.cpp" line="158"/>
+        <location filename="../src/gui/tileset_scene.cpp" line="159"/>
         <source>Missing tileset image &apos;%1&apos;</source>
         <translation>Image de tileset manquante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_scene.cpp" line="359"/>
+        <location filename="../src/gui/tileset_scene.cpp" line="360"/>
         <source>No such pattern index: %1</source>
         <translation>Index de motif inexistant : %1</translation>
     </message>
