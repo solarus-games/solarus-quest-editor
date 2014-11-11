@@ -174,9 +174,6 @@
    </property>
   </action>
   <action name="action_save">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="icon">
     <iconset resource="../../resources/images.qrc">
      <normaloff>:/images/icon_save.png</normaloff>:/images/icon_save.png</iconset>

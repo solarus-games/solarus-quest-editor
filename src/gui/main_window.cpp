@@ -102,12 +102,18 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_copy->setShortcut(QKeySequence::Copy);
   ui.action_paste->setShortcut(QKeySequence::Paste);
 
-  // Connect signals and slots.
+  // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
           ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
+
+  // Enable or disable actions depending on the situation.
+  ui.action_close->setEnabled(false);
+  ui.action_save->setEnabled(false);
+  ui.action_run_quest->setEnabled(false);
   connect(ui.tab_widget, &EditorTabs::currentChanged, [=](int index) {
-    const bool enable_save = index != -1;
-    ui.action_save->setEnabled(enable_save);
+    const bool has_tab = index != -1;
+    ui.action_close->setEnabled(has_tab);
+    ui.action_save->setEnabled(has_tab);
   });
 }
 
@@ -161,6 +167,7 @@ void MainWindow::close_quest() {
 
   quest.set_root_path("");
   update_title();
+  ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
 }
 
@@ -193,6 +200,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
     connect(&quest, SIGNAL(file_deleted(QString)),
             ui.tab_widget, SLOT(file_deleted(QString)));
 
+    ui.action_run_quest->setEnabled(true);
     success = true;
   }
   catch (const ObsoleteEditorException& ex) {
