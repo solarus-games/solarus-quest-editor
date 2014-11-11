@@ -102,9 +102,13 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_copy->setShortcut(QKeySequence::Copy);
   ui.action_paste->setShortcut(QKeySequence::Paste);
 
-  // Connect children.
+  // Connect signals and slots.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
           ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
+  connect(ui.tab_widget, &EditorTabs::currentChanged, [=](int index) {
+    const bool enable_save = index != -1;
+    ui.action_save->setEnabled(enable_save);
+  });
 }
 
 /**
