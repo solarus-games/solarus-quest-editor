@@ -363,6 +363,15 @@ bool Editor::confirm_close() {
 }
 
 /**
+ * @brief Returns whether a cut action is currently possible.
+ *
+ * The default implementation returns can_copy().
+ */
+bool Editor::can_cut() const {
+  return can_copy();
+}
+
+/**
  * @brief Copies the selection to the clipboard and removes it.
  *
  * The default implementation does nothing, meaning that clipboard operations
@@ -372,12 +381,32 @@ void Editor::cut() {
 }
 
 /**
+ * @brief Returns whether a copy action is currently possible.
+ *
+ * The default implementation returns false, meaning that clipboard operations
+ * are not supported.
+ */
+bool Editor::can_copy() const {
+  return false;
+}
+
+/**
  * @brief Copies the selection to the clipboard.
  *
  * The default implementation does nothing, meaning that clipboard operations
  * are not supported.
  */
 void Editor::copy() {
+}
+
+/**
+ * @brief Returns whether a paste action is currently possible.
+ *
+ * The default implementation returns false, meaning that clipboard operations
+ * are not supported.
+ */
+bool Editor::can_paste() const {
+  return false;
 }
 
 /**

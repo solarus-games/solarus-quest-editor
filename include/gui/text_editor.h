@@ -35,8 +35,11 @@ public:
   QIcon create_icon() const;
 
   virtual void save() override;
+  virtual bool can_cut() const override;
   virtual void cut() override;
+  virtual bool can_copy() const override;
   virtual void copy() override;
+  virtual bool can_paste() const override;
   virtual void paste() override;
 
 private:

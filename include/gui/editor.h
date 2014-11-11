@@ -52,9 +52,18 @@ public:
   bool confirm_close();
 
   virtual void save() = 0;
+  virtual bool can_cut() const;
   virtual void cut();
+  virtual bool can_copy() const;
   virtual void copy();
+  virtual bool can_paste() const;
   virtual void paste();
+
+signals:
+
+  void can_cut_changed(bool can_cut);
+  void can_copy_changed(bool can_copy);
+  void can_paste_changed(bool can_paste);
 
 protected:
 

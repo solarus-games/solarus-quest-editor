@@ -62,6 +62,12 @@ public:
 
   bool confirm_close();
 
+signals:
+
+  void can_cut_changed(bool can_cut);
+  void can_copy_changed(bool can_copy);
+  void can_paste_changed(bool can_paste);
+
 public slots:
 
   void save_file_requested(int index);

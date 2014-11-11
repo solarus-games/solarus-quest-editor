@@ -45,6 +45,11 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   text_widget = new TextEditorWidget(file_path, *this);
   layout->addWidget(text_widget);
 
+  connect(text_widget, SIGNAL(copyAvailable(bool)),
+          this, SIGNAL(can_cut_changed(bool)));
+  connect(text_widget, SIGNAL(copyAvailable(bool)),
+          this, SIGNAL(can_copy_changed(bool)));
+
   // Use a monospace font.
   QFont font("DejaVu Sans Mono");
   font.setStyleHint(QFont::TypeWriter);
@@ -70,7 +75,6 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   QTextStream out(&file);
   out.setCodec("UTF-8");
   text_widget->setPlainText(out.readAll());
-
 }
 
 /**
@@ -143,6 +147,13 @@ void TextEditor::save() {
 }
 
 /**
+ * @copydoc Editor::can_cut()
+ */
+bool TextEditor::can_cut() const {
+  return !text_widget->isReadOnly() && can_copy();
+}
+
+/**
  * @copydoc Editor::cut
  */
 void TextEditor::cut() {
@@ -151,11 +162,25 @@ void TextEditor::cut() {
 }
 
 /**
+ * @copydoc Editor::can_copy()
+ */
+bool TextEditor::can_copy() const {
+  return text_widget->textCursor().hasSelection();
+}
+
+/**
  * @copydoc Editor::copy
  */
 void TextEditor::copy() {
 
   text_widget->copy();
+}
+
+/**
+ * @copydoc Editor::can_paste()
+ */
+bool TextEditor::can_paste() const {
+  return true;
 }
 
 /**

@@ -110,11 +110,21 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_close->setEnabled(false);
   ui.action_save->setEnabled(false);
   ui.action_run_quest->setEnabled(false);
+  ui.action_cut->setEnabled(false);
+  ui.action_copy->setEnabled(false);
+  ui.action_paste->setEnabled(false);
+
   connect(ui.tab_widget, &EditorTabs::currentChanged, [=](int index) {
     const bool has_tab = index != -1;
     ui.action_close->setEnabled(has_tab);
     ui.action_save->setEnabled(has_tab);
   });
+  connect(ui.tab_widget, SIGNAL(can_cut_changed(bool)),
+          ui.action_cut, SLOT(setEnabled(bool)));
+  connect(ui.tab_widget, SIGNAL(can_copy_changed(bool)),
+          ui.action_copy, SLOT(setEnabled(bool)));
+  connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
+          ui.action_paste, SLOT(setEnabled(bool)));
 }
 
 /**

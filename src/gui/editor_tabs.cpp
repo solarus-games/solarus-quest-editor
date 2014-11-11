@@ -37,6 +37,7 @@ EditorTabs::EditorTabs(QWidget* parent):
 
   ClosableTabBar* tab_bar = new ClosableTabBar();
   setTabBar(tab_bar);
+
   connect(tab_bar, SIGNAL(tabCloseRequested(int)),
           this, SLOT(close_file_requested(int)));
   connect(tab_bar, SIGNAL(currentChanged(int)),
@@ -433,7 +434,7 @@ bool EditorTabs::confirm_close() {
 }
 
 /**
- * @brief Slot called when the curren tab changes.
+ * @brief Slot called when the current tab changes.
  * @param index Index of the new current tab.
  */
 void EditorTabs::current_editor_changed(int /* index */) {
@@ -441,9 +442,30 @@ void EditorTabs::current_editor_changed(int /* index */) {
   Editor* editor = get_editor();
   if (editor == nullptr) {
     get_undo_group().setActiveStack(nullptr);
+    emit can_cut_changed(false);
+    emit can_copy_changed(false);
+    emit can_paste_changed(false);
   }
   else {
     get_undo_group().setActiveStack(&editor->get_undo_stack());
+    connect(editor, &Editor::can_cut_changed, [=](bool can_cut) {
+      if (get_editor() == editor) {
+        emit can_cut_changed(can_cut);
+      }
+    });
+    connect(editor, &Editor::can_copy_changed, [=](bool can_copy) {
+      if (get_editor() == editor) {
+        emit can_copy_changed(can_copy);
+      }
+    });
+    connect(editor, &Editor::can_paste_changed, [=](bool can_paste) {
+      if (get_editor() == editor) {
+        emit can_paste_changed(can_paste);
+      }
+    });
+    emit can_cut_changed(editor->can_cut());
+    emit can_copy_changed(editor->can_copy());
+    emit can_paste_changed(editor->can_paste());
   }
 }
 
