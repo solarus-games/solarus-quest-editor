@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "editor_exception.h"
 #include "file_tools.h"
 #include "new_quest_builder.h"
 #include "quest.h"
