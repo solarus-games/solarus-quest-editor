@@ -74,19 +74,7 @@ MainWindow::MainWindow(QWidget* parent) :
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
   ui.tool_bar->insertWidget(nullptr, zoom_button);
 
-  QMenu* zoom_menu = new QMenu();
-  std::vector<std::pair<QString, double>> zooms = {
-    { tr("25 %"), 0.25 },
-    { tr("50 %"), 0.5 },
-    { tr("100 %"), 1.0 },
-    { tr("200 %"), 2.0 },
-    { tr("400 %"), 4.0 }
-  };
-  for (const std::pair<QString, double>& zoom : zooms) {
-    QAction* action = new QAction(zoom.first, this);
-    // TODO connect to triggered(), make the current zoom checked
-    zoom_menu->addAction(action);
-  }
+  QMenu* zoom_menu = create_zoom_menu();
   zoom_button->setMenu(zoom_menu);
   zoom_button->setPopupMode(QToolButton::InstantPopup);
 
@@ -153,6 +141,35 @@ void MainWindow::initialize_geometry_on_screen() {
   int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top() - 10;
 
   move(qMax(0, x), qMax(0, y));
+}
+
+/**
+ * @brief Creates a menu with zoom actions.
+ * @return The created menu. It has no parent initially.
+ */
+QMenu* MainWindow::create_zoom_menu() {
+
+  QMenu* zoom_menu = new QMenu();
+  std::vector<std::pair<QString, double>> zooms = {
+    { tr("25 %"), 0.25 },
+    { tr("50 %"), 0.5 },
+    { tr("100 %"), 1.0 },
+    { tr("200 %"), 2.0 },
+    { tr("400 %"), 4.0 }
+  };
+  for (const std::pair<QString, double>& zoom : zooms) {
+    QAction* action = new QAction(zoom.first, this);
+    // TODO make the current zoom checked
+    connect(action, &QAction::triggered, [=]() {
+      Editor* editor = ui.tab_widget->get_editor();
+      if (editor != nullptr) {
+        editor->set_zoom(zoom.second);
+      }
+    });
+    zoom_menu->addAction(action);
+  }
+
+  return zoom_menu;
 }
 
 /**
