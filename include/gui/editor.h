@@ -48,8 +48,10 @@ public:
   QString get_title() const;
   QIcon get_icon() const;
   QUndoStack& get_undo_stack();
-  bool try_command(QUndoCommand* command);
   bool confirm_close();
+
+  bool is_zoom_supported() const;
+  double get_zoom() const;
 
   virtual void save() = 0;
   virtual bool can_cut() const;
@@ -64,14 +66,22 @@ signals:
   void can_cut_changed(bool can_cut);
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
+  void zoom_changed(double zoom);
+
+public slots:
+
+  void set_zoom(double zoom);
 
 protected:
 
   void set_title(const QString& title);
   void set_icon(const QIcon& icon);
+  void set_zoom_supported(bool zoom_supported);
 
   QString get_close_confirm_message() const;
   void set_close_confirm_message(const QString& message);
+
+  bool try_command(QUndoCommand* command);
 
 private:
 
@@ -82,6 +92,8 @@ private:
   QString
       close_confirm_message; /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;    /**< The undo/redo history of editing this file. */
+  bool zoom_supported;       /**< Whether the editor supports zooming. */
+  double zoom;               /**< The current zoom factor. */
 
 };
 

@@ -458,6 +458,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_icon(QIcon(":/images/icon_resource_tileset.png"));
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
+  set_zoom_supported(true);
 
   // Open the file.
   model = new TilesetModel(quest, tileset_id, this);
@@ -538,6 +539,11 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
+
+  connect(this, SIGNAL(zoom_changed(double)),
+          ui.tileset_view, SLOT(set_zoom(double)));
+  connect(ui.tileset_view, SIGNAL(zoom_changed(double)),
+          this, SLOT(set_zoom(double)));
 }
 
 /**

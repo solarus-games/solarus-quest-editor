@@ -52,6 +52,7 @@ signals:
   void change_selected_patterns_default_layer_requested(Layer layer);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
+  void zoom_changed(double zoom);
 
 public slots:
 

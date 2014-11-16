@@ -113,6 +113,8 @@ void TilesetView::set_zoom(double zoom) {
   scale(1.0 / this->zoom, 1.0 / this->zoom);
   this->zoom = zoom;
   scale(zoom, zoom);
+
+  emit zoom_changed(zoom);
 }
 
 /**

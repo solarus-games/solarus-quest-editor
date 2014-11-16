@@ -119,7 +119,9 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   quest(quest),
   file_path(file_path),
   title(get_file_name()),
-  undo_stack(new QUndoStack(this)) {
+  undo_stack(new QUndoStack(this)),
+  zoom_supported(false),
+  zoom(1.0) {
 
   // Default close confirmation message.
   set_close_confirm_message(
@@ -416,4 +418,53 @@ bool Editor::can_paste() const {
  * are not supported.
  */
 void Editor::paste() {
+}
+
+/**
+ * @brief Returns whether this editor supports zooming.
+ * @return @c true if zoom operations are supported.
+ */
+bool Editor::is_zoom_supported() const {
+  return zoom_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports zooming.
+ *
+ * If your editor supports zooming, you are responsible to apply the new
+ * zoom value when the zoom_changed() is emitted.
+ *
+ * @param zoom_supported @c true if zoom operations are supported.
+ */
+void Editor::set_zoom_supported(bool zoom_supported) {
+  this->zoom_supported = zoom_supported;
+}
+
+/**
+ * @brief Returns the current zoom factor.
+ *
+ * Returns 1.0 if zooming is not supported.
+ *
+ * @return The zoom factor.
+ */
+double Editor::get_zoom() const {
+
+  return zoom;
+}
+
+/**
+ * @brief Sets the zoom factor.
+ *
+ * Emits zoom_changed() if there is a change.
+ *
+ * @param zoom The zoom factor to set.
+ */
+void Editor::set_zoom(double zoom) {
+
+  if (zoom == this->zoom) {
+    return;
+  }
+
+  this->zoom = zoom;
+  emit zoom_changed(zoom);
 }
