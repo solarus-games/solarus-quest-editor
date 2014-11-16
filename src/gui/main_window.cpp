@@ -27,6 +27,7 @@
 #include <solarus/MainLoop.h>
 #include <solarus/SolarusFatal.h>
 #include <solarus/lowlevel/Debug.h>
+#include <QActionGroup>
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -40,7 +41,8 @@
  * @param parent The parent widget or nullptr.
  */
 MainWindow::MainWindow(QWidget* parent) :
-  QMainWindow(parent) {
+  QMainWindow(parent),
+  zoom_button(nullptr) {
 
   // Set up widgets.
   ui.setupUi(this);
@@ -70,7 +72,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
 
-  QToolButton* zoom_button = new QToolButton();
+  zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
   ui.tool_bar->insertWidget(nullptr, zoom_button);
 
@@ -94,25 +96,48 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
           ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
 
-  // Enable or disable actions depending on the situation.
-  ui.action_close->setEnabled(false);
-  ui.action_save->setEnabled(false);
-  ui.action_run_quest->setEnabled(false);
-  ui.action_cut->setEnabled(false);
-  ui.action_copy->setEnabled(false);
-  ui.action_paste->setEnabled(false);
-
-  connect(ui.tab_widget, &EditorTabs::currentChanged, [=](int index) {
-    const bool has_tab = index != -1;
-    ui.action_close->setEnabled(has_tab);
-    ui.action_save->setEnabled(has_tab);
-  });
+  connect(ui.tab_widget, SIGNAL(currentChanged(int)),
+          this, SLOT(current_editor_changed(int)));
   connect(ui.tab_widget, SIGNAL(can_cut_changed(bool)),
           ui.action_cut, SLOT(setEnabled(bool)));
   connect(ui.tab_widget, SIGNAL(can_copy_changed(bool)),
           ui.action_copy, SLOT(setEnabled(bool)));
   connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
           ui.action_paste, SLOT(setEnabled(bool)));
+
+  // No editor initially.
+  current_editor_changed(-1);
+}
+
+/**
+ * @brief Creates a menu with zoom actions.
+ * @return The created menu. It has no parent initially.
+ */
+QMenu* MainWindow::create_zoom_menu() {
+
+  QMenu* zoom_menu = new QMenu();
+  std::vector<std::pair<QString, double>> zooms = {
+    { tr("25 %"), 0.25 },
+    { tr("50 %"), 0.5 },
+    { tr("100 %"), 1.0 },
+    { tr("200 %"), 2.0 },
+    { tr("400 %"), 4.0 }
+  };
+  QActionGroup* action_group = new QActionGroup(this);
+  for (const std::pair<QString, double>& zoom : zooms) {
+    QAction* action = new QAction(zoom.first, action_group);
+    zoom_actions[zoom.second] = action;
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, [=]() {
+      Editor* editor = ui.tab_widget->get_editor();
+      if (editor != nullptr) {
+        editor->set_zoom(zoom.second);
+      }
+    });
+    zoom_menu->addAction(action);
+  }
+
+  return zoom_menu;
 }
 
 /**
@@ -141,35 +166,6 @@ void MainWindow::initialize_geometry_on_screen() {
   int y = screen.height() / 2 - frameGeometry().height() / 2 + screen.top() - 10;
 
   move(qMax(0, x), qMax(0, y));
-}
-
-/**
- * @brief Creates a menu with zoom actions.
- * @return The created menu. It has no parent initially.
- */
-QMenu* MainWindow::create_zoom_menu() {
-
-  QMenu* zoom_menu = new QMenu();
-  std::vector<std::pair<QString, double>> zooms = {
-    { tr("25 %"), 0.25 },
-    { tr("50 %"), 0.5 },
-    { tr("100 %"), 1.0 },
-    { tr("200 %"), 2.0 },
-    { tr("400 %"), 4.0 }
-  };
-  for (const std::pair<QString, double>& zoom : zooms) {
-    QAction* action = new QAction(zoom.first, this);
-    // TODO make the current zoom checked
-    connect(action, &QAction::triggered, [=]() {
-      Editor* editor = ui.tab_widget->get_editor();
-      if (editor != nullptr) {
-        editor->set_zoom(zoom.second);
-      }
-    });
-    zoom_menu->addAction(action);
-  }
-
-  return zoom_menu;
 }
 
 /**
@@ -447,6 +443,39 @@ void MainWindow::on_action_run_quest_triggered() {
     // The run did not end well.
     std::cout << tr("Quest terminated unexpectedly: %1").arg(ex.what()).toStdString()
               << std::endl;
+  }
+}
+
+/**
+ * @brief Slot called when the current editor changes.
+ * @param index Index of the new current editor, or -1 if no editor is active.
+ */
+void MainWindow::current_editor_changed(int index) {
+
+  const bool has_tab = index != -1;
+  ui.action_cut->setEnabled(has_tab);
+  ui.action_copy->setEnabled(has_tab);
+  ui.action_paste->setEnabled(has_tab);
+  ui.action_close->setEnabled(has_tab);
+  ui.action_save->setEnabled(has_tab);
+  zoom_button->setEnabled(has_tab);
+
+  Editor* editor = ui.tab_widget->get_editor();
+  if (editor != nullptr) {
+    connect(editor, SIGNAL(zoom_changed(double)),
+            this, SLOT(editor_zoom_changed(double)));
+    editor_zoom_changed(editor->get_zoom());
+  }
+}
+
+/**
+ * @brief Slot called when the zoom of the current editor changes.
+ * @param zoom The new zoom factor.
+ */
+void MainWindow::editor_zoom_changed(double zoom) {
+
+  if (zoom_actions.contains(zoom)) {
+    zoom_actions[zoom]->setChecked(true);
   }
 }
 

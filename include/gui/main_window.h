@@ -22,6 +22,7 @@
 #include <QMainWindow>
 
 class QuestManager;
+class QToolButton;
 
 /**
  * @brief Main window of the quest editor.
@@ -52,6 +53,9 @@ private slots:
   void on_action_paste_triggered();
   void on_action_run_quest_triggered();
 
+  void current_editor_changed(int index);
+  void editor_zoom_changed(double zoom);
+
 protected:
 
   virtual void closeEvent(QCloseEvent* event) override;
@@ -66,6 +70,9 @@ private:
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */
 
+  QToolButton* zoom_button;       /**< The zoom toolbar button. */
+  QMap<double, QAction*>
+      zoom_actions;               /**< Action of each zoom value. */
 };
 
 #endif
