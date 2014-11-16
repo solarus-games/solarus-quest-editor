@@ -70,6 +70,7 @@ private:
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */
 
+  QMenu* zoom_menu;               /**< The zoom menu. */
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>
       zoom_actions;               /**< Action of each zoom value. */

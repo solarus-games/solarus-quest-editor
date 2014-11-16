@@ -42,6 +42,7 @@
  */
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
+  zoom_menu(nullptr),
   zoom_button(nullptr) {
 
   // Set up widgets.
@@ -74,11 +75,11 @@ MainWindow::MainWindow(QWidget* parent) :
 
   zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
-  ui.tool_bar->insertWidget(nullptr, zoom_button);
-
-  QMenu* zoom_menu = create_zoom_menu();
+  zoom_menu = create_zoom_menu();
   zoom_button->setMenu(zoom_menu);
   zoom_button->setPopupMode(QToolButton::InstantPopup);
+  ui.tool_bar->insertWidget(nullptr, zoom_button);
+  ui.menu_view->insertMenu(ui.action_show_grid, zoom_menu);
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);
@@ -115,7 +116,7 @@ MainWindow::MainWindow(QWidget* parent) :
  */
 QMenu* MainWindow::create_zoom_menu() {
 
-  QMenu* zoom_menu = new QMenu();
+  QMenu* zoom_menu = new QMenu(tr("Zoom"));
   std::vector<std::pair<QString, double>> zooms = {
     { tr("25 %"), 0.25 },
     { tr("50 %"), 0.5 },
@@ -458,6 +459,7 @@ void MainWindow::current_editor_changed(int index) {
   ui.action_paste->setEnabled(has_tab);
   ui.action_close->setEnabled(has_tab);
   ui.action_save->setEnabled(has_tab);
+  zoom_menu->setEnabled(has_tab);
   zoom_button->setEnabled(has_tab);
 
   Editor* editor = ui.tab_widget->get_editor();
