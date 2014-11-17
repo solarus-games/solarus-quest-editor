@@ -459,6 +459,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
   set_zoom_supported(true);
+  set_zoom(2.0);
 
   // Open the file.
   model = new TilesetModel(quest, tileset_id, this);
