@@ -40,6 +40,7 @@ public:
 
   void set_model(TilesetModel& tileset);
   double get_zoom() const;
+  bool is_read_only() const;
 
 signals:
 
@@ -57,6 +58,7 @@ signals:
 public slots:
 
   void set_zoom(double zoom);
+  void set_read_only(bool read_only);
   void zoom_in();
   void zoom_out();
 
@@ -120,6 +122,8 @@ private:
                                         * coordinates. */
 
   double zoom;                         /**< Scale factor of the view. */
+  bool read_only;                      /**< Whether the view forbids editing the tileset. */
+
 };
 
 #endif

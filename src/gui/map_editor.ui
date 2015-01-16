@@ -91,7 +91,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QGraphicsView" name="tileset_view"/>
+         <widget class="TilesetView" name="tileset_view"/>
         </widget>
        </item>
       </layout>
@@ -101,6 +101,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TilesetView</class>
+   <extends>QGraphicsView</extends>
+   <header>gui/tileset_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

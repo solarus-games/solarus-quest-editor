@@ -41,7 +41,8 @@ TilesetView::TilesetView(QWidget* parent) :
   last_integer_pattern_id(0),
   state(State::NORMAL),
   current_area_item(nullptr),
-  zoom(1.0) {
+  zoom(1.0),
+  read_only(false) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -91,6 +92,23 @@ void TilesetView::set_model(TilesetModel& model) {
  */
 double TilesetView::get_zoom() const {
   return zoom;
+}
+
+/**
+ * @brief Returns whether the view is in read-only mode.
+ * @return @c true if the mode is read-only, @c false if changes can be
+ * made to the tileset.
+ */
+bool TilesetView::is_read_only() const {
+  return read_only;
+}
+
+/**
+ * @brief Sets whether the view is in read-only mode.
+ * @param read_only @c true to block changes from this view, @c false to allow them.
+ */
+void TilesetView::set_read_only(bool read_only) {
+  this->read_only = read_only;
 }
 
 /**
@@ -150,6 +168,10 @@ void TilesetView::zoom_out() {
  */
 void TilesetView::mousePressEvent(QMouseEvent* event) {
 
+  if (scene == nullptr) {
+    return;
+  }
+
   if (event->button() == Qt::MidButton) {
     // Middle button: pan the view.
     QApplication::setOverrideCursor(Qt::ClosedHandCursor);
@@ -197,7 +219,8 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
             item->setSelected(true);
           }
           // Allow to move it.
-          if (model->get_selection_count() == 1) {
+          if (model->get_selection_count() == 1 &&
+              !is_read_only()) {
             start_state_moving_pattern(event->pos());
           }
         }
@@ -229,6 +252,10 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
  */
 void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
 
+  if (scene == nullptr) {
+    return;
+  }
+
   if (event->button() == Qt::MidButton) {
     QApplication::restoreOverrideCursor();
     return;
@@ -254,6 +281,10 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
  */
 void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
+  if (scene == nullptr) {
+    return;
+  }
+
   if ((event->buttons() & Qt::MidButton) == Qt::MidButton) {
 
     QPoint scroll_point(
@@ -273,28 +304,28 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
     if (dragging_current_point != dragging_previous_point) {
 
-        QRect new_pattern_area;
+      QRect new_pattern_area;
 
-        // The area has changed: recalculate the rectangle.
-        if (dragging_start_point.x() < dragging_current_point.x()) {
-            new_pattern_area.setX(dragging_start_point.x());
-            new_pattern_area.setWidth(dragging_current_point.x() - dragging_start_point.x());
-        }
-        else {
-            new_pattern_area.setX(dragging_current_point.x());
-            new_pattern_area.setWidth(dragging_start_point.x() - dragging_current_point.x());
-        }
+      // The area has changed: recalculate the rectangle.
+      if (dragging_start_point.x() < dragging_current_point.x()) {
+        new_pattern_area.setX(dragging_start_point.x());
+        new_pattern_area.setWidth(dragging_current_point.x() - dragging_start_point.x());
+      }
+      else {
+        new_pattern_area.setX(dragging_current_point.x());
+        new_pattern_area.setWidth(dragging_start_point.x() - dragging_current_point.x());
+      }
 
-        if (dragging_start_point.y() < dragging_current_point.y()) {
-            new_pattern_area.setY(dragging_start_point.y());
-            new_pattern_area.setHeight(dragging_current_point.y() - dragging_start_point.y());
-        }
-        else {
-            new_pattern_area.setY(dragging_current_point.y());
-            new_pattern_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
-        }
+      if (dragging_start_point.y() < dragging_current_point.y()) {
+        new_pattern_area.setY(dragging_start_point.y());
+        new_pattern_area.setHeight(dragging_current_point.y() - dragging_start_point.y());
+      }
+      else {
+        new_pattern_area.setY(dragging_current_point.y());
+        new_pattern_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
+      }
 
-        set_current_area(new_pattern_area);
+      set_current_area(new_pattern_area);
     }
   }
   else if (state == State::MOVING_PATTERN) {
@@ -326,6 +357,10 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
  */
 void TilesetView::wheelEvent(QWheelEvent* event) {
 
+  if (scene == nullptr) {
+    return;
+  }
+
   if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
     // Control + wheel: zoom in or out.
     if (event->delta() > 0) {
@@ -346,6 +381,10 @@ void TilesetView::wheelEvent(QWheelEvent* event) {
  */
 void TilesetView::contextMenuEvent(QContextMenuEvent* event) {
 
+  if (scene == nullptr) {
+    return;
+  }
+
   QPoint where;
   if (event->pos() != QPoint(0, 0)) {
     where = event->pos();
@@ -360,9 +399,16 @@ void TilesetView::contextMenuEvent(QContextMenuEvent* event) {
 
 /**
  * @brief Shows a context menu with actions relative to the selected patterns.
+ *
+ * Does nothing if the view is in read-only mode.
+ *
  * @param where Where to show the menu, in view coordinates.
  */
 void TilesetView::show_context_menu(const QPoint& where) {
+
+  if (is_read_only()) {
+    return;
+  }
 
   QList<int> selected_indexes = model->get_selected_indexes();
   if (selected_indexes.empty()) {
@@ -553,7 +599,8 @@ void TilesetView::end_state_drawing_rectangle() {
   if (!rectangle.isEmpty() &&
       sceneRect().contains(rectangle) &&
       get_items_intersecting_current_area().isEmpty() &&
-      model->is_selection_empty()) {
+      model->is_selection_empty() &&
+      !is_read_only()) {
 
     // Context menu to create a pattern.
     QMenu menu;
@@ -626,7 +673,8 @@ void TilesetView::end_state_moving_pattern() {
   if (!box.isEmpty() &&
       sceneRect().contains(box) &&
       get_items_intersecting_current_area().isEmpty() &&
-      model->get_selection_count() == 1) {
+      model->get_selection_count() == 1 &&
+      !is_read_only()) {
 
     // Context menu to move the pattern.
     QMenu menu;

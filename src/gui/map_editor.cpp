@@ -41,6 +41,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   }
   this->map_id = map_id;
 
+  ui.tileset_view->set_read_only(true);
 }
 
 /**
