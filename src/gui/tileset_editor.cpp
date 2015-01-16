@@ -470,7 +470,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
-  ui.tileset_view->set_model(*model);
+  ui.tileset_view->set_model(model);
   update();
 
   // Make connections.
@@ -590,7 +590,6 @@ void TilesetEditor::update_num_patterns_field() {
 
   ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
 }
-
 
 /**
  * @brief Updates the background color button from the one of the tileset.

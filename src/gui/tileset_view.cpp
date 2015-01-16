@@ -65,25 +65,36 @@ TilesetView::TilesetView(QWidget* parent) :
 
 /**
  * @brief Sets the tileset to represent in this view.
- * @param model The tileset model.
+ * @param model The tileset model, or nullptr to remove any model.
+ * This class does not take ownership on the model.
+ * The model can be deleted safely.
  */
-void TilesetView::set_model(TilesetModel& model) {
+void TilesetView::set_model(TilesetModel* model) {
 
-  this->model = &model;
-
-  // Create the scene from the model.
-  scene = new TilesetScene(model, this);
-  setScene(scene);
-
-  if (model.get_patterns_image().isNull()) {
-    return;
+  if (this->model != nullptr) {
+    delete this->model;
+    this->model = nullptr;
+    delete this->scene;
+    this->scene = nullptr;
   }
 
-  // Enable useful features if there is an image.
-  setDragMode(QGraphicsView::RubberBandDrag);
-  set_zoom(2.0);  // Initial zoom: x2.
-  horizontalScrollBar()->setValue(0);
-  verticalScrollBar()->setValue(0);
+  this->model = model;
+
+  if (model != nullptr) {
+    // Create the scene from the model.
+    scene = new TilesetScene(*model, this);
+    setScene(scene);
+
+    if (model->get_patterns_image().isNull()) {
+      return;
+    }
+
+    // Enable useful features if there is an image.
+    setDragMode(QGraphicsView::RubberBandDrag);
+    set_zoom(2.0);  // Initial zoom: x2.
+    horizontalScrollBar()->setValue(0);
+    verticalScrollBar()->setValue(0);
+  }
 }
 
 /**
@@ -168,7 +179,7 @@ void TilesetView::zoom_out() {
  */
 void TilesetView::mousePressEvent(QMouseEvent* event) {
 
-  if (scene == nullptr) {
+  if (model == nullptr) {
     return;
   }
 
@@ -252,7 +263,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
  */
 void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
 
-  if (scene == nullptr) {
+  if (model == nullptr) {
     return;
   }
 
@@ -281,7 +292,7 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
  */
 void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
-  if (scene == nullptr) {
+  if (model == nullptr) {
     return;
   }
 
@@ -357,7 +368,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
  */
 void TilesetView::wheelEvent(QWheelEvent* event) {
 
-  if (scene == nullptr) {
+  if (model == nullptr) {
     return;
   }
 
@@ -405,6 +416,10 @@ void TilesetView::contextMenuEvent(QContextMenuEvent* event) {
  * @param where Where to show the menu, in view coordinates.
  */
 void TilesetView::show_context_menu(const QPoint& where) {
+
+  if (model == nullptr) {
+    return;
+  }
 
   if (is_read_only()) {
     return;

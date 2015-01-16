@@ -90,6 +90,7 @@ set(solarus_quest_editor_SOURCES
   include/file_tools.h
   include/ground_traits.h
   include/layer_traits.h
+  include/map_model.h
   include/natural_comparator.h
   include/new_quest_builder.h
   include/obsolete_editor_exception.h
@@ -127,6 +128,7 @@ set(solarus_quest_editor_SOURCES
   src/ground_traits.cpp
   src/layer_traits.cpp
   src/main.cpp
+  src/map_model.cpp
   src/new_quest_builder.cpp
   src/obsolete_editor_exception.cpp
   src/obsolete_quest_exception.cpp

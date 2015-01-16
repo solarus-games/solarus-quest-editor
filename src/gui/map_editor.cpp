@@ -14,10 +14,13 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/gui_tools.h"
 #include "gui/map_editor.h"
 #include "editor_exception.h"
+#include "map_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QUndoStack>
 
 /**
  * @brief Creates a map editor.
@@ -27,7 +30,8 @@
  * @throws EditorException If the file could not be opened.
  */
 MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
-  Editor(quest, path, parent) {
+  Editor(quest, path, parent),
+  model(nullptr) {
 
   ui.setupUi(this);
 
@@ -41,7 +45,27 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   }
   this->map_id = map_id;
 
+  // Editor properties.
+  set_title("Map " + get_file_name_without_extension());
+  set_icon(QIcon(":/images/icon_resource_map.png"));
+  set_close_confirm_message(
+        tr("Map '%1' has been modified. Save changes?").arg(map_id));
+  set_zoom_supported(true);
+  set_zoom(2.0);
+
+  // Open the file.
+  model = new MapModel(quest, map_id, this);
+  get_undo_stack().setClean();
+
+  // Prepare the gui.
   ui.tileset_view->set_read_only(true);
+  update();
+
+  // Make connections.
+  connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
+          this, SLOT(update_description_to_gui()));
+  connect(ui.description_field, SIGNAL(editingFinished()),
+          this, SLOT(set_description_from_gui()));
 }
 
 /**
@@ -49,5 +73,71 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
  */
 void MapEditor::save() {
 
-  // TODO
+  model->save();
+}
+
+/**
+ * @brief Updates everything in the gui.
+ */
+void MapEditor::update() {
+
+  update_map_id_field();
+  update_description_to_gui();
+  update_tileset_view();
+}
+
+/**
+ * @brief Updates the map id displaying.
+ */
+void MapEditor::update_map_id_field() {
+
+  ui.map_id_field->setText(map_id);
+}
+
+/**
+ * @brief Updates the content of the map description text edit.
+ */
+void MapEditor::update_description_to_gui() {
+
+  QString description = get_resources().get_description(ResourceType::MAP, map_id);
+  if (ui.description_field->text() != description) {
+    ui.description_field->setText(description);
+  }
+}
+
+/**
+ * @brief Modifies the map description in the quest resource list with
+ * the new text entered by the user.
+ *
+ * If the new description is invalid, an error dialog is shown.
+ */
+void MapEditor::set_description_from_gui() {
+
+  QString description = ui.description_field->text();
+  if (description == get_resources().get_description(ResourceType::MAP, map_id)) {
+    return;
+  }
+
+  if (description.isEmpty()) {
+    GuiTools::error_dialog("Invalid description");
+    update_description_to_gui();
+    return;
+  }
+
+  QSignalBlocker(this);
+  try {
+    get_resources().set_description(ResourceType::MAP, map_id, description);
+    get_resources().save();
+  }
+  catch (const EditorException& ex) {
+    ex.print_message();
+  }
+}
+
+/**
+ * @brief Updates the content of the tileset view.
+ */
+void MapEditor::update_tileset_view() {
+
+  ui.tileset_view->set_model(model->get_tileset_model());
 }

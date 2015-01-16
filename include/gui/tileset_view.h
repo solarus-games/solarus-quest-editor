@@ -38,7 +38,7 @@ public:
 
   TilesetView(QWidget* parent = nullptr);
 
-  void set_model(TilesetModel& tileset);
+  void set_model(TilesetModel* tileset);
   double get_zoom() const;
   bool is_read_only() const;
 

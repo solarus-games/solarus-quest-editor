@@ -36,10 +36,20 @@ public:
 
   virtual void save() override;
 
+public slots:
+
+  void update();
+
+  void update_map_id_field();
+  void update_description_to_gui();
+  void set_description_from_gui();
+  void update_tileset_view();
+
 private:
 
   Ui::MapEditor ui;         /**< The map editor widgets. */
   QString map_id;           /**< Id of the map being edited. */
+  MapModel* model;          /**< Map model being edited. */
 
 };
 
