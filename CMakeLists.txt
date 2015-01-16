@@ -73,6 +73,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/enum_selector.inl
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
+  include/gui/map_editor.h
   include/gui/main_window.h
   include/gui/new_resource_element_dialog.h
   include/gui/quest_files_model.h
@@ -110,6 +111,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
+  src/gui/map_editor.cpp
   src/gui/new_resource_element_dialog.cpp
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
@@ -142,6 +144,7 @@ set(solarus_quest_editor_FORMS
   src/gui/change_pattern_id_dialog.ui
   src/gui/external_script_dialog.ui
   src/gui/main_window.ui
+  src/gui/map_editor.ui
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
 )

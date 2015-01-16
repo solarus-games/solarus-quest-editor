@@ -17,10 +17,12 @@
 #include "gui/closable_tab_bar.h"
 #include "gui/editor_tabs.h"
 #include "gui/gui_tools.h"
+#include "gui/map_editor.h"
 #include "gui/text_editor.h"
 #include "gui/tileset_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include <QFileInfo>
 #include <QUndoGroup>
 #include <QUndoStack>
 
@@ -144,9 +146,27 @@ void EditorTabs::open_text_editor(
  * @param path Path of the map data file to open.
  */
 void EditorTabs::open_map_editor(
-    Quest& /* quest */, const QString& /* path */) {
+    Quest& quest, const QString& path) {
 
-  // TODO map editor.
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new MapEditor(quest, path));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**
@@ -345,28 +365,30 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     return;
   }
 
-  if (!quest.is_in_root_path(path)) {
+  QFileInfo file_info(path);
+  QString canonical_path = file_info.canonicalFilePath();
+  if (!quest.is_in_root_path(canonical_path)) {
     // Not a file of this quest.
     return;
   }
 
   ResourceType resource_type;
   QString element_id;
-  if (quest.is_resource_element(path, resource_type, element_id)) {
+  if (quest.is_resource_element(canonical_path, resource_type, element_id)) {
     // A resource element declared in the quest.
     // Possibly a map data file, an enemy Lua script,
     // a language directory, etc.
     open_resource(quest, resource_type, element_id);
   }
-  else if (quest.is_dialogs_file(path, element_id)) {
-    open_dialogs_editor(quest, path);
+  else if (quest.is_dialogs_file(canonical_path, element_id)) {
+    open_dialogs_editor(quest, canonical_path);
   }
-  else if (quest.is_strings_file(path, element_id)) {
-    open_strings_editor(quest, path);
+  else if (quest.is_strings_file(canonical_path, element_id)) {
+    open_strings_editor(quest, canonical_path);
   }
-  else if (quest.is_script(path)) {
+  else if (quest.is_script(canonical_path)) {
     // A Lua script that is not a resource element.
-    open_text_editor(quest, path);
+    open_text_editor(quest, canonical_path);
   }
 }
 
