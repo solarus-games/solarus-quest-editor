@@ -466,7 +466,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   get_undo_stack().setClean();
 
   // Prepare the gui.
-  layout()->addWidget(ui.splitter);
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
