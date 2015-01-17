@@ -60,6 +60,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   // Prepare the gui.
   const int side_width = 300;
   ui.splitter->setSizes({ side_width, width() - side_width });
+  ui.tileset_field->set_resource_type(ResourceType::TILESET);
+  ui.tileset_field->set_quest(quest);
+  ui.music_field->set_resource_type(ResourceType::MUSIC);
+  ui.music_field->set_quest(quest);
   ui.tileset_view->set_read_only(true);
   update();
 

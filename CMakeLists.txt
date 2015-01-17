@@ -78,6 +78,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/new_resource_element_dialog.h
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
+  include/gui/resource_model.h
+  include/gui/resource_selector.h
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
   include/gui/tile_patterns_list_view.h
@@ -116,6 +118,8 @@ set(solarus_quest_editor_SOURCES
   src/gui/new_resource_element_dialog.cpp
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
+  src/gui/resource_model.cpp
+  src/gui/resource_selector.cpp
   src/gui/text_editor.cpp
   src/gui/text_editor_widget.cpp
   src/gui/tile_patterns_list_view.cpp

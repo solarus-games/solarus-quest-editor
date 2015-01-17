@@ -238,7 +238,7 @@
            <item row="6" column="1">
             <layout class="QHBoxLayout" name="horizontal_layout_5">
              <item>
-              <widget class="QComboBox" name="tileset_field"/>
+              <widget class="ResourceSelector" name="tileset_field"/>
              </item>
              <item>
               <widget class="QToolButton" name="tileset_refresh_button">
@@ -284,7 +284,7 @@
             </widget>
            </item>
            <item row="7" column="1">
-            <widget class="QComboBox" name="music_field"/>
+            <widget class="ResourceSelector" name="music_field"/>
            </item>
            <item row="3" column="0">
             <widget class="QCheckBox" name="checkBox">
@@ -310,6 +310,11 @@
    <class>TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>gui/tileset_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResourceSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/resource_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources>
