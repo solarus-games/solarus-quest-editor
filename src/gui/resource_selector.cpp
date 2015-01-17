@@ -16,7 +16,9 @@
  */
 #include "gui/resource_selector.h"
 #include "gui/resource_model.h"
+#include <QHeaderView>
 #include <QStandardItemModel>
+#include <QTreeView>
 
 /**
  * @brief Creates a resource selector.
@@ -63,6 +65,16 @@ void ResourceSelector::set_quest(Quest& quest) {
 
   model = new ResourceModel(quest, resource_type);
   setModel(model);
+
+  QTreeView* tree_view = new QTreeView(this);
+  tree_view->setModel(model);
+  tree_view->setEditTriggers(QTreeView::NoEditTriggers);
+  tree_view->setAlternatingRowColors(true);
+  tree_view->expandAll();
+  tree_view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  tree_view->setHeaderHidden(true);
+
+  setView(tree_view);
 }
 
 /**
@@ -71,8 +83,7 @@ void ResourceSelector::set_quest(Quest& quest) {
  */
 QString ResourceSelector::get_selected_id() const {
 
-  // TODO
-  return "";
+  return currentData(Qt::UserRole).toString();
 }
 
 /**

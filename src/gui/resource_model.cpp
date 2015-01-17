@@ -31,10 +31,10 @@ ResourceModel::ResourceModel(Quest& quest, ResourceType resource_type, QObject* 
 
   QStringList ids = get_resources().get_elements(this->resource_type);
   for (const QString& id : ids) {
-    QString description = get_resources().get_description(resource_type, id);
-    // TODO add an icon
-    this->appendRow(new QStandardItem(description));
+    add_element(id);
   }
+
+  // TODO update when resources change.
 }
 
 /**
@@ -51,4 +51,70 @@ Quest& ResourceModel::get_quest() {
  */
 QuestResources& ResourceModel::get_resources() {
   return quest.get_resources();
+}
+
+/**
+ * @brief Adds to the model an item for the specified resource element.
+ * @param element_id Id of the resource element to add.
+ */
+void ResourceModel::add_element(const QString& element_id) {
+
+  QString description = get_resources().get_description(resource_type, element_id);
+
+  QStringList files = element_id.split('/', QString::SkipEmptyParts);
+  QStandardItem* parent = invisibleRootItem();
+  while (files.size() > 1) {
+    parent = find_or_create_dir_item(*parent, files.first());
+    files.removeFirst();
+  }
+
+  QStandardItem* item = new QStandardItem(description);
+  QString resource_type_name = QString::fromStdString(
+        Solarus::QuestResources::get_resource_type_name(resource_type));
+  item->setData(
+        QIcon(":/images/icon_resource_" + resource_type_name + ".png"),
+        Qt::DecorationRole);
+  item->setData(element_id, Qt::UserRole);
+  parent->appendRow(item);
+}
+
+/**
+ * @brief Returns the item with the specified directory name.
+ * @param parent The parent item.
+ * @param dir_name Name of the subdirectory to get.
+ * @return The child. It is created if it does not exist yet.
+ */
+QStandardItem* ResourceModel::find_or_create_dir_item(
+    QStandardItem& parent, const QString& dir_name) {
+
+  for (int i = 0; i < parent.rowCount(); ++i) {
+    QStandardItem* child = parent.child(i, 0);
+    QString name = child->data(Qt::DisplayRole).toString();
+    if (name == dir_name) {
+      return child;
+    }
+
+    if (name > dir_name) {
+      child = create_dir_item(dir_name);
+      parent.insertRow(i, child);
+      return child;
+    }
+  }
+
+  QStandardItem* child = create_dir_item(dir_name);
+  parent.appendRow(child);
+  return child;
+}
+
+/**
+ * @brief Creates a new item with the specified directory name.
+ * @param dir_name Name of a bdirectory.
+ * @return The created item.
+ */
+QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
+
+  QStandardItem* item = new QStandardItem(dir_name);
+  item->setSelectable(false);
+  item->setData(QIcon(":/images/icon_folder_open.png"), Qt::DecorationRole);
+  return item;
 }

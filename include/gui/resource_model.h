@@ -39,6 +39,11 @@ public:
 
 private:
 
+  void add_element(const QString& element_id);
+  QStandardItem* find_or_create_dir_item(
+      QStandardItem& parent, const QString& dir_name);
+  QStandardItem* create_dir_item(const QString& dir_name);
+
   Quest& quest;
   ResourceType resource_type;
 

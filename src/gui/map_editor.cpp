@@ -58,7 +58,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   get_undo_stack().setClean();
 
   // Prepare the gui.
-  const int side_width = 300;
+  const int side_width = 350;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
