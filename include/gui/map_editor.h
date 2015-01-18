@@ -43,6 +43,12 @@ public slots:
   void update_map_id_field();
   void update_description_to_gui();
   void set_description_from_gui();
+  void update_size_field();
+  void update_world_field();
+  void update_floor_field();
+  void update_location_field();
+  void update_tileset_field();
+  void update_music_field();
   void update_tileset_view();
 
 private:

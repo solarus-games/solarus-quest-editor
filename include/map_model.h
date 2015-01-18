@@ -45,6 +45,7 @@ public:
 
   TilesetModel* get_tileset_model() const;
   QString get_tileset_id() const;
+  QString get_music_id() const;
 
 public slots:
 

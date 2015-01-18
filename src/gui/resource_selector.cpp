@@ -90,6 +90,12 @@ QString ResourceSelector::get_selected_id() const {
  * @brief Selects the specified resource element.
  * @param element_id Id of the element to select.
  */
-void ResourceSelector::set_selected_id(const QString& /* element_id */) {
-  // TODO
+void ResourceSelector::set_selected_id(const QString& element_id) {
+
+  if (model == nullptr) {
+    return;
+  }
+
+  int index = model->get_element_index(element_id);
+  setCurrentIndex(index);
 }

@@ -94,3 +94,11 @@ QString MapModel::get_tileset_id() const {
 TilesetModel* MapModel::get_tileset_model() const {
   return tileset_model;
 }
+
+/**
+ * @brief Returns the id of the music of this map.
+ * @return The music id or "none" or "same".
+ */
+QString MapModel::get_music_id() const {
+  return QString::fromStdString(map.get_music_id());
+}

@@ -68,7 +68,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   update();
 
   // Make connections.
-  connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
+  connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
@@ -89,6 +89,12 @@ void MapEditor::update() {
 
   update_map_id_field();
   update_description_to_gui();
+  update_size_field();
+  update_world_field();
+  update_floor_field();
+  update_location_field();
+  update_tileset_field();
+  update_music_field();
   update_tileset_view();
 }
 
@@ -138,6 +144,38 @@ void MapEditor::set_description_from_gui() {
   catch (const EditorException& ex) {
     ex.print_message();
   }
+}
+
+void MapEditor::update_size_field() {
+  // TODO
+}
+
+void MapEditor::update_world_field() {
+  // TODO
+}
+
+void MapEditor::update_floor_field() {
+  // TODO
+}
+
+void MapEditor::update_location_field() {
+  // TODO
+}
+
+/**
+ * @brief Updates the tileset selector with the data from the model.
+ */
+void MapEditor::update_tileset_field() {
+
+  ui.tileset_field->set_selected_id(model->get_tileset_id());
+}
+
+/**
+ * @brief Updates the tileset selector with the data from the model.
+ */
+void MapEditor::update_music_field() {
+
+  ui.music_field->set_selected_id(model->get_music_id());
 }
 
 /**

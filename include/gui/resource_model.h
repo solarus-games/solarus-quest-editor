@@ -37,15 +37,22 @@ public:
   Quest& get_quest();
   QuestResources& get_resources();
 
+  int get_element_index(const QString& element_id) const;
+
 private:
 
   void add_element(const QString& element_id);
   QStandardItem* find_or_create_dir_item(
       QStandardItem& parent, const QString& dir_name);
   QStandardItem* create_dir_item(const QString& dir_name);
+  QStandardItem* create_element_item(const QString& element_id);
+  const QStandardItem* get_element_item(const QString& element_id) const;
+  QStandardItem* get_element_item(const QString& element_id);
 
-  Quest& quest;
-  ResourceType resource_type;
+  Quest& quest;                   /**< The quest. */
+  ResourceType resource_type;     /**< The resource type represented in the model. */
+  std::map<QString, QStandardItem*>
+      items;                      /**< Mapping of items from element ids. */
 
 };
 
