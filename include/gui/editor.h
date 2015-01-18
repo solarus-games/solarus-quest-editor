@@ -67,6 +67,7 @@ signals:
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
   void zoom_changed(double zoom);
+  void open_file_requested(Quest& quest, const QString& path);
 
 public slots:
 

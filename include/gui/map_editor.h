@@ -55,6 +55,7 @@ private slots:
   void change_location_requested();
   void update_tileset_field();
   void tileset_selector_activated();
+  void open_tileset_requested();
   void update_music_field();
   void music_selector_activated();
   void update_tileset_view();

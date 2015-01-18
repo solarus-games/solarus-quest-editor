@@ -248,6 +248,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(update_tileset_field()));
   connect(model, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(update_tileset_view()));
+  connect(ui.tileset_edit_button, SIGNAL(clicked()),
+          this, SLOT(open_tileset_requested()));
 
   connect(ui.music_field, SIGNAL(activated(QString)),
           this, SLOT(music_selector_activated()));
@@ -504,6 +506,15 @@ void MapEditor::tileset_selector_activated() {
   }
 
   try_command(new SetTilesetCommand(*this, new_tileset_id));
+}
+
+/**
+ * @brief Slot called when the user wants to open the selected tileset.
+ */
+void MapEditor::open_tileset_requested() {
+
+  emit open_file_requested(
+        get_quest(), get_quest().get_tileset_data_file_path(model->get_tileset_id()));
 }
 
 /**

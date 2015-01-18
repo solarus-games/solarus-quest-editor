@@ -250,9 +250,12 @@ void EditorTabs::add_editor(Editor* editor) {
   // Tell the quest that this file is now open.
   editor->get_quest().set_path_open(path, true);
 
-  // Show asterisk in tab title when a file is modified.
+  // Show an asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
           this, SLOT(modification_state_changed(bool)));
+
+  connect(editor, SIGNAL(open_file_requested(Quest&, QString)),
+          this, SLOT(open_file_requested(Quest&, QString)));
 }
 
 /**
