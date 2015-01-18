@@ -48,7 +48,9 @@ public slots:
   void update_floor_field();
   void update_location_field();
   void update_tileset_field();
+  void tileset_selector_activated();
   void update_music_field();
+  void music_selector_activated();
   void update_tileset_view();
 
 private:

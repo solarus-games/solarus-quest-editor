@@ -88,6 +88,23 @@ QString MapModel::get_tileset_id() const {
 }
 
 /**
+ * @brief Sets the tileset of this map.
+ *
+ * Emits tileset_id_changed() if there is a change.
+ *
+ * @param tileset_id The tileset id.
+ */
+void MapModel::set_tileset_id(const QString& tileset_id) {
+
+  const std::string std_tileset_id = tileset_id.toStdString();
+  if (std_tileset_id == map.get_tileset_id()) {
+    return;
+  }
+  map.set_tileset_id(std_tileset_id);
+  emit tileset_id_changed(tileset_id);
+}
+
+/**
  * @brief Returns the tileset of this map.
  * @return The tileset. Returns nullptr if no tileset is set.
  */
@@ -101,4 +118,21 @@ TilesetModel* MapModel::get_tileset_model() const {
  */
 QString MapModel::get_music_id() const {
   return QString::fromStdString(map.get_music_id());
+}
+
+/**
+ * @brief Sets the music of this map.
+ *
+ * Emits music_id_changed() if there is a change.
+ *
+ * @param music_id The music id or "none" or "same".
+ */
+void MapModel::set_music_id(const QString& music_id) {
+
+  const std::string std_music_id = music_id.toStdString();
+  if (std_music_id == map.get_music_id()) {
+    return;
+  }
+  map.set_music_id(std_music_id);
+  emit music_id_changed(music_id);
 }
