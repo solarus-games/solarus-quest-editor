@@ -64,6 +64,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.tileset_field->set_quest(quest);
   ui.music_field->set_resource_type(ResourceType::MUSIC);
   ui.music_field->set_quest(quest);
+  ui.music_field->add_special_value("none", tr("<No music>"), 0);
+  ui.music_field->add_special_value("same", tr("<Same as before>"), 1);
   ui.tileset_view->set_read_only(true);
   update();
 

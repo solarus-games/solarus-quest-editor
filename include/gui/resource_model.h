@@ -37,6 +37,8 @@ public:
   Quest& get_quest();
   QuestResources& get_resources();
 
+  void add_special_value(
+      const QString& id, const QString& text, int index);
   int get_element_index(const QString& element_id) const;
 
 private:

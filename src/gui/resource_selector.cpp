@@ -78,6 +78,21 @@ void ResourceSelector::set_quest(Quest& quest) {
 }
 
 /**
+ * @brief Adds an item for a special value that is not an existing resource element.
+ *
+ * You can use this function to add a fake item like "None" or "Unchanged".
+ *
+ * @param id String to identify the item, replacing the resource element id.
+ * @param text Text to show in the combo box for this item.
+ * @param index Index where to insert the item.
+ */
+void ResourceSelector::add_special_value(
+    const QString& id, const QString& text, int index) {
+
+  model->add_special_value(id, text, index);
+}
+
+/**
  * @brief Returns the id of the selected resource element.
  * @return The selected id.
  */

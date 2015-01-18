@@ -65,6 +65,24 @@ int ResourceModel::get_element_index(const QString& element_id) const {
 }
 
 /**
+ * @brief Adds an item for a special value that is not an existing resource element.
+ *
+ * You can use this function to add a fake item like "None" or "Unchanged".
+ *
+ * @param id String to identify the item, replacing the resource element id.
+ * @param text Text to show in the combo box for this item.
+ * @param index Index where to insert the item.
+ */
+void ResourceModel::add_special_value(
+    const QString& id, const QString& text, int index) {
+
+  QStandardItem* item = new QStandardItem(text);
+  item->setData(id, Qt::UserRole);
+  items.insert(std::make_pair(id, item));
+  insertRow(index, item);
+}
+
+/**
  * @brief Adds to the model an item for the specified resource element.
  * @param element_id Id of the resource element to add.
  */
