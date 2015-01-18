@@ -36,7 +36,7 @@ public:
 
   virtual void save() override;
 
-public slots:
+private slots:
 
   void update();
 
@@ -46,8 +46,13 @@ public slots:
   void update_size_field();
   void change_size_requested();
   void update_world_field();
+  void world_check_box_changed();
+  void change_world_requested();
   void update_floor_field();
+  void floor_check_box_changed();
+  void change_floor_requested();
   void update_location_field();
+  void change_location_requested();
   void update_tileset_field();
   void tileset_selector_activated();
   void update_music_field();

@@ -70,6 +70,60 @@ private:
 };
 
 /**
+ * @brief Changing the world of the map.
+ */
+class SetWorldCommand : public MapEditorCommand {
+
+public:
+  SetWorldCommand(MapEditor& editor, const QString& world) :
+    MapEditorCommand(editor, MapEditor::tr("Map world")),
+    before(get_model().get_world()),
+    after(world) { }
+
+  void undo() override { get_model().set_world(before); }
+  void redo() override { get_model().set_world(after); }
+
+private:
+  QString before, after;
+};
+
+/**
+ * @brief Changing the floor of the map.
+ */
+class SetFloorCommand : public MapEditorCommand {
+
+public:
+  SetFloorCommand(MapEditor& editor, int floor) :
+    MapEditorCommand(editor, MapEditor::tr("Map floor")),
+    before(get_model().get_floor()),
+    after(floor) { }
+
+  void undo() override { get_model().set_floor(before); }
+  void redo() override { get_model().set_floor(after); }
+
+private:
+  int before, after;
+};
+
+/**
+ * @brief Changing the location of the map.
+ */
+class SetLocationCommand : public MapEditorCommand {
+
+public:
+  SetLocationCommand(MapEditor& editor, const QPoint& location) :
+    MapEditorCommand(editor, MapEditor::tr("Map location")),
+    before(get_model().get_location()),
+    after(location) { }
+
+  void undo() override { get_model().set_location(before); }
+  void redo() override { get_model().set_location(after); }
+
+private:
+  QPoint before, after;
+};
+
+/**
  * @brief Changing the tileset of the map.
  */
 class SetTilesetCommand : public MapEditorCommand {
@@ -160,12 +214,33 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
 
-  connect(ui.width_field, SIGNAL(valueChanged(int)),
+  connect(ui.width_field, SIGNAL(editingFinished()),
           this, SLOT(change_size_requested()));
-  connect(ui.height_field, SIGNAL(valueChanged(int)),
+  connect(ui.height_field, SIGNAL(editingFinished()),
           this, SLOT(change_size_requested()));
   connect(model, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
+
+  connect(ui.world_check_box, SIGNAL(stateChanged(int)),
+          this, SLOT(world_check_box_changed()));
+  connect(ui.world_field, SIGNAL(editingFinished()),
+          this, SLOT(change_world_requested()));
+  connect(model, SIGNAL(world_changed(QString)),
+          this, SLOT(update_world_field()));
+
+  connect(ui.floor_check_box, SIGNAL(stateChanged(int)),
+          this, SLOT(floor_check_box_changed()));
+  connect(ui.floor_field, SIGNAL(editingFinished()),
+          this, SLOT(change_floor_requested()));
+  connect(model, SIGNAL(floor_changed(int)),
+          this, SLOT(update_floor_field()));
+
+  connect(ui.x_field, SIGNAL(editingFinished()),
+          this, SLOT(change_location_requested()));
+  connect(ui.y_field, SIGNAL(editingFinished()),
+          this, SLOT(change_location_requested()));
+  connect(model, SIGNAL(location_changed(QPoint)),
+          this, SLOT(update_location_field()));
 
   connect(model, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(update_tileset_field()));
@@ -273,7 +348,7 @@ void MapEditor::update_size_field() {
 }
 
 /**
- * @brief Modifies the map size with the new values entered by the user.
+ * @brief Modifies the map size with new values entered by the user.
  */
 void MapEditor::change_size_requested() {
 
@@ -293,13 +368,47 @@ void MapEditor::update_world_field() {
   if (world.isEmpty()) {
     ui.world_check_box->setChecked(false);
     ui.world_field->setEnabled(false);
-    ui.world_field->setText("");
   }
   else {
     ui.world_check_box->setChecked(true);
     ui.world_field->setEnabled(true);
     ui.world_field->setText(world);
   }
+}
+
+/**
+ * @brief Slot called when the user clicks the "Set a world" checkbox.
+ */
+void MapEditor::world_check_box_changed() {
+
+  bool checked = ui.world_check_box->isChecked();
+  if (checked) {
+    ui.world_field->setEnabled(true);
+    if (!model->has_world() &&
+        !ui.world_field->text().isEmpty()) {
+      // Use the text that was still in the disabled field.
+      try_command(new SetWorldCommand(*this, ui.world_field->text()));
+    }
+  }
+  else {
+    ui.world_field->setEnabled(false);
+    if (model->has_world()) {
+      // Remove the world but keep the text in the field.
+      try_command(new SetWorldCommand(*this, ""));
+    }
+  }
+}
+
+/**
+ * @brief Changes the world value with the new text entered by the user.
+ */
+void MapEditor::change_world_requested() {
+
+  QString world = ui.world_field->text();
+  if (world == model->get_world()) {
+    return;
+  }
+  try_command(new SetWorldCommand(*this, world));
 }
 
 /**
@@ -311,13 +420,46 @@ void MapEditor::update_floor_field() {
   if (floor == MapModel::NO_FLOOR) {
     ui.floor_check_box->setChecked(false);
     ui.floor_field->setEnabled(false);
-    ui.floor_field->setValue(0);
   }
   else {
     ui.floor_check_box->setChecked(true);
     ui.floor_field->setEnabled(true);
     ui.floor_field->setValue(floor);
   }
+}
+
+/**
+ * @brief Slot called when the user clicks the "Set a floor" checkbox.
+ */
+void MapEditor::floor_check_box_changed() {
+
+  bool checked = ui.floor_check_box->isChecked();
+  if (checked) {
+    ui.floor_field->setEnabled(true);
+    if (!model->has_floor()) {
+      // Use the value that was still in the disabled field.
+      try_command(new SetFloorCommand(*this, ui.floor_field->value()));
+    }
+  }
+  else {
+    ui.floor_field->setEnabled(false);
+    if (model->has_floor()) {
+      // Remove the floor but keep the value in the field.
+      try_command(new SetFloorCommand(*this, MapModel::NO_FLOOR));
+    }
+  }
+}
+
+/**
+ * @brief Changes the floor value with the new text entered by the user.
+ */
+void MapEditor::change_floor_requested() {
+
+  int floor = ui.floor_field->value();
+  if (floor == model->get_floor()) {
+    return;
+  }
+  try_command(new SetFloorCommand(*this, floor));
 }
 
 /**
@@ -328,6 +470,18 @@ void MapEditor::update_location_field() {
   const QPoint& location = model->get_location();
   ui.x_field->setValue(location.x());
   ui.y_field->setValue(location.y());
+}
+
+/**
+ * @brief Modifies the map location with new values entered by the user.
+ */
+void MapEditor::change_location_requested() {
+
+  QPoint location(ui.x_field->value(), ui.y_field->value());
+  if (location == model->get_location()) {
+    return;
+  }
+  try_command(new SetLocationCommand(*this, location));
 }
 
 /**
