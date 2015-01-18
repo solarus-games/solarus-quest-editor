@@ -242,13 +242,12 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(model, SIGNAL(location_changed(QPoint)),
           this, SLOT(update_location_field()));
 
-  connect(model, SIGNAL(tileset_id_changed(QString)),
-          this, SLOT(update_tileset_field()));
-
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
   connect(model, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(update_tileset_field()));
+  connect(model, SIGNAL(tileset_id_changed(QString)),
+          this, SLOT(update_tileset_view()));
 
   connect(ui.music_field, SIGNAL(activated(QString)),
           this, SLOT(music_selector_activated()));

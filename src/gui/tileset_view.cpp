@@ -72,9 +72,7 @@ TilesetView::TilesetView(QWidget* parent) :
 void TilesetView::set_model(TilesetModel* model) {
 
   if (this->model != nullptr) {
-    delete this->model;
     this->model = nullptr;
-    delete this->scene;
     this->scene = nullptr;
   }
 

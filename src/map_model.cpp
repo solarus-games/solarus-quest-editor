@@ -228,6 +228,11 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
     return;
   }
   map.set_tileset_id(std_tileset_id);
+
+  if (!tileset_id.isEmpty()) {
+    tileset_model = new TilesetModel(quest, tileset_id, this);
+  }
+
   emit tileset_id_changed(tileset_id);
 }
 
