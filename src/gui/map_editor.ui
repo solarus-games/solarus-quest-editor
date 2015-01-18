@@ -27,25 +27,31 @@
        </sizepolicy>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QSplitter" name="map_side_splitter">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <widget class="QGroupBox" name="map_properties_group_box">
+         <widget class="QWidget" name="map_properties_view" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="title">
-           <string>Map properties</string>
-          </property>
           <layout class="QFormLayout" name="formLayout">
-           <property name="fieldGrowthPolicy">
-            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-           </property>
            <item row="0" column="0">
             <widget class="QLabel" name="map_id_label">
              <property name="toolTip">
@@ -145,6 +151,13 @@
               </spacer>
              </item>
             </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="world_check_box">
+             <property name="text">
+              <string>Set a world</string>
+             </property>
+            </widget>
            </item>
            <item row="3" column="1">
             <widget class="QLineEdit" name="world_field">
@@ -316,13 +329,6 @@
             <widget class="ResourceSelector" name="music_field">
              <property name="toolTip">
               <string>Background music of the map</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QCheckBox" name="world_check_box">
-             <property name="text">
-              <string>Set a world</string>
              </property>
             </widget>
            </item>
