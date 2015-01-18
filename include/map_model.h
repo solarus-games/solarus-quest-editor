@@ -43,14 +43,30 @@ public:
   Quest& get_quest();
   QString get_map_id() const;
 
+  QSize get_size() const;
+  void set_size(const QSize& size);
+  bool has_world() const;
+  QString get_world() const;
+  void set_world(const QString& world);
+  bool has_floor() const;
+  int get_floor() const;
+  void set_floor(int floor);
+  QPoint get_location() const;
+  void set_location(const QPoint& location);
   TilesetModel* get_tileset_model() const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
 
+  static constexpr int NO_FLOOR = Solarus::MapData::NO_FLOOR;
+
 signals:
 
+  void size_changed(const QSize& size);
+  void world_changed(const QString& world);
+  void floor_changed(int floor);
+  void location_changed(const QPoint& location);
   void tileset_id_changed(const QString& tileset_id);
   void music_id_changed(const QString& music_id);
 

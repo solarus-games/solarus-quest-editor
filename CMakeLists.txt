@@ -101,10 +101,12 @@ set(solarus_quest_editor_SOURCES
   include/pattern_animation_traits.h
   include/pattern_separation.h
   include/pattern_separation_traits.h
+  include/point.h
   include/quest.h
   include/quest_properties.h
   include/quest_resources.h
   include/rectangle.h
+  include/size.h
   include/tileset_model.h
   src/gui/change_pattern_id_dialog.cpp
   src/gui/closable_tab_bar.cpp
@@ -138,10 +140,12 @@ set(solarus_quest_editor_SOURCES
   src/obsolete_quest_exception.cpp
   src/pattern_animation_traits.cpp
   src/pattern_separation_traits.cpp
+  src/point.cpp
   src/quest.cpp
   src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp
+  src/size.cpp
   src/tileset_model.cpp
 )
 

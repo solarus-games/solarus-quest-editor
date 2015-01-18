@@ -253,20 +253,60 @@ void MapEditor::set_description_from_gui() {
   }
 }
 
+/**
+ * @brief Updates the size field with the data from the model.
+ */
 void MapEditor::update_size_field() {
-  // TODO
+
+  const QSize& size = model->get_size();
+  ui.width_field->setValue(size.width());
+  ui.height_field->setValue(size.height());
 }
 
+/**
+ * @brief Updates the world field with the data from the model.
+ */
 void MapEditor::update_world_field() {
-  // TODO
+
+  const QString& world = model->get_world();
+  if (world.isEmpty()) {
+    ui.world_check_box->setChecked(false);
+    ui.world_field->setEnabled(false);
+    ui.world_field->setText("");
+  }
+  else {
+    ui.world_check_box->setChecked(true);
+    ui.world_field->setEnabled(true);
+    ui.world_field->setText(world);
+  }
 }
 
+/**
+ * @brief Updates the floor field with the data from the model.
+ */
 void MapEditor::update_floor_field() {
-  // TODO
+
+  int floor = model->get_floor();
+  if (floor == MapModel::NO_FLOOR) {
+    ui.floor_check_box->setChecked(false);
+    ui.floor_field->setEnabled(false);
+    ui.floor_field->setValue(0);
+  }
+  else {
+    ui.floor_check_box->setChecked(true);
+    ui.floor_field->setEnabled(true);
+    ui.floor_field->setValue(floor);
+  }
 }
 
+/**
+ * @brief Updates the location field with the data from the model.
+ */
 void MapEditor::update_location_field() {
-  // TODO
+
+  const QPoint& location = model->get_location();
+  ui.x_field->setValue(location.x());
+  ui.y_field->setValue(location.y());
 }
 
 /**

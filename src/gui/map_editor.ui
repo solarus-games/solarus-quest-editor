@@ -320,7 +320,7 @@
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="world_check_box">
              <property name="text">
               <string>Set a world</string>
              </property>

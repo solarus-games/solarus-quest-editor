@@ -17,6 +17,8 @@
 #include "editor_exception.h"
 #include "map_model.h"
 #include "quest.h"
+#include "point.h"
+#include "size.h"
 #include "tileset_model.h"
 #include <QIcon>
 
@@ -77,6 +79,131 @@ void MapModel::save() const {
   if (!map.export_to_file(path.toStdString())) {
     throw EditorException(tr("Cannot save map data file '%1'").arg(path));
   }
+}
+
+/**
+ * @brief Returns the size of the map.
+ * @return The size of the map in pixels.
+ */
+QSize MapModel::get_size() const {
+
+  return Size::to_qsize(map.get_size());
+}
+
+/**
+ * @brief Sets the size of this map.
+ *
+ * Emits size_changed() if there is a change.
+ *
+ * @param size The size to set.
+ */
+void MapModel::set_size(const QSize& size) {
+
+  const Solarus::Size solarus_size = Size::to_solarus_size(size);
+  if (solarus_size == map.get_size()) {
+    return;
+  }
+
+  map.set_size(solarus_size);
+  emit size_changed(size);
+}
+
+/**
+ * @brief Returns whether a world is set.
+ * @return @c true if this map is in a world.
+ */
+bool MapModel::has_world() const {
+
+  return map.has_world();
+}
+
+/**
+ * @brief Returns the world this maps belongs to.
+ * @return The world name or an empty string.
+ */
+QString MapModel::get_world() const {
+
+  return QString::fromStdString(map.get_world());
+}
+
+/**
+ * @brief Sets the world of this map.
+ *
+ * Emits world_changed() if there is a change.
+ *
+ * @param world The world name or an empty string.
+ */
+void MapModel::set_world(const QString& world) {
+
+  const std::string& std_world = world.toStdString();
+  if (std_world == map.get_world()) {
+    return;
+  }
+
+  map.set_world(std_world);
+  emit world_changed(world);
+}
+
+/**
+ * @brief Returns whether a floor is set.
+ * @return @c true if this map has a floor value.
+ */
+bool MapModel::has_floor() const {
+
+  return map.has_floor();
+}
+
+/**
+ * @brief Returns the floor of this map.
+ * @return The floor or NO_FLOOR.
+ */
+int MapModel::get_floor() const {
+
+  return map.get_floor();
+}
+
+/**
+ * @brief Sets the floor of this map.
+ *
+ * Emits floor_changed() if there is a change.
+ *
+ * @param floor The floor or NO_FLOOR.
+ */
+void MapModel::set_floor(int floor) {
+
+  if (floor == map.get_floor()) {
+    return;
+  }
+
+  map.set_floor(floor);
+  emit floor_changed(floor);
+}
+
+/**
+ * @brief Returns the location of this map in its world.
+ * @return The location.
+ */
+QPoint MapModel::get_location() const {
+
+  return Point::to_qpoint(map.get_location());
+}
+
+/**
+ * @brief Sets the location of this map in its world.
+ *
+ * Emits location_changed() if there is a change.
+ *
+ * @return The location.
+ */
+void MapModel::set_location(const QPoint& location) {
+
+  const Solarus::Point solarus_location = Point::to_solarus_point(location);
+  if (solarus_location == map.get_location()) {
+    return;
+  }
+
+  map.set_location(solarus_location);
+  emit location_changed(location);
 }
 
 /**
