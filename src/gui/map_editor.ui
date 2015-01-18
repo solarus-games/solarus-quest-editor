@@ -59,7 +59,7 @@
            <item row="0" column="1">
             <widget class="QLabel" name="map_id_field">
              <property name="toolTip">
-              <string>Filename of the tileset (without extension)</string>
+              <string>Filename of the map (without extension)</string>
              </property>
              <property name="text">
               <string/>
@@ -100,6 +100,9 @@
             <layout class="QHBoxLayout" name="horizontal_layout_2">
              <item>
               <widget class="QSpinBox" name="width_field">
+               <property name="toolTip">
+                <string>Width of the map in pixels</string>
+               </property>
                <property name="maximum">
                 <number>99999</number>
                </property>
@@ -117,6 +120,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="height_field">
+               <property name="toolTip">
+                <string>Height of the map in pixels</string>
+               </property>
                <property name="maximum">
                 <number>99999</number>
                </property>
@@ -141,7 +147,11 @@
             </layout>
            </item>
            <item row="3" column="1">
-            <widget class="QLineEdit" name="world_field"/>
+            <widget class="QLineEdit" name="world_field">
+             <property name="toolTip">
+              <string>A name to group maps together</string>
+             </property>
+            </widget>
            </item>
            <item row="4" column="0">
             <widget class="QCheckBox" name="floor_check_box">
@@ -154,6 +164,9 @@
             <layout class="QHBoxLayout" name="horizontal_layout_4">
              <item>
               <widget class="QSpinBox" name="floor_field">
+               <property name="toolTip">
+                <string>Floor number of the map</string>
+               </property>
                <property name="minimum">
                 <number>-9999</number>
                </property>
@@ -188,6 +201,9 @@
             <layout class="QHBoxLayout" name="horizontal_layout_3">
              <item>
               <widget class="QSpinBox" name="x_field">
+               <property name="toolTip">
+                <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
+               </property>
                <property name="maximum">
                 <number>99999</number>
                </property>
@@ -205,6 +221,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="y_field">
+               <property name="toolTip">
+                <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
+               </property>
                <property name="maximum">
                 <number>99999</number>
                </property>
@@ -238,10 +257,17 @@
            <item row="6" column="1">
             <layout class="QHBoxLayout" name="horizontal_layout_5">
              <item>
-              <widget class="ResourceSelector" name="tileset_field"/>
+              <widget class="ResourceSelector" name="tileset_field">
+               <property name="toolTip">
+                <string>Tileset of the map</string>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="tileset_refresh_button">
+               <property name="toolTip">
+                <string>Refresh tileset</string>
+               </property>
                <property name="text">
                 <string>...</string>
                </property>
@@ -259,6 +285,9 @@
              </item>
              <item>
               <widget class="QToolButton" name="tileset_edit_button">
+               <property name="toolTip">
+                <string>Edit tileset</string>
+               </property>
                <property name="text">
                 <string>...</string>
                </property>
@@ -284,7 +313,11 @@
             </widget>
            </item>
            <item row="7" column="1">
-            <widget class="ResourceSelector" name="music_field"/>
+            <widget class="ResourceSelector" name="music_field">
+             <property name="toolTip">
+              <string>Background music of the map</string>
+             </property>
+            </widget>
            </item>
            <item row="3" column="0">
             <widget class="QCheckBox" name="checkBox">
