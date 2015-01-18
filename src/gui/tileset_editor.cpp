@@ -454,7 +454,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   this->tileset_id = tileset_id;
 
   // Editor properties.
-  set_title("Tileset " + get_file_name_without_extension());
+  set_title(tr("Tileset %1").arg(get_file_name_without_extension()));
   set_icon(QIcon(":/images/icon_resource_tileset.png"));
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));

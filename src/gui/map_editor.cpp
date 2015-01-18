@@ -21,6 +21,7 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include <QUndoStack>
+#include <QDebug>
 
 namespace {
 
@@ -51,31 +52,39 @@ private:
 };
 
 /**
+ * @brief Changing the size of the map.
+ */
+class SetSizeCommand : public MapEditorCommand {
+
+public:
+  SetSizeCommand(MapEditor& editor, const QSize& size) :
+    MapEditorCommand(editor, MapEditor::tr("Map size")),
+    before(get_model().get_size()),
+    after(size) { }
+
+  void undo() override { get_model().set_size(before); }
+  void redo() override { get_model().set_size(after); }
+
+private:
+  QSize before, after;
+};
+
+/**
  * @brief Changing the tileset of the map.
  */
 class SetTilesetCommand : public MapEditorCommand {
 
 public:
-
   SetTilesetCommand(MapEditor& editor, const QString& tileset_id) :
     MapEditorCommand(editor, MapEditor::tr("Tileset")),
-    tileset_id_before(get_model().get_tileset_id()),
-    tileset_id_after(tileset_id) {
-  }
+    before(get_model().get_tileset_id()),
+    after(tileset_id) { }
 
-  virtual void undo() override {
-    get_model().set_tileset_id(tileset_id_before);
-  }
-
-  virtual void redo() override {
-    get_model().set_tileset_id(tileset_id_after);
-  }
+  void undo() override { get_model().set_tileset_id(before); }
+  void redo() override { get_model().set_tileset_id(after); }
 
 private:
-
-  QString tileset_id_before;
-  QString tileset_id_after;
-
+  QString before, after;
 };
 
 /**
@@ -84,26 +93,16 @@ private:
 class SetMusicCommand : public MapEditorCommand {
 
 public:
-
   SetMusicCommand(MapEditor& editor, const QString& music_id) :
     MapEditorCommand(editor, MapEditor::tr("Music")),
-    music_id_before(get_model().get_music_id()),
-    music_id_after(music_id) {
-  }
+    before(get_model().get_music_id()),
+    after(music_id) { }
 
-  virtual void undo() override {
-    get_model().set_music_id(music_id_before);
-  }
-
-  virtual void redo() override {
-    get_model().set_music_id(music_id_after);
-  }
+  void undo() override { get_model().set_music_id(before); }
+  void redo() override { get_model().set_music_id(after); }
 
 private:
-
-  QString music_id_before;
-  QString music_id_after;
-
+  QString before, after;
 };
 
 }  // Anonymous namespace.
@@ -132,7 +131,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   this->map_id = map_id;
 
   // Editor properties.
-  set_title("Map " + get_file_name_without_extension());
+  set_title(tr("Map %1").arg(get_file_name_without_extension()));
   set_icon(QIcon(":/images/icon_resource_map.png"));
   set_close_confirm_message(
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
@@ -160,6 +159,16 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
+
+  connect(ui.width_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_size_requested()));
+  connect(ui.height_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_size_requested()));
+  connect(model, SIGNAL(size_changed(QSize)),
+          this, SLOT(update_size_field()));
+
+  connect(model, SIGNAL(tileset_id_changed(QString)),
+          this, SLOT(update_tileset_field()));
 
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
@@ -261,6 +270,18 @@ void MapEditor::update_size_field() {
   const QSize& size = model->get_size();
   ui.width_field->setValue(size.width());
   ui.height_field->setValue(size.height());
+}
+
+/**
+ * @brief Modifies the map size with the new values entered by the user.
+ */
+void MapEditor::change_size_requested() {
+
+  QSize size(ui.width_field->value(), ui.height_field->value());
+  if (size == model->get_size()) {
+    return;
+  }
+  try_command(new SetSizeCommand(*this, size));
 }
 
 /**

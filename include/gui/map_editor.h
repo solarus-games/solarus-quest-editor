@@ -44,6 +44,7 @@ public slots:
   void update_description_to_gui();
   void set_description_from_gui();
   void update_size_field();
+  void change_size_requested();
   void update_world_field();
   void update_floor_field();
   void update_location_field();
