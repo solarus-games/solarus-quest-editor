@@ -111,6 +111,6 @@ void ResourceSelector::set_selected_id(const QString& element_id) {
     return;
   }
 
-  int index = model->get_element_index(element_id);
-  setCurrentIndex(index);
+  const QModelIndex& index = model->get_element_index(element_id);
+  view()->setCurrentIndex(index);
 }

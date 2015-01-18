@@ -31,6 +31,7 @@ class ResourceModel;
  * Resource elements are presented in a tree view.
  */
 class ResourceSelector : public QComboBox {
+  Q_OBJECT
 
 public:
 

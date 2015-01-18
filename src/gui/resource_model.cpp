@@ -34,7 +34,15 @@ ResourceModel::ResourceModel(Quest& quest, ResourceType resource_type, QObject* 
     add_element(id);
   }
 
-  // TODO update when resources change.
+  QuestResources& resources = get_resources();
+  connect(&resources, SIGNAL(element_added(ResourceType, QString, QString)),
+          this, SLOT(element_added(ResourceType, QString, QString)));
+  connect(&resources, SIGNAL(element_removed(ResourceType, QString)),
+          this, SLOT(element_removed(ResourceType, QString)));
+  connect(&resources, SIGNAL(element_renamed(ResourceType, QString, QString)),
+          this, SLOT(element_renamed(ResourceType, QString, QString)));
+  connect(&resources, SIGNAL(element_description_changed(ResourceType, QString, QString)),
+          this, SLOT(element_description_changed(ResourceType, QString, QString)));
 }
 
 /**
@@ -56,12 +64,13 @@ QuestResources& ResourceModel::get_resources() {
 /**
  * @brief Returns the index of the specified element.
  * @param element_id Id of a resource element.
- * @return The corresponding index in this model or -1 if it does not exist.
+ * @return The corresponding index in this model
+ * or an invalid index if it does not exist.
  */
-int ResourceModel::get_element_index(const QString& element_id) const {
+QModelIndex ResourceModel::get_element_index(const QString& element_id) const {
 
   const QStandardItem* item = get_element_item(element_id);
-  return indexFromItem(item).row();
+  return item->index();
 }
 
 /**
@@ -97,6 +106,20 @@ void ResourceModel::add_element(const QString& element_id) {
 
   QStandardItem* item = create_element_item(element_id);
   parent->appendRow(item);
+}
+
+/**
+ * @brief Removes from the model the item of the specified resource element.
+ * @param element_id Id of the resource element to remove.
+ */
+void ResourceModel::remove_element(const QString& element_id) {
+
+  const QModelIndex& index = get_element_index(element_id);
+  if (!index.isValid()) {
+    return;
+  }
+
+  // TODO
 }
 
 /**
@@ -191,4 +214,67 @@ QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
   item->setSelectable(false);
   item->setData(QIcon(":/images/icon_folder_open.png"), Qt::DecorationRole);
   return item;
+}
+
+/**
+ * @brief Slot called when a resource element is added to the quest.
+ * @param type A type of resource.
+ * @param id Id of the element added.
+ * @param description Description of the element added.
+ */
+void ResourceModel::element_added(
+    ResourceType type, const QString& id, const QString& /* description */) {
+
+  if (type != this->resource_type) {
+    return;
+  }
+
+  // Add an item to the model.
+  add_element(id);
+}
+
+/**
+ * @brief Slot called when a resource element is removed from the quest.
+ * @param type A type of resource.
+ * @param id Id of the element removed.
+ */
+void ResourceModel::element_removed(
+    ResourceType type, const QString& id) {
+
+  if (type != this->resource_type) {
+    return;
+  }
+
+  // Remove the item from the model.
+  remove_element(id);
+}
+
+/**
+ * @brief Slot called when a resource element is renamed.
+ * @param type A type of resource.
+ * @param old_id Id of the element before rename.
+ * @param new_id Id of the element after rename.
+ */
+void ResourceModel::element_renamed(
+    ResourceType type, const QString& /* old_id */, const QString& /* new_id */) {
+
+  if (type != this->resource_type) {
+    return;
+  }
+  // TODO
+}
+
+/**
+ * @brief Slot called when the description of a resource element changes.
+ * @param type A type of resource.
+ * @param id Id of the element.
+ * @param new_description The new description.
+ */
+void ResourceModel::element_description_changed(
+    ResourceType type, const QString& /* id */, const QString& /* new_description */) {
+
+  if (type != this->resource_type) {
+    return;
+  }
+  // TODO
 }

@@ -29,6 +29,7 @@ class QuestResources;
  * @brief A tree model with resources elements of a type.
  */
 class ResourceModel : public QStandardItemModel {
+  Q_OBJECT
 
 public:
 
@@ -39,11 +40,23 @@ public:
 
   void add_special_value(
       const QString& id, const QString& text, int index);
-  int get_element_index(const QString& element_id) const;
+  QModelIndex get_element_index(const QString& element_id) const;
+
+private slots:
+
+  void element_added(
+      ResourceType type, const QString& id, const QString& description);
+  void element_removed(
+      ResourceType type, const QString& id);
+  void element_renamed(
+      ResourceType type, const QString& old_id, const QString& new_id);
+  void element_description_changed(
+      ResourceType type, const QString& id, const QString& new_description);
 
 private:
 
   void add_element(const QString& element_id);
+  void remove_element(const QString& element_id);
   QStandardItem* find_or_create_dir_item(
       QStandardItem& parent, const QString& dir_name);
   QStandardItem* create_dir_item(const QString& dir_name);
