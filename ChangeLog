@@ -18,6 +18,7 @@ New features
 * Quest tree: show resources whose file is missing on the filesystem.
 * Quest tree: show files that look like resources but are not declared.
 * The quest tree now automatically refreshes after changes in the filesystem.
+* Resource selectors now show a hierarchical view of elements.
 * A file to open can now be passed on the command line.
 * Show an appropriate icon in tabs.
 * Show an asterisk in the tab of files that are changed.
