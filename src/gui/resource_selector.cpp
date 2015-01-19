@@ -112,5 +112,15 @@ void ResourceSelector::set_selected_id(const QString& element_id) {
   }
 
   const QModelIndex& index = model->get_element_index(element_id);
-  view()->setCurrentIndex(index);
+  if (!index.isValid()) {
+    return;
+  }
+
+  // To make the label of the combobox show the correct value,
+  // we need to call setCurrentIndex() or setCurrentText(),
+  // but these functions only work with top-level elements of the hierarchy.
+  // A workaround is to temporarily change the root of the tree.
+  setRootModelIndex(index.parent());
+  setCurrentIndex(index.row());  // Relative to the new root.
+  setRootModelIndex(model->invisibleRootItem()->index());
 }

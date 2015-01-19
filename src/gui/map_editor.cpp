@@ -21,7 +21,6 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include <QUndoStack>
-#include <QDebug>
 
 namespace {
 
