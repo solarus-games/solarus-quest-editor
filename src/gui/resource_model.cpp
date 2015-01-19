@@ -70,6 +70,9 @@ QuestResources& ResourceModel::get_resources() {
 QModelIndex ResourceModel::get_element_index(const QString& element_id) const {
 
   const QStandardItem* item = get_element_item(element_id);
+  if (item == nullptr) {
+    return QModelIndex();
+  }
   return item->index();
 }
 
@@ -105,7 +108,7 @@ void ResourceModel::add_element(const QString& element_id) {
   }
 
   QStandardItem* item = create_element_item(element_id);
-  parent->appendRow(item);
+  parent->appendRow(item);  // TODO insert at the correct position
 }
 
 /**
@@ -119,7 +122,7 @@ void ResourceModel::remove_element(const QString& element_id) {
     return;
   }
 
-  // TODO
+  removeRow(index.row(), index.parent());
 }
 
 /**
