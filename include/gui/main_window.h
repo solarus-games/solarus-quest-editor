@@ -66,6 +66,7 @@ private:
   void update_title();
   void upgrade_quest();
   QMenu* create_zoom_menu();
+  QMenu* create_show_entities_menu();
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */

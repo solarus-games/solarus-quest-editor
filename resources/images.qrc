@@ -111,5 +111,9 @@
         <file>images/icon_quest_editor_32.png</file>
         <file>images/icon_quest_editor_48.png</file>
         <file>images/icon_grid.png</file>
+        <file>images/icon_glasses.png</file>
+        <file>images/icon_layer_0.png</file>
+        <file>images/icon_layer_1.png</file>
+        <file>images/icon_layer_2.png</file>
     </qresource>
 </RCC>

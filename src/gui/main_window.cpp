@@ -79,8 +79,17 @@ MainWindow::MainWindow(QWidget* parent) :
   zoom_menu = create_zoom_menu();
   zoom_button->setMenu(zoom_menu);
   zoom_button->setPopupMode(QToolButton::InstantPopup);
-  ui.tool_bar->insertWidget(nullptr, zoom_button);
+  ui.tool_bar->insertWidget(ui.action_show_grid, zoom_button);
   ui.menu_view->insertMenu(ui.action_show_grid, zoom_menu);
+
+  QToolButton* show_entities_button = new QToolButton();
+  show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
+  show_entities_button->setToolTip(tr("Show entity types"));
+  QMenu* show_entities_menu = create_show_entities_menu();
+  show_entities_button->setMenu(show_entities_menu);
+  show_entities_button->setPopupMode(QToolButton::InstantPopup);
+  ui.tool_bar->insertWidget(nullptr, show_entities_button);
+  ui.menu_view->insertMenu(nullptr, show_entities_menu);
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);
@@ -140,6 +149,17 @@ QMenu* MainWindow::create_zoom_menu() {
   }
 
   return zoom_menu;
+}
+
+/**
+ * @brief Creates a menu with actions to show each entity type.
+ * @return The created menu. It has no parent initially.
+ */
+QMenu* MainWindow::create_show_entities_menu() {
+
+  QMenu* menu = new QMenu(tr("Show entity types"));
+  // TODO
+  return menu;
 }
 
 /**

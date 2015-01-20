@@ -92,6 +92,9 @@
      <string>View</string>
     </property>
     <addaction name="action_show_grid"/>
+    <addaction name="action_show_layer_0"/>
+    <addaction name="action_show_layer_1"/>
+    <addaction name="action_show_layer_2"/>
    </widget>
    <addaction name="menu_quest"/>
    <addaction name="menu_edit"/>
@@ -118,6 +121,9 @@
    <addaction name="action_run_quest"/>
    <addaction name="separator"/>
    <addaction name="action_show_grid"/>
+   <addaction name="action_show_layer_0"/>
+   <addaction name="action_show_layer_1"/>
+   <addaction name="action_show_layer_2"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">
@@ -200,6 +206,51 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="action_show_layer_0">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_layer_0.png</normaloff>:/images/icon_layer_0.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show low layer</string>
+   </property>
+   <property name="toolTip">
+    <string>Show low layer</string>
+   </property>
+  </action>
+  <action name="action_show_layer_1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_layer_1.png</normaloff>:/images/icon_layer_1.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show intermediate layer</string>
+   </property>
+   <property name="toolTip">
+    <string>Show intermediate layer</string>
+   </property>
+  </action>
+  <action name="action_show_layer_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_layer_2.png</normaloff>:/images/icon_layer_2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show high layer</string>
+   </property>
+   <property name="toolTip">
+    <string>Show high layer</string>
    </property>
   </action>
  </widget>
