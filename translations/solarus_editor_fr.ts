@@ -5,16 +5,19 @@
     <name>ChangePatternIdDialog</name>
     <message>
         <location filename="../src/gui/change_pattern_id_dialog.ui" line="24"/>
+        <location filename="../build/ui_change_pattern_id_dialog.h" line="88"/>
         <source>New pattern id:</source>
         <translation>Nouvel id du motif :</translation>
     </message>
     <message>
         <location filename="../src/gui/change_pattern_id_dialog.ui" line="34"/>
+        <location filename="../build/ui_change_pattern_id_dialog.h" line="89"/>
         <source>Update references in existing maps</source>
         <translation>Mettre à jour les références dans les maps existantes</translation>
     </message>
     <message>
         <location filename="../src/gui/change_pattern_id_dialog.ui" line="14"/>
+        <location filename="../build/ui_change_pattern_id_dialog.h" line="87"/>
         <source>Rename tile pattern</source>
         <translation>Renommer un motif</translation>
     </message>
@@ -41,22 +44,26 @@
     <name>ExternalScriptDialog</name>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="14"/>
+        <location filename="../build/ui_external_script_dialog.h" line="108"/>
         <source>Running script</source>
         <translation>Exécution du script</translation>
     </message>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="24"/>
+        <location filename="../build/ui_external_script_dialog.h" line="109"/>
         <source>Running script...</source>
         <translation>Exécution du script...</translation>
     </message>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="40"/>
+        <location filename="../build/ui_external_script_dialog.h" line="110"/>
         <location filename="../src/gui/external_script_dialog.cpp" line="166"/>
         <source>In progress</source>
         <translation>en cours</translation>
     </message>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="62"/>
+        <location filename="../build/ui_external_script_dialog.h" line="111"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
@@ -85,103 +92,128 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../src/gui/main_window.cpp" line="489"/>
+        <location filename="../build/ui_main_window.h" line="181"/>
+        <location filename="../build/ui_mainwindow.h" line="113"/>
+        <location filename="../src/gui/main_window.cpp" line="490"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="65"/>
+        <location filename="../build/ui_main_window.h" line="194"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
+        <location filename="../build/ui_main_window.h" line="195"/>
+        <location filename="../build/ui_mainwindow.h" line="123"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="86"/>
+        <location filename="../build/ui_main_window.h" line="196"/>
+        <location filename="../build/ui_mainwindow.h" line="124"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="92"/>
+        <location filename="../build/ui_main_window.h" line="197"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="124"/>
+        <location filename="../build/ui_main_window.h" line="182"/>
+        <location filename="../build/ui_mainwindow.h" line="114"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="129"/>
+        <location filename="../build/ui_main_window.h" line="183"/>
+        <location filename="../build/ui_mainwindow.h" line="116"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="134"/>
+        <location filename="../build/ui_main_window.h" line="184"/>
+        <location filename="../build/ui_mainwindow.h" line="118"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="143"/>
+        <location filename="../build/ui_main_window.h" line="185"/>
+        <location filename="../build/ui_mainwindow.h" line="120"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="146"/>
+        <location filename="../build/ui_main_window.h" line="186"/>
+        <location filename="../build/ui_mainwindow.h" line="121"/>
         <source>F9</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="155"/>
+        <location filename="../build/ui_main_window.h" line="187"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="164"/>
+        <location filename="../build/ui_main_window.h" line="188"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="173"/>
+        <location filename="../build/ui_main_window.h" line="189"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="178"/>
+        <location filename="../build/ui_main_window.h" line="190"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="187"/>
+        <location filename="../build/ui_main_window.h" line="191"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="199"/>
+        <location filename="../build/ui_main_window.h" line="192"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="202"/>
+        <location filename="../build/ui_main_window.h" line="193"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="318"/>
-        <location filename="../src/gui/main_window.cpp" line="348"/>
+        <location filename="../src/gui/main_window.cpp" line="319"/>
+        <location filename="../src/gui/main_window.cpp" line="349"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="329"/>
+        <location filename="../src/gui/main_window.cpp" line="330"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="329"/>
+        <location filename="../src/gui/main_window.cpp" line="330"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -191,85 +223,323 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="218"/>
+        <location filename="../src/gui/main_window.cpp" line="219"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="119"/>
+        <location filename="../src/gui/main_window.cpp" line="78"/>
+        <location filename="../src/gui/main_window.cpp" line="120"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="121"/>
+        <location filename="../src/gui/main_window.cpp" line="122"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="122"/>
+        <location filename="../src/gui/main_window.cpp" line="123"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="123"/>
+        <location filename="../src/gui/main_window.cpp" line="124"/>
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="124"/>
+        <location filename="../src/gui/main_window.cpp" line="125"/>
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="125"/>
+        <location filename="../src/gui/main_window.cpp" line="126"/>
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="237"/>
+        <location filename="../src/gui/main_window.cpp" line="238"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="238"/>
+        <location filename="../src/gui/main_window.cpp" line="239"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="289"/>
+        <location filename="../src/gui/main_window.cpp" line="290"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="306"/>
+        <location filename="../src/gui/main_window.cpp" line="307"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="445"/>
+        <location filename="../src/gui/main_window.cpp" line="446"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="115"/>
+        <source>Ctrl+N</source>
+        <translation>Ctrl+N</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="117"/>
+        <source>Ctrl+O</source>
+        <translation>Ctrl+O</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="119"/>
+        <source>Ctrl+Q</source>
+        <translation>Ctrl+Q</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="122"/>
+        <source>Quest</source>
+        <translation>Quête</translation>
+    </message>
+</context>
+<context>
+    <name>MapEditor</name>
+    <message>
+        <source>Tileset editor</source>
+        <translation type="vanished">Éditeur de tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="14"/>
+        <location filename="../build/ui_map_editor.h" line="292"/>
+        <source>Map editor</source>
+        <translation>Éditeur de map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="61"/>
+        <location filename="../build/ui_map_editor.h" line="296"/>
+        <source>Map id</source>
+        <translation>Id de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="68"/>
+        <location filename="../build/ui_map_editor.h" line="298"/>
+        <source>Filename of the map (without extension)</source>
+        <translation>Nom de fichier de la map (sans extension)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="81"/>
+        <location filename="../build/ui_map_editor.h" line="304"/>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="94"/>
+        <location filename="../build/ui_map_editor.h" line="306"/>
+        <source>User-friendly description to show in the editor</source>
+        <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="101"/>
+        <location filename="../build/ui_map_editor.h" line="308"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="110"/>
+        <location filename="../build/ui_map_editor.h" line="310"/>
+        <source>Width of the map in pixels</source>
+        <translation>Largeur de la map en pixels</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="123"/>
+        <location filename="../build/ui_map_editor.h" line="312"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="130"/>
+        <location filename="../build/ui_map_editor.h" line="314"/>
+        <source>Height of the map in pixels</source>
+        <translation>Hauteur de la map en pixels</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="158"/>
+        <location filename="../build/ui_map_editor.h" line="316"/>
+        <source>Set a world</source>
+        <translation>Monde</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="165"/>
+        <location filename="../build/ui_map_editor.h" line="318"/>
+        <source>A name to group maps together</source>
+        <translation>Nom permettant de regrouper des maps</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="172"/>
+        <location filename="../build/ui_map_editor.h" line="320"/>
+        <source>Set a floor</source>
+        <translation>Étage</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="181"/>
+        <location filename="../build/ui_map_editor.h" line="322"/>
+        <source>Floor number of the map</source>
+        <translation>Numéro d&apos;étage de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="209"/>
+        <location filename="../build/ui_map_editor.h" line="324"/>
+        <source>Location in its world</source>
+        <translation>Coordonnées</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="218"/>
+        <location filename="../src/gui/map_editor.ui" line="238"/>
+        <location filename="../build/ui_map_editor.h" line="326"/>
+        <location filename="../build/ui_map_editor.h" line="330"/>
+        <source>Coordinates of the map in its world (useful to make adjacent scrolling maps)</source>
+        <translation>Coordonnées de la map dans son monde (utile pour faire des maps adjacentes avec scrolling)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="231"/>
+        <location filename="../build/ui_map_editor.h" line="328"/>
+        <source>,</source>
+        <translation>,</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="266"/>
+        <location filename="../build/ui_map_editor.h" line="332"/>
+        <location filename="../src/gui/map_editor.cpp" line="132"/>
+        <source>Tileset</source>
+        <translation>Tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="275"/>
+        <location filename="../build/ui_map_editor.h" line="334"/>
+        <source>Tileset of the map</source>
+        <translation>Tileset de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="282"/>
+        <location filename="../build/ui_map_editor.h" line="337"/>
+        <source>Refresh tileset</source>
+        <translation>Recharger le tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="285"/>
+        <location filename="../src/gui/map_editor.ui" line="305"/>
+        <location filename="../build/ui_map_editor.h" line="339"/>
+        <location filename="../build/ui_map_editor.h" line="343"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="302"/>
+        <location filename="../build/ui_map_editor.h" line="341"/>
+        <source>Edit tileset</source>
+        <translation>Modifier le tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="324"/>
+        <location filename="../build/ui_map_editor.h" line="344"/>
+        <location filename="../src/gui/map_editor.cpp" line="150"/>
+        <source>Music</source>
+        <translation>Musique</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.ui" line="331"/>
+        <location filename="../build/ui_map_editor.h" line="346"/>
+        <source>Background music of the map</source>
+        <translation>Musique de fond de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="60"/>
+        <source>Map size</source>
+        <translation>Taille de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="78"/>
+        <source>Map world</source>
+        <translation>Monde de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="96"/>
+        <source>Map floor</source>
+        <translation>Étage de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="114"/>
+        <source>Map location</source>
+        <translation>Coordonnées de la map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="182"/>
+        <source>File &apos;%1&apos; is not a map</source>
+        <translation>Le fichier &apos;%1&apos; n&apos;est pas une map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="187"/>
+        <source>Map %1</source>
+        <translation>Map %1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="190"/>
+        <source>Map &apos;%1&apos; has been modified. Save changes?</source>
+        <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="205"/>
+        <source>&lt;No music&gt;</source>
+        <translation>&lt;Pas de musique&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="206"/>
+        <source>&lt;Same as before&gt;</source>
+        <translation>&lt;Garder la même musique&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="325"/>
+        <source>Invalid description</source>
+        <translation>Description invalide</translation>
+    </message>
+</context>
+<context>
+    <name>MapModel</name>
+    <message>
+        <location filename="../src/map_model.cpp" line="45"/>
+        <source>Cannot open map data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/map_model.cpp" line="80"/>
+        <source>Cannot save map data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;enregistrer le fichier de map &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
     <name>NewResourceElementDialog</name>
     <message>
         <location filename="../src/gui/new_resource_element_dialog.ui" line="14"/>
+        <location filename="../build/ui_new_resource_element_dialog.h" line="86"/>
         <source>Create resource</source>
         <translation>Nouvelle ressource</translation>
     </message>
     <message>
         <location filename="../src/gui/new_resource_element_dialog.ui" line="22"/>
+        <location filename="../build/ui_new_resource_element_dialog.h" line="87"/>
         <source>Resource id (filename):</source>
         <translation>Id de la ressource (nom de fichier) :</translation>
     </message>
     <message>
         <location filename="../src/gui/new_resource_element_dialog.ui" line="32"/>
+        <location filename="../build/ui_new_resource_element_dialog.h" line="88"/>
         <source>Description:</source>
         <translation>Description :</translation>
     </message>
@@ -1108,6 +1378,15 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
 </context>
 <context>
+    <name>ResourceModel</name>
+    <message>
+        <location filename="../src/gui/resource_model.cpp" line="271"/>
+        <location filename="../src/gui/resource_model.cpp" line="297"/>
+        <source>Missing resource element in selector: &apos;%1&apos;</source>
+        <translation>Ressource manquante dans le sélecteur : &apos;%1&apos;</translation>
+    </message>
+</context>
+<context>
     <name>TextEditor</name>
     <message>
         <location filename="../src/gui/text_editor.cpp" line="73"/>
@@ -1165,109 +1444,130 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     <name>TilesetEditor</name>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="14"/>
+        <location filename="../build/ui_tileset_editor.h" line="293"/>
         <source>Tileset editor</source>
         <translation>Éditeur de tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="39"/>
+        <location filename="../build/ui_tileset_editor.h" line="294"/>
         <source>Tileset properties</source>
         <translation>Propriétés du tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="51"/>
+        <location filename="../build/ui_tileset_editor.h" line="298"/>
         <source>Tileset id</source>
         <translation>Id du tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="58"/>
+        <location filename="../build/ui_tileset_editor.h" line="300"/>
         <source>Filename of the tileset (without extension)</source>
         <translation>Nom de fichier du tileset (sans extension)</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="71"/>
+        <location filename="../build/ui_tileset_editor.h" line="306"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="84"/>
+        <location filename="../build/ui_tileset_editor.h" line="308"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="107"/>
+        <location filename="../build/ui_tileset_editor.h" line="315"/>
         <source>Background color applied to maps using this tileset</source>
         <translation>Couleur de fond pour les maps utilisant ce tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="196"/>
+        <location filename="../build/ui_tileset_editor.h" line="332"/>
         <source>Name identifying the pattern</source>
         <translation>Nom pour identifier le motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="341"/>
+        <location filename="../build/ui_tileset_editor.h" line="361"/>
         <source>Layer to initially apply to tiles using this pattern on maps</source>
         <translation>Couche initialement appliquée aux tiles créés avec ce motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="94"/>
+        <location filename="../build/ui_tileset_editor.h" line="313"/>
         <source>Background</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="131"/>
+        <location filename="../build/ui_tileset_editor.h" line="321"/>
         <source>Patterns</source>
         <translation>Motifs</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="138"/>
+        <location filename="../build/ui_tileset_editor.h" line="323"/>
         <source>Number of existing tile patterns in the tileset</source>
         <translation>Nombre total de motifs dans le tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="160"/>
+        <location filename="../build/ui_tileset_editor.h" line="326"/>
         <source>Selection properties</source>
         <translation>Propriétés de la sélection</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="172"/>
+        <location filename="../build/ui_tileset_editor.h" line="330"/>
         <location filename="../src/gui/tileset_editor.cpp" line="405"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="206"/>
+        <location filename="../build/ui_tileset_editor.h" line="336"/>
         <source>Rename (F2)</source>
         <translation>Renommer (F2)</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="241"/>
+        <location filename="../build/ui_tileset_editor.h" line="342"/>
         <location filename="../src/gui/tileset_editor.cpp" line="132"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="254"/>
+        <location filename="../build/ui_tileset_editor.h" line="344"/>
         <source>Terrain of the pattern</source>
         <translation>Type de terrain du motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="264"/>
+        <location filename="../build/ui_tileset_editor.h" line="349"/>
         <location filename="../src/gui/tileset_editor.cpp" line="219"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="300"/>
+        <location filename="../build/ui_tileset_editor.h" line="351"/>
         <source>Kind of animation of the pattern</source>
         <translation>Type d&apos;animation du motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="313"/>
+        <location filename="../build/ui_tileset_editor.h" line="354"/>
         <source>Horizontal or vertical separation (only for multi-frame patterns)</source>
         <translation>Séparation horizontale ou verticale (motifs multi-images uniquement)</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="328"/>
+        <location filename="../build/ui_tileset_editor.h" line="359"/>
         <location filename="../src/gui/tileset_editor.cpp" line="175"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
@@ -1298,37 +1598,52 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Supprimer</translation>
     </message>
     <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="452"/>
+        <source>File &apos;%1&apos; is not a tileset</source>
+        <translation>Le fichier &apos;%1&apos;n&apos;est pas un tileset</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="457"/>
+        <source>Tileset %1</source>
+        <translation>Tileset %1</translation>
+    </message>
+    <message>
         <location filename="../src/gui/tileset_editor.cpp" line="460"/>
         <source>Tileset &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="754"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="651"/>
+        <source>Invalid description</source>
+        <translation>Description invalide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/tileset_editor.cpp" line="753"/>
         <source>Please close all maps before updating tile pattern references.</source>
         <translation>Veuillez fermer toutes les maps avant de mettre à jour les références des motifs.</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="805"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="804"/>
         <source>Cannot open map file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="823"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="822"/>
         <source>Cannot open map file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos; en écriture</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1076"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1075"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1080"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1079"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1086"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1085"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
@@ -1387,48 +1702,48 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>TilesetView</name>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="49"/>
+        <location filename="../src/gui/tileset_view.cpp" line="50"/>
         <source>Change id...</source>
         <translation>Changer l&apos;id...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="50"/>
+        <location filename="../src/gui/tileset_view.cpp" line="51"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="57"/>
+        <location filename="../src/gui/tileset_view.cpp" line="58"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="378"/>
+        <location filename="../src/gui/tileset_view.cpp" line="437"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="384"/>
+        <location filename="../src/gui/tileset_view.cpp" line="443"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="572"/>
+        <location filename="../src/gui/tileset_view.cpp" line="632"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="578"/>
+        <location filename="../src/gui/tileset_view.cpp" line="638"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="589"/>
-        <location filename="../src/gui/tileset_view.cpp" line="639"/>
+        <location filename="../src/gui/tileset_view.cpp" line="649"/>
+        <location filename="../src/gui/tileset_view.cpp" line="700"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="633"/>
+        <location filename="../src/gui/tileset_view.cpp" line="694"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>
