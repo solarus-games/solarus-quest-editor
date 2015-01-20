@@ -179,7 +179,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   quest.check_exists(path);
   if (!quest.is_resource_element(path, resource_type, map_id) ||
       resource_type != ResourceType::MAP) {
-    throw EditorException("File '%1' is not a map");
+    throw EditorException(tr("File '%1' is not a map").arg(path));
   }
   this->map_id = map_id;
 
@@ -322,7 +322,7 @@ void MapEditor::set_description_from_gui() {
   }
 
   if (description.isEmpty()) {
-    GuiTools::error_dialog("Invalid description");
+    GuiTools::error_dialog(tr("Invalid description"));
     update_description_to_gui();
     return;
   }

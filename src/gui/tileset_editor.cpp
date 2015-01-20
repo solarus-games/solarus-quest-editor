@@ -449,7 +449,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   quest.check_exists(path);
   if (!quest.is_resource_element(path, resource_type, tileset_id) ||
       resource_type != ResourceType::TILESET) {
-    throw EditorException("File '%1' is not a tileset");
+    throw EditorException(tr("File '%1' is not a tileset").arg(path));
   }
   this->tileset_id = tileset_id;
 
@@ -648,7 +648,7 @@ void TilesetEditor::set_description_from_gui() {
   }
 
   if (description.isEmpty()) {
-    GuiTools::error_dialog("Invalid description");
+    GuiTools::error_dialog(tr("Invalid description"));
     update_description_to_gui();
     return;
   }
