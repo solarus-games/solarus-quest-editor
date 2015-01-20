@@ -17,6 +17,7 @@
 #include "gui/resource_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QDebug>
 
 /**
  * @brief Creates a resource model.
@@ -259,12 +260,23 @@ void ResourceModel::element_removed(
  * @param new_id Id of the element after rename.
  */
 void ResourceModel::element_renamed(
-    ResourceType type, const QString& /* old_id */, const QString& /* new_id */) {
+    ResourceType type, const QString& old_id, const QString& new_id) {
 
   if (type != this->resource_type) {
     return;
   }
-  // TODO
+
+  QStandardItem* item = get_element_item(old_id);
+  if (item == nullptr) {
+    qCritical() << tr("Missing resource element in selector: '%1'").arg(old_id);
+    return;
+  }
+
+  item->setData(new_id, Qt::UserRole);
+
+  items.erase(old_id);
+  items.insert(std::make_pair(new_id, item));
+  // TODO update the order
 }
 
 /**
@@ -274,10 +286,17 @@ void ResourceModel::element_renamed(
  * @param new_description The new description.
  */
 void ResourceModel::element_description_changed(
-    ResourceType type, const QString& /* id */, const QString& /* new_description */) {
+    ResourceType type, const QString& id, const QString& new_description) {
 
   if (type != this->resource_type) {
     return;
   }
-  // TODO
+
+  QStandardItem* item = get_element_item(id);
+  if (item == nullptr) {
+    qCritical() << tr("Missing resource element in selector: '%1'").arg(id);
+    return;
+  }
+
+  item->setData(new_description, Qt::DisplayRole);
 }
