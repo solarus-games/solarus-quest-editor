@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget* parent) :
 
   zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
+  zoom_button->setToolTip(tr("Zoom"));
   zoom_menu = create_zoom_menu();
   zoom_button->setMenu(zoom_menu);
   zoom_button->setPopupMode(QToolButton::InstantPopup);
