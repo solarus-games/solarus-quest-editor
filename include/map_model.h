@@ -59,6 +59,8 @@ public:
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
 
+  static QList<Solarus::EntityType> get_entity_types_available_in_map_file();
+
   static constexpr int NO_FLOOR = Solarus::MapData::NO_FLOOR;
 
 signals:

@@ -19,6 +19,7 @@
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
 #include "file_tools.h"
+#include "map_model.h"
 #include "new_quest_builder.h"
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
@@ -35,6 +36,8 @@
 #include <QToolButton>
 #include <QUndoGroup>
 #include <iostream>
+
+using EntityType = Solarus::EntityType;
 
 /**
  * @brief Creates a main window.
@@ -158,7 +161,14 @@ QMenu* MainWindow::create_zoom_menu() {
 QMenu* MainWindow::create_show_entities_menu() {
 
   QMenu* menu = new QMenu(tr("Show entity types"));
-  // TODO
+
+  /* TODO
+  for (EntityType type : MapModel::get_entity_types_available_in_map_file()) {
+    QAction* action = new QAction(type_name, this);
+    menu->addAction(action);
+  }
+  */
+
   return menu;
 }
 
