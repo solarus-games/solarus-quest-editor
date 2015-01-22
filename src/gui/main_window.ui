@@ -92,9 +92,11 @@
      <string>View</string>
     </property>
     <addaction name="action_show_grid"/>
+    <addaction name="separator"/>
     <addaction name="action_show_layer_0"/>
     <addaction name="action_show_layer_1"/>
     <addaction name="action_show_layer_2"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menu_quest"/>
    <addaction name="menu_edit"/>
@@ -121,9 +123,11 @@
    <addaction name="action_run_quest"/>
    <addaction name="separator"/>
    <addaction name="action_show_grid"/>
+   <addaction name="separator"/>
    <addaction name="action_show_layer_0"/>
    <addaction name="action_show_layer_1"/>
    <addaction name="action_show_layer_2"/>
+   <addaction name="separator"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">

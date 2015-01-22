@@ -15,9 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/editor.h"
+#include "gui/enum_menus.h"
 #include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "entity_traits.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"
@@ -162,12 +164,19 @@ QMenu* MainWindow::create_show_entities_menu() {
 
   QMenu* menu = new QMenu(tr("Show entity types"));
 
-  /* TODO
-  for (EntityType type : MapModel::get_entity_types_available_in_map_file()) {
-    QAction* action = new QAction(type_name, this);
+  // Add show entity types actions to the menu.
+  QList<QAction*> entity_actions = EnumMenus<EntityType>::create_actions(
+        *menu,
+        EnumMenuCheckableOption::CHECKABLE,
+        [=](EntityType /* type */) {
+    // TODO
+  });
+
+  for (QAction* action : entity_actions) {
+    // TODO only show the ones that can exist in map files
+    action->setChecked(true);  // Initially visible.
     menu->addAction(action);
   }
-  */
 
   return menu;
 }
