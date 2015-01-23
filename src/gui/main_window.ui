@@ -216,6 +216,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../../resources/images.qrc">
      <normaloff>:/images/icon_layer_0.png</normaloff>:/images/icon_layer_0.png</iconset>
@@ -231,6 +234,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="../../resources/images.qrc">
      <normaloff>:/images/icon_layer_1.png</normaloff>:/images/icon_layer_1.png</iconset>
@@ -244,6 +250,9 @@
   </action>
   <action name="action_show_layer_2">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">
