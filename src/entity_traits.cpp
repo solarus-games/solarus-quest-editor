@@ -155,3 +155,13 @@ QIcon EnumTraits<EntityType>::get_icon(EntityType value) {
 QString EnumTraits<EntityType>::get_lua_name(EntityType value) {
   return QString::fromStdString(Solarus::EntityTypeInfo::get_entity_type_name(value));
 }
+
+/**
+ * @brief Returns whether entities of the specified type can be stored in map files.
+ * @param type A type of entity.
+ * @return @c true if this type can be stored.
+ */
+bool EnumTraits<EntityType>::can_be_stored_in_map_file(EntityType type) {
+
+  return Solarus::EntityTypeInfo::can_be_stored_in_map_file(type);
+}

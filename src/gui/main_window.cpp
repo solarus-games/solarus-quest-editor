@@ -173,9 +173,13 @@ QMenu* MainWindow::create_show_entities_menu() {
   });
 
   for (QAction* action : entity_actions) {
-    // TODO only show the ones that can exist in map files
+    EntityType type = static_cast<EntityType>(action->data().toInt());
+    if (!EntityTraits::can_be_stored_in_map_file(type)) {
+      // Only show the ones that can exist in map files.
+      menu->removeAction(action);
+      continue;
+    }
     action->setChecked(true);  // Initially visible.
-    menu->addAction(action);
   }
 
   return menu;
