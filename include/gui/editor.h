@@ -52,6 +52,8 @@ public:
 
   bool is_zoom_supported() const;
   double get_zoom() const;
+  bool is_grid_supported() const;
+  bool is_grid_visible() const;
 
   virtual void save() = 0;
   virtual bool can_cut() const;
@@ -67,17 +69,20 @@ signals:
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
   void zoom_changed(double zoom);
+  void grid_visibility_changed(bool grid_visible);
   void open_file_requested(Quest& quest, const QString& path);
 
 public slots:
 
   void set_zoom(double zoom);
+  void set_grid_visible(bool grid_visible);
 
 protected:
 
   void set_title(const QString& title);
   void set_icon(const QIcon& icon);
   void set_zoom_supported(bool zoom_supported);
+  void set_grid_supported(bool grid_supported);
 
   QString get_close_confirm_message() const;
   void set_close_confirm_message(const QString& message);
@@ -94,7 +99,9 @@ private:
       close_confirm_message; /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;    /**< The undo/redo history of editing this file. */
   bool zoom_supported;       /**< Whether the editor supports zooming. */
-  double zoom;               /**< The current zoom factor. */
+  double zoom;               /**< If supported, the current zoom factor. */
+  bool grid_supported;       /**< Whether the editor supports showing/hiding a grid. */
+  bool grid_visible;         /**< If supported, whether the grid is currently shown.*/
 
 };
 

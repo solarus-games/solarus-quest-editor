@@ -432,7 +432,7 @@ bool Editor::is_zoom_supported() const {
  * @brief Sets whether this editor supports zooming.
  *
  * If your editor supports zooming, you are responsible to apply the new
- * zoom value when the zoom_changed() is emitted.
+ * zoom value when the zoom_changed() is signal emitted.
  *
  * @param zoom_supported @c true if zoom operations are supported.
  */
@@ -467,4 +467,51 @@ void Editor::set_zoom(double zoom) {
 
   this->zoom = zoom;
   emit zoom_changed(zoom);
+}
+
+/**
+ * @brief Returns whether this editor supports showing and hiding a grid.
+ * @return @c true if a grid can be shown or hidden.
+ */
+bool Editor::is_grid_supported() const {
+  return grid_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports showing and hiding a grid.
+ *
+ * If your editor supports this, you are responsible to apply the new
+ * setting when the grid_visibility_changed() signal is emitted.
+ *
+ * @param zoom_supported @c true if zoom operations are supported.
+ */
+void Editor::set_grid_supported(bool grid_supported) {
+  this->grid_supported = grid_supported;
+}
+
+/**
+ * @brief Returns the current grid visibility setting.
+ * @return @c true if the grid is visible, @c false if it is hidden
+ * or not supported.
+ */
+bool Editor::is_grid_visible() const {
+
+  return grid_visible;
+}
+
+/**
+ * @brief Shows or hides the grid.
+ *
+ * Emits grid_visibility_changed() if there is a change.
+ *
+ * @param grid_visible @c true to show the grid, @c false to hide it.
+ */
+void Editor::set_grid_visible(bool grid_visible) {
+
+  if (grid_visible == this->grid_visible) {
+    return;
+  }
+
+  this->grid_visible = grid_visible;
+  emit grid_visibility_changed(grid_visible);
 }
