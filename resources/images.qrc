@@ -6,7 +6,6 @@
         <file>images/entity_chest.png</file>
         <file>images/entity_crystal.png</file>
         <file>images/entity_crystal_block.png</file>
-        <file>images/entity_custom.png</file>
         <file>images/entity_custom_resizable.png</file>
         <file>images/entity_destination.png</file>
         <file>images/entity_destructible.png</file>
@@ -115,5 +114,12 @@
         <file>images/icon_layer_0.png</file>
         <file>images/icon_layer_1.png</file>
         <file>images/icon_layer_2.png</file>
+        <file>images/entity_dynamic_tile.png</file>
+        <file>images/entity_tile.png</file>
+        <file>images/entity_crystal_block_all.png</file>
+        <file>images/entity_destination_all.png</file>
+        <file>images/entity_stairs_all.png</file>
+        <file>images/entity_stream_all.png</file>
+        <file>images/entity_custom_entity.png</file>
     </qresource>
 </RCC>
