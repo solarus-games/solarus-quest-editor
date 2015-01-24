@@ -270,3 +270,4 @@ QString QuestResources::get_friendly_name_for_id(ResourceType resource_type) con
 QString QuestResources::get_directory_friendly_name(ResourceType resource_type) const {
   return resource_type_directory_friendly_names[resource_type];
 }
+
