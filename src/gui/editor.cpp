@@ -121,7 +121,9 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   title(get_file_name()),
   undo_stack(new QUndoStack(this)),
   zoom_supported(false),
-  zoom(1.0) {
+  zoom(1.0),
+  grid_supported(false),
+  grid_visible(false) {
 
   // Default close confirmation message.
   set_close_confirm_message(
