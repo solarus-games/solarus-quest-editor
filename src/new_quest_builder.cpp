@@ -40,3 +40,4 @@ void create_initial_quest_files(const QString& quest_path) {
 }
 
 }
+
