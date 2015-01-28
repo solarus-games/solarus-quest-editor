@@ -67,3 +67,4 @@ QIcon EnumTraits<PatternSeparation>::get_icon(PatternSeparation value) {
 
   return QIcon();
 }
+
