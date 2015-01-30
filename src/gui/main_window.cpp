@@ -32,6 +32,7 @@
 #include <solarus/lowlevel/Debug.h>
 #include <QActionGroup>
 #include <QCloseEvent>
+#include <QDebug>
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -87,10 +88,10 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertWidget(ui.action_show_grid, zoom_button);
   ui.menu_view->insertMenu(ui.action_show_grid, zoom_menu);
 
-  QToolButton* show_entities_button = new QToolButton();
+  show_entities_button = new QToolButton();
   show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
   show_entities_button->setToolTip(tr("Show entity types"));
-  QMenu* show_entities_menu = create_show_entities_menu();
+  show_entities_menu = create_show_entities_menu();
   show_entities_button->setMenu(show_entities_menu);
   show_entities_button->setPopupMode(QToolButton::InstantPopup);
   ui.tool_bar->insertWidget(nullptr, show_entities_button);
@@ -179,7 +180,7 @@ QMenu* MainWindow::create_show_entities_menu() {
       menu->removeAction(action);
       continue;
     }
-    action->setChecked(true);  // Initially visible.
+    show_entities_actions[type] = action;
   }
 
   return menu;
@@ -517,6 +518,22 @@ void MainWindow::current_editor_changed(int /* index */) {
     ui.action_show_grid->setChecked(false);
   }
 
+  bool layer_visibility_supported =
+      has_editor && editor->is_layer_visibility_supported();
+  ui.action_show_layer_0->setEnabled(layer_visibility_supported);
+  ui.action_show_layer_1->setEnabled(layer_visibility_supported);
+  ui.action_show_layer_2->setEnabled(layer_visibility_supported);
+  if (!layer_visibility_supported) {
+    ui.action_show_layer_0->setChecked(false);
+    ui.action_show_layer_1->setChecked(false);
+    ui.action_show_layer_2->setChecked(false);
+  }
+
+  bool entity_type_visibility_supported =
+      has_editor && editor->is_entity_type_visibility_supported();
+  show_entities_menu->setEnabled(entity_type_visibility_supported);
+  show_entities_button->setEnabled(entity_type_visibility_supported);
+
   if (has_editor) {
 
     connect(editor, SIGNAL(zoom_changed(double)),
@@ -526,6 +543,15 @@ void MainWindow::current_editor_changed(int /* index */) {
     connect(editor, SIGNAL(grid_visibility_changed(bool)),
             this, SLOT(editor_grid_visibility_changed(bool)));
     editor_grid_visibility_changed(editor->is_grid_visible());
+
+    connect(editor, SIGNAL(layer_visibility_changed(Layer, bool)),
+            this, SLOT(editor_layer_visibility_changed(Layer, bool)));
+    editor_layer_visibility_changed();
+
+    connect(editor, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
+            this, SLOT(editor_entity_type_visibility_changed(EntityType, bool)));
+    editor_entity_type_visibility_changed();
+
   }
 }
 
@@ -547,6 +573,90 @@ void MainWindow::editor_zoom_changed(double zoom) {
 void MainWindow::editor_grid_visibility_changed(bool grid_visible) {
 
   ui.action_show_grid->setChecked(grid_visible);
+}
+
+/**
+ * @brief Slot called when a layer of the current editor was just shown or hidden.
+ * @param layer The layer whose visibility has just changed.
+ * @param bool visible The new layer visiblity.
+ */
+void MainWindow::editor_layer_visibility_changed(Layer layer, bool visible) {
+
+  switch (layer) {
+
+  case Layer::LAYER_LOW:
+    ui.action_show_layer_0->setChecked(visible);
+    break;
+
+  case Layer::LAYER_INTERMEDIATE:
+    ui.action_show_layer_1->setChecked(visible);
+    break;
+
+  case Layer::LAYER_HIGH:
+    ui.action_show_layer_2->setChecked(visible);
+    break;
+
+  case Layer::LAYER_NB:
+    qCritical() << "Invalid layer: " << layer;
+    break;
+  }
+}
+
+/**
+ * @brief Slot called when the visibility of all layers should be updated to the GUI.
+ */
+void MainWindow::editor_layer_visibility_changed() {
+
+  Editor* editor = ui.tab_widget->get_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  ui.action_show_layer_0->setChecked(editor->is_layer_visible(Layer::LAYER_LOW));
+  ui.action_show_layer_1->setChecked(editor->is_layer_visible(Layer::LAYER_INTERMEDIATE));
+  ui.action_show_layer_2->setChecked(editor->is_layer_visible(Layer::LAYER_HIGH));
+}
+
+/**
+ * @brief Slot called when a entity type of the current editor was just shown or hidden.
+ * @param entity_type The entity type whose visibility has just changed.
+ * @param bool visible The new entity type visiblity.
+ */
+void MainWindow::editor_entity_type_visibility_changed(EntityType entity_type, bool visible) {
+
+  Editor* editor = ui.tab_widget->get_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  const auto& it = show_entities_actions.find(entity_type);
+  if (it == show_entities_actions.end() || it.value() == nullptr) {
+    qCritical() << "Missing show entity type action";
+    return;
+  }
+
+  QAction* action = it.value();
+  action->setChecked(visible);
+}
+
+/**
+ * @brief Slot called when the visibility of all entity types should be updated to the GUI.
+ */
+void MainWindow::editor_entity_type_visibility_changed() {
+
+  Editor* editor = ui.tab_widget->get_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  for (QAction* action: show_entities_actions) {
+    if (action == nullptr) {
+      qCritical() << "Missing show entity type action";
+      return;
+    }
+    EntityType entity_type = static_cast<EntityType>(action->data().toInt());
+    action->setChecked(editor->is_entity_type_visible(entity_type));
+  }
 }
 
 /**

@@ -19,10 +19,15 @@
 
 #include "quest.h"
 #include "ui_main_window.h"
+#include <solarus/entities/EntityType.h>
+#include <solarus/entities/Layer.h>
 #include <QMainWindow>
 
 class QuestManager;
 class QToolButton;
+
+using EntityType = Solarus::EntityType;
+using Layer = Solarus::Layer;
 
 /**
  * @brief Main window of the quest editor.
@@ -56,6 +61,10 @@ private slots:
   void current_editor_changed(int index);
   void editor_zoom_changed(double zoom);
   void editor_grid_visibility_changed(bool grid_visible);
+  void editor_layer_visibility_changed(Layer layer, bool visible);
+  void editor_layer_visibility_changed();
+  void editor_entity_type_visibility_changed(EntityType entity_type, bool visible);
+  void editor_entity_type_visibility_changed();
 
 protected:
 
@@ -76,6 +85,13 @@ private:
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>
       zoom_actions;               /**< Action of each zoom value. */
+
+  QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
+  QToolButton*
+      show_entities_button;       /**< The entity type visilibity toolbar button. */
+  QMap<EntityType, QAction*>
+      show_entities_actions;      /**< The action to show each entity type. */
+
 };
 
 #endif

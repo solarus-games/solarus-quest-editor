@@ -191,6 +191,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_zoom_supported(true);
   set_zoom(2.0);
   set_grid_supported(true);
+  set_layer_visibility_supported(true);
+  set_entity_type_visibility_supported(true);
 
   // Open the file.
   model = new MapModel(quest, map_id, this);
