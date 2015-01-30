@@ -55,6 +55,7 @@ private slots:
 
   void current_editor_changed(int index);
   void editor_zoom_changed(double zoom);
+  void editor_grid_visibility_changed(bool grid_visible);
 
 protected:
 

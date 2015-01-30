@@ -190,6 +190,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
   set_zoom_supported(true);
   set_zoom(2.0);
+  set_grid_supported(true);
 
   // Open the file.
   model = new MapModel(quest, map_id, this);

@@ -498,7 +498,7 @@ void Editor::set_grid_supported(bool grid_supported) {
  */
 bool Editor::is_grid_visible() const {
 
-  return grid_visible;
+  return is_grid_supported() && grid_visible;
 }
 
 /**

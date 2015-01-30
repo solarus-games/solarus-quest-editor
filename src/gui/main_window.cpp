@@ -495,22 +495,37 @@ void MainWindow::on_action_run_quest_triggered() {
  * @brief Slot called when the current editor changes.
  * @param index Index of the new current editor, or -1 if no editor is active.
  */
-void MainWindow::current_editor_changed(int index) {
-
-  const bool has_tab = index != -1;
-  ui.action_cut->setEnabled(has_tab);
-  ui.action_copy->setEnabled(has_tab);
-  ui.action_paste->setEnabled(has_tab);
-  ui.action_close->setEnabled(has_tab);
-  ui.action_save->setEnabled(has_tab);
-  zoom_menu->setEnabled(has_tab);
-  zoom_button->setEnabled(has_tab);
+void MainWindow::current_editor_changed(int /* index */) {
 
   Editor* editor = ui.tab_widget->get_editor();
-  if (editor != nullptr) {
+  const bool has_editor = editor != nullptr;
+
+  // Set up toolbar buttons for this editor.
+  ui.action_cut->setEnabled(has_editor);
+  ui.action_copy->setEnabled(has_editor);
+  ui.action_paste->setEnabled(has_editor);
+  ui.action_close->setEnabled(has_editor);
+  ui.action_save->setEnabled(has_editor);
+
+  const bool zoom_supported = has_editor && editor->is_zoom_supported();
+  zoom_menu->setEnabled(zoom_supported);
+  zoom_button->setEnabled(zoom_supported);
+
+  const bool grid_supported = has_editor && editor->is_grid_supported();
+  ui.action_show_grid->setEnabled(grid_supported);
+  if (!grid_supported) {
+    ui.action_show_grid->setChecked(false);
+  }
+
+  if (has_editor) {
+
     connect(editor, SIGNAL(zoom_changed(double)),
             this, SLOT(editor_zoom_changed(double)));
     editor_zoom_changed(editor->get_zoom());
+
+    connect(editor, SIGNAL(grid_visibility_changed(bool)),
+            this, SLOT(editor_grid_visibility_changed(bool)));
+    editor_grid_visibility_changed(editor->is_grid_visible());
   }
 }
 
@@ -523,6 +538,15 @@ void MainWindow::editor_zoom_changed(double zoom) {
   if (zoom_actions.contains(zoom)) {
     zoom_actions[zoom]->setChecked(true);
   }
+}
+
+/**
+ * @brief Slot called when the grid of the current editor was just shown or hidden.
+ * @param bool visible The new grid visiblity.
+ */
+void MainWindow::editor_grid_visibility_changed(bool grid_visible) {
+
+  ui.action_show_grid->setChecked(grid_visible);
 }
 
 /**
