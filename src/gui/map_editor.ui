@@ -189,7 +189,7 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer">
+              <spacer name="horizontal_spacer_3">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -339,7 +339,122 @@
        </item>
       </layout>
      </widget>
-     <widget class="QGraphicsView" name="map_view"/>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="vertical_layout_2">
+       <item>
+        <layout class="QHBoxLayout" name="create_entities_layout">
+         <item>
+          <widget class="QToolButton" name="create_entity_button_destination">
+           <property name="toolTip">
+            <string>Create destination</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/entity_destination.png</normaloff>:/images/entity_destination.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="create_entity_button_teletransporter">
+           <property name="toolTip">
+            <string>Create teletransporter</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/entity_teletransporter.png</normaloff>:/images/entity_teletransporter.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="create_entity_button_pickable">
+           <property name="toolTip">
+            <string>Create pickable treasure</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/entity_pickable.png</normaloff>:/images/entity_pickable.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="create_entity_button_destructible">
+           <property name="toolTip">
+            <string>Create destructible object</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/entity_destructible.png</normaloff>:/images/entity_destructible.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontal_spacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="map_view"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
