@@ -30,12 +30,12 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../src/gui/editor.cpp" line="128"/>
+        <location filename="../src/gui/editor.cpp" line="133"/>
         <source>File &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Le fichier &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/editor.cpp" line="332"/>
+        <location filename="../src/gui/editor.cpp" line="346"/>
         <source>Save changes</source>
         <translation>Enregistrer les changements</translation>
     </message>
@@ -92,152 +92,152 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../build/ui_main_window.h" line="212"/>
+        <location filename="../build/ui_main_window.h" line="215"/>
         <location filename="../build/ui_mainwindow.h" line="113"/>
-        <location filename="../src/gui/main_window.cpp" line="529"/>
+        <location filename="../src/gui/main_window.cpp" line="709"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="65"/>
-        <location filename="../build/ui_main_window.h" line="237"/>
+        <location filename="../build/ui_main_window.h" line="240"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
-        <location filename="../build/ui_main_window.h" line="238"/>
+        <location filename="../build/ui_main_window.h" line="241"/>
         <location filename="../build/ui_mainwindow.h" line="123"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="86"/>
-        <location filename="../build/ui_main_window.h" line="239"/>
+        <location filename="../build/ui_main_window.h" line="242"/>
         <location filename="../build/ui_mainwindow.h" line="124"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="92"/>
-        <location filename="../build/ui_main_window.h" line="240"/>
+        <location filename="../build/ui_main_window.h" line="243"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="134"/>
-        <location filename="../build/ui_main_window.h" line="213"/>
+        <location filename="../build/ui_main_window.h" line="216"/>
         <location filename="../build/ui_mainwindow.h" line="114"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="139"/>
-        <location filename="../build/ui_main_window.h" line="214"/>
+        <location filename="../build/ui_main_window.h" line="217"/>
         <location filename="../build/ui_mainwindow.h" line="116"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="144"/>
-        <location filename="../build/ui_main_window.h" line="215"/>
+        <location filename="../build/ui_main_window.h" line="218"/>
         <location filename="../build/ui_mainwindow.h" line="118"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="153"/>
-        <location filename="../build/ui_main_window.h" line="216"/>
+        <location filename="../build/ui_main_window.h" line="219"/>
         <location filename="../build/ui_mainwindow.h" line="120"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="156"/>
-        <location filename="../build/ui_main_window.h" line="217"/>
+        <location filename="../build/ui_main_window.h" line="220"/>
         <location filename="../build/ui_mainwindow.h" line="121"/>
         <source>F9</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="165"/>
-        <location filename="../build/ui_main_window.h" line="218"/>
+        <location filename="../build/ui_main_window.h" line="221"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="174"/>
-        <location filename="../build/ui_main_window.h" line="219"/>
+        <location filename="../build/ui_main_window.h" line="222"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="183"/>
-        <location filename="../build/ui_main_window.h" line="220"/>
+        <location filename="../build/ui_main_window.h" line="223"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="188"/>
-        <location filename="../build/ui_main_window.h" line="221"/>
+        <location filename="../build/ui_main_window.h" line="224"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="197"/>
-        <location filename="../build/ui_main_window.h" line="222"/>
+        <location filename="../build/ui_main_window.h" line="225"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="209"/>
-        <location filename="../build/ui_main_window.h" line="223"/>
+        <location filename="../build/ui_main_window.h" line="226"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="212"/>
-        <location filename="../build/ui_main_window.h" line="224"/>
+        <location filename="../build/ui_main_window.h" line="227"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="224"/>
         <location filename="../src/gui/main_window.ui" line="227"/>
-        <location filename="../build/ui_main_window.h" line="225"/>
-        <location filename="../build/ui_main_window.h" line="227"/>
+        <location filename="../src/gui/main_window.ui" line="230"/>
+        <location filename="../build/ui_main_window.h" line="228"/>
+        <location filename="../build/ui_main_window.h" line="230"/>
         <source>Show low layer</source>
         <translation>Afficher la couche basse</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="239"/>
-        <location filename="../src/gui/main_window.ui" line="242"/>
-        <location filename="../build/ui_main_window.h" line="229"/>
-        <location filename="../build/ui_main_window.h" line="231"/>
+        <location filename="../src/gui/main_window.ui" line="245"/>
+        <location filename="../src/gui/main_window.ui" line="248"/>
+        <location filename="../build/ui_main_window.h" line="232"/>
+        <location filename="../build/ui_main_window.h" line="234"/>
         <source>Show intermediate layer</source>
         <translation>Afficher la couche intermédiaire</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="254"/>
-        <location filename="../src/gui/main_window.ui" line="257"/>
-        <location filename="../build/ui_main_window.h" line="233"/>
-        <location filename="../build/ui_main_window.h" line="235"/>
+        <location filename="../src/gui/main_window.ui" line="263"/>
+        <location filename="../src/gui/main_window.ui" line="266"/>
+        <location filename="../build/ui_main_window.h" line="236"/>
+        <location filename="../build/ui_main_window.h" line="238"/>
         <source>Show high layer</source>
         <translation>Afficher la couche haute</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="358"/>
-        <location filename="../src/gui/main_window.cpp" line="388"/>
+        <location filename="../src/gui/main_window.cpp" line="401"/>
+        <location filename="../src/gui/main_window.cpp" line="431"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="369"/>
+        <location filename="../src/gui/main_window.cpp" line="412"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="369"/>
+        <location filename="../src/gui/main_window.cpp" line="412"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -247,74 +247,84 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="258"/>
+        <location filename="../src/gui/main_window.cpp" line="301"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="83"/>
-        <location filename="../src/gui/main_window.cpp" line="134"/>
+        <location filename="../src/gui/main_window.cpp" line="84"/>
+        <location filename="../src/gui/main_window.cpp" line="144"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="92"/>
-        <location filename="../src/gui/main_window.cpp" line="165"/>
+        <location filename="../src/gui/main_window.cpp" line="93"/>
+        <location filename="../src/gui/main_window.cpp" line="175"/>
         <source>Show entity types</source>
         <translation>Afficher les types d&apos;entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="136"/>
+        <location filename="../src/gui/main_window.cpp" line="146"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="137"/>
+        <location filename="../src/gui/main_window.cpp" line="147"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="138"/>
+        <location filename="../src/gui/main_window.cpp" line="148"/>
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="139"/>
+        <location filename="../src/gui/main_window.cpp" line="149"/>
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="140"/>
+        <location filename="../src/gui/main_window.cpp" line="150"/>
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="277"/>
+        <location filename="../src/gui/main_window.cpp" line="202"/>
+        <source>Show all</source>
+        <translation>Afficher tout</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="212"/>
+        <source>Hide all</source>
+        <translation>Cacher tout</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="320"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="278"/>
+        <location filename="../src/gui/main_window.cpp" line="321"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="329"/>
+        <location filename="../src/gui/main_window.cpp" line="372"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="346"/>
+        <location filename="../src/gui/main_window.cpp" line="389"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="485"/>
+        <location filename="../src/gui/main_window.cpp" line="528"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
@@ -525,17 +535,17 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="205"/>
+        <location filename="../src/gui/map_editor.cpp" line="208"/>
         <source>&lt;No music&gt;</source>
         <translation>&lt;Pas de musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="206"/>
+        <location filename="../src/gui/map_editor.cpp" line="209"/>
         <source>&lt;Same as before&gt;</source>
         <translation>&lt;Garder la même musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="325"/>
+        <location filename="../src/gui/map_editor.cpp" line="328"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -1789,37 +1799,37 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="651"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="652"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="753"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="754"/>
         <source>Please close all maps before updating tile pattern references.</source>
         <translation>Veuillez fermer toutes les maps avant de mettre à jour les références des motifs.</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="804"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="805"/>
         <source>Cannot open map file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="822"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="823"/>
         <source>Cannot open map file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos; en écriture</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1075"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1076"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1079"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1080"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1085"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1086"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
