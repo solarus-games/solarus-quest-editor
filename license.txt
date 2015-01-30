@@ -30,8 +30,6 @@ resources/images/icon_file.png
 resources/images/icon_first.png
 resources/images/icon_glasses.png
 resources/images/icon_last.png
-resources/images/icon_layer_0.png
-resources/images/icon_layer_2.png
 resources/images/icon_next.png
 resources/images/icon_open.png
 resources/images/icon_paste.png
@@ -68,7 +66,9 @@ resources/images/icon_folder_open_map.png
 resources/images/icon_folder_open_sound.png
 resources/images/icon_folder_open_sprite.png
 resources/images/icon_folder_open_tileset.png
+resources/images/icon_layer_0.png
 resources/images/icon_layer_1.png
+resources/images/icon_layer_2.png
 resources/images/icon_resource_language.png
 resources/images/icon_resource_enemy_missing.png
 resources/images/icon_resource_entity_missing.png
