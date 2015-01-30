@@ -54,6 +54,9 @@ MainWindow::MainWindow(QWidget* parent) :
   // Set up widgets.
   ui.setupUi(this);
 
+  // Title.
+  update_title();
+
   // Icon.
   QStringList icon_sizes = { "16", "32", "48", "256" };
   QIcon icon;
@@ -706,7 +709,8 @@ void MainWindow::editor_entity_type_visibility_changed() {
  */
 void MainWindow::update_title() {
 
-  QString title = tr("Solarus Quest Editor");
+  QString version = SOLARUS_VERSION;
+  QString title = tr("Solarus Quest Editor %1").arg(version);
   QString quest_name = quest.get_name();
   if (!quest_name.isEmpty()) {
     title = quest_name + " - " + title;
