@@ -81,6 +81,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, undo_action);
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
+  ui.action_run_quest->setEnabled(false);
 
   zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
