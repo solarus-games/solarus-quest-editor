@@ -647,3 +647,37 @@ void Editor::set_entity_type_visible(EntityType entity_type, bool visible) {
   }
   emit entity_type_visibility_changed(entity_type, visible);
 }
+
+/**
+ * @brief Shows all entity types.
+ *
+ * This function does nothing if entity type visibility is not supported by the editor.
+ * Emits entity_type_visibility_changed() for each type whose visibility changes.
+ */
+void Editor::show_all_entity_types() {
+
+  if (!is_entity_type_visibility_supported()) {
+    return;
+  }
+
+  for (EntityType entity_type: EntityTraits::get_values()) {
+    set_entity_type_visible(entity_type, true);
+  }
+}
+
+/**
+ * @brief Hides all entity types.
+ *
+ * This function does nothing if entity type visibility is not supported by the editor.
+ * Emits entity_type_visibility_changed() for each type whose visibility changes.
+ */
+void Editor::hide_all_entity_types() {
+
+  if (!is_entity_type_visibility_supported()) {
+    return;
+  }
+
+  for (EntityType entity_type: EntityTraits::get_values()) {
+    set_entity_type_visible(entity_type, false);
+  }
+}

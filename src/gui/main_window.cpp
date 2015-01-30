@@ -127,6 +127,15 @@ MainWindow::MainWindow(QWidget* parent) :
 }
 
 /**
+ * @brief Returns the editor of the current tab, if any.
+ * @return The current editor or nullptr.
+ */
+Editor* MainWindow::get_current_editor() {
+
+  return ui.tab_widget->get_editor();
+}
+
+/**
  * @brief Creates a menu with zoom actions.
  * @return The created menu. It has no parent initially.
  */
@@ -169,8 +178,13 @@ QMenu* MainWindow::create_show_entities_menu() {
   QList<QAction*> entity_actions = EnumMenus<EntityType>::create_actions(
         *menu,
         EnumMenuCheckableOption::CHECKABLE,
-        [=](EntityType /* type */) {
-    // TODO
+        [=](EntityType type) {
+    Editor* editor = ui.tab_widget->get_editor();
+    if (editor != nullptr) {
+      QString type_name = EntityTraits::get_lua_name(type);
+      const bool visible = show_entities_actions[type_name]->isChecked();
+      editor->set_entity_type_visible(type, visible);
+    }
   });
 
   for (QAction* action : entity_actions) {
@@ -180,8 +194,32 @@ QMenu* MainWindow::create_show_entities_menu() {
       menu->removeAction(action);
       continue;
     }
-    show_entities_actions[type] = action;
+    QString type_name = EntityTraits::get_lua_name(type);
+    show_entities_actions[type_name] = action;
   }
+
+  // Add special actions Show all and Hide all.
+  QAction* show_all_action = new QAction(tr("Show all"), this);
+  show_entities_actions["action_show_all"] = show_all_action;
+  menu->insertAction(entity_actions.first(), show_all_action);
+  connect(show_all_action, &QAction::triggered, [=]() {
+    Editor* editor = get_current_editor();
+    if (editor != nullptr) {
+      editor->show_all_entity_types();
+    }
+  });
+
+  QAction* hide_all_action = new QAction(tr("Hide all"), this);
+  show_entities_actions["action_hide_all"] = hide_all_action;
+  menu->insertAction(entity_actions.first(), hide_all_action);
+  connect(hide_all_action, &QAction::triggered, [=]() {
+    Editor* editor = get_current_editor();
+    if (editor != nullptr) {
+      editor->hide_all_entity_types();
+    }
+  });
+
+  menu->insertSeparator(entity_actions.first());
 
   return menu;
 }
@@ -440,7 +478,7 @@ void MainWindow::on_action_exit_triggered() {
  */
 void MainWindow::on_action_cut_triggered() {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor != nullptr) {
     editor->cut();
   }
@@ -451,7 +489,7 @@ void MainWindow::on_action_cut_triggered() {
  */
 void MainWindow::on_action_copy_triggered() {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor != nullptr) {
     editor->copy();
   }
@@ -462,7 +500,7 @@ void MainWindow::on_action_copy_triggered() {
  */
 void MainWindow::on_action_paste_triggered() {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor != nullptr) {
     editor->paste();
   }
@@ -498,7 +536,7 @@ void MainWindow::on_action_run_quest_triggered() {
  */
 void MainWindow::current_editor_changed(int /* index */) {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   const bool has_editor = editor != nullptr;
 
   // Set up toolbar buttons for this editor.
@@ -607,7 +645,7 @@ void MainWindow::editor_layer_visibility_changed(Layer layer, bool visible) {
  */
 void MainWindow::editor_layer_visibility_changed() {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
@@ -624,14 +662,16 @@ void MainWindow::editor_layer_visibility_changed() {
  */
 void MainWindow::editor_entity_type_visibility_changed(EntityType entity_type, bool visible) {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
 
-  const auto& it = show_entities_actions.find(entity_type);
+  QString type_name = EntityTraits::get_lua_name(entity_type);
+  const auto& it = show_entities_actions.find(type_name);
   if (it == show_entities_actions.end() || it.value() == nullptr) {
-    qCritical() << "Missing show entity type action";
+    // This type of entity is not present in the menu.
+    // This might be a type that cannot be used in the editor but only by the engine.
     return;
   }
 
@@ -644,7 +684,7 @@ void MainWindow::editor_entity_type_visibility_changed(EntityType entity_type, b
  */
 void MainWindow::editor_entity_type_visibility_changed() {
 
-  Editor* editor = ui.tab_widget->get_editor();
+  Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
@@ -654,8 +694,10 @@ void MainWindow::editor_entity_type_visibility_changed() {
       qCritical() << "Missing show entity type action";
       return;
     }
-    EntityType entity_type = static_cast<EntityType>(action->data().toInt());
-    action->setChecked(editor->is_entity_type_visible(entity_type));
+    if (action->data().isValid()) {  // Skip special actions.
+      EntityType entity_type = static_cast<EntityType>(action->data().toInt());
+      action->setChecked(editor->is_entity_type_visible(entity_type));
+    }
   }
 }
 

@@ -23,6 +23,7 @@
 #include <solarus/entities/Layer.h>
 #include <QMainWindow>
 
+class Editor;
 class QuestManager;
 class QToolButton;
 
@@ -44,6 +45,7 @@ public:
   void close_quest();
   bool open_quest(const QString& quest_path);
   void open_file(Quest& quest, const QString& path);
+  Editor* get_current_editor();
 
 private slots:
 
@@ -89,8 +91,12 @@ private:
   QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
   QToolButton*
       show_entities_button;       /**< The entity type visilibity toolbar button. */
-  QMap<EntityType, QAction*>
-      show_entities_actions;      /**< The action to show each entity type. */
+  QMap<QString, QAction*>
+      show_entities_actions;      /**< Actions in the show entity type menu.
+                                   * There is one action for each entity type,
+                                   * plus two special actions "Show all" and "Hide all".
+                                   * The key is the entity type name or
+                                   * "action_show_all" or "action_hide_all". */
 
 };
 

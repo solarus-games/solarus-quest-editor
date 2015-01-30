@@ -91,6 +91,8 @@ public slots:
   void set_grid_visible(bool grid_visible);
   void set_layer_visible(Layer layer, bool visible);
   void set_entity_type_visible(EntityType entity_type, bool visible);
+  void show_all_entity_types();
+  void hide_all_entity_types();
 
 protected:
 
