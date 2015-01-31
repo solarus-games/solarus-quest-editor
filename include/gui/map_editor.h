@@ -62,6 +62,8 @@ private slots:
 
 private:
 
+  void build_entity_creation_toolbar();
+
   Ui::MapEditor ui;         /**< The map editor widgets. */
   QString map_id;           /**< Id of the map being edited. */
   MapModel* model;          /**< Map model being edited. */

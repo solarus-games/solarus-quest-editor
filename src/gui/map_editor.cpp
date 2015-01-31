@@ -17,9 +17,11 @@
 #include "gui/gui_tools.h"
 #include "gui/map_editor.h"
 #include "editor_exception.h"
+#include "entity_traits.h"
 #include "map_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QToolBar>
 #include <QUndoStack>
 
 namespace {
@@ -172,6 +174,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   model(nullptr) {
 
   ui.setupUi(this);
+  build_entity_creation_toolbar();
 
   // Get the map.
   ResourceType resource_type;
@@ -266,6 +269,55 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
  */
 MapModel& MapEditor::get_model() {
   return *model;
+}
+
+/**
+ * @brief Initializes the entity creation toolbar.
+ *
+ * The entity creation toolbar is not made with Qt designer because
+ * - one cannot create QToolBar widgets with Qt designer,
+ * - we iterate on entity types to build all of them more easily.
+ */
+void MapEditor::build_entity_creation_toolbar() {
+
+  QToolBar* entity_creation_toolbar = new QToolBar(this);
+
+  // List of types proposed in the toolbar.
+  // The list is specified here manually because we want to control the order
+  // and all types are not included (tiles and dynamic tiles are omitted).
+  const std::vector<std::pair<EntityType, QString>> types_in_toolbar = {
+    { EntityType::DESTINATION, tr("Create destination") },
+    { EntityType::TELETRANSPORTER, tr("Create teletransporter") },
+    { EntityType::PICKABLE, tr("Create pickable") },
+    { EntityType::DESTRUCTIBLE, tr("Create destructible") },
+    { EntityType::CHEST, tr("Create chest") },
+    { EntityType::JUMPER, tr("Create jumper") },
+    { EntityType::ENEMY, tr("Create enemy") },
+    { EntityType::NPC, tr("Create non-playing character") },
+    { EntityType::BLOCK, tr("Create block") },
+    { EntityType::SWITCH, tr("Create switch") },
+    { EntityType::WALL, tr("Create wall") },
+    { EntityType::SENSOR, tr("Create sensor") },
+    { EntityType::CRYSTAL, tr("Create crystal") },
+    { EntityType::CRYSTAL_BLOCK, tr("Create crystal block") },
+    { EntityType::SHOP_TREASURE, tr("Create shop treasure") },
+    { EntityType::STREAM, tr("Create stream") },
+    { EntityType::DOOR, tr("Create door") },
+    { EntityType::STAIRS, tr("Create stairs") },
+    { EntityType::SEPARATOR, tr("Create separator") },
+    { EntityType::CUSTOM, tr("Create custom entity") }
+  };
+
+  for (const auto& pair : types_in_toolbar) {
+    EntityType type = pair.first;
+    QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
+    QAction* action = new QAction(QIcon(icon_name), pair.second, this);
+    entity_creation_toolbar->addAction(action);
+    entity_creation_toolbar->setIconSize(QSize(32, 32));
+  }
+  entity_creation_toolbar->setStyleSheet("spacing: 0");
+
+  ui.entity_creation_layout->insertWidget(0, entity_creation_toolbar);
 }
 
 /**
