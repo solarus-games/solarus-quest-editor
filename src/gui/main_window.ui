@@ -229,6 +229,9 @@
    <property name="toolTip">
     <string>Show low layer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
   </action>
   <action name="action_show_layer_1">
    <property name="checkable">
@@ -247,6 +250,9 @@
    <property name="toolTip">
     <string>Show intermediate layer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
+   </property>
   </action>
   <action name="action_show_layer_2">
    <property name="checkable">
@@ -264,6 +270,9 @@
    </property>
    <property name="toolTip">
     <string>Show high layer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
    </property>
   </action>
  </widget>
