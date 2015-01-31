@@ -227,12 +227,12 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
            (is_dir && quest.is_in_resource_path(path, resource_type))) {
     // Resource directory or subdirectory: let the user create a new element in it.
 
-    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
+    QString resource_type_create_friendly_name = resources.get_create_friendly_name(resource_type);
     QString resource_type_lua_name = resources.get_lua_name(resource_type);
 
     new_resource_element_action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
-          tr("Create %1...").arg(resource_type_friendly_name),
+          resource_type_create_friendly_name,
           this);
   }
 

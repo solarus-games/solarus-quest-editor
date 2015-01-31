@@ -69,6 +69,19 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::FONT,     tr("Font folder")          },
   };
 
+  resource_type_create_friendly_names = {
+    { ResourceType::MAP,      tr("New map")           },
+    { ResourceType::TILESET,  tr("New tileset")       },
+    { ResourceType::SPRITE,   tr("New sprite")        },
+    { ResourceType::MUSIC,    tr("New music")         },
+    { ResourceType::SOUND,    tr("New sound")         },
+    { ResourceType::ITEM,     tr("New item")          },
+    { ResourceType::ENEMY,    tr("New enemy")         },
+    { ResourceType::ENTITY,   tr("New custom entity") },
+    { ResourceType::LANGUAGE, tr("New language")      },
+    { ResourceType::FONT,     tr("New font")          },
+  };
+
   connect(&quest, SIGNAL(root_path_changed(const QString&)),
           this, SLOT(reload()));
   reload();
@@ -271,3 +284,11 @@ QString QuestResources::get_directory_friendly_name(ResourceType resource_type) 
   return resource_type_directory_friendly_names[resource_type];
 }
 
+/**
+ * @brief Returns a user-friendly name for the action of creating a resource element.
+ * @param resource_type A type of resources.
+ * @return The human-readable action name of creating such a resource element.
+ */
+QString QuestResources::get_create_friendly_name(ResourceType resource_type) const {
+  return resource_type_create_friendly_names[resource_type];
+}

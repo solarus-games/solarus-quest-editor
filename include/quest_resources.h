@@ -63,6 +63,7 @@ public:
   QString get_friendly_name(ResourceType resource_type) const;
   QString get_friendly_name_for_id(ResourceType resource_type) const;
   QString get_directory_friendly_name(ResourceType resource_type) const;
+  QString get_create_friendly_name(ResourceType resource_type) const;
 
 signals:
 
@@ -97,6 +98,10 @@ private:
   QMap<ResourceType, QString>
       resource_type_directory_friendly_names;    /**< Human-readable name describing the directory
                                                   * of each resource type. */
+  QMap<ResourceType, QString>
+      resource_type_create_friendly_names;       /**< Human-readable name for actions of creating
+                                                  * resource elements. */
+
 };
 
 #endif
