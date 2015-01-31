@@ -98,25 +98,25 @@
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="65"/>
-        <location filename="../build/ui_main_window.h" line="240"/>
+        <location filename="../build/ui_main_window.h" line="243"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
-        <location filename="../build/ui_main_window.h" line="241"/>
+        <location filename="../build/ui_main_window.h" line="244"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="86"/>
-        <location filename="../build/ui_main_window.h" line="242"/>
+        <location filename="../build/ui_main_window.h" line="245"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="92"/>
-        <location filename="../build/ui_main_window.h" line="243"/>
+        <location filename="../build/ui_main_window.h" line="246"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
@@ -201,20 +201,38 @@
         <translation>Afficher la couche basse</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="245"/>
-        <location filename="../src/gui/main_window.ui" line="248"/>
+        <location filename="../src/gui/main_window.ui" line="233"/>
         <location filename="../build/ui_main_window.h" line="232"/>
-        <location filename="../build/ui_main_window.h" line="234"/>
+        <source>Ctrl+1</source>
+        <translation>Ctrl+1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="248"/>
+        <location filename="../src/gui/main_window.ui" line="251"/>
+        <location filename="../build/ui_main_window.h" line="233"/>
+        <location filename="../build/ui_main_window.h" line="235"/>
         <source>Show intermediate layer</source>
         <translation>Afficher la couche intermédiaire</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="263"/>
-        <location filename="../src/gui/main_window.ui" line="266"/>
-        <location filename="../build/ui_main_window.h" line="236"/>
+        <location filename="../src/gui/main_window.ui" line="254"/>
+        <location filename="../build/ui_main_window.h" line="237"/>
+        <source>Ctrl+2</source>
+        <translation>Ctrl+2</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="269"/>
+        <location filename="../src/gui/main_window.ui" line="272"/>
         <location filename="../build/ui_main_window.h" line="238"/>
+        <location filename="../build/ui_main_window.h" line="240"/>
         <source>Show high layer</source>
         <translation>Afficher la couche haute</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="275"/>
+        <location filename="../build/ui_main_window.h" line="242"/>
+        <source>Ctrl+3</source>
+        <translation>Ctrl+3</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.cpp" line="405"/>
@@ -1570,13 +1588,21 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
     <message>
         <location filename="../src/quest_resources.cpp" line="79"/>
-        <source>New enemy...</source>
-        <translation>Nouvel ennemi...</translation>
+        <source>New enemy breed...</source>
+        <translation>Nouveau modèle d&apos;ennemi...</translation>
     </message>
     <message>
         <location filename="../src/quest_resources.cpp" line="80"/>
+        <source>New custom entity model...</source>
+        <translation>Nouveau modèle d&apos;entité custom...</translation>
+    </message>
+    <message>
+        <source>New enemy...</source>
+        <translation type="vanished">Nouvel ennemi...</translation>
+    </message>
+    <message>
         <source>New custom entity...</source>
-        <translation>Nouvelle entité custom...</translation>
+        <translation type="vanished">Nouvelle entité custom...</translation>
     </message>
     <message>
         <location filename="../src/quest_resources.cpp" line="81"/>
