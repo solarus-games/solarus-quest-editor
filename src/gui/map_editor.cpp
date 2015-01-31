@@ -308,13 +308,15 @@ void MapEditor::build_entity_creation_toolbar() {
     { EntityType::CUSTOM, tr("Create custom entity") }
   };
 
+  QActionGroup* button_group = new QActionGroup(this);
   for (const auto& pair : types_in_toolbar) {
     EntityType type = pair.first;
     QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
-    QAction* action = new QAction(QIcon(icon_name), pair.second, this);
+    QAction* action = new QAction(QIcon(icon_name), pair.second, button_group);
+    action->setCheckable(true);
     entity_creation_toolbar->addAction(action);
-    entity_creation_toolbar->setIconSize(QSize(32, 32));
   }
+  entity_creation_toolbar->setIconSize(QSize(32, 32));
   entity_creation_toolbar->setStyleSheet("spacing: 0");
 
   ui.entity_creation_layout->insertWidget(0, entity_creation_toolbar);
