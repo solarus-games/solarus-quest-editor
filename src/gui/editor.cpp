@@ -681,3 +681,4 @@ void Editor::hide_all_entity_types() {
     set_entity_type_visible(entity_type, false);
   }
 }
+
