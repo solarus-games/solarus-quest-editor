@@ -30,16 +30,16 @@ QuestResources::QuestResources(Quest& quest):
   // Friendly names are set dynamically because they are translated.
   resource_type_friendly_names = {
     //: To describe the type of resource itself like: New Map.
-    { ResourceType::MAP,      tr("Map", "resource_type")           },
-    { ResourceType::TILESET,  tr("Tileset", "resource_type")       },
-    { ResourceType::SPRITE,   tr("Sprite", "resource_type")        },
-    { ResourceType::MUSIC,    tr("Music", "resource_type")         },
-    { ResourceType::SOUND,    tr("Sound", "resource_type")         },
-    { ResourceType::ITEM,     tr("Item", "resource_type")          },
-    { ResourceType::ENEMY,    tr("Enemy", "resource_type")         },
-    { ResourceType::ENTITY,   tr("Custom entity", "resource_type") },
-    { ResourceType::LANGUAGE, tr("Language", "resource_type")      },
-    { ResourceType::FONT,     tr("Font", "resource_type")          },
+    { ResourceType::MAP,      tr("Map", "resource_type")              },
+    { ResourceType::TILESET,  tr("Tileset", "resource_type")          },
+    { ResourceType::SPRITE,   tr("Sprite", "resource_type")           },
+    { ResourceType::MUSIC,    tr("Music", "resource_type")            },
+    { ResourceType::SOUND,    tr("Sound", "resource_type")            },
+    { ResourceType::ITEM,     tr("Item", "resource_type")             },
+    { ResourceType::ENEMY,    tr("Enemy", "resource_type")            },
+    { ResourceType::ENTITY,   tr("Custom entity", "resource_type")    },
+    { ResourceType::LANGUAGE, tr("Language", "resource_type")         },
+    { ResourceType::FONT,     tr("Font", "resource_type")             },
   };
 
   resource_type_friendly_names_for_id = {
@@ -57,29 +57,29 @@ QuestResources::QuestResources(Quest& quest):
   };
 
   resource_type_directory_friendly_names = {
-    { ResourceType::MAP,      tr("Map folder")           },
-    { ResourceType::TILESET,  tr("Tileset folder")       },
-    { ResourceType::SPRITE,   tr("Sprite folder")        },
-    { ResourceType::MUSIC,    tr("Music folder")         },
-    { ResourceType::SOUND,    tr("Sound folder")         },
-    { ResourceType::ITEM,     tr("Item folder")          },
-    { ResourceType::ENEMY,    tr("Enemy folder")         },
-    { ResourceType::ENTITY,   tr("Custom entity folder") },
-    { ResourceType::LANGUAGE, tr("Language folder")      },
-    { ResourceType::FONT,     tr("Font folder")          },
+    { ResourceType::MAP,      tr("Map folder")                        },
+    { ResourceType::TILESET,  tr("Tileset folder")                    },
+    { ResourceType::SPRITE,   tr("Sprite folder")                     },
+    { ResourceType::MUSIC,    tr("Music folder")                      },
+    { ResourceType::SOUND,    tr("Sound folder")                      },
+    { ResourceType::ITEM,     tr("Item folder")                       },
+    { ResourceType::ENEMY,    tr("Enemy folder")                      },
+    { ResourceType::ENTITY,   tr("Custom entity folder")              },
+    { ResourceType::LANGUAGE, tr("Language folder")                   },
+    { ResourceType::FONT,     tr("Font folder")                       },
   };
 
   resource_type_create_friendly_names = {
-    { ResourceType::MAP,      tr("New map...")           },
-    { ResourceType::TILESET,  tr("New tileset...")       },
-    { ResourceType::SPRITE,   tr("New sprite...")        },
-    { ResourceType::MUSIC,    tr("New music...")         },
-    { ResourceType::SOUND,    tr("New sound...")         },
-    { ResourceType::ITEM,     tr("New item...")          },
-    { ResourceType::ENEMY,    tr("New enemy breed...")         },
-    { ResourceType::ENTITY,   tr("New custom entity model...") },
-    { ResourceType::LANGUAGE, tr("New language...")      },
-    { ResourceType::FONT,     tr("New font...")          },
+    { ResourceType::MAP,      tr("New map...")                        },
+    { ResourceType::TILESET,  tr("New tileset...")                    },
+    { ResourceType::SPRITE,   tr("New sprite...")                     },
+    { ResourceType::MUSIC,    tr("New music...")                      },
+    { ResourceType::SOUND,    tr("New sound...")                      },
+    { ResourceType::ITEM,     tr("New item...")                       },
+    { ResourceType::ENEMY,    tr("New enemy breed...")                },
+    { ResourceType::ENTITY,   tr("New custom entity model...")        },
+    { ResourceType::LANGUAGE, tr("New language...")                   },
+    { ResourceType::FONT,     tr("New font...")                       },
   };
 
   connect(&quest, SIGNAL(root_path_changed(const QString&)),
