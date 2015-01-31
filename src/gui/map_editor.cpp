@@ -286,26 +286,26 @@ void MapEditor::build_entity_creation_toolbar() {
   // The list is specified here manually because we want to control the order
   // and all types are not included (tiles and dynamic tiles are omitted).
   const std::vector<std::pair<EntityType, QString>> types_in_toolbar = {
-    { EntityType::DESTINATION, tr("Create destination") },
-    { EntityType::TELETRANSPORTER, tr("Create teletransporter") },
-    { EntityType::PICKABLE, tr("Create pickable") },
-    { EntityType::DESTRUCTIBLE, tr("Create destructible") },
-    { EntityType::CHEST, tr("Create chest") },
-    { EntityType::JUMPER, tr("Create jumper") },
-    { EntityType::ENEMY, tr("Create enemy") },
-    { EntityType::NPC, tr("Create non-playing character") },
-    { EntityType::BLOCK, tr("Create block") },
-    { EntityType::SWITCH, tr("Create switch") },
-    { EntityType::WALL, tr("Create wall") },
-    { EntityType::SENSOR, tr("Create sensor") },
-    { EntityType::CRYSTAL, tr("Create crystal") },
-    { EntityType::CRYSTAL_BLOCK, tr("Create crystal block") },
-    { EntityType::SHOP_TREASURE, tr("Create shop treasure") },
-    { EntityType::STREAM, tr("Create stream") },
-    { EntityType::DOOR, tr("Create door") },
-    { EntityType::STAIRS, tr("Create stairs") },
-    { EntityType::SEPARATOR, tr("Create separator") },
-    { EntityType::CUSTOM, tr("Create custom entity") }
+    { EntityType::DESTINATION, tr("Add destination") },
+    { EntityType::TELETRANSPORTER, tr("Add teletransporter") },
+    { EntityType::PICKABLE, tr("Add pickable") },
+    { EntityType::DESTRUCTIBLE, tr("Add destructible") },
+    { EntityType::CHEST, tr("Add chest") },
+    { EntityType::JUMPER, tr("Add jumper") },
+    { EntityType::ENEMY, tr("Add enemy") },
+    { EntityType::NPC, tr("Add non-playing character") },
+    { EntityType::BLOCK, tr("Add block") },
+    { EntityType::SWITCH, tr("Add switch") },
+    { EntityType::WALL, tr("Add wall") },
+    { EntityType::SENSOR, tr("Add sensor") },
+    { EntityType::CRYSTAL, tr("Add crystal") },
+    { EntityType::CRYSTAL_BLOCK, tr("Add crystal block") },
+    { EntityType::SHOP_TREASURE, tr("Add shop treasure") },
+    { EntityType::STREAM, tr("Add stream") },
+    { EntityType::DOOR, tr("Add door") },
+    { EntityType::STAIRS, tr("Add stairs") },
+    { EntityType::SEPARATOR, tr("Add separator") },
+    { EntityType::CUSTOM, tr("Add custom entity") }
   };
 
   QActionGroup* button_group = new QActionGroup(this);

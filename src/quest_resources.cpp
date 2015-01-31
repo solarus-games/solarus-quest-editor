@@ -70,16 +70,16 @@ QuestResources::QuestResources(Quest& quest):
   };
 
   resource_type_create_friendly_names = {
-    { ResourceType::MAP,      tr("New map")           },
-    { ResourceType::TILESET,  tr("New tileset")       },
-    { ResourceType::SPRITE,   tr("New sprite")        },
-    { ResourceType::MUSIC,    tr("New music")         },
-    { ResourceType::SOUND,    tr("New sound")         },
-    { ResourceType::ITEM,     tr("New item")          },
-    { ResourceType::ENEMY,    tr("New enemy")         },
-    { ResourceType::ENTITY,   tr("New custom entity") },
-    { ResourceType::LANGUAGE, tr("New language")      },
-    { ResourceType::FONT,     tr("New font")          },
+    { ResourceType::MAP,      tr("New map...")           },
+    { ResourceType::TILESET,  tr("New tileset...")       },
+    { ResourceType::SPRITE,   tr("New sprite...")        },
+    { ResourceType::MUSIC,    tr("New music...")         },
+    { ResourceType::SOUND,    tr("New sound...")         },
+    { ResourceType::ITEM,     tr("New item...")          },
+    { ResourceType::ENEMY,    tr("New enemy breed...")         },
+    { ResourceType::ENTITY,   tr("New custom entity model...") },
+    { ResourceType::LANGUAGE, tr("New language...")      },
+    { ResourceType::FONT,     tr("New font...")          },
   };
 
   connect(&quest, SIGNAL(root_path_changed(const QString&)),
