@@ -143,3 +143,4 @@ Solarus::TileScrolling EnumTraits<PatternAnimation>::get_scrolling(PatternAnimat
 
   return Solarus::TileScrolling::NONE;
 }
+
