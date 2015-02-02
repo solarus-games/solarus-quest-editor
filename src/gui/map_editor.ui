@@ -342,7 +342,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="entity_creation_layout">
        <item>
-        <widget class="QGraphicsView" name="map_view"/>
+        <widget class="MapView" name="map_view"/>
        </item>
       </layout>
      </widget>
@@ -361,12 +361,14 @@
    <extends>QComboBox</extends>
    <header>gui/resource_selector.h</header>
   </customwidget>
+  <customwidget>
+   <class>MapView</class>
+   <extends>QGraphicsView</extends>
+   <header>gui/map_view.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
   <include location="../../resources/images.qrc"/>
  </resources>
  <connections/>
- <buttongroups>
-  <buttongroup name="create_entities_button_group"/>
- </buttongroups>
 </ui>

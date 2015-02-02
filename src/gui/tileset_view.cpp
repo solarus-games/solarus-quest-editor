@@ -96,14 +96,6 @@ void TilesetView::set_model(TilesetModel* model) {
 }
 
 /**
- * @brief Returns the zoom level of the view.
- * @return The zoom level.
- */
-double TilesetView::get_zoom() const {
-  return zoom;
-}
-
-/**
  * @brief Returns whether the view is in read-only mode.
  * @return @c true if the mode is read-only, @c false if changes can be
  * made to the tileset.
@@ -118,6 +110,14 @@ bool TilesetView::is_read_only() const {
  */
 void TilesetView::set_read_only(bool read_only) {
   this->read_only = read_only;
+}
+
+/**
+ * @brief Returns the zoom level of the view.
+ * @return The zoom level.
+ */
+double TilesetView::get_zoom() const {
+  return zoom;
 }
 
 /**
