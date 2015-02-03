@@ -72,13 +72,13 @@ public:
   int get_num_entities() const;
   int get_num_entities(Layer layer) const;
   bool entity_exists(const EntityIndex& index) const;
+  EntityType get_entity_type(const EntityIndex& index) const;
+  QString get_entity_type_name(const EntityIndex& index) const;
   QPoint get_entity_xy(const EntityIndex& index) const;
   QPoint get_entity_top_left(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   QPixmap get_entity_image(const EntityIndex& index) const;
-  EntityType get_entity_type(const EntityIndex& index) const;
-  QString get_entity_type_name(const EntityIndex& index) const;
 
 signals:
 

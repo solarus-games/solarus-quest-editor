@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_ENTITY_MODEL_H
 #define SOLARUSEDITOR_ENTITY_MODEL_H
 
+#include "entity_traits.h"
 #include <solarus/MapData.h>
 #include <QPixmap>
 #include <QPointer>
@@ -26,27 +27,51 @@ class MapModel;
 using EntityIndex = Solarus::EntityIndex;
 
 /**
- * @brief Data of a map entity.
+ * @brief Model of a map entity.
  *
- * This class adds to a map entity all information
- * about how to represent and modify it in the editor.
+ * This class wraps an enttiy from the Solarus library and
+ * adds all useful information about how to represent and modify it in the
+ * editor.
  */
 class EntityModel {
 
 public:
 
-  EntityModel(MapModel& map, const EntityIndex& index);
+  EntityModel(MapModel& map, const Solarus::EntityData& entity);
   virtual ~EntityModel();
 
   const MapModel& get_map() const;
   MapModel& get_map();
 
+  EntityType get_type() const;
+  QString get_type_name() const;
+
+  QPoint get_xy() const;
+  void set_xy(const QPoint& xy);
+  QPoint get_top_left() const;
+  void set_top_left(const QPoint& top_left);
+  QPoint get_origin() const;
+  void set_origin(const QPoint& origin);
+  int get_width() const;
+  void set_width(int width);
+  int get_height() const;
+  void set_height(int height);
+  QSize get_size() const;
+  void set_size(const QSize& size);
+  QRect get_bounding_box() const;
+
   virtual const QPixmap& get_image() const;
+
+protected:
+
 
 private:
 
-  QPointer<MapModel> map;       /**< The map this entity belongs to. */
-  EntityIndex index;            /**< Index of the entity on the map. */
+  QPointer<MapModel> map;       /**< The map this entity belongs to.
+                                 * (could be a reference but we want operator=) */
+  Solarus::EntityData entity;   /**< The entity data wrapped. */
+  QPoint origin;                /**< Origin point of the entity. */
+  QSize size;                   /**< Size of the entity for the editor. */
   mutable QPixmap image;        /**< Image of the entity
                                  * to be displayed in the map view. */
 };

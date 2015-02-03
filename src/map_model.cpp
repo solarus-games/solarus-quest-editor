@@ -55,7 +55,8 @@ MapModel::MapModel(
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     for (int j = 0; j < get_num_entities(layer); ++j) {
-      entities[i].append(EntityModel(*this, { layer, j }));
+      const Solarus::EntityData& entity_data = map.get_entity({ layer, j});
+      entities[i].append(EntityModel(*this, entity_data));
     }
   }
 }
@@ -315,81 +316,6 @@ const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
 }
 
 /**
- * @brief Returns the coordinates of an entity on the map.
- * @param index Index of the entity to get.
- * @return The coordinates of the entity's origin point.
- * Returns @c QPoint() if there is no entity with this index.
- */
-QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
-
-  if (!entity_exists(index)) {
-    return QPoint();
-  }
-
-  return Point::to_qpoint(map.get_entity(index).get_xy());
-}
-
-/**
- * @brief Returns the coordinates of the upper-left corner of an entity.
- * @param index Index of the entity to get.
- * @return The coordinates of the entity's upper-left corner.
- * Returns @c QPoint() if there is no entity with this index.
- */
-QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
-
-  // TODO take the origin into account.
-  return get_entity_xy(index);
-}
-
-/**
- * @brief Returns the size of an entity on the map.
- * @param index Index of the entity to get.
- * @return The size of this entity.
- * Returns @c QSize() if there is no entity with this index.
- */
-QSize MapModel::get_entity_size(const EntityIndex& index) const {
-
-  if (!entity_exists(index)) {
-    return QSize();
-  }
-
-  // TODO this depends on the entity type: subclass EntityModel.
-  return QSize(16, 16);
-}
-
-/**
- * @brief Returns the bounding box of an entity for the editor.
- * @param index Index of the entity to get.
- * @return The bounding box, or an empty rectangle if there is no entity
- * with this index.
- */
-QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
-
-  if (!entity_exists(index)) {
-    return QRect();
-  }
-
-  return QRect(get_entity_top_left(index), get_entity_size(index));
-}
-
-/**
- * @brief Returns an image representing the specified entity.
- * @param index Index of a map entity.
- * @return The corresponding image.
- * Returns a null pixmap if there is no entity at this index.
- */
-QPixmap MapModel::get_entity_image(const EntityIndex& index) const {
-
-  if (!entity_exists(index)) {
-    // No such entity.
-    return QPixmap();
-  }
-
-  const EntityModel& entity = get_entity_model(index);
-  return entity.get_image();
-}
-
-/**
  * @brief Returns the type of an entity.
  * @param index Index of a map entity.
  * @return The corresponding type.
@@ -402,7 +328,7 @@ EntityType MapModel::get_entity_type(const EntityIndex& index) const {
     return EntityType();
   }
 
-  return map.get_entity(index).get_type();
+  return get_entity_model(index).get_type();
 }
 
 /**
@@ -418,5 +344,77 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
     return QString();
   }
 
-  return QString::fromStdString(map.get_entity(index).get_type_name());
+  return get_entity_model(index).get_type_name();
+}
+
+/**
+ * @brief Returns the coordinates of an entity on the map.
+ * @param index Index of the entity to get.
+ * @return The coordinates of the entity's origin point.
+ * Returns @c QPoint() if there is no entity with this index.
+ */
+QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QPoint();
+  }
+
+  return get_entity_model(index).get_xy();
+}
+
+/**
+ * @brief Returns the coordinates of the upper-left corner of an entity.
+ * @param index Index of the entity to get.
+ * @return The coordinates of the entity's upper-left corner.
+ * Returns @c QPoint() if there is no entity with this index.
+ */
+QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
+
+  return get_entity_model(index).get_top_left();
+}
+
+/**
+ * @brief Returns the size of an entity on the map.
+ * @param index Index of the entity to get.
+ * @return The size of this entity.
+ * Returns @c QSize() if there is no entity with this index.
+ */
+QSize MapModel::get_entity_size(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QSize();
+  }
+
+  return get_entity_model(index).get_size();
+}
+
+/**
+ * @brief Returns the bounding box of an entity for the editor.
+ * @param index Index of the entity to get.
+ * @return The bounding box, or an empty rectangle if there is no entity
+ * with this index.
+ */
+QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QRect();
+  }
+
+  return get_entity_model(index).get_bounding_box();
+}
+
+/**
+ * @brief Returns an image representing the specified entity.
+ * @param index Index of a map entity.
+ * @return The corresponding image.
+ * Returns a null pixmap if there is no entity at this index.
+ */
+QPixmap MapModel::get_entity_image(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return QPixmap();
+  }
+
+  return get_entity_model(index).get_image();
 }
