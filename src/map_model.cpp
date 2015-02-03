@@ -268,17 +268,3 @@ void MapModel::set_music_id(const QString& music_id) {
   map.set_music_id(std_music_id);
   emit music_id_changed(music_id);
 }
-
-/**
- * @brief Returns the types of entities that can be saved in a map fle.
- *
- * These are all entity types except the ones that are only created by the
- * engine at run-time, such as the hero, explosions, etc.
- *
- * @return The entity types that can be stored.
- */
-QList<Solarus::EntityType> MapModel::get_entity_types_available_in_map_file() {
-
-  // TODO
-  return QList<Solarus::EntityType>();
-}
