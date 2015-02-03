@@ -17,11 +17,17 @@
 #ifndef SOLARUSEDITOR_MAP_MODEL_H
 #define SOLARUSEDITOR_MAP_MODEL_H
 
+#include "entity_traits.h"
+#include "layer_traits.h"
 #include <solarus/MapData.h>
 #include <QItemSelectionModel>
+#include <QPixmap>
+#include <QPointer>
 
 class Quest;
 class TilesetModel;
+
+using EntityIndex = Solarus::EntityIndex;
 
 /**
  * @brief Model that wraps a map.
@@ -36,6 +42,8 @@ class MapModel : public QObject {
 
 public:
 
+  static constexpr int NO_FLOOR = Solarus::MapData::NO_FLOOR;
+
   // Creation.
   MapModel(
       Quest& quest, const QString& map_id, QObject* parent = nullptr);
@@ -43,6 +51,7 @@ public:
   Quest& get_quest();
   QString get_map_id() const;
 
+  // Map properties.
   QSize get_size() const;
   void set_size(const QSize& size);
   bool has_world() const;
@@ -59,7 +68,17 @@ public:
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
 
-  static constexpr int NO_FLOOR = Solarus::MapData::NO_FLOOR;
+  // Entities.
+  int get_num_entities() const;
+  int get_num_entities(Layer layer) const;
+  bool entity_exists(const EntityIndex& index) const;
+  QPoint get_entity_xy(const EntityIndex& index) const;
+  QPoint get_entity_top_left(const EntityIndex& index) const;
+  QSize get_entity_size(const EntityIndex& index) const;
+  QRect get_entity_bounding_box(const EntityIndex& index) const;
+  QPixmap get_entity_image(const EntityIndex& index) const;
+  EntityType get_entity_type(const EntityIndex& index) const;
+  QString get_entity_type_name(const EntityIndex& index) const;
 
 signals:
 
@@ -76,10 +95,34 @@ public slots:
 
 private:
 
+  /**
+   * @brief Editor data of a specific entity.
+   * TODO move to a separate file
+   */
+  class EntityModel {
+
+  public:
+
+    EntityModel(MapModel& map, const EntityIndex& index);
+    void set_image_dirty() const;
+    const QPixmap& get_image() const;
+
+  private:
+
+    QPointer<MapModel> map;       /**< The map this entity belongs to. */
+    EntityIndex index;            /**< Index of the entity. */
+    mutable QPixmap image;        /**< Image of the entity
+                                   * to be displayed in the map view. */
+  };
+
+  const EntityModel& get_entity(const EntityIndex& index) const;
+
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
+  std::array<QList<EntityModel>, Layer::LAYER_NB>
+      entities;                   /**< All entities. */
 
 };
 

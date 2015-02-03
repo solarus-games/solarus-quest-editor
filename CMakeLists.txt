@@ -75,6 +75,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/lua_syntax_highlighter.h
   include/gui/map_editor.h
   include/gui/map_view.h
+  include/gui/map_scene.h
   include/gui/main_window.h
   include/gui/new_resource_element_dialog.h
   include/gui/quest_files_model.h
@@ -120,6 +121,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/main_window.cpp
   src/gui/map_editor.cpp
   src/gui/map_view.cpp
+  src/gui/map_scene.cpp
   src/gui/new_resource_element_dialog.cpp
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp

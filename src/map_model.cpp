@@ -51,6 +51,12 @@ MapModel::MapModel(
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
+  for (int i = 0; i < Layer::LAYER_NB; ++i) {
+    Layer layer = static_cast<Layer>(i);
+    for (int j = 0; j < get_num_entities(layer); ++j) {
+      entities[i].append(EntityModel(*this, { layer, j }));
+    }
+  }
 }
 
 /**
@@ -267,4 +273,178 @@ void MapModel::set_music_id(const QString& music_id) {
   }
   map.set_music_id(std_music_id);
   emit music_id_changed(music_id);
+}
+
+/**
+ * @brief Returns the total number of entities on the map.
+ * @return The number of entities.
+ */
+int MapModel::get_num_entities() const {
+  return map.get_num_entities();
+}
+
+/**
+ * @brief Returns the number of entities on a layer of the map.
+ * @param layer A layer.
+ * @return The number of entities on that layer.
+ */
+int MapModel::get_num_entities(Layer layer) const {
+  return map.get_num_entities(layer);
+}
+
+/**
+ * @brief Returns whether there is an entity at the given index.
+ * @param index An index.
+ * @return @c true if there is an entity at this index.
+ */
+bool MapModel::entity_exists(const EntityIndex& index) const {
+  return map.entity_exists(index);
+}
+
+/**
+ * @brief Returns the model of entity at the given index.
+ * @param index An index.
+ * @return The corresponding entity model.
+ */
+const MapModel::EntityModel& MapModel::get_entity(const EntityIndex& index) const {
+  return entities[index.layer].at(index.index);
+}
+
+/**
+ * @brief Returns the coordinates of an entity on the map.
+ * @param index Index of the entity to get.
+ * @return The coordinates of the entity's origin point.
+ * Returns @c QPoint() if there is no entity with this index.
+ */
+QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QPoint();
+  }
+
+  return Point::to_qpoint(map.get_entity(index).get_xy());
+}
+
+/**
+ * @brief Returns the coordinates of the upper-left corner of an entity.
+ * @param index Index of the entity to get.
+ * @return The coordinates of the entity's upper-left corner.
+ * Returns @c QPoint() if there is no entity with this index.
+ */
+QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
+
+  // TODO take the origin into account.
+  return get_entity_xy(index);
+}
+
+/**
+ * @brief Returns the size of an entity on the map.
+ * @param index Index of the entity to get.
+ * @return The size of this entity.
+ * Returns @c QSize() if there is no entity with this index.
+ */
+QSize MapModel::get_entity_size(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QSize();
+  }
+
+  // TODO this depends on the entity type: subclass EntityModel.
+  return QSize(16, 16);
+}
+
+/**
+ * @brief Returns the bounding box of an entity for the editor.
+ * @param index Index of the entity to get.
+ * @return The bounding box, or an empty rectangle if there is no entity
+ * with this index.
+ */
+QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QRect();
+  }
+
+  return QRect(get_entity_top_left(index), get_entity_size(index));
+}
+
+/**
+ * @brief Returns an image representing the specified entity.
+ * @param index Index of a map entity.
+ * @return The corresponding image.
+ * Returns a null pixmap if there is no entity at this index.
+ */
+QPixmap MapModel::get_entity_image(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return QPixmap();
+  }
+
+  const EntityModel& entity = get_entity(index);
+  return entity.get_image();
+}
+
+/**
+ * @brief Returns the type of an entity.
+ * @param index Index of a map entity.
+ * @return The corresponding type.
+ * Returns a default-constructed type if there is no entity at this index.
+ */
+EntityType MapModel::get_entity_type(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return EntityType();
+  }
+
+  return map.get_entity(index).get_type();
+}
+
+/**
+ * @brief Returns the Lua type name of an entity.
+ * @param index Index of a map entity.
+ * @return The corresponding type name.
+ * Returns an empty string if there is no entity at this index.
+ */
+QString MapModel::get_entity_type_name(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return QString();
+  }
+
+  return QString::fromStdString(map.get_entity(index).get_type_name());
+}
+
+/**
+ * @brief Creates an entity model.
+ * @param map The map containing the entity.
+ * @param index Index of the tile pattern to represent.
+ */
+MapModel::EntityModel::EntityModel(MapModel& map, const EntityIndex& index) :
+  map(&map),
+  index(index) {
+}
+
+/**
+ * @brief Clears the image cache of this entity.
+ */
+void MapModel::EntityModel::set_image_dirty() const {
+  image = QPixmap();
+}
+
+/**
+ * @brief Returns the image representing the entity in the editor.
+ * @return The entity's image.
+ */
+const QPixmap& MapModel::EntityModel::get_image() const {
+
+  if (image.isNull()) {
+    // Lazily create the image.
+    QString type_name = map->get_entity_type_name(index);
+    image = QPixmap(QString(":/images/entity_%1.png").arg(type_name)).scaledToHeight(16);  // TODO
+  }
+
+  return image;
 }

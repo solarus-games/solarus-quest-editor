@@ -61,7 +61,7 @@ private:
 };
 
 /**
- * @brief TilesetScene Creates a tileset scene.
+ * @brief Creates a tileset scene.
  * @param model The tileset data to represent in the scene.
  * @param parent The parent object or nullptr.
  */

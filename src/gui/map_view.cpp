@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/map_scene.h"
 #include "gui/map_view.h"
 #include <QScrollBar>
 
@@ -36,8 +37,8 @@ MapView::MapView(QWidget* parent) :
  * This class does not take ownership on the model.
  * The model can be deleted safely.
  */
-void MapView::set_model(MapModel* /* model */) {
-  /* TDOO
+void MapView::set_model(MapModel* model) {
+
   if (this->model != nullptr) {
     this->model = nullptr;
     this->scene = nullptr;
@@ -56,7 +57,6 @@ void MapView::set_model(MapModel* /* model */) {
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
   }
-  */
 }
 
 /**
