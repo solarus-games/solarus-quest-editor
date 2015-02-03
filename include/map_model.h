@@ -17,14 +17,14 @@
 #ifndef SOLARUSEDITOR_MAP_MODEL_H
 #define SOLARUSEDITOR_MAP_MODEL_H
 
+#include "entity_model.h"
 #include "entity_traits.h"
 #include "layer_traits.h"
 #include <solarus/MapData.h>
 #include <QItemSelectionModel>
-#include <QPixmap>
-#include <QPointer>
 
 class Quest;
+class EntityModel;
 class TilesetModel;
 
 using EntityIndex = Solarus::EntityIndex;
@@ -95,27 +95,7 @@ public slots:
 
 private:
 
-  /**
-   * @brief Editor data of a specific entity.
-   * TODO move to a separate file
-   */
-  class EntityModel {
-
-  public:
-
-    EntityModel(MapModel& map, const EntityIndex& index);
-    void set_image_dirty() const;
-    const QPixmap& get_image() const;
-
-  private:
-
-    QPointer<MapModel> map;       /**< The map this entity belongs to. */
-    EntityIndex index;            /**< Index of the entity. */
-    mutable QPixmap image;        /**< Image of the entity
-                                   * to be displayed in the map view. */
-  };
-
-  const EntityModel& get_entity(const EntityIndex& index) const;
+  const EntityModel& get_entity_model(const EntityIndex& index) const;
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */

@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "editor_exception.h"
+#include "entity_model.h"
 #include "map_model.h"
 #include "quest.h"
 #include "point.h"
@@ -303,10 +304,13 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
 
 /**
  * @brief Returns the model of entity at the given index.
+ *
+ * The EntityModel class is only for internal use of MapModel.
+ *
  * @param index An index.
  * @return The corresponding entity model.
  */
-const MapModel::EntityModel& MapModel::get_entity(const EntityIndex& index) const {
+const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
   return entities[index.layer].at(index.index);
 }
 
@@ -381,7 +385,7 @@ QPixmap MapModel::get_entity_image(const EntityIndex& index) const {
     return QPixmap();
   }
 
-  const EntityModel& entity = get_entity(index);
+  const EntityModel& entity = get_entity_model(index);
   return entity.get_image();
 }
 
@@ -415,36 +419,4 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
   }
 
   return QString::fromStdString(map.get_entity(index).get_type_name());
-}
-
-/**
- * @brief Creates an entity model.
- * @param map The map containing the entity.
- * @param index Index of the tile pattern to represent.
- */
-MapModel::EntityModel::EntityModel(MapModel& map, const EntityIndex& index) :
-  map(&map),
-  index(index) {
-}
-
-/**
- * @brief Clears the image cache of this entity.
- */
-void MapModel::EntityModel::set_image_dirty() const {
-  image = QPixmap();
-}
-
-/**
- * @brief Returns the image representing the entity in the editor.
- * @return The entity's image.
- */
-const QPixmap& MapModel::EntityModel::get_image() const {
-
-  if (image.isNull()) {
-    // Lazily create the image.
-    QString type_name = map->get_entity_type_name(index);
-    image = QPixmap(QString(":/images/entity_%1.png").arg(type_name)).scaledToHeight(16);  // TODO
-  }
-
-  return image;
 }

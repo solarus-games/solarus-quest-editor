@@ -90,6 +90,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_view.h
   include/color.h
   include/editor_exception.h
+  include/entity_model.h
   include/entity_traits.h
   include/enum_traits.h
   include/file_tools.h
@@ -135,6 +136,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
+  src/entity_model.cpp
   src/entity_traits.cpp
   src/file_tools.cpp
   src/ground_traits.cpp
