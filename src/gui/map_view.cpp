@@ -53,7 +53,12 @@ void MapView::set_model(MapModel* model) {
 
     // Enable useful features if there is an image.
     setDragMode(QGraphicsView::RubberBandDrag);
-    set_zoom(2.0);  // Initial zoom: x2.
+
+    // Scale the view of 0.5 because the whole scene works with upscaled
+    // coordinates.
+    scale(MapScene::map_from_scene_factor, MapScene::map_from_scene_factor);
+    set_zoom(2.0);  // Initial zoom.
+
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
@@ -87,9 +92,8 @@ void MapView::set_zoom(double zoom) {
   }
 
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  scale(1.0 / this->zoom, 1.0 / this->zoom);
+  scale(zoom / this->zoom, zoom / this->zoom);
   this->zoom = zoom;
-  scale(zoom, zoom);
 
   emit zoom_changed(zoom);
 }

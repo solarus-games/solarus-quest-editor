@@ -27,6 +27,15 @@ class MapModel;
 
 /**
  * @brief The scene containing all entities in the map main view.
+ *
+ * In scene coordinates, map entity coordinates are multiplied by 2.
+ * This allows us to show entity icons at a higher resolution than tiles:
+ * for example, we show a 32x32 icon on a 16x16 tile
+ * In scene coordinates, a tile with coordinates 16x16 in the data file becomes 32x32.
+ * In other words, scene coordinates match the view when the user actually
+ * sets a zoom of 200%.
+ * This is nice for the user, but in the code all coordinates from the map
+ * data file have to be scaled.
  */
 class MapScene : public QGraphicsScene {
   Q_OBJECT
@@ -37,6 +46,9 @@ public:
 
   const MapModel& get_model() const;
   const Quest& get_quest() const;
+
+  static constexpr int map_to_scene_factor = 2;
+  static constexpr double map_from_scene_factor = 0.5;
 
 private:
 

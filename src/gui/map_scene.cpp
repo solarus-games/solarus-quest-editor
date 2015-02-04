@@ -125,7 +125,7 @@ EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
   index(index) {
 
   QRect frame = map.get_entity_bounding_box(index);
-  setPos(frame.topLeft());
+  setPos(frame.topLeft() * MapScene::map_to_scene_factor);
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
@@ -151,7 +151,7 @@ void EntityItem::set_index(const EntityIndex& index) {
  */
 QRectF EntityItem::boundingRect() const {
 
-  return QRect(QPoint(0, 0), map.get_entity_size(index));
+  return QRect(QPoint(0, 0), map.get_entity_size(index) * MapScene::map_to_scene_factor);
 }
 
 /**
@@ -183,7 +183,7 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    QRect box(QPoint(), map.get_entity_size(index));
+    QRect box(QPoint(), map.get_entity_size(index) * MapScene::map_to_scene_factor);
     GuiTools::draw_rectangle_outline(*painter, box, Qt::blue);
   }
 }

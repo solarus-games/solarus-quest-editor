@@ -48,9 +48,10 @@ void Tile::draw(QPainter& painter) const {
     const TilesetModel* tileset = get_tileset();
     if (tileset != nullptr) {
       int pattern_index = tileset->id_to_index(get_pattern_id());
-      pattern_image = tileset->get_pattern_image(pattern_index);
+      int pattern_width = tileset->get_pattern_frame(pattern_index).width();
+      pattern_image = tileset->get_pattern_image(pattern_index).scaledToWidth(pattern_width * 2);
     }
   }
 
-  painter.drawTiledPixmap(0, 0, get_width(), get_height(), pattern_image);
+  painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, pattern_image);
 }

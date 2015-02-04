@@ -141,9 +141,8 @@ void TilesetView::set_zoom(double zoom) {
   }
 
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  scale(1.0 / this->zoom, 1.0 / this->zoom);
+  scale(zoom / this->zoom, zoom / this->zoom);
   this->zoom = zoom;
-  scale(zoom, zoom);
 
   emit zoom_changed(zoom);
 }
