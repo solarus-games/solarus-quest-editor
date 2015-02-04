@@ -262,6 +262,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(model, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
+  connect(this, SIGNAL(zoom_changed(double)),
+          ui.map_view, SLOT(set_zoom(double)));
+  connect(ui.map_view, SIGNAL(zoom_changed(double)),
+          this, SLOT(set_zoom(double)));
 }
 
 /**

@@ -151,7 +151,7 @@ void EntityItem::set_index(const EntityIndex& index) {
  */
 QRectF EntityItem::boundingRect() const {
 
-  return map.get_entity_bounding_box(index);
+  return QRect(QPoint(0, 0), map.get_entity_size(index));
 }
 
 /**
@@ -165,21 +165,13 @@ QRectF EntityItem::boundingRect() const {
  */
 void EntityItem::paint(QPainter* painter,
                         const QStyleOptionGraphicsItem* option,
-                        QWidget* widget) {
+                        QWidget* /* widget */) {
 
   if (!map.entity_exists(index)) {
     // Bug in the editor.
     qCritical() << MapScene::tr("No such entity index on layer %1: %2").arg(index.layer, index.index);
     return;
   }
-
-  QRect box = map.get_entity_bounding_box(index);
-  QPoint top_left = box.topLeft();
-  box.translate(-top_left);
-
-  // Start with an opaque background, to erase anything below
-  // if the pattern has transparency.
-  painter->fillRect(box, widget->palette().window());
 
   const bool selected = option->state & QStyle::State_Selected;
 
@@ -191,6 +183,7 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
+    QRect box(QPoint(), map.get_entity_size(index));
     GuiTools::draw_rectangle_outline(*painter, box, Qt::blue);
   }
 }

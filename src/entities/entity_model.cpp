@@ -264,5 +264,5 @@ void EntityModel::draw(QPainter& painter) const {
     icon = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name()));
   }
 
-  painter.drawTiledPixmap(get_bounding_box(), icon);
+  painter.drawTiledPixmap(0, 0, get_width(), get_height(), icon);
 }

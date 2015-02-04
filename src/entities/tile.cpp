@@ -52,5 +52,5 @@ void Tile::draw(QPainter& painter) const {
     }
   }
 
-  painter.drawTiledPixmap(get_bounding_box(), pattern_image);
+  painter.drawTiledPixmap(0, 0, get_width(), get_height(), pattern_image);
 }
