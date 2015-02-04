@@ -47,8 +47,17 @@ public:
   const MapModel& get_model() const;
   const Quest& get_quest() const;
 
-  static constexpr int map_to_scene_factor = 2;
-  static constexpr double map_from_scene_factor = 0.5;
+  static int quest_to_scene(int coordinate);
+  static int scene_to_quest(int coordinate);
+  static QPoint quest_to_scene(const QPoint& point);
+  static QPoint scene_to_quest(const QPoint& point);
+  static QRect quest_to_scene(const QRect& rectangle);
+  static QRect scene_to_quest(const QRect& rectangle);
+  static QSize quest_to_scene(const QSize& size);
+  static QSize scene_to_quest(const QSize& size);
+
+  static constexpr int quest_to_scene_factor = 2;
+  static constexpr double scene_to_quest_factor = 0.5;
 
 private:
 

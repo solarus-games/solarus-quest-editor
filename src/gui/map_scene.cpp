@@ -87,6 +87,88 @@ const Quest& MapScene::get_quest() const {
 }
 
 /**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param coordinate The value to convert.
+ * @return The converted value.
+ */
+int MapScene::quest_to_scene(int coordinate) {
+
+  return coordinate * quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param coordinate The value to convert.
+ * @return The converted value.
+ */
+int MapScene::scene_to_quest(int coordinate) {
+
+  return coordinate / quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param point The value to convert.
+ * @return The converted value.
+ */
+QPoint MapScene::quest_to_scene(const QPoint& point) {
+
+  return point * quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param point The value to convert.
+ * @return The converted value.
+ */
+QPoint MapScene::scene_to_quest(const QPoint& point) {
+
+  return point / quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param rectangle The value to convert.
+ * @return The converted value.
+ */
+QRect MapScene::quest_to_scene(const QRect& rectangle) {
+
+  return QRect(rectangle.topLeft() * quest_to_scene_factor,
+               rectangle.size() * quest_to_scene_factor);
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param rectangle The value to convert.
+ * @return The converted value.
+ */
+QRect MapScene::scene_to_quest(const QRect& rectangle) {
+
+  return QRect(rectangle.topLeft() / quest_to_scene_factor,
+               rectangle.size() / quest_to_scene_factor);
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param rectangle The value to convert.
+ * @return The converted value.
+ */
+QSize MapScene::quest_to_scene(const QSize& size) {
+
+  return size * quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param rectangle The value to convert.
+ * @return The converted value.
+ */
+QSize MapScene::scene_to_quest(const QSize& size) {
+
+  return size / quest_to_scene_factor;
+}
+
+/**
  * @brief Create all entity items in the scene.
  */
 void MapScene::build() {
@@ -125,7 +207,7 @@ EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
   index(index) {
 
   QRect frame = map.get_entity_bounding_box(index);
-  setPos(frame.topLeft() * MapScene::map_to_scene_factor);
+  setPos(MapScene::quest_to_scene(frame.topLeft()));
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
@@ -151,7 +233,7 @@ void EntityItem::set_index(const EntityIndex& index) {
  */
 QRectF EntityItem::boundingRect() const {
 
-  return QRect(QPoint(0, 0), map.get_entity_size(index) * MapScene::map_to_scene_factor);
+  return QRect(QPoint(0, 0), MapScene::quest_to_scene(map.get_entity_size(index)));
 }
 
 /**
@@ -183,7 +265,6 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    QRect box(QPoint(), map.get_entity_size(index) * MapScene::map_to_scene_factor);
-    GuiTools::draw_rectangle_outline(*painter, box, Qt::blue);
+    GuiTools::draw_rectangle_outline(*painter, boundingRect().toRect(), Qt::blue);
   }
 }

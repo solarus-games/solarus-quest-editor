@@ -56,7 +56,7 @@ void MapView::set_model(MapModel* model) {
 
     // Scale the view of 0.5 because the whole scene works with upscaled
     // coordinates.
-    scale(MapScene::map_from_scene_factor, MapScene::map_from_scene_factor);
+    scale(MapScene::scene_to_quest_factor, MapScene::scene_to_quest_factor);
     set_zoom(2.0);  // Initial zoom.
 
     horizontalScrollBar()->setValue(0);
