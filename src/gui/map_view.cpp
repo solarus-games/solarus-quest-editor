@@ -16,6 +16,7 @@
  */
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
+#include "gui/pan_tool.h"
 #include <QScrollBar>
 
 /**
@@ -28,7 +29,6 @@ MapView::MapView(QWidget* parent) :
   zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
-
 }
 
 /**
@@ -56,6 +56,9 @@ void MapView::set_model(MapModel* model) {
     set_zoom(2.0);  // Initial zoom: x2.
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
+
+    // Pan the view with the middle mouse button.
+    new PanTool(this);
   }
 }
 

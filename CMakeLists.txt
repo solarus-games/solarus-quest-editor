@@ -81,6 +81,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/map_scene.h
   include/gui/main_window.h
   include/gui/new_resource_element_dialog.h
+  include/gui/pan_tool.h
   include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/resource_model.h
@@ -128,6 +129,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/map_view.cpp
   src/gui/map_scene.cpp
   src/gui/new_resource_element_dialog.cpp
+  src/gui/pan_tool.cpp
   src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/resource_model.cpp

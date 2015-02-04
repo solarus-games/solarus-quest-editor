@@ -115,12 +115,6 @@ private:
                                         * MOVING_PATTERN: graphic item of the
                                         * rectangle the user is drawing. */
 
-  // TODO move the panning code to a reusable class,
-  // because other views also need it. Use an event filter?
-  QPoint pan_initial_point;            /**< Point initially clicked when panning
-                                        * the view, in scrolling-independent
-                                        * coordinates. */
-
   double zoom;                         /**< Scale factor of the view. */
   bool read_only;                      /**< Whether the view forbids editing the tileset. */
 

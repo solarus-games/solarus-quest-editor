@@ -16,6 +16,7 @@
  */
 #include "gui/enum_menus.h"
 #include "gui/gui_tools.h"
+#include "gui/pan_tool.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
 #include "ground_traits.h"
@@ -92,6 +93,9 @@ void TilesetView::set_model(TilesetModel* model) {
     set_zoom(2.0);  // Initial zoom: x2.
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
+
+    // Pan the view with the middle mouse button.
+    new PanTool(this);
   }
 }
 
@@ -171,7 +175,7 @@ void TilesetView::zoom_out() {
 /**
  * @brief Receives a mouse press event.
  *
- * Reimplemented to scroll the view when the middle mouse button is pressed.
+ * Reimplemented to handle the selection.
  *
  * @param event The event to handle.
  */
@@ -181,15 +185,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     return;
   }
 
-  if (event->button() == Qt::MidButton) {
-    // Middle button: pan the view.
-    QApplication::setOverrideCursor(Qt::ClosedHandCursor);
-    pan_initial_point = QPoint(
-          horizontalScrollBar()->value() + event->x(),
-          verticalScrollBar()->value() + event->y()
-          );
-  }
-  else if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+  if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
 
     // Left or right button: possibly change the selection.
     QList<QGraphicsItem*> items_under_mouse = items(
@@ -265,11 +261,6 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
     return;
   }
 
-  if (event->button() == Qt::MidButton) {
-    QApplication::restoreOverrideCursor();
-    return;
-  }
-
   if (state == State::DRAWING_RECTANGLE) {
     end_state_drawing_rectangle();
   }
@@ -291,17 +282,6 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
 void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
   if (model == nullptr) {
-    return;
-  }
-
-  if ((event->buttons() & Qt::MidButton) == Qt::MidButton) {
-
-    QPoint scroll_point(
-          pan_initial_point.x() - event->x(),
-          pan_initial_point.y() - event->y()
-    );
-    horizontalScrollBar()->setValue(scroll_point.x());
-    verticalScrollBar()->setValue(scroll_point.y());
     return;
   }
 
