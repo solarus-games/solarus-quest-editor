@@ -17,15 +17,17 @@
 #ifndef SOLARUSEDITOR_MAP_MODEL_H
 #define SOLARUSEDITOR_MAP_MODEL_H
 
-#include "entity_model.h"
-#include "entity_traits.h"
+#include "entities/entity_model.h"
+#include "entities/entity_traits.h"
 #include "layer_traits.h"
 #include <solarus/MapData.h>
 #include <QItemSelectionModel>
+#include <deque>
 
-class Quest;
 class EntityModel;
+class Quest;
 class TilesetModel;
+class QPainter;
 
 using EntityIndex = Solarus::EntityIndex;
 
@@ -78,7 +80,7 @@ public:
   QPoint get_entity_top_left(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
-  QPixmap get_entity_image(const EntityIndex& index) const;
+  void draw_entity(const EntityIndex& index, QPainter& painter) const;
 
 signals:
 
@@ -101,7 +103,7 @@ private:
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
-  std::array<QList<EntityModel>, Layer::LAYER_NB>
+  std::array<std::deque<std::unique_ptr<EntityModel>>, Layer::LAYER_NB>
       entities;                   /**< All entities. */
 
 };

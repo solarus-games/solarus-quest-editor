@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/entity_traits.h"
 #include "gui/editor.h"
 #include "editor_exception.h"
-#include "entity_traits.h"
 #include "quest.h"
 #include <solarus/SolarusFatal.h>
 #include <QMessageBox>

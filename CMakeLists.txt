@@ -62,6 +62,9 @@ include_directories(SYSTEM
 
 # Source files.
 set(solarus_quest_editor_SOURCES
+  include/entities/entity_model.h
+  include/entities/entity_traits.h
+  include/entities/tile.h
   include/gui/change_pattern_id_dialog.h
   include/gui/closable_tab_bar.h
   include/gui/editor.h
@@ -90,8 +93,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_view.h
   include/color.h
   include/editor_exception.h
-  include/entity_model.h
-  include/entity_traits.h
   include/enum_traits.h
   include/file_tools.h
   include/ground_traits.h
@@ -112,6 +113,9 @@ set(solarus_quest_editor_SOURCES
   include/rectangle.h
   include/size.h
   include/tileset_model.h
+  src/entities/entity_model.cpp
+  src/entities/entity_traits.cpp
+  src/entities/tile.cpp
   src/gui/change_pattern_id_dialog.cpp
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
@@ -136,8 +140,6 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/color.cpp
   src/editor_exception.cpp
-  src/entity_model.cpp
-  src/entity_traits.cpp
   src/file_tools.cpp
   src/ground_traits.cpp
   src/layer_traits.cpp

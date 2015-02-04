@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/entity_model.h"
 #include "editor_exception.h"
-#include "entity_model.h"
 #include "map_model.h"
 #include "quest.h"
 #include "point.h"
@@ -56,7 +56,7 @@ MapModel::MapModel(
     Layer layer = static_cast<Layer>(i);
     for (int j = 0; j < get_num_entities(layer); ++j) {
       const Solarus::EntityData& entity_data = map.get_entity({ layer, j});
-      entities[i].append(EntityModel(*this, entity_data));
+      entities[i].push_back(std::move(EntityModel::create(*this, entity_data)));
     }
   }
 }
@@ -312,7 +312,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  * @return The corresponding entity model.
  */
 const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
-  return entities[index.layer].at(index.index);
+  return *entities[index.layer].at(index.index);
 }
 
 /**
@@ -404,17 +404,18 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
 }
 
 /**
- * @brief Returns an image representing the specified entity.
- * @param index Index of a map entity.
- * @return The corresponding image.
- * Returns a null pixmap if there is no entity at this index.
+ * @brief Draws an entity of this map.
+ *
+ * Does nothing if there is no entity with this index.
+ *
+ * @paran index Index of the entity to draw.
+ * @param painter The drawing painter.
  */
-QPixmap MapModel::get_entity_image(const EntityIndex& index) const {
+void MapModel::draw_entity(const EntityIndex& index, QPainter& painter) const {
 
   if (!entity_exists(index)) {
-    // No such entity.
-    return QPixmap();
+    return;
   }
 
-  return get_entity_model(index).get_image();
+  get_entity_model(index).draw(painter);
 }

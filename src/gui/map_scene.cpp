@@ -18,13 +18,13 @@
 #include "gui/map_scene.h"
 #include "map_model.h"
 #include <QDebug>
-#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 #include <QPainter>
 
 /**
  * @brief Graphic item representing a map entity.
  */
-class EntityItem : public QGraphicsPixmapItem {
+class EntityItem : public QGraphicsItem {
 
 public:
 
@@ -42,15 +42,17 @@ public:
   EntityIndex get_index() const;
   void set_index(const EntityIndex& index);
 
+  QRectF boundingRect() const override;
+
 protected:
 
-  virtual void paint(QPainter* painter,
+  void paint(QPainter* painter,
                      const QStyleOptionGraphicsItem* option,
                      QWidget* widget = nullptr) override;
 
 private:
 
-  MapModel& model;            /**< The map this entity belongs to. */
+  MapModel& map;              /**< The map this entity belongs to. */
   EntityIndex index;          /**< Index of the entity in the map. */
 
 };
@@ -114,15 +116,15 @@ void MapScene::create_entity_item(const EntityIndex& index) {
 
 /**
  * @brief Creates an entity item.
- * @param model The map.
+ * @param map The map.
  * @param index Index of the entity on the map.
  */
-EntityItem::EntityItem(MapModel& model, const EntityIndex& index) :
-  QGraphicsPixmapItem(model.get_entity_image(index)),
-  model(model),
+EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
+  QGraphicsItem(),
+  map(map),
   index(index) {
 
-  QRect frame = model.get_entity_bounding_box(index);
+  QRect frame = map.get_entity_bounding_box(index);
   setPos(frame.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
@@ -144,9 +146,18 @@ void EntityItem::set_index(const EntityIndex& index) {
 }
 
 /**
+ * @brief Returns the bounding rectangle of the entity item.
+ * @return The bounding rectangle.
+ */
+QRectF EntityItem::boundingRect() const {
+
+  return map.get_entity_bounding_box(index);
+}
+
+/**
  * @brief Paints the pattern item.
  *
- * Reimplemented to draw our own selection marker.
+ * Draws our own selection marker.
  *
  * @param painter The painter.
  * @param option Style option of the item.
@@ -156,13 +167,13 @@ void EntityItem::paint(QPainter* painter,
                         const QStyleOptionGraphicsItem* option,
                         QWidget* widget) {
 
-  if (!model.entity_exists(index)) {
+  if (!map.entity_exists(index)) {
     // Bug in the editor.
     qCritical() << MapScene::tr("No such entity index on layer %1: %2").arg(index.layer, index.index);
     return;
   }
 
-  QRect box = model.get_entity_bounding_box(index);
+  QRect box = map.get_entity_bounding_box(index);
   QPoint top_left = box.topLeft();
   box.translate(-top_left);
 
@@ -176,7 +187,7 @@ void EntityItem::paint(QPainter* painter,
   // Qt's built-in selection marker.
   QStyleOptionGraphicsItem option_deselected = *option;
   option_deselected.state &= ~QStyle::State_Selected;
-  QGraphicsPixmapItem::paint(painter, &option_deselected, widget);
+  map.draw_entity(index, *painter);
 
   // Add our selection marker.
   if (selected) {

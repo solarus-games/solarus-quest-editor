@@ -14,27 +14,61 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "entity_model.h"
+#include "entities/entity_model.h"
+#include "entities/tile.h"
 #include "map_model.h"
 #include "point.h"
+#include <QPainter>
 
 /**
  * @brief Creates an entity model.
  * @param map The map containing the entity.
- * @param index Index of the tile pattern to represent.
+ * @param entity The entity data to represent.
  */
 EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   map(&map),
   entity(entity),
   origin(0, 0),
   size(16, 16),
-  image() {
+  icon() {
+
+  // If the entity has explicit size information in its properties, use it.
+  if (entity.is_integer("width") && entity.is_integer("height")) {
+    set_size(QSize(entity.get_integer("width"), entity.get_integer("height")));
+  }
 }
 
 /**
  * @brief Destructor.
  */
 EntityModel::~EntityModel() {
+}
+
+/**
+ * @brief Creates an entity model of the appropriate concrete type from data.
+ * @param map The map containing the entity.
+ * @param entity The entity data to represent.
+ * @return The created model.
+ */
+std::unique_ptr<EntityModel> EntityModel::create(
+    MapModel& map, const Solarus::EntityData& entity_data) {
+
+  EntityModel* entity = nullptr;
+
+  switch (entity_data.get_type()) {
+
+  case EntityType::TILE:
+    entity = new Tile(map, entity_data);
+    break;
+
+  default:
+    // TODO other types
+    entity = new EntityModel(map, entity_data);
+    break;
+
+  }
+
+  return std::unique_ptr<EntityModel>(entity);
 }
 
 /**
@@ -54,6 +88,14 @@ const MapModel& EntityModel::get_map() const {
  */
 MapModel& EntityModel::get_map() {
   return *map;
+}
+
+/**
+ * @brief Returns the tileset of the map.
+ * @return The tileset or nullptr if no tileset is set.
+ */
+const TilesetModel* EntityModel::get_tileset() const {
+  return get_map().get_tileset_model();
 }
 
 /**
@@ -183,15 +225,44 @@ QRect EntityModel::get_bounding_box() const {
 }
 
 /**
- * @brief Returns the image representing the entity in the editor.
- * @return The entity's image.
+ * @brief Returns the value of a field of this entity.
+ * @param key Key of the field to get.
+ * @return The corresponding value.
+ * It can be a string, an integer or a boolean, or
+ * an invalid QVariant if the field does not exist.
  */
-const QPixmap& EntityModel::get_image() const {
+QVariant EntityModel::get_field(const QString& key) const {
 
-  if (image.isNull()) {
-    // Lazily create the image.
-    image = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name())).scaledToHeight(get_height());  // TODO
+  std::string std_key = key.toStdString();
+
+  if (entity.is_string(std_key)) {
+    return QString::fromStdString(entity.get_string(std_key));
   }
 
-  return image;
+  if (entity.is_integer(std_key)) {
+    return entity.get_integer(std_key);
+  }
+
+  if (entity.is_boolean(std_key)) {
+    return entity.get_boolean(std_key);
+  }
+
+  return QVariant();
+}
+
+/**
+ * @brief Draws this entity.
+ *
+ * The default implementation draws an icon representing the type of entity.
+ *
+ * @param painter The painter to draw.
+ */
+void EntityModel::draw(QPainter& painter) const {
+
+  if (icon.isNull()) {
+    // Lazily create the image.
+    icon = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name()));
+  }
+
+  painter.drawTiledPixmap(get_bounding_box(), icon);
 }

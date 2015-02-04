@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/entity_traits.h"
 #include "gui/editor.h"
 #include "gui/enum_menus.h"
 #include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
-#include "entity_traits.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"

@@ -21,8 +21,11 @@
 #include <solarus/MapData.h>
 #include <QPixmap>
 #include <QPointer>
+#include <memory>
 
 class MapModel;
+class TilesetModel;
+class QPainter;
 
 using EntityIndex = Solarus::EntityIndex;
 
@@ -37,11 +40,14 @@ class EntityModel {
 
 public:
 
-  EntityModel(MapModel& map, const Solarus::EntityData& entity);
+  EntityModel(MapModel& map, const Solarus::EntityData& entity);  // TODO protected
   virtual ~EntityModel();
+  static std::unique_ptr<EntityModel> create(
+      MapModel& map, const Solarus::EntityData& entity_data);
 
   const MapModel& get_map() const;
   MapModel& get_map();
+  const TilesetModel* get_tileset() const;
 
   EntityType get_type() const;
   QString get_type_name() const;
@@ -59,11 +65,9 @@ public:
   QSize get_size() const;
   void set_size(const QSize& size);
   QRect get_bounding_box() const;
+  QVariant get_field(const QString& key) const;
 
-  virtual const QPixmap& get_image() const;
-
-protected:
-
+  virtual void draw(QPainter& painter) const;
 
 private:
 
@@ -72,8 +76,9 @@ private:
   Solarus::EntityData entity;   /**< The entity data wrapped. */
   QPoint origin;                /**< Origin point of the entity. */
   QSize size;                   /**< Size of the entity for the editor. */
-  mutable QPixmap image;        /**< Image of the entity
-                                 * to be displayed in the map view. */
+  mutable QPixmap icon;         /**< Icon of the entity
+                                 * to be displayed in the map view by the default.
+                                 * of draw_entity(). */
 };
 
 #endif
