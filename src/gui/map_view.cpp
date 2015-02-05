@@ -62,7 +62,8 @@ void MapView::set_model(MapModel* model) {
 
     // Scale the view of 0.5 because the whole scene works with upscaled
     // coordinates.
-    scale(MapScene::scene_to_quest(1.0), MapScene::scene_to_quest(1.0));
+    double initial_scale_factor = MapScene::scene_to_quest(1.0);
+    scale(initial_scale_factor, initial_scale_factor);
 
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
