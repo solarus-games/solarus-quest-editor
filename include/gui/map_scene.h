@@ -17,13 +17,13 @@
 #ifndef SOLARUSEDITOR_MAP_SCENE_H
 #define SOLARUSEDITOR_MAP_SCENE_H
 
-#include <layer_traits.h>
-#include <map_model.h>
+#include "layer_traits.h"
+#include "map_model.h"
 #include <QGraphicsScene>
 
 class EntityItem;
 class Quest;
-class MapModel;
+class ViewSettings;
 
 /**
  * @brief The scene containing all entities in the map main view.
@@ -47,8 +47,8 @@ public:
   const MapModel& get_model() const;
   const Quest& get_quest() const;
 
-  void set_layer_visible(Layer layer, bool visible);
-  void set_entity_type_visible(EntityType type, bool visible);
+  void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
+  void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
   static int quest_to_scene(int coordinate);
   static int scene_to_quest(int coordinate);
@@ -76,8 +76,6 @@ private:
       entity_items;           /**< Entities item in the scene on each layer,
                                * ordered as in the model. */
 
-  QSet<Layer> visible_layers;          /**< Layers currently shown. */
-  QSet<EntityType> visible_types;      /**< Entity types currently shown. */
 };
 
 #endif

@@ -159,7 +159,7 @@ QMenu* MainWindow::create_zoom_menu() {
     zoom_actions[zoom.second] = action;
     action->setCheckable(true);
     connect(action, &QAction::triggered, [=]() {
-      Editor* editor = ui.tab_widget->get_editor();
+      Editor* editor = get_current_editor();
       if (editor != nullptr) {
         editor->get_view_settings().set_zoom(zoom.second);
       }
@@ -183,7 +183,7 @@ QMenu* MainWindow::create_show_entities_menu() {
         *menu,
         EnumMenuCheckableOption::CHECKABLE,
         [=](EntityType type) {
-    Editor* editor = ui.tab_widget->get_editor();
+    Editor* editor = get_current_editor();
     if (editor != nullptr) {
       QString type_name = EntityTraits::get_lua_name(type);
       const bool visible = show_entities_actions[type_name]->isChecked();
@@ -532,6 +532,45 @@ void MainWindow::on_action_run_quest_triggered() {
     std::cout << tr("Quest terminated unexpectedly: %1").arg(ex.what()).toStdString()
               << std::endl;
   }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show low layer" action.
+ */
+void MainWindow::on_action_show_layer_0_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_layer_visible(Layer::LAYER_LOW, ui.action_show_layer_0->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show intermediate layer" action.
+ */
+void MainWindow::on_action_show_layer_1_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_layer_visible(Layer::LAYER_INTERMEDIATE, ui.action_show_layer_1->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show high layer" action.
+ */
+void MainWindow::on_action_show_layer_2_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_layer_visible(Layer::LAYER_HIGH, ui.action_show_layer_2->isChecked());
 }
 
 /**

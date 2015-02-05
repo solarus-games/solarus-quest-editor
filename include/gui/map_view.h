@@ -44,8 +44,9 @@ public slots:
   void update_zoom();
   void zoom_in();
   void zoom_out();
-  void set_layer_visible(Layer layer, bool visible);
-  void set_entity_type_visible(EntityType type, bool visible);
+  void update_grid_visibility();
+  void update_layer_visibility(Layer layer);
+  void update_entity_type_visibility(EntityType type);
 
 private:
 

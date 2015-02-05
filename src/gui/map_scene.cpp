@@ -17,6 +17,7 @@
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "map_model.h"
+#include "view_settings.h"
 #include <QDebug>
 #include <QGraphicsItem>
 #include <QPainter>
@@ -42,7 +43,10 @@ public:
   EntityIndex get_index() const;
   void set_index(const EntityIndex& index);
 
+  EntityType get_entity_type() const;
   QRectF boundingRect() const override;
+
+  void update_visibility(const ViewSettings& view_settings);
 
 protected:
 
@@ -227,35 +231,31 @@ const MapScene::EntityList& MapScene::get_entities(Layer layer) {
 
 /**
  * @brief Shows or hides entities on a layer.
- * @param layer The layer to change.
- * @param visible @c true to show the layer, @c false to hide it.
+ * @param layer The layer to update.
+ * @param view_settings The new view settings to apply.
  */
-void MapScene::set_layer_visible(Layer /* layer */, bool /* visible */) {
+void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_settings) {
 
-  /* TODO
   for (EntityItem* item : get_entities(layer)) {
-    item->update_entity_visibility();
+    item->update_visibility(view_settings);
   }
-    */
 }
 
 /**
  * @brief Shows or hides entities of the specified type.
  * @param type The entity type to change.
- * @param visible @c true to show entities of that type, @c false to hide them.
+ * @param view_settings The new view settings to apply.
  */
-void MapScene::set_entity_type_visible(EntityType /* type */, bool /* visible */) {
+void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings& view_settings) {
 
-  /* TODO
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     for (EntityItem* item : get_entities(layer)) {
       if (item->get_entity_type() == type) {
-        item->update_entity_visibility();
+        item->update_visibility(view_settings);
       }
     }
   }
-  */
 }
 
 /**
@@ -290,12 +290,35 @@ void EntityItem::set_index(const EntityIndex& index) {
 }
 
 /**
+ * @brief Returns the type of map entity represented by this item.
+ * @return The entity type.
+ */
+EntityType EntityItem::get_entity_type() const {
+
+  return map.get_entity_type(index);
+}
+
+/**
  * @brief Returns the bounding rectangle of the entity item.
  * @return The bounding rectangle.
  */
 QRectF EntityItem::boundingRect() const {
 
   return QRect(QPoint(0, 0), MapScene::quest_to_scene(map.get_entity_size(index)));
+}
+
+/**
+ * @brief Shows or hides this entity item according to view settings.
+ * @param view_settings The settings to apply.
+ */
+void EntityItem::update_visibility(const ViewSettings& view_settings) {
+
+  Layer layer = map.get_entity_layer(index);
+  EntityType type = get_entity_type();
+
+  const bool visible = view_settings.is_layer_visible(layer) &&
+             view_settings.is_entity_type_visible(type);
+  setVisible(visible);
 }
 
 /**

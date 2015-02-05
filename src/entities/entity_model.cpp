@@ -115,6 +115,22 @@ QString EntityModel::get_type_name() const {
 }
 
 /**
+ * @brief Returns the layer where this entity is on the map.
+ * @return The layer.
+ */
+Layer EntityModel::get_layer() const {
+  return entity.get_layer();
+}
+
+/**
+ * @brief Sets the layer where this entity is on the map.
+ * @param layer The layer.
+ */
+void EntityModel::set_layer(Layer layer) {
+  entity.set_layer(layer);
+}
+
+/**
  * @brief Returns the coordinates of this entity on the map.
  * @return The coordinates of the entity's origin point.
  */

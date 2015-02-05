@@ -348,6 +348,22 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Returns the layer where an entity is on the map.
+ * @param index Index of a map entity.
+ * @return The layer.
+ * Returns a default-constructed layer if there is no entity at this index.
+ */
+Layer MapModel::get_entity_layer(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return Layer();
+  }
+
+  return get_entity_model(index).get_layer();
+}
+
+/**
  * @brief Returns the coordinates of an entity on the map.
  * @param index Index of the entity to get.
  * @return The coordinates of the entity's origin point.

@@ -92,6 +92,16 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
           this, SLOT(update_zoom()));
   update_zoom();
 
+  connect(this->view_settings, SIGNAL(grid_visibility_changed(bool)),
+          this, SLOT(update_grid_visibility()));
+  update_grid_visibility();
+
+  connect(this->view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
+          this, SLOT(update_layer_visibility(Layer)));
+
+  connect(this->view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
+          this, SLOT(update_entity_type_visibility(EntityType)));
+
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
 }
@@ -119,6 +129,18 @@ void MapView::update_zoom() {
   double scale_factor = zoom / this->zoom;
   scale(scale_factor, scale_factor);
   this->zoom = zoom;
+}
+
+/**
+ * @brief Shows or hides the grid according to the view settings.
+ */
+void MapView::update_grid_visibility() {
+
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  // TODO
 }
 
 /**
@@ -154,25 +176,23 @@ void MapView::zoom_out() {
 }
 
 /**
- * @brief Shows or hides entities on a layer.
- * @param layer The layer to change.
- * @param visible @c true to show the layer, @c false to hide it.
+ * @brief Shows or hides entities on a layer according to the view settings.
+ * @param layer The layer to update.
  */
-void MapView::set_layer_visible(Layer layer, bool visible) {
+void MapView::update_layer_visibility(Layer layer) {
 
   if (scene == nullptr) {
     return;
   }
 
-  scene->set_layer_visible(layer, visible);
+  scene->update_layer_visibility(layer, *view_settings);
 }
 
 /**
- * @brief Shows or hides entities of the specified type.
- * @param type The entity type to change.
- * @param visible @c true to show entities of that type, @c false to hide them.
+ * @brief Shows or hides entities of a type according to the view settings.
+ * @param type The entity type to update.
  */
-void MapView::set_entity_type_visible(EntityType type, bool visible) {
+void MapView::update_entity_type_visibility(EntityType type) {
 
-  scene->set_entity_type_visible(type, visible);
+  scene->update_entity_type_visibility(type, *view_settings);
 }

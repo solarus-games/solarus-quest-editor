@@ -96,6 +96,7 @@ void TilesetView::set_model(TilesetModel* model) {
 
     // Enable useful features if there is an image.
     setDragMode(QGraphicsView::RubberBandDrag);
+
     if (view_settings != nullptr) {
       view_settings->set_zoom(2.0);  // Initial zoom: x2.
     }

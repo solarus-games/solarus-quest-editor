@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_ENTITY_MODEL_H
 
 #include "entity_traits.h"
+#include "layer_traits.h"
 #include <solarus/MapData.h>
 #include <QPixmap>
 #include <QPointer>
@@ -52,6 +53,8 @@ public:
   EntityType get_type() const;
   QString get_type_name() const;
 
+  Layer get_layer() const;
+  void set_layer(Layer layer);
   QPoint get_xy() const;
   void set_xy(const QPoint& xy);
   QPoint get_top_left() const;

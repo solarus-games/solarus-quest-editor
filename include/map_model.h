@@ -76,6 +76,7 @@ public:
   bool entity_exists(const EntityIndex& index) const;
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
+  Layer get_entity_layer(const EntityIndex& index) const;
   QPoint get_entity_xy(const EntityIndex& index) const;
   QPoint get_entity_top_left(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
