@@ -17,21 +17,15 @@
 #ifndef SOLARUSEDITOR_EDITOR_H
 #define SOLARUSEDITOR_EDITOR_H
 
-#include <solarus/entities/EntityType.h>
-#include <solarus/entities/Layer.h>
+#include "view_settings.h"
 #include <QIcon>
-#include <QSet>
 #include <QWidget>
 #include <memory>
-#include <set>
 
 class Quest;
 class QuestResources;
 class QUndoCommand;
 class QUndoStack;
-
-using EntityType = Solarus::EntityType;
-using Layer = Solarus::Layer;
 
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
@@ -58,13 +52,10 @@ public:
   bool confirm_close();
 
   bool is_zoom_supported() const;
-  double get_zoom() const;
   bool is_grid_supported() const;
-  bool is_grid_visible() const;
   bool is_layer_visibility_supported() const;
-  bool is_layer_visible(Layer layer) const;
   bool is_entity_type_visibility_supported() const;
-  bool is_entity_type_visible(EntityType entity_type) const;
+  ViewSettings& get_view_settings();
 
   virtual void save() = 0;
   virtual bool can_cut() const;
@@ -79,20 +70,7 @@ signals:
   void can_cut_changed(bool can_cut);
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
-  void zoom_changed(double zoom);
-  void grid_visibility_changed(bool grid_visible);
-  void layer_visibility_changed(Layer layer, bool visible);
-  void entity_type_visibility_changed(EntityType entity_type, bool visible);
   void open_file_requested(Quest& quest, const QString& path);
-
-public slots:
-
-  void set_zoom(double zoom);
-  void set_grid_visible(bool grid_visible);
-  void set_layer_visible(Layer layer, bool visible);
-  void set_entity_type_visible(EntityType entity_type, bool visible);
-  void show_all_entity_types();
-  void hide_all_entity_types();
 
 protected:
 
@@ -117,14 +95,10 @@ private:
   QString close_confirm_message;            /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;                   /**< The undo/redo history of editing this file. */
   bool zoom_supported;                      /**< Whether the editor supports zooming. */
-  double zoom;                              /**< If supported, the current zoom factor. */
   bool grid_supported;                      /**< Whether the editor supports showing/hiding a grid. */
-  bool grid_visible;                        /**< If supported, whether the grid is currently shown.*/
   bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */
-  std::set<Layer> visible_layers;           /**< Layers currently shown, if supported. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
-  std::set<EntityType>
-      visible_entity_types;                 /**< Types of entities currently shown, if supported. */
+  ViewSettings view_settings;               /**< What is shown and how. */
 
 };
 

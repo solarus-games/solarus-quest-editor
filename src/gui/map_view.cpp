@@ -18,6 +18,7 @@
 #include "gui/map_view.h"
 #include "gui/pan_tool.h"
 #include "gui/zoom_tool.h"
+#include "view_settings.h"
 #include <QScrollBar>
 
 /**
@@ -27,9 +28,13 @@
 MapView::MapView(QWidget* parent) :
   QGraphicsView(parent),
   scene(nullptr),
+  view_settings(nullptr),
   zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+  ViewSettings* view_settings = new ViewSettings(this);
+  set_view_settings(*view_settings);
 }
 
 /**
@@ -57,8 +62,7 @@ void MapView::set_model(MapModel* model) {
 
     // Scale the view of 0.5 because the whole scene works with upscaled
     // coordinates.
-    scale(MapScene::scene_to_quest_factor, MapScene::scene_to_quest_factor);
-    set_zoom(2.0);  // Initial zoom.
+    scale(MapScene::scene_to_quest(1.0), MapScene::scene_to_quest(1.0));
 
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
@@ -70,23 +74,37 @@ void MapView::set_model(MapModel* model) {
 }
 
 /**
- * @brief Returns the zoom level of the view.
- * @return The zoom level.
+ * @brief Sets the view settings for this map view.
+ *
+ * When they change, the map view is updated accordingly.
+ *
+ * @param view_settings The settings to watch.
  */
-double MapView::get_zoom() const {
-  return zoom;
+void MapView::set_view_settings(ViewSettings& view_settings) {
+
+  this->view_settings = &view_settings;
+
+  connect(this->view_settings, SIGNAL(zoom_changed(double)),
+          this, SLOT(update_zoom()));
+  view_settings.set_zoom(2.0);  // Initial zoom: x2.
+
+  horizontalScrollBar()->setValue(0);
+  verticalScrollBar()->setValue(0);
 }
 
 /**
- * @brief Sets the zoom level of the view.
+ * @brief Sets the zoom level of the view from the settings.
  *
  * Zooming will be anchored at the mouse position.
  * The zoom value will be clamped between 0.25 and 4.0.
- *
- * @param zoom The zoom to set.
  */
-void MapView::set_zoom(double zoom) {
+void MapView::update_zoom() {
 
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  double zoom = view_settings->get_zoom();
   zoom = qMin(4.0, qMax(0.25, zoom));
 
   if (zoom == this->zoom) {
@@ -94,10 +112,9 @@ void MapView::set_zoom(double zoom) {
   }
 
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  scale(zoom / this->zoom, zoom / this->zoom);
+  double scale_factor = zoom / this->zoom;
+  scale(scale_factor, scale_factor);
   this->zoom = zoom;
-
-  emit zoom_changed(zoom);
 }
 
 /**
@@ -109,7 +126,11 @@ void MapView::set_zoom(double zoom) {
  */
 void MapView::zoom_in() {
 
-  set_zoom(get_zoom() * 2.0);
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  view_settings->set_zoom(view_settings->get_zoom() * 2.0);
 }
 
 /**
@@ -121,5 +142,33 @@ void MapView::zoom_in() {
  */
 void MapView::zoom_out() {
 
-  set_zoom(get_zoom() / 2.0);
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  view_settings->set_zoom(view_settings->get_zoom() / 2.0);
+}
+
+/**
+ * @brief Shows or hides entities on a layer.
+ * @param layer The layer to change.
+ * @param visible @c true to show the layer, @c false to hide it.
+ */
+void MapView::set_layer_visible(Layer layer, bool visible) {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->set_layer_visible(layer, visible);
+}
+
+/**
+ * @brief Shows or hides entities of the specified type.
+ * @param type The entity type to change.
+ * @param visible @c true to show entities of that type, @c false to hide them.
+ */
+void MapView::set_entity_type_visible(EntityType type, bool visible) {
+
+  scene->set_entity_type_visible(type, visible);
 }

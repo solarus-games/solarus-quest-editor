@@ -122,24 +122,12 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   title(get_file_name()),
   undo_stack(new QUndoStack(this)),
   zoom_supported(false),
-  zoom(1.0),
   grid_supported(false),
-  grid_visible(false),
-  layer_visibility_supported(false),
-  entity_type_visibility_supported(false) {
+  view_settings() {
 
   // Default close confirmation message.
   set_close_confirm_message(
         tr("File '%1' has been modified. Save changes?").arg(get_file_name()));
-
-  // Default visibility settings.
-  for (int layer = 0; layer < Layer::LAYER_NB; ++layer) {
-    visible_layers.insert(static_cast<Layer>(layer));
-  }
-
-  for (EntityType entity_type : EntityTraits::get_values()) {
-    visible_entity_types.insert(entity_type);
-  }
 }
 
 /**
@@ -455,35 +443,6 @@ void Editor::set_zoom_supported(bool zoom_supported) {
 }
 
 /**
- * @brief Returns the current zoom factor.
- *
- * Returns 1.0 if zooming is not supported.
- *
- * @return The zoom factor.
- */
-double Editor::get_zoom() const {
-
-  return zoom;
-}
-
-/**
- * @brief Sets the zoom factor.
- *
- * Emits zoom_changed() if there is a change.
- *
- * @param zoom The zoom factor to set.
- */
-void Editor::set_zoom(double zoom) {
-
-  if (zoom == this->zoom) {
-    return;
-  }
-
-  this->zoom = zoom;
-  emit zoom_changed(zoom);
-}
-
-/**
  * @brief Returns whether this editor supports showing and hiding a grid.
  * @return @c true if a grid can be shown or hidden.
  */
@@ -501,35 +460,6 @@ bool Editor::is_grid_supported() const {
  */
 void Editor::set_grid_supported(bool grid_supported) {
   this->grid_supported = grid_supported;
-}
-
-/**
- * @brief Returns the current grid visibility setting.
- * @return @c true if the grid is visible, @c false if it is hidden
- * or not supported.
- */
-bool Editor::is_grid_visible() const {
-
-  return is_grid_supported() && grid_visible;
-}
-
-/**
- * @brief Shows or hides the grid.
- *
- * This function does nothing if the grid is not supported by the editor.
- * Emits grid_visibility_changed() if there is a change.
- *
- * @param grid_visible @c true to show the grid, @c false to hide it.
- */
-void Editor::set_grid_visible(bool grid_visible) {
-
-  if (!is_grid_supported() ||
-      grid_visible == this->grid_visible) {
-    return;
-  }
-
-  this->grid_visible = grid_visible;
-  emit grid_visibility_changed(grid_visible);
 }
 
 /**
@@ -554,43 +484,6 @@ void Editor::set_layer_visibility_supported(bool supported) {
 }
 
 /**
- * @brief Returns whether a layer is currently visible.
- * @param layer The layer to test.
- * @return @c true if this layer is visible, @c false if it is hidden
- * or if layer visibility is not supported.
- */
-bool Editor::is_layer_visible(Layer layer) const {
-
-  return is_layer_visibility_supported() &&
-      visible_layers.find(layer) != visible_layers.end();
-}
-
-/**
- * @brief Shows or hides a layer.
- *
- * This function does nothing if layers visibility is not supported by the editor.
- * Emits layer_visibility_changed() if there is a change.
- *
- * @param layer The layer to change.
- * @param visible @c true to show the layer, @c false to hide it.
- */
-void Editor::set_layer_visible(Layer layer, bool visible) {
-
-  if (!is_layer_visibility_supported() ||
-      visible == is_layer_visible(layer)) {
-    return;
-  }
-
-  if (visible) {
-    visible_layers.insert(layer);
-  }
-  else {
-    visible_layers.erase(layer);
-  }
-  emit layer_visibility_changed(layer, visible);
-}
-
-/**
  * @brief Returns whether this editor supports showing and hiding entity types.
  * @return @c true if entity types can be shown or hidden.
  */
@@ -612,73 +505,9 @@ void Editor::set_entity_type_visibility_supported(bool supported) {
 }
 
 /**
- * @brief Returns whether a entity type is currently visible.
- * @param entity_type The entity type to test.
- * @return @c true if this entity type is visible, @c false if it is hidden
- * or if entity type visibility is not supported.
+ * @brief Returns the view settings of this editor.
+ * @return The view settings.
  */
-bool Editor::is_entity_type_visible(EntityType entity_type) const {
-
-  return is_entity_type_visibility_supported() &&
-      visible_entity_types.find(entity_type) != visible_entity_types.end();
+ViewSettings& Editor::get_view_settings() {
+  return view_settings;
 }
-
-/**
- * @brief Shows or hides an entity type.
- *
- * This function does nothing if entity type visibility is not supported by the editor.
- * Emits entity_type_visibility_changed() if there is a change.
- *
- * @param entity_type The entity type to change.
- * @param visible @c true to show the entity type, @c false to hide it.
- */
-void Editor::set_entity_type_visible(EntityType entity_type, bool visible) {
-
-  if (!is_entity_type_visibility_supported() ||
-      visible == is_entity_type_visible(entity_type)) {
-    return;
-  }
-
-  if (visible) {
-    visible_entity_types.insert(entity_type);
-  }
-  else {
-    visible_entity_types.erase(entity_type);
-  }
-  emit entity_type_visibility_changed(entity_type, visible);
-}
-
-/**
- * @brief Shows all entity types.
- *
- * This function does nothing if entity type visibility is not supported by the editor.
- * Emits entity_type_visibility_changed() for each type whose visibility changes.
- */
-void Editor::show_all_entity_types() {
-
-  if (!is_entity_type_visibility_supported()) {
-    return;
-  }
-
-  for (EntityType entity_type: EntityTraits::get_values()) {
-    set_entity_type_visible(entity_type, true);
-  }
-}
-
-/**
- * @brief Hides all entity types.
- *
- * This function does nothing if entity type visibility is not supported by the editor.
- * Emits entity_type_visibility_changed() for each type whose visibility changes.
- */
-void Editor::hide_all_entity_types() {
-
-  if (!is_entity_type_visibility_supported()) {
-    return;
-  }
-
-  for (EntityType entity_type: EntityTraits::get_values()) {
-    set_entity_type_visible(entity_type, false);
-  }
-}
-

@@ -30,6 +30,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include "view_settings.h"
 
 /**
  * @brief Creates a tileset view.
@@ -43,6 +44,7 @@ TilesetView::TilesetView(QWidget* parent) :
   last_integer_pattern_id(0),
   state(State::NORMAL),
   current_area_item(nullptr),
+  view_settings(nullptr),
   zoom(1.0),
   read_only(false) {
 
@@ -63,6 +65,9 @@ TilesetView::TilesetView(QWidget* parent) :
   connect(delete_patterns_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_patterns_requested()));
   addAction(delete_patterns_action);
+
+  ViewSettings* view_settings = new ViewSettings(this);
+  set_view_settings(*view_settings);
 }
 
 /**
@@ -91,7 +96,6 @@ void TilesetView::set_model(TilesetModel* model) {
 
     // Enable useful features if there is an image.
     setDragMode(QGraphicsView::RubberBandDrag);
-    set_zoom(2.0);  // Initial zoom: x2.
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
@@ -99,6 +103,25 @@ void TilesetView::set_model(TilesetModel* model) {
     new PanTool(this);
     new ZoomTool(this);
   }
+}
+
+/**
+ * @brief Sets the view settings for this view.
+ *
+ * When they change, the view is updated accordingly.
+ *
+ * @param view_settings The settings to watch.
+ */
+void TilesetView::set_view_settings(ViewSettings& view_settings) {
+
+  this->view_settings = &view_settings;
+
+  connect(&view_settings, SIGNAL(zoom_changed(double)),
+          this, SLOT(update_zoom()));
+  view_settings.set_zoom(2.0);  // Initial zoom: x2.
+
+  horizontalScrollBar()->setValue(0);
+  verticalScrollBar()->setValue(0);
 }
 
 /**
@@ -119,23 +142,18 @@ void TilesetView::set_read_only(bool read_only) {
 }
 
 /**
- * @brief Returns the zoom level of the view.
- * @return The zoom level.
- */
-double TilesetView::get_zoom() const {
-  return zoom;
-}
-
-/**
- * @brief Sets the zoom level of the view.
+ * @brief Sets the zoom level of the view from the settings.
  *
  * Zooming will be anchored at the mouse position.
  * The zoom value will be clamped between 0.25 and 4.0.
- *
- * @param zoom The zoom to set.
  */
-void TilesetView::set_zoom(double zoom) {
+void TilesetView::update_zoom() {
 
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  double zoom = view_settings->get_zoom();
   zoom = qMin(4.0, qMax(0.25, zoom));
 
   if (zoom == this->zoom) {
@@ -143,10 +161,9 @@ void TilesetView::set_zoom(double zoom) {
   }
 
   setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-  scale(zoom / this->zoom, zoom / this->zoom);
+  double scale_factor = zoom / this->zoom;
+  scale(scale_factor, scale_factor);
   this->zoom = zoom;
-
-  emit zoom_changed(zoom);
 }
 
 /**
@@ -158,7 +175,11 @@ void TilesetView::set_zoom(double zoom) {
  */
 void TilesetView::zoom_in() {
 
-  set_zoom(get_zoom() * 2.0);
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  view_settings->set_zoom(view_settings->get_zoom() * 2.0);
 }
 
 /**
@@ -170,7 +191,11 @@ void TilesetView::zoom_in() {
  */
 void TilesetView::zoom_out() {
 
-  set_zoom(get_zoom() / 2.0);
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  view_settings->set_zoom(view_settings->get_zoom() / 2.0);
 }
 
 /**

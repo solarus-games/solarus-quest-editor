@@ -17,11 +17,14 @@
 #ifndef SOLARUSEDITOR_MAP_VIEW_H
 #define SOLARUSEDITOR_MAP_VIEW_H
 
+#include "entities/entity_traits.h"
+#include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
 
 class MapModel;
 class MapScene;
+class ViewSettings;
 
 /**
  * @brief Graphical view of the map image, allowing to manage entities.
@@ -34,24 +37,23 @@ public:
   MapView(QWidget* parent = nullptr);
 
   void set_model(MapModel* map);
-  double get_zoom() const;
-
-signals:
-
-  void zoom_changed(double zoom);
+  void set_view_settings(ViewSettings& view_settings);
 
 public slots:
 
-  void set_zoom(double zoom);
+  void update_zoom();
   void zoom_in();
   void zoom_out();
+  void set_layer_visible(Layer layer, bool visible);
+  void set_entity_type_visible(EntityType type, bool visible);
 
 private:
 
   QPointer<MapModel> model;        /**< The map model. */
   MapScene* scene;                 /**< The scene viewed. */
-
-  double zoom;                     /**< Scale factor of the view. */
+  QPointer<ViewSettings>
+      view_settings;               /**< What is displayed in the view. */
+  double zoom;                     /**< Zoom factor currently applied. */
 
 };
 

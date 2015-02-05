@@ -192,7 +192,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_close_confirm_message(
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
   set_zoom_supported(true);
-  set_zoom(2.0);
+  get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
   set_layer_visibility_supported(true);
   set_entity_type_visibility_supported(true);
@@ -212,6 +212,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.music_field->add_special_value("same", tr("<Same as before>"), 1);
   ui.tileset_view->set_read_only(true);
   ui.map_view->set_model(model);
+  ui.map_view->set_view_settings(get_view_settings());
   update();
 
   // Make connections.
@@ -261,11 +262,6 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(music_selector_activated()));
   connect(model, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
-
-  connect(this, SIGNAL(zoom_changed(double)),
-          ui.map_view, SLOT(set_zoom(double)));
-  connect(ui.map_view, SIGNAL(zoom_changed(double)),
-          this, SLOT(set_zoom(double)));
 }
 
 /**

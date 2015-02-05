@@ -26,6 +26,7 @@
 
 class TilesetModel;
 class TilesetScene;
+class ViewSettings;
 class QAction;
 
 /**
@@ -39,7 +40,7 @@ public:
   TilesetView(QWidget* parent = nullptr);
 
   void set_model(TilesetModel* tileset);
-  double get_zoom() const;
+  void set_view_settings(ViewSettings& view_settings);
   bool is_read_only() const;
 
 signals:
@@ -53,11 +54,10 @@ signals:
   void change_selected_patterns_default_layer_requested(Layer layer);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
-  void zoom_changed(double zoom);
 
 public slots:
 
-  void set_zoom(double zoom);
+  void update_zoom();
   void set_read_only(bool read_only);
   void zoom_in();
   void zoom_out();
@@ -113,8 +113,10 @@ private:
       current_area_item;               /**< In states DRAWING_NEW_PATTERN and
                                         * MOVING_PATTERN: graphic item of the
                                         * rectangle the user is drawing. */
+  QPointer<ViewSettings>
+      view_settings;                   /**< How the view is displayed. */
+  double zoom;                         /**< Zoom factor currently applied. */
 
-  double zoom;                         /**< Scale factor of the view. */
   bool read_only;                      /**< Whether the view forbids editing the tileset. */
 
 };

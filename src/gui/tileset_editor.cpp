@@ -459,7 +459,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
   set_zoom_supported(true);
-  set_zoom(2.0);
+  ViewSettings& view_settings = get_view_settings();
+  view_settings.set_zoom(2.0);
   set_grid_supported(true);
 
   // Open the file.
@@ -471,6 +472,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
   ui.tileset_view->set_model(model);
+  ui.tileset_view->set_view_settings(get_view_settings());
   update();
 
   // Make connections.
@@ -541,10 +543,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
 
-  connect(this, SIGNAL(zoom_changed(double)),
-          ui.tileset_view, SLOT(set_zoom(double)));
-  connect(ui.tileset_view, SIGNAL(zoom_changed(double)),
-          this, SLOT(set_zoom(double)));
+  connect(&view_settings, SIGNAL(zoom_changed(double)),
+          ui.tileset_view, SLOT(update_zoom()));
 }
 
 /**

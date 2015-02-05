@@ -47,8 +47,13 @@ public:
   const MapModel& get_model() const;
   const Quest& get_quest() const;
 
+  void set_layer_visible(Layer layer, bool visible);
+  void set_entity_type_visible(EntityType type, bool visible);
+
   static int quest_to_scene(int coordinate);
   static int scene_to_quest(int coordinate);
+  static double quest_to_scene(double coordinate);
+  static double scene_to_quest(double coordinate);
   static QPoint quest_to_scene(const QPoint& point);
   static QPoint scene_to_quest(const QPoint& point);
   static QRect quest_to_scene(const QRect& rectangle);
@@ -57,18 +62,22 @@ public:
   static QSize scene_to_quest(const QSize& size);
 
   static constexpr int quest_to_scene_factor = 2;
-  static constexpr double scene_to_quest_factor = 0.5;
 
 private:
 
+  using EntityList = QList<EntityItem*>;
+
   void build();
   void create_entity_item(const EntityIndex& index);
+  const EntityList& get_entities(Layer layer);
 
   MapModel& model;            /**< The tileset represented. */
-  std::array<QList<EntityItem*>, Layer::LAYER_NB>
+  std::array<EntityList, Layer::LAYER_NB>
       entity_items;           /**< Entities item in the scene on each layer,
                                * ordered as in the model. */
 
+  QSet<Layer> visible_layers;          /**< Layers currently shown. */
+  QSet<EntityType> visible_types;      /**< Entity types currently shown. */
 };
 
 #endif

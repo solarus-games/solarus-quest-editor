@@ -115,6 +115,7 @@ set(solarus_quest_editor_SOURCES
   include/rectangle.h
   include/size.h
   include/tileset_model.h
+  include/view_settings.h
   src/entities/entity_model.cpp
   src/entities/entity_traits.cpp
   src/entities/tile.cpp
@@ -161,6 +162,7 @@ set(solarus_quest_editor_SOURCES
   src/rectangle.cpp
   src/size.cpp
   src/tileset_model.cpp
+  src/view_settings.cpp
 )
 
 # UI files.

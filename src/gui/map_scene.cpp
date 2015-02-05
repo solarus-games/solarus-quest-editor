@@ -47,8 +47,8 @@ public:
 protected:
 
   void paint(QPainter* painter,
-                     const QStyleOptionGraphicsItem* option,
-                     QWidget* widget = nullptr) override;
+             const QStyleOptionGraphicsItem* option,
+             QWidget* widget = nullptr) override;
 
 private:
 
@@ -102,6 +102,26 @@ int MapScene::quest_to_scene(int coordinate) {
  * @return The converted value.
  */
 int MapScene::scene_to_quest(int coordinate) {
+
+  return coordinate / quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param coordinate The value to convert.
+ * @return The converted value.
+ */
+double MapScene::quest_to_scene(double coordinate) {
+
+  return coordinate * quest_to_scene_factor;
+}
+
+/**
+ * @brief Converts quest coordinates to scene coordinates.
+ * @param coordinate The value to convert.
+ * @return The converted value.
+ */
+double MapScene::scene_to_quest(double coordinate) {
 
   return coordinate / quest_to_scene_factor;
 }
@@ -194,6 +214,48 @@ void MapScene::create_entity_item(const EntityIndex& index) {
   EntityItem* item = new EntityItem(model, index);
   addItem(item);
   entity_items[index.layer].append(item);
+}
+
+/**
+ * @brief Returns the entity items on the specified layer.
+ * @param layer A layer.
+ * @return Items of entities on that layer.
+ */
+const MapScene::EntityList& MapScene::get_entities(Layer layer) {
+  return entity_items[layer];
+}
+
+/**
+ * @brief Shows or hides entities on a layer.
+ * @param layer The layer to change.
+ * @param visible @c true to show the layer, @c false to hide it.
+ */
+void MapScene::set_layer_visible(Layer /* layer */, bool /* visible */) {
+
+  /* TODO
+  for (EntityItem* item : get_entities(layer)) {
+    item->update_entity_visibility();
+  }
+    */
+}
+
+/**
+ * @brief Shows or hides entities of the specified type.
+ * @param type The entity type to change.
+ * @param visible @c true to show entities of that type, @c false to hide them.
+ */
+void MapScene::set_entity_type_visible(EntityType /* type */, bool /* visible */) {
+
+  /* TODO
+  for (int i = 0; i < Layer::LAYER_NB; ++i) {
+    Layer layer = static_cast<Layer>(i);
+    for (EntityItem* item : get_entities(layer)) {
+      if (item->get_entity_type() == type) {
+        item->update_entity_visibility();
+      }
+    }
+  }
+  */
 }
 
 /**

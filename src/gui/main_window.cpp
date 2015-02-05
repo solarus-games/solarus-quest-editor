@@ -161,7 +161,7 @@ QMenu* MainWindow::create_zoom_menu() {
     connect(action, &QAction::triggered, [=]() {
       Editor* editor = ui.tab_widget->get_editor();
       if (editor != nullptr) {
-        editor->set_zoom(zoom.second);
+        editor->get_view_settings().set_zoom(zoom.second);
       }
     });
     zoom_menu->addAction(action);
@@ -187,7 +187,7 @@ QMenu* MainWindow::create_show_entities_menu() {
     if (editor != nullptr) {
       QString type_name = EntityTraits::get_lua_name(type);
       const bool visible = show_entities_actions[type_name]->isChecked();
-      editor->set_entity_type_visible(type, visible);
+      editor->get_view_settings().set_entity_type_visible(type, visible);
     }
   });
 
@@ -209,7 +209,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   connect(show_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
-      editor->show_all_entity_types();
+      editor->get_view_settings().show_all_entity_types();
     }
   });
 
@@ -219,7 +219,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   connect(hide_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
-      editor->hide_all_entity_types();
+      editor->get_view_settings().hide_all_entity_types();
     }
   });
 
@@ -578,30 +578,37 @@ void MainWindow::current_editor_changed(int /* index */) {
 
   if (has_editor) {
 
-    connect(editor, SIGNAL(zoom_changed(double)),
-            this, SLOT(editor_zoom_changed(double)));
-    editor_zoom_changed(editor->get_zoom());
+    ViewSettings& view_settings = editor->get_view_settings();
+    connect(&view_settings, SIGNAL(zoom_changed(double)),
+            this, SLOT(update_zoom()));
+    update_zoom();
 
-    connect(editor, SIGNAL(grid_visibility_changed(bool)),
-            this, SLOT(editor_grid_visibility_changed(bool)));
-    editor_grid_visibility_changed(editor->is_grid_visible());
+    connect(&view_settings, SIGNAL(grid_visibility_changed(bool)),
+            this, SLOT(update_grid_visibility()));
+    update_grid_visibility();
 
-    connect(editor, SIGNAL(layer_visibility_changed(Layer, bool)),
-            this, SLOT(editor_layer_visibility_changed(Layer, bool)));
-    editor_layer_visibility_changed();
+    connect(&view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
+            this, SLOT(update_layer_visibility(Layer)));
+    update_layers_visibility();
 
-    connect(editor, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
-            this, SLOT(editor_entity_type_visibility_changed(EntityType, bool)));
-    editor_entity_type_visibility_changed();
+    connect(&view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
+            this, SLOT(update_entity_type_visibility(EntityType)));
+    update_entity_types_visibility();
 
   }
 }
 
 /**
  * @brief Slot called when the zoom of the current editor changes.
- * @param zoom The new zoom factor.
  */
-void MainWindow::editor_zoom_changed(double zoom) {
+void MainWindow::update_zoom() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  double zoom = editor->get_view_settings().get_zoom();
 
   if (zoom_actions.contains(zoom)) {
     zoom_actions[zoom]->setChecked(true);
@@ -610,19 +617,31 @@ void MainWindow::editor_zoom_changed(double zoom) {
 
 /**
  * @brief Slot called when the grid of the current editor was just shown or hidden.
- * @param bool visible The new grid visiblity.
  */
-void MainWindow::editor_grid_visibility_changed(bool grid_visible) {
+void MainWindow::update_grid_visibility() {
 
-  ui.action_show_grid->setChecked(grid_visible);
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  bool visible = editor->get_view_settings().is_grid_visible();
+
+  ui.action_show_grid->setChecked(visible);
 }
 
 /**
  * @brief Slot called when a layer of the current editor was just shown or hidden.
  * @param layer The layer whose visibility has just changed.
- * @param bool visible The new layer visiblity.
  */
-void MainWindow::editor_layer_visibility_changed(Layer layer, bool visible) {
+void MainWindow::update_layer_visibility(Layer layer) {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+  ViewSettings& view_settings = editor->get_view_settings();
+  bool visible = view_settings.is_layer_visible(layer);
 
   switch (layer) {
 
@@ -647,29 +666,31 @@ void MainWindow::editor_layer_visibility_changed(Layer layer, bool visible) {
 /**
  * @brief Slot called when the visibility of all layers should be updated to the GUI.
  */
-void MainWindow::editor_layer_visibility_changed() {
+void MainWindow::update_layers_visibility() {
 
   Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
 
-  ui.action_show_layer_0->setChecked(editor->is_layer_visible(Layer::LAYER_LOW));
-  ui.action_show_layer_1->setChecked(editor->is_layer_visible(Layer::LAYER_INTERMEDIATE));
-  ui.action_show_layer_2->setChecked(editor->is_layer_visible(Layer::LAYER_HIGH));
+  ViewSettings& view_settings = editor->get_view_settings();
+  ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(Layer::LAYER_LOW));
+  ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(Layer::LAYER_INTERMEDIATE));
+  ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(Layer::LAYER_HIGH));
 }
 
 /**
  * @brief Slot called when a entity type of the current editor was just shown or hidden.
  * @param entity_type The entity type whose visibility has just changed.
- * @param bool visible The new entity type visiblity.
  */
-void MainWindow::editor_entity_type_visibility_changed(EntityType entity_type, bool visible) {
+void MainWindow::update_entity_type_visibility(EntityType entity_type) {
 
   Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
+  ViewSettings& view_settings = editor->get_view_settings();
+  bool visible = view_settings.is_entity_type_visible(entity_type);
 
   QString type_name = EntityTraits::get_lua_name(entity_type);
   const auto& it = show_entities_actions.find(type_name);
@@ -686,13 +707,14 @@ void MainWindow::editor_entity_type_visibility_changed(EntityType entity_type, b
 /**
  * @brief Slot called when the visibility of all entity types should be updated to the GUI.
  */
-void MainWindow::editor_entity_type_visibility_changed() {
+void MainWindow::update_entity_types_visibility() {
 
   Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
 
+  ViewSettings& view_settings = editor->get_view_settings();
   for (QAction* action: show_entities_actions) {
     if (action == nullptr) {
       qCritical() << "Missing show entity type action";
@@ -700,7 +722,7 @@ void MainWindow::editor_entity_type_visibility_changed() {
     }
     if (action->data().isValid()) {  // Skip special actions.
       EntityType entity_type = static_cast<EntityType>(action->data().toInt());
-      action->setChecked(editor->is_entity_type_visible(entity_type));
+      action->setChecked(view_settings.is_entity_type_visible(entity_type));
     }
   }
 }

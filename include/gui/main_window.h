@@ -61,12 +61,12 @@ private slots:
   void on_action_run_quest_triggered();
 
   void current_editor_changed(int index);
-  void editor_zoom_changed(double zoom);
-  void editor_grid_visibility_changed(bool grid_visible);
-  void editor_layer_visibility_changed(Layer layer, bool visible);
-  void editor_layer_visibility_changed();
-  void editor_entity_type_visibility_changed(EntityType entity_type, bool visible);
-  void editor_entity_type_visibility_changed();
+  void update_zoom();
+  void update_grid_visibility();
+  void update_layer_visibility(Layer layer);
+  void update_layers_visibility();
+  void update_entity_type_visibility(EntityType entity_type);
+  void update_entity_types_visibility();
 
 protected:
 
