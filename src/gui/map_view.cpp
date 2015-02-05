@@ -65,6 +65,9 @@ void MapView::set_model(MapModel* model) {
     double initial_scale_factor = MapScene::scene_to_quest(1.0);
     scale(initial_scale_factor, initial_scale_factor);
 
+    if (view_settings != nullptr) {
+      view_settings->set_zoom(2.0);  // Initial zoom: x2.
+    }
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
@@ -87,7 +90,7 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
 
   connect(this->view_settings, SIGNAL(zoom_changed(double)),
           this, SLOT(update_zoom()));
-  view_settings.set_zoom(2.0);  // Initial zoom: x2.
+  update_zoom();
 
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);

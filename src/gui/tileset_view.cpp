@@ -96,6 +96,9 @@ void TilesetView::set_model(TilesetModel* model) {
 
     // Enable useful features if there is an image.
     setDragMode(QGraphicsView::RubberBandDrag);
+    if (view_settings != nullptr) {
+      view_settings->set_zoom(2.0);  // Initial zoom: x2.
+    }
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
@@ -118,7 +121,7 @@ void TilesetView::set_view_settings(ViewSettings& view_settings) {
 
   connect(&view_settings, SIGNAL(zoom_changed(double)),
           this, SLOT(update_zoom()));
-  view_settings.set_zoom(2.0);  // Initial zoom: x2.
+  update_zoom();
 
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
