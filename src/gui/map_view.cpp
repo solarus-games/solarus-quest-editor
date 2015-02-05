@@ -17,6 +17,7 @@
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
 #include "gui/pan_tool.h"
+#include "gui/zoom_tool.h"
 #include <QScrollBar>
 
 /**
@@ -62,8 +63,9 @@ void MapView::set_model(MapModel* model) {
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
-    // Pan the view with the middle mouse button.
+    // Install panning and zooming helpers.
     new PanTool(this);
+    new ZoomTool(this);
   }
 }
 

@@ -17,9 +17,7 @@
 #include "gui/zoom_tool.h"
 #include <QAbstractScrollArea>
 #include <QApplication>
-#include <QEvent>
-#include <QMouseEvent>
-#include <QScrollBar>
+#include <QWheelEvent>
 
 /**
  * @brief Creates a zoom tool on the specified object.
