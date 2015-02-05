@@ -173,8 +173,8 @@ QSize MapScene::scene_to_quest(const QSize& size) {
  */
 void MapScene::build() {
 
+  setSceneRect(QRectF(QPoint(0, 0), quest_to_scene(model.get_size())));
 
-  setSceneRect(QRectF(QPoint(0, 0), model.get_size()));
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     entity_items[i].clear();
