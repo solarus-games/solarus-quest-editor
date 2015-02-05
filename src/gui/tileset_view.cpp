@@ -19,6 +19,7 @@
 #include "gui/pan_tool.h"
 #include "gui/tileset_scene.h"
 #include "gui/tileset_view.h"
+#include "gui/zoom_tool.h"
 #include "ground_traits.h"
 #include "pattern_animation_traits.h"
 #include "pattern_separation_traits.h"
@@ -94,8 +95,9 @@ void TilesetView::set_model(TilesetModel* model) {
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
 
-    // Pan the view with the middle mouse button.
+    // Install panning and zooming helpers.
     new PanTool(this);
+    new ZoomTool(this);
   }
 }
 
@@ -337,30 +339,6 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
   }
 
   QGraphicsView::mouseMoveEvent(event);
-}
-
-/**
- * @brief Receives a mouse wheel event.
- * @param event The event to handle.
- */
-void TilesetView::wheelEvent(QWheelEvent* event) {
-
-  if (model == nullptr) {
-    return;
-  }
-
-  if (QApplication::keyboardModifiers() == Qt::ControlModifier) {
-    // Control + wheel: zoom in or out.
-    if (event->delta() > 0) {
-      zoom_in();
-    }
-    else {
-      zoom_out();
-    }
-    return;  // Don't forward the event to the scrollbars.
-  }
-
-  QGraphicsView::wheelEvent(event);
 }
 
 /**

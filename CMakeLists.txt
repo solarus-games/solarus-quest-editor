@@ -92,6 +92,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_editor.h
   include/gui/tileset_scene.h
   include/gui/tileset_view.h
+  include/gui/zoom_tool.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -140,6 +141,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_editor.cpp
   src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
+  src/gui/zoom_tool.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp

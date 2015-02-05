@@ -67,7 +67,6 @@ protected:
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;
   virtual void mouseMoveEvent(QMouseEvent* event) override;
-  virtual void wheelEvent(QWheelEvent* event) override;
   virtual void contextMenuEvent(QContextMenuEvent* event) override;
 
 private:

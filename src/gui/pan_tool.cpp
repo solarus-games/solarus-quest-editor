@@ -21,8 +21,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-#include <QDebug>
-
 /**
  * @brief Creates a pan tool on the specified object.
  * @param widget The scrolling area to manage.
