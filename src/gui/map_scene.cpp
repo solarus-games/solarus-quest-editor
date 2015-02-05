@@ -327,6 +327,10 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    GuiTools::draw_rectangle_outline(*painter, boundingRect().toRect(), Qt::blue);
+    GuiTools::draw_rectangle_outline(
+          *painter,
+          boundingRect().toRect(),
+          Qt::blue,
+          MapScene::quest_to_scene(1));
   }
 }

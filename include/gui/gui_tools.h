@@ -30,7 +30,8 @@ void error_dialog(const QString& message);
 
 void draw_rectangle_outline(QPainter& painter,
                             const QRect& where,
-                            const QColor& color);
+                            const QColor& color,
+                            int thickness);
 
 }
 

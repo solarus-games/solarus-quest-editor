@@ -24,13 +24,13 @@
 #include "pattern_animation_traits.h"
 #include "pattern_separation_traits.h"
 #include "tileset_model.h"
+#include "view_settings.h"
 #include <QAction>
 #include <QApplication>
 #include <QGraphicsItem>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include "view_settings.h"
 
 /**
  * @brief Creates a tileset view.
@@ -293,7 +293,6 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
   else if (state == State::MOVING_PATTERN) {
     end_state_moving_pattern();
   }
-
 
   QGraphicsView::mouseReleaseEvent(event);
 }
