@@ -390,6 +390,21 @@ QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Returns the origin point of an entity on the map.
+ * @param index Index of the entity to get.
+ * @return The entity's origin point relative to its upper-left corner.
+ * Returns @c QPoint() if there is no entity with this index.
+ */
+QPoint MapModel::get_entity_origin(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QPoint();
+  }
+
+  return get_entity_model(index).get_origin();
+}
+
+/**
  * @brief Returns the size of an entity on the map.
  * @param index Index of the entity to get.
  * @return The size of this entity.

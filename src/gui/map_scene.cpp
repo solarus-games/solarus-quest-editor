@@ -268,8 +268,8 @@ EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
   map(map),
   index(index) {
 
-  QRect frame = map.get_entity_bounding_box(index);
-  setPos(MapScene::quest_to_scene(frame.topLeft()));
+  QRect box = map.get_entity_bounding_box(index);
+  setPos(MapScene::quest_to_scene(box.topLeft()));
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 

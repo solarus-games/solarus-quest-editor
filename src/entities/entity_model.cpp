@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/destination.h"
 #include "entities/entity_model.h"
 #include "entities/tile.h"
 #include "map_model.h"
@@ -59,6 +60,10 @@ std::unique_ptr<EntityModel> EntityModel::create(
 
   case EntityType::TILE:
     entity = new Tile(map, entity_data);
+    break;
+
+  case EntityType::DESTINATION:
+    entity = new Destination(map, entity_data);
     break;
 
   default:

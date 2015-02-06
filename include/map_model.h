@@ -79,6 +79,7 @@ public:
   Layer get_entity_layer(const EntityIndex& index) const;
   QPoint get_entity_xy(const EntityIndex& index) const;
   QPoint get_entity_top_left(const EntityIndex& index) const;
+  QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   void draw_entity(const EntityIndex& index, QPainter& painter) const;
