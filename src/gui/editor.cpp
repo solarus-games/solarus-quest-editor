@@ -123,6 +123,8 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   undo_stack(new QUndoStack(this)),
   zoom_supported(false),
   grid_supported(false),
+  layer_visibility_supported(false),
+  entity_type_visibility_supported(false),
   view_settings() {
 
   // Default close confirmation message.
