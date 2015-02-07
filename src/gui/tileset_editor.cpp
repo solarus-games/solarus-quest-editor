@@ -542,9 +542,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
-
-  connect(&view_settings, SIGNAL(zoom_changed(double)),
-          ui.tileset_view, SLOT(update_zoom()));
 }
 
 /**

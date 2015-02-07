@@ -14,6 +14,7 @@ New features
 * Add new keyboard shortcuts.
 * Tileset editor: undo/redo is now supported.
 * Tileset editor: multi-selection is now supported.
+* Tileset editor: showing the grid is now supported.
 * Sprite editor: undo/redo is now supported.
 * Quest tree: organize the view in columns (file name, description, type).
 * Quest tree: show resources whose file is missing on the filesystem.

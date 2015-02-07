@@ -124,6 +124,10 @@ void TilesetView::set_view_settings(ViewSettings& view_settings) {
           this, SLOT(update_zoom()));
   update_zoom();
 
+  connect(this->view_settings, SIGNAL(grid_visibility_changed(bool)),
+          this, SLOT(update_grid_visibility()));
+  update_grid_visibility();
+
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
 }
@@ -200,6 +204,47 @@ void TilesetView::zoom_out() {
   }
 
   view_settings->set_zoom(view_settings->get_zoom() / 2.0);
+}
+
+/**
+ * @brief Shows or hides the grid according to the view settings.
+ */
+void TilesetView::update_grid_visibility() {
+
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  if (view_settings->is_grid_visible()) {
+    // Necessary to correctly show the grid when scrolling,
+    // because it is part of the foreground, not of graphics items.
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+  }
+  else {
+    // Faster.
+    setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+  }
+
+  if (scene != nullptr) {
+    // The foreground has changed.
+    scene->invalidate();
+  }
+}
+
+/**
+ * @brief Draws the foreground of the map.
+ * @param painter The painter to draw.
+ * @param rect The exposed rectangle.
+ */
+void TilesetView::drawForeground(QPainter* painter, const QRectF& rectangle) {
+
+  if (view_settings == nullptr || !view_settings->is_grid_visible()) {
+    return;
+  }
+
+  GuiTools::draw_grid(*painter, rectangle.toRect(), 16);
+
+  QGraphicsView::drawForeground(painter, rectangle);
 }
 
 /**

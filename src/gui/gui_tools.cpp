@@ -87,4 +87,30 @@ void draw_rectangle_outline(QPainter& painter,
 
 }
 
+/**
+ * @brief Draws a grid.
+ * @param painter The painter to draw.
+ * @param where Rectangle where drawing the grid should be limited to.
+ * @param spacing Square size.
+ */
+void draw_grid(QPainter& painter, const QRect& where, int square_size) {
+
+  int left = where.left() - where.left() % square_size;
+  int top = where.top() - where.top() % square_size;
+
+  QVarLengthArray<QLineF, 100> lines;
+
+  for (int x = left; x < where.right(); x += square_size) {
+    lines.append(QLineF(x, where.top(), x, where.bottom()));
+  }
+
+  for (int y = top; y < where.bottom(); y += square_size) {
+    lines.append(QLineF(where.left(), y, where.right(), y));
+  }
+
+  painter.setPen(QPen(Qt::black, 0, Qt::DashLine));
+  painter.drawLines(lines.data(), lines.size());
+
+}
+
 }

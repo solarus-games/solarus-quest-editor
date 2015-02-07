@@ -57,12 +57,15 @@ signals:
 
 public slots:
 
-  void update_zoom();
   void set_read_only(bool read_only);
+  void update_zoom();
   void zoom_in();
   void zoom_out();
+  void update_grid_visibility();
 
 protected:
+
+  void drawForeground(QPainter* painter, const QRectF& rectangle) override;
 
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;

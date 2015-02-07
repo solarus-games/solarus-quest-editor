@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
 #include "gui/pan_tool.h"
@@ -132,30 +133,6 @@ void MapView::update_zoom() {
 }
 
 /**
- * @brief Shows or hides the grid according to the view settings.
- */
-void MapView::update_grid_visibility() {
-
-  if (view_settings == nullptr) {
-    return;
-  }
-
-  if (view_settings->is_grid_visible()) {
-    // Necessary to correctly show the grid when scrolling,
-    // because it is part of the foreground, not of graphics items.
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-  }
-  else {
-    // Faster.
-    setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
-  }
-
-  if (scene != nullptr) {
-    scene->invalidate();
-  }
-}
-
-/**
  * @brief Scales the view by a factor of 2.
  *
  * Zooming will be anchored at the mouse position.
@@ -185,6 +162,31 @@ void MapView::zoom_out() {
   }
 
   view_settings->set_zoom(view_settings->get_zoom() / 2.0);
+}
+
+/**
+ * @brief Shows or hides the grid according to the view settings.
+ */
+void MapView::update_grid_visibility() {
+
+  if (view_settings == nullptr) {
+    return;
+  }
+
+  if (view_settings->is_grid_visible()) {
+    // Necessary to correctly show the grid when scrolling,
+    // because it is part of the foreground, not of graphics items.
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+  }
+  else {
+    // Faster.
+    setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+  }
+
+  if (scene != nullptr) {
+    // The foreground has changed.
+    scene->invalidate();
+  }
 }
 
 /**
@@ -220,24 +222,8 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
-  const int grid_size = MapScene::quest_to_scene(16);
-  const QRect int_rect = rectangle.toRect();
+  const int square_size = MapScene::quest_to_scene(16);
+  GuiTools::draw_grid(*painter, rectangle.toRect(), square_size);
 
-  int left = int_rect.left() - int_rect.left() % grid_size;
-  int top = int_rect.top() - int_rect.top() % grid_size;
-
-  QVarLengthArray<QLineF, 100> lines;
-
-  for (int x = left; x < int_rect.right(); x += grid_size) {
-    lines.append(QLineF(x, int_rect.top(), x, int_rect.bottom()));
-  }
-
-  for (int y = top; y < int_rect.bottom(); y += grid_size) {
-    lines.append(QLineF(int_rect.left(), y, int_rect.right(), y));
-  }
-
-  painter->setPen(Qt::DotLine);
-  painter->drawLines(lines.data(), lines.size());
-
-  QGraphicsView::drawBackground(painter, int_rect);
+  QGraphicsView::drawForeground(painter, rectangle);
 }

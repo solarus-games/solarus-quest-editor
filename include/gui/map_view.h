@@ -50,7 +50,7 @@ public slots:
 
 protected:
 
-  void drawForeground(QPainter* painter, const QRectF& rectangle);
+  void drawForeground(QPainter* painter, const QRectF& rectangle) override;
 
 private:
 

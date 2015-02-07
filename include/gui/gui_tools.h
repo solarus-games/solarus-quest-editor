@@ -33,6 +33,8 @@ void draw_rectangle_outline(QPainter& painter,
                             const QColor& color,
                             int thickness);
 
+void draw_grid(QPainter& painter, const QRect& where, int square_size);
+
 }
 
 #endif
