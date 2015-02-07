@@ -62,6 +62,7 @@ include_directories(SYSTEM
 
 # Source files.
 set(solarus_quest_editor_SOURCES
+  include/entities/chest.h
   include/entities/destination.h
   include/entities/entity_model.h
   include/entities/entity_traits.h
@@ -117,6 +118,7 @@ set(solarus_quest_editor_SOURCES
   include/size.h
   include/tileset_model.h
   include/view_settings.h
+  src/entities/chest.cpp
   src/entities/destination.cpp
   src/entities/entity_model.cpp
   src/entities/entity_traits.cpp

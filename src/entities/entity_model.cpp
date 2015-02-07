@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/chest.h"
 #include "entities/destination.h"
 #include "entities/entity_model.h"
 #include "entities/tile.h"
@@ -58,12 +59,16 @@ std::unique_ptr<EntityModel> EntityModel::create(
 
   switch (entity_data.get_type()) {
 
-  case EntityType::TILE:
-    entity = new Tile(map, entity_data);
+  case EntityType::CHEST:
+    entity = new Chest(map, entity_data);
     break;
 
   case EntityType::DESTINATION:
     entity = new Destination(map, entity_data);
+    break;
+
+  case EntityType::TILE:
+    entity = new Tile(map, entity_data);
     break;
 
   default:
