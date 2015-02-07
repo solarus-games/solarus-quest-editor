@@ -24,7 +24,7 @@
 Chest::Chest(MapModel& map, const Solarus::EntityData& entity) :
   EntityModel(map, entity) {
 
-  Q_ASSERT(entity.get_type() == EntityType::Chest);
+  Q_ASSERT(entity.get_type() == EntityType::CHEST);
 
   set_origin(QPoint(8, 13));
 }
