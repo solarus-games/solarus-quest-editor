@@ -59,6 +59,7 @@ private slots:
   void on_action_copy_triggered();
   void on_action_paste_triggered();
   void on_action_run_quest_triggered();
+  void on_action_show_grid_triggered();
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();

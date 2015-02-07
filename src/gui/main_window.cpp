@@ -535,6 +535,19 @@ void MainWindow::on_action_run_quest_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Show grid" action.
+ */
+void MainWindow::on_action_show_grid_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_grid_visible(ui.action_show_grid->isChecked());
+}
+
+/**
  * @brief Slot called when the user triggers the "Show low layer" action.
  */
 void MainWindow::on_action_show_layer_0_triggered() {

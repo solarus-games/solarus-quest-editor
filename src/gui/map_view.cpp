@@ -140,7 +140,19 @@ void MapView::update_grid_visibility() {
     return;
   }
 
-  // TODO
+  if (view_settings->is_grid_visible()) {
+    // Necessary to correctly show the grid when scrolling,
+    // because it is part of the foreground, not of graphics items.
+    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+  }
+  else {
+    // Faster.
+    setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+  }
+
+  if (scene != nullptr) {
+    scene->invalidate();
+  }
 }
 
 /**
@@ -195,4 +207,37 @@ void MapView::update_layer_visibility(Layer layer) {
 void MapView::update_entity_type_visibility(EntityType type) {
 
   scene->update_entity_type_visibility(type, *view_settings);
+}
+
+/**
+ * @brief Draws the foreground of the map.
+ * @param painter The painter to draw.
+ * @param rect The exposed rectangle.
+ */
+void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
+
+  if (view_settings == nullptr || !view_settings->is_grid_visible()) {
+    return;
+  }
+
+  const int grid_size = MapScene::quest_to_scene(16);
+  const QRect int_rect = rectangle.toRect();
+
+  int left = int_rect.left() - int_rect.left() % grid_size;
+  int top = int_rect.top() - int_rect.top() % grid_size;
+
+  QVarLengthArray<QLineF, 100> lines;
+
+  for (int x = left; x < int_rect.right(); x += grid_size) {
+    lines.append(QLineF(x, int_rect.top(), x, int_rect.bottom()));
+  }
+
+  for (int y = top; y < int_rect.bottom(); y += grid_size) {
+    lines.append(QLineF(int_rect.left(), y, int_rect.right(), y));
+  }
+
+  painter->setPen(Qt::DotLine);
+  painter->drawLines(lines.data(), lines.size());
+
+  QGraphicsView::drawBackground(painter, int_rect);
 }

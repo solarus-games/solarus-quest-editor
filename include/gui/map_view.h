@@ -48,6 +48,10 @@ public slots:
   void update_layer_visibility(Layer layer);
   void update_entity_type_visibility(EntityType type);
 
+protected:
+
+  void drawForeground(QPainter* painter, const QRectF& rectangle);
+
 private:
 
   QPointer<MapModel> model;        /**< The map model. */
