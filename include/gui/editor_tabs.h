@@ -76,6 +76,10 @@ public slots:
   void file_renamed(const QString& old_path, const QString& new_path);
   void file_deleted(const QString& path);
 
+protected:
+
+  void keyPressEvent(QKeyEvent* event) override;
+
 private slots:
 
   void current_editor_changed(int index);

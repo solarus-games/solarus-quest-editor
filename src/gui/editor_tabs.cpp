@@ -23,6 +23,7 @@
 #include "editor_exception.h"
 #include "quest.h"
 #include <QFileInfo>
+#include <QKeyEvent>
 #include <QUndoGroup>
 #include <QUndoStack>
 
@@ -510,4 +511,31 @@ void EditorTabs::modification_state_changed(bool clean) {
     title += '*';
   }
   setTabText(currentIndex(), title);
+}
+
+/**
+ * @brief Receives a key press event.
+ *
+ * Reimplemented to switch tabs with Ctrl+Tab.
+ * TODO move this as actions of MainWindow to make it work from anywhere
+ *
+ * @param event The event to handle.
+ */
+void EditorTabs::keyPressEvent(QKeyEvent* event) {
+
+  if (event == QKeySequence::NextChild) {
+    if (count() > 1) {
+      setCurrentIndex((currentIndex() + 1) % count());
+    }
+    return;
+  }
+
+  if (event == QKeySequence::PreviousChild) {
+    if (count() > 1) {
+      setCurrentIndex((currentIndex() + count() - 1) % count());
+    }
+    return;
+  }
+
+  QTabWidget::keyPressEvent(event);
 }
