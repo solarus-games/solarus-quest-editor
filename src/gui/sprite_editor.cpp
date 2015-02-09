@@ -120,6 +120,179 @@ private:
   int loop_on_frame_after;
 };
 
+/**
+ * @brief Change direction size.
+ */
+class SetDirectionSizeCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionSizeCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index, const QSize& size) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction size")),
+    index(index),
+    size_before(get_model().get_direction_size(index)),
+    size_after(size) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_size(index, size_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_size(index, size_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QSize size_before;
+  QSize size_after;
+};
+
+/**
+ * @brief Change direction position.
+ */
+class SetDirectionPositionCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionPositionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QPoint& position) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction position")),
+    index(index),
+    position_before(get_model().get_direction_position(index)),
+    position_after(position) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_position(index, position_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_position(index, position_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QPoint position_before;
+  QPoint position_after;
+};
+
+/**
+ * @brief Change direction origin.
+ */
+class SetDirectionOriginCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionOriginCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QPoint& origin) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction origin")),
+    index(index),
+    origin_before(get_model().get_direction_origin(index)),
+    origin_after(origin) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_origin(index, origin_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_origin(index, origin_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QPoint origin_before;
+  QPoint origin_after;
+};
+
+/**
+ * @brief Change direction num frames.
+ */
+class SetDirectionNumFramesCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionNumFramesCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index, int num_frames) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction num frames")),
+    index(index),
+    num_frames_before(get_model().get_direction_num_frames(index)),
+    num_frames_after(num_frames) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_num_frames(index, num_frames_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_num_frames(index, num_frames_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  int num_frames_before;
+  int num_frames_after;
+};
+
+
+/**
+ * @brief Change direction num columns.
+ */
+class SetDirectionNumColumnsCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionNumColumnsCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index, int num_columns) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction num frames")),
+    index(index),
+    num_columns_before(get_model().get_direction_num_columns(index)),
+    num_columns_after(num_columns) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_num_columns(index, num_columns_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_num_columns(index, num_columns_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  int num_columns_before;
+  int num_columns_after;
+};
+
 }
 
 /**
@@ -185,9 +358,43 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.loop_on_frame_field, SIGNAL(editingFinished()),
           this, SLOT(change_animation_loop_on_frame_requested()));
 
+  connect(model, SIGNAL(direction_size_changed(Index,QSize)),
+          this, SLOT(update_direction_size_field()));
+  connect(ui.width_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_size_requested()));
+  connect(ui.height_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_size_requested()));
+
+  connect(model, SIGNAL(direction_position_changed(Index,QPoint)),
+          this, SLOT(update_direction_position_field()));
+  connect(ui.position_x_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_position_requested()));
+  connect(ui.position_y_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_position_requested()));
+
+  connect(model, SIGNAL(direction_origin_changed(Index,QPoint)),
+          this, SLOT(update_direction_origin_field()));
+  connect(ui.origin_x_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_origin_requested()));
+  connect(ui.origin_y_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_origin_requested()));
+
+  connect(model, SIGNAL(direction_num_frames_changed(Index,int)),
+          this, SLOT(update_direction_num_frames_field()));
+  connect(ui.num_frames_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_num_frames_requested()));
+
+  connect(model, SIGNAL(direction_num_columns_changed(Index,int)),
+          this, SLOT(update_direction_num_columns_field()));
+  connect(ui.num_columns_field, SIGNAL(editingFinished()),
+          this, SLOT(change_direction_num_columns_requested()));
+
   connect(&model->get_selection_model(),
           SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_animation_view()));
+  connect(&model->get_selection_model(),
+          SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+          this, SLOT(update_direction_view()));
 }
 
 SpriteEditor::~SpriteEditor() {
@@ -220,6 +427,7 @@ void SpriteEditor::update() {
   update_sprite_id_field();
   update_description_to_gui();
   update_animation_view();
+  update_direction_view();
 }
 
 /**
@@ -370,4 +578,183 @@ void SpriteEditor::change_animation_loop_on_frame_requested() {
   }
 
   try_command(new SetAnimationLoopOnFrameCommand(*this, index, loop_on_frame));
+}
+
+/**
+ * @brief Fills the direction view.
+ *
+ * If a direction is selected, its properties are displayed in the
+ * direction view.
+ * Otherwise, the direction view becomes disabled.
+ */
+void SpriteEditor::update_direction_view() {
+
+  update_direction_size_field();
+  update_direction_position_field();
+  update_direction_origin_field();
+  update_direction_num_frames_field();
+  update_direction_num_columns_field();
+
+  // If no directin is selected, disable the direction view.
+  bool enable = model->get_selected_index().is_direction_index();
+  ui.direction_properties_group_box->setEnabled(enable);
+}
+
+/**
+ * @brief Updates the direction size field from the model.
+ */
+void SpriteEditor::update_direction_size_field() {
+
+  QSize size = model->get_direction_size(model->get_selected_index());
+  ui.width_field->setValue(size.width());
+  ui.height_field->setValue(size.height());
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction size.
+ */
+void SpriteEditor::change_direction_size_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  QSize old_size = model->get_direction_size(index);
+  QSize size = QSize(ui.width_field->value(), ui.height_field->value());
+
+  if (size == old_size) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetDirectionSizeCommand(*this, index, size));
+}
+
+/**
+ * @brief Updates the direction position field from the model.
+ */
+void SpriteEditor::update_direction_position_field() {
+
+  QPoint position = model->get_direction_position(model->get_selected_index());
+  ui.position_x_field->setValue(position.x());
+  ui.position_y_field->setValue(position.y());
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction position.
+ */
+void SpriteEditor::change_direction_position_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  QPoint old_position = model->get_direction_position(index);
+  QPoint position =
+      QPoint(ui.position_x_field->value(), ui.position_y_field->value());
+
+  if (position == old_position) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetDirectionPositionCommand(*this, index, position));
+}
+
+/**
+ * @brief Updates the direction origin field from the model.
+ */
+void SpriteEditor::update_direction_origin_field() {
+
+  QPoint origin = model->get_direction_origin(model->get_selected_index());
+  ui.origin_x_field->setValue(origin.x());
+  ui.origin_y_field->setValue(origin.y());
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction origin.
+ */
+void SpriteEditor::change_direction_origin_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  QPoint old_origin = model->get_direction_origin(index);
+  QPoint origin = QPoint(ui.origin_x_field->value(), ui.origin_y_field->value());
+
+  if (origin == old_origin) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetDirectionOriginCommand(*this, index, origin));
+}
+
+/**
+ * @brief Updates the direction num frames field from the model.
+ */
+void SpriteEditor::update_direction_num_frames_field() {
+
+  int num_frames = model->get_direction_num_frames(model->get_selected_index());
+  ui.num_frames_field->setValue(num_frames);
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction num frames.
+ */
+void SpriteEditor::change_direction_num_frames_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  int old_num_frames = model->get_direction_num_frames(index);
+  int num_frames = ui.num_frames_field->value();
+
+  if (num_frames == old_num_frames) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetDirectionNumFramesCommand(*this, index, num_frames));
+}
+
+/**
+ * @brief Updates the direction num columns field from the model.
+ */
+void SpriteEditor::update_direction_num_columns_field() {
+
+  int num_columns = model->get_direction_num_columns(model->get_selected_index());
+  ui.num_columns_field->setValue(num_columns);
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction num columns.
+ */
+void SpriteEditor::change_direction_num_columns_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  int old_num_columns = model->get_direction_num_columns(index);
+  int num_columns = ui.num_columns_field->value();
+
+  if (num_columns == old_num_columns) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetDirectionNumColumnsCommand(*this, index, num_columns));
 }

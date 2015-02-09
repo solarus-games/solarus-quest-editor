@@ -53,6 +53,18 @@ public slots:
   void update_animation_loop_on_frame_field();
   void change_animation_loop_on_frame_requested();
 
+  void update_direction_view();
+  void update_direction_size_field();
+  void change_direction_size_requested();
+  void update_direction_position_field();
+  void change_direction_position_requested();
+  void update_direction_origin_field();
+  void change_direction_origin_requested();
+  void update_direction_num_frames_field();
+  void change_direction_num_frames_requested();
+  void update_direction_num_columns_field();
+  void change_direction_num_columns_requested();
+
 private:
   Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
   QString sprite_id;            /**< Id of the sprite being edited. */
