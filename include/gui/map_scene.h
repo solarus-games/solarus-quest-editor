@@ -30,7 +30,7 @@ class ViewSettings;
  *
  * In scene coordinates, map entity coordinates are multiplied by 2.
  * This allows us to show entity icons at a higher resolution than tiles:
- * for example, we show a 32x32 icon on a 16x16 tile
+ * for example, we can show a 32x32 icon on a 16x16 tile.
  * In scene coordinates, a tile with coordinates 16x16 in the data file becomes 32x32.
  * In other words, scene coordinates match the view when the user actually
  * sets a zoom of 200%.
