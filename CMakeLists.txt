@@ -1,5 +1,5 @@
 # CMake 2.8.11 or above is necessary for recent Qt5 cmake helper functions.
-cmake_minimum_required(VERSION 2.8.11)  
+cmake_minimum_required(VERSION 2.8.11)
 
 project(solarus-quest-editor)
 
@@ -109,6 +109,7 @@ set(solarus_quest_editor_SOURCES
   include/rectangle.h
   include/size.h
   include/tileset_model.h
+  include/sprite_model.h
   src/gui/change_pattern_id_dialog.cpp
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
@@ -149,6 +150,7 @@ set(solarus_quest_editor_SOURCES
   src/rectangle.cpp
   src/size.cpp
   src/tileset_model.cpp
+  src/sprite_model.cpp
 )
 
 # UI files.
