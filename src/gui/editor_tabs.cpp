@@ -20,6 +20,7 @@
 #include "gui/map_editor.h"
 #include "gui/text_editor.h"
 #include "gui/tileset_editor.h"
+#include "gui/sprite_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include <QFileInfo>
@@ -206,7 +207,25 @@ void EditorTabs::open_tileset_editor(
 void EditorTabs::open_sprite_editor(
     Quest& quest, const QString& path) {
 
-  open_text_editor(quest, path);  // TODO sprite editor.
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new SpriteEditor(quest, path));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**

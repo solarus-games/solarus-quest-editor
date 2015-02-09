@@ -1,0 +1,62 @@
+/*
+ * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ *
+ * Solarus Quest Editor is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Solarus Quest Editor is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+#ifndef SOLARUSEDITOR_SPRITE_EDITOR_H
+#define SOLARUSEDITOR_SPRITE_EDITOR_H
+
+#include "gui/editor.h"
+#include "ui_sprite_editor.h"
+
+class SpriteModel;
+
+/**
+ * \brief A widget to edit graphically a sprite file.
+ */
+class SpriteEditor : public Editor {
+  Q_OBJECT
+
+public:
+
+  SpriteEditor(Quest& quest, const QString& path, QWidget* parent = nullptr);
+  ~SpriteEditor();
+
+  SpriteModel& get_model();
+
+  virtual void save() override;
+
+public slots:
+
+  void update();
+
+  void update_sprite_id_field();
+
+  void update_description_to_gui();
+  void set_description_from_gui();
+
+  void update_animation_view();
+  void update_animation_source_image_field();
+  void update_animation_frame_delay_field();
+  void change_animation_frame_delay_requested();
+  void update_animation_loop_on_frame_field();
+  void change_animation_loop_on_frame_requested();
+
+private:
+  Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
+  QString sprite_id;            /**< Id of the sprite being edited. */
+  SpriteModel* model;           /**< Sprite model being edited. */
+};
+
+#endif

@@ -86,6 +86,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_editor.h
   include/gui/tileset_scene.h
   include/gui/tileset_view.h
+  include/gui/sprite_editor.h
+  include/gui/sprite_tree_view.h
   include/color.h
   include/editor_exception.h
   include/entity_traits.h
@@ -130,6 +132,8 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_editor.cpp
   src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
+  src/gui/sprite_editor.cpp
+  src/gui/sprite_tree_view.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/entity_traits.cpp
@@ -161,6 +165,7 @@ set(solarus_quest_editor_FORMS
   src/gui/map_editor.ui
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
+  src/gui/sprite_editor.ui
 )
 
 # Generate .h from .ui.
