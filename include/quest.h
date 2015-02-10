@@ -74,6 +74,7 @@ public:
   QString get_music_path(const QString& music_id) const;
   QString get_sound_path(const QString& sound_id) const;
   QString get_sprite_path(const QString& sprite_id) const;
+  QString get_sprite_image_path(const QString& src_image) const;
   QString get_strings_path(const QString& language_id) const;
   QString get_tileset_data_file_path(const QString& tileset_id) const;
   QString get_tileset_tiles_image_path(const QString& tileset_id) const;
