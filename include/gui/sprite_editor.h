@@ -48,6 +48,7 @@ public slots:
 
   void update_selection();
   void create_animation_requested();
+  void rename_animation_requested();
   void delete_requested();
 
   void update_animation_view();

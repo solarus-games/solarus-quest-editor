@@ -14,23 +14,25 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef NEW_ANIMATION_DIALOG_H
-#define NEW_ANIMATION_DIALOG_H
+#ifndef GET_ANIMATION_NAME_DIALOG_H
+#define GET_ANIMATION_NAME_DIALOG_H
 
-#include "ui_new_animation_dialog.h"
-#include <QDialog>
+#include <QInputDialog>
+
+class SpriteModel;
 
 /**
- * @brief A dialog to create a new animation in the sprite editor.
- *
- * This dialog is similar to a standard QInputDialog with a line edit.
+ * @brief A dialog to get an animation name in the sprite editor.
  */
-class NewAnimationDialog : public QDialog {
+class GetAnimationNameDialog : public QInputDialog {
   Q_OBJECT
 
 public:
 
-  NewAnimationDialog(QWidget* parent = 0);
+  GetAnimationNameDialog(const SpriteModel& model, QWidget* parent = 0);
+  GetAnimationNameDialog(
+      const SpriteModel& model,
+      const QString& animation_name, QWidget* parent = 0);
 
   QString get_animation_name() const;
   void set_animation_name(const QString& animation_name);
@@ -41,8 +43,10 @@ public slots:
 
 private:
 
-  Ui::NewAnimationDialog ui;   /**< The widgets. */
+  void setup_ui ();
 
+  const SpriteModel& model;
+  QString animation_name;
 };
 
 #endif

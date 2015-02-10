@@ -16,7 +16,7 @@
  */
 #include "gui/gui_tools.h"
 #include "gui/sprite_editor.h"
-#include "gui/new_animation_dialog.h"
+#include "gui/get_animation_name_dialog.h"
 #include "gui/change_source_image_dialog.h"
 #include "editor_exception.h"
 #include "quest.h"
@@ -79,6 +79,43 @@ public:
 private:
 
   QString name;
+};
+
+/**
+ * @brief Change animation name.
+ */
+class RenameAnimationCommand : public SpriteEditorCommand {
+
+public:
+
+  RenameAnimationCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QString& new_animation_name) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change animation name")),
+    index(index),
+    animation_name_before(index.animation_name),
+    animation_name_after(new_animation_name) {
+  }
+
+  virtual void undo() override {
+
+    index.animation_name = animation_name_after;
+    get_model().set_animation_name(index, animation_name_before);
+    get_model().set_selected_index(animation_name_before);
+  }
+
+  virtual void redo() override {
+
+    index.animation_name = animation_name_before;
+    get_model().set_animation_name(index, animation_name_after);
+    get_model().set_selected_index(animation_name_after);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QString animation_name_before;
+  QString animation_name_after;
 };
 
 /**
@@ -615,7 +652,10 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.num_columns_field, SIGNAL(editingFinished()),
           this, SLOT(change_direction_num_columns_requested()));
 
-  connect(ui.create_button, SIGNAL(clicked()), this, SLOT(create_animation_requested()));
+  connect(ui.create_button, SIGNAL(clicked()),
+          this, SLOT(create_animation_requested()));
+  connect(ui.rename_button, SIGNAL(clicked()),
+          this, SLOT(rename_animation_requested()));
   connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
 
   connect(&model->get_selection_model(),
@@ -712,6 +752,7 @@ void SpriteEditor::update_selection() {
   update_direction_view();
 
   bool enable = model->get_selected_index().is_valid();
+  ui.rename_button->setEnabled(enable);
   ui.delete_button->setEnabled(enable);
 }
 
@@ -720,7 +761,7 @@ void SpriteEditor::update_selection() {
  */
 void SpriteEditor::create_animation_requested() {
 
-  NewAnimationDialog dialog(this);
+  GetAnimationNameDialog dialog(*model, this);
 
   int result = dialog.exec();
   if (result != QDialog::Accepted) {
@@ -729,6 +770,34 @@ void SpriteEditor::create_animation_requested() {
 
   QString name = dialog.get_animation_name();
   try_command(new CreateAnimationCommand(*this, name));
+}
+
+/**
+ * @brief Slot called when the user wants to rename an animation.
+ */
+void SpriteEditor::rename_animation_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_valid()) {
+    // No selection.
+    return;
+  }
+
+  QString old_name = index.animation_name;
+  GetAnimationNameDialog dialog(*model, old_name, this);
+
+  int result = dialog.exec();
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString new_name = dialog.get_animation_name();
+
+  if (new_name == old_name) {
+    return;
+  }
+
+  try_command(new RenameAnimationCommand(*this, index, new_name));
 }
 
 /**

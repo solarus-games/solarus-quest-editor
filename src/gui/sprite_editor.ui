@@ -88,6 +88,20 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="rename_button">
+             <property name="toolTip">
+              <string>Rename</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/images.qrc">
+               <normaloff>:/images/icon_rename.png</normaloff>:/images/icon_rename.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="delete_button">
              <property name="toolTip">
               <string>Delete</string>

@@ -562,6 +562,10 @@ void SpriteModel::set_animation_name(const Index& index, const QString& new_name
   emit animation_name_changed(index, Index(new_name));
 
   // Restore the selection.
+  if (selection.animation_name == index.animation_name) {
+    selection.animation_name = new_name;
+  }
+
   set_selected_index(selection);
 }
 
