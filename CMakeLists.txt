@@ -1,5 +1,5 @@
 # CMake 2.8.11 or above is necessary for recent Qt5 cmake helper functions.
-cmake_minimum_required(VERSION 2.8.11)  
+cmake_minimum_required(VERSION 2.8.11)
 
 project(solarus-quest-editor)
 
@@ -69,6 +69,7 @@ set(solarus_quest_editor_SOURCES
   include/entities/entity_traits.h
   include/entities/tile.h
   include/gui/change_pattern_id_dialog.h
+  include/gui/change_source_image_dialog.h
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
@@ -77,6 +78,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/enum_menus.inl
   include/gui/enum_selector.h
   include/gui/enum_selector.inl
+  include/gui/get_animation_name_dialog.h
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
   include/gui/map_editor.h
@@ -89,6 +91,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/quest_tree_view.h
   include/gui/resource_model.h
   include/gui/resource_selector.h
+  include/gui/sprite_editor.h
+  include/gui/sprite_tree_view.h
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
   include/gui/tile_patterns_list_view.h
@@ -117,6 +121,7 @@ set(solarus_quest_editor_SOURCES
   include/quest_resources.h
   include/rectangle.h
   include/size.h
+  include/sprite_model.h
   include/tileset_model.h
   include/view_settings.h
   src/entities/chest.cpp
@@ -126,10 +131,12 @@ set(solarus_quest_editor_SOURCES
   src/entities/entity_traits.cpp
   src/entities/tile.cpp
   src/gui/change_pattern_id_dialog.cpp
+  src/gui/change_source_image_dialog.cpp
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
   src/gui/external_script_dialog.cpp
+  src/gui/get_animation_name_dialog.cpp
   src/gui/gui_tools.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
@@ -142,6 +149,8 @@ set(solarus_quest_editor_SOURCES
   src/gui/quest_tree_view.cpp
   src/gui/resource_model.cpp
   src/gui/resource_selector.cpp
+  src/gui/sprite_editor.cpp
+  src/gui/sprite_tree_view.cpp
   src/gui/text_editor.cpp
   src/gui/text_editor_widget.cpp
   src/gui/tile_patterns_list_view.cpp
@@ -167,6 +176,7 @@ set(solarus_quest_editor_SOURCES
   src/quest_resources.cpp
   src/rectangle.cpp
   src/size.cpp
+  src/sprite_model.cpp
   src/tileset_model.cpp
   src/view_settings.cpp
 )
@@ -179,6 +189,8 @@ set(solarus_quest_editor_FORMS
   src/gui/map_editor.ui
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
+  src/gui/sprite_editor.ui
+  src/gui/change_source_image_dialog.ui
 )
 
 # Generate .h from .ui.

@@ -505,6 +505,16 @@ QString Quest::get_sprite_path(
 }
 
 /**
+ * @brief Returns the path to a sprite image file.
+ * @param src_image Path of the image.
+ * @return The path to the sprite image file.
+ */
+QString Quest::get_sprite_image_path(const QString& src_image) const {
+
+  return get_data_path() + "/sprites/" + src_image;
+}
+
+/**
  * @brief Returns the path to a dialogs file.
  * @param language_id Id of a language.
  * @return The path to the dialogs file of this language.
