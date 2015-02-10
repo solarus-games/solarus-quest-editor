@@ -52,6 +52,8 @@ public slots:
 
   void update_animation_view();
   void update_animation_source_image_field();
+  void change_animation_source_image_requested();
+  void tileset_selector_activated();
   void update_animation_frame_delay_field();
   void change_animation_frame_delay_requested();
   void update_animation_loop_on_frame_field();
@@ -73,6 +75,7 @@ private:
   Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
   QString sprite_id;            /**< Id of the sprite being edited. */
   SpriteModel* model;           /**< Sprite model being edited. */
+  Quest& quest;                 /**< The quest. */
 };
 
 #endif

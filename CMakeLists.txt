@@ -89,6 +89,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/sprite_editor.h
   include/gui/sprite_tree_view.h
   include/gui/new_animation_dialog.h
+  include/gui/change_source_image_dialog.h
   include/color.h
   include/editor_exception.h
   include/entity_traits.h
@@ -136,6 +137,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/sprite_editor.cpp
   src/gui/sprite_tree_view.cpp
   src/gui/new_animation_dialog.cpp
+  src/gui/change_source_image_dialog.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/entity_traits.cpp
@@ -169,6 +171,7 @@ set(solarus_quest_editor_FORMS
   src/gui/tileset_editor.ui
   src/gui/sprite_editor.ui
   src/gui/new_animation_dialog.ui
+  src/gui/change_source_image_dialog.ui
 )
 
 # Generate .h from .ui.

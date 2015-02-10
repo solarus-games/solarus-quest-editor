@@ -171,6 +171,9 @@
                 </widget>
                </item>
                <item>
+                <widget class="ResourceSelector" name="tileset_field"/>
+               </item>
+               <item>
                 <widget class="QToolButton" name="src_image_button">
                  <property name="toolTip">
                   <string>Rename (F2)</string>
@@ -471,6 +474,11 @@
    <class>SpriteTreeView</class>
    <extends>QTreeView</extends>
    <header>gui/sprite_tree_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResourceSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/resource_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources>

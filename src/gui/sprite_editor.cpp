@@ -17,6 +17,7 @@
 #include "gui/gui_tools.h"
 #include "gui/sprite_editor.h"
 #include "gui/new_animation_dialog.h"
+#include "gui/change_source_image_dialog.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
@@ -129,6 +130,41 @@ private:
   uint32_t frame_delay;
   int loop_on_frame;
   QList<Solarus::SpriteAnimationDirectionData> directions;
+};
+
+/**
+ * @brief Change animation source image.
+ */
+class SetAnimationSourceImageCommand : public SpriteEditorCommand {
+
+public:
+
+  SetAnimationSourceImageCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QString& source_image) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change source image")),
+    index(index),
+    source_image_before(get_model().get_animation_source_image(index)),
+    source_image_after(source_image) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_animation_source_image(index, source_image_before);
+    get_model().set_selected_animation(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_animation_source_image(index, source_image_after);
+    get_model().set_selected_animation(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QString source_image_before;
+  QString source_image_after;
 };
 
 /**
@@ -447,7 +483,8 @@ private:
  */
 SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
-  model(nullptr) {
+  model(nullptr),
+  quest(quest) {
 
   ui.setupUi(this);
 
@@ -477,6 +514,9 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.sprite_tree_view->set_model(*model);
+  ui.tileset_field->set_resource_type(ResourceType::TILESET);
+  ui.tileset_field->set_quest(quest);
+  ui.tileset_field->set_selected_id(model->get_sprite_id());
   update();
 
   // Make connections.
@@ -488,6 +528,12 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(model, SIGNAL(animation_image_changed(Index,QString)),
           this, SLOT(update_animation_source_image_field()));
+
+  connect(ui.src_image_button, SIGNAL(clicked()),
+          this, SLOT(change_animation_source_image_requested()));
+
+  connect(ui.tileset_field, SIGNAL(activated(QString)),
+          this, SLOT(tileset_selector_activated()));
 
   connect(model, SIGNAL(animation_frame_delay_changed(Index,uint32_t)),
           this, SLOT(update_animation_frame_delay_field()));
@@ -691,7 +737,44 @@ void SpriteEditor::update_animation_source_image_field() {
 
   QString src_image =
       model->get_animation_source_image(model->get_selected_index());
+
+  bool is_tileset = src_image == "tileset";
+
   ui.src_image_value->setText(src_image);
+  ui.src_image_value->setVisible(!is_tileset);
+
+  ui.tileset_field->setVisible(is_tileset);
+}
+
+/**
+ * @brief Slot called when the user wants to change the animation source image.
+ */
+void SpriteEditor::change_animation_source_image_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  QString old_source_image = model->get_animation_source_image(index);
+
+  ChangeSourceImageDialog dialog(quest, old_source_image, this);
+
+  int result = dialog.exec();
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString source_image = dialog.get_source_image();
+  if (source_image == old_source_image) {
+    return;
+  }
+
+  try_command(new SetAnimationSourceImageCommand(*this, index, source_image));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset in the selector.
+ */
+void SpriteEditor::tileset_selector_activated() {
+
+  model->set_tileset_id(ui.tileset_field->get_selected_id());
 }
 
 /**
