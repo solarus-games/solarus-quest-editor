@@ -16,6 +16,7 @@
  */
 #include "entities/chest.h"
 #include "entities/destination.h"
+#include "entities/destructible.h"
 #include "entities/entity_model.h"
 #include "entities/tile.h"
 #include "map_model.h"
@@ -65,6 +66,10 @@ std::unique_ptr<EntityModel> EntityModel::create(
 
   case EntityType::DESTINATION:
     entity = new Destination(map, entity_data);
+    break;
+
+  case EntityType::DESTRUCTIBLE:
+    entity = new Destructible(map, entity_data);
     break;
 
   case EntityType::TILE:

@@ -64,6 +64,7 @@ include_directories(SYSTEM
 set(solarus_quest_editor_SOURCES
   include/entities/chest.h
   include/entities/destination.h
+  include/entities/destructible.h
   include/entities/entity_model.h
   include/entities/entity_traits.h
   include/entities/tile.h
@@ -120,6 +121,7 @@ set(solarus_quest_editor_SOURCES
   include/view_settings.h
   src/entities/chest.cpp
   src/entities/destination.cpp
+  src/entities/destructible.cpp
   src/entities/entity_model.cpp
   src/entities/entity_traits.cpp
   src/entities/tile.cpp

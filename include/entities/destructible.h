@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_CHEST_H
-#define SOLARUSEDITOR_CHEST_H
+#ifndef SOLARUSEDITOR_DESTRUCTIBLE_H
+#define SOLARUSEDITOR_DESTRUCTIBLE_H
 
 #include "entities/entity_model.h"
 
 /**
- * @brief An editable chest.
+ * @brief An editable destructible object.
  */
-class Chest : public EntityModel {
+class Destructible : public EntityModel {
 
 public:
 
-  Chest(MapModel& map, const Solarus::EntityData& entity);
+  Destructible(MapModel& map, const Solarus::EntityData& entity);
 
 };
 

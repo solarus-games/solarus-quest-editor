@@ -14,20 +14,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_CHEST_H
-#define SOLARUSEDITOR_CHEST_H
-
-#include "entities/entity_model.h"
+#include "entities/destructible.h"
 
 /**
- * @brief An editable chest.
+ * @brief Constructor.
+ * @param map The map containing the entity.
+ * @param entity The entity data to represent.
  */
-class Chest : public EntityModel {
+Destructible::Destructible(MapModel& map, const Solarus::EntityData& entity) :
+  EntityModel(map, entity) {
 
-public:
+  Q_ASSERT(entity.get_type() == EntityType::DESTRUCTIBLE);
 
-  Chest(MapModel& map, const Solarus::EntityData& entity);
-
-};
-
-#endif
+  set_origin(QPoint(8, 13));
+}

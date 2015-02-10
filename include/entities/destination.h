@@ -19,6 +19,9 @@
 
 #include "entities/entity_model.h"
 
+/**
+ * @brief An editable destination.
+ */
 class Destination : public EntityModel {
 
 public:
