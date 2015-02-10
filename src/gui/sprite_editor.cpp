@@ -136,6 +136,9 @@ public:
     get_model().set_animation_source_image(index, src_image);
     get_model().set_animation_frame_delay(index, frame_delay);
     get_model().set_animation_loop_on_frame(index, loop_on_frame);
+    if (is_default) {
+      get_model().set_default_animation_name(index.animation_name);
+    }
     SpriteModel::Index dir_index = index;
     for (int nb = 0; nb < directions.size(); nb++) {
       dir_index.direction_nb = nb;
@@ -151,6 +154,7 @@ public:
     src_image = get_model().get_animation_source_image(index);
     frame_delay = get_model().get_animation_frame_delay(index);
     loop_on_frame = get_model().get_animation_loop_on_frame(index);
+    is_default = get_model().get_default_animation_name() == index.animation_name;
 
     SpriteModel::Index dir_index = index;
     for (int nb = 0; nb < num_directions; nb++) {
@@ -166,6 +170,7 @@ private:
   QString src_image;
   uint32_t frame_delay;
   int loop_on_frame;
+  bool is_default;
   QList<Solarus::SpriteAnimationDirectionData> directions;
 };
 
