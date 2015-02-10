@@ -95,6 +95,39 @@ QString SpriteModel::get_default_animation_name() const {
 }
 
 /**
+ * @brief Changes the default animation name of the sprite.
+ * @param default_animation_name The new default animation name.
+ */
+void SpriteModel::set_default_animation_name(
+    const QString& default_animation_name) {
+
+  QString old_default_animation_name = get_default_animation_name();
+
+  if (default_animation_name == old_default_animation_name) {
+    return;
+  }
+
+  sprite.set_default_animation_name(default_animation_name.toStdString());
+
+  emit default_animation_changed(
+        old_default_animation_name, default_animation_name);
+
+  // Notify data change
+  Index old_index(old_default_animation_name);
+  Index new_index(default_animation_name);
+
+  if (animation_exists(old_index)) {
+    QModelIndex model_index = get_model_index(old_index);
+    emit dataChanged(model_index, model_index);
+  }
+
+  if (animation_exists(new_index)) {
+    QModelIndex model_index = get_model_index(new_index);
+    emit dataChanged(model_index, model_index);
+  }
+}
+
+/**
  * @brief Returns whether there exists an animation or a direction.
  * @param index Index of an animation or a direction.
  * @return \c true if there exists an animation or a direction with this index.

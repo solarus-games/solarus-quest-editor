@@ -133,7 +133,7 @@
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="src_image_label">
             <property name="toolTip">
              <string/>
@@ -143,7 +143,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QWidget" name="animation_name_field" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <property name="leftMargin">
@@ -205,7 +205,7 @@
             </layout>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <widget class="QSpinBox" name="frame_delay_field">
             <property name="maximum">
              <number>99999</number>
@@ -215,7 +215,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="frame_delay_label">
             <property name="toolTip">
              <string/>
@@ -225,14 +225,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="loop_on_frame_check_box">
             <property name="text">
              <string>Loop on frame</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QSpinBox" name="loop_on_frame_field">
             <property name="enabled">
              <bool>false</bool>
@@ -245,6 +245,20 @@
             </property>
             <property name="value">
              <number>-1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="default_animation_label">
+            <property name="text">
+             <string>Default animation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="default_animation_value">
+            <property name="text">
+             <string>set as default</string>
             </property>
            </widget>
           </item>

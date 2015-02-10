@@ -95,6 +95,7 @@ public:
   Quest& get_quest();
   QString get_sprite_id() const;
   QString get_default_animation_name() const;
+  void set_default_animation_name(const QString& default_animation_name);
   bool exists(const Index& index) const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
@@ -165,6 +166,8 @@ public:
 
 signals:
 
+  void default_animation_changed(
+      const QString& old_default_animation, const QString& new_default_animation);
   void animation_created(const Index& index);
   void animation_deleted(const Index& index);
   void animation_name_changed(const Index& old_index, const Index& new_index);

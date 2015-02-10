@@ -133,6 +133,38 @@ private:
 };
 
 /**
+ * @brief Change default animation.
+ */
+class SetDefaultAnimationCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDefaultAnimationCommand(
+      SpriteEditor& editor, const QString& default_animation_name) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change default animation")),
+    default_animation_name_before(get_model().get_default_animation_name()),
+    default_animation_name_after(default_animation_name) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_default_animation_name(default_animation_name_before);
+    get_model().set_selected_animation(default_animation_name_before);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_default_animation_name(default_animation_name_after);
+    get_model().set_selected_animation(default_animation_name_after);
+  }
+
+private:
+
+  QString default_animation_name_before;
+  QString default_animation_name_after;
+};
+
+/**
  * @brief Change animation source image.
  */
 class SetAnimationSourceImageCommand : public SpriteEditorCommand {
@@ -535,6 +567,11 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
 
+  connect(model, SIGNAL(default_animation_changed(QString,QString)),
+          this, SLOT(update_default_animation_field()));
+  connect(ui.default_animation_value, SIGNAL(clicked()),
+          this, SLOT(change_default_animation_requested()));
+
   connect(model, SIGNAL(animation_frame_delay_changed(Index,uint32_t)),
           this, SLOT(update_animation_frame_delay_field()));
   connect(ui.frame_delay_field, SIGNAL(editingFinished()),
@@ -721,6 +758,7 @@ void SpriteEditor::delete_requested() {
  */
 void SpriteEditor::update_animation_view() {
 
+  update_default_animation_field();
   update_animation_source_image_field();
   update_animation_frame_delay_field();
   update_animation_loop_on_frame_field();
@@ -728,6 +766,45 @@ void SpriteEditor::update_animation_view() {
   // If no animation is selected, disable the animation view.
   bool enable = model->get_selected_index().is_valid();
   ui.animation_properties_group_box->setEnabled(enable);
+}
+
+/**
+ * @brief Updates the default animation field from the model.
+ */
+void SpriteEditor::update_default_animation_field() {
+
+  bool is_default = false;
+  SpriteModel::Index index = model->get_selected_index();
+
+  if (index.is_valid()) {
+    if (index.animation_name == model->get_default_animation_name()) {
+      is_default = true;
+    }
+  }
+
+  ui.default_animation_value->setChecked(is_default);
+}
+
+/**
+ * @brief Slot called when the user wants to change the default animation.
+ */
+void SpriteEditor::change_default_animation_requested() {
+
+  if (!ui.default_animation_value->isChecked()) {
+    ui.default_animation_value->setChecked(true);
+    return;
+  }
+
+  QString old_default_animation_name = model->get_default_animation_name();
+  QString new_default_animation_name =
+      model->get_selected_index().animation_name;
+
+  if (new_default_animation_name == old_default_animation_name) {
+    return;
+  }
+
+  try_command(
+        new SetDefaultAnimationCommand(*this, new_default_animation_name));
 }
 
 /**

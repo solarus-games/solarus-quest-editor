@@ -51,6 +51,8 @@ public slots:
   void delete_requested();
 
   void update_animation_view();
+  void update_default_animation_field();
+  void change_default_animation_requested();
   void update_animation_source_image_field();
   void change_animation_source_image_requested();
   void tileset_selector_activated();
