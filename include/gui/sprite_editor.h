@@ -46,6 +46,10 @@ public slots:
   void update_description_to_gui();
   void set_description_from_gui();
 
+  void update_selection();
+  void create_animation_requested();
+  void delete_requested();
+
   void update_animation_view();
   void update_animation_source_image_field();
   void update_animation_frame_delay_field();

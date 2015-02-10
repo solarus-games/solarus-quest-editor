@@ -16,6 +16,7 @@
  */
 #include "gui/gui_tools.h"
 #include "gui/sprite_editor.h"
+#include "gui/new_animation_dialog.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
@@ -48,6 +49,86 @@ private:
 
   SpriteEditor& editor;
 
+};
+
+/**
+ * @brief Create an animation.
+ */
+class CreateAnimationCommand : public SpriteEditorCommand {
+
+public:
+
+  CreateAnimationCommand(
+      SpriteEditor& editor, const QString& name) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Create animation")),
+    name(name) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_animation(name);
+  }
+
+  virtual void redo() override {
+
+    get_model().create_animation(name);
+    get_model().set_selected_animation(name);
+  }
+
+private:
+
+  QString name;
+};
+
+/**
+ * @brief Delete an animation.
+ */
+class DeleteAnimationCommand : public SpriteEditorCommand {
+
+public:
+
+  DeleteAnimationCommand(SpriteEditor& editor, const SpriteModel::Index& index) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Delete animation")),
+    index(index) {
+  }
+
+  virtual void undo() override {
+
+    get_model().create_animation(index.animation_name);
+    get_model().set_animation_source_image(index, src_image);
+    get_model().set_animation_frame_delay(index, frame_delay);
+    get_model().set_animation_loop_on_frame(index, loop_on_frame);
+    SpriteModel::Index dir_index = index;
+    for (int nb = 0; nb < directions.size(); nb++) {
+      dir_index.direction_nb = nb;
+      get_model().insert_direction(dir_index, directions[nb]);
+    }
+    get_model().set_selected_animation(index);
+  }
+
+  virtual void redo() override {
+
+    directions.clear();
+    int num_directions = get_model().get_animation_num_directions(index);
+    src_image = get_model().get_animation_source_image(index);
+    frame_delay = get_model().get_animation_frame_delay(index);
+    loop_on_frame = get_model().get_animation_loop_on_frame(index);
+
+    SpriteModel::Index dir_index = index;
+    for (int nb = 0; nb < num_directions; nb++) {
+      dir_index.direction_nb = nb;
+      directions.append(get_model().get_direction_data(dir_index));
+    }
+    get_model().delete_animation(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QString src_image;
+  uint32_t frame_delay;
+  int loop_on_frame;
+  QList<Solarus::SpriteAnimationDirectionData> directions;
 };
 
 /**
@@ -85,7 +166,6 @@ private:
   uint32_t frame_delay_after;
 };
 
-
 /**
  * @brief Change animation loop on frame.
  */
@@ -118,6 +198,69 @@ private:
   SpriteModel::Index index;
   int loop_on_frame_before;
   int loop_on_frame_after;
+};
+
+/**
+ * @brief Create a direction.
+ */
+class CreateDirectionCommand : public SpriteEditorCommand {
+
+public:
+
+  CreateDirectionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QRect& frame) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Add direction")),
+    index(index),
+    frame(frame) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_direction(index);
+  }
+
+  virtual void redo() override {
+
+    index.direction_nb = get_model().add_direction(index, frame);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  QRect frame;
+};
+
+/**
+ * @brief Delete a direction.
+ */
+class DeleteDirectionCommand : public SpriteEditorCommand {
+
+public:
+
+  DeleteDirectionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Delete direction")),
+    index(index) {
+  }
+
+  virtual void undo() override {
+
+    index.direction_nb = get_model().insert_direction(index, direction);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    direction = get_model().get_direction_data(index);
+    get_model().delete_direction(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  Solarus::SpriteAnimationDirectionData direction;
 };
 
 /**
@@ -389,12 +532,12 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.num_columns_field, SIGNAL(editingFinished()),
           this, SLOT(change_direction_num_columns_requested()));
 
+  connect(ui.create_button, SIGNAL(clicked()), this, SLOT(create_animation_requested()));
+  connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
+
   connect(&model->get_selection_model(),
           SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-          this, SLOT(update_animation_view()));
-  connect(&model->get_selection_model(),
-          SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-          this, SLOT(update_direction_view()));
+          this, SLOT(update_selection()));
 }
 
 SpriteEditor::~SpriteEditor() {
@@ -426,8 +569,7 @@ void SpriteEditor::update() {
 
   update_sprite_id_field();
   update_description_to_gui();
-  update_animation_view();
-  update_direction_view();
+  update_selection();
 }
 
 /**
@@ -475,6 +617,52 @@ void SpriteEditor::set_description_from_gui() {
   }
   catch (const EditorException& ex) {
     ex.print_message();
+  }
+}
+
+/**
+ * @brief Updates the selection.
+ */
+void SpriteEditor::update_selection() {
+
+  update_animation_view();
+  update_direction_view();
+
+  bool enable = model->get_selected_index().is_valid();
+  ui.delete_button->setEnabled(enable);
+}
+
+/**
+ * @brief Slot called when the user wants to create an animation.
+ */
+void SpriteEditor::create_animation_requested() {
+
+  NewAnimationDialog dialog(this);
+
+  int result = dialog.exec();
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString name = dialog.get_animation_name();
+  try_command(new CreateAnimationCommand(*this, name));
+}
+
+/**
+ * @brief Slot called when the user wants to delete an animation or a direction.
+ */
+void SpriteEditor::delete_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_valid()) {
+    // No selection.
+    return;
+  }
+
+  if (index.is_animation_index()) {
+    try_command(new DeleteAnimationCommand(*this, index));
+  } else {
+    try_command(new DeleteDirectionCommand(*this, index));
   }
 }
 

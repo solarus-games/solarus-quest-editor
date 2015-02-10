@@ -127,10 +127,14 @@ public:
 
   // Direction
   bool direction_exists(const Index& index) const;
-  int add_direction(const Index& index, QRect frame);
+  int add_direction(const Index& index, const QRect &frame);
+  int insert_direction(
+      const Index& index, const Solarus::SpriteAnimationDirectionData &data);
   void delete_direction(const Index& index);
   void move_direction(const Index& index, int new_direction_nb);
 
+  Solarus::SpriteAnimationDirectionData
+    get_direction_data(const Index& index) const;
   QRect get_direction_frame_rect(const Index& index) const;
   QList<QRect> get_direction_frames(const Index& index) const;
   QPoint get_direction_position(const Index& index) const;

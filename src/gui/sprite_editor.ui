@@ -67,7 +67,56 @@
         </widget>
        </item>
        <item>
-        <widget class="SpriteTreeView" name="sprite_tree_view"/>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="SpriteTreeView" name="sprite_tree_view"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QPushButton" name="create_button">
+             <property name="toolTip">
+              <string>Add</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/images.qrc">
+               <normaloff>:/images/icon_add.png</normaloff>:/images/icon_add.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="delete_button">
+             <property name="toolTip">
+              <string>Delete</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/images.qrc">
+               <normaloff>:/images/icon_cross.png</normaloff>:/images/icon_cross.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QGroupBox" name="animation_properties_group_box">

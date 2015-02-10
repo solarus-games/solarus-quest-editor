@@ -377,8 +377,6 @@ void SpriteModel::create_animation(const QString& animation_name) {
   Index selection = get_selected_index();
   clear_selection();
 
-  int animation_nb = get_animation_nb(animation_name);
-
   // Add the animation to the sprite file.
   sprite.add_animation(animation_name.toStdString(), SpriteAnimationData());
 
@@ -386,6 +384,7 @@ void SpriteModel::create_animation(const QString& animation_name) {
   build_index_map();
 
   // Call beginInsertRows() as requested by QAbstractItemModel.
+  int animation_nb = get_animation_nb(animation_name);
   beginInsertRows(QModelIndex(), animation_nb, animation_nb);
 
   // Update our animation model list.
@@ -692,10 +691,10 @@ bool SpriteModel::direction_exists(const Index& index) const {
  * @return Index of the created direction.
  * @throws EditorException in case of error.
  */
-int SpriteModel::add_direction(const Index& index, QRect frame) {
+int SpriteModel::add_direction(const Index& index, const QRect& frame) {
 
   // Make some checks first.
-  if (animation_exists(index)) {
+  if (!animation_exists(index)) {
     throw EditorException(
             tr("Animation '%1' don't exists").arg(index.animation_name));
   }
@@ -729,6 +728,62 @@ int SpriteModel::add_direction(const Index& index, QRect frame) {
 }
 
 /**
+ * @brief Inserts a direction in an animation of this sprite.
+ * @param index Index of the direction to insert.
+ * @param data The direction data to insert.
+ * @return Index of the inserted direction.
+ * @throws EditorException in case of error.
+ */
+int SpriteModel::insert_direction(
+    const Index& index, const SpriteAnimationDirectionData& data) {
+
+  // Make some checks first.
+  if (!animation_exists(index)) {
+    throw EditorException(
+            tr("Animation '%1' don't exists").arg(index.animation_name));
+  }
+
+  // Save and clear the selection.
+  Index selection = get_selected_index();
+  clear_selection();
+
+  // Insert the direction to the sprite file.
+  SpriteAnimationData& animation_data = get_animation(index);
+
+  animation_data.add_direction(data);
+
+  int last_dir = animation_data.get_num_directions() - 1;
+  animation_data.move_direction(last_dir, index.direction_nb);
+
+  int direction_nb = std::min(index.direction_nb, last_dir);
+
+  // Call beginInsertRows() as requested by QAbstractItemModel.
+  QModelIndex model_index = get_model_index(Index(index.animation_name));
+  beginInsertRows(model_index, direction_nb, direction_nb);
+
+  // Update our animation model list.
+  int animation_nb = get_animation_nb(index);
+  auto& directions = animations[animation_nb].directions;
+  directions.insert(
+        direction_nb, DirectionModel(index.animation_name, direction_nb));
+
+  // Update direction model indexes.
+  for (int nb = direction_nb + 1; nb < directions.size(); nb++) {
+    directions[nb].index->direction_nb = nb;
+  }
+
+  // Notify people before restoring the selection, so that they have a
+  // chance to know new indexes before receiving selection signals.
+  endInsertRows();
+  emit direction_added(Index(index.animation_name, direction_nb));
+
+  // Restore the selection.
+  set_selected_index(selection);
+
+  return direction_nb;
+}
+
+/**
  * @brief Deletes a direction.
  * @param index Index of the direction to delete.
  * @throws EditorException in case of error.
@@ -745,6 +800,10 @@ void SpriteModel::delete_direction(const Index &index) {
 
   // Save and clear the selection.
   Index selection = get_selected_index();
+  if (selection.animation_name == index.animation_name &&
+      selection.direction_nb == index.direction_nb) {
+    selection.direction_nb = -1;
+  }
   clear_selection();
 
   // Delete the direction in the sprite file.
@@ -756,7 +815,13 @@ void SpriteModel::delete_direction(const Index &index) {
 
   // Update our direction model list.
   int animation_nb = get_animation_nb(index);
-  animations[animation_nb].directions.removeAt(index.direction_nb);
+  auto& directions = animations[animation_nb].directions;
+  directions.removeAt(index.direction_nb);
+
+  // Update direction model indexes.
+  for (int nb = index.direction_nb; nb < directions.size(); nb++) {
+    directions[nb].index->direction_nb = nb;
+  }
 
   // Notify people before restoring the selection, so that they have a
   // chance to know new indexes before receiving selection signals.
@@ -808,7 +873,7 @@ void SpriteModel::move_direction(const Index& index, int new_direction_nb) {
   int animation_nb = get_animation_nb(index);
   animations[animation_nb].directions.move(index.direction_nb, new_direction_nb);
 
-  // Update direction model indexes
+  // Update direction model indexes.
   int num_dir = animations[animation_nb].directions.size();
   for (int nb = 0; nb < num_dir; nb++) {
     animations[animation_nb].directions[nb].index->direction_nb = nb;
@@ -826,6 +891,20 @@ void SpriteModel::move_direction(const Index& index, int new_direction_nb) {
   }
 
   set_selected_index(selection);
+}
+
+/**
+ * @brief Returns a direction data.
+ * @param index A direction index.
+ * @return The direction data.
+ */
+SpriteAnimationDirectionData SpriteModel::get_direction_data(
+    const Index& index) const {
+
+  if (!direction_exists(index)) {
+    return SpriteAnimationDirectionData();
+  }
+  return get_direction(index);
 }
 
 /**
