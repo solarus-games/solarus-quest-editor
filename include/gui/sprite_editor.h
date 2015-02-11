@@ -75,10 +75,12 @@ public slots:
   void change_direction_num_columns_requested();
 
 private:
+
   Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
   QString sprite_id;            /**< Id of the sprite being edited. */
   SpriteModel* model;           /**< Sprite model being edited. */
   Quest& quest;                 /**< The quest. */
+
 };
 
 #endif
