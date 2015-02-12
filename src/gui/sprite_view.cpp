@@ -48,7 +48,12 @@ SpriteView::SpriteView(QWidget* parent) :
   delete_direction_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(delete_direction_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_direction_requested()));
-  addAction(delete_direction_action);
+  duplicate_direction_action = new QAction(
+        QIcon(":/images/icon_copy.png"), tr("Duplicate..."), this);
+  // TODO: set a shortcut to duplicate a direction
+  connect(duplicate_direction_action, SIGNAL(triggered()),
+          this, SLOT(duplicate_selected_direction_requested()));
+  addAction(duplicate_direction_action);
 
   ViewSettings* view_settings = new ViewSettings(this);
   set_view_settings(*view_settings);
@@ -192,6 +197,19 @@ void SpriteView::update_grid_visibility() {
     // The foreground has changed.
     scene->invalidate();
   }
+}
+
+/**
+ * @brief Slot called when the user asks for ducplicate the selected direction.
+ */
+void SpriteView::duplicate_selected_direction_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    return;
+  }
+  QPoint posistion = model->get_direction_position(index);
+  emit duplicate_selected_direction_requested(posistion);
 }
 
 /**
@@ -387,6 +405,9 @@ void SpriteView::show_context_menu(const QPoint& where) {
 
   // Delete direction.
   menu->addAction(delete_direction_action);
+  menu->addAction(duplicate_direction_action);
+  menu->addSeparator();
+  menu->addAction(tr("Cancel"));
 
   // Create the menu at 1,1 to avoid the cursor being already in the first item.
   menu->popup(viewport()->mapToGlobal(where) + QPoint(1, 1));
@@ -483,7 +504,8 @@ void SpriteView::end_state_moving_direction() {
       emit change_selected_direction_position_requested(box.topLeft());
     });
     menu.addAction(move_direction_action);
-    QAction* duplicate_direction_action = new QAction(tr("Duplicate here"), this);
+    QAction* duplicate_direction_action =
+      new QAction(QIcon(":/images/icon_copy.png"), tr("Duplicate here"), this);
     connect(duplicate_direction_action, &QAction::triggered, [=] {
       emit duplicate_selected_direction_requested(box.topLeft());
     });

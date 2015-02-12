@@ -114,9 +114,12 @@ public:
 
   bool animation_exists(const Index& index) const;
   void create_animation(const QString& animation_name);
+  void insert_animation(
+      const Index& index, const Solarus::SpriteAnimationData& data);
   void delete_animation(const Index& index);
   void set_animation_name(const Index& index, const QString& new_name);
 
+  Solarus::SpriteAnimationData get_animation_data(const Index& index) const;
   QString get_animation_source_image(const Index& index) const;
   bool is_animation_image_is_tileset(const Index& index) const;
   void set_animation_source_image(const Index& index, const QString &src_image);

@@ -433,6 +433,70 @@ void SpriteModel::create_animation(const QString& animation_name) {
 }
 
 /**
+ * @brief Inserts an animation in this sprite.
+ *
+ * The index of the selection may change, since animations are sorted
+ * alphabetically.
+ * Emits rowsAboutToBeInserted(), inserts the animation
+ * and then emits rowsInserted(), as required by QAbstractItemModel.
+ *
+ * Then, emits animation_created().
+ *
+ * The newly created animation is not initially selected.
+ * The existing selection is preserved, though the index of many
+ * animations can change.
+ * The selection is cleared before the operations and restored after,
+ * updated with the new index.
+ *
+ * @param index Index of the animation to insert.
+ * @param data Data of the animation.
+ * @throws EditorException in case of error.
+ */
+void SpriteModel::insert_animation(
+    const Index& index, const Solarus::SpriteAnimationData& data) {
+
+  // Make some checks first.
+  if (index.animation_name.length() <= 0) {
+      throw EditorException(tr("Animation name cannot be empty"));
+  }
+
+  if (animation_exists(index)) {
+      throw EditorException(
+            tr("Animation '%1' already exists").arg(index.animation_name));
+  }
+
+  // Save and clear the selection since a lot of indexes may change.
+  Index selection = get_selected_index();
+  clear_selection();
+
+  // Add the animation to the sprite file.
+  sprite.add_animation(index.animation_name.toStdString(), data);
+
+  // Rebuild indexes in the list model (indexes were shifted).
+  build_index_map();
+
+  // Call beginInsertRows() as requested by QAbstractItemModel.
+  int animation_nb = get_animation_nb(index.animation_name);
+  beginInsertRows(QModelIndex(), animation_nb, animation_nb);
+
+  // Update our animation model list.
+  animations.insert(animation_nb, AnimationModel(index.animation_name));
+  int num_directions = data.get_num_directions();
+  for (int nb = 0; nb < num_directions; nb++) {
+    animations[animation_nb].directions.append(
+          DirectionModel(index.animation_name, nb));
+  }
+
+  // Notify people before restoring the selection, so that they have a
+  // chance to know new indexes before receiving selection signals.
+  endInsertRows();
+  emit animation_created(index);
+
+  // Restore the selection.
+  set_selected_index(selection);
+}
+
+/**
  * @brief Deletes an animation.
  *
  * The index of the selection may change, since animations are sorted
@@ -567,6 +631,19 @@ void SpriteModel::set_animation_name(const Index& index, const QString& new_name
   }
 
   set_selected_index(selection);
+}
+
+/**
+ * @brief Returns an animation data.
+ * @param index An animation index.
+ * @return The animation data.
+ */
+SpriteAnimationData SpriteModel::get_animation_data(const Index& index) const {
+
+  if (!animation_exists(index)) {
+    return SpriteAnimationData();
+  }
+  return get_animation(index);
 }
 
 /**

@@ -53,6 +53,10 @@ public slots:
   void zoom_out();
   void update_grid_visibility();
 
+private slots:
+
+  void duplicate_selected_direction_requested();
+
 protected:
 
   void drawForeground(QPainter* painter, const QRectF& rectangle) override;
@@ -87,6 +91,8 @@ private:
   QPointer<SpriteModel> model;         /**< The sprite model. */
   SpriteScene* scene;                  /**< The scene viewed. */
   QAction* delete_direction_action;    /**< Action of deleting the selected
+                                        * direction. */
+  QAction* duplicate_direction_action; /**< Action of duplicate the selected
                                         * direction. */
   State state;                         /**< Current operation done by user. */
   QPoint dragging_start_point;         /**< In states DRAWING_RECTANGLE and

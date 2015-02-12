@@ -83,6 +83,39 @@ private:
 };
 
 /**
+ * @brief Duplicate an animation.
+ */
+class DuplicateAnimationCommand : public SpriteEditorCommand {
+
+public:
+
+  DuplicateAnimationCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Duplicate animation")),
+    index(index),
+    new_index(index) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_animation(new_index);
+  }
+
+  virtual void redo() override {
+
+    new_index.animation_name = index.animation_name + QObject::tr(" (copy)");
+    const auto& animation = get_model().get_animation_data(index);
+    get_model().insert_animation(new_index, animation);
+    get_model().set_selected_animation(new_index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  SpriteModel::Index new_index;
+};
+
+/**
  * @brief Change animation name.
  */
 class RenameAnimationCommand : public SpriteEditorCommand {
@@ -133,46 +166,25 @@ public:
 
   virtual void undo() override {
 
-    get_model().create_animation(index.animation_name);
-    get_model().set_animation_source_image(index, src_image);
-    get_model().set_animation_frame_delay(index, frame_delay);
-    get_model().set_animation_loop_on_frame(index, loop_on_frame);
+    get_model().insert_animation(index, data);
     if (is_default) {
       get_model().set_default_animation_name(index.animation_name);
-    }
-    SpriteModel::Index dir_index = index;
-    for (int nb = 0; nb < directions.size(); nb++) {
-      dir_index.direction_nb = nb;
-      get_model().insert_direction(dir_index, directions[nb]);
     }
     get_model().set_selected_animation(index);
   }
 
   virtual void redo() override {
 
-    directions.clear();
-    int num_directions = get_model().get_animation_num_directions(index);
-    src_image = get_model().get_animation_source_image(index);
-    frame_delay = get_model().get_animation_frame_delay(index);
-    loop_on_frame = get_model().get_animation_loop_on_frame(index);
     is_default = get_model().get_default_animation_name() == index.animation_name;
-
-    SpriteModel::Index dir_index = index;
-    for (int nb = 0; nb < num_directions; nb++) {
-      dir_index.direction_nb = nb;
-      directions.append(get_model().get_direction_data(dir_index));
-    }
+    data = get_model().get_animation_data(index);
     get_model().delete_animation(index);
   }
 
 private:
 
   SpriteModel::Index index;
-  QString src_image;
-  uint32_t frame_delay;
-  int loop_on_frame;
   bool is_default;
-  QList<Solarus::SpriteAnimationDirectionData> directions;
+  Solarus::SpriteAnimationData data;
 };
 
 /**
@@ -707,6 +719,8 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(duplicate_selected_direction_requested(QPoint)));
   connect(ui.rename_button, SIGNAL(clicked()),
           this, SLOT(rename_animation_requested()));
+  connect(ui.duplicate_button, SIGNAL(clicked()),
+          this, SLOT(duplicate_requested()));
   connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
   connect(ui.sprite_view, SIGNAL(delete_selected_direction_requested()),
           this, SLOT(delete_direction_requested()));
@@ -865,6 +879,25 @@ void SpriteEditor::create_direction_requested(const QRect& frame) {
   }
 
   try_command(new CreateDirectionCommand(*this, index, frame));
+}
+
+/**
+ * @brief Slot called when the user wants to duplicate the selection.
+ */
+void SpriteEditor::duplicate_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_valid()) {
+    // No selection.
+    return;
+  }
+
+  if (index.is_animation_index()) {
+    try_command(new DuplicateAnimationCommand(*this, index));
+  } else {
+    QPoint position = model->get_direction_position(index);
+    try_command(new DuplicateDirectionCommand(*this, index, position));
+  }
 }
 
 /**
