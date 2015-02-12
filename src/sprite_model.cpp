@@ -736,6 +736,10 @@ int SpriteModel::add_direction(const Index& index, const QRect& frame) {
             tr("Animation '%1' don't exists").arg(index.animation_name));
   }
 
+  // Save and clear the selection.
+  Index selection = get_selected_index();
+  clear_selection();
+
   // Add the direction to the sprite file.
   SpriteAnimationData& animation_data = get_animation(index);
   SpriteAnimationDirectionData direction(
@@ -760,6 +764,9 @@ int SpriteModel::add_direction(const Index& index, const QRect& frame) {
   // chance to know new indexes before receiving selection signals.
   endInsertRows();
   emit direction_added(Index(index.animation_name, direction_nb));
+
+  // Restore the selection.
+  set_selected_index(selection);
 
   return direction_nb;
 }
@@ -955,6 +962,25 @@ QRect SpriteModel::get_direction_frame_rect(const Index& index) const {
     return QRect();
   }
   return Rectangle::to_qrect(get_direction(index).get_frame());
+}
+
+/**
+ * @brief Returns a rect that contains all frames of a direction.
+ * @param index A direction index.
+ * @return The direction's frames rect.
+ */
+QRect SpriteModel::get_direction_all_frames_rect(const Index& index) const {
+
+  if (!direction_exists(index)) {
+    return QRect();
+  }
+
+  QRect rect = get_direction_frame_rect(index);
+  for (const QRect& frame: get_direction_frames(index)) {
+    rect.setBottom(qMax(frame.bottom(), rect.bottom()));
+    rect.setRight(qMax(frame.right(), rect.right()));
+  }
+  return rect;
 }
 
 /**

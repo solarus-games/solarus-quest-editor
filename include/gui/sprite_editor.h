@@ -49,7 +49,10 @@ public slots:
   void update_selection();
   void create_animation_requested();
   void rename_animation_requested();
+  void create_direction_requested(const QRect& frame);
+  void duplicate_selected_direction_requested(const QPoint &position);
   void delete_requested();
+  void delete_direction_requested();
 
   void update_animation_view();
   void update_default_animation_field();
@@ -66,7 +69,8 @@ public slots:
   void update_direction_size_field();
   void change_direction_size_requested();
   void update_direction_position_field();
-  void change_direction_position_requested();
+  void change_direction_position_requested_from_field();
+  void change_direction_position_requested(const QPoint& position);
   void update_direction_origin_field();
   void change_direction_origin_requested();
   void update_direction_num_frames_field();

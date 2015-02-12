@@ -23,6 +23,7 @@
 #include "quest_resources.h"
 #include "sprite_model.h"
 #include <QUndoStack>
+#include "point.h"
 
 namespace {
 
@@ -343,6 +344,42 @@ private:
 };
 
 /**
+ * @brief Duplicate a direction.
+ */
+class DuplicateDirectionCommand : public SpriteEditorCommand {
+
+public:
+
+  DuplicateDirectionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      const QPoint& position) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Duplicate direction")),
+    index(index) {
+
+    direction = get_model().get_direction_data(index);
+    direction.set_xy(Point::to_solarus_point(position));
+    this->index.direction_nb =
+        get_model().get_animation_num_directions(index);
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_direction(index);
+  }
+
+  virtual void redo() override {
+
+    index.direction_nb = get_model().insert_direction(index, direction);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  Solarus::SpriteAnimationDirectionData direction;
+};
+
+/**
  * @brief Delete a direction.
  */
 class DeleteDirectionCommand : public SpriteEditorCommand {
@@ -579,6 +616,7 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
         tr("Sprite '%1' has been modified. Save changes?").arg(sprite_id));
   set_zoom_supported(true);
   get_view_settings().set_zoom(2.0);
+  set_grid_supported(true);
 
   // Open the file.
   model = new SpriteModel(quest, sprite_id, this);
@@ -588,6 +626,8 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.sprite_tree_view->set_model(*model);
+  ui.sprite_view->set_model(model);
+  ui.sprite_view->set_view_settings(get_view_settings());
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
   ui.tileset_field->set_selected_id(model->get_sprite_id());
@@ -636,9 +676,11 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(model, SIGNAL(direction_position_changed(Index,QPoint)),
           this, SLOT(update_direction_position_field()));
   connect(ui.position_x_field, SIGNAL(editingFinished()),
-          this, SLOT(change_direction_position_requested()));
+          this, SLOT(change_direction_position_requested_from_field()));
   connect(ui.position_y_field, SIGNAL(editingFinished()),
-          this, SLOT(change_direction_position_requested()));
+          this, SLOT(change_direction_position_requested_from_field()));
+  connect(ui.sprite_view, SIGNAL(change_selected_direction_position_requested(QPoint)),
+          this, SLOT(change_direction_position_requested(QPoint)));
 
   connect(model, SIGNAL(direction_origin_changed(Index,QPoint)),
           this, SLOT(update_direction_origin_field()));
@@ -659,9 +701,15 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.create_button, SIGNAL(clicked()),
           this, SLOT(create_animation_requested()));
+  connect(ui.sprite_view, SIGNAL(add_direction_requested(QRect)),
+          this, SLOT(create_direction_requested(QRect)));
+  connect(ui.sprite_view, SIGNAL(duplicate_selected_direction_requested(QPoint)),
+          this, SLOT(duplicate_selected_direction_requested(QPoint)));
   connect(ui.rename_button, SIGNAL(clicked()),
           this, SLOT(rename_animation_requested()));
   connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
+  connect(ui.sprite_view, SIGNAL(delete_selected_direction_requested()),
+          this, SLOT(delete_direction_requested()));
 
   connect(&model->get_selection_model(),
           SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
@@ -806,6 +854,33 @@ void SpriteEditor::rename_animation_requested() {
 }
 
 /**
+ * @brief Slot called when the user wants to add a new direction.
+ */
+void SpriteEditor::create_direction_requested(const QRect& frame) {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_valid()) {
+    // No selection.
+    return;
+  }
+
+  try_command(new CreateDirectionCommand(*this, index, frame));
+}
+
+/**
+ * @brief Slot called when the user wants to duplicate the selected direction.
+ */
+void SpriteEditor::duplicate_selected_direction_requested(const QPoint& position) {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No selection.
+    return;
+  }
+  try_command(new DuplicateDirectionCommand(*this, index, position));
+}
+
+/**
  * @brief Slot called when the user wants to delete an animation or a direction.
  */
 void SpriteEditor::delete_requested() {
@@ -821,6 +896,19 @@ void SpriteEditor::delete_requested() {
   } else {
     try_command(new DeleteDirectionCommand(*this, index));
   }
+}
+
+/**
+ * @brief Slot called when the user wants to delete a direction.
+ */
+void SpriteEditor::delete_direction_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No selection.
+    return;
+  }
+  try_command(new DeleteDirectionCommand(*this, index));
 }
 
 /**
@@ -1066,8 +1154,21 @@ void SpriteEditor::update_direction_position_field() {
 
 /**
  * @brief Slot called when the user wants to change the direction position.
+ *
+ * Change the direction position from x and y field.
  */
-void SpriteEditor::change_direction_position_requested() {
+void SpriteEditor::change_direction_position_requested_from_field() {
+
+  QPoint position =
+      QPoint(ui.position_x_field->value(), ui.position_y_field->value());
+  change_direction_position_requested(position);
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction position.
+ */
+void SpriteEditor::change_direction_position_requested(
+    const QPoint& position) {
 
   SpriteModel::Index index = model->get_selected_index();
   if (!index.is_direction_index()) {
@@ -1076,8 +1177,6 @@ void SpriteEditor::change_direction_position_requested() {
   }
 
   QPoint old_position = model->get_direction_position(index);
-  QPoint position =
-      QPoint(ui.position_x_field->value(), ui.position_y_field->value());
 
   if (position == old_position) {
     // No change.
