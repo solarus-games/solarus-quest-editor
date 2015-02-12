@@ -27,6 +27,18 @@
        </sizepolicy>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="tileset_properties_group_box">
          <property name="sizePolicy">
@@ -354,14 +366,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TilePatternsListView</class>
-   <extends>QListView</extends>
-   <header>gui/tile_patterns_list_view.h</header>
-  </customwidget>
-  <customwidget>
    <class>TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>gui/tileset_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TilePatternsListView</class>
+   <extends>QListView</extends>
+   <header>gui/tile_patterns_list_view.h</header>
   </customwidget>
   <customwidget>
    <class>EnumSelector&lt;Ground&gt;</class>

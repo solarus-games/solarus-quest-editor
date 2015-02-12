@@ -27,6 +27,18 @@
        </sizepolicy>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="sprite_properties_group_box">
          <property name="title">
@@ -75,6 +87,12 @@
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QPushButton" name="create_button">
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="toolTip">
               <string>Add</string>
              </property>
@@ -85,10 +103,34 @@
               <iconset resource="../../resources/images.qrc">
                <normaloff>:/images/icon_add.png</normaloff>:/images/icon_add.png</iconset>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="rename_button">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="toolTip">
               <string>Rename</string>
              </property>
@@ -99,10 +141,34 @@
               <iconset resource="../../resources/images.qrc">
                <normaloff>:/images/icon_rename.png</normaloff>:/images/icon_rename.png</iconset>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="delete_button">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
              <property name="toolTip">
               <string>Delete</string>
              </property>
@@ -112,6 +178,12 @@
              <property name="icon">
               <iconset resource="../../resources/images.qrc">
                <normaloff>:/images/icon_cross.png</normaloff>:/images/icon_cross.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -199,6 +271,12 @@
                   <iconset resource="../../resources/images.qrc">
                    <normaloff>:/images/icon_edit.png</normaloff>:/images/icon_edit.png</iconset>
                  </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -235,7 +313,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>Frame delay</string>
+             <string>Frame delay (ms)</string>
             </property>
            </widget>
           </item>
@@ -272,7 +350,7 @@
           <item row="0" column="1">
            <widget class="QCheckBox" name="default_animation_value">
             <property name="text">
-             <string>set as default</string>
+             <string>Set as default</string>
             </property>
            </widget>
           </item>
