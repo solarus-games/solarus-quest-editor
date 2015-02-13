@@ -399,6 +399,18 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="direction_preview_group_box">
+         <property name="title">
+          <string>Direction preview</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="SpritePreviewer" name="sprite_previewer" native="true"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="direction_properties_group_box">
          <property name="title">
           <string>Direction properties</string>
@@ -631,6 +643,12 @@
    <class>SpriteView</class>
    <extends>QGraphicsView</extends>
    <header>gui/sprite_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SpritePreviewer</class>
+   <extends>QWidget</extends>
+   <header>gui/sprite_previewer.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

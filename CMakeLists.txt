@@ -95,6 +95,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/sprite_tree_view.h
   include/gui/sprite_scene.h
   include/gui/sprite_view.h
+  include/gui/sprite_previewer.h
   include/gui/text_editor.h
   include/gui/text_editor_widget.h
   include/gui/tile_patterns_list_view.h
@@ -155,6 +156,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/sprite_tree_view.cpp
   src/gui/sprite_scene.cpp
   src/gui/sprite_view.cpp
+  src/gui/sprite_previewer.cpp
   src/gui/text_editor.cpp
   src/gui/text_editor_widget.cpp
   src/gui/tile_patterns_list_view.cpp
@@ -194,6 +196,7 @@ set(solarus_quest_editor_FORMS
   src/gui/new_resource_element_dialog.ui
   src/gui/tileset_editor.ui
   src/gui/sprite_editor.ui
+  src/gui/sprite_previewer.ui
   src/gui/change_source_image_dialog.ui
 )
 

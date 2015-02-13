@@ -640,6 +640,7 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.sprite_tree_view->set_model(*model);
   ui.sprite_view->set_model(model);
   ui.sprite_view->set_view_settings(get_view_settings());
+  ui.sprite_previewer->set_model(model);
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
   ui.tileset_field->set_selected_id(model->get_sprite_id());
