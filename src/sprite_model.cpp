@@ -585,7 +585,7 @@ void SpriteModel::set_animation_name(const Index& index, const QString& new_name
   }
 
   if (animation_exists(new_name)) {
-      throw EditorException(tr("animation '%1' already exists").arg(new_name));
+      throw EditorException(tr("Animation '%1' already exists").arg(new_name));
   }
 
   // Save and clear the selection since a lot of indexes may change.

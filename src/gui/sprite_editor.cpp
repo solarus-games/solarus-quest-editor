@@ -103,7 +103,7 @@ public:
 
   virtual void redo() override {
 
-    new_index.animation_name = index.animation_name + QObject::tr(" (copy)");
+    new_index.animation_name = index.animation_name + SpriteEditor::tr(" (copy)");
     const auto& animation = get_model().get_animation_data(index);
     get_model().insert_animation(new_index, animation);
     get_model().set_selected_animation(new_index);

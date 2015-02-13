@@ -163,7 +163,7 @@ void SpriteScene::rebuild() {
     if (!src_image.isEmpty()) {
       QString path = get_quest().get_sprite_image_path(src_image);
       path = path.right(path.length() - get_quest().get_data_path().length() - 1);
-      addText(tr("Missing source image image '%1'").arg(path));
+      addText(tr("Missing source image '%1'").arg(path));
     }
   }
 

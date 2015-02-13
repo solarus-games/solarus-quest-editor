@@ -58,7 +58,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="sprite_id_field">
             <property name="toolTip">
-             <string>Filename of the tileset (without extension)</string>
+             <string>Filename of the sprite (without extension)</string>
             </property>
             <property name="text">
              <string/>
