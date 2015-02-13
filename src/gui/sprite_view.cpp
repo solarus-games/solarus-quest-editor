@@ -493,9 +493,12 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
  */
 void SpriteView::end_state_moving_direction() {
 
+  SpriteModel::Index index = model->get_selected_index();
   QRect box = current_area_item->rect().toRect();
   if (!box.isEmpty() &&
-      sceneRect().contains(box)) {
+      sceneRect().contains(box) &&
+      index.is_direction_index() &&
+      box != model->get_direction_all_frames_rect(index)) {
 
     // Context menu to move the direction.
     QMenu menu;
