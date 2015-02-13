@@ -256,7 +256,7 @@ void SpriteView::mousePressEvent(QMouseEvent* event) {
         scene->clearSelection();
         item->setSelected(true);
       }
-      else if (event->button() == Qt::LeftButton &&
+      if (event->button() == Qt::LeftButton &&
                model->get_selected_index().is_direction_index()) {
         // Allow to move it.
         start_state_moving_direction(event->pos());
