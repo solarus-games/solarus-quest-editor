@@ -97,6 +97,7 @@ public:
   QString get_default_animation_name() const;
   void set_default_animation_name(const QString& default_animation_name);
   bool exists(const Index& index) const;
+  QModelIndex get_model_index(const Index& index) const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
 
@@ -263,7 +264,6 @@ private:
 
   void build_index_map();
 
-  QModelIndex get_model_index(const Index& index) const;
   void set_animation_image_dirty(const Index& index);
   void set_direction_image_dirty(const Index& index);
 

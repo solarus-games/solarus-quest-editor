@@ -139,6 +139,29 @@ bool SpriteModel::exists(const Index& index) const {
 }
 
 /**
+ * @brief Returns a model index corresponding to a specified index.
+ * @param index Index of an animation or a direction.
+ * @return The corresponding model index or invalid model index if index no exists.
+ */
+QModelIndex SpriteModel::get_model_index(const Index& index) const {
+
+  if (!exists(index)) {
+    return QModelIndex();
+  }
+
+  // get model index of the animation
+  int animation_nb = get_animation_nb(index);
+  QModelIndex model_index = this->index(animation_nb, 0);
+
+  if (index.is_direction_index()) {
+    // return the direction model index
+    return this->index(index.direction_nb, 0, model_index);
+  }
+
+  return model_index;
+}
+
+/**
  * @brief Returns the tileset id used for animations images.
  * @return The tileset id.
  */
@@ -1516,29 +1539,6 @@ void SpriteModel::build_index_map() {
     names_to_indexes[animation_name] = index;
     ++index;
   }
-}
-
-/**
- * @brief Returns a model index corresponding to a specified index.
- * @param index Index of an animation or a direction.
- * @return The corresponding model index or invalid model index if index no exists.
- */
-QModelIndex SpriteModel::get_model_index(const Index& index) const {
-
-  if (!exists(index)) {
-    return QModelIndex();
-  }
-
-  // get model index of the animation
-  int animation_nb = get_animation_nb(index);
-  QModelIndex model_index = this->index(animation_nb, 0);
-
-  if (index.is_direction_index()) {
-    // return the direction model index
-    return this->index(index.direction_nb, 0, model_index);
-  }
-
-  return model_index;
 }
 
 /**

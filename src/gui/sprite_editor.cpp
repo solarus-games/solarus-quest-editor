@@ -1139,8 +1139,15 @@ void SpriteEditor::update_direction_view() {
   update_direction_num_columns_field();
 
   // If no directin is selected, disable the direction view.
-  bool enable = model->get_selected_index().is_direction_index();
+  SpriteModel::Index index = model->get_selected_index();
+  bool enable = index.is_direction_index();
   ui.direction_properties_group_box->setEnabled(enable);
+
+  // expand the selected animation item
+  if (enable) {
+    index.direction_nb = -1;
+    ui.sprite_tree_view->expand(model->get_model_index(index));
+  }
 }
 
 /**
