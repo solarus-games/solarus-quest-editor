@@ -643,6 +643,15 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
   ui.tileset_field->set_selected_id(model->get_sprite_id());
+
+  // Select the default animation and his first direction if exists
+  SpriteModel::Index index(model->get_default_animation_name());
+  int num_directions = model->get_animation_num_directions(index);
+  if (num_directions > 0) {
+    index.direction_nb = 0;
+  }
+  model->set_selected_index(index);
+
   update();
 
   // Make connections.
