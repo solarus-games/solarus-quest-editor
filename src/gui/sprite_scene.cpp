@@ -176,6 +176,9 @@ void SpriteScene::rebuild() {
     direction_item->setSelected(selected);
     direction_item->setZValue(selected);
     addItem(direction_item);
+    if (selected) {
+      direction_item->ensureVisible();
+    }
     direction_items.append(direction_item);
   }
 }
@@ -221,6 +224,7 @@ void SpriteScene::update_selection_to_scene(
       bool selected = index.direction_nb == nb;
       direction_items[nb]->setSelected(selected);
       direction_items[nb]->setZValue(selected);
+      direction_items[nb]->ensureVisible();
     }
 
     blocker.unblock();
