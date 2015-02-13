@@ -1773,159 +1773,165 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     <name>SpriteEditor</name>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="14"/>
-        <location filename="../build/ui_sprite_editor.h" line="452"/>
+        <location filename="../build/ui_sprite_editor.h" line="473"/>
         <source>Sprite editor</source>
         <translation>Éditeur de sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="45"/>
-        <location filename="../build/ui_sprite_editor.h" line="453"/>
+        <location filename="../build/ui_sprite_editor.h" line="474"/>
         <source>Sprite properties</source>
         <translation>Propriétés du sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="54"/>
-        <location filename="../build/ui_sprite_editor.h" line="457"/>
+        <location filename="../build/ui_sprite_editor.h" line="478"/>
         <source>Sprite id</source>
         <translation>Id du sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="61"/>
-        <location filename="../build/ui_sprite_editor.h" line="459"/>
+        <location filename="../build/ui_sprite_editor.h" line="480"/>
         <source>Filename of the sprite (without extension)</source>
         <translation>Nom de fichier du sprite (sans extension)</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="71"/>
-        <location filename="../build/ui_sprite_editor.h" line="462"/>
+        <location filename="../build/ui_sprite_editor.h" line="483"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="97"/>
-        <location filename="../build/ui_sprite_editor.h" line="464"/>
+        <location filename="../build/ui_sprite_editor.h" line="485"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="135"/>
-        <location filename="../build/ui_sprite_editor.h" line="468"/>
+        <location filename="../build/ui_sprite_editor.h" line="489"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="155"/>
-        <location filename="../build/ui_sprite_editor.h" line="472"/>
+        <location filename="../src/gui/sprite_editor.ui" line="173"/>
+        <location filename="../build/ui_sprite_editor.h" line="493"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="187"/>
-        <location filename="../build/ui_sprite_editor.h" line="476"/>
+        <location filename="../src/gui/sprite_editor.ui" line="211"/>
+        <location filename="../build/ui_sprite_editor.h" line="497"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="230"/>
-        <location filename="../build/ui_sprite_editor.h" line="479"/>
+        <location filename="../src/gui/sprite_editor.ui" line="254"/>
+        <location filename="../build/ui_sprite_editor.h" line="500"/>
         <source>Animation properties</source>
         <translation>Propriétés de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="242"/>
-        <location filename="../build/ui_sprite_editor.h" line="483"/>
+        <location filename="../src/gui/sprite_editor.ui" line="266"/>
+        <location filename="../build/ui_sprite_editor.h" line="504"/>
         <source>Source image</source>
         <translation>Image source</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="266"/>
-        <location filename="../build/ui_sprite_editor.h" line="485"/>
+        <location filename="../src/gui/sprite_editor.ui" line="290"/>
+        <location filename="../build/ui_sprite_editor.h" line="506"/>
         <source>source image of the animation</source>
         <translation>Image source de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="279"/>
-        <location filename="../build/ui_sprite_editor.h" line="489"/>
+        <location filename="../src/gui/sprite_editor.ui" line="303"/>
+        <location filename="../build/ui_sprite_editor.h" line="510"/>
         <source>Change</source>
         <translation>Changer</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="317"/>
-        <location filename="../build/ui_sprite_editor.h" line="492"/>
+        <location filename="../src/gui/sprite_editor.ui" line="341"/>
+        <location filename="../build/ui_sprite_editor.h" line="513"/>
         <source> ms</source>
         <translation> ms</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="333"/>
-        <location filename="../build/ui_sprite_editor.h" line="496"/>
+        <location filename="../src/gui/sprite_editor.ui" line="357"/>
+        <location filename="../build/ui_sprite_editor.h" line="517"/>
         <source>Frame delay</source>
         <translation>Délais entre les frames</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="340"/>
-        <location filename="../build/ui_sprite_editor.h" line="497"/>
+        <location filename="../src/gui/sprite_editor.ui" line="364"/>
+        <location filename="../build/ui_sprite_editor.h" line="518"/>
         <source>Loop on frame</source>
         <translation>Boucler sur la frame</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="363"/>
-        <location filename="../build/ui_sprite_editor.h" line="498"/>
+        <location filename="../src/gui/sprite_editor.ui" line="387"/>
+        <location filename="../build/ui_sprite_editor.h" line="519"/>
         <source>Default animation</source>
         <translation>Animation par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="370"/>
-        <location filename="../build/ui_sprite_editor.h" line="499"/>
+        <location filename="../src/gui/sprite_editor.ui" line="394"/>
+        <location filename="../build/ui_sprite_editor.h" line="520"/>
         <source>Set as default</source>
         <translation>Définir par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="380"/>
-        <location filename="../build/ui_sprite_editor.h" line="500"/>
+        <location filename="../src/gui/sprite_editor.ui" line="404"/>
+        <location filename="../build/ui_sprite_editor.h" line="521"/>
+        <source>Direction preview</source>
+        <translation>Prévisualisation de la direction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_editor.ui" line="416"/>
+        <location filename="../build/ui_sprite_editor.h" line="522"/>
         <source>Direction properties</source>
         <translation>Propriétés de la direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="389"/>
-        <location filename="../build/ui_sprite_editor.h" line="501"/>
+        <location filename="../src/gui/sprite_editor.ui" line="425"/>
+        <location filename="../build/ui_sprite_editor.h" line="523"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="408"/>
-        <location filename="../src/gui/sprite_editor.ui" line="476"/>
-        <location filename="../build/ui_sprite_editor.h" line="502"/>
-        <location filename="../build/ui_sprite_editor.h" line="506"/>
+        <location filename="../src/gui/sprite_editor.ui" line="444"/>
+        <location filename="../src/gui/sprite_editor.ui" line="512"/>
+        <location filename="../build/ui_sprite_editor.h" line="524"/>
+        <location filename="../build/ui_sprite_editor.h" line="528"/>
         <source>,</source>
         <translation>,</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="440"/>
-        <location filename="../build/ui_sprite_editor.h" line="503"/>
+        <location filename="../src/gui/sprite_editor.ui" line="476"/>
+        <location filename="../build/ui_sprite_editor.h" line="525"/>
         <source>Origin</source>
         <translation>Origine</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="447"/>
-        <location filename="../build/ui_sprite_editor.h" line="504"/>
+        <location filename="../src/gui/sprite_editor.ui" line="483"/>
+        <location filename="../build/ui_sprite_editor.h" line="526"/>
         <source>Number of frames</source>
         <translation>Nombre de frames</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="454"/>
-        <location filename="../build/ui_sprite_editor.h" line="505"/>
+        <location filename="../src/gui/sprite_editor.ui" line="490"/>
+        <location filename="../build/ui_sprite_editor.h" line="527"/>
         <source>Number of columns</source>
         <translation>Nombre de colonnes</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="531"/>
-        <location filename="../build/ui_sprite_editor.h" line="507"/>
+        <location filename="../src/gui/sprite_editor.ui" line="567"/>
+        <location filename="../build/ui_sprite_editor.h" line="529"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="553"/>
-        <location filename="../build/ui_sprite_editor.h" line="508"/>
+        <location filename="../src/gui/sprite_editor.ui" line="589"/>
+        <location filename="../build/ui_sprite_editor.h" line="530"/>
         <source>x</source>
         <translation>x</translation>
     </message>
@@ -2026,7 +2032,7 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Le sprite &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.cpp" line="807"/>
+        <location filename="../src/gui/sprite_editor.cpp" line="808"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -2100,6 +2106,49 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <location filename="../src/sprite_model.cpp" line="996"/>
         <source>Direction %1 don&apos;t exists in animation &apos;%2&apos;</source>
         <translation>La direction %1 n&apos;existe pas dans l&apos;animation &apos;%2&apos;</translation>
+    </message>
+</context>
+<context>
+    <name>SpritePreviewer</name>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="71"/>
+        <location filename="../build/ui_sprite_previewer.h" line="178"/>
+        <source>Last</source>
+        <translation>Dernière</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="103"/>
+        <location filename="../build/ui_sprite_previewer.h" line="182"/>
+        <source>Stop</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="135"/>
+        <location filename="../build/ui_sprite_previewer.h" line="186"/>
+        <source>Next</source>
+        <translation>Suivant</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="196"/>
+        <location filename="../build/ui_sprite_previewer.h" line="191"/>
+        <source>Previous</source>
+        <translation>Précédent</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="228"/>
+        <location filename="../build/ui_sprite_previewer.h" line="195"/>
+        <source>First</source>
+        <translation>Première</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="126"/>
+        <source>Pause</source>
+        <translation>Pause</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="129"/>
+        <source>Start</source>
+        <translation>Démarrer</translation>
     </message>
 </context>
 <context>
