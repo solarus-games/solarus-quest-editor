@@ -104,7 +104,9 @@ void ChangeSourceImageDialog::update_source_image() {
  */
 void ChangeSourceImageDialog::update_image_view() {
 
-  image_item.setPixmap(QPixmap::fromImage(QImage(image_path + source_image)));
+  QImage image(image_path + source_image);
+  image_item.setPixmap(QPixmap::fromImage(image));
+  scene.setSceneRect(QRectF(QPoint(0, 0), image.size()));
   ui.image_view->update();
 }
 
