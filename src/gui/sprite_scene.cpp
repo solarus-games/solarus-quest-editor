@@ -88,6 +88,8 @@ SpriteScene::SpriteScene(SpriteModel& model, QObject* parent) :
           this, SLOT(invalidate()));
   connect(&model, SIGNAL(direction_num_columns_changed(Index,int)),
           this, SLOT(invalidate()));
+  connect(&model, SIGNAL(animation_image_changed(Index,QString)),
+          this, SLOT(update_image()));
 }
 
 /**
@@ -148,28 +150,22 @@ void SpriteScene::drawBackground(QPainter* painter, const QRectF& rect) {
  */
 void SpriteScene::rebuild() {
 
+  // Get the selected index
   SpriteModel::Index index = model.get_selected_index();
   animation_name = index.animation_name;
 
+  // Remove existing direction items
+  QSignalBlocker blocker(this);
   for (auto& item: direction_items) {
     removeItem(item);
   }
   direction_items.clear();
+  blocker.unblock();
 
-  const QImage& image = model.get_animation_image(index);
+  // Update image
+  update_image();
 
-  if (image.isNull()) {
-    QString src_image = model.get_animation_source_image(index);
-    if (!src_image.isEmpty()) {
-      QString path = get_quest().get_sprite_image_path(src_image);
-      path = path.right(path.length() - get_quest().get_data_path().length() - 1);
-      addText(tr("Missing source image '%1'").arg(path));
-    }
-  }
-
-  setSceneRect(QRectF(QPoint(0, 0), image.size()));
-  invalidate();
-
+  // Create direction items
   int num_directions = model.get_animation_num_directions(index);
   SpriteModel::Index direction_index = index;
   for (int nb = 0; nb < num_directions; ++nb) {
@@ -185,6 +181,26 @@ void SpriteScene::rebuild() {
 }
 
 /**
+ * @brief Slot called when the source image of the animation has changed.
+ */
+void SpriteScene::update_image() {
+
+  const QImage& image = model.get_animation_image(animation_name);
+
+  if (image.isNull()) {
+    QString src_image = model.get_animation_source_image(animation_name);
+    if (!src_image.isEmpty()) {
+      QString path = get_quest().get_sprite_image_path(src_image);
+      path = path.right(path.length() - get_quest().get_data_path().length() - 1);
+      addText(tr("Missing source image '%1'").arg(path));
+    }
+  }
+
+  setSceneRect(QRectF(QPoint(0, 0), image.size()));
+  invalidate();
+}
+
+/**
  * @brief Slot called when the sprite selection has changed.
  *
  * The selection on the scene is updated.
@@ -193,21 +209,22 @@ void SpriteScene::update_selection_to_scene(
     const QItemSelection& /* selected */,
     const QItemSelection& /* deselected */) {
 
-  QSignalBlocker blocker(this);
-
   SpriteModel::Index index = model.get_selected_index();
   if (index.animation_name != animation_name) {
     rebuild();
   } else if (index.is_valid()) {
+
+    QSignalBlocker blocker(this);
+
     // Update the scene with the change.
     for (int nb = 0; nb < direction_items.size(); ++nb) {
       bool selected = index.direction_nb == nb;
       direction_items[nb]->setSelected(selected);
       direction_items[nb]->setZValue(selected);
     }
-  }
 
-  blocker.unblock();
+    blocker.unblock();
+  }
 }
 
 /**
