@@ -313,6 +313,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="frame_delay_field">
+            <property name="suffix">
+             <string> ms</string>
+            </property>
             <property name="maximum">
              <number>99999</number>
             </property>
@@ -327,7 +330,7 @@
              <string/>
             </property>
             <property name="text">
-             <string>Frame delay (ms)</string>
+             <string>Frame delay</string>
             </property>
            </widget>
           </item>
