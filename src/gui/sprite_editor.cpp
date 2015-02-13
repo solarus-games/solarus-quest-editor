@@ -827,6 +827,13 @@ void SpriteEditor::update_selection() {
   update_animation_view();
   update_direction_view();
 
+  // Ensures that the selected item is visible in the tree view
+  SpriteModel::Index index = model->get_selected_index();
+  if (index.is_valid()) {
+    ui.sprite_tree_view->scrollTo(model->get_model_index(index));
+  }
+
+  // Update buttons
   bool enable = model->get_selected_index().is_valid();
   ui.rename_button->setEnabled(enable);
   ui.delete_button->setEnabled(enable);
