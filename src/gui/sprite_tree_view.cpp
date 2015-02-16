@@ -41,4 +41,3 @@ void SpriteTreeView::set_model(SpriteModel& model) {
   setSelectionModel(&model.get_selection_model());
 }
 
-
