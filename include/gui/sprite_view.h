@@ -73,8 +73,7 @@ private:
    */
   enum class State {
       NORMAL,                   /**< Can click on directions. */
-      DRAWING_RECTANGLE,        /**< Drawing a rectangle for a selection or
-                                 * a new direction. */
+      DRAWING_RECTANGLE,        /**< Drawing a rectangle for a new direction. */
       MOVING_DIRECTION          /**< Moving an existing direcion to another
                                  * place in the PNG image. */
   };
