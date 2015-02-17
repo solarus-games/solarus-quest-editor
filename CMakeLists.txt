@@ -103,6 +103,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_scene.h
   include/gui/tileset_view.h
   include/gui/zoom_tool.h
+  include/gui/quest_properties_editor.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -164,6 +165,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
   src/gui/zoom_tool.cpp
+  src/gui/quest_properties_editor.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp
@@ -198,6 +200,7 @@ set(solarus_quest_editor_FORMS
   src/gui/sprite_editor.ui
   src/gui/sprite_previewer.ui
   src/gui/change_source_image_dialog.ui
+  src/gui/quest_properties_editor.ui
 )
 
 # Generate .h from .ui.

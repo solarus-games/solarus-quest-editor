@@ -887,6 +887,16 @@ bool Quest::is_in_root_path(const QString& path) const {
 }
 
 /**
+ * @brief Returns whether a path is the data path.
+ * @param path The path to test.
+ * @return @c true if this path is the data path.
+ */
+bool Quest::is_data_path(const QString& path) const {
+
+  return path == get_data_path();
+}
+
+/**
  * @brief Checks that a path is under the quest path.
  *
  * It is okay if such a file does not exist yet.

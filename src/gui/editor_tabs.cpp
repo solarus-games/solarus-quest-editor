@@ -21,6 +21,7 @@
 #include "gui/text_editor.h"
 #include "gui/tileset_editor.h"
 #include "gui/sprite_editor.h"
+#include "gui/quest_properties_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include <QFileInfo>
@@ -107,6 +108,28 @@ void EditorTabs::open_resource(
   case ResourceType::FONT:
     // These resource types cannot be edited.
     break;
+  }
+}
+
+/**
+ * @brief Shows a tab to edit the quest properties.
+ * @param quest A Solarus quest.
+ */
+void EditorTabs::open_quest_properties_editor(Quest& quest) {
+
+  // Find the existing tab if any.
+  int index = find_editor(quest.get_properties_path());
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new QuestPropertiesEditor(quest));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
   }
 }
 
@@ -412,6 +435,9 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
   else if (quest.is_script(canonical_path)) {
     // A Lua script that is not a resource element.
     open_text_editor(quest, canonical_path);
+  }
+  else if (quest.is_data_path(canonical_path)) {
+    open_quest_properties_editor(quest);
   }
 }
 

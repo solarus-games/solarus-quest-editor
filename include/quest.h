@@ -84,6 +84,7 @@ public:
   static bool is_valid_file_name(const QString& file_name);
   static void check_valid_file_name(const QString& file_name);
   bool is_in_root_path(const QString& path) const;
+  bool is_data_path(const QString& path) const;
   void check_is_in_root_path(const QString& path) const;
   bool exists(const QString& path) const;
   void check_exists(const QString& path) const;

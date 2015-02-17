@@ -37,9 +37,28 @@ public:
   QString get_solarus_version() const;
   QString get_solarus_version_without_patch() const;
 
+  QString get_write_dir() const;
+  void set_write_dir(const QString& write_dir);
+
+  QString get_title_bar() const;
+  void set_title_bar(const QString& title_bar);
+
+  QSize get_normal_quest_size() const;
+  void set_normal_quest_size(const QSize& size);
+
+  QSize get_min_quest_size() const;
+  void set_min_quest_size(const QSize& size);
+
+  QSize get_max_quest_size() const;
+  void set_max_quest_size(const QSize& size);
+
 signals:
 
-  // TODO
+  void write_dir_changed(const QString& write_dir);
+  void title_bar_changed(const QString& title_bar);
+  void normal_size_changed(const QSize& size);
+  void min_size_changed(const QSize& size);
+  void max_size_changed(const QSize& size);
 
 private slots:
 

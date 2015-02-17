@@ -41,6 +41,7 @@ public:
 
   void open_resource(
       Quest& quest, ResourceType resource_type, const QString& id);
+  void open_quest_properties_editor(Quest& quest);
   void open_map_editor(
       Quest& quest, const QString& path);
   void open_tileset_editor(

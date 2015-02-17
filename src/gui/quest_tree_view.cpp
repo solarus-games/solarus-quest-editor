@@ -169,8 +169,8 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
   QString path = model->get_file_path(index);
   QMenu* menu = new QMenu(this);
 
-  build_context_menu_new(*menu, path);
   build_context_menu_open(*menu, path);
+  build_context_menu_new(*menu, path);
   build_context_menu_rename(*menu, path);
   build_context_menu_delete(*menu, path);
 
@@ -339,6 +339,11 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   else if (quest.is_script(path)) {
     // Open a Lua script that is not a resource.
     open_action->setIcon(QIcon(":/images/icon_script.png"));
+    menu.addAction(open_action);
+  }
+  else if (quest.is_data_path(path)) {
+    // Open quest properties file.
+    open_action->setText(tr("Open Properties"));
     menu.addAction(open_action);
   }
 }
