@@ -10,12 +10,14 @@ New features
 
 * French translation available.
 * The quest can now be run from the editor.
+* Add a quest properties editor (quest.dat has to be edited by hand before).
 * Add a toolbar.
 * Add new keyboard shortcuts.
 * Tileset editor: undo/redo is now supported.
 * Tileset editor: multi-selection is now supported.
 * Tileset editor: showing the grid is now supported.
 * Sprite editor: undo/redo is now supported.
+* Sprite editor: showing the grid is now supported.
 * Quest tree: organize the view in columns (file name, description, type).
 * Quest tree: show resources whose file is missing on the filesystem.
 * Quest tree: show files that look like resources but are not declared.
@@ -34,10 +36,10 @@ At this moment, some important features of the old editor are still to be
 done in the new one.
 
 * Edit maps.
-* Edit sprites.
 
 Bug fixes
 ---------
 
 * Fix encoding of non-ascii characters in project_db.dat with Windows.
+* Fix Ctrl+S shortcut not always working.
 
