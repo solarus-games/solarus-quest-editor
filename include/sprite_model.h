@@ -45,14 +45,14 @@ class SpriteModel : public QAbstractItemModel {
 public:
 
   /**
-   * @brief Index of an animation or a direction.
+   * @brief Index identifying an animation and direction of a sprite.
    */
   struct Index {
 
   public:
 
     /**
-     * @brief Creates index.
+     * @brief Creates a sprite direction index.
      * @param animation_name Animation name of this index.
      * @param direction_nb Direction number of this index.
      */
