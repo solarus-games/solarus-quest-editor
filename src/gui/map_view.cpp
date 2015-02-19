@@ -61,11 +61,6 @@ void MapView::set_model(MapModel* model) {
     // Enable useful features if there is an image.
     setDragMode(QGraphicsView::RubberBandDrag);
 
-    // Scale the view of 0.5 because the whole scene works with upscaled
-    // coordinates.
-    double initial_scale_factor = MapScene::scene_to_quest(1.0);
-    scale(initial_scale_factor, initial_scale_factor);
-
     if (view_settings != nullptr) {
       view_settings->set_zoom(2.0);  // Initial zoom: x2.
     }
@@ -222,7 +217,7 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
-  const int square_size = MapScene::quest_to_scene(16);
+  const int square_size = 16;
   GuiTools::draw_grid(*painter, rectangle.toRect(), square_size);
 
   QGraphicsView::drawForeground(painter, rectangle);

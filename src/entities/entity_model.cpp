@@ -362,7 +362,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
     }
   }
 
-  painter.drawPixmap(QRect(QPoint(0, 0), get_size() * 2), sprite);
+  painter.drawPixmap(QRect(QPoint(0, 0), get_size()), sprite);
   return true;
 }
 
@@ -376,6 +376,11 @@ void EntityModel::draw_as_icon(QPainter& painter) const {
     // Lazily create the icon.
     icon = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name()));
   }
-  painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, icon);  // TODO don't hardcode 2
+
+  // We draw a 32x32 icon on a 16x16 square.
+  // It will have a better resolution than tiles and sprites.
+  painter.scale(0.5, 0.5);
+  painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, icon);
+  painter.scale(2, 2);
 
 }
