@@ -340,10 +340,9 @@ void EntityItem::paint(QPainter* painter,
     return;
   }
 
-  const bool selected = option->state & QStyle::State_Selected;
-
   // First, paint the item like if there was no selection, to avoid
   // Qt's built-in selection marker.
+  const bool selected = option->state & QStyle::State_Selected;
   QStyleOptionGraphicsItem option_deselected = *option;
   option_deselected.state &= ~QStyle::State_Selected;
   map.draw_entity(index, *painter);

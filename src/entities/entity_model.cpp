@@ -37,7 +37,7 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   origin(0, 0),
   size(16, 16),
   icon(),
-  sprite(nullptr) {
+  sprite() {
 
   // If the entity has explicit size information in its properties, use it.
   if (entity.is_integer("width") && entity.is_integer("height")) {
@@ -355,10 +355,14 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
       // No direction.
       return false;
     }
-    sprite = sprite_model.get_animation_image(index);
+    sprite = sprite_model.get_direction_frame(index);
+    if (sprite.isNull()) {
+      // The sprite model did not give a valid image.
+      return false;
+    }
   }
 
-  painter.drawImage(get_bounding_box(), sprite);
+  painter.drawPixmap(QRect(QPoint(0, 0), get_size() * 2), sprite);
   return true;
 }
 

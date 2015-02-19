@@ -88,7 +88,7 @@ private:
   QSize size;                   /**< Size of the entity for the editor. */
   mutable QPixmap icon;         /**< Icon of the entity
                                  * to be displayed by the default. */
-  mutable QImage sprite;        /**< Sprite image of the entity to be displayed. */
+  mutable QPixmap sprite;       /**< Sprite image of the entity to be displayed. */
 };
 
 #endif
