@@ -50,6 +50,7 @@ public:
   MapModel(
       Quest& quest, const QString& map_id, QObject* parent = nullptr);
 
+  const Quest& get_quest() const;
   Quest& get_quest();
   QString get_map_id() const;
 

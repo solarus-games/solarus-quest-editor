@@ -90,9 +90,9 @@ public:
   };
 
   // Creation.
-  SpriteModel(Quest& quest, const QString& sprite_id, QObject* parent = nullptr);
+  SpriteModel(const Quest& quest, const QString& sprite_id, QObject* parent = nullptr);
 
-  Quest& get_quest();
+  const Quest& get_quest() const;
   QString get_sprite_id() const;
   QString get_default_animation_name() const;
   void set_default_animation_name(const QString& default_animation_name);
@@ -109,7 +109,7 @@ public:
   virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
   virtual QVariant data(const QModelIndex& model_index, int role) const override;
 
-  // Animation
+  // Animation.
   int get_animation_nb(const Index& index) const;
   Index get_animation_index(int animation_nb) const;
 
@@ -130,7 +130,7 @@ public:
   void set_animation_loop_on_frame(const Index& index, int loop_on_frame);
   int get_animation_num_directions(const Index& index) const;
 
-  // Direction
+  // Direction.
   bool direction_exists(const Index& index) const;
   int add_direction(const Index& index, const QRect &frame);
   int insert_direction(
@@ -155,13 +155,13 @@ public:
   int get_direction_num_columns(const Index& index) const;
   void set_direction_num_columns(const Index& index, int num_columns);
 
-  // Images
+  // Images.
   QImage get_animation_image(const Index& index) const;
   QList<QPixmap> get_direction_all_frames(const Index& index) const;
   QPixmap get_direction_frame(const Index& index) const;
   QPixmap get_direction_icon(const Index& index) const;
 
-  // Selection
+  // Selection.
   QItemSelectionModel& get_selection_model();
   bool is_selection_empty() const;
   Index get_selected_index() const;
@@ -273,7 +273,7 @@ private:
   const Solarus::SpriteAnimationDirectionData& get_direction(const Index& index) const;
   Solarus::SpriteAnimationDirectionData& get_direction(const Index& index);
 
-  Quest& quest;                   /**< The quest the sprite belongs to. */
+  const Quest& quest;             /**< The quest the sprite belongs to. */
   const QString sprite_id;        /**< Id of the sprite. */
   Solarus::SpriteData sprite;     /**< Sprite data wrapped by this model. */
   QString tileset_id;             /**< Tileset id used for animations images. */

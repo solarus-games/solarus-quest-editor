@@ -25,6 +25,8 @@
 #include <memory>
 
 class MapModel;
+class Quest;
+class QuestResources;
 class TilesetModel;
 class QPainter;
 
@@ -49,6 +51,8 @@ public:
   const MapModel& get_map() const;
   MapModel& get_map();
   const TilesetModel* get_tileset() const;
+  const Quest& get_quest() const;
+  const QuestResources& get_resources() const;
 
   EntityType get_type() const;
   QString get_type_name() const;
@@ -74,14 +78,17 @@ public:
 
 private:
 
+  bool draw_as_sprite(QPainter& painter) const;
+  void draw_as_icon(QPainter& painter) const;
+
   QPointer<MapModel> map;       /**< The map this entity belongs to.
                                  * (could be a reference but we want operator=) */
   Solarus::EntityData entity;   /**< The entity data wrapped. */
   QPoint origin;                /**< Origin point of the entity. */
   QSize size;                   /**< Size of the entity for the editor. */
   mutable QPixmap icon;         /**< Icon of the entity
-                                 * to be displayed in the map view by the default.
-                                 * of draw_entity(). */
+                                 * to be displayed by the default. */
+  mutable QImage sprite;        /**< Sprite image of the entity to be displayed. */
 };
 
 #endif

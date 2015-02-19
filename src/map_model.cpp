@@ -64,6 +64,15 @@ MapModel::MapModel(
 /**
  * @brief Returns the quest.
  */
+const Quest& MapModel::get_quest() const {
+  return quest;
+}
+
+/**
+ * @brief Returns the quest.
+ *
+ * Non-const version.
+ */
 Quest& MapModel::get_quest() {
   return quest;
 }

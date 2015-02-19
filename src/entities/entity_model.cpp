@@ -21,6 +21,9 @@
 #include "entities/tile.h"
 #include "map_model.h"
 #include "point.h"
+#include "quest.h"
+#include "quest_resources.h"
+#include "sprite_model.h"
 #include <QPainter>
 
 /**
@@ -33,7 +36,8 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   entity(entity),
   origin(0, 0),
   size(16, 16),
-  icon() {
+  icon(),
+  sprite(nullptr) {
 
   // If the entity has explicit size information in its properties, use it.
   if (entity.is_integer("width") && entity.is_integer("height")) {
@@ -111,6 +115,22 @@ MapModel& EntityModel::get_map() {
  */
 const TilesetModel* EntityModel::get_tileset() const {
   return get_map().get_tileset_model();
+}
+
+/**
+ * @brief Returns the quest the map of this entity belongs to.
+ * @return The quest.
+ */
+const Quest& EntityModel::get_quest() const {
+  return get_map().get_quest();
+}
+
+/**
+ * @brief Returns the quest resources.
+ * @return The resources.
+ */
+const QuestResources& EntityModel::get_resources() const {
+  return get_quest().get_resources();
 }
 
 /**
@@ -284,16 +304,74 @@ QVariant EntityModel::get_field(const QString& key) const {
 /**
  * @brief Draws this entity.
  *
- * The default implementation draws an icon representing the type of entity.
+ * The default implementation draws the entity's sprite if there is a "sprite"
+ * field, or draws an icon representing the type of entity otherwise.
  *
  * @param painter The painter to draw.
  */
 void EntityModel::draw(QPainter& painter) const {
 
-  if (icon.isNull()) {
-    // Lazily create the image.
-    icon = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name()));
+  if (!draw_as_sprite(painter)) {
+    draw_as_icon(painter);
+  }
+}
+
+/**
+ * @brief Draws this entity using the specified sprite.
+ * @param painter The painter to draw.
+ * @return @c true if the sprite was successfully drawn.
+ */
+bool EntityModel::draw_as_sprite(QPainter& painter) const {
+
+  const QString sprite_id = get_field("sprite").toString();
+  if (sprite_id.isEmpty()) {
+    // No sprite field.
+    return false;
   }
 
-  painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, icon);
+  if (!get_resources().exists(ResourceType::SPRITE, sprite_id)) {
+    // The sprite does not exist in the quest.
+    return false;
+  }
+
+  // Lazily create the image.
+  if (sprite.isNull()) {
+    SpriteModel sprite_model(get_quest(), sprite_id);
+    QString animation_name = sprite_model.get_default_animation_name();
+    if (animation_name.isEmpty()) {
+      // No animation.
+      return false;
+    }
+    bool has_direction_field;
+    int direction = get_field("direction").toInt(&has_direction_field);
+    if (!has_direction_field) {
+      direction = 0;
+    }
+    SpriteModel::Index index(animation_name, direction);
+    if (!sprite_model.direction_exists(index)) {
+      index.direction_nb = 0;
+    }
+    if (!sprite_model.direction_exists(index)) {
+      // No direction.
+      return false;
+    }
+    sprite = sprite_model.get_animation_image(index);
+  }
+
+  painter.drawImage(get_bounding_box(), sprite);
+  return true;
+}
+
+/**
+ * @brief Draws this entity using the icon of its entity type.
+ * @param painter The painter to draw.
+ */
+void EntityModel::draw_as_icon(QPainter& painter) const {
+
+  if (icon.isNull()) {
+    // Lazily create the icon.
+    icon = QPixmap(QString(":/images/entity_%1.png").arg(get_type_name()));
+  }
+  painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, icon);  // TODO don't hardcode 2
+
 }

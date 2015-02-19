@@ -34,7 +34,7 @@ using SpriteAnimationDirectionData = Solarus::SpriteAnimationDirectionData;
  * @throws EditorException If the file could not be opened.
  */
 SpriteModel::SpriteModel(
-    Quest& quest,
+    const Quest& quest,
     const QString& sprite_id,
     QObject* parent) :
   QAbstractItemModel(parent),
@@ -74,7 +74,7 @@ SpriteModel::SpriteModel(
 /**
  * @brief Returns the quest.
  */
-Quest& SpriteModel::get_quest() {
+const Quest& SpriteModel::get_quest() const {
   return quest;
 }
 
