@@ -21,6 +21,7 @@
 #include "map_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include <QStatusBar>
 #include <QToolBar>
 #include <QUndoStack>
 
@@ -175,6 +176,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   ui.setupUi(this);
   build_entity_creation_toolbar();
+  build_status_bar();
 
   // Get the map.
   ResourceType resource_type;
@@ -321,6 +323,19 @@ void MapEditor::build_entity_creation_toolbar() {
   entity_creation_toolbar->setStyleSheet("spacing: 0");
 
   ui.entity_creation_layout->insertWidget(0, entity_creation_toolbar);
+}
+
+/**
+ * @brief Initializes the status bar.
+ *
+ * The status bar is not made with Qt designer because
+ * one cannot create QStatusBar widgets with Qt designer.
+ */
+void MapEditor::build_status_bar() {
+
+  QStatusBar* status_bar = new QStatusBar();
+  ui.entity_creation_layout->addWidget(status_bar);
+  // TODO show the mouse coordinates
 }
 
 /**
