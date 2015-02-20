@@ -44,10 +44,9 @@ class EntityModel {
 
 public:
 
-  EntityModel(MapModel& map, const Solarus::EntityData& entity);  // TODO protected
-  virtual ~EntityModel();
   static std::unique_ptr<EntityModel> create(
       MapModel& map, const Solarus::EntityData& entity_data);
+  virtual ~EntityModel();
 
   const MapModel& get_map() const;
   MapModel& get_map();
@@ -76,6 +75,10 @@ public:
   QVariant get_field(const QString& key) const;
 
   virtual void draw(QPainter& painter) const;
+
+protected:
+
+  EntityModel(MapModel& map, const Solarus::EntityData& entity);
 
 private:
 

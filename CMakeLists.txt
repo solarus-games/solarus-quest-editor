@@ -62,12 +62,30 @@ include_directories(SYSTEM
 
 # Source files.
 set(solarus_quest_editor_SOURCES
+  include/entities/block.h
   include/entities/chest.h
+  include/entities/crystal.h
+  include/entities/crystal_block.h
+  include/entities/custom_entity.h
   include/entities/destination.h
   include/entities/destructible.h
+  include/entities/door.h
+  include/entities/dynamic_tile.h
+  include/entities/enemy.h
   include/entities/entity_model.h
   include/entities/entity_traits.h
+  include/entities/jumper.h
+  include/entities/npc.h
+  include/entities/pickable.h
+  include/entities/sensor.h
+  include/entities/separator.h
+  include/entities/shop_treasure.h
+  include/entities/stairs.h
+  include/entities/stream.h
+  include/entities/switch.h
+  include/entities/teletransporter.h
   include/entities/tile.h
+  include/entities/wall.h
   include/gui/change_pattern_id_dialog.h
   include/gui/change_source_image_dialog.h
   include/gui/closable_tab_bar.h
@@ -128,12 +146,30 @@ set(solarus_quest_editor_SOURCES
   include/sprite_model.h
   include/tileset_model.h
   include/view_settings.h
+  src/entities/block.cpp
   src/entities/chest.cpp
+  src/entities/crystal.cpp
+  src/entities/crystal_block.cpp
+  src/entities/custom_entity.cpp
   src/entities/destination.cpp
   src/entities/destructible.cpp
+  src/entities/door.cpp
+  src/entities/dynamic_tile.cpp
+  src/entities/enemy.cpp
   src/entities/entity_model.cpp
   src/entities/entity_traits.cpp
+  src/entities/jumper.cpp
+  src/entities/npc.cpp
+  src/entities/pickable.cpp
+  src/entities/sensor.cpp
+  src/entities/separator.cpp
+  src/entities/shop_treasure.cpp
+  src/entities/stairs.cpp
+  src/entities/stream.cpp
+  src/entities/switch.cpp
+  src/entities/teletransporter.cpp
   src/entities/tile.cpp
+  src/entities/wall.cpp
   src/gui/change_pattern_id_dialog.cpp
   src/gui/change_source_image_dialog.cpp
   src/gui/closable_tab_bar.cpp

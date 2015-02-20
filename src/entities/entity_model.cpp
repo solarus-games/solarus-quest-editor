@@ -14,16 +14,35 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/block.h"
 #include "entities/chest.h"
+#include "entities/custom_entity.h"
+#include "entities/crystal.h"
+#include "entities/crystal_block.h"
 #include "entities/destination.h"
 #include "entities/destructible.h"
+#include "entities/door.h"
+#include "entities/dynamic_tile.h"
+#include "entities/enemy.h"
 #include "entities/entity_model.h"
+#include "entities/jumper.h"
+#include "entities/pickable.h"
+#include "entities/npc.h"
+#include "entities/sensor.h"
+#include "entities/separator.h"
+#include "entities/shop_treasure.h"
+#include "entities/stairs.h"
+#include "entities/stream.h"
+#include "entities/switch.h"
+#include "entities/teletransporter.h"
 #include "entities/tile.h"
+#include "entities/wall.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "sprite_model.h"
+#include <QDebug>
 #include <QPainter>
 
 /**
@@ -65,8 +84,24 @@ std::unique_ptr<EntityModel> EntityModel::create(
 
   switch (entity_data.get_type()) {
 
+  case EntityType::BLOCK:
+    entity = new Block(map, entity_data);
+    break;
+
   case EntityType::CHEST:
     entity = new Chest(map, entity_data);
+    break;
+
+  case EntityType::CRYSTAL:
+    entity = new Crystal(map, entity_data);
+    break;
+
+  case EntityType::CRYSTAL_BLOCK:
+    entity = new CrystalBlock(map, entity_data);
+    break;
+
+  case EntityType::CUSTOM:
+    entity = new CustomEntity(map, entity_data);
     break;
 
   case EntityType::DESTINATION:
@@ -77,15 +112,77 @@ std::unique_ptr<EntityModel> EntityModel::create(
     entity = new Destructible(map, entity_data);
     break;
 
+  case EntityType::DOOR:
+    entity = new Door(map, entity_data);
+    break;
+
+  case EntityType::DYNAMIC_TILE:
+    entity = new DynamicTile(map, entity_data);
+    break;
+
+  case EntityType::ENEMY:
+    entity = new Enemy(map, entity_data);
+    break;
+
+  case EntityType::JUMPER:
+    entity = new Jumper(map, entity_data);
+    break;
+
+  case EntityType::NPC:
+    entity = new Npc(map, entity_data);
+    break;
+
+  case EntityType::PICKABLE:
+    entity = new Pickable(map, entity_data);
+    break;
+
+  case EntityType::SENSOR:
+    entity = new Sensor(map, entity_data);
+    break;
+
+  case EntityType::SEPARATOR:
+    entity = new Separator(map, entity_data);
+    break;
+
+  case EntityType::SHOP_TREASURE:
+    entity = new ShopTreasure(map, entity_data);
+    break;
+
+  case EntityType::STAIRS:
+    entity = new Stairs(map, entity_data);
+    break;
+
+  case EntityType::STREAM:
+    entity = new Stream(map, entity_data);
+    break;
+
+  case EntityType::SWITCH:
+    entity = new Switch(map, entity_data);
+    break;
+
+  case EntityType::TELETRANSPORTER:
+    entity = new Teletransporter(map, entity_data);
+    break;
+
   case EntityType::TILE:
     entity = new Tile(map, entity_data);
     break;
 
-  default:
-    // TODO other types
-    entity = new EntityModel(map, entity_data);
+  case EntityType::WALL:
+    entity = new Wall(map, entity_data);
     break;
 
+  case EntityType::ARROW:
+  case EntityType::BOMB:
+  case EntityType::BOOMERANG:
+  case EntityType::CARRIED_ITEM:
+  case EntityType::EXPLOSION:
+  case EntityType::FIRE:
+  case EntityType::HERO:
+  case EntityType::HOOKSHOT:
+    qCritical() << "Unexpected entity type (not allowed in map files): " <<
+                   QString::fromStdString(entity_data.get_type_name());
+    break;
   }
 
   return std::unique_ptr<EntityModel>(entity);
