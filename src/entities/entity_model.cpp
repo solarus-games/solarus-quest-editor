@@ -37,7 +37,8 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   origin(0, 0),
   size(16, 16),
   icon(),
-  sprite() {
+  sprite_model(nullptr),
+  sprite_image() {
 
   // If the entity has explicit size information in its properties, use it.
   if (entity.is_integer("width") && entity.is_integer("height")) {
@@ -334,35 +335,41 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
     return false;
   }
 
+  if (sprite_model == nullptr ||
+      sprite_model->get_sprite_id() != sprite_id) {
+    sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(get_quest(), sprite_id));
+  }
+
+  QString animation_name = sprite_model->get_default_animation_name();
+  if (animation_name.isEmpty()) {
+    // No animation.
+    return false;
+  }
+  bool has_direction_field;
+  int direction = get_field("direction").toInt(&has_direction_field);
+  if (!has_direction_field) {
+    direction = 0;
+  }
+  SpriteModel::Index index(animation_name, direction);
+  if (!sprite_model->direction_exists(index)) {
+    index.direction_nb = 0;
+  }
+  if (!sprite_model->direction_exists(index)) {
+    // No direction.
+    return false;
+  }
+
   // Lazily create the image.
-  if (sprite.isNull()) {
-    SpriteModel sprite_model(get_quest(), sprite_id);
-    QString animation_name = sprite_model.get_default_animation_name();
-    if (animation_name.isEmpty()) {
-      // No animation.
-      return false;
-    }
-    bool has_direction_field;
-    int direction = get_field("direction").toInt(&has_direction_field);
-    if (!has_direction_field) {
-      direction = 0;
-    }
-    SpriteModel::Index index(animation_name, direction);
-    if (!sprite_model.direction_exists(index)) {
-      index.direction_nb = 0;
-    }
-    if (!sprite_model.direction_exists(index)) {
-      // No direction.
-      return false;
-    }
-    sprite = sprite_model.get_direction_frame(index);
-    if (sprite.isNull()) {
+  if (sprite_image.isNull()) {
+    sprite_image = sprite_model->get_direction_frame(index);
+    if (sprite_image.isNull()) {
       // The sprite model did not give a valid image.
       return false;
     }
   }
 
-  painter.drawPixmap(QRect(QPoint(0, 0), get_size()), sprite);
+  QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
+  painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
   return true;
 }
 

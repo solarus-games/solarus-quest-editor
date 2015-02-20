@@ -27,6 +27,7 @@
 class MapModel;
 class Quest;
 class QuestResources;
+class SpriteModel;
 class TilesetModel;
 class QPainter;
 
@@ -88,7 +89,9 @@ private:
   QSize size;                   /**< Size of the entity for the editor. */
   mutable QPixmap icon;         /**< Icon of the entity
                                  * to be displayed by the default. */
-  mutable QPixmap sprite;       /**< Sprite image of the entity to be displayed. */
+  mutable std::unique_ptr<SpriteModel>
+      sprite_model;             /**< Sprite of the entity to be displayed. */
+  mutable QPixmap sprite_image; /**< Fixed image from the sprite. */
 };
 
 #endif
