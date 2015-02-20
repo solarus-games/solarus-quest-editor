@@ -26,4 +26,5 @@ CustomEntity::CustomEntity(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::CUSTOM);
 
+  set_origin(QPoint(8, 13));
 }

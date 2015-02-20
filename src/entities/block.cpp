@@ -26,4 +26,5 @@ Block::Block(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::BLOCK);
 
+  set_origin(QPoint(8, 13));
 }

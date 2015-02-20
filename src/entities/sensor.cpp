@@ -26,4 +26,5 @@ Sensor::Sensor(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::SENSOR);
 
+  set_origin(QPoint(8, 13));
 }

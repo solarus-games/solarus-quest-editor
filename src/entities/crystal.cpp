@@ -26,4 +26,5 @@ Crystal::Crystal(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::CRYSTAL);
 
+  set_origin(QPoint(8, 13));
 }

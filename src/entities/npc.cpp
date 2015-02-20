@@ -26,4 +26,5 @@ Npc::Npc(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::NPC);
 
+  set_origin(QPoint(8, 13));
 }
