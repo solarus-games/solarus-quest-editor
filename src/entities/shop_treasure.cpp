@@ -26,4 +26,5 @@ ShopTreasure::ShopTreasure(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::SHOP_TREASURE);
 
+  set_size(QSize(32, 32));
 }

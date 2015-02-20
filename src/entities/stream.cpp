@@ -26,4 +26,5 @@ Stream::Stream(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::STREAM);
 
+  set_origin(QPoint(8, 13));
 }
