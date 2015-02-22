@@ -85,5 +85,17 @@ bool PanTool::eventFilter(QObject* object, QEvent* event) {
     }
   }
 
+  else if (event->type() == QEvent::Wheel) {
+    QWheelEvent* wheel_event = static_cast<QWheelEvent*>(event);
+
+    if (QApplication::keyboardModifiers() == Qt::ShiftModifier) {
+      // Shift + wheel: pan the view.
+      int new_value =
+          scroll_area->horizontalScrollBar()->value() - wheel_event->delta();
+      scroll_area->horizontalScrollBar()->setValue(new_value);
+      return true;
+    }
+  }
+
   return QObject::eventFilter(object, event);
 }
