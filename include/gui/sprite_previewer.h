@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QTimer>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsLineItem>
 #include "sprite_model.h"
 
 /**
@@ -45,6 +46,7 @@ private slots:
   void update_buttons();
   void update_frames();
   void update_frame();
+  void update_origin();
 
   void timeout();
 
@@ -62,8 +64,10 @@ private:
   SpriteModel::Index index;     /**< The selected index. */
   QTimer timer;                 /**< The timer to animate the view. */
   QList<QPixmap> frames;        /**< Frames of the current direction. */
-  int current_frame;
-  QGraphicsPixmapItem* item;
+  int current_frame;            /**< Index of the current displayed frame. */
+  QGraphicsPixmapItem* item;    /**< Pixmap item of the displayed frame. */
+  QGraphicsLineItem* origin_h;  /**< Horizontal origin line. */
+  QGraphicsLineItem* origin_v;  /**< Vertical origin line. */
 
 };
 

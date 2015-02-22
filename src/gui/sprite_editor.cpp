@@ -636,7 +636,9 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   // Prepare the gui.
   const int side_width = 400;
-  ui.splitter->setSizes({ side_width, width() - side_width });
+  const int side_height = 550;
+  ui.horizontal_splitter->setSizes({ side_width, width() - side_width });
+  ui.vertical_splitter->setSizes({ side_height, height() - side_height });
   ui.sprite_tree_view->set_model(*model);
   ui.sprite_view->set_model(model);
   ui.sprite_view->set_view_settings(get_view_settings());

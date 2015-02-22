@@ -27,9 +27,16 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
   ui.setupUi(this);
 
   item = new QGraphicsPixmapItem();
+  origin_h = new QGraphicsLineItem();
+  origin_v = new QGraphicsLineItem();
+
+  origin_h->setPen(QPen(Qt::blue));
+  origin_v->setPen(QPen(Qt::blue));
 
   ui.frame_view->setScene(new QGraphicsScene());
   ui.frame_view->scene()->addItem(item);
+  ui.frame_view->scene()->addItem(origin_h);
+  ui.frame_view->scene()->addItem(origin_v);
 
   connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 
@@ -39,6 +46,8 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
   connect(ui.previous_button, SIGNAL(clicked()), this, SLOT(previous()));
   connect(ui.last_button, SIGNAL(clicked()), this, SLOT(last()));
   connect(ui.next_button, SIGNAL(clicked()), this, SLOT(next()));
+
+  connect(ui.origin_check_box, SIGNAL(clicked()), this, SLOT(update_origin()));
 }
 
 /**
@@ -74,6 +83,9 @@ void SpritePreviewer::set_model(SpriteModel* model) {
             this, SLOT(update_frames()));
     connect(model, SIGNAL(direction_num_columns_changed(Index,int)),
             this, SLOT(update_frames()));
+
+    connect(model, SIGNAL(direction_origin_changed(Index,QPoint)),
+            this, SLOT(update_origin()));
   }
 }
 
@@ -85,6 +97,7 @@ void SpritePreviewer::update_selection() {
   index = model->get_selected_index();
   update_frames();
   update_buttons();
+  update_origin();
 
   if (!index.is_direction_index()) {
     timer.stop();
@@ -155,6 +168,27 @@ void SpritePreviewer::update_frame() {
 
   QString size_str = QString::number(nb_frames > 0 ? nb_frames - 1 : 0);
   ui.frame_label->setText(QString::number(current_frame) + " / " + size_str);
+}
+
+/**
+ * @brief Update the displayed origin.
+ */
+void SpritePreviewer::update_origin() {
+
+  bool show_origin = ui.origin_check_box->isChecked();
+
+  origin_h->setVisible(show_origin);
+  origin_v->setVisible(show_origin);
+
+  if (!show_origin) {
+    return;
+  }
+
+  QRectF rect = ui.frame_view->sceneRect();
+  QPoint origin = model->get_direction_origin(index);
+
+  origin_h->setLine(0, origin.y(), rect.width(), origin.y());
+  origin_v->setLine(origin.x(), 0, origin.x(), rect.height());
 }
 
 /**
