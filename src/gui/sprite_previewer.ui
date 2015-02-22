@@ -42,6 +42,9 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="frame_label">
+            <property name="toolTip">
+             <string>Index of the current frame</string>
+            </property>
             <property name="text">
              <string/>
             </property>

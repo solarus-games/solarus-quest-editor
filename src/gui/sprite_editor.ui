@@ -73,7 +73,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="description_field"/>
+           <widget class="QLineEdit" name="description_field">
+            <property name="toolTip">
+             <string>User-friendly description to show in the editor</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -287,7 +291,7 @@
                <item>
                 <widget class="QLabel" name="src_image_value">
                  <property name="toolTip">
-                  <string>source image of the animation</string>
+                  <string>Source image of the animation</string>
                  </property>
                  <property name="text">
                   <string/>
@@ -295,7 +299,11 @@
                 </widget>
                </item>
                <item>
-                <widget class="ResourceSelector" name="tileset_field"/>
+                <widget class="ResourceSelector" name="tileset_field">
+                 <property name="toolTip">
+                  <string>Tileset of the animation</string>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QToolButton" name="src_image_button">
@@ -337,6 +345,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QSpinBox" name="frame_delay_field">
+            <property name="toolTip">
+             <string>Delay in milliseconds between two frames of the animation</string>
+            </property>
             <property name="suffix">
              <string> ms</string>
             </property>
@@ -370,6 +381,9 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="toolTip">
+             <string>Index of the frame where you want the animation to come back when the last frame finishes</string>
+            </property>
             <property name="minimum">
              <number>-1</number>
             </property>
@@ -390,6 +404,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="default_animation_value">
+            <property name="toolTip">
+             <string>Default animation of the sprite</string>
+            </property>
             <property name="text">
              <string>Set as default</string>
             </property>
@@ -430,6 +447,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QSpinBox" name="position_x_field">
+              <property name="toolTip">
+               <string>X coordinate of the top-left corner of area containing the frames in the image</string>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -447,6 +467,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="position_y_field">
+              <property name="toolTip">
+               <string>Y coordinate of the top-left corner of area containing the frames in the image</string>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -495,6 +518,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
              <widget class="QSpinBox" name="origin_x_field">
+              <property name="toolTip">
+               <string>X coordinate of the origin point of the sprite</string>
+              </property>
               <property name="minimum">
                <number>-9999</number>
               </property>
@@ -515,6 +541,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="origin_y_field">
+              <property name="toolTip">
+               <string>Y coordinate of the origin point of the sprite</string>
+              </property>
               <property name="minimum">
                <number>-9999</number>
               </property>
@@ -543,6 +572,9 @@
           </item>
           <item row="4" column="1">
            <widget class="QSpinBox" name="num_frames_field">
+            <property name="toolTip">
+             <string>Number of frames of this direction</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -553,6 +585,9 @@
           </item>
           <item row="5" column="1">
            <widget class="QSpinBox" name="num_columns_field">
+            <property name="toolTip">
+             <string>Number of columns of the grid containing the frames of this direction in the image</string>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -572,6 +607,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QSpinBox" name="width_field">
+              <property name="toolTip">
+               <string>Width of each frame in the image</string>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
@@ -592,6 +630,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="height_field">
+              <property name="toolTip">
+               <string>Height of each frame in the image</string>
+              </property>
               <property name="minimum">
                <number>1</number>
               </property>
