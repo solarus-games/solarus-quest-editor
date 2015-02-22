@@ -31,7 +31,7 @@ public:
   virtual ~EditorException() { }
 
   QString get_message() const noexcept;
-  virtual const char* what() const noexcept override;
+  const char* what() const noexcept override;
 
   void print_message() const;
   void show_dialog() const;
