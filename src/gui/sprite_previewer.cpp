@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/sprite_previewer.h"
+#include <QMenu>
 
 /**
  * @brief Create a sprite previewer.
@@ -22,7 +23,8 @@
  */
 SpritePreviewer::SpritePreviewer(QWidget *parent) :
   QWidget(parent),
-  model(nullptr) {
+  model(nullptr),
+  zoom(1.0) {
 
   ui.setupUi(this);
 
@@ -37,6 +39,12 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
   ui.frame_view->scene()->addItem(item);
   ui.frame_view->scene()->addItem(origin_h);
   ui.frame_view->scene()->addItem(origin_v);
+
+  ui.zoom_button->setMenu(create_zoom_menu());
+  ui.zoom_button->setPopupMode(QToolButton::InstantPopup);
+
+  set_zoom(2.0);
+  update_zoom();
 
   connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 
@@ -290,4 +298,58 @@ void SpritePreviewer::next() {
   current_frame++;
   update_frame();
   update_buttons();
+}
+
+/**
+ * @brief Updates the zoom menu.
+ */
+void SpritePreviewer::update_zoom() {
+
+  if (zoom_actions.contains(this->zoom)) {
+    zoom_actions[this->zoom]->setChecked(true);
+  }
+}
+
+/**
+ * @brief Changes the current zoom.
+ * @param zoom The new zoom value.
+ */
+void SpritePreviewer::set_zoom(double zoom) {
+
+  zoom = qMin(4.0, qMax(0.25, zoom));
+
+  if (zoom == this->zoom) {
+    return;
+  }
+
+  double scale_factor = zoom / this->zoom;
+  ui.frame_view->scale(scale_factor, scale_factor);
+  this->zoom = zoom;
+}
+
+/**
+ * @brief Creates a menu with zoom actions.
+ * @return The created menu. It has no parent initially.
+ */
+QMenu* SpritePreviewer::create_zoom_menu() {
+
+  QMenu* zoom_menu = new QMenu(tr("Zoom"));
+  std::vector<std::pair<QString, double>> zooms = {
+    { tr("50 %"), 0.5 },
+    { tr("100 %"), 1.0 },
+    { tr("200 %"), 2.0 },
+    { tr("400 %"), 4.0 }
+  };
+  QActionGroup* action_group = new QActionGroup(this);
+  for (const std::pair<QString, double>& zoom : zooms) {
+    QAction* action = new QAction(zoom.first, action_group);
+    zoom_actions[zoom.second] = action;
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, [=]() {
+      set_zoom(zoom.second);
+    });
+    zoom_menu->addAction(action);
+  }
+
+  return zoom_menu;
 }

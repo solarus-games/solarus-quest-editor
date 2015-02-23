@@ -57,7 +57,14 @@ private slots:
   void last();
   void next();
 
+private slots:
+
+  void update_zoom();
+
 private:
+
+  void set_zoom(double zoom);
+  QMenu* create_zoom_menu();
 
   Ui::SpritePreviewer ui;       /**< The widgets. */
   QPointer<SpriteModel> model;  /**< The sprite model. */
@@ -68,6 +75,9 @@ private:
   QGraphicsPixmapItem* item;    /**< Pixmap item of the displayed frame. */
   QGraphicsLineItem* origin_h;  /**< Horizontal origin line. */
   QGraphicsLineItem* origin_v;  /**< Vertical origin line. */
+  QMap<double, QAction*>
+      zoom_actions;             /**< Action of each zoom value. */
+  double zoom;                  /**< Zoom factor currently applied. */
 
 };
 

@@ -27,11 +27,35 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="origin_check_box">
-       <property name="text">
-        <string>Show origin</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QCheckBox" name="origin_check_box">
+         <property name="text">
+          <string>Show origin</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="zoom_button">
+         <property name="toolTip">
+          <string>Zoom</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/images.qrc">
+           <normaloff>:/images/icon_zoom.png</normaloff>:/images/icon_zoom.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <layout class="QGridLayout" name="buttons_layout">
