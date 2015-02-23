@@ -208,6 +208,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   // Prepare the gui.
   const int side_width = 350;
   ui.splitter->setSizes({ side_width, width() - side_width });
+  ui.map_side_splitter->setStretchFactor(0, 0);  // Don't expand the map properties view
+  ui.map_side_splitter->setStretchFactor(1, 1);  // but only the tileset view.
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
   ui.music_field->set_resource_type(ResourceType::MUSIC);
