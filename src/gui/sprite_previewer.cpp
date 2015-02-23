@@ -28,6 +28,7 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
 
   ui.setupUi(this);
 
+  // Create frame and origin items.
   item = new QGraphicsPixmapItem();
   origin_h = new QGraphicsLineItem();
   origin_v = new QGraphicsLineItem();
@@ -35,14 +36,17 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
   origin_h->setPen(QPen(Qt::blue));
   origin_v->setPen(QPen(Qt::blue));
 
+  // Create the scene.
   ui.frame_view->setScene(new QGraphicsScene());
   ui.frame_view->scene()->addItem(item);
   ui.frame_view->scene()->addItem(origin_h);
   ui.frame_view->scene()->addItem(origin_v);
+  ui.frame_view->scene()->setBackgroundBrush(
+        ui.frame_view->scene()->palette().window());
 
+  // Zoom.
   ui.zoom_button->setMenu(create_zoom_menu());
   ui.zoom_button->setPopupMode(QToolButton::InstantPopup);
-
   set_zoom(2.0);
   update_zoom();
 
