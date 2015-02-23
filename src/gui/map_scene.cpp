@@ -72,7 +72,6 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
   model(model) {
 
   build();
-
 }
 
 /**
@@ -120,7 +119,7 @@ QSize MapScene::get_margin_size() {
 void MapScene::build() {
 
   setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + model.get_size()));
-  setBackgroundBrush(palette().window());
+  setBackgroundBrush(Qt::gray);
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
