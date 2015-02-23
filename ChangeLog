@@ -27,6 +27,8 @@ New features
 * Show an appropriate icon in tabs.
 * Show an asterisk in the tab of files that are changed.
 * The editor has an icon now.
+* Add a menu item to open the official Solarus website.
+* Add a menu item to open Solarus documentation.
 
 Missing features
 ----------------
