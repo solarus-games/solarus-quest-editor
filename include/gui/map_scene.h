@@ -38,6 +38,9 @@ public:
   const MapModel& get_model() const;
   const Quest& get_quest() const;
 
+  static QPoint get_margin_top_left();
+  static QSize get_margin_size();
+
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 

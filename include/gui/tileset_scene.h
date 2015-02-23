@@ -41,7 +41,7 @@ public:
 
 protected:
 
-  virtual void drawBackground(QPainter* painter, const QRectF& rect) override;
+  void drawBackground(QPainter* painter, const QRectF& rect) override;
 
 private slots:
 

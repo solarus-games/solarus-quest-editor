@@ -91,11 +91,35 @@ const Quest& MapScene::get_quest() const {
 }
 
 /**
+ * @brief Returns the coordinates of the point (0,0) of the map on the scene.
+ *
+ * It is different due to the margin.
+ *
+ * @return The top-left map corner coordinates on the scene.
+ */
+QPoint MapScene::get_margin_top_left() {
+
+  const QSize margin = get_margin_size();
+  return QPoint(margin.width(), margin.height());
+}
+
+/**
+ * @brief Returns the size of the margin around the map.
+ * @return The margin in scene coordinates.
+ */
+QSize MapScene::get_margin_size() {
+
+  const QSize margin(64, 64);
+  return margin;
+}
+
+/**
  * @brief Create all entity items in the scene.
  */
 void MapScene::build() {
 
-  setSceneRect(QRectF(QPoint(0, 0), model.get_size()));
+  setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + model.get_size()));
+  setBackgroundBrush(palette().window());
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
@@ -167,7 +191,7 @@ EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
   index(index) {
 
   QRect box = map.get_entity_bounding_box(index);
-  setPos(box.topLeft());
+  setPos(MapScene::get_margin_top_left() + box.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
