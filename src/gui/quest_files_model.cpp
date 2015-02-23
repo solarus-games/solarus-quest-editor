@@ -16,6 +16,7 @@
  */
 #include "gui/quest_files_model.h"
 #include "editor_exception.h"
+#include "natural_comparator.h"
 #include "quest.h"
 #include <QFileSystemModel>
 
@@ -580,6 +581,14 @@ bool QuestFilesModel::lessThan(const QModelIndex& left, const QModelIndex& right
   if (!source_model->isDir(left) &&
       source_model->isDir(right)) {
     return false;
+  }
+
+  const QString& left_string = source_model->data(left, Qt::DisplayRole).toString();
+  const QString& right_string = source_model->data(right, Qt::DisplayRole).toString();
+  if (!left_string.isEmpty() && !right_string.isEmpty()) {
+    // If we are comparing strings displayed to the user, use the natural
+    // comparator so that "tileset_2" is before "tileset_10".
+    return NaturalComparator()(left_string, right_string);
   }
 
   return QSortFilterProxyModel::lessThan(left, right);
