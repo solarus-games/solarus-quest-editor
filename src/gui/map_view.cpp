@@ -17,6 +17,7 @@
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
+#include "gui/mouse_coordinates_tracking_tool.h"
 #include "gui/pan_tool.h"
 #include "gui/zoom_tool.h"
 #include "view_settings.h"
@@ -70,6 +71,7 @@ void MapView::set_model(MapModel* model) {
     // Install panning and zooming helpers.
     new PanTool(this);
     new ZoomTool(this);
+    new MouseCoordinatesTrackingTool(this);
   }
 }
 
@@ -157,6 +159,20 @@ void MapView::zoom_out() {
   }
 
   view_settings->set_zoom(view_settings->get_zoom() / 2.0);
+}
+
+/**
+ * @brief Slot called when the mouse coordinates on the view have changed.
+ *
+ * Translates the coordinates relative to the view into coordinates relative
+ * to the map and emits mouse_map_coordinates_changed().
+ *
+ * @param xy The mouse coordinates relative to the widget.
+ */
+void MapView::mouse_coordinates_changed(const QPoint& xy) {
+
+  QPoint map_xy = mapToScene(xy).toPoint();
+  emit mouse_map_coordinates_changed(map_xy);
 }
 
 /**

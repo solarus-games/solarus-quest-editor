@@ -14,25 +14,27 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_ZOOM_TOOL_H
-#define SOLARUSEDITOR_ZOOM_TOOL_H
+#ifndef SOLARUSEDITOR_MOUSE_COORDINATES_TRACKING_TOOL_H
+#define SOLARUSEDITOR_MOUSE_COORDINATES_TRACKING_TOOL_H
 
 #include <QObject>
 
 class QAbstractScrollArea;
 
 /**
- * @brief Provides to a scrolling widget the ability to zoom the view using
- * the middle mouse wheel and the control key.
+ * @brief Notifies a scrolling widget of mouse movements.
  *
- * The controlled scrolling widget must have slots zoom_in() and zoom_out().
+ * The controlled scrolling widget must have signals or slots
+ * mouse_coordinates_changed(const QPoint& xy)
+ * and mouse_left();
+ * The indicated coordinates are relative to the current scrollbar position.
  */
-class ZoomTool : public QObject {
+class MouseCoordinatesTrackingTool : public QObject {
   Q_OBJECT
 
 public:
 
-  ZoomTool(QAbstractScrollArea* widget);
+  MouseCoordinatesTrackingTool(QAbstractScrollArea* widget);
 
   bool eventFilter(QObject* object, QEvent* event) override;
 

@@ -25,6 +25,8 @@
 #include <QToolBar>
 #include <QUndoStack>
 
+#include <QDebug>
+
 namespace {
 
 /**
@@ -326,7 +328,7 @@ void MapEditor::build_entity_creation_toolbar() {
 }
 
 /**
- * @brief Initializes the status bar.
+ * @brief Creates a status bar in the map view.
  *
  * The status bar is not made with Qt designer because
  * one cannot create QStatusBar widgets with Qt designer.
@@ -335,7 +337,21 @@ void MapEditor::build_status_bar() {
 
   QStatusBar* status_bar = new QStatusBar();
   ui.entity_creation_layout->addWidget(status_bar);
-  // TODO show the mouse coordinates
+
+  connect(ui.map_view, &MapView::mouse_map_coordinates_changed, [=](const QPoint& xy) {
+
+    QPoint snapped_xy(xy + QPoint(4, 4));
+    snapped_xy = snapped_xy - QPoint(
+          snapped_xy.x() % 8,
+          snapped_xy.y() % 8);
+    QString message = tr("%1,%2").arg(snapped_xy.x()).arg(snapped_xy.y());
+    status_bar->showMessage(message);
+  });
+
+  connect(ui.map_view, &MapView::mouse_left, [=]() {
+
+    status_bar->clearMessage();
+  });
 }
 
 /**

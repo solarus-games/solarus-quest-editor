@@ -103,6 +103,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/map_view.h
   include/gui/map_scene.h
   include/gui/main_window.h
+  include/gui/mouse_coordinates_tracking_tool.h
   include/gui/new_resource_element_dialog.h
   include/gui/pan_tool.h
   include/gui/quest_files_model.h
@@ -183,6 +184,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/map_editor.cpp
   src/gui/map_view.cpp
   src/gui/map_scene.cpp
+  src/gui/mouse_coordinates_tracking_tool.cpp
   src/gui/new_resource_element_dialog.cpp
   src/gui/pan_tool.cpp
   src/gui/quest_files_model.cpp

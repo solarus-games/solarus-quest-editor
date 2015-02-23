@@ -39,11 +39,17 @@ public:
   void set_model(MapModel* map);
   void set_view_settings(ViewSettings& view_settings);
 
+signals:
+
+  void mouse_map_coordinates_changed(const QPoint& xy);
+  void mouse_left();
+
 public slots:
 
   void update_zoom();
   void zoom_in();
   void zoom_out();
+  void mouse_coordinates_changed(const QPoint& xy);
   void update_grid_visibility();
   void update_layer_visibility(Layer layer);
   void update_entity_type_visibility(EntityType type);
