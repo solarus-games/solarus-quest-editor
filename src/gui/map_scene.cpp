@@ -247,6 +247,7 @@ EntityType EntityItem::get_entity_type() const {
  */
 QRectF EntityItem::boundingRect() const {
 
+  // FIXME this is not true for entities whose sprite is larger, like NPCs
   return QRect(QPoint(0, 0), map.get_entity_size(index));
 }
 
