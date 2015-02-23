@@ -37,6 +37,9 @@ MapView::MapView(QWidget* parent) :
 
   ViewSettings* view_settings = new ViewSettings(this);
   set_view_settings(*view_settings);
+
+  // Necessary because we draw a custom background.
+  setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
 /**
@@ -182,16 +185,6 @@ void MapView::update_grid_visibility() {
 
   if (view_settings == nullptr) {
     return;
-  }
-
-  if (view_settings->is_grid_visible()) {
-    // Necessary to correctly show the grid when scrolling,
-    // because it is part of the foreground, not of graphics items.
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-  }
-  else {
-    // Faster.
-    setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
   }
 
   if (scene != nullptr) {
