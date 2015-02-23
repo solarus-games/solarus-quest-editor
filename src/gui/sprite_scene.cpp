@@ -361,7 +361,7 @@ void DirectionItem::paint(QPainter* painter,
 
     // Add our selection marker if is selected.
     if (selected) {
-      GuiTools::draw_rectangle_outline(*painter, frame, Qt::blue, 1);
+      GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }
   }
 }

@@ -37,6 +37,7 @@
 #include "entities/teletransporter.h"
 #include "entities/tile.h"
 #include "entities/wall.h"
+#include "gui/gui_tools.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
@@ -55,9 +56,10 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   entity(entity),
   origin(0, 0),
   size(16, 16),
-  icon(),
   sprite_model(nullptr),
-  sprite_image() {
+  sprite_image(),
+  draw_shape_info(),
+  icon() {
 
   // If the entity has explicit size information in its properties, use it.
   if (entity.is_integer("width") && entity.is_integer("height")) {
@@ -400,22 +402,45 @@ QVariant EntityModel::get_field(const QString& key) const {
 }
 
 /**
+ * @brief Sets how to draw this entity as a shape.
+ *
+ * Call this function if you want your entity to be drawn as a shape
+ * when it has no sprite.
+ *
+ * @param draw_shape_info Description of the shape to draw.
+ */
+void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
+
+  this->draw_shape_info = draw_shape_info;
+}
+
+/**
  * @brief Draws this entity.
  *
- * The default implementation draws the entity's sprite if there is a "sprite"
- * field, or draws an icon representing the type of entity otherwise.
+ * The default implementation does the following.
+ * - If the entity type has a "sprite" field, draws this sprite if the value
+ *   is set to a valid sprite.
+ * - Otherwise, if a shape description was set by calling set_draw_shape_info(),
+ *   this shape is drawn.
+ * - Otherwise, draws an icon representing the type of entity.
  *
  * @param painter The painter to draw.
  */
 void EntityModel::draw(QPainter& painter) const {
 
-  if (!draw_as_sprite(painter)) {
-    draw_as_icon(painter);
+  if (draw_as_sprite(painter)) {
+    return;
   }
+
+  if (draw_as_shape(painter)) {
+    return;
+  }
+
+  draw_as_icon(painter);
 }
 
 /**
- * @brief Draws this entity using the specified sprite.
+ * @brief Draws this entity using its sprite if any.
  * @param painter The painter to draw.
  * @return @c true if the sprite was successfully drawn.
  */
@@ -471,10 +496,61 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
 }
 
 /**
+ * @brief Draws this entity using its shape description if any.
+ * @param painter The painter to draw.
+ * @return @c true if there was a valid shape to draw.
+ */
+bool EntityModel::draw_as_shape(QPainter& painter) const {
+
+  if (!draw_shape_info.enabled) {
+    // The entity does not want to be drawn as a shape.
+    return false;
+  }
+
+  // Background color.
+  if (draw_shape_info.background_color.isValid()) {
+    painter.fillRect(0, 0, get_width(), get_height(), draw_shape_info.background_color);
+  }
+
+  // Pixmap.
+  if (!draw_shape_info.pixmap.isNull()) {
+
+    // We will draw the pixmap with a double resolution.
+    painter.scale(0.5, 0.5);
+
+    const QPixmap& pixmap = draw_shape_info.pixmap;
+    if (draw_shape_info.tiled_pixmap) {
+      // Repeat the pixmap pattern.
+      painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, pixmap);
+    }
+    else {
+      // Draw the pixmap centered in the entity.
+      int x = get_width() - pixmap.width() / 2;  // Actually get_width() * 2 / 2 - pixmap.width() / 2
+                                                 // because we want the double size.
+      int y = get_height() - pixmap.height() / 2;
+      painter.drawPixmap(x, y, pixmap.width(), pixmap.height(), pixmap);
+    }
+
+    painter.scale(2, 2);
+  }
+
+  // Border.
+  if (draw_shape_info.between_border_color.isValid()) {
+    GuiTools::draw_rectangle_border_double(
+          painter,
+          QRect(0, 0, get_width(), get_height()),
+          draw_shape_info.between_border_color);
+  }
+
+  return true;
+}
+
+/**
  * @brief Draws this entity using the icon of its entity type.
  * @param painter The painter to draw.
+ * @return @c true if the icon was successfully drawn.
  */
-void EntityModel::draw_as_icon(QPainter& painter) const {
+bool EntityModel::draw_as_icon(QPainter& painter) const {
 
   if (icon.isNull()) {
     // Lazily create the icon.
@@ -487,4 +563,5 @@ void EntityModel::draw_as_icon(QPainter& painter) const {
   painter.drawTiledPixmap(0, 0, get_width() * 2, get_height() * 2, icon);
   painter.scale(2, 2);
 
+  return true;
 }

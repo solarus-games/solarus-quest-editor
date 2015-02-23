@@ -383,7 +383,7 @@ void PatternItem::paint(QPainter* painter,
 
     for (QRect frame : frames) {
       frame.translate(-top_left);
-      GuiTools::draw_rectangle_outline(*painter, frame, Qt::blue, 1);
+      GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }
   }
 }

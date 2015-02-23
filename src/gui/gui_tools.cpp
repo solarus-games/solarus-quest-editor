@@ -60,7 +60,7 @@ void error_dialog(const QString& message) {
 }
 
 /**
- * @brief Draws a rectangle outline.
+ * @brief Draws a rectangle border.
  *
  * Unlike QPainter::drawRect(), this function draws the outline entirely
  * inside the rectangle and does not involve half-pixels.
@@ -70,10 +70,10 @@ void error_dialog(const QString& message) {
  * @param color Color to use.
  * @param thickness Thickness of the brush.
  */
-void draw_rectangle_outline(QPainter& painter,
-                            const QRect& where,
-                            const QColor& color,
-                            int thickness) {
+void draw_rectangle_border(QPainter& painter,
+                           const QRect& where,
+                           const QColor& color,
+                           int thickness) {
   const int x = where.x();
   const int y = where.y();
   const int w = where.width();
@@ -88,7 +88,35 @@ void draw_rectangle_outline(QPainter& painter,
 }
 
 /**
- * @brief Draws a grid.
+ * @brief Draws a rectangle border as two black lines and a color between them.
+ *
+ * The black lines will always keep a thickness of one pixel
+ * no matter the transformation set on the painter.
+ *
+ * @param painter The painter.
+ * @param where Rectangle to draw the outline of.
+ * @param color Color to use.
+ * @param thickness Thickness of the brush.
+ */
+void draw_rectangle_border_double(QPainter& painter,
+                                  const QRect& where,
+                                  const QColor& color_between) {
+
+  draw_rectangle_border(painter, where, color_between, 2);
+
+  painter.setPen(QPen(Qt::black, 0, Qt::SolidLine));
+  QRect dst = where;
+  painter.drawRect(dst);
+  dst.adjust(2, 2, -2, -2);
+  painter.drawRect(dst);
+}
+
+/**
+ * @brief Draws a grid with dashed lines.
+ *
+ * The lines of the grid will always keep a thickness of one pixel
+ * no matter the transformation set on the painter.
+ *
  * @param painter The painter to draw.
  * @param where Rectangle where drawing the grid should be limited to.
  * @param spacing Square size.

@@ -28,10 +28,14 @@ void information_dialog(const QString& message);
 void warning_dialog(const QString& message);
 void error_dialog(const QString& message);
 
-void draw_rectangle_outline(QPainter& painter,
-                            const QRect& where,
-                            const QColor& color,
-                            int thickness);
+void draw_rectangle_border(QPainter& painter,
+                           const QRect& where,
+                           const QColor& color,
+                           int thickness);
+
+void draw_rectangle_border_double(QPainter& painter,
+                                  const QRect& where,
+                                  const QColor& color_between);
 
 void draw_grid(QPainter& painter, const QRect& where, int square_size);
 

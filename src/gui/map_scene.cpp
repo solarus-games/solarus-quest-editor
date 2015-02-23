@@ -292,7 +292,7 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    GuiTools::draw_rectangle_outline(
+    GuiTools::draw_rectangle_border(
           *painter,
           boundingRect().toRect(),
           Qt::blue,

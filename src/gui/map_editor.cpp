@@ -25,8 +25,6 @@
 #include <QToolBar>
 #include <QUndoStack>
 
-#include <QDebug>
-
 namespace {
 
 /**

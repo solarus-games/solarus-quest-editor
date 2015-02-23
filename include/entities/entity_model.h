@@ -78,23 +78,46 @@ public:
 
 protected:
 
+  /**
+   * @brief Describes how to draw an entity as a shape.
+   *
+   * The shape is filled with a background color or a pixmap,
+   * or both if the pixmap is not tiled but centered,
+   * and may have a border with two black lines and a color between them.
+   * For now the shape is always rectangular.
+   */
+  struct DrawShapeInfo {
+
+    bool enabled = false;  // false means not drawn as a shape.
+    QColor background_color;
+    QColor between_border_color;
+    QPixmap pixmap;
+    bool tiled_pixmap = false;  // tiled or centered
+  };
+
   EntityModel(MapModel& map, const Solarus::EntityData& entity);
+
+  void set_draw_shape_info(const DrawShapeInfo& draw_shape_info);
+
+  bool draw_as_sprite(QPainter& painter) const;
+  bool draw_as_shape(QPainter& painter) const;
+  bool draw_as_icon(QPainter& painter) const;
 
 private:
 
-  bool draw_as_sprite(QPainter& painter) const;
-  void draw_as_icon(QPainter& painter) const;
-
-  QPointer<MapModel> map;       /**< The map this entity belongs to.
-                                 * (could be a reference but we want operator=) */
-  Solarus::EntityData entity;   /**< The entity data wrapped. */
-  QPoint origin;                /**< Origin point of the entity. */
-  QSize size;                   /**< Size of the entity for the editor. */
-  mutable QPixmap icon;         /**< Icon of the entity
-                                 * to be displayed by the default. */
+  QPointer<MapModel> map;         /**< The map this entity belongs to.
+                                   * (could be a reference but we want operator=) */
+  Solarus::EntityData entity;     /**< The entity data wrapped. */
+  QPoint origin;                  /**< Origin point of the entity. */
+  QSize size;                     /**< Size of the entity for the editor. */
   mutable std::unique_ptr<SpriteModel>
-      sprite_model;             /**< Sprite of the entity to be displayed. */
-  mutable QPixmap sprite_image; /**< Fixed image from the sprite. */
+      sprite_model;               /**< Sprite to show when the entity is drawn
+                                   * as a sprite. */
+  mutable QPixmap sprite_image;   /**< Fixed image from the sprite. */
+  DrawShapeInfo draw_shape_info;  /**< Shape to use when the entity is drawn as
+                                   * a shape. */
+  mutable QPixmap icon;           /**< Icon to use when the entity is drawn as
+                                   * an icon. */
 };
 
 #endif
