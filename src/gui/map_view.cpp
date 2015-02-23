@@ -171,7 +171,7 @@ void MapView::zoom_out() {
  */
 void MapView::mouse_coordinates_changed(const QPoint& xy) {
 
-  QPoint map_xy = mapToScene(xy).toPoint();
+  QPoint map_xy = mapToScene(xy).toPoint() - MapScene::get_margin_top_left();
   emit mouse_map_coordinates_changed(map_xy);
 }
 
