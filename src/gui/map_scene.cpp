@@ -17,6 +17,7 @@
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "map_model.h"
+#include "tileset_model.h"
 #include "view_settings.h"
 #include <QDebug>
 #include <QGraphicsItem>
@@ -178,6 +179,27 @@ void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings
       }
     }
   }
+}
+
+/**
+ * @brief Draws the tileset's background color as background of the map.
+ * @param painter The painter.
+ * @param rect The exposed rectangle in scene coordinates.
+ * It may be larger than the scene.
+ */
+void MapScene::drawBackground(QPainter* painter, const QRectF& rect) {
+
+  // Call the parent class to have the correct color in margins.
+  QGraphicsScene::drawBackground(painter, rect);
+
+  // Draw the background color from the tileset.
+  TilesetModel* tileset = model.get_tileset_model();
+  if (tileset == nullptr) {
+    return;
+  }
+
+  QRect rect_no_margins = rect.toRect().intersected(QRect(get_margin_top_left(), model.get_size()));
+  painter->fillRect(rect_no_margins, tileset->get_background_color());
 }
 
 /**

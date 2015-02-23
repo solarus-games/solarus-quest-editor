@@ -44,6 +44,10 @@ public:
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
+protected:
+
+  void drawBackground(QPainter* painter, const QRectF& rect) override;
+
 private:
 
   using EntityList = QList<EntityItem*>;
@@ -52,7 +56,7 @@ private:
   void create_entity_item(const EntityIndex& index);
   const EntityList& get_entities(Layer layer);
 
-  MapModel& model;            /**< The tileset represented. */
+  MapModel& model;            /**< The map represented. */
   std::array<EntityList, Layer::LAYER_NB>
       entity_items;           /**< Entities item in the scene on each layer,
                                * ordered as in the model. */
