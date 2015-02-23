@@ -146,161 +146,185 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../build/ui_main_window.h" line="210"/>
+        <location filename="../build/ui_main_window.h" line="228"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="65"/>
-        <location filename="../build/ui_main_window.h" line="238"/>
+        <location filename="../build/ui_main_window.h" line="259"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
-        <location filename="../build/ui_main_window.h" line="239"/>
+        <location filename="../build/ui_main_window.h" line="260"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="86"/>
-        <location filename="../build/ui_main_window.h" line="240"/>
+        <location filename="../build/ui_main_window.h" line="261"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="92"/>
-        <location filename="../build/ui_main_window.h" line="241"/>
+        <location filename="../build/ui_main_window.h" line="262"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="133"/>
-        <location filename="../build/ui_main_window.h" line="211"/>
+        <location filename="../src/gui/main_window.ui" line="103"/>
+        <location filename="../build/ui_main_window.h" line="263"/>
+        <source>Help</source>
+        <translation>Aide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="141"/>
+        <location filename="../build/ui_main_window.h" line="229"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="138"/>
-        <location filename="../build/ui_main_window.h" line="212"/>
+        <location filename="../src/gui/main_window.ui" line="146"/>
+        <location filename="../build/ui_main_window.h" line="230"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="143"/>
-        <location filename="../build/ui_main_window.h" line="213"/>
+        <location filename="../src/gui/main_window.ui" line="151"/>
+        <location filename="../build/ui_main_window.h" line="231"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="152"/>
-        <location filename="../build/ui_main_window.h" line="214"/>
+        <location filename="../src/gui/main_window.ui" line="160"/>
+        <location filename="../build/ui_main_window.h" line="232"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="155"/>
-        <location filename="../build/ui_main_window.h" line="215"/>
+        <location filename="../src/gui/main_window.ui" line="163"/>
+        <location filename="../build/ui_main_window.h" line="233"/>
         <source>F9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="164"/>
-        <location filename="../build/ui_main_window.h" line="216"/>
+        <location filename="../src/gui/main_window.ui" line="172"/>
+        <location filename="../build/ui_main_window.h" line="234"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="173"/>
-        <location filename="../build/ui_main_window.h" line="217"/>
+        <location filename="../src/gui/main_window.ui" line="181"/>
+        <location filename="../build/ui_main_window.h" line="235"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="182"/>
-        <location filename="../build/ui_main_window.h" line="218"/>
+        <location filename="../src/gui/main_window.ui" line="190"/>
+        <location filename="../build/ui_main_window.h" line="236"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="187"/>
-        <location filename="../build/ui_main_window.h" line="219"/>
+        <location filename="../src/gui/main_window.ui" line="195"/>
+        <location filename="../build/ui_main_window.h" line="237"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="196"/>
-        <location filename="../build/ui_main_window.h" line="220"/>
+        <location filename="../src/gui/main_window.ui" line="204"/>
+        <location filename="../build/ui_main_window.h" line="238"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="208"/>
-        <location filename="../build/ui_main_window.h" line="221"/>
+        <location filename="../src/gui/main_window.ui" line="216"/>
+        <location filename="../build/ui_main_window.h" line="239"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="211"/>
-        <location filename="../build/ui_main_window.h" line="222"/>
+        <location filename="../src/gui/main_window.ui" line="219"/>
+        <location filename="../build/ui_main_window.h" line="240"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="226"/>
-        <location filename="../src/gui/main_window.ui" line="229"/>
-        <location filename="../build/ui_main_window.h" line="223"/>
-        <location filename="../build/ui_main_window.h" line="225"/>
+        <location filename="../src/gui/main_window.ui" line="234"/>
+        <location filename="../src/gui/main_window.ui" line="237"/>
+        <location filename="../build/ui_main_window.h" line="241"/>
+        <location filename="../build/ui_main_window.h" line="243"/>
         <source>Show low layer</source>
         <translation>Afficher la couche basse</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="232"/>
-        <location filename="../build/ui_main_window.h" line="227"/>
+        <location filename="../src/gui/main_window.ui" line="240"/>
+        <location filename="../build/ui_main_window.h" line="245"/>
         <source>Ctrl+1</source>
         <translation>Ctrl+1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="247"/>
-        <location filename="../src/gui/main_window.ui" line="250"/>
-        <location filename="../build/ui_main_window.h" line="228"/>
-        <location filename="../build/ui_main_window.h" line="230"/>
+        <location filename="../src/gui/main_window.ui" line="255"/>
+        <location filename="../src/gui/main_window.ui" line="258"/>
+        <location filename="../build/ui_main_window.h" line="246"/>
+        <location filename="../build/ui_main_window.h" line="248"/>
         <source>Show intermediate layer</source>
         <translation>Afficher la couche intermédiaire</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="253"/>
-        <location filename="../build/ui_main_window.h" line="232"/>
+        <location filename="../src/gui/main_window.ui" line="261"/>
+        <location filename="../build/ui_main_window.h" line="250"/>
         <source>Ctrl+2</source>
         <translation>Ctrl+2</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="268"/>
-        <location filename="../src/gui/main_window.ui" line="271"/>
-        <location filename="../build/ui_main_window.h" line="233"/>
-        <location filename="../build/ui_main_window.h" line="235"/>
+        <location filename="../src/gui/main_window.ui" line="276"/>
+        <location filename="../src/gui/main_window.ui" line="279"/>
+        <location filename="../build/ui_main_window.h" line="251"/>
+        <location filename="../build/ui_main_window.h" line="253"/>
         <source>Show high layer</source>
         <translation>Afficher la couche haute</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="274"/>
-        <location filename="../build/ui_main_window.h" line="237"/>
+        <location filename="../src/gui/main_window.ui" line="282"/>
+        <location filename="../build/ui_main_window.h" line="255"/>
         <source>Ctrl+3</source>
         <translation>Ctrl+3</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="405"/>
-        <location filename="../src/gui/main_window.cpp" line="435"/>
+        <location filename="../src/gui/main_window.ui" line="291"/>
+        <location filename="../build/ui_main_window.h" line="256"/>
+        <source>Documentation</source>
+        <translation>Documentation</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="294"/>
+        <location filename="../build/ui_main_window.h" line="257"/>
+        <source>F1</source>
+        <translation>F1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="303"/>
+        <location filename="../build/ui_main_window.h" line="258"/>
+        <source>Website</source>
+        <translation>Site web</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="406"/>
+        <location filename="../src/gui/main_window.cpp" line="436"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="416"/>
+        <location filename="../src/gui/main_window.cpp" line="417"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="416"/>
+        <location filename="../src/gui/main_window.cpp" line="417"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -310,89 +334,89 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="305"/>
+        <location filename="../src/gui/main_window.cpp" line="306"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="88"/>
-        <location filename="../src/gui/main_window.cpp" line="148"/>
+        <location filename="../src/gui/main_window.cpp" line="89"/>
+        <location filename="../src/gui/main_window.cpp" line="149"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="97"/>
-        <location filename="../src/gui/main_window.cpp" line="179"/>
+        <location filename="../src/gui/main_window.cpp" line="98"/>
+        <location filename="../src/gui/main_window.cpp" line="180"/>
         <source>Show entity types</source>
         <translation>Afficher les types d&apos;entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="150"/>
+        <location filename="../src/gui/main_window.cpp" line="151"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="151"/>
+        <location filename="../src/gui/main_window.cpp" line="152"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="152"/>
+        <location filename="../src/gui/main_window.cpp" line="153"/>
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="153"/>
+        <location filename="../src/gui/main_window.cpp" line="154"/>
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="154"/>
+        <location filename="../src/gui/main_window.cpp" line="155"/>
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="206"/>
+        <location filename="../src/gui/main_window.cpp" line="207"/>
         <source>Show all</source>
         <translation>Afficher tout</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="216"/>
+        <location filename="../src/gui/main_window.cpp" line="217"/>
         <source>Hide all</source>
         <translation>Cacher tout</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="324"/>
+        <location filename="../src/gui/main_window.cpp" line="325"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="325"/>
+        <location filename="../src/gui/main_window.cpp" line="326"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="376"/>
+        <location filename="../src/gui/main_window.cpp" line="377"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="393"/>
+        <location filename="../src/gui/main_window.cpp" line="394"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="532"/>
+        <location filename="../src/gui/main_window.cpp" line="533"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="788"/>
+        <location filename="../src/gui/main_window.cpp" line="806"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -579,117 +603,122 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="213"/>
+        <location filename="../src/gui/map_editor.cpp" line="215"/>
         <source>&lt;No music&gt;</source>
         <translation>&lt;Pas de musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="214"/>
+        <location filename="../src/gui/map_editor.cpp" line="216"/>
         <source>&lt;Same as before&gt;</source>
         <translation>&lt;Garder la même musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="292"/>
+        <location filename="../src/gui/map_editor.cpp" line="294"/>
         <source>Add destination</source>
         <translation>Ajouter une destination</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="293"/>
+        <location filename="../src/gui/map_editor.cpp" line="295"/>
         <source>Add teletransporter</source>
         <translation>Ajouter un téléporteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="294"/>
+        <location filename="../src/gui/map_editor.cpp" line="296"/>
         <source>Add pickable</source>
         <translation>Ajouter un trésor ramassable</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="295"/>
+        <location filename="../src/gui/map_editor.cpp" line="297"/>
         <source>Add destructible</source>
         <translation>Ajouter un destructible</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="296"/>
+        <location filename="../src/gui/map_editor.cpp" line="298"/>
         <source>Add chest</source>
         <translation>Ajouter un coffre</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="297"/>
+        <location filename="../src/gui/map_editor.cpp" line="299"/>
         <source>Add jumper</source>
         <translation>Ajouter un sauteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="298"/>
+        <location filename="../src/gui/map_editor.cpp" line="300"/>
         <source>Add enemy</source>
         <translation>Ajouter un ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="299"/>
+        <location filename="../src/gui/map_editor.cpp" line="301"/>
         <source>Add non-playing character</source>
         <translation>Ajouter un personnage non-joueur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="300"/>
+        <location filename="../src/gui/map_editor.cpp" line="302"/>
         <source>Add block</source>
         <translation>Ajouter un bloc</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="301"/>
+        <location filename="../src/gui/map_editor.cpp" line="303"/>
         <source>Add switch</source>
         <translation>Ajouter un bouton</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="302"/>
+        <location filename="../src/gui/map_editor.cpp" line="304"/>
         <source>Add wall</source>
         <translation>Ajouter un mur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="303"/>
+        <location filename="../src/gui/map_editor.cpp" line="305"/>
         <source>Add sensor</source>
         <translation>Ajouter un capteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="304"/>
+        <location filename="../src/gui/map_editor.cpp" line="306"/>
         <source>Add crystal</source>
         <translation>Ajouter un cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="305"/>
+        <location filename="../src/gui/map_editor.cpp" line="307"/>
         <source>Add crystal block</source>
         <translation>Ajouter un plot de cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="306"/>
+        <location filename="../src/gui/map_editor.cpp" line="308"/>
         <source>Add shop treasure</source>
         <translation>Ajouter un article de magasin</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="307"/>
+        <location filename="../src/gui/map_editor.cpp" line="309"/>
         <source>Add stream</source>
         <translation>Ajouter un flux</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="308"/>
+        <location filename="../src/gui/map_editor.cpp" line="310"/>
         <source>Add door</source>
         <translation>Ajouter une porte</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="309"/>
+        <location filename="../src/gui/map_editor.cpp" line="311"/>
         <source>Add stairs</source>
         <translation>Ajouter un escalier</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="310"/>
+        <location filename="../src/gui/map_editor.cpp" line="312"/>
         <source>Add separator</source>
         <translation>Ajouter un séparateur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="311"/>
+        <location filename="../src/gui/map_editor.cpp" line="313"/>
         <source>Add custom entity</source>
         <translation>Ajouter une entité custom</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="398"/>
+        <location filename="../src/gui/map_editor.cpp" line="347"/>
+        <source>%1,%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="414"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -710,7 +739,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
 <context>
     <name>MapScene</name>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="237"/>
+        <location filename="../src/gui/map_scene.cpp" line="283"/>
         <source>No such entity index on layer %1: %2</source>
         <translation>Index d&apos;entité inexistant sur la couche %1 : %2</translation>
     </message>
@@ -1331,42 +1360,42 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>QuestFilesModel</name>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="297"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="298"/>
         <source>Resource</source>
         <translation>Ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="300"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="301"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="303"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="304"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="356"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="357"/>
         <source>Quest</source>
         <translation>Quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="361"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="362"/>
         <source>Main Lua script</source>
         <translation>Script Lua principal</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="376"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="377"/>
         <source>Lua script</source>
         <translation>Script Lua</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="554"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="555"/>
         <source>%1 (file not found)</source>
         <translation>%1 (fichier introuvable)</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_files_model.cpp" line="559"/>
+        <location filename="../src/gui/quest_files_model.cpp" line="560"/>
         <source>%1 (not in the quest)</source>
         <translation>%1 (non inclus dans la quête)</translation>
     </message>
@@ -1931,243 +1960,243 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>SpriteEditor</name>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="14"/>
-        <location filename="../build/ui_sprite_editor.h" line="473"/>
+        <location filename="../build/ui_sprite_editor.h" line="476"/>
         <source>Sprite editor</source>
         <translation>Éditeur de sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="45"/>
-        <location filename="../build/ui_sprite_editor.h" line="474"/>
+        <location filename="../build/ui_sprite_editor.h" line="477"/>
         <source>Sprite properties</source>
         <translation>Propriétés du sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="54"/>
-        <location filename="../build/ui_sprite_editor.h" line="478"/>
+        <location filename="../build/ui_sprite_editor.h" line="481"/>
         <source>Sprite id</source>
         <translation>Id du sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="61"/>
-        <location filename="../build/ui_sprite_editor.h" line="480"/>
+        <location filename="../build/ui_sprite_editor.h" line="483"/>
         <source>Filename of the sprite (without extension)</source>
         <translation>Nom de fichier du sprite (sans extension)</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="71"/>
-        <location filename="../build/ui_sprite_editor.h" line="483"/>
+        <location filename="../build/ui_sprite_editor.h" line="486"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="78"/>
-        <location filename="../build/ui_sprite_editor.h" line="485"/>
+        <location filename="../build/ui_sprite_editor.h" line="488"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="101"/>
-        <location filename="../build/ui_sprite_editor.h" line="488"/>
+        <location filename="../build/ui_sprite_editor.h" line="491"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="139"/>
-        <location filename="../build/ui_sprite_editor.h" line="492"/>
+        <location filename="../build/ui_sprite_editor.h" line="495"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="177"/>
-        <location filename="../build/ui_sprite_editor.h" line="496"/>
+        <location filename="../build/ui_sprite_editor.h" line="499"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="215"/>
-        <location filename="../build/ui_sprite_editor.h" line="500"/>
+        <location filename="../build/ui_sprite_editor.h" line="503"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="258"/>
-        <location filename="../build/ui_sprite_editor.h" line="503"/>
+        <location filename="../build/ui_sprite_editor.h" line="506"/>
         <source>Animation properties</source>
         <translation>Propriétés de l&apos;animation</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="270"/>
-        <location filename="../build/ui_sprite_editor.h" line="507"/>
+        <location filename="../build/ui_sprite_editor.h" line="510"/>
         <source>Source image</source>
         <translation>Image source</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="294"/>
-        <location filename="../build/ui_sprite_editor.h" line="509"/>
+        <location filename="../build/ui_sprite_editor.h" line="512"/>
         <source>Source image of the animation</source>
         <translation>Image source de l&apos;animation</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="304"/>
-        <location filename="../build/ui_sprite_editor.h" line="513"/>
+        <location filename="../build/ui_sprite_editor.h" line="516"/>
         <source>Tileset of the animation</source>
         <translation>Tileset de l&apos;animation</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="311"/>
-        <location filename="../build/ui_sprite_editor.h" line="516"/>
+        <location filename="../build/ui_sprite_editor.h" line="519"/>
         <source>Change</source>
         <translation>Changer</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="349"/>
-        <location filename="../build/ui_sprite_editor.h" line="520"/>
+        <location filename="../build/ui_sprite_editor.h" line="523"/>
         <source>Delay in milliseconds between two frames of the animation</source>
         <translation>Délais en millisecondes entre deux frames de l&apos;animation</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="352"/>
-        <location filename="../build/ui_sprite_editor.h" line="522"/>
+        <location filename="../build/ui_sprite_editor.h" line="525"/>
         <source> ms</source>
         <translation> ms</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="368"/>
-        <location filename="../build/ui_sprite_editor.h" line="526"/>
+        <location filename="../build/ui_sprite_editor.h" line="529"/>
         <source>Frame delay</source>
         <translation>Délais entre les frames</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="375"/>
-        <location filename="../build/ui_sprite_editor.h" line="527"/>
+        <location filename="../build/ui_sprite_editor.h" line="530"/>
         <source>Loop on frame</source>
         <translation>Boucler sur la frame</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="385"/>
-        <location filename="../build/ui_sprite_editor.h" line="529"/>
+        <location filename="../build/ui_sprite_editor.h" line="532"/>
         <source>Index of the frame where you want the animation to come back when the last frame finishes</source>
         <translation>Index de le frame sur laquelle l&apos;animation doit revenir après la dernière frame</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="401"/>
-        <location filename="../build/ui_sprite_editor.h" line="531"/>
+        <location filename="../build/ui_sprite_editor.h" line="534"/>
         <source>Default animation</source>
         <translation>Animation par défaut</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="408"/>
-        <location filename="../build/ui_sprite_editor.h" line="533"/>
+        <location filename="../build/ui_sprite_editor.h" line="536"/>
         <source>Default animation of the sprite</source>
         <translation>Animation par défaut du sprite</translation>
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="411"/>
-        <location filename="../build/ui_sprite_editor.h" line="535"/>
+        <location filename="../build/ui_sprite_editor.h" line="538"/>
         <source>Set as default</source>
         <translation>Définir par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="421"/>
-        <location filename="../build/ui_sprite_editor.h" line="536"/>
+        <location filename="../src/gui/sprite_editor.ui" line="662"/>
+        <location filename="../build/ui_sprite_editor.h" line="572"/>
         <source>Direction preview</source>
         <translation>Prévisualisation de la direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="433"/>
-        <location filename="../build/ui_sprite_editor.h" line="537"/>
+        <location filename="../src/gui/sprite_editor.ui" line="421"/>
+        <location filename="../build/ui_sprite_editor.h" line="539"/>
         <source>Direction properties</source>
         <translation>Propriétés de la direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="442"/>
-        <location filename="../build/ui_sprite_editor.h" line="538"/>
+        <location filename="../src/gui/sprite_editor.ui" line="430"/>
+        <location filename="../build/ui_sprite_editor.h" line="540"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="451"/>
-        <location filename="../build/ui_sprite_editor.h" line="540"/>
+        <location filename="../src/gui/sprite_editor.ui" line="439"/>
+        <location filename="../build/ui_sprite_editor.h" line="542"/>
         <source>X coordinate of the top-left corner of area containing the frames in the image</source>
         <translation>Coordonnée en X du coin haut-gauche de la zone contenant les frames dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="464"/>
-        <location filename="../src/gui/sprite_editor.ui" line="538"/>
-        <location filename="../build/ui_sprite_editor.h" line="542"/>
-        <location filename="../build/ui_sprite_editor.h" line="552"/>
+        <location filename="../src/gui/sprite_editor.ui" line="452"/>
+        <location filename="../src/gui/sprite_editor.ui" line="526"/>
+        <location filename="../build/ui_sprite_editor.h" line="544"/>
+        <location filename="../build/ui_sprite_editor.h" line="554"/>
         <source>,</source>
         <translation>,</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="471"/>
-        <location filename="../build/ui_sprite_editor.h" line="544"/>
+        <location filename="../src/gui/sprite_editor.ui" line="459"/>
+        <location filename="../build/ui_sprite_editor.h" line="546"/>
         <source>Y coordinate of the top-left corner of area containing the frames in the image</source>
         <translation>Coordonnée en Y du coin haut-gauche de la zone contenant les frames dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="499"/>
-        <location filename="../build/ui_sprite_editor.h" line="546"/>
+        <location filename="../src/gui/sprite_editor.ui" line="487"/>
+        <location filename="../build/ui_sprite_editor.h" line="548"/>
         <source>Origin</source>
         <translation>Origine</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="506"/>
-        <location filename="../build/ui_sprite_editor.h" line="547"/>
+        <location filename="../src/gui/sprite_editor.ui" line="494"/>
+        <location filename="../build/ui_sprite_editor.h" line="549"/>
         <source>Number of frames</source>
         <translation>Nombre de frames</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="513"/>
-        <location filename="../build/ui_sprite_editor.h" line="548"/>
+        <location filename="../src/gui/sprite_editor.ui" line="501"/>
+        <location filename="../build/ui_sprite_editor.h" line="550"/>
         <source>Number of columns</source>
         <translation>Nombre de colonnes</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="522"/>
-        <location filename="../build/ui_sprite_editor.h" line="550"/>
+        <location filename="../src/gui/sprite_editor.ui" line="510"/>
+        <location filename="../build/ui_sprite_editor.h" line="552"/>
         <source>X coordinate of the origin point of the sprite</source>
         <translation>Coordonnée en X du point d&apos;origine du sprite</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="545"/>
-        <location filename="../build/ui_sprite_editor.h" line="554"/>
+        <location filename="../src/gui/sprite_editor.ui" line="533"/>
+        <location filename="../build/ui_sprite_editor.h" line="556"/>
         <source>Y coordinate of the origin point of the sprite</source>
         <translation>Coordonnée en Y du point d&apos;origine du sprite</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="576"/>
-        <location filename="../build/ui_sprite_editor.h" line="557"/>
+        <location filename="../src/gui/sprite_editor.ui" line="564"/>
+        <location filename="../build/ui_sprite_editor.h" line="559"/>
         <source>Number of frames of this direction</source>
         <translation>Nombre de frames de la direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="589"/>
-        <location filename="../build/ui_sprite_editor.h" line="560"/>
+        <location filename="../src/gui/sprite_editor.ui" line="577"/>
+        <location filename="../build/ui_sprite_editor.h" line="562"/>
         <source>Number of columns of the grid containing the frames of this direction in the image</source>
         <translation>Nombre de colonnes de la grille contenant les frames de cette direction dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="602"/>
-        <location filename="../build/ui_sprite_editor.h" line="562"/>
+        <location filename="../src/gui/sprite_editor.ui" line="590"/>
+        <location filename="../build/ui_sprite_editor.h" line="564"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="611"/>
-        <location filename="../build/ui_sprite_editor.h" line="564"/>
+        <location filename="../src/gui/sprite_editor.ui" line="599"/>
+        <location filename="../build/ui_sprite_editor.h" line="566"/>
         <source>Width of each frame in the image</source>
         <translation>Largeur de chaque frame dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="627"/>
-        <location filename="../build/ui_sprite_editor.h" line="566"/>
+        <location filename="../src/gui/sprite_editor.ui" line="615"/>
+        <location filename="../build/ui_sprite_editor.h" line="568"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.ui" line="634"/>
-        <location filename="../build/ui_sprite_editor.h" line="568"/>
+        <location filename="../src/gui/sprite_editor.ui" line="622"/>
+        <location filename="../build/ui_sprite_editor.h" line="570"/>
         <source>Height of each frame in the image</source>
         <translation>Hauteur de chaque frame dans l&apos;image</translation>
     </message>
@@ -2268,7 +2297,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Le sprite &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.cpp" line="808"/>
+        <location filename="../src/gui/sprite_editor.cpp" line="810"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -2347,50 +2376,83 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SpritePreviewer</name>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="46"/>
-        <location filename="../build/ui_sprite_previewer.h" line="177"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="34"/>
+        <location filename="../build/ui_sprite_previewer.h" line="195"/>
+        <source>Show origin</source>
+        <translation>Afficher l&apos;origine</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="41"/>
+        <location filename="../build/ui_sprite_previewer.h" line="197"/>
+        <location filename="../src/gui/sprite_previewer.cpp" line="344"/>
+        <source>Zoom</source>
+        <translation>Zoom</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.ui" line="74"/>
+        <location filename="../build/ui_sprite_previewer.h" line="201"/>
         <source>Index of the current frame</source>
         <translation>Index de la frame courante</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="74"/>
-        <location filename="../build/ui_sprite_previewer.h" line="181"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="102"/>
+        <location filename="../build/ui_sprite_previewer.h" line="205"/>
         <source>Last</source>
         <translation>Dernière</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="106"/>
-        <location filename="../build/ui_sprite_previewer.h" line="185"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="134"/>
+        <location filename="../build/ui_sprite_previewer.h" line="209"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="138"/>
-        <location filename="../build/ui_sprite_previewer.h" line="189"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="166"/>
+        <location filename="../build/ui_sprite_previewer.h" line="213"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="199"/>
-        <location filename="../build/ui_sprite_previewer.h" line="194"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="227"/>
+        <location filename="../build/ui_sprite_previewer.h" line="218"/>
         <source>Previous</source>
         <translation>Précédent</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.ui" line="231"/>
-        <location filename="../build/ui_sprite_previewer.h" line="198"/>
+        <location filename="../src/gui/sprite_previewer.ui" line="259"/>
+        <location filename="../build/ui_sprite_previewer.h" line="222"/>
         <source>First</source>
         <translation>Première</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.cpp" line="126"/>
+        <location filename="../src/gui/sprite_previewer.cpp" line="155"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_previewer.cpp" line="129"/>
+        <location filename="../src/gui/sprite_previewer.cpp" line="158"/>
         <source>Start</source>
         <translation>Démarrer</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="346"/>
+        <source>50 %</source>
+        <translation>50 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="347"/>
+        <source>100 %</source>
+        <translation>100 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="348"/>
+        <source>200 %</source>
+        <translation>200 %</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_previewer.cpp" line="349"/>
+        <source>400 %</source>
+        <translation>400 %</translation>
     </message>
 </context>
 <context>
