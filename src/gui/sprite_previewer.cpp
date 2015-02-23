@@ -107,7 +107,11 @@ void SpritePreviewer::update_selection() {
   update_buttons();
   update_origin();
 
-  if (!index.is_direction_index()) {
+  bool is_direction = index.is_direction_index();
+  ui.origin_check_box->setEnabled(is_direction);
+  ui.zoom_button->setEnabled(is_direction);
+
+  if (!is_direction) {
     timer.stop();
   }
 }
@@ -183,7 +187,7 @@ void SpritePreviewer::update_frame() {
  */
 void SpritePreviewer::update_origin() {
 
-  bool show_origin = ui.origin_check_box->isChecked();
+  bool show_origin = ui.origin_check_box->isChecked() && frames.size() > 0;
 
   origin_h->setVisible(show_origin);
   origin_v->setVisible(show_origin);
@@ -192,7 +196,7 @@ void SpritePreviewer::update_origin() {
     return;
   }
 
-  QRectF rect = ui.frame_view->sceneRect();
+  QRect rect = frames[0].rect();
   QPoint origin = model->get_direction_origin(index);
 
   origin_h->setLine(0, origin.y(), rect.width(), origin.y());
