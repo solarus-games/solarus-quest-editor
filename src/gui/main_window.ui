@@ -98,10 +98,18 @@
     <addaction name="action_show_layer_2"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menu_help">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="action_website"/>
+    <addaction name="action_doc"/>
+   </widget>
    <addaction name="menu_quest"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menu_run"/>
+   <addaction name="menu_help"/>
   </widget>
   <widget class="QToolBar" name="tool_bar">
    <property name="movable">
@@ -272,6 +280,27 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+3</string>
+   </property>
+  </action>
+  <action name="action_doc">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_doc.png</normaloff>:/images/icon_doc.png</iconset>
+   </property>
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="action_website">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_web.png</normaloff>:/images/icon_web.png</iconset>
+   </property>
+   <property name="text">
+    <string>Website</string>
    </property>
   </action>
  </widget>

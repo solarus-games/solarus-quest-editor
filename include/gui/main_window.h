@@ -63,6 +63,8 @@ private slots:
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();
+  void on_action_website_triggered();
+  void on_action_doc_triggered();
 
   void current_editor_changed(int index);
   void update_zoom();

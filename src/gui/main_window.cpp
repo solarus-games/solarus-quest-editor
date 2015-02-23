@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QUndoGroup>
+#include <QDesktopServices>
 #include <iostream>
 
 using EntityType = Solarus::EntityType;
@@ -584,6 +585,23 @@ void MainWindow::on_action_show_layer_2_triggered() {
   }
 
   editor->get_view_settings().set_layer_visible(Layer::LAYER_HIGH, ui.action_show_layer_2->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Website" action.
+ */
+void MainWindow::on_action_website_triggered() {
+
+  QDesktopServices::openUrl(QUrl("http://www.solarus-games.org/"));
+}
+
+/**
+ * @brief Slot called when the user triggers the "Documentation" action.
+ */
+void MainWindow::on_action_doc_triggered() {
+
+  QDesktopServices::openUrl(
+        QUrl("http://www.solarus-games.org/doc/latest/index.html"));
 }
 
 /**

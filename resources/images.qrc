@@ -121,5 +121,7 @@
         <file>images/entity_stairs_all.png</file>
         <file>images/entity_stream_all.png</file>
         <file>images/entity_custom_entity.png</file>
+        <file>images/icon_doc.png</file>
+        <file>images/icon_web.png</file>
     </qresource>
 </RCC>
