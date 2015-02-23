@@ -36,7 +36,7 @@ QuestProperties::QuestProperties(Quest& quest) :
  */
 void QuestProperties::reload() {
 
-  if (!quest.is_valid()) {
+  if (!quest.is_valid() || !quest.exists()) {
     return;
   }
 
@@ -52,7 +52,7 @@ void QuestProperties::reload() {
  */
 void QuestProperties::save() const {
 
-  if (!quest.is_valid()) {
+  if (!quest.is_valid() || !quest.exists()) {
     throw EditorException(tr("No quest"));
   }
 
