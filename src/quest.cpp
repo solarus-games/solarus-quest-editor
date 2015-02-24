@@ -383,7 +383,7 @@ QString Quest::get_font_path(
 
   QString prefix = get_data_path() + "/fonts/" + font_id;
   QStringList extensions;
-  extensions << ".ttf" << ".ttc" << ".fon";
+  extensions << ".png" << ".ttf" << ".ttc" << ".fon";
   for (const QString& extension: extensions) {
     QString path = prefix + extension;
     if (QFileInfo(path).exists()) {
@@ -658,7 +658,7 @@ bool Quest::is_potential_resource_element(
     break;
 
   case ResourceType::FONT:
-    extensions << ".ttf" << ".ttc" << ".fon";
+    extensions << ".png" << ".ttf" << ".ttc" << ".fon";
     break;
 
   case ResourceType::LANGUAGE:
