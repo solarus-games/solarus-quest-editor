@@ -100,6 +100,8 @@ public:
       const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool is_resource_element(
       const QString& path, ResourceType& resource_type, QString& element_id) const;
+  bool has_resource_element(
+      const QString& path, ResourceType& resource_type) const;
   bool is_map_script(const QString& path, QString& map_id) const;
   bool is_dialogs_file(const QString& path, QString& language_id) const;
   bool is_strings_file(const QString& path, QString& language_id) const;

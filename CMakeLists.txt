@@ -106,7 +106,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/mouse_coordinates_tracking_tool.h
   include/gui/new_resource_element_dialog.h
   include/gui/pan_tool.h
-  include/gui/quest_files_model.h
   include/gui/quest_tree_view.h
   include/gui/resource_model.h
   include/gui/resource_selector.h
@@ -140,6 +139,7 @@ set(solarus_quest_editor_SOURCES
   include/pattern_separation_traits.h
   include/point.h
   include/quest.h
+  include/quest_files_model.h
   include/quest_properties.h
   include/quest_resources.h
   include/rectangle.h
@@ -187,7 +187,6 @@ set(solarus_quest_editor_SOURCES
   src/gui/mouse_coordinates_tracking_tool.cpp
   src/gui/new_resource_element_dialog.cpp
   src/gui/pan_tool.cpp
-  src/gui/quest_files_model.cpp
   src/gui/quest_tree_view.cpp
   src/gui/resource_model.cpp
   src/gui/resource_selector.cpp
@@ -218,6 +217,7 @@ set(solarus_quest_editor_SOURCES
   src/pattern_separation_traits.cpp
   src/point.cpp
   src/quest.cpp
+  src/quest_files_model.cpp
   src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp

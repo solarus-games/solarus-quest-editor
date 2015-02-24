@@ -717,6 +717,37 @@ bool Quest::is_resource_element(
 }
 
 /**
+ * @brief Return whether a path is a directory containing at least one declared
+ * resource element.
+ *
+ * Only the path string is tested: whether files actually exist does not
+ * matter.
+ *
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
+ * @return @c true if this path is a directory and contains at least one
+ * declared resource element.
+ */
+bool Quest::has_resource_element(
+    const QString& path, ResourceType& resource_type) const {
+
+  if (!is_resource_path(path, resource_type) &&
+      !is_in_resource_path(path, resource_type)) {
+    // Not in a resource directory.
+    return false;
+  }
+
+  QString resource_path = get_resource_path(resource_type);
+  QString prefix = path.right(path.size() - resource_path.size());
+  if (!prefix.isEmpty() && !prefix.endsWith('/')) {
+    prefix = prefix + '/';
+  }
+
+  return get_resources().exists_with_prefix(resource_type, prefix);
+}
+
+
+/**
  * @brief Determines if a path is a map script.
  *
  * This function exists because the main map resource path (as recognized by

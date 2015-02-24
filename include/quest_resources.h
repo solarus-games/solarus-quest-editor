@@ -38,6 +38,7 @@ public:
   void save() const;
 
   bool exists(ResourceType type, const QString& id) const;
+  bool exists_with_prefix(ResourceType type, const QString& prefix) const;
   QStringList get_elements(ResourceType type) const;
 
   bool add(

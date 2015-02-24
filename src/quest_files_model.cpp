@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/quest_files_model.h"
 #include "editor_exception.h"
 #include "natural_comparator.h"
 #include "quest.h"
+#include "quest_files_model.h"
 #include <QFileSystemModel>
 
 /**
@@ -211,15 +211,34 @@ bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
   ResourceType resource_type;
   QString element_id;
 
-  if (quest.is_resource_element(file_path, resource_type, element_id) &&
-      resource_type == ResourceType::LANGUAGE) {
-    // Remove the subtree of languages.
+  if (quest.is_resource_element(file_path, resource_type, element_id)) {
+    // A resource element is always a leaf, even languages
+    // that are actually directories on the filesystem.
     return false;
   }
 
-  // TODO return true for an empty directory where resources are declared but are missing.
+  if (QSortFilterProxyModel::hasChildren(parent))  {
+    // This is a non-empty directory.
+    // TODO return false if the files are actually all ignored by the model.
+    return true;
+  }
 
-  return QSortFilterProxyModel::hasChildren(parent);
+  // The directory is empty, but resources might be declared there and missing.
+  if (!quest.is_resource_path(file_path, resource_type) &&
+      !quest.is_in_resource_path(file_path, resource_type)) {
+    // This is not a resource directory, nothing special was declared here.
+    return false;
+  }
+
+  // This is a resource directory and it is empty.
+  // To see if some resources are declared there, ask the quest
+  // (this is faster than calling get_missing_resource_elements()).
+  if (quest.has_resource_element(file_path, resource_type)) {
+    return true;
+  }
+
+  // The directory is empty and no resource is declared in it.
+  return false;
 }
 
 /**
@@ -260,9 +279,9 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 
   case FILE_COLUMN:  // File name.
 
-    if (quest.is_resource_element(file_path, resource_type, element_id) &&
-        resource_type == ResourceType::LANGUAGE) {
-      // Ignore the subtree of languages.
+    if (quest.is_resource_element(file_path, resource_type, element_id)) {
+      // Resource elements never has children,
+      // even languages that are actually directories on the filesystem.
       flags |= Qt::ItemNeverHasChildren;
     }
     return flags;
@@ -782,6 +801,8 @@ QModelIndex QuestFilesModel::get_file_index(const QString& path) const {
  */
 QStringList QuestFilesModel::get_missing_resource_elements(
         const QModelIndex& parent, ResourceType& resource_type) const {
+
+  // TODO this should be cached for better performance.
 
   QString parent_path = get_file_path(parent);
   if (!quest.is_dir(parent_path)) {

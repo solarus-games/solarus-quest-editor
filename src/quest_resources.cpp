@@ -129,6 +129,24 @@ bool QuestResources::exists(ResourceType type, const QString& id) const {
 }
 
 /**
+ * @brief Returns whether a resource element exists with the specified prefix.
+ * @param type A type of resource.
+ * @param prefix The prefix of ids to look for.
+ * @return @c true if at least such an element exists in the resource.
+ */
+bool QuestResources::exists_with_prefix(ResourceType type, const QString& prefix) const {
+
+  for (const auto& kvp : resources.get_elements(type)) {
+    const QString& id = QString::fromStdString(kvp.first);
+    if (id.startsWith(prefix)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
  * @brief Returns the ids of all elements of a resource type.
  * @param type A type of resource.
  * @return All ids declared for this resource type.

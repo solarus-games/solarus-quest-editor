@@ -17,9 +17,9 @@
 #include "gui/gui_tools.h"
 #include "gui/new_resource_element_dialog.h"
 #include "gui/quest_tree_view.h"
-#include "gui/quest_files_model.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include "quest_files_model.h"
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QFile>
