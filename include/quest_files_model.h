@@ -105,6 +105,7 @@ private:
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 
+  bool is_dir_on_filesystem(const QModelIndex& index) const;
   bool is_extra_path(const QModelIndex& index, QString& path) const;
   QStringList get_missing_resource_elements(
       const QModelIndex& parent, ResourceType& resource_type) const;

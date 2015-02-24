@@ -111,7 +111,7 @@ int QuestFilesModel::rowCount(const QModelIndex& parent) const {
  * @brief Returns the index of an item.
  *
  * Reimplemented from QSortFilterProxyModel to create custom indexes
- * for items that are not in the source model
+ * for items that are not in the source modelk
  * Such items represent files expected by the quest, shown in the model but
  * that are missing on the filesystem.
  *
@@ -669,12 +669,38 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
  *
  * This function returns @c true for all columns of the data directory row.
  *
- * @param source_index An index in the model.
+ * @param index An index in the model.
  * @return @c true if this is the quest data directory.
  */
 bool QuestFilesModel::is_quest_data_index(const QModelIndex& index) const {
 
   return get_file_path(index) == quest.get_data_path();
+}
+
+/**
+ * @brief Returns whether a source index is the index of a directory that
+ * exists on the filesystem.
+ *
+ * This is an internal utility function.
+ * Note that it returns @c true for all actual directories including
+ * language resource elements.
+ *
+ * @param index An index in the model.
+ * @return @c true if this is an existing directory.
+ */
+bool QuestFilesModel::is_dir_on_filesystem(const QModelIndex& index) const {
+
+  QString extra_path;
+  if (is_extra_path(index, extra_path)) {
+    // This item does not exist in the filesystem (it was added by us).
+    // So it is clearly not an existing directory.
+    return false;
+  }
+
+  // For performance, ask the filesystem model rather than the quest
+  // since the filesystem model already has the information in cache.
+  const QModelIndex& source_index = mapToSource(index);
+  return source_model->isDir(source_index);
 }
 
 /**
@@ -802,17 +828,14 @@ QModelIndex QuestFilesModel::get_file_index(const QString& path) const {
 QStringList QuestFilesModel::get_missing_resource_elements(
         const QModelIndex& parent, ResourceType& resource_type) const {
 
-  // TODO this should be cached for better performance.
-
-  QString parent_path = get_file_path(parent);
-  if (!quest.is_dir(parent_path)) {
+  if (!is_dir_on_filesystem(parent)) {
     // Parent is not a directory: nothing more to do.
     return QStringList();
   }
 
+  QString parent_path = get_file_path(parent);
   QString element_id;
-  if (quest.is_resource_element(parent_path, resource_type, element_id) &&
-      resource_type == ResourceType::LANGUAGE) {
+  if (quest.is_resource_element(parent_path, resource_type, element_id)) {
     // Ignore the subtree of languages.
     return QStringList();
   }
@@ -827,23 +850,22 @@ QStringList QuestFilesModel::get_missing_resource_elements(
   // the directory.
   QStringList missing_element_ids;
   QStringList element_ids = quest.get_resources().get_elements(resource_type);
-  for (QString element_id : element_ids) {
+  for (const QString& element_id : element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
-    QDir current_parent_dir(current_path);
-    if (!current_parent_dir.cdUp()) {
-      // Even the parent directory of the element does not exist.
+    if (!current_path.startsWith(parent_path)) {
+      // The current element is not under our directory.
       continue;
     }
 
-    QString current_parent_path = current_parent_dir.path();
-    if (current_parent_path != parent_path) {
-      // This resource element is not (or not directly) in the directory.
+    QString current_path_from_parent = current_path.right(current_path.size() - parent_path.size() - 1);
+    if (current_path_from_parent.indexOf('/') != -1) {
+      // The current element is not a direct child of our directory.
       continue;
     }
 
     // The current resource element is declared in this directory.
     // Check that its file exists.
-    if (!quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
+    if (!source_model->index(current_path).isValid()) {
       missing_element_ids << element_id;
     }
   }

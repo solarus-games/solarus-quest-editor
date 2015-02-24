@@ -106,6 +106,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/mouse_coordinates_tracking_tool.h
   include/gui/new_resource_element_dialog.h
   include/gui/pan_tool.h
+  include/gui/quest_properties_editor.h
   include/gui/quest_tree_view.h
   include/gui/resource_model.h
   include/gui/resource_selector.h
@@ -121,7 +122,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_scene.h
   include/gui/tileset_view.h
   include/gui/zoom_tool.h
-  include/gui/quest_properties_editor.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -187,6 +187,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/mouse_coordinates_tracking_tool.cpp
   src/gui/new_resource_element_dialog.cpp
   src/gui/pan_tool.cpp
+  src/gui/quest_properties_editor.cpp
   src/gui/quest_tree_view.cpp
   src/gui/resource_model.cpp
   src/gui/resource_selector.cpp
@@ -202,7 +203,6 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_scene.cpp
   src/gui/tileset_view.cpp
   src/gui/zoom_tool.cpp
-  src/gui/quest_properties_editor.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp
