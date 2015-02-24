@@ -146,14 +146,14 @@ QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& paren
 
   // Create a custom index for this path and store the path in it.
   QString extra_path = quest.get_resource_element_path(resource_type, element_id) ;
-  for (QString* extra_path_ptr : extra_paths) {
-    if (*extra_path_ptr == extra_path) {
-      return createIndex(row, column, extra_path_ptr);
-    }
+  auto it = extra_paths.find(extra_path);
+  if (it != extra_paths.end()) {
+    QString* extra_path_ptr = it.value();
+    return createIndex(row, column, extra_path_ptr);
   }
 
   QString* extra_path_ptr = new QString(extra_path);
-  extra_paths.insert(extra_path_ptr);
+  extra_paths[extra_path] = extra_path_ptr;
   return createIndex(row, column, extra_path_ptr);
 }
 
@@ -704,7 +704,7 @@ bool QuestFilesModel::is_dir_on_filesystem(const QModelIndex& index) const {
 }
 
 /**
- * @brief Returns whether an index is a extra path that does not exist in the
+ * @brief Returns whether an index is an extra path that does not exist in the
  * source model.
  * @param[in] index The index to test.
  * @param[out] path The extra path corresponding to this index if any.
@@ -714,15 +714,17 @@ bool QuestFilesModel::is_extra_path(
     const QModelIndex& index, QString& extra_path) const {
 
   void* internal_ptr = index.internalPointer();
-  auto it = extra_paths.find(static_cast<QString*>(internal_ptr));
-  if (it == extra_paths.end()) {
-    // Index managed by QSortFilterProxyModel.
-    return false;
+
+  for (QString* extra_path_ptr : extra_paths) {
+    if (static_cast<void*>(extra_path_ptr) == internal_ptr) {
+      // Index managed by us.
+      extra_path = *static_cast<QString*>(internal_ptr);
+      return true;
+    }
   }
 
-  // Index managed by us.
-  extra_path = **it;
-  return true;
+  // Index managed by QSortFilterProxyModel.
+  return false;
 }
 
 /**
@@ -922,10 +924,9 @@ void QuestFilesModel::resource_element_removed(
 
   // See if this was an extra path (not existing in the source model).
   QString* extra_path_ptr = nullptr;
-  for (QString* current_extra_path : extra_paths) {
-    if (*current_extra_path == path) {
-      extra_path_ptr = current_extra_path;
-    }
+  auto it = extra_paths.find(path);
+  if (it != extra_paths.end()) {
+    extra_path_ptr = it.value();
   }
 
   if (extra_path_ptr == nullptr) {
@@ -958,7 +959,7 @@ void QuestFilesModel::resource_element_removed(
 
   // It was row i.
   beginRemoveRows(parent_index, i, i);
-  extra_paths.erase(extra_path_ptr);
+  extra_paths.erase(it);
   delete extra_path_ptr;
   endRemoveRows();
 }

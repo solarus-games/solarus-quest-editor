@@ -18,8 +18,8 @@
 #define SOLARUSEDITOR_QUEST_FILES_MODEL_H
 
 #include "quest_resources.h"
+#include <QMap>
 #include <QSortFilterProxyModel>
-#include <set>
 
 class Quest;
 class QFileSystemModel;
@@ -112,7 +112,7 @@ private:
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
-  mutable std::set<QString*>
+  mutable QMap<QString, QString*>
       extra_paths;                     /**< Extra paths added by this model, but
                                         * that don't exist in the source model.
                                         * Stored as pointers in order to use
