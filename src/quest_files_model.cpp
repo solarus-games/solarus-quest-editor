@@ -45,16 +45,6 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
           this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
 }
 
-/**
- * @brief Destructor.
- */
-QuestFilesModel::~QuestFilesModel() {
-
-  // TODO use unique_ptr
-  for (QString* extra_path : extra_paths) {
-    delete extra_path;
-  }
-}
 
 /**
  * @brief Returns the quest represented by this model.
@@ -100,9 +90,8 @@ int QuestFilesModel::rowCount(const QModelIndex& parent) const {
 
   // Get the number of rows from the filesytem (filtered)
   // and add extra rows for resource element whose file is missing.
-  ResourceType resource_type;
   int existing_files_count = QSortFilterProxyModel::rowCount(parent);
-  int missing_files_count = get_missing_resource_elements(parent, resource_type).size();
+  int missing_files_count = get_num_extra_paths(parent);
 
   return existing_files_count + missing_files_count;
 }
@@ -135,25 +124,20 @@ QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& paren
   // Item does not exist in the source model: this is an extra item of
   // QuestFilesModel. Determine its file path.
   int num_existing = QSortFilterProxyModel::rowCount(parent);
-  int index_in_missing = row - num_existing;
-  ResourceType resource_type;
-  QStringList missing_element_ids = get_missing_resource_elements(parent, resource_type);
-  if (index_in_missing < 0 || index_in_missing >= missing_element_ids.size()) {
+  int index_in_extra = row - num_existing;
+  ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr) {
+    // The parent is not an item expecting extra children.
+    return QModelIndex();
+  }
+
+  if (index_in_extra < 0 || index_in_extra >= extra_paths->element_ids.size()) {
     // The row parameter is out of range.
     return QModelIndex();
   }
-  QString element_id = missing_element_ids.at(index_in_missing);
 
-  // Create a custom index for this path and store the path in it.
-  QString extra_path = quest.get_resource_element_path(resource_type, element_id) ;
-  auto it = extra_paths.find(extra_path);
-  if (it != extra_paths.end()) {
-    QString* extra_path_ptr = it.value();
-    return createIndex(row, column, extra_path_ptr);
-  }
-
-  QString* extra_path_ptr = new QString(extra_path);
-  extra_paths[extra_path] = extra_path_ptr;
+  // Create a custom index for this path.
+  QString* extra_path_ptr = extra_paths->paths.at(index_in_extra);
   return createIndex(row, column, extra_path_ptr);
 }
 
@@ -714,17 +698,15 @@ bool QuestFilesModel::is_extra_path(
     const QModelIndex& index, QString& extra_path) const {
 
   void* internal_ptr = index.internalPointer();
-
-  for (QString* extra_path_ptr : extra_paths) {
-    if (static_cast<void*>(extra_path_ptr) == internal_ptr) {
-      // Index managed by us.
-      extra_path = *static_cast<QString*>(internal_ptr);
-      return true;
-    }
+  auto it = all_extra_paths.find(static_cast<QString*>(internal_ptr));
+  if (it == all_extra_paths.end()) {
+    // Index managed by QSortFilterProxyModel.
+    return false;
   }
 
-  // Index managed by QSortFilterProxyModel.
-  return false;
+  // Index managed by us.
+  extra_path = **it;
+  return true;
 }
 
 /**
@@ -743,37 +725,17 @@ QString QuestFilesModel::get_file_path(const QModelIndex& index) const {
   }
 
   QString extra_path;
-  if (!is_extra_path(index, extra_path)) {
-    // The item is a file that exists on the filesystem.
-    QModelIndex source_index = mapToSource(index);
-    QModelIndex file_source_index = source_model->index(
-          source_index.row(), FILE_COLUMN, source_index.parent());
-    return source_model->filePath(file_source_index);
+  if (is_extra_path(index, extra_path)) {
+    // The item is a declared resource element whose file is missing
+    // (see how rowCount() adds rows for missing elements).
+    return extra_path;
   }
 
-  // The file represented by this item does not exist.
-  // It must be a declared resource element whose file is missing
-  // (see how rowCount() adds rows for missing elements).
-  ResourceType resource_type;
-  const QModelIndex& parent_index = index.parent();
-  QString parent_path = get_file_path(parent_index);
-  if (!quest.is_resource_path(parent_path, resource_type) &&
-      !quest.is_in_resource_path(parent_path, resource_type)) {
-    // No resource elements can exist here.
-    return "";
-  }
-
-  // Get all missing element ids in this directory to check the range of the index.
-  QStringList missing_element_ids =
-      get_missing_resource_elements(parent_index, resource_type);
-  int num_existing = QSortFilterProxyModel::rowCount(parent_index);
-  int index_in_missing = index.row() - num_existing;
-  if (index_in_missing < 0 || index_in_missing >= missing_element_ids.size()) {
-    // The index is out of range.
-    return "";
-  }
-  QString element_id = missing_element_ids.at(index_in_missing);
-  return quest.get_resource_element_path(resource_type, element_id);
+  // The item is a file that exists on the filesystem.
+  QModelIndex source_index = mapToSource(index);
+  QModelIndex file_source_index = source_model->index(
+        source_index.row(), FILE_COLUMN, source_index.parent());
+  return source_model->filePath(file_source_index);
 }
 
 /**
@@ -802,55 +764,100 @@ QModelIndex QuestFilesModel::get_file_index(const QString& path) const {
   }
   const QModelIndex& parent = get_file_index(parent_dir.path());
 
-  ResourceType resource_type;
-  QStringList missing_element_ids =
-      get_missing_resource_elements(parent, resource_type);
-  int row = QSortFilterProxyModel::rowCount(parent);
-  for (QString missing_element_id : missing_element_ids) {
-    QString missing_element_path =
-        quest.get_resource_element_path(resource_type, missing_element_id);
-    if (missing_element_path == path) {
-      return index(row, 0, parent);
-    }
-    ++row;
+  const ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr) {
+    // Path not in the model.
+    return QModelIndex();
   }
 
-  // Path not in the model.
-  return QModelIndex();
+  const auto& it = extra_paths->path_indexes.find(path);
+  if (it == extra_paths->path_indexes.end()) {
+    // Path not in the model.
+    return QModelIndex();
+  }
+  const int index_in_extra = it.value();
+  const int row = QSortFilterProxyModel::rowCount(parent) + index_in_extra;
+  return index(row, 0, parent);
 }
 
 /**
- * @brief Returns the ids of resource elements that are declared under an item
+ * @brief Returns the number of resource elements that are declared under an item
+ * but whose files are missing on the filesystem.
+ * @param[in] parent An index in the model. If this is a directory, resources
+ * directly under this directory are counted. Otherwise, returns 0.
+ * @return The number of resource elements declared but missing under the item.
+ */
+int QuestFilesModel::get_num_extra_paths(const QModelIndex& parent) const {
+
+  const ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr) {
+    return 0;
+  }
+  return extra_paths->paths.size();
+}
+
+/**
+ * @brief Returns the resource elements that are declared under an item
  * but whose files are missing on the filesystem.
  * @param[in] parent An index in the model. If this is a directory, resources
  * directly under this directory are checked. Otherwise, returns an empty list.
- * @param[out] resource_type The type of resource that can exist under the item.
  * @return The ids of resource elements whose file is missing under the item.
+ * Returns nullptr if this is not a directory or not a directory expecting resources.
  */
-QStringList QuestFilesModel::get_missing_resource_elements(
-        const QModelIndex& parent, ResourceType& resource_type) const {
+QuestFilesModel::ExtraPaths* QuestFilesModel::get_extra_paths(const QModelIndex& parent) const {
+
+  const QString& parent_path = get_file_path(parent);
+  auto it = extra_paths_by_dir.find(parent_path);
+  if (it == extra_paths_by_dir.end()) {
+    // The info is not computed yet.
+    compute_extra_paths(parent);
+    it = extra_paths_by_dir.find(parent_path);
+    if (it == extra_paths_by_dir.end()) {
+      // Not a directory or not a directory expecting resources.
+      return nullptr;
+    }
+  }
+
+  ExtraPaths* extra_paths = &it.value();
+  return extra_paths;
+}
+
+/**
+ * @brief Determines the ids of resource elements that are declared under an item
+ * but whose files are missing on the filesystem.
+ * @param[in] parent An index in the model. If this is a directory, resources
+ * directly under this directory are checked. Otherwise, nothing is done.
+ * @param[out] resource_type The type of resource that can exist under the item.
+ */
+void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
+
+  QString parent_path = get_file_path(parent);
+
+  // First clear the cache, we are about to rebuild it.
+  extra_paths_by_dir.remove(parent_path);
 
   if (!is_dir_on_filesystem(parent)) {
     // Parent is not a directory: nothing more to do.
-    return QStringList();
+    return;
   }
 
-  QString parent_path = get_file_path(parent);
+  ResourceType resource_type;
   QString element_id;
   if (quest.is_resource_element(parent_path, resource_type, element_id)) {
-    // Ignore the subtree of languages.
-    return QStringList();
+    // This is a leaf item. In particular, we ignore the subtree of languages.
+    return;
   }
 
   if (!quest.is_resource_path(parent_path, resource_type) &&
       !quest.is_in_resource_path(parent_path, resource_type)) {
     // Parent is not a resource directory: we will not find resources there.
-    return QStringList();
+    return;
   }
+
+  ExtraPaths& extra_paths = extra_paths_by_dir[parent_path];
 
   // Get all declared elements of this resource type that are directly in
   // the directory.
-  QStringList missing_element_ids;
   QStringList element_ids = quest.get_resources().get_elements(resource_type);
   for (const QString& element_id : element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
@@ -868,11 +875,41 @@ QStringList QuestFilesModel::get_missing_resource_elements(
     // The current resource element is declared in this directory.
     // Check that its file exists.
     if (!source_model->index(current_path).isValid()) {
-      missing_element_ids << element_id;
+      // This is an extra element. Insert it in the cache.
+      QString* path_internal_ptr = new QString(current_path);
+      extra_paths.paths.append(path_internal_ptr);
+      extra_paths.element_ids.append(element_id);
+      all_extra_paths.insert(path_internal_ptr);
     }
   }
+}
 
-  return missing_element_ids;
+/**
+ * @brief Marks the list of missing resource elements under an item as dirty.
+ *
+ * It will be recomputed on the next get_missing_resource_elements() call.
+ *
+ * @param[in] parent An index in the model. If this is a directory, resources
+ * directly under this directory are invalidated. Otherwise, nothing is done.
+ */
+void QuestFilesModel::invalidate_extra_paths(const QModelIndex& parent) const {
+
+  QString parent_path = get_file_path(parent);
+  auto it = extra_paths_by_dir.find(parent_path);
+  if (it == extra_paths_by_dir.end()) {
+    // Already invalidated.
+    return;
+  }
+
+  // Update the redundant list.
+  ExtraPaths& extra_paths = it.value();
+  for (const QString* path_internal_ptr : extra_paths.paths) {
+    all_extra_paths.remove(path_internal_ptr);
+    delete path_internal_ptr;
+  }
+
+  // Clear the cache of this directory.
+  extra_paths_by_dir.remove(parent_path);
 }
 
 /**
@@ -922,45 +959,33 @@ void QuestFilesModel::resource_element_removed(
 
   QString path = quest.get_resource_element_path(resource_type, element_id);
 
+  QDir parent_dir(path);
+  if (!parent_dir.cdUp()) {
+    // The parent no longer exists either: nothing to do.
+    return;
+  }
+  const QModelIndex& parent_index = get_file_index(parent_dir.path());
+
   // See if this was an extra path (not existing in the source model).
-  QString* extra_path_ptr = nullptr;
-  auto it = extra_paths.find(path);
-  if (it != extra_paths.end()) {
-    extra_path_ptr = it.value();
+  const ExtraPaths* extra_paths = get_extra_paths(parent_index);
+  if (extra_paths == nullptr) {
+    // This was a regular path from the source model.
+    return;
   }
 
-  if (extra_path_ptr == nullptr) {
+  const auto& it = extra_paths->path_indexes.find(path);
+  if (it == extra_paths->path_indexes.end()) {
     // This was a regular path from the source model.
     return;
   }
 
   // This was an extra path.
-
-  // Determine its directory.
-  QDir parent_dir(path);
-  if (!parent_dir.cdUp()) {
-    // The directory no longer exists either: nothing to do.
-    return;
-  }
-  const QModelIndex& parent_index = get_file_index(parent_dir.path());
-
   // Determine the index it had under that directory.
-  int i = QSortFilterProxyModel::rowCount(parent_index);
-  QStringList missing_element_ids =
-      get_missing_resource_elements(parent_index, resource_type);
-  for (QString missing_element_id : missing_element_ids) {
-    if (missing_element_id < element_id) {
-      ++i;
-    }
-    else {
-      break;
-    }
-  }
+  const int index_in_extra = it.value();
+  const int row = QSortFilterProxyModel::rowCount(parent_index) + index_in_extra;
 
-  // It was row i.
-  beginRemoveRows(parent_index, i, i);
-  extra_paths.erase(it);
-  delete extra_path_ptr;
+  beginRemoveRows(parent_index, row, row);
+  invalidate_extra_paths(parent_index);  // Sibling indexes get shifted.
   endRemoveRows();
 }
 

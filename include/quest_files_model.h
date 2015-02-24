@@ -18,7 +18,7 @@
 #define SOLARUSEDITOR_QUEST_FILES_MODEL_H
 
 #include "quest_resources.h"
-#include <QMap>
+#include <QSet>
 #include <QSortFilterProxyModel>
 
 class Quest;
@@ -48,7 +48,6 @@ public:
   static constexpr int TYPE_COLUMN = 2;          /**< Column index of the type info in the model. */
 
   explicit QuestFilesModel(Quest& quest);
-  virtual ~QuestFilesModel();
 
   Quest& get_quest();
   QModelIndex get_quest_root_index() const;
@@ -82,7 +81,6 @@ public:
       const QModelIndex& index, const QVariant& value, int role = Qt::EditRole
       ) override;
 
-
 protected:
 
   virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
@@ -101,22 +99,54 @@ private slots:
 
 private:
 
+  /**
+   * @brief For a directory, list of the paths added by this model but that
+   * do not exist on the filesystem.
+   *
+   * These paths correspond to resource elements that are declared in the quest
+   * but that are missing on the filesystem.
+   * There is a lot of redundancy for performance.
+   */
+  struct ExtraPaths {
+    QList<QString*> paths;                  /**< Paths stored as pointers
+                                             * in order to use QModelIndex::internalPointer().
+                                             * This class has exclusive ownership of the pointers. */
+    QMap<QString, int> path_indexes;        /**< Fast access to the index of each
+                                             * element in paths (redundant information). */
+    QStringList element_ids;                /**< The corresponding resource element ids
+                                             * (redundant information). */
+
+    ~ExtraPaths() {
+      // TODO use unique_ptr
+      for (QString* path_internal_ptr : paths) {
+        delete path_internal_ptr;
+      }
+    }
+  };
+
   QIcon get_quest_file_icon(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 
   bool is_dir_on_filesystem(const QModelIndex& index) const;
   bool is_extra_path(const QModelIndex& index, QString& path) const;
-  QStringList get_missing_resource_elements(
-      const QModelIndex& parent, ResourceType& resource_type) const;
+  int get_num_extra_paths(const QModelIndex& parent) const;
+  ExtraPaths* get_extra_paths(const QModelIndex& parent) const;
+  void compute_extra_paths(const QModelIndex& parent) const;
+  void invalidate_extra_paths(const QModelIndex& parent) const;
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
-  mutable QMap<QString, QString*>
-      extra_paths;                     /**< Extra paths added by this model, but
-                                        * that don't exist in the source model.
-                                        * Stored as pointers in order to use
-                                        * QModelIndex::internalPointer(). */
+
+  mutable QMap<QString, ExtraPaths>
+      extra_paths_by_dir;              /**< For each directory, extra paths added by
+                                        * this model but that don't exist in the source model. */
+  mutable QSet<const QString*>
+      all_extra_paths;                 /**< List of all paths stored in extra_paths
+                                        * (redundant info for performance). */
+  // TODO invalidate extra paths
+  // - when a row previously known as an extra path is inserted in the source model
+  // - when a row of a resource element is removed from the source model
 
 };
 
