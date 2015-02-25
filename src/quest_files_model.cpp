@@ -44,12 +44,14 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
   connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
 
+  // This model adds extra items for files missing on the filesystem.
+  // To ensure we have an extra item if and only if the file is missing,
+  // we need to watch files creations and destructions.
   connect(source_model, SIGNAL(rowsInserted(QModelIndex, int, int)),
           SLOT(source_model_rows_inserted(QModelIndex, int, int)));
-  connect(source_model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-          SLOT(source_model_rows_removed(QModelIndex, int, int)));
+  connect(source_model, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
+          SLOT(source_model_rows_about_to_be_removed(QModelIndex, int, int)));
 }
-
 
 /**
  * @brief Returns the quest represented by this model.
@@ -880,7 +882,10 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
 
     // The current resource element is declared in this directory.
     // Check that its file exists.
-    if (!source_model->index(current_path).isValid()) {
+    // Note: we could check the existence of the file faster by asking the source model,
+    // but we want this computation to work even from rowsAboutToBeRemoved(), that is,
+    // when model rows of files just deleted still exist in the source model.
+    if (!quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
       // This is an extra element. Insert it in the cache.
       QString* path_internal_ptr = new QString(current_path);
       extra_paths.paths.append(path_internal_ptr);
@@ -1049,14 +1054,6 @@ void QuestFilesModel::source_model_rows_inserted(const QModelIndex& source_paren
     return;
   }
 
-  const QString& parent_path = get_file_path(parent);
-  ResourceType resource_type;
-  if (!quest.is_resource_path(parent_path, resource_type) &&
-      !quest.is_in_resource_path(parent_path, resource_type)) {
-    // Parent is not a resource directory: there are no extra paths there.
-    return;
-  }
-
   ExtraPaths* extra_paths = get_extra_paths(parent);
   if (extra_paths == nullptr || extra_paths->paths.isEmpty()) {
     // There are currently no extra paths here.
@@ -1069,9 +1066,11 @@ void QuestFilesModel::source_model_rows_inserted(const QModelIndex& source_paren
     const QString& path = source_model->filePath(source_index);
     const auto& it = extra_paths->path_indexes.find(path);
     if (it == extra_paths->path_indexes.end()) {
+      // There is already no extra path for this item.
       continue;
     }
 
+    // Notify people about the removed extra path row.
     const int row = regular_row_count + it.value();
     beginRemoveRows(parent, row, row);
     invalidate_extra_paths(parent);
@@ -1080,20 +1079,57 @@ void QuestFilesModel::source_model_rows_inserted(const QModelIndex& source_paren
 }
 
 /**
- * @brief Slot called when a file (or more) disappears in the source model.
+ * @brief Slot called when a file (or more) is disappearing in the source model.
  *
- * If the file was a resource element, is becomes missing so a extra path is
+ * If the file was a resource element, is becomes missing so an extra path is
  * added by this model to replace it and still show an item.
  *
- * @param source_parent Parent source index of the added items.
- * @param first First row of the added source items.
- * @param last Last row of the added source items.
+ * @param source_parent Parent source index of the removed items.
+ * @param first First row of the removed source items.
+ * @param last Last row of the removed source items.
  */
-void QuestFilesModel::source_model_rows_removed(const QModelIndex& source_parent, int first, int last) {
+void QuestFilesModel::source_model_rows_about_to_be_removed(const QModelIndex& source_parent, int first, int last) {
 
-  Q_UNUSED(first);
-  Q_UNUSED(last);
-  Q_UNUSED(source_parent);
-  // TODO
+  const QModelIndex& parent = mapFromSource(source_parent);
+  if (!parent.isValid()) {
+    // The parent item was filtered out.
+    return;
+  }
+
+  ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr) {
+    // The directory cannot have extra paths.
+    return;
+  }
+
+  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
+  for (int source_row = first; source_row <= last; ++source_row) {
+
+    const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
+    const QString& path = source_model->filePath(source_index);
+    auto it = extra_paths->path_indexes.find(path);
+    if (it != extra_paths->path_indexes.end()) {
+      // There is already an extra path for this item.
+      continue;
+    }
+
+    // Compute extra paths right now to know more easily if one gets inserted and where.
+    // Ideally, we would invalidate extra paths between beginInsertRows() and endInsertRows()
+    // below but this is okay.
+    invalidate_extra_paths(parent);
+    compute_extra_paths(parent);
+
+    it = extra_paths->path_indexes.find(path);
+    if (it == extra_paths->path_indexes.end()) {
+      // No extra path was just created for the removed file
+      // (this was probably not a resource).
+      continue;
+    }
+
+    // Notify people about the new extra path row.
+    const int row = regular_row_count + it.value();
+    beginInsertRows(parent, row, row);
+    endInsertRows();
+  }
 }
 

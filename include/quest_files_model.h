@@ -98,7 +98,7 @@ private slots:
       ResourceType resource_type, const QString& element_id, const QString& description);
 
   void source_model_rows_inserted(const QModelIndex& source_parent, int first, int last);
-  void source_model_rows_removed(const QModelIndex& source_parent, int first, int last);
+  void source_model_rows_about_to_be_removed(const QModelIndex& source_parent, int first, int last);
 
 private:
 
