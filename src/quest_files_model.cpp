@@ -43,6 +43,11 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
           this, SLOT(resource_element_renamed(ResourceType, QString, QString)));
   connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
+
+  connect(source_model, SIGNAL(rowsInserted(QModelIndex, int, int)),
+          SLOT(source_model_rows_inserted(QModelIndex, int, int)));
+  connect(source_model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+          SLOT(source_model_rows_removed(QModelIndex, int, int)));
 }
 
 
@@ -859,6 +864,7 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
   // Get all declared elements of this resource type that are directly in
   // the directory.
   QStringList element_ids = quest.get_resources().get_elements(resource_type);
+  int i = 0;
   for (const QString& element_id : element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
     if (!current_path.startsWith(parent_path)) {
@@ -878,9 +884,11 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
       // This is an extra element. Insert it in the cache.
       QString* path_internal_ptr = new QString(current_path);
       extra_paths.paths.append(path_internal_ptr);
+      extra_paths.path_indexes[current_path] = i;
       extra_paths.element_ids.append(element_id);
       all_extra_paths.insert(path_internal_ptr);
     }
+    ++i;
   }
 }
 
@@ -905,7 +913,6 @@ void QuestFilesModel::invalidate_extra_paths(const QModelIndex& parent) const {
   ExtraPaths& extra_paths = it.value();
   for (const QString* path_internal_ptr : extra_paths.paths) {
     all_extra_paths.remove(path_internal_ptr);
-    delete path_internal_ptr;
   }
 
   // Clear the cache of this directory.
@@ -1022,3 +1029,71 @@ void QuestFilesModel::resource_element_description_changed(
   index = sibling(index.row(), DESCRIPTION_COLUMN, index);
   emit dataChanged(index, index);
 }
+
+/**
+ * @brief Slot called when a file (or more) appears in the source model.
+ *
+ * If the file there as an extra path in this model, the extra path is removed
+ * now that the physical file exists.
+ *
+ * @param source_parent Parent source index of the added items.
+ * @param first First row of the added source items.
+ * @param last Last row of the added source items.
+ */
+void QuestFilesModel::source_model_rows_inserted(const QModelIndex& source_parent, int first, int last) {
+
+  const QModelIndex& parent = mapFromSource(source_parent);
+  if (!parent.isValid()) {
+    // The parent item was not created yet in this model
+    // or was filtered out.
+    return;
+  }
+
+  const QString& parent_path = get_file_path(parent);
+  ResourceType resource_type;
+  if (!quest.is_resource_path(parent_path, resource_type) &&
+      !quest.is_in_resource_path(parent_path, resource_type)) {
+    // Parent is not a resource directory: there are no extra paths there.
+    return;
+  }
+
+  ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr || extra_paths->paths.isEmpty()) {
+    // There are currently no extra paths here.
+    return;
+  }
+
+  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
+  for (int source_row = first; source_row <= last; ++source_row) {
+    const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
+    const QString& path = source_model->filePath(source_index);
+    const auto& it = extra_paths->path_indexes.find(path);
+    if (it == extra_paths->path_indexes.end()) {
+      continue;
+    }
+
+    const int row = regular_row_count + it.value();
+    beginRemoveRows(parent, row, row);
+    invalidate_extra_paths(parent);
+    endRemoveRows();
+  }
+}
+
+/**
+ * @brief Slot called when a file (or more) disappears in the source model.
+ *
+ * If the file was a resource element, is becomes missing so a extra path is
+ * added by this model to replace it and still show an item.
+ *
+ * @param source_parent Parent source index of the added items.
+ * @param first First row of the added source items.
+ * @param last Last row of the added source items.
+ */
+void QuestFilesModel::source_model_rows_removed(const QModelIndex& source_parent, int first, int last) {
+
+  Q_UNUSED(first);
+  Q_UNUSED(last);
+  Q_UNUSED(source_parent);
+  // TODO
+}
+
