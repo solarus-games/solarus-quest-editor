@@ -27,4 +27,11 @@ Sensor::Sensor(MapModel& map, const Solarus::EntityData& entity) :
   Q_ASSERT(entity.get_type() == EntityType::SENSOR);
 
   set_origin(QPoint(8, 13));
+
+  DrawShapeInfo info;
+  info.enabled = true;
+  info.between_border_color = QColor(184, 200, 96);
+  info.pixmap = QPixmap(":/images/entity_sensor_resizable.png");
+  info.tiled_pixmap = true;
+  set_draw_shape_info(info);
 }

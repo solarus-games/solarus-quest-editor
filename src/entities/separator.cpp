@@ -26,4 +26,10 @@ Separator::Separator(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::SEPARATOR);
 
+  DrawShapeInfo info;
+  info.enabled = true;
+  info.between_border_color = QColor(142, 142, 142);
+  info.pixmap = QPixmap(":/images/entity_separator_resizable.png");
+  info.tiled_pixmap = true;
+  set_draw_shape_info(info);
 }

@@ -26,4 +26,10 @@ Wall::Wall(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::WALL);
 
+  DrawShapeInfo info;
+  info.enabled = true;
+  info.between_border_color = QColor(240, 142, 142);
+  info.pixmap = QPixmap(":/images/entity_wall_resizable.png");
+  info.tiled_pixmap = true;
+  set_draw_shape_info(info);
 }
