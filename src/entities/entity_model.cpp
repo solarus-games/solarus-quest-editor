@@ -56,6 +56,7 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   entity(entity),
   origin(0, 0),
   size(16, 16),
+  draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
   draw_shape_info(),
@@ -402,6 +403,34 @@ QVariant EntityModel::get_field(const QString& key) const {
 }
 
 /**
+ * @brief Returns the sprite description of the entity.
+ * @return The sprite description that was set with set_sprite_description().
+ */
+const EntityModel::DrawSpriteInfo& EntityModel::get_draw_sprite_info() const {
+  return this->draw_sprite_info;
+}
+
+/**
+ * @brief Sets how to draw this entity as a sprite.
+ * @param draw_sprite_info Description of the sprite to draw.
+ */
+void EntityModel::set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info) {
+
+  this->draw_sprite_info = draw_sprite_info;
+
+  sprite_model = nullptr;
+  sprite_image = QPixmap();
+}
+
+/**
+ * @brief Returns the shape description of the entity.
+ * @return The shape description that was set with set_shape_description().
+ */
+const EntityModel::DrawShapeInfo& EntityModel::get_draw_shape_info() const {
+  return this->draw_shape_info;
+}
+
+/**
  * @brief Sets how to draw this entity as a shape.
  *
  * Call this function if you want your entity to be drawn as a shape
@@ -410,7 +439,6 @@ QVariant EntityModel::get_field(const QString& key) const {
  * @param draw_shape_info Description of the shape to draw.
  */
 void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
-
   this->draw_shape_info = draw_shape_info;
 }
 
@@ -420,6 +448,8 @@ void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
  * The default implementation does the following.
  * - If the entity type has a "sprite" field, draws this sprite if the value
  *   is set to a valid sprite.
+ * - Otherwise, if a sprite was set by calling set_sprite_id(), draws this
+ *   sprite if it is a valid one.
  * - Otherwise, if a shape description was set by calling set_draw_shape_info(),
  *   this shape is drawn.
  * - Otherwise, draws an icon representing the type of entity.
@@ -440,15 +470,35 @@ void EntityModel::draw(QPainter& painter) const {
 }
 
 /**
- * @brief Draws this entity using its sprite if any.
+ * @brief Attempts to draw this entity using its sprite if any.
+ *
+ * Its sprite is the one from the sprite field value if any,
+ * and otherwise the one that was set by set_sprite_id().
+ *
  * @param painter The painter to draw.
  * @return @c true if the sprite was successfully drawn.
  */
 bool EntityModel::draw_as_sprite(QPainter& painter) const {
 
-  const QString sprite_id = get_field("sprite").toString();
+  // Try to draw the sprite from the sprite field if any.
+  const QString& sprite_field_value = get_field("sprite").toString();
+  if (draw_as_sprite(painter, sprite_field_value)) {
+    return true;
+  }
+
+  // Otherwise try to draw the one that was set by set_draw_sprite_info().
+  return draw_as_sprite(painter, draw_sprite_info.sprite_id);
+}
+
+/**
+ * @brief Attempts to draw this entity using the specified sprite.
+ * @param painter The painter to draw.
+ * @return @c true if the sprite was successfully drawn.
+ */
+bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id) const {
+
   if (sprite_id.isEmpty()) {
-    // No sprite field.
+    // No sprite sheet.
     return false;
   }
 
@@ -491,7 +541,12 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
   }
 
   QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
-  painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
+  if (draw_sprite_info.tiled) {
+    painter.drawTiledPixmap(QRect(dst_top_left, get_size()), sprite_image);
+  }
+  else {
+    painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
+  }
   return true;
 }
 

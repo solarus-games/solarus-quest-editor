@@ -26,4 +26,8 @@ CrystalBlock::CrystalBlock(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::CRYSTAL_BLOCK);
 
+  DrawSpriteInfo info;
+  info.sprite_id = "entities/crystal_block";
+  info.tiled = true;
+  set_draw_sprite_info(info);
 }

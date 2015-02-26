@@ -79,6 +79,16 @@ public:
 protected:
 
   /**
+   * @brief Describes how to draw an entity as a sprite.
+   */
+  struct DrawSpriteInfo {
+
+    bool enabled = true;  // false means not drawn as a sprite.
+    QString sprite_id;    // Only used if there is no "sprite" field.
+    bool tiled = false;   // Tiled or only once at origin point.
+  };
+
+  /**
    * @brief Describes how to draw an entity as a shape.
    *
    * The shape is filled with a background color or a pixmap,
@@ -92,14 +102,18 @@ protected:
     QColor background_color;
     QColor between_border_color;
     QPixmap pixmap;
-    bool tiled_pixmap = false;  // tiled or centered
+    bool tiled_pixmap = false;  // Tiled or centered.
   };
 
   EntityModel(MapModel& map, const Solarus::EntityData& entity);
 
+  const DrawSpriteInfo& get_draw_sprite_info() const;
+  void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);
+  const DrawShapeInfo& get_draw_shape_info() const;
   void set_draw_shape_info(const DrawShapeInfo& draw_shape_info);
 
   bool draw_as_sprite(QPainter& painter) const;
+  bool draw_as_sprite(QPainter& painter, const QString& sprite_id) const;
   bool draw_as_shape(QPainter& painter) const;
   bool draw_as_icon(QPainter& painter) const;
 
@@ -110,6 +124,11 @@ private:
   Solarus::EntityData entity;     /**< The entity data wrapped. */
   QPoint origin;                  /**< Origin point of the entity. */
   QSize size;                     /**< Size of the entity for the editor. */
+
+  // Displaying.
+  DrawSpriteInfo
+      draw_sprite_info;           /**< How to draw the entity
+                                   * when it is drawn as a sprite. */
   mutable std::unique_ptr<SpriteModel>
       sprite_model;               /**< Sprite to show when the entity is drawn
                                    * as a sprite. */
