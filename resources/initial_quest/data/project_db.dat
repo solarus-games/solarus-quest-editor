@@ -1,23 +1,16 @@
 sprite{ id = "entities/arrow", description = "Arrow" }
 sprite{ id = "entities/block", description = "Block" }
 sprite{ id = "entities/bomb", description = "Bomb" }
-sprite{ id = "entities/bomb_flower", description = "Bomb flower" }
-sprite{ id = "entities/bush", description = "Bush" }
 sprite{ id = "entities/chest", description = "Chest" }
-sprite{ id = "entities/conveyor_belt", description = "Conveyor belt" }
 sprite{ id = "entities/crystal", description = "Crystal" }
+sprite{ id = "entities/crystal_block", description = "Crystal block" }
 sprite{ id = "entities/explosion", description = "Explosion" }
 sprite{ id = "entities/fire", description = "Fire" }
-sprite{ id = "entities/grass", description = "Grass" }
 sprite{ id = "entities/hookshot", description = "Hookshot" }
 sprite{ id = "entities/items", description = "Items" }
-sprite{ id = "entities/pot", description = "Pot" }
 sprite{ id = "entities/shadow", description = "Shadow" }
-sprite{ id = "entities/sign", description = "Sign" }
 sprite{ id = "entities/solid_switch", description = "Solid switch" }
 sprite{ id = "entities/star", description = "Star" }
-sprite{ id = "entities/stone_small_black", description = "Stone (black)" }
-sprite{ id = "entities/stone_small_white", description = "Stone (white)" }
 sprite{ id = "entities/switch", description = "Switch" }
 sprite{ id = "hero/tunic1", description = "Hero tunic 1" }
 sprite{ id = "hero/sword1", description = "Hero sword 1" }
