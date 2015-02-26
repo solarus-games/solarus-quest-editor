@@ -1010,29 +1010,10 @@ void QuestFilesModel::resource_element_removed(
     // The parent no longer exists either: nothing to do.
     return;
   }
-  const QModelIndex& parent_index = get_file_index(parent_dir.path());
+  const QModelIndex& parent = get_file_index(parent_dir.path());
 
   // See if this was an extra path (not existing in the source model).
-  const ExtraPaths* extra_paths = get_extra_paths(parent_index);
-  if (extra_paths == nullptr) {
-    // This was a regular path from the source model.
-    return;
-  }
-
-  const auto& it = extra_paths->path_indexes.find(path);
-  if (it == extra_paths->path_indexes.end()) {
-    // This was a regular path from the source model.
-    return;
-  }
-
-  // This was an extra path.
-  // Determine the index it had under that directory.
-  const int index_in_extra = it.value();
-  const int row = QSortFilterProxyModel::rowCount(parent_index) + index_in_extra;
-
-  beginRemoveRows(parent_index, row, row);
-  invalidate_extra_paths(parent_index);  // Sibling indexes get shifted.
-  endRemoveRows();
+  remove_extra_path(parent, path);
 }
 
 /**
@@ -1088,27 +1069,16 @@ void QuestFilesModel::source_model_rows_inserted(const QModelIndex& source_paren
     return;
   }
 
-  ExtraPaths* extra_paths = get_extra_paths(parent);
+  const ExtraPaths* extra_paths = get_extra_paths(parent);
   if (extra_paths == nullptr || extra_paths->paths.isEmpty()) {
     // There are currently no extra paths here.
     return;
   }
 
-  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
   for (int source_row = first; source_row <= last; ++source_row) {
     const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
     const QString& path = source_model->filePath(source_index);
-    const auto& it = extra_paths->path_indexes.find(path);
-    if (it == extra_paths->path_indexes.end()) {
-      // There is already no extra path for this item.
-      continue;
-    }
-
-    // Notify people about the removed extra path row.
-    const int row = regular_row_count + it.value();
-    beginRemoveRows(parent, row, row);
-    invalidate_extra_paths(parent);
-    endRemoveRows();
+    remove_extra_path(parent, path);
   }
 }
 
@@ -1139,6 +1109,8 @@ void QuestFilesModel::source_model_rows_about_to_be_removed(const QModelIndex& s
   const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
   for (int source_row = first; source_row <= last; ++source_row) {
 
+    // TODO make a function insert_extra_path()
+
     const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
     const QString& path = source_model->filePath(source_index);
     auto it = extra_paths->path_indexes.find(path);
@@ -1167,3 +1139,47 @@ void QuestFilesModel::source_model_rows_about_to_be_removed(const QModelIndex& s
   }
 }
 
+/**
+ * @brief If the specified path exists as an extra path, removes it from the model.
+ * @param parent Parent directory where to remove the path.
+ * @param path The path to remove.
+ */
+void QuestFilesModel::remove_extra_path(const QModelIndex& parent, const QString& path) {
+
+  ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr || extra_paths->paths.isEmpty()) {
+    // No extra path here.
+    return;
+  }
+  const auto& it = extra_paths->path_indexes.find(path);
+  if (it == extra_paths->path_indexes.end()) {
+    // There is already no extra path for this item.
+    return;
+  }
+
+  // Remove the extra path.
+  const int index_in_extra = it.value();
+  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
+  const int row = regular_row_count + index_in_extra;
+
+  beginRemoveRows(parent, row, row);
+
+  for (const ExtraPathColumnPtrs& columns : extra_paths->paths) {
+    for (QString* path_internal_ptr : columns) {
+      all_extra_paths.remove(path_internal_ptr);
+    }
+  }
+  extra_paths->paths.removeAt(index_in_extra);
+  extra_paths->element_ids.removeAt(index_in_extra);
+
+  // Rebuild the index map because indexes get shifted.
+  extra_paths->path_indexes.clear();
+  int i = 0;
+  for (const ExtraPathColumnPtrs& columns : extra_paths->paths) {
+    const QString& current_path = *columns[0];
+    extra_paths->path_indexes.insert(current_path, i);
+    ++i;
+  }
+
+  endRemoveRows();
+}

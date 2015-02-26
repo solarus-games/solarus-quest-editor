@@ -143,6 +143,7 @@ private:
   ExtraPaths* get_extra_paths(const QModelIndex& parent) const;
   void compute_extra_paths(const QModelIndex& parent) const;
   void invalidate_extra_paths(const QModelIndex& parent) const;
+  void remove_extra_path(const QModelIndex& parent, const QString& path);
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
