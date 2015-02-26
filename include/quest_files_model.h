@@ -60,14 +60,14 @@ public:
   // adding extra rows breaks an assumption of QSortFilterProxyModel:
   // the fact that a valid proxy index can always be mapped to a valid
   // source index.
-  virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex parent(const QModelIndex& index) const override;
-  virtual QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
-  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex mapToSource(const QModelIndex& proxy_index) const override;
-  // TODO mapSelectionToSource
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex& index) const override;
+  QModelIndex sibling(int row, int column, const QModelIndex& idx) const override;
+  bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex mapToSource(const QModelIndex& proxy_index) const override;
+  QItemSelection mapSelectionToSource(const QItemSelection& proxy_selection) const override;
 
   // Data.
   virtual Qt::ItemFlags flags(const QModelIndex& index) const override;

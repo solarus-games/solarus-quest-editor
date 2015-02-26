@@ -19,6 +19,7 @@
 #include "quest.h"
 #include "quest_files_model.h"
 #include <QFileSystemModel>
+#include <QItemSelection>
 
 /**
  * @brief Creates a quest files model.
@@ -252,6 +253,32 @@ QModelIndex QuestFilesModel::mapToSource(const QModelIndex& proxy_index) const {
   }
 
   return QSortFilterProxyModel::mapToSource(proxy_index);
+}
+
+/**
+ * @brief Converts a selection of this model to a selection in the source model.
+ *
+ * Reimplemented from QSortFilterProxyModel to peacefully handle items that do
+ * not exist in the source model.
+ *
+ * @param proxy_selection A selection in this model.
+ * @return The corresponding source selection.
+ */
+QItemSelection QuestFilesModel::mapSelectionToSource(const QItemSelection& proxy_selection) const {
+
+  QItemSelection source_selection;
+
+  const QModelIndexList& indexes = proxy_selection.indexes();
+  for (const QModelIndex& index : indexes) {
+    const QModelIndex& source_index = mapToSource(index);
+    if (!index.isValid()) {
+      // Selected item that does not exist in the source model.
+      continue;
+    }
+    source_selection.append(QItemSelectionRange(source_index));
+  }
+
+  return source_selection;
 }
 
 /**
