@@ -792,6 +792,7 @@ void QuestTreeView::delete_action_triggered() {
         return;
       }
 
+      set_selected_path("");  // Unselect the item, otherwise the next one gets selected.
       quest.delete_resource_element(resource_type, element_id);
     }
 
