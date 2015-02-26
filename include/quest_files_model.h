@@ -20,6 +20,7 @@
 #include "quest_resources.h"
 #include <QSet>
 #include <QSortFilterProxyModel>
+#include <array>
 
 class Quest;
 class QFileSystemModel;
@@ -46,6 +47,7 @@ public:
   static constexpr int FILE_COLUMN = 0;          /**< Column index of the file in the model. */
   static constexpr int DESCRIPTION_COLUMN = 1;   /**< Column index of the resource description in the model. */
   static constexpr int TYPE_COLUMN = 2;          /**< Column index of the type info in the model. */
+  static constexpr int NUM_COLUMNS = 3;          /**< Number of columns of the model. */
 
   explicit QuestFilesModel(Quest& quest);
 
@@ -102,6 +104,8 @@ private slots:
 
 private:
 
+  using ExtraPathColumnPtrs = std::array<QString*, NUM_COLUMNS>;
+
   /**
    * @brief For a directory, list of the paths added by this model but that
    * do not exist on the filesystem.
@@ -111,7 +115,7 @@ private:
    * There is a lot of redundancy for performance.
    */
   struct ExtraPaths {
-    QList<QString*> paths;                  /**< Paths stored as pointers
+    QList<ExtraPathColumnPtrs> paths;       /**< Paths stored as pointers
                                              * in order to use QModelIndex::internalPointer().
                                              * This class has exclusive ownership of the pointers. */
     QMap<QString, int> path_indexes;        /**< Fast access to the index of each
@@ -121,8 +125,10 @@ private:
 
     ~ExtraPaths() {
       // TODO use unique_ptr
-      for (QString* path_internal_ptr : paths) {
-        delete path_internal_ptr;
+      for (ExtraPathColumnPtrs& ptrs : paths) {
+        for (QString* path_internal_ptr : ptrs) {
+          delete path_internal_ptr;
+        }
       }
     }
   };
@@ -147,9 +153,6 @@ private:
   mutable QSet<const QString*>
       all_extra_paths;                 /**< List of all paths stored in extra_paths
                                         * (redundant info for performance). */
-  // TODO invalidate extra paths
-  // - when a row previously known as an extra path is inserted in the source model
-  // - when a row of a resource element is removed from the source model
 
 };
 

@@ -82,7 +82,7 @@ QModelIndex QuestFilesModel::get_quest_root_index() const {
 int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
 
   // File, Description, Type.
-  return 3;
+  return NUM_COLUMNS;
 }
 
 /**
@@ -145,7 +145,7 @@ QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& paren
   }
 
   // Create a custom index for this path.
-  QString* extra_path_ptr = extra_paths->paths.at(index_in_extra);
+  QString* extra_path_ptr = extra_paths->paths.at(index_in_extra)[column];
   return createIndex(row, column, extra_path_ptr);
 }
 
@@ -914,11 +914,15 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
     // when model rows of files just deleted still exist in the source model.
     if (!quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
       // This is an extra element. Insert it in the cache.
-      QString* path_internal_ptr = new QString(current_path);
-      extra_paths.paths.append(path_internal_ptr);
+      ExtraPathColumnPtrs columns;
+      for (int j = 0; j < NUM_COLUMNS; ++j) {
+        QString* path_internal_ptr = new QString(current_path);
+        columns[j] = path_internal_ptr;
+        all_extra_paths.insert(path_internal_ptr);
+      }
+      extra_paths.paths.append(columns);
       extra_paths.path_indexes[current_path] = i;
       extra_paths.element_ids.append(element_id);
-      all_extra_paths.insert(path_internal_ptr);
     }
     ++i;
   }
@@ -943,8 +947,10 @@ void QuestFilesModel::invalidate_extra_paths(const QModelIndex& parent) const {
 
   // Update the redundant list.
   ExtraPaths& extra_paths = it.value();
-  for (const QString* path_internal_ptr : extra_paths.paths) {
-    all_extra_paths.remove(path_internal_ptr);
+  for (const ExtraPathColumnPtrs& columns : extra_paths.paths) {
+    for (QString* path_internal_ptr : columns) {
+      all_extra_paths.remove(path_internal_ptr);
+    }
   }
 
   // Clear the cache of this directory.
@@ -976,6 +982,7 @@ void QuestFilesModel::resource_element_added(
 
   if (!quest.exists(path)) {
     beginInsertRows(parent_index, index.row(), index.row());
+    invalidate_extra_paths(parent_index);  // Sibling indexes get shifted.
     endInsertRows();
   }
 }
