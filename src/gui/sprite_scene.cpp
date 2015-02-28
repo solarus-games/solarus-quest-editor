@@ -40,18 +40,18 @@ public:
     Type = UserType + 1
   };
 
-  virtual int type() const override {
+  int type() const override {
     return Type;
   }
 
   SpriteModel::Index get_index() const;
   void set_index(const SpriteModel::Index& index);
 
-  virtual QRectF boundingRect() const override;
+  QRectF boundingRect() const override;
 
 protected:
 
-  virtual void paint(QPainter* painter,
+  void paint(QPainter* painter,
                      const QStyleOptionGraphicsItem* option,
                      QWidget* widget = nullptr) override;
 
