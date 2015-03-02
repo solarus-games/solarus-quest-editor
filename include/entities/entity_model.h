@@ -20,6 +20,7 @@
 #include "entity_traits.h"
 #include "layer_traits.h"
 #include <solarus/MapData.h>
+#include <QList>
 #include <QPixmap>
 #include <QPointer>
 #include <memory>
@@ -72,6 +73,9 @@ public:
   QSize get_size() const;
   void set_size(const QSize& size);
   QRect get_bounding_box() const;
+  bool has_direction_property() const;
+  int get_direction() const;
+  bool has_field(const QString& key) const;
   QVariant get_field(const QString& key) const;
 
   virtual void draw(QPainter& painter) const;
@@ -105,16 +109,40 @@ protected:
     bool tiled_pixmap = false;  // Tiled or centered.
   };
 
+  /**
+   * @brief A rectangle region of an image file.
+   */
+  struct SubImage {
+    QString file_name;
+    QRect src_rect;  // An invalid rect means the whole image.
+    mutable QPixmap pixmap;
+  };
+
+  /**
+   * @brief Describes how to draw an entity as a fixed image.
+   *
+   * If nothing is specified, the image will be a generic icon for the entity
+   * type.
+   */
+  struct DrawImageInfo {
+    SubImage image_no_direction;
+    QList<SubImage> images_by_direction;
+  };
+
   EntityModel(MapModel& map, const Solarus::EntityData& entity);
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);
   const DrawShapeInfo& get_draw_shape_info() const;
   void set_draw_shape_info(const DrawShapeInfo& draw_shape_info);
+  const DrawImageInfo& get_draw_image_info() const;
+  void set_draw_image_info(const DrawImageInfo& draw_shape_info);
 
   bool draw_as_sprite(QPainter& painter) const;
   bool draw_as_sprite(QPainter& painter, const QString& sprite_id) const;
   bool draw_as_shape(QPainter& painter) const;
+  bool draw_as_image(QPainter& painter) const;
+  bool draw_as_image(QPainter& painter, const SubImage& image) const;
   bool draw_as_icon(QPainter& painter) const;
 
 private:
@@ -135,6 +163,8 @@ private:
   mutable QPixmap sprite_image;   /**< Fixed image from the sprite. */
   DrawShapeInfo draw_shape_info;  /**< Shape to use when the entity is drawn as
                                    * a shape. */
+  DrawImageInfo draw_image_info;  /**< Subimage to use when the entity is
+                                   * drawn as a fixed image from a file. */
   mutable QPixmap icon;           /**< Icon to use when the entity is drawn as
                                    * an icon. */
 };

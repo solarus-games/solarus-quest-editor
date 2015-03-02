@@ -27,4 +27,15 @@ Stream::Stream(MapModel& map, const Solarus::EntityData& entity) :
   Q_ASSERT(entity.get_type() == EntityType::STREAM);
 
   set_origin(QPoint(8, 13));
+
+  // When no sprite is set, draw an image that depends on a direction.
+  DrawImageInfo info;
+  QString file_name(":/images/entity_stream_all.png");
+  for (int direction = 0; direction < 8; ++direction) {
+    SubImage sub_image;
+    sub_image.file_name = file_name;
+    sub_image.src_rect = QRect(direction * 16, 0, 16, 16);
+    info.images_by_direction.append(sub_image);
+  }
+  set_draw_image_info(info);
 }

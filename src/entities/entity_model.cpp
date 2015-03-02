@@ -46,12 +46,14 @@
 #include <QDebug>
 #include <QPainter>
 
+using EntityData = Solarus::EntityData;
+
 /**
  * @brief Creates an entity model.
  * @param map The map containing the entity.
  * @param entity The entity data to represent.
  */
-EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
+EntityModel::EntityModel(MapModel& map, const EntityData& entity) :
   map(&map),
   entity(entity),
   origin(0, 0),
@@ -60,6 +62,7 @@ EntityModel::EntityModel(MapModel& map, const Solarus::EntityData& entity) :
   sprite_model(nullptr),
   sprite_image(),
   draw_shape_info(),
+  draw_image_info(),
   icon() {
 
   // If the entity has explicit size information in its properties, use it.
@@ -81,7 +84,7 @@ EntityModel::~EntityModel() {
  * @return The created model.
  */
 std::unique_ptr<EntityModel> EntityModel::create(
-    MapModel& map, const Solarus::EntityData& entity_data) {
+    MapModel& map, const EntityData& entity_data) {
 
   EntityModel* entity = nullptr;
 
@@ -377,6 +380,49 @@ QRect EntityModel::get_bounding_box() const {
 }
 
 /**
+ * @brief Returns whether this entity has a "direction" field.
+ * @return @c true if a direction property exists.
+ */
+bool EntityModel::has_direction_property() const {
+
+  return has_field("direction");
+}
+
+/**
+ * @brief Returns the direction of this entity.
+ *
+ * If the entity has no direction field, or if the direction is unset,
+ * returns -1.
+ *
+ * @return The direction or -1.
+ */
+int EntityModel::get_direction() const {
+
+  if (!has_direction_property()) {
+    return -1;
+  }
+
+  bool ok;
+  int direction = get_field("direction").toInt(&ok);
+  if (!ok) {
+    return -1;
+  }
+
+  return direction;
+}
+
+/**
+ * @brief Returns if the entity has a field with the given name.
+ * @param key Key of the field to get.
+ * @return @c true if there is this field eixsts.
+ */
+bool EntityModel::has_field(const QString& key) const {
+
+  std::string std_key = key.toStdString();
+  return entity.get_field(std_key).value_type != EntityData::EntityFieldType::NIL;
+}
+
+/**
  * @brief Returns the value of a field of this entity.
  * @param key Key of the field to get.
  * @return The corresponding value.
@@ -404,7 +450,7 @@ QVariant EntityModel::get_field(const QString& key) const {
 
 /**
  * @brief Returns the sprite description of the entity.
- * @return The sprite description that was set with set_sprite_description().
+ * @return The sprite description that was set with set_draw_sprite_info().
  */
 const EntityModel::DrawSpriteInfo& EntityModel::get_draw_sprite_info() const {
   return this->draw_sprite_info;
@@ -424,7 +470,7 @@ void EntityModel::set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info) {
 
 /**
  * @brief Returns the shape description of the entity.
- * @return The shape description that was set with set_shape_description().
+ * @return The shape description that was set with set_draw_shape_info().
  */
 const EntityModel::DrawShapeInfo& EntityModel::get_draw_shape_info() const {
   return this->draw_shape_info;
@@ -443,6 +489,26 @@ void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
 }
 
 /**
+ * @brief Returns the image description of the entity.
+ * @return The image description that was set with set_draw_image_info().
+ */
+const EntityModel::DrawImageInfo& EntityModel::get_draw_image_info() const {
+  return this->draw_image_info;
+}
+
+/**
+ * @brief Sets how to draw this entity as an image.
+ *
+ * Call this function if you want your entity to be drawn as a fixed image
+ * when it has no sprite and no shape info.
+ *
+ * @param draw_shape_info Description of the image to draw.
+ */
+void EntityModel::set_draw_image_info(const DrawImageInfo& draw_image_info) {
+  this->draw_image_info = draw_image_info;
+}
+
+/**
  * @brief Draws this entity.
  *
  * The default implementation does the following.
@@ -452,6 +518,8 @@ void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
  *   sprite if it is a valid one.
  * - Otherwise, if a shape description was set by calling set_draw_shape_info(),
  *   this shape is drawn.
+ * - Otherwise, if an image description was set by calling set_draw_image_info(),
+ *   this image is drawn.
  * - Otherwise, draws an icon representing the type of entity.
  *
  * @param painter The painter to draw.
@@ -463,6 +531,10 @@ void EntityModel::draw(QPainter& painter) const {
   }
 
   if (draw_as_shape(painter)) {
+    return;
+  }
+
+  if (draw_as_image(painter)) {
     return;
   }
 
@@ -597,6 +669,52 @@ bool EntityModel::draw_as_shape(QPainter& painter) const {
           draw_shape_info.between_border_color);
   }
 
+  return true;
+}
+
+/**
+ * @brief Draws this entity using its image description if any.
+ * @param painter The painter to draw.
+ * @return @c true if there was a valid image to draw.
+ */
+bool EntityModel::draw_as_image(QPainter& painter) const {
+
+  // First try to draw an image specific to the current direction.
+  int direction = get_direction();
+  if (direction != -1 &&
+      direction < draw_image_info.images_by_direction.size()) {
+    if (draw_as_image(painter, draw_image_info.images_by_direction.at(direction))) {
+      return true;
+    }
+  }
+
+  // No direction-specific image was set, or the entity has no direction:
+  // use the direction-independent image if one was set.
+  return draw_as_image(painter, draw_image_info.image_no_direction);
+}
+
+/**
+ * @brief Draws this entity using the specified image region.
+ * @param painter The painter to draw.
+ * @param sub_image Region of image to draw.
+ * @return @c true if the image was drawn.
+ */
+bool EntityModel::draw_as_image(QPainter& painter, const SubImage& sub_image) const {
+
+  if (sub_image.file_name.isEmpty()) {
+    return false;
+  }
+
+  if (sub_image.pixmap.isNull()) {
+    // Lazily load the image.
+    qDebug() << sub_image.src_rect;
+    sub_image.pixmap = QPixmap(sub_image.file_name).copy(sub_image.src_rect);
+    if (sub_image.pixmap.isNull()) {
+      return false;
+    }
+  }
+
+  painter.drawTiledPixmap(0, 0, get_width(), get_height(), sub_image.pixmap);
   return true;
 }
 
