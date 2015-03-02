@@ -35,7 +35,7 @@ class QFileSystemModel;
  * Resources that are declared in the resource list but missing on the
  * filesystem appear in the model with a warning icon.
  *
- * Similarly, existing files whose name looks like a resource but that are no
+ * Similarly, existing files whose name looks like a resource but that are not
  * declared in the resource list appear in the model with an interrogation mark
  * icon.
  */
