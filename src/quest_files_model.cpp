@@ -929,35 +929,6 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
 }
 
 /**
- * @brief Marks the list of missing resource elements under an item as dirty.
- *
- * It will be recomputed on the next get_missing_resource_elements() call.
- *
- * @param[in] parent An index in the model. If this is a directory, resources
- * directly under this directory are invalidated. Otherwise, nothing is done.
- */
-void QuestFilesModel::invalidate_extra_paths(const QModelIndex& parent) const {
-
-  QString parent_path = get_file_path(parent);
-  auto it = extra_paths_by_dir.find(parent_path);
-  if (it == extra_paths_by_dir.end()) {
-    // Already invalidated.
-    return;
-  }
-
-  // Update the redundant list.
-  ExtraPaths& extra_paths = it.value();
-  for (const ExtraPathColumnPtrs& columns : extra_paths.paths) {
-    for (QString* path_internal_ptr : columns) {
-      all_extra_paths.remove(path_internal_ptr);
-    }
-  }
-
-  // Clear the cache of this directory.
-  extra_paths_by_dir.remove(parent_path);
-}
-
-/**
  * @brief Slot called a resource element is added to the resource list.
  *
  * The corresponding files may or may not already exist on the filesystem.
@@ -973,18 +944,20 @@ void QuestFilesModel::resource_element_added(
 
   // If the file already exists, it automatically appears in the tree
   // thanks to QFileSystemWatcher.
-  // Otherwise, since we include it in the tree anyway,
-  // so we need to notify people that there is a new row.
+  // Otherwise, we insert it as an extra path.
 
-  QString path = quest.get_resource_element_path(resource_type, element_id);
-  const QModelIndex& index = get_file_index(path);
-  const QModelIndex& parent_index = parent(index);
-
-  if (!quest.exists(path)) {
-    beginInsertRows(parent_index, index.row(), index.row());
-    invalidate_extra_paths(parent_index);  // Sibling indexes get shifted.
-    endInsertRows();
+  const QString& path = quest.get_resource_element_path(resource_type, element_id);
+  if (quest.exists(path)) {
+    return;
   }
+
+  QDir parent_dir(path);
+  if (!parent_dir.cdUp()) {
+    // The parent does not exist: nothing to do.
+    return;
+  }
+  const QModelIndex& parent = get_file_index(parent_dir.path());
+  insert_extra_path(parent, path);
 }
 
 /**
@@ -1100,43 +1073,73 @@ void QuestFilesModel::source_model_rows_about_to_be_removed(const QModelIndex& s
     return;
   }
 
-  ExtraPaths* extra_paths = get_extra_paths(parent);
-  if (extra_paths == nullptr) {
-    // The directory cannot have extra paths.
+  for (int source_row = first; source_row <= last; ++source_row) {
+    const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
+    const QString& path = source_model->filePath(source_index);
+    insert_extra_path(parent, path);
+  }
+}
+
+/**
+ * @brief If the specified path does not exist as an extra path yet, inserts it in the model.
+ * @param parent Parent directory where to insert the path.
+ * @param path The path to insert.
+ */
+void QuestFilesModel::insert_extra_path(const QModelIndex& parent, const QString& path) {
+
+  ResourceType resource_type;
+  QString element_id;
+  if (!quest.is_resource_element(path, resource_type, element_id)) {
+    // Only resource elements can create extra paths.
     return;
   }
 
-  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
-  for (int source_row = first; source_row <= last; ++source_row) {
-
-    // TODO make a function insert_extra_path()
-
-    const QModelIndex& source_index = source_model->index(source_row, 0, source_parent);
-    const QString& path = source_model->filePath(source_index);
-    auto it = extra_paths->path_indexes.find(path);
-    if (it != extra_paths->path_indexes.end()) {
-      // There is already an extra path for this item.
-      continue;
+  ExtraPaths* extra_paths = get_extra_paths(parent);
+  if (extra_paths == nullptr) {
+    // First extra path of this directory: create the extra paths cache.
+    const QString& parent_path = get_file_path(parent);
+    extra_paths_by_dir[parent_path] = ExtraPaths();
+    extra_paths = get_extra_paths(parent);
+    if (extra_paths == nullptr) {
+      // Something is wrong.
+      return;
     }
-
-    // Compute extra paths right now to know more easily if one gets inserted and where.
-    // Ideally, we would invalidate extra paths between beginInsertRows() and endInsertRows()
-    // below but this is okay.
-    invalidate_extra_paths(parent);
-    compute_extra_paths(parent);
-
-    it = extra_paths->path_indexes.find(path);
-    if (it == extra_paths->path_indexes.end()) {
-      // No extra path was just created for the removed file
-      // (this was probably not a resource).
-      continue;
-    }
-
-    // Notify people about the new extra path row.
-    const int row = regular_row_count + it.value();
-    beginInsertRows(parent, row, row);
-    endInsertRows();
   }
+
+  auto it = extra_paths->path_indexes.find(path);
+  if (it != extra_paths->path_indexes.end()) {
+    // There is already an extra path for this item.
+    return;
+  }
+
+  // Determine the index where to insert the new item.
+  int index_in_extra = 0;
+  const int regular_row_count = QSortFilterProxyModel::rowCount(parent);
+  for (index_in_extra = 0; index_in_extra < extra_paths->paths.size(); ++index_in_extra) {
+    const int current_row = regular_row_count + index_in_extra;
+    const QModelIndex& current_index = index(current_row, 0, parent);
+    const QString& current_path = get_file_path(current_index);
+    if (current_path > path) {
+      break;
+    }
+  }
+  const int row = regular_row_count + index_in_extra;
+
+  beginInsertRows(parent, row, row);
+
+  ExtraPathColumnPtrs columns;
+  for (int j = 0; j < NUM_COLUMNS; ++j) {
+    QString* path_internal_ptr = new QString(path);
+    columns[j] = path_internal_ptr;
+    all_extra_paths.insert(path_internal_ptr);
+  }
+  extra_paths->element_ids.insert(index_in_extra, element_id);
+  extra_paths->paths.insert(index_in_extra, columns);
+
+  // Rebuild the index map because indexes get shifted.
+  extra_paths->rebuild_index_cache();
+
+  endInsertRows();
 }
 
 /**
@@ -1164,22 +1167,44 @@ void QuestFilesModel::remove_extra_path(const QModelIndex& parent, const QString
 
   beginRemoveRows(parent, row, row);
 
-  for (const ExtraPathColumnPtrs& columns : extra_paths->paths) {
-    for (QString* path_internal_ptr : columns) {
-      all_extra_paths.remove(path_internal_ptr);
-    }
+  for (QString* path_internal_ptr : extra_paths->paths.at(index_in_extra)) {
+    all_extra_paths.remove(path_internal_ptr);
   }
+
   extra_paths->paths.removeAt(index_in_extra);
   extra_paths->element_ids.removeAt(index_in_extra);
 
   // Rebuild the index map because indexes get shifted.
-  extra_paths->path_indexes.clear();
+  extra_paths->rebuild_index_cache();
+  endRemoveRows();
+}
+
+/**
+ * @brief Destroys an extra paths objects.
+ *
+ * TODO use unique_ptr to get rid of this destructor.
+ */
+QuestFilesModel::ExtraPaths::~ExtraPaths() {
+
+  for (ExtraPathColumnPtrs& ptrs : paths) {
+    for (QString* path_internal_ptr : ptrs) {
+      delete path_internal_ptr;
+    }
+  }
+}
+
+/**
+ * @brief Rebuilds the extra path to indexes internal mapping.
+ *
+ * Call this function when extra path indexes are changed.
+ */
+void QuestFilesModel::ExtraPaths::rebuild_index_cache() {
+
+  path_indexes.clear();
   int i = 0;
-  for (const ExtraPathColumnPtrs& columns : extra_paths->paths) {
+  for (const ExtraPathColumnPtrs& columns : paths) {
     const QString& current_path = *columns[0];
-    extra_paths->path_indexes.insert(current_path, i);
+    path_indexes.insert(current_path, i);
     ++i;
   }
-
-  endRemoveRows();
 }

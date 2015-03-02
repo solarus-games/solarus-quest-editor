@@ -123,14 +123,8 @@ private:
     QStringList element_ids;                /**< The corresponding resource element ids
                                              * (redundant information). */
 
-    ~ExtraPaths() {
-      // TODO use unique_ptr
-      for (ExtraPathColumnPtrs& ptrs : paths) {
-        for (QString* path_internal_ptr : ptrs) {
-          delete path_internal_ptr;
-        }
-      }
-    }
+    ~ExtraPaths();
+    void rebuild_index_cache();
   };
 
   QIcon get_quest_file_icon(const QModelIndex& index) const;
@@ -142,8 +136,9 @@ private:
   int get_num_extra_paths(const QModelIndex& parent) const;
   ExtraPaths* get_extra_paths(const QModelIndex& parent) const;
   void compute_extra_paths(const QModelIndex& parent) const;
-  void invalidate_extra_paths(const QModelIndex& parent) const;
+  void insert_extra_path(const QModelIndex& parent, const QString& path);
   void remove_extra_path(const QModelIndex& parent, const QString& path);
+  void rebuild_extra_path_indexes_cache(const QModelIndex& parent);
 
   Quest& quest;                        /**< The quest represented by this model. */
   QFileSystemModel* source_model;      /**< The underlying file model. */
