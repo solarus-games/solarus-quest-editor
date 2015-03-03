@@ -40,7 +40,6 @@ ViewSettings::ViewSettings(QObject* parent) :
  * @return The zoom factor.
  */
 double ViewSettings::get_zoom() const {
-
   return zoom;
 }
 
