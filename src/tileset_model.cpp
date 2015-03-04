@@ -473,7 +473,7 @@ bool TilesetModel::is_valid_pattern_id(const QString& pattern_id) {
       pattern_id.contains('\\') ||
       pattern_id.contains('\n') ||
       pattern_id.contains('\r')
-      ) {
+  ) {
     return false;
   }
 
