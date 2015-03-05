@@ -89,6 +89,7 @@ protected:
 
     bool enabled = true;  // false means not drawn as a sprite.
     QString sprite_id;    // Only used if there is no "sprite" field.
+    QString animation;    // Animation for sprite_id (empty means default).
     bool tiled = false;   // Tiled or only once at origin point.
   };
 
@@ -139,7 +140,7 @@ protected:
   void set_draw_image_info(const DrawImageInfo& draw_shape_info);
 
   bool draw_as_sprite(QPainter& painter) const;
-  bool draw_as_sprite(QPainter& painter, const QString& sprite_id) const;
+  bool draw_as_sprite(QPainter& painter, const QString& sprite_id, const QString& animation) const;
   bool draw_as_shape(QPainter& painter) const;
   bool draw_as_image(QPainter& painter) const;
   bool draw_as_image(QPainter& painter, const SubImage& image) const;
