@@ -27,4 +27,11 @@ ShopTreasure::ShopTreasure(MapModel& map, const Solarus::EntityData& entity) :
   Q_ASSERT(entity.get_type() == EntityType::SHOP_TREASURE);
 
   set_size(QSize(32, 32));
+
+  DrawShapeInfo info;
+  info.enabled = true;
+  info.background_color = QColor(224, 108, 72);
+  info.between_border_color = QColor(184, 96, 96);
+  info.pixmap = QPixmap(":/images/entity_shop_treasure.png");
+  set_draw_shape_info(info);
 }
