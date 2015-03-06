@@ -27,7 +27,6 @@
 Tile::Tile(MapModel& map, const Solarus::EntityData& entity) :
   EntityModel(map, entity) {
 
-  Q_ASSERT(entity.get_type() == EntityType::TILE);
 }
 
 /**

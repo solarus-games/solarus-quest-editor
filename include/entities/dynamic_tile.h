@@ -17,12 +17,12 @@
 #ifndef SOLARUSEDITOR_DYNAMIC_TILE_H
 #define SOLARUSEDITOR_DYNAMIC_TILE_H
 
-#include "entities/entity_model.h"
+#include "entities/tile.h"
 
 /**
  * @brief An editable dynamic tile.
  */
-class DynamicTile : public EntityModel {
+class DynamicTile : public Tile {
 
 public:
 

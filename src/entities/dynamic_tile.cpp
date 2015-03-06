@@ -22,8 +22,6 @@
  * @param entity The entity data to represent.
  */
 DynamicTile::DynamicTile(MapModel& map, const Solarus::EntityData& entity) :
-  EntityModel(map, entity) {
-
-  Q_ASSERT(entity.get_type() == EntityType::DYNAMIC_TILE);
+  Tile(map, entity) {
 
 }
