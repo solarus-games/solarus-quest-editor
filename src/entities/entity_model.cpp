@@ -725,14 +725,17 @@ bool EntityModel::draw_as_image(QPainter& painter, const SubImage& sub_image) co
 
   if (sub_image.pixmap.isNull()) {
     // Lazily load the image.
-    qDebug() << sub_image.src_rect;
     sub_image.pixmap = QPixmap(sub_image.file_name).copy(sub_image.src_rect);
     if (sub_image.pixmap.isNull()) {
       return false;
     }
   }
 
-  painter.drawTiledPixmap(0, 0, get_width(), get_height(), sub_image.pixmap);
+  const double scale = draw_image_info.scale;
+  painter.scale(1.0 / scale, 1.0 / scale);
+  painter.drawTiledPixmap(0, 0, (int) (get_width() * scale), (int) (get_height() * scale),
+                          sub_image.pixmap);
+  painter.scale(scale, scale);
   return true;
 }
 

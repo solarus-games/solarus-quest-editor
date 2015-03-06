@@ -129,6 +129,7 @@ protected:
   struct DrawImageInfo {
     SubImage image_no_direction;
     QList<SubImage> images_by_direction;
+    double scale = 1.0;  // If 2.0, the image will have a resolution twice better.
   };
 
   EntityModel(MapModel& map, const Solarus::EntityData& entity);
