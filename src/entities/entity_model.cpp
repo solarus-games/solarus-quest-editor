@@ -214,6 +214,14 @@ MapModel& EntityModel::get_map() {
 }
 
 /**
+ * @brief Returns the id of the tileset of the map.
+ * @return The tileset id or an empty string if no tileset is set.
+ */
+QString EntityModel::get_tileset_id() const {
+  return get_map().get_tileset_id();
+}
+
+/**
  * @brief Returns the tileset of the map.
  * @return The tileset or nullptr if no tileset is set.
  */
@@ -585,6 +593,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, co
   if (sprite_model == nullptr ||
       sprite_model->get_sprite_id() != sprite_id) {
     sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(get_quest(), sprite_id));
+    sprite_model->set_tileset_id(get_tileset_id());
   }
 
   SpriteModel::Index index(animation, 0);

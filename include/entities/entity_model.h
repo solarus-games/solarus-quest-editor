@@ -51,6 +51,7 @@ public:
 
   const MapModel& get_map() const;
   MapModel& get_map();
+  QString get_tileset_id() const;
   const TilesetModel* get_tileset() const;
   const Quest& get_quest() const;
   const QuestResources& get_resources() const;
