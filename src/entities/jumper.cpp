@@ -26,4 +26,9 @@ Jumper::Jumper(MapModel& map, const Solarus::EntityData& entity) :
 
   Q_ASSERT(entity.get_type() == EntityType::JUMPER);
 
+  DrawShapeInfo info;
+  info.enabled = true;
+  info.background_color = QColor(48, 184, 208);
+  info.between_border_color = QColor(144, 224, 240);
+  set_draw_shape_info(info);
 }
