@@ -602,6 +602,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, co
   if (!has_direction_field) {
     direction = 0;
   }
+  index.direction_nb = direction;
 
   if (!sprite_model->direction_exists(index)) {
     index.direction_nb = 0;
