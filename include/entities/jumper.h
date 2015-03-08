@@ -28,6 +28,10 @@ public:
 
   Jumper(MapModel& map, const Solarus::EntityData& entity);
 
+  bool is_diagonal() const;
+
+  void draw(QPainter& painter) const override;
+
 };
 
 #endif

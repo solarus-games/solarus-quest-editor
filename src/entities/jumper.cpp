@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/jumper.h"
+#include <QPainter>
 
 /**
  * @brief Constructor.
@@ -31,4 +32,60 @@ Jumper::Jumper(MapModel& map, const Solarus::EntityData& entity) :
   info.background_color = QColor(48, 184, 208);
   info.between_border_color = QColor(144, 224, 240);
   set_draw_shape_info(info);
+}
+
+/**
+ * @brief Returns whether this jumper is a diagonal one.
+ * @return @c true if the jumper is diagonal.
+ */
+bool Jumper::is_diagonal() const {
+
+  const int direction = get_direction();
+  if (direction == -1) {
+    // No value is set.
+    return false;
+  }
+
+  return direction % 2 != 0;
+}
+
+/**
+ * @copydoc EntityModel::draw
+ *
+ * Reimplemented because diagonal jumpers have a special shape.
+ */
+void Jumper::draw(QPainter& painter) const {
+
+  if (!is_diagonal()) {
+    // Horizontal or vertical.
+    EntityModel::draw(painter);
+  }
+
+  // Diagonal jumper.
+  const QColor background_color(48, 184, 208);
+  //const QColor between_border_color(144, 224, 240);
+
+  QPainterPath path;
+  switch (get_direction()) {
+
+  case 1:
+
+    break;
+
+  case 3:
+
+    break;
+
+  case 5:
+
+    break;
+
+  case 7:
+
+    break;
+
+  }
+
+  painter.fillPath(path, background_color);
+
 }
