@@ -43,7 +43,7 @@ public:
 
 public slots:
 
-  virtual void done(int result) override;
+  void done(int result) override;
 
 private:
 
