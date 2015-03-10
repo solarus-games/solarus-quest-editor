@@ -296,7 +296,7 @@ void EntityItem::paint(QPainter* painter,
     GuiTools::draw_rectangle_border(
           *painter,
           boundingRect().toRect(),
-          Qt::blue,
+          Qt::green,
           1);
   }
 }
