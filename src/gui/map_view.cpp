@@ -21,7 +21,95 @@
 #include "gui/pan_tool.h"
 #include "gui/zoom_tool.h"
 #include "view_settings.h"
+#include <QGraphicsItem>
+#include <QMouseEvent>
 #include <QScrollBar>
+
+namespace {
+
+/**
+ * @brief State of the map view corresponding to the user doing nothing special.
+ *
+ * He can select or unselect entities.
+ */
+class DoingNothingState : public MapView::State {
+
+public:
+
+  DoingNothingState(MapView& map_view) :
+    MapView::State(map_view) {
+
+  }
+
+  virtual bool mouse_pressed(const QMouseEvent& event) {
+
+    if (event.button() == Qt::LeftButton || event.button() == Qt::RightButton) {
+
+      MapView& view = get_view();
+      MapScene* scene = get_scene();
+
+      // Left or right button: possibly change the selection.
+      QList<QGraphicsItem*> items_under_mouse = view.items(
+            QRect(event.pos(), QSize(1, 1)),
+            Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+            );
+      QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
+
+      const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+
+      bool keep_selected = false;
+      if (control_or_shift) {
+        // If ctrl or shift is pressed, keep the existing selection.
+        keep_selected = true;
+      }
+      else if (item != nullptr && item->isSelected()) {
+        // When clicking an already selected item, keep the existing selection too.
+        keep_selected = true;
+      }
+
+      if (!keep_selected) {
+        scene->clearSelection();
+      }
+
+      if (event.button() == Qt::LeftButton) {
+
+        if (item != nullptr) {
+
+          if (control_or_shift) {
+            // Left-clicking an item while pressing control or shift: toggle it.
+            item->setSelected(!item->isSelected());
+          }
+          else {
+            if (!item->isSelected()) {
+              // Select the item.
+              item->setSelected(true);
+            }
+            // Allow to move selected items.
+            // TODO view.start_state_moving_items(event.pos()).
+          }
+        }
+        else {
+          // Left click outside items: trace a selection rectangle.
+          // TODO view.start_state_drawing_rectangle(event.pos());
+        }
+      }
+
+      else if (event.button() == Qt::RightButton) {
+
+        if (item != nullptr) {
+          if (!item->isSelected()) {
+            // Select the right-clicked item.
+            item->setSelected(true);
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+};
+
+}
 
 /**
  * @brief Creates a map view.
@@ -40,6 +128,16 @@ MapView::MapView(QWidget* parent) :
 
   // Necessary because we draw a custom background.
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+  set_state(std::unique_ptr<State>(new DoingNothingState(*this)));
+}
+
+/**
+ * @brief Returns the map represented in this view.
+ * @return The map model or nullptr if none was set.
+ */
+MapModel* MapView::get_model() {
+  return model.data();
 }
 
 /**
@@ -77,6 +175,14 @@ void MapView::set_model(MapModel* model) {
 }
 
 /**
+ * @brief Returns the map scene represented in this view.
+ * @return The scene or nullptr if no map model was set.
+ */
+MapScene* MapView::get_scene() {
+  return scene;
+}
+
+/**
  * @brief Sets the view settings for this map view.
  *
  * When they change, the map view is updated accordingly.
@@ -103,6 +209,18 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
 
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
+}
+
+/**
+ * @brief Changes the state of the view.
+ *
+ * The previous state if any is destroyed.
+ *
+ * @param state The new state.
+ */
+void MapView::set_state(std::unique_ptr<State> state) {
+
+  this->state = std::move(state);
 }
 
 /**
@@ -228,4 +346,162 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
   GuiTools::draw_grid(*painter, rectangle.toRect(), square_size);
 
   QGraphicsView::drawForeground(painter, rectangle);
+}
+
+/**
+ * @brief Receives a mouse press event.
+ * @param event The event to handle.
+ */
+void MapView::mousePressEvent(QMouseEvent* event) {
+
+  if (model != nullptr && get_scene() != nullptr) {
+    if (state->mouse_pressed(*event)) {
+      return;
+    }
+  }
+
+  QGraphicsView::mousePressEvent(event);
+}
+
+/**
+ * @brief Receives a mouse release event.
+ * @param event The event to handle.
+ */
+void MapView::mouseReleaseEvent(QMouseEvent* event) {
+
+  if (model != nullptr && get_scene() != nullptr) {
+    if (state->mouse_released(*event)) {
+      return;
+    }
+  }
+
+  QGraphicsView::mouseReleaseEvent(event);
+}
+
+/**
+ * @brief Receives a mouse move event.
+ * @param event The event to handle.
+ */
+void MapView::mouseMoveEvent(QMouseEvent* event) {
+
+  if (model != nullptr && get_scene() != nullptr) {
+    if (state->mouse_moved(*event)) {
+      return;
+    }
+  }
+
+  QGraphicsView::mouseMoveEvent(event);
+}
+
+/**
+ * @brief Receives a context menu event.
+ * @param event The event to handle.
+ */
+void MapView::contextMenuEvent(QContextMenuEvent* event) {
+
+  if (model != nullptr && get_scene() != nullptr) {
+    if (state->context_menu_requested(*event)) {
+      return;
+    }
+  }
+
+  QGraphicsView::contextMenuEvent(event);
+}
+
+/**
+ * @brief Creates a state.
+ * @param map_view The map view to manage.
+ */
+MapView::State::State(MapView& map_view) :
+  map_view(map_view) {
+
+}
+
+/**
+ * @brief Destructor.
+ */
+MapView::State::~State() {
+
+}
+
+/**
+ * @brief Returns the map view managed by this state.
+ * @return The map view.
+ */
+MapView& MapView::State::get_view() {
+  return map_view;
+}
+
+/**
+ * @brief Returns the map scene managed by this state.
+ * @return The map scene or nullptr if no map model was set.
+ */
+MapScene* MapView::State::get_scene() {
+
+  return map_view.get_scene();
+}
+
+/**
+ * @brief Returns the map model represented in the view.
+ * @return The map model or nullptr if none was set.
+ */
+MapModel* MapView::State::get_map() {
+  return map_view.get_model();
+}
+
+/**
+ * @brief Called when the mouse is pressed in the map view during this state.
+ *
+ * Subclasses can reimplement this function to define what happens.
+ *
+ * @param event The event to handle.
+ * @return @c true if the event was handled, @c false to propagate it further.
+ */
+bool MapView::State::mouse_pressed(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+  return false;
+}
+
+/**
+ * @brief Called when the mouse is released in the map view during this state.
+ *
+ * Subclasses can reimplement this function to define what happens.
+ *
+ * @param event The event to handle.
+ * @return @c true if the event was handled, @c false to propagate it further.
+ */
+bool MapView::State::mouse_released(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+  return false;
+}
+
+/**
+ * @brief Called when the mouse is moved in the map view during this state.
+ *
+ * Subclasses can reimplement this function to define what happens.
+ *
+ * @param event The event to handle.
+ * @return @c true if the event was handled, @c false to propagate it further.
+ */
+bool MapView::State::mouse_moved(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+  return false;
+}
+
+/**
+ * @brief Called when a context menu is requested in the map view during this
+ * state.
+ *
+ * Subclasses can reimplement this function to define what happens.
+ *
+ * @param event The event to handle.
+ * @return @c true if the event was handled, @c false to propagate it further.
+ */
+bool MapView::State::context_menu_requested(const QContextMenuEvent& event) {
+
+  Q_UNUSED(event);
+  return false;
 }

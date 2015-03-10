@@ -21,6 +21,7 @@
 #include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
+#include <memory>
 
 class MapModel;
 class MapScene;
@@ -34,8 +35,35 @@ class MapView : public QGraphicsView {
 
 public:
 
+  /**
+   * @brief Indicates what the user is currently doing on the map view.
+   */
+  class State {
+
+  public:
+
+    State(MapView& map_view);
+    virtual ~State();
+
+    MapView& get_view();
+    MapScene* get_scene();
+    MapModel* get_map();
+
+    virtual bool mouse_pressed(const QMouseEvent& event);
+    virtual bool mouse_released(const QMouseEvent& event);
+    virtual bool mouse_moved(const QMouseEvent& event);
+    virtual bool context_menu_requested(const QContextMenuEvent& event);
+
+  private:
+
+    MapView& map_view;
+
+  };
+
   MapView(QWidget* parent = nullptr);
 
+  MapModel* get_model();
+  MapScene* get_scene();
   void set_model(MapModel* map);
   void set_view_settings(ViewSettings& view_settings);
 
@@ -58,13 +86,21 @@ protected:
 
   void drawForeground(QPainter* painter, const QRectF& rectangle) override;
 
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void contextMenuEvent(QContextMenuEvent* event) override;
+
 private:
+
+  void set_state(std::unique_ptr<State> state);
 
   QPointer<MapModel> model;        /**< The map model. */
   MapScene* scene;                 /**< The scene viewed. */
   QPointer<ViewSettings>
       view_settings;               /**< What is displayed in the view. */
   double zoom;                     /**< Zoom factor currently applied. */
+  std::unique_ptr<State> state;    /**< Current state of the view. */
 
 };
 

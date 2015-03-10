@@ -267,7 +267,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
           );
     QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
 
-    bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+    const bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
 
     bool keep_selected = false;
     if (control_or_shift) {

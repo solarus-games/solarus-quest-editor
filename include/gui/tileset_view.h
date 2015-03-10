@@ -67,10 +67,10 @@ protected:
 
   void drawForeground(QPainter* painter, const QRectF& rectangle) override;
 
-  virtual void mousePressEvent(QMouseEvent* event) override;
-  virtual void mouseReleaseEvent(QMouseEvent* event) override;
-  virtual void mouseMoveEvent(QMouseEvent* event) override;
-  virtual void contextMenuEvent(QContextMenuEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void contextMenuEvent(QContextMenuEvent* event) override;
 
 private:
 
