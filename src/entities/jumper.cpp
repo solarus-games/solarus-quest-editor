@@ -56,36 +56,124 @@ bool Jumper::is_diagonal() const {
  */
 void Jumper::draw(QPainter& painter) const {
 
-  if (!is_diagonal()) {
-    // Horizontal or vertical.
+  const int w = get_width();
+  const int h = get_height();
+
+  if (!is_diagonal() || w != h) {
+    // Horizontal or vertical, or diagonal but with wrong size.
     EntityModel::draw(painter);
+    return;
   }
 
   // Diagonal jumper.
   const QColor background_color(48, 184, 208);
-  //const QColor between_border_color(144, 224, 240);
+  const QColor between_border_color(144, 224, 240);
+  const QColor border_color(Qt::black);
+  QPainterPath outer_path;
+  QPainterPath inner_path;
 
-  QPainterPath path;
   switch (get_direction()) {
 
-  case 1:
+  case 1:  // North-East.
+    /*  __
+     *  \ \
+     *   \ \
+     *    \ \
+     *     \ \
+     *      \|
+     *
+     */
+
+    outer_path.lineTo(QPoint(8, 0));
+    outer_path.lineTo(QPoint(w, h - 8));
+    outer_path.lineTo(QPoint(w, h));
+    outer_path.closeSubpath();
+
+    inner_path.moveTo(QPoint(4, 2));
+    inner_path.lineTo(QPoint(8, 2));
+    inner_path.lineTo(QPoint(w - 2, h - 8));
+    inner_path.lineTo(QPoint(w - 2, h - 4));
+    inner_path.closeSubpath();
 
     break;
 
-  case 3:
+  case 3:  // North-West.
+    /*      __
+     *     / /
+     *    / /
+     *   / /
+     *  / /
+     *  |/
+     *
+     */
+
+    outer_path.moveTo(QPoint(w - 8, 0));
+    outer_path.lineTo(QPoint(w, 0));
+    outer_path.lineTo(QPoint(0, h));
+    outer_path.lineTo(QPoint(0, h - 8));
+    outer_path.closeSubpath();
+
+    inner_path.moveTo(QPoint(w - 8, 2));
+    inner_path.lineTo(QPoint(w - 4, 2));
+    inner_path.lineTo(QPoint(2, h - 4));
+    inner_path.lineTo(QPoint(2, h - 8));
+    inner_path.closeSubpath();
 
     break;
 
-  case 5:
+  case 5:  // South-West.
+    /*
+     *  |\
+     *  \ \
+     *   \ \
+     *    \ \
+     *     \_\
+     *
+     */
+
+    outer_path.lineTo(QPoint(w, h));
+    outer_path.lineTo(QPoint(w - 8, h));
+    outer_path.lineTo(QPoint(0, 8));
+    outer_path.closeSubpath();
+
+    inner_path.moveTo(QPoint(2, 4));
+    inner_path.lineTo(QPoint(w - 4, h - 2));
+    inner_path.lineTo(QPoint(w - 8, h - 2));
+    inner_path.lineTo(QPoint(2, 8));
+    inner_path.closeSubpath();
 
     break;
 
-  case 7:
+  case 7:  // South-East.
+    /*
+     *      /|
+     *     / /
+     *    / /
+     *   / /
+     *  /_/
+     *
+     */
+
+    outer_path.moveTo(QPoint(w, 0));
+    outer_path.lineTo(QPoint(w, 8));
+    outer_path.lineTo(QPoint(8, h));
+    outer_path.lineTo(QPoint(0, h));
+    outer_path.closeSubpath();
+
+    inner_path.moveTo(QPoint(w - 2, 4));
+    inner_path.lineTo(QPoint(w - 2, 8));
+    inner_path.lineTo(QPoint(8, h - 2));
+    inner_path.lineTo(QPoint(4, h - 2));
+    inner_path.closeSubpath();
 
     break;
 
   }
 
-  painter.fillPath(path, background_color);
+  painter.setPen(QPen(border_color, 0, Qt::SolidLine));
+  painter.fillPath(outer_path, between_border_color);
+  painter.fillPath(inner_path, background_color);
+  painter.drawPath(outer_path);
+  painter.drawPath(inner_path);
 
 }
