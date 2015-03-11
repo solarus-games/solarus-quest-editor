@@ -40,4 +40,34 @@ Solarus::Rectangle to_solarus_rect(const QRect& qt_rect) {
         qt_rect.x(), qt_rect.y(), qt_rect.width(), qt_rect.height());
 }
 
+/**
+ * @brief Returns the rectangle formed by two opposite corner points.
+ * @param p1 A point.
+ * @param p2 Another point.
+ * @return The corresponding rectangle.
+ */
+QRect from_two_points(const QPoint& p1, const QPoint& p2) {
+
+  QRect result;
+  if (p1.x() < p2.x()) {
+    result.setX(p1.x());
+    result.setWidth(p2.x() - p1.x());
+  }
+  else {
+    result.setX(p2.x());
+    result.setWidth(p1.x() - p2.x());
+  }
+
+  if (p1.y() < p2.y()) {
+    result.setY(p1.y());
+    result.setHeight(p2.y() - p1.y());
+  }
+  else {
+    result.setY(p2.y());
+    result.setHeight(p1.y() - p2.y());
+  }
+
+  return result;
+}
+
 }

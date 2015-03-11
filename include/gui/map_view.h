@@ -42,12 +42,15 @@ public:
 
   public:
 
-    State(MapView& map_view);
+    State(MapView& view);
     virtual ~State();
 
     MapView& get_view();
-    MapScene* get_scene();
-    MapModel* get_map();
+    MapScene& get_scene();
+    MapModel& get_map();
+
+    virtual void start();
+    virtual void stop();
 
     virtual bool mouse_pressed(const QMouseEvent& event);
     virtual bool mouse_released(const QMouseEvent& event);
@@ -56,7 +59,7 @@ public:
 
   private:
 
-    MapView& map_view;
+    MapView& view;
 
   };
 
@@ -66,6 +69,10 @@ public:
   MapScene* get_scene();
   void set_model(MapModel* map);
   void set_view_settings(ViewSettings& view_settings);
+
+  void start_state_doing_nothing();
+  void start_state_drawing_rectangle(const QPoint& initial_point);
+  void start_state_moving_entities(const QPoint& initial_point);
 
 signals:
 

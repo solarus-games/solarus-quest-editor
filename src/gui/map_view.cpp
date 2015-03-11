@@ -20,6 +20,7 @@
 #include "gui/mouse_coordinates_tracking_tool.h"
 #include "gui/pan_tool.h"
 #include "gui/zoom_tool.h"
+#include "rectangle.h"
 #include "view_settings.h"
 #include <QGraphicsItem>
 #include <QMouseEvent>
@@ -35,81 +36,44 @@ namespace {
 class DoingNothingState : public MapView::State {
 
 public:
-
-  DoingNothingState(MapView& map_view) :
-    MapView::State(map_view) {
-
-  }
-
-  virtual bool mouse_pressed(const QMouseEvent& event) {
-
-    if (event.button() == Qt::LeftButton || event.button() == Qt::RightButton) {
-
-      MapView& view = get_view();
-      MapScene* scene = get_scene();
-
-      // Left or right button: possibly change the selection.
-      QList<QGraphicsItem*> items_under_mouse = view.items(
-            QRect(event.pos(), QSize(1, 1)),
-            Qt::IntersectsItemBoundingRect  // Pick transparent items too.
-            );
-      QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
-
-      const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
-
-      bool keep_selected = false;
-      if (control_or_shift) {
-        // If ctrl or shift is pressed, keep the existing selection.
-        keep_selected = true;
-      }
-      else if (item != nullptr && item->isSelected()) {
-        // When clicking an already selected item, keep the existing selection too.
-        keep_selected = true;
-      }
-
-      if (!keep_selected) {
-        scene->clearSelection();
-      }
-
-      if (event.button() == Qt::LeftButton) {
-
-        if (item != nullptr) {
-
-          if (control_or_shift) {
-            // Left-clicking an item while pressing control or shift: toggle it.
-            item->setSelected(!item->isSelected());
-          }
-          else {
-            if (!item->isSelected()) {
-              // Select the item.
-              item->setSelected(true);
-            }
-            // Allow to move selected items.
-            // TODO view.start_state_moving_items(event.pos()).
-          }
-        }
-        else {
-          // Left click outside items: trace a selection rectangle.
-          // TODO view.start_state_drawing_rectangle(event.pos());
-        }
-      }
-
-      else if (event.button() == Qt::RightButton) {
-
-        if (item != nullptr) {
-          if (!item->isSelected()) {
-            // Select the right-clicked item.
-            item->setSelected(true);
-          }
-        }
-      }
-    }
-    return true;
-  }
-
+  DoingNothingState(MapView& view);
+  bool mouse_pressed(const QMouseEvent& event) override;
 };
 
-}
+/**
+ * @brief State of the map view of drawing a selection rectangle.
+ */
+class DrawingRectangleState : public MapView::State {
+
+public:
+  DrawingRectangleState(MapView& view, const QPoint& initial_point);
+
+  void start() override;
+  void stop() override;
+
+  bool mouse_moved(const QMouseEvent& event) override;
+  bool mouse_released(const QMouseEvent& event) override;
+
+private:
+  QPoint initial_point;                     /**< Point where the drawing started, in scene coordinates. */
+  QPoint current_point;                     /**< Point where the dragging currently is, in scene coordinates. */
+  QGraphicsRectItem* current_area_item;     /**< Graphic item of the rectangle the user is drawing
+                                             * (belongs to the scene). */
+};
+
+/**
+ * @brief State of the map view of moving the selected entities.
+ */
+class MovingEntitiesState : public MapView::State {
+
+public:
+  MovingEntitiesState(MapView& view, const QPoint& initial_point);
+
+private:
+  QPoint initial_point;  /**< Point where the dragging started, in scene coordinates. */
+};
+
+}  // Anonymous namespace.
 
 /**
  * @brief Creates a map view.
@@ -128,8 +92,6 @@ MapView::MapView(QWidget* parent) :
 
   // Necessary because we draw a custom background.
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-  set_state(std::unique_ptr<State>(new DoingNothingState(*this)));
 }
 
 /**
@@ -171,6 +133,9 @@ void MapView::set_model(MapModel* model) {
     new PanTool(this);
     new ZoomTool(this);
     new MouseCoordinatesTrackingTool(this);
+
+    // Start the state mechanism.
+    start_state_doing_nothing();
   }
 }
 
@@ -220,7 +185,43 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
  */
 void MapView::set_state(std::unique_ptr<State> state) {
 
+  if (this->state != nullptr) {
+    this->state->stop();
+  }
+
   this->state = std::move(state);
+
+  if (this->state != nullptr) {
+    this->state->start();
+  }
+}
+
+/**
+ * @brief Moves to the normal state of the map view.
+ */
+void MapView::start_state_doing_nothing() {
+
+  set_state(std::unique_ptr<State>(new DoingNothingState(*this)));
+}
+
+/**
+ * @brief Moves to the state of moving the selected entities.
+ * @param initial_point Where the user starts dragging the entities,
+ * in view coordinates.
+ */
+void MapView::start_state_moving_entities(const QPoint& initial_point) {
+
+  set_state(std::unique_ptr<State>(new MovingEntitiesState(*this, initial_point)));
+}
+
+/**
+ * @brief Moves to the state of drawing a rectangle for a selection.
+ * @param initial_point Where the user starts drawing the rectangle,
+ * in view coordinates.
+ */
+void MapView::start_state_drawing_rectangle(const QPoint& initial_point) {
+
+  set_state(std::unique_ptr<State>(new DrawingRectangleState(*this, initial_point)));
 }
 
 /**
@@ -410,10 +411,10 @@ void MapView::contextMenuEvent(QContextMenuEvent* event) {
 
 /**
  * @brief Creates a state.
- * @param map_view The map view to manage.
+ * @param view The map view to manage.
  */
-MapView::State::State(MapView& map_view) :
-  map_view(map_view) {
+MapView::State::State(MapView& view) :
+  view(view) {
 
 }
 
@@ -429,24 +430,40 @@ MapView::State::~State() {
  * @return The map view.
  */
 MapView& MapView::State::get_view() {
-  return map_view;
+  return view;
 }
 
 /**
  * @brief Returns the map scene managed by this state.
- * @return The map scene or nullptr if no map model was set.
+ * @return The map scene.
  */
-MapScene* MapView::State::get_scene() {
+MapScene& MapView::State::get_scene() {
 
-  return map_view.get_scene();
+  return *view.get_scene();
 }
 
 /**
  * @brief Returns the map model represented in the view.
- * @return The map model or nullptr if none was set.
+ * @return The map model.
  */
-MapModel* MapView::State::get_map() {
-  return map_view.get_model();
+MapModel& MapView::State::get_map() {
+  return *view.get_model();
+}
+
+/**
+ * @brief Called when entering this state.
+ *
+ * Subclasses can reimplement this function to initialize data.
+ */
+void MapView::State::start() {
+}
+
+/**
+ * @brief Called when leaving this state.
+ *
+ * Subclasses can reimplement this function to clean data.
+ */
+void MapView::State::stop() {
 }
 
 /**
@@ -504,4 +521,167 @@ bool MapView::State::context_menu_requested(const QContextMenuEvent& event) {
 
   Q_UNUSED(event);
   return false;
+}
+
+/**
+ * @brief Constructor.
+ * @param view The map view to manage.
+ */
+DoingNothingState::DoingNothingState(MapView& view) :
+  MapView::State(view) {
+
+}
+
+/**
+ * @copydoc MapView::State::mouse_pressed
+ */
+bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
+
+  if (event.button() == Qt::LeftButton || event.button() == Qt::RightButton) {
+
+    MapView& view = get_view();
+    MapScene& scene = get_scene();
+
+    // Left or right button: possibly change the selection.
+    QList<QGraphicsItem*> items_under_mouse = view.items(
+          QRect(event.pos(), QSize(1, 1)),
+          Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+          );
+    QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
+
+    const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+
+    bool keep_selected = false;
+    if (control_or_shift) {
+      // If ctrl or shift is pressed, keep the existing selection.
+      keep_selected = true;
+    }
+    else if (item != nullptr && item->isSelected()) {
+      // When clicking an already selected item, keep the existing selection too.
+      keep_selected = true;
+    }
+
+    if (!keep_selected) {
+      scene.clearSelection();
+    }
+
+    if (event.button() == Qt::LeftButton) {
+
+      if (item != nullptr) {
+
+        if (control_or_shift) {
+          // Left-clicking an item while pressing control or shift: toggle it.
+          item->setSelected(!item->isSelected());
+        }
+        else {
+          if (!item->isSelected()) {
+            // Select the item.
+            item->setSelected(true);
+          }
+          // Allow to move selected items.
+          view.start_state_moving_entities(event.pos());
+        }
+      }
+      else {
+        // Left click outside items: trace a selection rectangle.
+        view.start_state_drawing_rectangle(event.pos());
+      }
+    }
+
+    else if (event.button() == Qt::RightButton) {
+
+      if (item != nullptr) {
+        if (!item->isSelected()) {
+          // Select the right-clicked item.
+          item->setSelected(true);
+        }
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Constructor.
+ * @param view The map view to manage.
+ * @param initial_point Point where the drawing started, in view coordinates.
+ */
+DrawingRectangleState::DrawingRectangleState(MapView& view, const QPoint& initial_point) :
+  MapView::State(view),
+  initial_point(view.mapToScene(initial_point).toPoint() / 8 * 8),
+  current_area_item(nullptr) {
+
+}
+
+/**
+ * @copydoc MapView::State::start
+ */
+void DrawingRectangleState::start() {
+
+  current_area_item = new QGraphicsRectItem();
+  current_area_item->setPen(QPen(Qt::yellow));
+  get_scene().addItem(current_area_item);
+}
+
+/**
+ * @copydoc MapView::State::stop
+ */
+void DrawingRectangleState::stop() {
+
+  get_scene().removeItem(current_area_item);
+  delete current_area_item;
+  current_area_item = nullptr;
+}
+
+/**
+ * @copydoc MapView::State::mouse_moved
+ */
+bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
+
+  MapView& view = get_view();
+  MapScene& scene = get_scene();
+
+  // Compute the selected area.
+  QPoint previous_point = current_point;
+  current_point = view.mapToScene(event.pos()).toPoint() / 8 * 8;
+
+  if (current_point == previous_point) {
+    // No change.
+    return true;
+  }
+
+  // The area has changed: recalculate the rectangle.
+  QRect area = Rectangle::from_two_points(initial_point, current_point);
+  current_area_item->setRect(area);
+
+  // Select items strictly in the rectangle.
+  scene.clearSelection();
+  QPainterPath path;
+  path.addRect(QRect(area.topLeft() - QPoint(1, 1),
+                     area.size() + QSize(2, 2)));
+  scene.setSelectionArea(path, Qt::ContainsItemBoundingRect);
+
+  return true;
+}
+
+/**
+ * @copydoc MapView::State::mouse_released
+ */
+bool DrawingRectangleState::mouse_released(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+
+  get_view().start_state_doing_nothing();
+  return true;
+}
+
+/**
+ * @brief Constructor.
+ * @param view The map view to manage.
+ * @param initial_point Point where the dragging started, in view coordinates.
+ */
+MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_point) :
+  MapView::State(view),
+  initial_point(view.mapToScene(initial_point).toPoint()) {
+
 }

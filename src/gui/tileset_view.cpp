@@ -23,6 +23,7 @@
 #include "ground_traits.h"
 #include "pattern_animation_traits.h"
 #include "pattern_separation_traits.h"
+#include "rectangle.h"
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QAction>
@@ -365,27 +366,8 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
 
     if (dragging_current_point != dragging_previous_point) {
 
-      QRect new_pattern_area;
-
       // The area has changed: recalculate the rectangle.
-      if (dragging_start_point.x() < dragging_current_point.x()) {
-        new_pattern_area.setX(dragging_start_point.x());
-        new_pattern_area.setWidth(dragging_current_point.x() - dragging_start_point.x());
-      }
-      else {
-        new_pattern_area.setX(dragging_current_point.x());
-        new_pattern_area.setWidth(dragging_start_point.x() - dragging_current_point.x());
-      }
-
-      if (dragging_start_point.y() < dragging_current_point.y()) {
-        new_pattern_area.setY(dragging_start_point.y());
-        new_pattern_area.setHeight(dragging_current_point.y() - dragging_start_point.y());
-      }
-      else {
-        new_pattern_area.setY(dragging_current_point.y());
-        new_pattern_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
-      }
-
+      QRect new_pattern_area = Rectangle::from_two_points(dragging_start_point, dragging_current_point);
       set_current_area(new_pattern_area);
     }
   }

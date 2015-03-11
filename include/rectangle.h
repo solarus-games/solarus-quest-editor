@@ -25,6 +25,8 @@ namespace Rectangle {
 QRect to_qrect(const Solarus::Rectangle& solarus_rect);
 Solarus::Rectangle to_solarus_rect(const QRect& qt_rect);
 
+QRect from_two_points(const QPoint& p1, const QPoint& p2);
+
 }
 
 #endif
