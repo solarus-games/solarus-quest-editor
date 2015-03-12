@@ -20,6 +20,7 @@
 #include "gui/mouse_coordinates_tracking_tool.h"
 #include "gui/pan_tool.h"
 #include "gui/zoom_tool.h"
+#include "point.h"
 #include "rectangle.h"
 #include "view_settings.h"
 #include <QGraphicsItem>
@@ -608,7 +609,7 @@ bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
  */
 DrawingRectangleState::DrawingRectangleState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
-  initial_point(view.mapToScene(initial_point).toPoint() / 8 * 8),
+  initial_point(view.mapToScene(initial_point).toPoint()),
   current_area_item(nullptr) {
 
 }
@@ -643,7 +644,7 @@ bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
 
   // Compute the selected area.
   QPoint previous_point = current_point;
-  current_point = view.mapToScene(event.pos()).toPoint() / 8 * 8;
+  current_point = view.mapToScene(event.pos()).toPoint();
 
   if (current_point == previous_point) {
     // No change.

@@ -25,6 +25,9 @@ namespace Point {
 QPoint to_qpoint(const Solarus::Point& solarus_point);
 Solarus::Point to_solarus_point(const QPoint& qt_point);
 
+QPoint round_8(const QPoint& point);
+QPoint round_8(const QPointF& point);
+
 }
 
 #endif

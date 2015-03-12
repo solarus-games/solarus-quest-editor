@@ -38,4 +38,26 @@ Solarus::Point to_solarus_point(const QPoint& qt_point) {
   return Solarus::Point(qt_point.x(), qt_point.y());
 }
 
+/**
+ * @brief Rounds the coordinates of a point to the nearest multiples of 8.
+ * @param point A point.
+ * @return The rounded point.
+ */
+QPoint round_8(const QPoint& point) {
+
+  // The division operator of QPoint already implements rounding to the
+  // nearest integer.
+  return point / 8 * 8;
+}
+
+/**
+ * @overload
+ */
+QPoint round_8(const QPointF& point) {
+
+  // The division operator of QPoint already implements rounding to the
+  // nearest integer.
+  return round_8(point.toPoint());
+}
+
 }
