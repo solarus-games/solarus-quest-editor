@@ -61,7 +61,7 @@ public:
    * catches it because it is better than a crash, but the undo stack is then
    * unrecoverable.
    */
-  virtual void undo() override {
+  void undo() override {
 
     try {
       wrapped_command->undo();
@@ -75,14 +75,13 @@ public:
   /**
    * @brief Calls redo() on the wrapped command.
    *
-   * Does nothing the first time, because the command was already done
-   * from the constructor.
+   * Does nothing the first time, because the command was already done once.
    *
    * The wrapped redo() should not throw exceptions if it did not the first
    * time. If it does anyway, this function catches it because it is better
    * than a crash, but the undo stack is then unrecoverable.
    */
-  virtual void redo() override {
+  void redo() override {
 
     if (first_time) {
       // Not a real redo.
@@ -97,6 +96,33 @@ public:
       // This is a bug in the editor.
       std::cerr << "Error in redo(): " << ex.what() << std::endl;
     }
+  }
+
+  /**
+   * @brief Returns a value identifying this type of command.
+   * @return 0.
+   */
+  int id() const override {
+    return 0;
+  }
+
+  /**
+   * @brief Attempts to merge this command with another.
+   *
+   * If the other command is also an UndoCommandSkipFirst, this function
+   * attempts to merge both wrapped comands.
+   *
+   * @param other Another command.
+   * @return @c true if they could be merged.
+   */
+  bool mergeWith(const QUndoCommand* other) override {
+
+    if (other->id() != id()) {
+      return false;
+    }
+    const UndoCommandSkipFirst& other_skip = *static_cast<const UndoCommandSkipFirst*>(other);
+
+    return wrapped_command->mergeWith(other_skip.wrapped_command.get());
   }
 
 private:

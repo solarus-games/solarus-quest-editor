@@ -27,7 +27,7 @@
 
 namespace {
 
-constexpr int move_entities_command_id = 0;
+constexpr int move_entities_command_id = 1;
 
 /**
  * @brief Parent class of all undoable commands of the map editor.
