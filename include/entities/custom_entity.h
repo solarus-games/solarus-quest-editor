@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_CUSTOM_ENTITY_H
 #define SOLARUSEDITOR_CUSTOM_ENTITY_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable custom entity.
  */
-class CustomEntity : public EntityModel {
+class MapModel::CustomEntity : public MapModel::EntityModel {
 
 public:
 
-  CustomEntity(MapModel& map, const Solarus::EntityData& entity);
+  CustomEntity(MapModel& map, const EntityIndex& index);
 
 };
 

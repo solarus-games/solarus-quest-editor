@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_STAIRS_H
 #define SOLARUSEDITOR_STAIRS_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable staircase.
  */
-class Stairs : public EntityModel {
+class MapModel::Stairs : public MapModel::EntityModel {
 
 public:
 
-  Stairs(MapModel& map, const Solarus::EntityData& entity);
+  Stairs(MapModel& map, const EntityIndex& index);
 
 };
 

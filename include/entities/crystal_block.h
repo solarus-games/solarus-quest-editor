@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_CRYSTAL_BLOCK_H
 #define SOLARUSEDITOR_CRYSTAL_BLOCK_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable crystal_block.
  */
-class CrystalBlock : public EntityModel {
+class MapModel::CrystalBlock : public MapModel::EntityModel {
 
 public:
 
-  CrystalBlock(MapModel& map, const Solarus::EntityData& entity);
+  CrystalBlock(MapModel& map, const EntityIndex& index);
 
 };
 

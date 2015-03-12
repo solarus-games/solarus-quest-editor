@@ -22,10 +22,13 @@
 #include <QGraphicsView>
 #include <QPointer>
 #include <memory>
+#include <solarus/MapData.h>
 
 class MapModel;
 class MapScene;
 class ViewSettings;
+
+using EntityIndex = Solarus::EntityIndex;
 
 /**
  * @brief Graphical view of the map image, allowing to manage entities.
@@ -70,14 +73,21 @@ public:
   void set_model(MapModel* map);
   void set_view_settings(ViewSettings& view_settings);
 
+  // State of the view.
   void start_state_doing_nothing();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void start_state_moving_entities(const QPoint& initial_point);
+
+  // Selection.
+  QList<EntityIndex> get_selected_entities();
+
+  void move_selected_entities(const QPoint& translation);
 
 signals:
 
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
+  void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation);
 
 public slots:
 

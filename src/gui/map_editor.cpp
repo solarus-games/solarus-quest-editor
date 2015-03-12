@@ -161,6 +161,33 @@ private:
   QString before, after;
 };
 
+/**
+ * @brief Moving entities on the map.
+ */
+class MoveEntitiesCommand : public MapEditorCommand {
+
+public:
+  MoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes, const QPoint& translation) :
+    MapEditorCommand(editor, MapEditor::tr("Move entities")),
+    indexes(indexes),
+    translation(translation) { }
+
+  void undo() override {
+    for (const EntityIndex& index : indexes) {
+      get_model().add_entity_xy(index, -translation);
+    }
+  }
+  void redo() override {
+    for (const EntityIndex& index : indexes) {
+      get_model().add_entity_xy(index, translation);
+    }
+  }
+
+private:
+  const QList<EntityIndex> indexes;
+  const QPoint translation;
+};
+
 }  // Anonymous namespace.
 
 /**
@@ -266,6 +293,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(music_selector_activated()));
   connect(model, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
+
+  connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint)),
+          this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint)));
 }
 
 /**
@@ -634,4 +664,18 @@ void MapEditor::music_selector_activated() {
 void MapEditor::update_tileset_view() {
 
   ui.tileset_view->set_model(model->get_tileset_model());
+}
+
+/**
+ * @brief Slot called when the user wants to move entities.
+ * @param indexes Indexes of the entities to move.
+ * @param translation XY translation to make.
+ */
+void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new MoveEntitiesCommand(*this, indexes, translation));
 }

@@ -44,9 +44,15 @@ public:
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
+  EntityIndex get_item_index(const QGraphicsItem& item);
+
 protected:
 
   void drawBackground(QPainter* painter, const QRectF& rect) override;
+
+private slots:
+
+  void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 private:
 
@@ -54,6 +60,7 @@ private:
 
   void build();
   void create_entity_item(const EntityIndex& index);
+  EntityItem* get_entity_item(const EntityIndex& index);
   const EntityList& get_entities(Layer layer);
 
   MapModel& model;            /**< The map represented. */

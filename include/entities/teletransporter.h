@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_TELETRANSPORTER_H
 #define SOLARUSEDITOR_TELETRANSPORTER_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable teletransporter.
  */
-class Teletransporter : public EntityModel {
+class MapModel::Teletransporter : public MapModel::EntityModel {
 
 public:
 
-  Teletransporter(MapModel& map, const Solarus::EntityData& entity);
+  Teletransporter(MapModel& map, const EntityIndex& index);
 
 };
 

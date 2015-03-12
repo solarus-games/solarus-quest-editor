@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_DOOR_H
 #define SOLARUSEDITOR_DOOR_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable door.
  */
-class Door : public EntityModel {
+class MapModel::Door : public MapModel::EntityModel {
 
 public:
 
-  Door(MapModel& map, const Solarus::EntityData& entity);
+  Door(MapModel& map, const EntityIndex& index);
 
 };
 

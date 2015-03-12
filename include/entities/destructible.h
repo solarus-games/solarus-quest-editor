@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_DESTRUCTIBLE_H
 #define SOLARUSEDITOR_DESTRUCTIBLE_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable destructible object.
  */
-class Destructible : public EntityModel {
+class MapModel::Destructible : public MapModel::EntityModel {
 
 public:
 
-  Destructible(MapModel& map, const Solarus::EntityData& entity);
+  Destructible(MapModel& map, const EntityIndex& index);
 
 };
 

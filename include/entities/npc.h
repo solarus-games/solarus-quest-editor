@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_NPC_H
 #define SOLARUSEDITOR_NPC_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable non-playing character.
  */
-class Npc : public EntityModel {
+class MapModel::Npc : public MapModel::EntityModel {
 
 public:
 
-  Npc(MapModel& map, const Solarus::EntityData& entity);
+  Npc(MapModel& map, const EntityIndex& index);
 
 };
 

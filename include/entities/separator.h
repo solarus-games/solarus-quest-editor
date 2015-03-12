@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_SEPARATOR_H
 #define SOLARUSEDITOR_SEPARATOR_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable separator.
  */
-class Separator : public EntityModel {
+class MapModel::Separator : public MapModel::EntityModel {
 
 public:
 
-  Separator(MapModel& map, const Solarus::EntityData& entity);
+  Separator(MapModel& map, const EntityIndex& index);
 
 };
 

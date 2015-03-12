@@ -48,6 +48,7 @@ public:
   QRectF boundingRect() const override;
 
   void update_visibility(const ViewSettings& view_settings);
+  void update_xy();
 
 protected:
 
@@ -72,6 +73,9 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
   model(model) {
 
   build();
+
+  connect(&model, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
+          this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
 }
 
 /**
@@ -143,6 +147,26 @@ void MapScene::create_entity_item(const EntityIndex& index) {
 }
 
 /**
+ * @brief Returns the graphic item of the specified entity.
+ * @param index Index of a map entity.
+ * @return The corresponding item or nullptr if there is no such entity.
+ */
+EntityItem* MapScene::get_entity_item(const EntityIndex& index) {
+
+  if (!index.is_valid()) {
+    return nullptr;
+  }
+
+  const EntityList& entities = get_entities(index.layer);
+  if (index.index < 0 || index.index >= entities.size()) {
+    // Index out of range.
+    return nullptr;
+  }
+
+  return entities.at(index.index);
+}
+
+/**
  * @brief Returns the entity items on the specified layer.
  * @param layer A layer.
  * @return Items of entities on that layer.
@@ -202,6 +226,44 @@ void MapScene::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 /**
+ * @brief Returns the index of the entity represented by the specified item.
+ * @param item An item of the scene.
+ * @return The index of the entity, or an invalid index if the item does not
+ * represent a map entity.
+ */
+EntityIndex MapScene::get_item_index(const QGraphicsItem& item) {
+
+  const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(&item);
+  if (entity_item == nullptr) {
+    // Not a map entity.
+    return EntityIndex();
+  }
+
+  return entity_item->get_index();
+}
+
+/**
+ * @brief Slot called when the position of an entity has changed.
+ *
+ * Its item on the scene is updated accordingly.
+ *
+ * @param index Index of an entity.
+ * @param xy Its new position.
+ */
+void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
+
+  Q_UNUSED(xy);
+
+  EntityItem* item = get_entity_item(index);
+  if (item == nullptr) {
+    // Bug in the map editor.
+    qCritical() << "Missing entity item";
+  }
+
+  item->update_xy();
+}
+
+/**
  * @brief Creates an entity item.
  * @param map The map.
  * @param index Index of the entity on the map.
@@ -211,8 +273,7 @@ EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
   map(map),
   index(index) {
 
-  QRect box = map.get_entity_bounding_box(index);
-  setPos(MapScene::get_margin_top_left() + box.topLeft());
+  update_xy();
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
@@ -263,6 +324,15 @@ void EntityItem::update_visibility(const ViewSettings& view_settings) {
   const bool visible = view_settings.is_layer_visible(layer) &&
              view_settings.is_entity_type_visible(type);
   setVisible(visible);
+}
+
+/**
+ * @brief Sets the position of this entity item according to the model.
+ */
+void EntityItem::update_xy() {
+
+  QPoint entity_top_left = map.get_entity_top_left(index);
+  setPos(MapScene::get_margin_top_left() + entity_top_left);
 }
 
 /**

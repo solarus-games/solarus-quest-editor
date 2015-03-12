@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_TILE_H
 #define SOLARUSEDITOR_TILE_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable tile.
  */
-class Tile : public EntityModel {
+class MapModel::Tile : public MapModel::EntityModel {
 
 public:
 
-  Tile(MapModel& map, const Solarus::EntityData& entity);
+  Tile(MapModel& map, const EntityIndex& index);
 
   QString get_pattern_id() const;
 

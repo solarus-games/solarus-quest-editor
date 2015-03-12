@@ -19,9 +19,9 @@
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
- * @param entity The entity data to represent.
+ * @param index Index of the entity in the map.
  */
-DynamicTile::DynamicTile(MapModel& map, const Solarus::EntityData& entity) :
-  Tile(map, entity) {
+MapModel::DynamicTile::DynamicTile(MapModel& map, const EntityIndex& index) :
+  Tile(map, index) {
 
 }

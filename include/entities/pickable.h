@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_PICKABLE_H
 #define SOLARUSEDITOR_PICKABLE_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable pickable treasure.
  */
-class Pickable : public EntityModel {
+class MapModel::Pickable : public MapModel::EntityModel {
 
 public:
 
-  Pickable(MapModel& map, const Solarus::EntityData& entity);
+  Pickable(MapModel& map, const EntityIndex& index);
 
 };
 

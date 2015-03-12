@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_WALL_H
 #define SOLARUSEDITOR_WALL_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable wall.
  */
-class Wall : public EntityModel {
+class MapModel::Wall : public MapModel::EntityModel {
 
 public:
 
-  Wall(MapModel& map, const Solarus::EntityData& entity);
+  Wall(MapModel& map, const EntityIndex& index);
 
 };
 

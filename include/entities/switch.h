@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_SWITCH_H
 #define SOLARUSEDITOR_SWITCH_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable switch.
  */
-class Switch : public EntityModel {
+class MapModel::Switch : public MapModel::EntityModel {
 
 public:
 
-  Switch(MapModel& map, const Solarus::EntityData& entity);
+  Switch(MapModel& map, const EntityIndex& index);
 
 };
 

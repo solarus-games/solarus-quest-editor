@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_SENSOR_H
 #define SOLARUSEDITOR_SENSOR_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable sensor.
  */
-class Sensor : public EntityModel {
+class MapModel::Sensor : public MapModel::EntityModel {
 
 public:
 
-  Sensor(MapModel& map, const Solarus::EntityData& entity);
+  Sensor(MapModel& map, const EntityIndex& index);
 
 };
 

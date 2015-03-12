@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_STREAM_H
 #define SOLARUSEDITOR_STREAM_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable stream.
  */
-class Stream : public EntityModel {
+class MapModel::Stream : public MapModel::EntityModel {
 
 public:
 
-  Stream(MapModel& map, const Solarus::EntityData& entity);
+  Stream(MapModel& map, const EntityIndex& index);
 
 };
 

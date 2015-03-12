@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_JUMPER_H
 #define SOLARUSEDITOR_JUMPER_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable jumper.
  */
-class Jumper : public EntityModel {
+class MapModel::Jumper : public MapModel::EntityModel {
 
 public:
 
-  Jumper(MapModel& map, const Solarus::EntityData& entity);
+  Jumper(MapModel& map, const EntityIndex& index);
 
   bool is_diagonal() const;
 

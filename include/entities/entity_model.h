@@ -19,34 +19,37 @@
 
 #include "entity_traits.h"
 #include "layer_traits.h"
+#include "map_model.h"
+#include "sprite_model.h"
 #include <solarus/MapData.h>
-#include <QList>
-#include <QPixmap>
 #include <QPointer>
 #include <memory>
 
 class MapModel;
 class Quest;
 class QuestResources;
-class SpriteModel;
 class TilesetModel;
-class QPainter;
 
 using EntityIndex = Solarus::EntityIndex;
 
 /**
- * @brief Model of a map entity.
+ * @brief Internal model of a map entity.
  *
- * This class wraps an enttiy from the Solarus library and
+ * This is an implementation detail of MapModel, it cannot be accessed from
+ * outside.
+ *
+ * This class wraps an entity from the Solarus library and
  * adds all useful information about how to represent and modify it in the
  * editor.
+ *
+ * Each type of entity is a subclass of EntityModel.
  */
-class EntityModel {
+class MapModel::EntityModel {
 
 public:
 
   static std::unique_ptr<EntityModel> create(
-      MapModel& map, const Solarus::EntityData& entity_data);
+      MapModel& map, const EntityIndex& index);
   virtual ~EntityModel();
 
   const MapModel& get_map() const;
@@ -132,7 +135,10 @@ protected:
     double scale = 1.0;  // If 2.0, the image will have a resolution twice better.
   };
 
-  EntityModel(MapModel& map, const Solarus::EntityData& entity);
+  EntityModel(MapModel& map, const EntityIndex& index);
+
+  const Solarus::EntityData& get_entity() const;
+  Solarus::EntityData& get_entity();
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);
@@ -150,10 +156,10 @@ protected:
 
 private:
 
-  QPointer<MapModel> map;         /**< The map this entity belongs to.
-                                   * (could be a reference but we want operator=) */
-  Solarus::EntityData entity;     /**< The entity data wrapped. */
-  QPoint origin;                  /**< Origin point of the entity. */
+  QPointer<MapModel> map;         /**< The map this entity belongs to
+                                   * (could be a reference but we want operator=). */
+  EntityIndex index;              /**< Index of this entity in the map. */
+  QPoint origin;                  /**< Origin point of the entity relative to its top-left corner. */
   QSize size;                     /**< Size of the entity for the editor. */
 
   // Displaying.

@@ -19,12 +19,10 @@
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
- * @param entity The entity data to represent.
+ * @param index Index of the entity in the map.
  */
-CrystalBlock::CrystalBlock(MapModel& map, const Solarus::EntityData& entity) :
-  EntityModel(map, entity) {
-
-  Q_ASSERT(entity.get_type() == EntityType::CRYSTAL_BLOCK);
+MapModel::CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
+  EntityModel(map, index) {
 
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal_block";

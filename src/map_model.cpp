@@ -55,8 +55,8 @@ MapModel::MapModel(
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     for (int j = 0; j < get_num_entities(layer); ++j) {
-      const Solarus::EntityData& entity_data = map.get_entity({ layer, j});
-      entities[i].push_back(std::move(EntityModel::create(*this, entity_data)));
+      EntityIndex index = { layer, j};
+      entities[i].emplace_back(EntityModel::create(*this, index));
     }
   }
 }
@@ -317,11 +317,42 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  *
  * The EntityModel class is only for internal use of MapModel.
  *
- * @param index An index.
+ * @param index A map entity index.
  * @return The corresponding entity model.
  */
-const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
+const MapModel::EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
   return *entities[index.layer].at(index.index);
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
+ */
+MapModel::EntityModel& MapModel::get_entity_model(const EntityIndex& index) {
+  return *entities[index.layer].at(index.index);
+}
+
+/**
+ * @brief Returns the underlying Solarus entity data at the given index.
+ *
+ * External classes cannot directly use this function, they should use the
+ * other functions to have Qt-friendly types and signals.
+ *
+ * @param index A map entity index.
+ * @return The entity at this index.
+ */
+const Solarus::EntityData& MapModel::get_entity(const EntityIndex& index) const {
+  return map.get_entity(index);
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
+ */
+Solarus::EntityData& MapModel::get_entity(const EntityIndex& index) {
+  return map.get_entity(index);
 }
 
 /**
@@ -385,6 +416,40 @@ QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
   }
 
   return get_entity_model(index).get_xy();
+}
+
+/**
+ * @brief Sets the coordinates of an entity on the map.
+ * @param index Index of the entity to change.
+ * @param xy The new coordinates of the entity's origin point.
+ * Does nothing if there is no entity with this index.
+ */
+void MapModel::set_entity_xy(const EntityIndex& index, const QPoint& xy) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  Solarus::EntityData& entity = map.get_entity(index);
+  Solarus::Point solarus_xy = Point::to_solarus_point(xy);
+
+  if (solarus_xy == entity.get_xy()) {
+    return;
+  }
+
+  get_entity_model(index).set_xy(xy);
+  emit entity_xy_changed(index, xy);
+}
+
+/**
+ * @brief Applies a translation to an entity on the map.
+ * @param index Index of the entity to change.
+ * @param xy The coordinates to add.
+ * Does nothing if there is no entity with this index.
+ */
+void MapModel::add_entity_xy(const EntityIndex& index, const QPoint& translation) {
+
+  set_entity_xy(index, get_entity_xy(index) + translation);
 }
 
 /**

@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_BLOCK_H
 #define SOLARUSEDITOR_BLOCK_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable block.
  */
-class Block : public EntityModel {
+class MapModel::Block : public MapModel::EntityModel {
 
 public:
 
-  Block(MapModel& map, const Solarus::EntityData& entity);
+  Block(MapModel& map, const EntityIndex& index);
 
 };
 

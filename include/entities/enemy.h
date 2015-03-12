@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_ENEMY_H
 #define SOLARUSEDITOR_ENEMY_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable enemy.
  */
-class Enemy : public EntityModel {
+class MapModel::Enemy : public MapModel::EntityModel {
 
 public:
 
-  Enemy(MapModel& map, const Solarus::EntityData& entity);
+  Enemy(MapModel& map, const EntityIndex& index);
 
 };
 

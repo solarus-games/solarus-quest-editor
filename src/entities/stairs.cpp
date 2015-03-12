@@ -19,11 +19,9 @@
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
- * @param entity The entity data to represent.
+ * @param index Index of the entity in the map.
  */
-Stairs::Stairs(MapModel& map, const Solarus::EntityData& entity) :
-  EntityModel(map, entity) {
-
-  Q_ASSERT(entity.get_type() == EntityType::STAIRS);
+MapModel::Stairs::Stairs(MapModel& map, const EntityIndex& index) :
+  EntityModel(map, index) {
 
 }

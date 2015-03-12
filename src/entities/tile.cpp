@@ -22,10 +22,10 @@
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
- * @param entity The entity data to represent.
+ * @param index Index of the entity in the map.
  */
-Tile::Tile(MapModel& map, const Solarus::EntityData& entity) :
-  EntityModel(map, entity) {
+MapModel::Tile::Tile(MapModel& map, const EntityIndex& index) :
+  EntityModel(map, index) {
 
 }
 
@@ -33,14 +33,14 @@ Tile::Tile(MapModel& map, const Solarus::EntityData& entity) :
  * @brief Returns the pattern id used by this tile.
  * @return The pattern id.
  */
-QString Tile::get_pattern_id() const {
+QString MapModel::Tile::get_pattern_id() const {
   return get_field("pattern").toString();
 }
 
 /**
  * @copydoc EntityModel::draw
  */
-void Tile::draw(QPainter& painter) const {
+void MapModel::Tile::draw(QPainter& painter) const {
 
   if (pattern_image.isNull()) {
     // Lazily create the image.

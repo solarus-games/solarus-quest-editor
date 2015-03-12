@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_CHEST_H
 #define SOLARUSEDITOR_CHEST_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable chest.
  */
-class Chest : public EntityModel {
+class MapModel::Chest : public MapModel::EntityModel {
 
 public:
 
-  Chest(MapModel& map, const Solarus::EntityData& entity);
+  Chest(MapModel& map, const EntityIndex& index);
 
 };
 

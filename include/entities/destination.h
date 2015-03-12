@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_DESTINATION_H
 #define SOLARUSEDITOR_DESTINATION_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable destination.
  */
-class Destination : public EntityModel {
+class MapModel::Destination : public MapModel::EntityModel {
 
 public:
 
-  Destination(MapModel& map, const Solarus::EntityData& entity);
+  Destination(MapModel& map, const EntityIndex& index);
 
 };
 

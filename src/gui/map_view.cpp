@@ -72,8 +72,13 @@ class MovingEntitiesState : public MapView::State {
 public:
   MovingEntitiesState(MapView& view, const QPoint& initial_point);
 
+  bool mouse_moved(const QMouseEvent& event) override;
+  bool mouse_released(const QMouseEvent& event) override;
+
 private:
-  QPoint initial_point;  /**< Point where the dragging started, in scene coordinates. */
+  QPoint initial_point;      /**< Point where the dragging started, in scene coordinates. */
+  QPoint last_point;         /**< Point where the mouse was last time it moved, in scene coordinates. */
+  QPoint total_translation;  /**< Total translation from the initial point. */
 };
 
 }  // Anonymous namespace.
@@ -413,6 +418,35 @@ void MapView::contextMenuEvent(QContextMenuEvent* event) {
 }
 
 /**
+ * @brief Returns the indexes of selected entities.
+ * @return The selected entities.
+ */
+QList<EntityIndex> MapView::get_selected_entities() {
+
+  QList<EntityIndex> result;
+  if (scene == nullptr) {
+    return result;
+  }
+
+  for (QGraphicsItem* item : scene->selectedItems()) {
+    EntityIndex index = scene->get_item_index(*item);
+    if (index.is_valid()) {
+      result.append(index);
+    }
+  }
+  return result;
+}
+
+/**
+ * @brief Requests to move the selected entities with the specified translation.
+ * @param translation XY coordinates to add.
+ */
+void MapView::move_selected_entities(const QPoint& translation) {
+
+  emit move_entities_requested(get_selected_entities(), translation);
+}
+
+/**
  * @brief Creates a state.
  * @param view The map view to manage.
  */
@@ -541,7 +575,7 @@ DoingNothingState::DoingNothingState(MapView& view) :
 bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 
   if (event.button() != Qt::LeftButton && event.button() != Qt::RightButton) {
-    return false;
+    return true;
   }
 
   MapView& view = get_view();
@@ -693,6 +727,45 @@ bool DrawingRectangleState::mouse_released(const QMouseEvent& event) {
  */
 MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
-  initial_point(view.mapToScene(initial_point).toPoint()) {
+  initial_point(Point::round_8(view.mapToScene(initial_point))),
+  last_point(this->initial_point),
+  total_translation(0, 0) {
 
+}
+
+/**
+ * @copydoc MapView::State::mouse_moved
+ */
+bool MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
+
+  MapView& view = get_view();
+
+  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
+  if (current_point == last_point) {
+    // No change after rounding.
+    return true;
+  }
+
+  // Make the selected entities follow the mouse while dragging.
+  QPoint translation = current_point - last_point;
+  view.move_selected_entities(translation);
+
+  // Also save the total translation because only the total result will be undoable.
+  this->total_translation += translation;
+  last_point = current_point;
+
+  return true;
+}
+
+/**
+ * @copydoc MapView::State::mouse_released
+ */
+bool MovingEntitiesState::mouse_released(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+
+  // TODO replace the successive translations by a total one in the undo/redo history.
+  get_view().start_state_doing_nothing();
+
+  return true;
 }

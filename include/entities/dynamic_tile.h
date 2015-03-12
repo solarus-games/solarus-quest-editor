@@ -22,11 +22,11 @@
 /**
  * @brief An editable dynamic tile.
  */
-class DynamicTile : public Tile {
+class MapModel::DynamicTile : public Tile {
 
 public:
 
-  DynamicTile(MapModel& map, const Solarus::EntityData& entity);
+  DynamicTile(MapModel& map, const EntityIndex& index);
 
 };
 

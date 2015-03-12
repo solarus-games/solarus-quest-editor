@@ -17,16 +17,16 @@
 #ifndef SOLARUSEDITOR_SHOP_TREASURE_H
 #define SOLARUSEDITOR_SHOP_TREASURE_H
 
-#include "entities/entity_model.h"
+#include "entity_model.h"
 
 /**
  * @brief An editable shop treasure.
  */
-class ShopTreasure : public EntityModel {
+class MapModel::ShopTreasure : public MapModel::EntityModel {
 
 public:
 
-  ShopTreasure(MapModel& map, const Solarus::EntityData& entity);
+  ShopTreasure(MapModel& map, const EntityIndex& index);
 
 };
 

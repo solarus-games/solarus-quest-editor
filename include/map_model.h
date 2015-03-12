@@ -17,15 +17,16 @@
 #ifndef SOLARUSEDITOR_MAP_MODEL_H
 #define SOLARUSEDITOR_MAP_MODEL_H
 
-#include "entities/entity_model.h"
 #include "entities/entity_traits.h"
 #include "layer_traits.h"
+#include "sprite_model.h"
 #include <solarus/MapData.h>
-#include <QItemSelectionModel>
 #include <deque>
+#include <memory>
+#include <QPointer>
 
-class EntityModel;
 class Quest;
+class QuestResources;
 class TilesetModel;
 class QPainter;
 
@@ -37,7 +38,6 @@ using EntityIndex = Solarus::EntityIndex;
  * It makes the link between the editor and the map data of the
  * Solarus library.
  * Signals are sent when something changes in the wrapped map.
- * This model also stores the selection information.
  */
 class MapModel : public QObject {
   Q_OBJECT
@@ -79,10 +79,13 @@ public:
   QString get_entity_type_name(const EntityIndex& index) const;
   Layer get_entity_layer(const EntityIndex& index) const;
   QPoint get_entity_xy(const EntityIndex& index) const;
+  void set_entity_xy(const EntityIndex& index, const QPoint& xy);
+  void add_entity_xy(const EntityIndex& index, const QPoint& translation);
   QPoint get_entity_top_left(const EntityIndex& index) const;
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
+
   void draw_entity(const EntityIndex& index, QPainter& painter) const;
 
 signals:
@@ -94,13 +97,43 @@ signals:
   void tileset_id_changed(const QString& tileset_id);
   void music_id_changed(const QString& music_id);
 
+  void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
+
 public slots:
 
   void save() const;
 
 private:
 
+  class EntityModel;
+  class Block;
+  class Chest;
+  class Crystal;
+  class CrystalBlock;
+  class CustomEntity;
+  class Destination;
+  class Destructible;
+  class Door;
+  class DynamicTile;
+  class Enemy;
+  class Jumper;
+  class Npc;
+  class Pickable;
+  class Sensor;
+  class Separator;
+  class ShopTreasure;
+  class Stairs;
+  class Stream;
+  class Switch;
+  class Teletransporter;
+  class Tile;
+  class Wall;
+
+  const Solarus::EntityData& get_entity(const EntityIndex& index) const;
+  Solarus::EntityData& get_entity(const EntityIndex& index);
+
   const EntityModel& get_entity_model(const EntityIndex& index) const;
+  EntityModel& get_entity_model(const EntityIndex& index);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */
@@ -110,5 +143,7 @@ private:
       entities;                   /**< All entities. */
 
 };
+
+#include "entities/entity_model.h"
 
 #endif
