@@ -169,10 +169,11 @@ private:
 class MoveEntitiesCommand : public MapEditorCommand {
 
 public:
-  MoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes, const QPoint& translation) :
+  MoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes, const QPoint& translation, bool allow_merge_to_previous) :
     MapEditorCommand(editor, MapEditor::tr("Move entities")),
     indexes(indexes),
-    translation(translation) { }
+    translation(translation),
+    allow_merge_to_previous(allow_merge_to_previous) { }
 
   void undo() override {
     for (const EntityIndex& index : indexes) {
@@ -190,23 +191,24 @@ public:
     return move_entities_command_id;
   }
 
-  bool mergeWith(const QUndoCommand* other_command) override {
+  bool mergeWith(const QUndoCommand* other) override {
 
-    if (other_command->id() != id()) {
+    if (other->id() != id()) {
       return false;
     }
-    const MoveEntitiesCommand& other_move_command = *static_cast<const MoveEntitiesCommand*>(other_command);
-    if (other_move_command.indexes != indexes) {
+    const MoveEntitiesCommand& other_move = *static_cast<const MoveEntitiesCommand*>(other);
+    if (!other_move.allow_merge_to_previous) {
       return false;
     }
 
-    translation += other_move_command.translation;
+    translation += other_move.translation;
     return true;
   }
 
 private:
   QList<EntityIndex> indexes;
   QPoint translation;
+  bool allow_merge_to_previous;
 };
 
 }  // Anonymous namespace.
@@ -315,8 +317,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(model, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
-  connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint)),
-          this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint)));
+  connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint, bool)),
+          this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint, bool)));
 }
 
 /**
@@ -691,12 +693,15 @@ void MapEditor::update_tileset_view() {
  * @brief Slot called when the user wants to move entities.
  * @param indexes Indexes of the entities to move.
  * @param translation XY translation to make.
+ * @param allow_merge_to_previous @c true to merge this move with the previous one if any.
  */
-void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation) {
+void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
+                                        const QPoint& translation,
+                                        bool allow_merge_to_previous) {
 
   if (indexes.isEmpty()) {
     return;
   }
 
-  try_command(new MoveEntitiesCommand(*this, indexes, translation));
+  try_command(new MoveEntitiesCommand(*this, indexes, translation, allow_merge_to_previous));
 }

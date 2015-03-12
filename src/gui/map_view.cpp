@@ -78,6 +78,7 @@ public:
 private:
   QPoint initial_point;      /**< Point where the dragging started, in scene coordinates. */
   QPoint last_point;         /**< Point where the mouse was last time it moved, in scene coordinates. */
+  bool first_move_done;      /**< Whether at least one move was done during the state. */
 };
 
 }  // Anonymous namespace.
@@ -439,10 +440,11 @@ QList<EntityIndex> MapView::get_selected_entities() {
 /**
  * @brief Requests to move the selected entities with the specified translation.
  * @param translation XY coordinates to add.
+ * @param allow_merge_to_previous @c true to merge this move with the previous one if any.
  */
-void MapView::move_selected_entities(const QPoint& translation) {
+void MapView::move_selected_entities(const QPoint& translation, bool allow_merge_to_previous) {
 
-  emit move_entities_requested(get_selected_entities(), translation);
+  emit move_entities_requested(get_selected_entities(), translation, allow_merge_to_previous);
 }
 
 /**
@@ -727,7 +729,8 @@ bool DrawingRectangleState::mouse_released(const QMouseEvent& event) {
 MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
   initial_point(Point::round_8(view.mapToScene(initial_point))),
-  last_point(this->initial_point) {
+  last_point(this->initial_point),
+  first_move_done(false) {
 
 }
 
@@ -744,11 +747,15 @@ bool MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
     return true;
   }
 
-  // Make the selected entities follow the mouse while dragging.
+  // Make selected entities follow the mouse while dragging.
   QPoint translation = current_point - last_point;
   last_point = current_point;
 
-  view.move_selected_entities(translation);
+  // Merge undo actions of successive moves,
+  // but don't merge the first one of this state instance to potential previous states.
+  const bool allow_merge_to_previous = first_move_done;
+  view.move_selected_entities(translation, allow_merge_to_previous);
+  first_move_done = true;
 
   return true;
 }
@@ -760,7 +767,6 @@ bool MovingEntitiesState::mouse_released(const QMouseEvent& event) {
 
   Q_UNUSED(event);
 
-  // TODO replace the successive translations by a total one in the undo/redo history.
   get_view().start_state_doing_nothing();
 
   return true;

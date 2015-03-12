@@ -81,14 +81,14 @@ public:
   // Selection.
   QList<EntityIndex> get_selected_entities();
 
-  void move_selected_entities(const QPoint& translation);
+  void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
 
 signals:
 
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
   void undo_requested();
-  void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation);
+  void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation, bool allow_merge_to_previous);
 
 public slots:
 

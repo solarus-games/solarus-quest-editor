@@ -60,7 +60,9 @@ private slots:
   void music_selector_activated();
   void update_tileset_view();
 
-  void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation);
+  void move_entities_requested(const QList<EntityIndex>& indexes,
+                               const QPoint& translation,
+                               bool allow_merge_to_previous);
 
 private:
 
