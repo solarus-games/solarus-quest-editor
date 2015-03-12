@@ -38,6 +38,7 @@ class DoingNothingState : public MapView::State {
 
 public:
   DoingNothingState(MapView& view);
+
   bool mouse_pressed(const QMouseEvent& event) override;
 };
 
@@ -60,6 +61,7 @@ private:
   QPoint current_point;                     /**< Point where the dragging currently is, in scene coordinates. */
   QGraphicsRectItem* current_area_item;     /**< Graphic item of the rectangle the user is drawing
                                              * (belongs to the scene). */
+  QList<QGraphicsItem*> initial_selection;  /**< Items that were selected before the drawing started. */
 };
 
 /**
@@ -538,67 +540,69 @@ DoingNothingState::DoingNothingState(MapView& view) :
  */
 bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 
-  if (event.button() == Qt::LeftButton || event.button() == Qt::RightButton) {
+  if (event.button() != Qt::LeftButton && event.button() != Qt::RightButton) {
+    return false;
+  }
 
-    MapView& view = get_view();
-    MapScene& scene = get_scene();
+  MapView& view = get_view();
+  MapScene& scene = get_scene();
 
-    // Left or right button: possibly change the selection.
-    QList<QGraphicsItem*> items_under_mouse = view.items(
-          QRect(event.pos(), QSize(1, 1)),
-          Qt::IntersectsItemBoundingRect  // Pick transparent items too.
-          );
-    QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
+  // Left or right button: possibly change the selection.
+  QList<QGraphicsItem*> items_under_mouse = view.items(
+        QRect(event.pos(), QSize(1, 1)),
+        Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+        );
+  QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
 
-    const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+  const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
 
-    bool keep_selected = false;
-    if (control_or_shift) {
-      // If ctrl or shift is pressed, keep the existing selection.
-      keep_selected = true;
-    }
-    else if (item != nullptr && item->isSelected()) {
-      // When clicking an already selected item, keep the existing selection too.
-      keep_selected = true;
-    }
+  bool keep_selected = false;
+  if (control_or_shift) {
+    // If ctrl or shift is pressed, keep the existing selection.
+    keep_selected = true;
+  }
+  else if (item != nullptr && item->isSelected()) {
+    // When clicking an already selected item, keep the existing selection too.
+    keep_selected = true;
+  }
 
-    if (!keep_selected) {
-      scene.clearSelection();
-    }
+  if (!keep_selected) {
+    scene.clearSelection();
+  }
 
-    if (event.button() == Qt::LeftButton) {
+  if (event.button() == Qt::LeftButton) {
 
-      if (item != nullptr) {
+    if (item != nullptr) {
 
-        if (control_or_shift) {
-          // Left-clicking an item while pressing control or shift: toggle it.
-          item->setSelected(!item->isSelected());
-        }
-        else {
-          if (!item->isSelected()) {
-            // Select the item.
-            item->setSelected(true);
-          }
-          // Allow to move selected items.
-          view.start_state_moving_entities(event.pos());
-        }
+      if (control_or_shift) {
+        // Left-clicking an item while pressing control or shift: toggle it.
+        item->setSelected(!item->isSelected());
       }
       else {
-        // Left click outside items: trace a selection rectangle.
-        view.start_state_drawing_rectangle(event.pos());
-      }
-    }
-
-    else if (event.button() == Qt::RightButton) {
-
-      if (item != nullptr) {
         if (!item->isSelected()) {
-          // Select the right-clicked item.
+          // Select the item.
           item->setSelected(true);
         }
+        // Allow to move selected items.
+        view.start_state_moving_entities(event.pos());
+      }
+    }
+    else {
+      // Left click outside items: trace a selection rectangle.
+      view.start_state_drawing_rectangle(event.pos());
+    }
+  }
+
+  else if (event.button() == Qt::RightButton) {
+
+    if (item != nullptr) {
+      if (!item->isSelected()) {
+        // Select the right-clicked item.
+        item->setSelected(true);
       }
     }
   }
+
   return true;
 }
 
@@ -610,7 +614,8 @@ bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 DrawingRectangleState::DrawingRectangleState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
   initial_point(view.mapToScene(initial_point).toPoint()),
-  current_area_item(nullptr) {
+  current_area_item(nullptr),
+  initial_selection() {
 
 }
 
@@ -622,6 +627,7 @@ void DrawingRectangleState::start() {
   current_area_item = new QGraphicsRectItem();
   current_area_item->setPen(QPen(Qt::yellow));
   get_scene().addItem(current_area_item);
+  initial_selection = get_scene().selectedItems();
 }
 
 /**
@@ -662,6 +668,10 @@ bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
                      area.size() + QSize(2, 2)));
   scene.setSelectionArea(path, Qt::ContainsItemBoundingRect);
 
+  // Also restore the initial selection.
+  for (QGraphicsItem* item : initial_selection) {
+      item->setSelected(true);
+  }
   return true;
 }
 
