@@ -27,6 +27,8 @@
 
 namespace {
 
+constexpr int move_entities_command_id = 0;
+
 /**
  * @brief Parent class of all undoable commands of the map editor.
  */
@@ -177,15 +179,34 @@ public:
       get_model().add_entity_xy(index, -translation);
     }
   }
+
   void redo() override {
     for (const EntityIndex& index : indexes) {
       get_model().add_entity_xy(index, translation);
     }
   }
 
+  int id() const override {
+    return move_entities_command_id;
+  }
+
+  bool mergeWith(const QUndoCommand* other_command) override {
+
+    if (other_command->id() != id()) {
+      return false;
+    }
+    const MoveEntitiesCommand& other_move_command = *static_cast<const MoveEntitiesCommand*>(other_command);
+    if (other_move_command.indexes != indexes) {
+      return false;
+    }
+
+    translation += other_move_command.translation;
+    return true;
+  }
+
 private:
-  const QList<EntityIndex> indexes;
-  const QPoint translation;
+  QList<EntityIndex> indexes;
+  QPoint translation;
 };
 
 }  // Anonymous namespace.

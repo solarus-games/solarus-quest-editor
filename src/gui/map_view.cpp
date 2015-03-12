@@ -78,7 +78,6 @@ public:
 private:
   QPoint initial_point;      /**< Point where the dragging started, in scene coordinates. */
   QPoint last_point;         /**< Point where the mouse was last time it moved, in scene coordinates. */
-  QPoint total_translation;  /**< Total translation from the initial point. */
 };
 
 }  // Anonymous namespace.
@@ -728,8 +727,7 @@ bool DrawingRectangleState::mouse_released(const QMouseEvent& event) {
 MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
   initial_point(Point::round_8(view.mapToScene(initial_point))),
-  last_point(this->initial_point),
-  total_translation(0, 0) {
+  last_point(this->initial_point) {
 
 }
 
@@ -748,11 +746,9 @@ bool MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   // Make the selected entities follow the mouse while dragging.
   QPoint translation = current_point - last_point;
-  view.move_selected_entities(translation);
-
-  // Also save the total translation because only the total result will be undoable.
-  this->total_translation += translation;
   last_point = current_point;
+
+  view.move_selected_entities(translation);
 
   return true;
 }

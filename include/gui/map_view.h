@@ -87,6 +87,7 @@ signals:
 
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
+  void undo_requested();
   void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation);
 
 public slots:
