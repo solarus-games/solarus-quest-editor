@@ -32,6 +32,10 @@ public:
 
   void draw(QPainter& painter) const override;
 
+protected:
+
+  Tile(MapModel& map, const EntityIndex& index, EntityType type);
+
 private:
 
   mutable QPixmap pattern_image;     /**< Cached image of the tile pattern. */

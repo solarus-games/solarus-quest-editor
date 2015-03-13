@@ -48,7 +48,10 @@ class MapModel::EntityModel {
 public:
 
   static std::unique_ptr<EntityModel> create(
+      MapModel& map, EntityType type);
+  static std::unique_ptr<EntityModel> create(
       MapModel& map, const EntityIndex& index);
+
   virtual ~EntityModel();
 
   const MapModel& get_map() const;
@@ -134,7 +137,7 @@ protected:
     double scale = 1.0;  // If 2.0, the image will have a resolution twice better.
   };
 
-  EntityModel(MapModel& map, const EntityIndex& index);
+  EntityModel(MapModel& map, const EntityIndex& index, EntityType type);
 
   const Solarus::EntityData& get_entity() const;
   Solarus::EntityData& get_entity();
@@ -155,9 +158,14 @@ protected:
 
 private:
 
+  static std::unique_ptr<EntityModel> create(
+      MapModel& map, const EntityIndex& index, EntityType type);
+
   QPointer<MapModel> map;         /**< The map this entity belongs to
                                    * (could be a reference but we want operator=). */
-  EntityIndex index;              /**< Index of this entity in the map. */
+  EntityIndex index;              /**< Index of this entity in the map.
+                                   * When invalid, the entity is not added to the map yet. */
+  Solarus::EntityData stub;       /**< Stub of entity, used before it gets added to the map. */
   QPoint origin;                  /**< Origin point of the entity relative to its top-left corner. */
   QSize size;                     /**< Size of the entity for the editor. */
 

@@ -55,7 +55,7 @@ MapModel::MapModel(
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     for (int j = 0; j < get_num_entities(layer); ++j) {
-      EntityIndex index = { layer, j};
+      EntityIndex index = { layer, j };
       entities[i].emplace_back(EntityModel::create(*this, index));
     }
   }

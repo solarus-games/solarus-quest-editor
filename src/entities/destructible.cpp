@@ -22,7 +22,7 @@
  * @param index Index of the entity in the map.
  */
 MapModel::Destructible::Destructible(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  EntityModel(map, index, EntityType::DESTRUCTIBLE) {
 
   set_origin(QPoint(8, 13));
 }

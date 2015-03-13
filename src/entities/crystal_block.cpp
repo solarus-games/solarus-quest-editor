@@ -22,7 +22,7 @@
  * @param index Index of the entity in the map.
  */
 MapModel::CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  EntityModel(map, index, EntityType::CRYSTAL_BLOCK) {
 
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal_block";

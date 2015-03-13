@@ -22,7 +22,7 @@
  * @param index Index of the entity in the map.
  */
 MapModel::Sensor::Sensor(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  EntityModel(map, index, EntityType::SENSOR) {
 
   set_origin(QPoint(8, 13));
 

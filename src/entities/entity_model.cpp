@@ -50,12 +50,19 @@ using EntityData = Solarus::EntityData;
 
 /**
  * @brief Creates an entity model.
- * @param map The map containing the entity.
- * @param index Index of the entity in the map.
+ * @param map The map that contains or will contain the entity.
+ * @param index Index of the entity in the map, or an invalid index if the
+ * entity is not in the map yet.
+ * @param type Type of entity to create (only needed if the entity is not
+ * in the map yet).
  */
-MapModel::EntityModel::EntityModel(MapModel& map, const EntityIndex& index) :
+MapModel::EntityModel::EntityModel(
+    MapModel& map,
+    const EntityIndex& index,
+    EntityType type) :
   map(&map),
   index(index),
+  stub(type),
   origin(0, 0),
   size(16, 16),
   draw_sprite_info(),
@@ -79,17 +86,48 @@ MapModel::EntityModel::~EntityModel() {
 }
 
 /**
- * @brief Creates an entity model of the appropriate concrete type from data.
- * @param map The map containing the entity.
- * @param index Index of the entity in the map.
+ * @brief Creates an entity model for a new entity of the given type.
+ * @param map The map that will contain the entity.
+ * @param type Type of entity to create.
+ * @return The created model.
+ */
+std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
+    MapModel& map, EntityType type) {
+
+  return create(map, EntityIndex(), type);
+}
+
+/**
+ * @brief Creates an entity model of the appropriate concrete type
+ * from the an existing entity of the map.
+ * @param map The map that contains the entity.
+ * @param index Index of the entity in the map
  * @return The created model.
  */
 std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
     MapModel& map, const EntityIndex& index) {
 
+  return create(map, index, map.get_entity(index).get_type());
+}
+
+/**
+ * @brief Creates an entity model of the appropriate concrete type.
+ * @param map The map that contains or will contain the entity.
+ * @param index Index of the entity in the map, or an invalid index if the
+ * entity is not in the map yet.
+ * @param type Type of entity to create (only needed if the entity is not
+ * in the map yet).
+ * @return The created model.
+ */
+std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
+    MapModel& map, const EntityIndex& index, EntityType type) {
+
   EntityModel* entity = nullptr;
 
-  EntityType type = map.get_entity(index).get_type();
+  if (index.is_valid()) {
+    type = map.get_entity(index).get_type();
+  }
+
   switch (type) {
 
   case EntityType::BLOCK:
@@ -215,11 +253,15 @@ MapModel& MapModel::EntityModel::get_map() {
 
 /**
  * @brief Returns the Solarus entity wrapped.
- * @return The Solarus entity.
+ * @return The entity from the map, or the entity stub if it does not belong
+ * to the map yet.
  */
 const Solarus::EntityData& MapModel::EntityModel::get_entity() const {
 
-  return map->get_entity(index);
+  if (index.is_valid()) {
+    return map->get_entity(index);
+  }
+  return stub;
 }
 
 /**
@@ -229,7 +271,10 @@ const Solarus::EntityData& MapModel::EntityModel::get_entity() const {
  */
 Solarus::EntityData& MapModel::EntityModel::get_entity() {
 
-  return map->get_entity(index);
+  if (index.is_valid()) {
+    return map->get_entity(index);
+  }
+  return stub;
 }
 
 /**

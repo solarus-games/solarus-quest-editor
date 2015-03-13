@@ -22,7 +22,7 @@
  * @param index Index of the entity in the map.
  */
 MapModel::Wall::Wall(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  EntityModel(map, index, EntityType::WALL) {
 
   DrawShapeInfo info;
   info.enabled = true;

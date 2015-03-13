@@ -22,7 +22,7 @@
  * @param index Index of the entity in the map.
  */
 MapModel::Chest::Chest(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  EntityModel(map, index, EntityType::CHEST) {
 
   set_origin(QPoint(8, 13));
 }

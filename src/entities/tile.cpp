@@ -20,12 +20,23 @@
 #include <QPainter>
 
 /**
- * @brief Constructor.
+ * @brief Creates a normal tile.
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
 MapModel::Tile::Tile(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index) {
+  Tile(map, index, EntityType::TILE) {
+
+}
+
+/**
+ * @brief Constructor.
+ * @param map The map containing the entity.
+ * @param index Index of the entity in the map.
+ * @param type Concrete type of entity: TILE or DYNAMIC_TILE.
+ */
+MapModel::Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
+  EntityModel(map, index, type) {
 
 }
 
