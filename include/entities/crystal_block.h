@@ -22,7 +22,7 @@
 /**
  * @brief An editable crystal_block.
  */
-class MapModel::CrystalBlock : public MapModel::EntityModel {
+class CrystalBlock : public EntityModel {
 
 public:
 

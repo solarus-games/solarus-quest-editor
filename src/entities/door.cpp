@@ -21,7 +21,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::Door::Door(MapModel& map, const EntityIndex& index) :
+Door::Door(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DOOR) {
 
 }

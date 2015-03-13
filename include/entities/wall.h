@@ -22,7 +22,7 @@
 /**
  * @brief An editable wall.
  */
-class MapModel::Wall : public MapModel::EntityModel {
+class Wall : public EntityModel {
 
 public:
 

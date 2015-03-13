@@ -22,7 +22,7 @@
 /**
  * @brief An editable switch.
  */
-class MapModel::Switch : public MapModel::EntityModel {
+class Switch : public EntityModel {
 
 public:
 

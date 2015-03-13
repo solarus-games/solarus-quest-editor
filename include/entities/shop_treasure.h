@@ -22,7 +22,7 @@
 /**
  * @brief An editable shop treasure.
  */
-class MapModel::ShopTreasure : public MapModel::EntityModel {
+class ShopTreasure : public EntityModel {
 
 public:
 

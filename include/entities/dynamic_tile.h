@@ -22,7 +22,7 @@
 /**
  * @brief An editable dynamic tile.
  */
-class MapModel::DynamicTile : public Tile {
+class DynamicTile : public Tile {
 
 public:
 

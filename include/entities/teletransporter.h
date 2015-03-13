@@ -22,7 +22,7 @@
 /**
  * @brief An editable teletransporter.
  */
-class MapModel::Teletransporter : public MapModel::EntityModel {
+class Teletransporter : public EntityModel {
 
 public:
 

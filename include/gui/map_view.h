@@ -24,11 +24,13 @@
 #include <memory>
 #include <solarus/MapData.h>
 
+class EntityModel;
 class MapModel;
 class MapScene;
 class ViewSettings;
 
 using EntityIndex = Solarus::EntityIndex;
+using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
  * @brief Graphical view of the map image, allowing to manage entities.
@@ -77,6 +79,7 @@ public:
   void start_state_doing_nothing();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void start_state_moving_entities(const QPoint& initial_point);
+  void start_state_adding_entities(EntityModels&& entities);
 
   // Selection.
   QList<EntityIndex> get_selected_entities();

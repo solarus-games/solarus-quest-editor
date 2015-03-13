@@ -22,7 +22,7 @@
 /**
  * @brief An editable crystal.
  */
-class MapModel::Crystal : public MapModel::EntityModel {
+class Crystal : public EntityModel {
 
 public:
 

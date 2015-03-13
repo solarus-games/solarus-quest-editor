@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/entity_model.h"
 #include "entities/entity_traits.h"
 #include "gui/gui_tools.h"
 #include "gui/map_editor.h"
@@ -24,6 +25,7 @@
 #include <QStatusBar>
 #include <QToolBar>
 #include <QUndoStack>
+#include <memory>
 
 namespace {
 
@@ -369,10 +371,14 @@ void MapEditor::build_entity_creation_toolbar() {
   QActionGroup* button_group = new QActionGroup(this);
   for (const auto& pair : types_in_toolbar) {
     EntityType type = pair.first;
+    QString text = pair.second;
     QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
-    QAction* action = new QAction(QIcon(icon_name), pair.second, button_group);
+    QAction* action = new QAction(QIcon(icon_name), text, button_group);
     action->setCheckable(true);
     entity_creation_toolbar->addAction(action);
+    connect(action, &QAction::triggered, [=](bool checked) {
+      entity_creation_button_triggered(type, checked);
+    });
   }
   entity_creation_toolbar->setIconSize(QSize(32, 32));
   entity_creation_toolbar->setStyleSheet("spacing: 0");
@@ -704,4 +710,22 @@ void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
   }
 
   try_command(new MoveEntitiesCommand(*this, indexes, translation, allow_merge_to_previous));
+}
+
+/**
+ * @brief This function is called when the user checks or unchecks a button of
+ * the entity creation toolbar.
+ * @param type Type of entity corresponding to the button.
+ * @param checked Whether the button is checked or unchecked.
+ */
+void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) {
+
+  if (checked) {
+    EntityModels entities;
+    entities.emplace_back(EntityModel::create(*model, type));
+    ui.map_view->start_state_adding_entities(std::move(entities));
+  }
+  else {
+    ui.map_view->start_state_doing_nothing();
+  }
 }

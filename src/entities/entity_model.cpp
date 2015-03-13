@@ -56,7 +56,7 @@ using EntityData = Solarus::EntityData;
  * @param type Type of entity to create (only needed if the entity is not
  * in the map yet).
  */
-MapModel::EntityModel::EntityModel(
+EntityModel::EntityModel(
     MapModel& map,
     const EntityIndex& index,
     EntityType type) :
@@ -82,7 +82,7 @@ MapModel::EntityModel::EntityModel(
 /**
  * @brief Destructor.
  */
-MapModel::EntityModel::~EntityModel() {
+EntityModel::~EntityModel() {
 }
 
 /**
@@ -91,7 +91,7 @@ MapModel::EntityModel::~EntityModel() {
  * @param type Type of entity to create.
  * @return The created model.
  */
-std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
+std::unique_ptr<EntityModel> EntityModel::create(
     MapModel& map, EntityType type) {
 
   return create(map, EntityIndex(), type);
@@ -104,7 +104,7 @@ std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
  * @param index Index of the entity in the map
  * @return The created model.
  */
-std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
+std::unique_ptr<EntityModel> EntityModel::create(
     MapModel& map, const EntityIndex& index) {
 
   return create(map, index, map.get_entity(index).get_type());
@@ -119,7 +119,7 @@ std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
  * in the map yet).
  * @return The created model.
  */
-std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
+std::unique_ptr<EntityModel> EntityModel::create(
     MapModel& map, const EntityIndex& index, EntityType type) {
 
   EntityModel* entity = nullptr;
@@ -238,7 +238,7 @@ std::unique_ptr<MapModel::EntityModel> MapModel::EntityModel::create(
  * @brief Returns the map this entity belongs to.
  * @return The map.
  */
-const MapModel& MapModel::EntityModel::get_map() const {
+const MapModel& EntityModel::get_map() const {
   return *map;
 }
 
@@ -247,7 +247,7 @@ const MapModel& MapModel::EntityModel::get_map() const {
  *
  * Non-const version.
  */
-MapModel& MapModel::EntityModel::get_map() {
+MapModel& EntityModel::get_map() {
   return *map;
 }
 
@@ -256,7 +256,7 @@ MapModel& MapModel::EntityModel::get_map() {
  * @return The entity from the map, or the entity stub if it does not belong
  * to the map yet.
  */
-const Solarus::EntityData& MapModel::EntityModel::get_entity() const {
+const Solarus::EntityData& EntityModel::get_entity() const {
 
   if (index.is_valid()) {
     return map->get_entity(index);
@@ -269,7 +269,7 @@ const Solarus::EntityData& MapModel::EntityModel::get_entity() const {
  *
  * Non-const version.
  */
-Solarus::EntityData& MapModel::EntityModel::get_entity() {
+Solarus::EntityData& EntityModel::get_entity() {
 
   if (index.is_valid()) {
     return map->get_entity(index);
@@ -281,7 +281,7 @@ Solarus::EntityData& MapModel::EntityModel::get_entity() {
  * @brief Returns the id of the tileset of the map.
  * @return The tileset id or an empty string if no tileset is set.
  */
-QString MapModel::EntityModel::get_tileset_id() const {
+QString EntityModel::get_tileset_id() const {
   return get_map().get_tileset_id();
 }
 
@@ -289,7 +289,7 @@ QString MapModel::EntityModel::get_tileset_id() const {
  * @brief Returns the tileset of the map.
  * @return The tileset or nullptr if no tileset is set.
  */
-const TilesetModel* MapModel::EntityModel::get_tileset() const {
+const TilesetModel* EntityModel::get_tileset() const {
   return get_map().get_tileset_model();
 }
 
@@ -297,7 +297,7 @@ const TilesetModel* MapModel::EntityModel::get_tileset() const {
  * @brief Returns the quest the map of this entity belongs to.
  * @return The quest.
  */
-const Quest& MapModel::EntityModel::get_quest() const {
+const Quest& EntityModel::get_quest() const {
   return get_map().get_quest();
 }
 
@@ -305,7 +305,7 @@ const Quest& MapModel::EntityModel::get_quest() const {
  * @brief Returns the quest resources.
  * @return The resources.
  */
-const QuestResources& MapModel::EntityModel::get_resources() const {
+const QuestResources& EntityModel::get_resources() const {
   return get_quest().get_resources();
 }
 
@@ -313,7 +313,7 @@ const QuestResources& MapModel::EntityModel::get_resources() const {
  * @brief Returns the type of this entity.
  * @return The entity type.
  */
-EntityType MapModel::EntityModel::get_type() const {
+EntityType EntityModel::get_type() const {
   return get_entity().get_type();
 }
 
@@ -321,7 +321,7 @@ EntityType MapModel::EntityModel::get_type() const {
  * @brief Returns the Lua type name of this entity.
  * @return The entity type name.
 */
-QString MapModel::EntityModel::get_type_name() const {
+QString EntityModel::get_type_name() const {
   return QString::fromStdString(get_entity().get_type_name());
 }
 
@@ -329,7 +329,7 @@ QString MapModel::EntityModel::get_type_name() const {
  * @brief Returns the layer where this entity is on the map.
  * @return The layer.
  */
-Layer MapModel::EntityModel::get_layer() const {
+Layer EntityModel::get_layer() const {
   return get_entity().get_layer();
 }
 
@@ -337,7 +337,7 @@ Layer MapModel::EntityModel::get_layer() const {
  * @brief Sets the layer where this entity is on the map.
  * @param layer The layer.
  */
-void MapModel::EntityModel::set_layer(Layer layer) {
+void EntityModel::set_layer(Layer layer) {
   get_entity().set_layer(layer);
 }
 
@@ -345,7 +345,7 @@ void MapModel::EntityModel::set_layer(Layer layer) {
  * @brief Returns the coordinates of this entity on the map.
  * @return The coordinates of the entity's origin point.
  */
-QPoint MapModel::EntityModel::get_xy() const {
+QPoint EntityModel::get_xy() const {
   return Point::to_qpoint(get_entity().get_xy());
 }
 
@@ -353,7 +353,7 @@ QPoint MapModel::EntityModel::get_xy() const {
  * @brief Sets the coordinates of this entity on the map.
  * @param xy The coordinates of the entity's origin point.
  */
-void MapModel::EntityModel::set_xy(const QPoint& xy) {
+void EntityModel::set_xy(const QPoint& xy) {
   get_entity().set_xy(Point::to_solarus_point(xy));
 }
 
@@ -361,7 +361,7 @@ void MapModel::EntityModel::set_xy(const QPoint& xy) {
  * @brief Returns the coordinates of the upper-left corner of this entity.
  * @return The coordinates of the entity's upper-left corner.
  */
-QPoint MapModel::EntityModel::get_top_left() const {
+QPoint EntityModel::get_top_left() const {
   return get_xy() - get_origin();
 }
 
@@ -369,7 +369,7 @@ QPoint MapModel::EntityModel::get_top_left() const {
  * @brief Sets the coordinates of the upper-left corner of this entity.
  * @param top_left The coordinates of the entity's upper-left corner.
  */
-void MapModel::EntityModel::set_top_left(const QPoint& top_left) {
+void EntityModel::set_top_left(const QPoint& top_left) {
   set_xy(top_left + get_origin());
 }
 
@@ -377,7 +377,7 @@ void MapModel::EntityModel::set_top_left(const QPoint& top_left) {
  * @brief Returns the origin point of this entity.
  * @return The origin point.
  */
-QPoint MapModel::EntityModel::get_origin() const {
+QPoint EntityModel::get_origin() const {
   return origin;
 }
 
@@ -391,7 +391,7 @@ QPoint MapModel::EntityModel::get_origin() const {
  *
  * @return The origin point.
  */
-void MapModel::EntityModel::set_origin(const QPoint& origin) {
+void EntityModel::set_origin(const QPoint& origin) {
   this->origin = origin;
 }
 
@@ -399,7 +399,7 @@ void MapModel::EntityModel::set_origin(const QPoint& origin) {
  * @brief Returns the width of this entity's bounding box.
  * @return The width.
  */
-int MapModel::EntityModel::get_width() const {
+int EntityModel::get_width() const {
   return get_size().width();
 }
 
@@ -407,7 +407,7 @@ int MapModel::EntityModel::get_width() const {
  * @brief Sets the width of this entity's bounding box.
  * @param width The width.
  */
-void MapModel::EntityModel::set_width(int width) {
+void EntityModel::set_width(int width) {
   set_size(QSize(width, get_height()));
 }
 
@@ -415,7 +415,7 @@ void MapModel::EntityModel::set_width(int width) {
  * @brief Returns the height of this entity's bounding box.
  * @return The height.
  */
-int MapModel::EntityModel::get_height() const {
+int EntityModel::get_height() const {
   return get_size().height();
 }
 
@@ -423,7 +423,7 @@ int MapModel::EntityModel::get_height() const {
  * @brief Sets the height of this entity's bounding box.
  * @param height The height.
  */
-void MapModel::EntityModel::set_height(int height) {
+void EntityModel::set_height(int height) {
   set_size(QSize(get_width(), height));
 }
 
@@ -431,7 +431,7 @@ void MapModel::EntityModel::set_height(int height) {
  * @brief Returns the size of this entity.
  * @return The size of this entity.
  */
-QSize MapModel::EntityModel::get_size() const {
+QSize EntityModel::get_size() const {
   return size;
 }
 
@@ -439,7 +439,7 @@ QSize MapModel::EntityModel::get_size() const {
  * @brief Sets the size of this entity.
  * @param size The size of this entity.
  */
-void MapModel::EntityModel::set_size(const QSize& size) {
+void EntityModel::set_size(const QSize& size) {
   this->size = size;
 }
 
@@ -447,7 +447,7 @@ void MapModel::EntityModel::set_size(const QSize& size) {
  * @brief Returns the bounding box of this entity.
  * @return The bounding box.
  */
-QRect MapModel::EntityModel::get_bounding_box() const {
+QRect EntityModel::get_bounding_box() const {
   return QRect(get_top_left(), get_size());
 }
 
@@ -455,7 +455,7 @@ QRect MapModel::EntityModel::get_bounding_box() const {
  * @brief Returns whether this entity has a "direction" field.
  * @return @c true if a direction property exists.
  */
-bool MapModel::EntityModel::has_direction_property() const {
+bool EntityModel::has_direction_property() const {
 
   return has_field("direction");
 }
@@ -468,7 +468,7 @@ bool MapModel::EntityModel::has_direction_property() const {
  *
  * @return The direction or -1.
  */
-int MapModel::EntityModel::get_direction() const {
+int EntityModel::get_direction() const {
 
   if (!has_direction_property()) {
     return -1;
@@ -488,7 +488,7 @@ int MapModel::EntityModel::get_direction() const {
  * @param key Key of the field to get.
  * @return @c true if there is this field eixsts.
  */
-bool MapModel::EntityModel::has_field(const QString& key) const {
+bool EntityModel::has_field(const QString& key) const {
 
   std::string std_key = key.toStdString();
   return get_entity().get_field(std_key).value_type != EntityData::EntityFieldType::NIL;
@@ -501,7 +501,7 @@ bool MapModel::EntityModel::has_field(const QString& key) const {
  * It can be a string, an integer or a boolean, or
  * an invalid QVariant if the field does not exist.
  */
-QVariant MapModel::EntityModel::get_field(const QString& key) const {
+QVariant EntityModel::get_field(const QString& key) const {
 
   std::string std_key = key.toStdString();
 
@@ -525,7 +525,7 @@ QVariant MapModel::EntityModel::get_field(const QString& key) const {
  * @brief Returns the sprite description of the entity.
  * @return The sprite description that was set with set_draw_sprite_info().
  */
-const MapModel::EntityModel::DrawSpriteInfo& MapModel::EntityModel::get_draw_sprite_info() const {
+const EntityModel::DrawSpriteInfo& EntityModel::get_draw_sprite_info() const {
   return this->draw_sprite_info;
 }
 
@@ -533,7 +533,7 @@ const MapModel::EntityModel::DrawSpriteInfo& MapModel::EntityModel::get_draw_spr
  * @brief Sets how to draw this entity as a sprite.
  * @param draw_sprite_info Description of the sprite to draw.
  */
-void MapModel::EntityModel::set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info) {
+void EntityModel::set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info) {
 
   this->draw_sprite_info = draw_sprite_info;
 
@@ -545,7 +545,7 @@ void MapModel::EntityModel::set_draw_sprite_info(const DrawSpriteInfo& draw_spri
  * @brief Returns the shape description of the entity.
  * @return The shape description that was set with set_draw_shape_info().
  */
-const MapModel::EntityModel::DrawShapeInfo& MapModel::EntityModel::get_draw_shape_info() const {
+const EntityModel::DrawShapeInfo& EntityModel::get_draw_shape_info() const {
   return this->draw_shape_info;
 }
 
@@ -557,7 +557,7 @@ const MapModel::EntityModel::DrawShapeInfo& MapModel::EntityModel::get_draw_shap
  *
  * @param draw_shape_info Description of the shape to draw.
  */
-void MapModel::EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
+void EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_info) {
   this->draw_shape_info = draw_shape_info;
 }
 
@@ -565,7 +565,7 @@ void MapModel::EntityModel::set_draw_shape_info(const DrawShapeInfo& draw_shape_
  * @brief Returns the image description of the entity.
  * @return The image description that was set with set_draw_image_info().
  */
-const MapModel::EntityModel::DrawImageInfo& MapModel::EntityModel::get_draw_image_info() const {
+const EntityModel::DrawImageInfo& EntityModel::get_draw_image_info() const {
   return this->draw_image_info;
 }
 
@@ -577,7 +577,7 @@ const MapModel::EntityModel::DrawImageInfo& MapModel::EntityModel::get_draw_imag
  *
  * @param draw_shape_info Description of the image to draw.
  */
-void MapModel::EntityModel::set_draw_image_info(const DrawImageInfo& draw_image_info) {
+void EntityModel::set_draw_image_info(const DrawImageInfo& draw_image_info) {
   this->draw_image_info = draw_image_info;
 }
 
@@ -597,7 +597,7 @@ void MapModel::EntityModel::set_draw_image_info(const DrawImageInfo& draw_image_
  *
  * @param painter The painter to draw.
  */
-void MapModel::EntityModel::draw(QPainter& painter) const {
+void EntityModel::draw(QPainter& painter) const {
 
   if (draw_as_sprite(painter)) {
     return;
@@ -623,7 +623,7 @@ void MapModel::EntityModel::draw(QPainter& painter) const {
  * @param painter The painter to draw.
  * @return @c true if the sprite was successfully drawn.
  */
-bool MapModel::EntityModel::draw_as_sprite(QPainter& painter) const {
+bool EntityModel::draw_as_sprite(QPainter& painter) const {
 
   // Try to draw the sprite from the sprite field if any.
   const QString& sprite_field_value = get_field("sprite").toString();
@@ -643,7 +643,7 @@ bool MapModel::EntityModel::draw_as_sprite(QPainter& painter) const {
  * If it does not exists, the default animation will be used.
  * @return @c true if the sprite was successfully drawn.
  */
-bool MapModel::EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, const QString& animation) const {
+bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, const QString& animation) const {
 
   if (sprite_id.isEmpty()) {
     // No sprite sheet.
@@ -710,7 +710,7 @@ bool MapModel::EntityModel::draw_as_sprite(QPainter& painter, const QString& spr
  * @param painter The painter to draw.
  * @return @c true if there was a valid shape to draw.
  */
-bool MapModel::EntityModel::draw_as_shape(QPainter& painter) const {
+bool EntityModel::draw_as_shape(QPainter& painter) const {
 
   if (!draw_shape_info.enabled) {
     // The entity does not want to be drawn as a shape.
@@ -760,7 +760,7 @@ bool MapModel::EntityModel::draw_as_shape(QPainter& painter) const {
  * @param painter The painter to draw.
  * @return @c true if there was a valid image to draw.
  */
-bool MapModel::EntityModel::draw_as_image(QPainter& painter) const {
+bool EntityModel::draw_as_image(QPainter& painter) const {
 
   // First try to draw an image specific to the current direction.
   int direction = get_direction();
@@ -782,7 +782,7 @@ bool MapModel::EntityModel::draw_as_image(QPainter& painter) const {
  * @param sub_image Region of image to draw.
  * @return @c true if the image was drawn.
  */
-bool MapModel::EntityModel::draw_as_image(QPainter& painter, const SubImage& sub_image) const {
+bool EntityModel::draw_as_image(QPainter& painter, const SubImage& sub_image) const {
 
   if (sub_image.file_name.isEmpty()) {
     return false;
@@ -809,7 +809,7 @@ bool MapModel::EntityModel::draw_as_image(QPainter& painter, const SubImage& sub
  * @param painter The painter to draw.
  * @return @c true if the icon was successfully drawn.
  */
-bool MapModel::EntityModel::draw_as_icon(QPainter& painter) const {
+bool EntityModel::draw_as_icon(QPainter& painter) const {
 
   if (icon.isNull()) {
     // Lazily create the icon.

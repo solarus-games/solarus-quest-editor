@@ -314,13 +314,10 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
 
 /**
  * @brief Returns the model of entity at the given index.
- *
- * The EntityModel class is only for internal use of MapModel.
- *
  * @param index A map entity index.
  * @return The corresponding entity model.
  */
-const MapModel::EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
+const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
   return *entities[index.layer].at(index.index);
 }
 
@@ -329,14 +326,14 @@ const MapModel::EntityModel& MapModel::get_entity_model(const EntityIndex& index
  *
  * Non-const version.
  */
-MapModel::EntityModel& MapModel::get_entity_model(const EntityIndex& index) {
+EntityModel& MapModel::get_entity_model(const EntityIndex& index) {
   return *entities[index.layer].at(index.index);
 }
 
 /**
  * @brief Returns the underlying Solarus entity data at the given index.
  *
- * External classes cannot directly use this function, they should use the
+ * External classes should not directly use this function, they should use the
  * other functions to have Qt-friendly types and signals.
  *
  * @param index A map entity index.

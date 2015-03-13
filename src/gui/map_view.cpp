@@ -81,6 +81,18 @@ private:
   bool first_move_done;      /**< Whether at least one move was done during the state. */
 };
 
+/**
+ * @brief State of the map view of adding new entities.
+ */
+class AddingEntitiesState : public MapView::State {
+
+public:
+  AddingEntitiesState(MapView& view, EntityModels&& entities);
+
+private:
+  EntityModels entities;     /**< Entities to be added. */
+};
+
 }  // Anonymous namespace.
 
 /**
@@ -213,16 +225,6 @@ void MapView::start_state_doing_nothing() {
 }
 
 /**
- * @brief Moves to the state of moving the selected entities.
- * @param initial_point Where the user starts dragging the entities,
- * in view coordinates.
- */
-void MapView::start_state_moving_entities(const QPoint& initial_point) {
-
-  set_state(std::unique_ptr<State>(new MovingEntitiesState(*this, initial_point)));
-}
-
-/**
  * @brief Moves to the state of drawing a rectangle for a selection.
  * @param initial_point Where the user starts drawing the rectangle,
  * in view coordinates.
@@ -230,6 +232,25 @@ void MapView::start_state_moving_entities(const QPoint& initial_point) {
 void MapView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   set_state(std::unique_ptr<State>(new DrawingRectangleState(*this, initial_point)));
+}
+
+/**
+ * @brief Moves to the state of moving the selected entities.
+ * @param initial_point Where the user starts dragging the entities,
+ */
+void MapView::start_state_moving_entities(const QPoint& initial_point) {
+
+  set_state(std::unique_ptr<State>(new MovingEntitiesState(*this, initial_point)));
+}
+
+/**
+ * @brief Moves to the state of adding new entities.
+ * @param entities The entities to be added.
+ * They must not belong to the map yet.
+ */
+void MapView::start_state_adding_entities(EntityModels&& entities) {
+
+  set_state(std::unique_ptr<State>(new AddingEntitiesState(*this, std::move(entities))));
 }
 
 /**
@@ -770,4 +791,15 @@ bool MovingEntitiesState::mouse_released(const QMouseEvent& event) {
   get_view().start_state_doing_nothing();
 
   return true;
+}
+
+/**
+ * @brief Constructor.
+ * @param view The map view to manage.
+ * @param entities The entities to be added to the map.
+ */
+AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities) :
+  MapView::State(view),
+  entities(std::move(entities)) {
+
 }

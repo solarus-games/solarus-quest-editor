@@ -21,7 +21,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::Destination::Destination(MapModel& map, const EntityIndex& index) :
+Destination::Destination(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DESTINATION) {
 
   set_origin(QPoint(8, 13));

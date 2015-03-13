@@ -22,7 +22,7 @@
 /**
  * @brief An editable custom entity.
  */
-class MapModel::CustomEntity : public MapModel::EntityModel {
+class CustomEntity : public EntityModel {
 
 public:
 

@@ -22,7 +22,7 @@
 /**
  * @brief An editable stream.
  */
-class MapModel::Stream : public MapModel::EntityModel {
+class Stream : public EntityModel {
 
 public:
 

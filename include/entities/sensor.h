@@ -22,7 +22,7 @@
 /**
  * @brief An editable sensor.
  */
-class MapModel::Sensor : public MapModel::EntityModel {
+class Sensor : public EntityModel {
 
 public:
 

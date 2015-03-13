@@ -22,7 +22,7 @@
 /**
  * @brief An editable destination.
  */
-class MapModel::Destination : public MapModel::EntityModel {
+class Destination : public EntityModel {
 
 public:
 

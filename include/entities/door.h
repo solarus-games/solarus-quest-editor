@@ -22,7 +22,7 @@
 /**
  * @brief An editable door.
  */
-class MapModel::Door : public MapModel::EntityModel {
+class Door : public EntityModel {
 
 public:
 

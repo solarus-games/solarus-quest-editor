@@ -22,7 +22,7 @@
 /**
  * @brief An editable chest.
  */
-class MapModel::Chest : public MapModel::EntityModel {
+class Chest : public EntityModel {
 
 public:
 

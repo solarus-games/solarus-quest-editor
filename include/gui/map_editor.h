@@ -68,6 +68,7 @@ private:
 
   void build_entity_creation_toolbar();
   void build_status_bar();
+  void entity_creation_button_triggered(EntityType type, bool checked);
 
   Ui::MapEditor ui;         /**< The map editor widgets. */
   QString map_id;           /**< Id of the map being edited. */

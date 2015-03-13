@@ -22,7 +22,7 @@
 /**
  * @brief An editable enemy.
  */
-class MapModel::Enemy : public MapModel::EntityModel {
+class Enemy : public EntityModel {
 
 public:
 

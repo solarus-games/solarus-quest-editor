@@ -22,7 +22,7 @@
 /**
  * @brief An editable staircase.
  */
-class MapModel::Stairs : public MapModel::EntityModel {
+class Stairs : public EntityModel {
 
 public:
 

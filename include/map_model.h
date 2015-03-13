@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_MAP_MODEL_H
 #define SOLARUSEDITOR_MAP_MODEL_H
 
+#include "entities/entity_model.h"
 #include "entities/entity_traits.h"
 #include "layer_traits.h"
 #include "sprite_model.h"
@@ -25,6 +26,7 @@
 #include <memory>
 #include <QPointer>
 
+class EntityModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
@@ -86,6 +88,9 @@ public:
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
 
+  const Solarus::EntityData& get_entity(const EntityIndex& index) const;
+  Solarus::EntityData& get_entity(const EntityIndex& index);
+
   void draw_entity(const EntityIndex& index, QPainter& painter) const;
 
 signals:
@@ -105,33 +110,6 @@ public slots:
 
 private:
 
-  class EntityModel;
-  class Block;
-  class Chest;
-  class Crystal;
-  class CrystalBlock;
-  class CustomEntity;
-  class Destination;
-  class Destructible;
-  class Door;
-  class DynamicTile;
-  class Enemy;
-  class Jumper;
-  class Npc;
-  class Pickable;
-  class Sensor;
-  class Separator;
-  class ShopTreasure;
-  class Stairs;
-  class Stream;
-  class Switch;
-  class Teletransporter;
-  class Tile;
-  class Wall;
-
-  const Solarus::EntityData& get_entity(const EntityIndex& index) const;
-  Solarus::EntityData& get_entity(const EntityIndex& index);
-
   const EntityModel& get_entity_model(const EntityIndex& index) const;
   EntityModel& get_entity_model(const EntityIndex& index);
 
@@ -143,7 +121,5 @@ private:
       entities;                   /**< All entities. */
 
 };
-
-#include "entities/entity_model.h"
 
 #endif

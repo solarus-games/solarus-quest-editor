@@ -24,7 +24,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::Tile::Tile(MapModel& map, const EntityIndex& index) :
+Tile::Tile(MapModel& map, const EntityIndex& index) :
   Tile(map, index, EntityType::TILE) {
 
 }
@@ -35,7 +35,7 @@ MapModel::Tile::Tile(MapModel& map, const EntityIndex& index) :
  * @param index Index of the entity in the map.
  * @param type Concrete type of entity: TILE or DYNAMIC_TILE.
  */
-MapModel::Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
+Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
   EntityModel(map, index, type) {
 
 }
@@ -44,14 +44,14 @@ MapModel::Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
  * @brief Returns the pattern id used by this tile.
  * @return The pattern id.
  */
-QString MapModel::Tile::get_pattern_id() const {
+QString Tile::get_pattern_id() const {
   return get_field("pattern").toString();
 }
 
 /**
  * @copydoc EntityModel::draw
  */
-void MapModel::Tile::draw(QPainter& painter) const {
+void Tile::draw(QPainter& painter) const {
 
   if (pattern_image.isNull()) {
     // Lazily create the image.

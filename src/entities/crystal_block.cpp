@@ -21,7 +21,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
+CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::CRYSTAL_BLOCK) {
 
   DrawSpriteInfo info;

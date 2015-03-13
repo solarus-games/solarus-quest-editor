@@ -22,7 +22,7 @@
 /**
  * @brief An editable pickable treasure.
  */
-class MapModel::Pickable : public MapModel::EntityModel {
+class Pickable : public EntityModel {
 
 public:
 

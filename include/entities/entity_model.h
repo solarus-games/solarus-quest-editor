@@ -19,12 +19,12 @@
 
 #include "entity_traits.h"
 #include "layer_traits.h"
-#include "map_model.h"
 #include "sprite_model.h"
 #include <solarus/MapData.h>
 #include <QPointer>
 #include <memory>
 
+class MapModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
@@ -32,18 +32,17 @@ class TilesetModel;
 using EntityIndex = Solarus::EntityIndex;
 
 /**
- * @brief Internal model of a map entity.
- *
- * This is an implementation detail of MapModel, it cannot be accessed from
- * outside.
+ * @brief Model of a map entity.
  *
  * This class wraps an entity from the Solarus library and
  * adds all useful information about how to represent and modify it in the
  * editor.
+ * An EntityModel can represent an entity on the map or an entity that is not
+ * on the map yet.
  *
  * Each type of entity is a subclass of EntityModel.
  */
-class MapModel::EntityModel {
+class EntityModel {
 
 public:
 

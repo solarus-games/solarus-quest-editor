@@ -22,7 +22,7 @@
 /**
  * @brief An editable jumper.
  */
-class MapModel::Jumper : public MapModel::EntityModel {
+class Jumper : public EntityModel {
 
 public:
 

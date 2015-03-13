@@ -22,7 +22,7 @@
 /**
  * @brief An editable block.
  */
-class MapModel::Block : public MapModel::EntityModel {
+class Block : public EntityModel {
 
 public:
 

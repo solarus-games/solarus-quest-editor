@@ -21,7 +21,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::DynamicTile::DynamicTile(MapModel& map, const EntityIndex& index) :
+DynamicTile::DynamicTile(MapModel& map, const EntityIndex& index) :
   Tile(map, index, EntityType::DYNAMIC_TILE) {
 
 }

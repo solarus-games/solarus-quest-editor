@@ -22,7 +22,7 @@
 /**
  * @brief An editable tile.
  */
-class MapModel::Tile : public MapModel::EntityModel {
+class Tile : public EntityModel {
 
 public:
 

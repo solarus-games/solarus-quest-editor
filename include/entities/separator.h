@@ -22,7 +22,7 @@
 /**
  * @brief An editable separator.
  */
-class MapModel::Separator : public MapModel::EntityModel {
+class Separator : public EntityModel {
 
 public:
 

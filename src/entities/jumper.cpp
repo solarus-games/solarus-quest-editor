@@ -22,7 +22,7 @@
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
-MapModel::Jumper::Jumper(MapModel& map, const EntityIndex& index) :
+Jumper::Jumper(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::JUMPER) {
 
   DrawShapeInfo info;
@@ -36,7 +36,7 @@ MapModel::Jumper::Jumper(MapModel& map, const EntityIndex& index) :
  * @brief Returns whether this jumper is a diagonal one.
  * @return @c true if the jumper is diagonal.
  */
-bool MapModel::Jumper::is_diagonal() const {
+bool Jumper::is_diagonal() const {
 
   const int direction = get_direction();
   if (direction == -1) {
@@ -52,7 +52,7 @@ bool MapModel::Jumper::is_diagonal() const {
  *
  * Reimplemented because diagonal jumpers have a special shape.
  */
-void MapModel::Jumper::draw(QPainter& painter) const {
+void Jumper::draw(QPainter& painter) const {
 
   const int w = get_width();
   const int h = get_height();

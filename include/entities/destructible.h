@@ -22,7 +22,7 @@
 /**
  * @brief An editable destructible object.
  */
-class MapModel::Destructible : public MapModel::EntityModel {
+class Destructible : public EntityModel {
 
 public:
 

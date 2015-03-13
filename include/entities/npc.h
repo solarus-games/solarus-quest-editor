@@ -22,7 +22,7 @@
 /**
  * @brief An editable non-playing character.
  */
-class MapModel::Npc : public MapModel::EntityModel {
+class Npc : public EntityModel {
 
 public:
 
