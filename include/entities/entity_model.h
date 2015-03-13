@@ -25,7 +25,6 @@
 #include <QPointer>
 #include <memory>
 
-class MapModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
