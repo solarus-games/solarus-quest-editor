@@ -107,7 +107,7 @@ std::unique_ptr<EntityModel> EntityModel::create(
 std::unique_ptr<EntityModel> EntityModel::create(
     MapModel& map, const EntityIndex& index) {
 
-  return create(map, index, map.get_entity(index).get_type());
+  return create(map, index, map.get_internal_entity(index).get_type());
 }
 
 /**
@@ -125,7 +125,7 @@ std::unique_ptr<EntityModel> EntityModel::create(
   EntityModel* entity = nullptr;
 
   if (index.is_valid()) {
-    type = map.get_entity(index).get_type();
+    type = map.get_internal_entity(index).get_type();
   }
 
   switch (type) {
@@ -252,6 +252,22 @@ MapModel& EntityModel::get_map() {
 }
 
 /**
+ * @brief Returns the index of this entity on the map.
+ * @return The index, or an invalid index if the entity is not on the map.
+ */
+EntityIndex EntityModel::get_index() const {
+  return index;
+}
+
+/**
+ * @brief Sets the index of this entity on the map.
+ * @param The new index, or an invalid index if the entity is not on the map.
+ */
+void EntityModel::set_index(const EntityIndex& index) {
+  this->index = index;
+}
+
+/**
  * @brief Returns the Solarus entity wrapped.
  * @return The entity from the map, or the entity stub if it does not belong
  * to the map yet.
@@ -259,7 +275,7 @@ MapModel& EntityModel::get_map() {
 const Solarus::EntityData& EntityModel::get_entity() const {
 
   if (index.is_valid()) {
-    return map->get_entity(index);
+    return map->get_internal_entity(index);
   }
   return stub;
 }
@@ -272,7 +288,7 @@ const Solarus::EntityData& EntityModel::get_entity() const {
 Solarus::EntityData& EntityModel::get_entity() {
 
   if (index.is_valid()) {
-    return map->get_entity(index);
+    return map->get_internal_entity(index);
   }
   return stub;
 }

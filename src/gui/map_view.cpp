@@ -450,10 +450,15 @@ QList<EntityIndex> MapView::get_selected_entities() {
   }
 
   for (QGraphicsItem* item : scene->selectedItems()) {
-    EntityIndex index = scene->get_item_index(*item);
-    if (index.is_valid()) {
-      result.append(index);
+    EntityModel* entity = scene->get_entity_from_item(*item);
+    if (entity == nullptr) {
+      continue;
     }
+    EntityIndex index = entity->get_index();
+    if (!index.is_valid()) {
+      continue;
+    }
+    result.append(index);
   }
   return result;
 }

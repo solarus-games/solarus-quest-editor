@@ -24,13 +24,11 @@
 #include <solarus/MapData.h>
 #include <deque>
 #include <memory>
-#include <QPointer>
 
 class EntityModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
-class QPainter;
 
 using EntityIndex = Solarus::EntityIndex;
 
@@ -88,10 +86,11 @@ public:
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
 
-  const Solarus::EntityData& get_entity(const EntityIndex& index) const;
-  Solarus::EntityData& get_entity(const EntityIndex& index);
+  const Solarus::EntityData& get_internal_entity(const EntityIndex& index) const;
+  Solarus::EntityData& get_internal_entity(const EntityIndex& index);
 
-  void draw_entity(const EntityIndex& index, QPainter& painter) const;
+  const EntityModel& get_entity(const EntityIndex& index) const;
+  EntityModel& get_entity(const EntityIndex& index);
 
 signals:
 
@@ -109,9 +108,6 @@ public slots:
   void save() const;
 
 private:
-
-  const EntityModel& get_entity_model(const EntityIndex& index) const;
-  EntityModel& get_entity_model(const EntityIndex& index);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */

@@ -37,14 +37,13 @@ public:
 
   const MapModel& get_model() const;
   const Quest& get_quest() const;
+  EntityModel* get_entity_from_item(const QGraphicsItem& item);
 
   static QPoint get_margin_top_left();
   static QSize get_margin_size();
 
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
-
-  EntityIndex get_item_index(const QGraphicsItem& item);
 
 protected:
 
@@ -59,7 +58,7 @@ private:
   using EntityList = QList<EntityItem*>;
 
   void build();
-  void create_entity_item(const EntityIndex& index);
+  void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityList& get_entities(Layer layer);
 

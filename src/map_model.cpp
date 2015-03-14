@@ -317,7 +317,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  * @param index A map entity index.
  * @return The corresponding entity model.
  */
-const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
+const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
   return *entities[index.layer].at(index.index);
 }
 
@@ -326,7 +326,7 @@ const EntityModel& MapModel::get_entity_model(const EntityIndex& index) const {
  *
  * Non-const version.
  */
-EntityModel& MapModel::get_entity_model(const EntityIndex& index) {
+EntityModel& MapModel::get_entity(const EntityIndex& index) {
   return *entities[index.layer].at(index.index);
 }
 
@@ -339,7 +339,7 @@ EntityModel& MapModel::get_entity_model(const EntityIndex& index) {
  * @param index A map entity index.
  * @return The entity at this index.
  */
-const Solarus::EntityData& MapModel::get_entity(const EntityIndex& index) const {
+const Solarus::EntityData& MapModel::get_internal_entity(const EntityIndex& index) const {
   return map.get_entity(index);
 }
 
@@ -348,7 +348,7 @@ const Solarus::EntityData& MapModel::get_entity(const EntityIndex& index) const 
  *
  * Non-const version.
  */
-Solarus::EntityData& MapModel::get_entity(const EntityIndex& index) {
+Solarus::EntityData& MapModel::get_internal_entity(const EntityIndex& index) {
   return map.get_entity(index);
 }
 
@@ -365,7 +365,7 @@ EntityType MapModel::get_entity_type(const EntityIndex& index) const {
     return EntityType();
   }
 
-  return get_entity_model(index).get_type();
+  return get_entity(index).get_type();
 }
 
 /**
@@ -381,7 +381,7 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
     return QString();
   }
 
-  return get_entity_model(index).get_type_name();
+  return get_entity(index).get_type_name();
 }
 
 /**
@@ -397,7 +397,7 @@ Layer MapModel::get_entity_layer(const EntityIndex& index) const {
     return Layer();
   }
 
-  return get_entity_model(index).get_layer();
+  return get_entity(index).get_layer();
 }
 
 /**
@@ -412,7 +412,7 @@ QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
     return QPoint();
   }
 
-  return get_entity_model(index).get_xy();
+  return get_entity(index).get_xy();
 }
 
 /**
@@ -427,14 +427,13 @@ void MapModel::set_entity_xy(const EntityIndex& index, const QPoint& xy) {
     return;
   }
 
-  Solarus::EntityData& entity = map.get_entity(index);
-  Solarus::Point solarus_xy = Point::to_solarus_point(xy);
+  EntityModel& entity = get_entity(index);
 
-  if (solarus_xy == entity.get_xy()) {
+  if (xy == entity.get_xy()) {
     return;
   }
 
-  get_entity_model(index).set_xy(xy);
+  entity.set_xy(xy);
   emit entity_xy_changed(index, xy);
 }
 
@@ -457,7 +456,11 @@ void MapModel::add_entity_xy(const EntityIndex& index, const QPoint& translation
  */
 QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
 
-  return get_entity_model(index).get_top_left();
+  if (!entity_exists(index)) {
+    return QPoint();
+  }
+
+  return get_entity(index).get_top_left();
 }
 
 /**
@@ -472,7 +475,7 @@ QPoint MapModel::get_entity_origin(const EntityIndex& index) const {
     return QPoint();
   }
 
-  return get_entity_model(index).get_origin();
+  return get_entity(index).get_origin();
 }
 
 /**
@@ -487,7 +490,7 @@ QSize MapModel::get_entity_size(const EntityIndex& index) const {
     return QSize();
   }
 
-  return get_entity_model(index).get_size();
+  return get_entity(index).get_size();
 }
 
 /**
@@ -502,22 +505,5 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
     return QRect();
   }
 
-  return get_entity_model(index).get_bounding_box();
-}
-
-/**
- * @brief Draws an entity of this map.
- *
- * Does nothing if there is no entity with this index.
- *
- * @paran index Index of the entity to draw.
- * @param painter The drawing painter.
- */
-void MapModel::draw_entity(const EntityIndex& index, QPainter& painter) const {
-
-  if (!entity_exists(index)) {
-    return;
-  }
-
-  get_entity_model(index).draw(painter);
+  return get_entity(index).get_bounding_box();
 }

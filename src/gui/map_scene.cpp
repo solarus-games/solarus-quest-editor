@@ -30,20 +30,19 @@ class EntityItem : public QGraphicsItem {
 
 public:
 
-  EntityItem(MapModel& model, const EntityIndex& index);
+  explicit EntityItem(EntityModel& entity);
 
   // Enable the use of qgraphicsitem_cast with this item.
   enum {
     Type = UserType + 2
   };
 
-  virtual int type() const override {
+  int type() const override {
     return Type;
   }
 
+  EntityModel& get_entity() const;
   EntityIndex get_index() const;
-  void set_index(const EntityIndex& index);
-
   EntityType get_entity_type() const;
   QRectF boundingRect() const override;
 
@@ -58,8 +57,7 @@ protected:
 
 private:
 
-  MapModel& map;              /**< The map this entity belongs to. */
-  EntityIndex index;          /**< Index of the entity in the map. */
+  EntityModel& entity;      /**< The entity represented. */
 
 };
 
@@ -129,7 +127,8 @@ void MapScene::build() {
     Layer layer = static_cast<Layer>(i);
     entity_items[i].clear();
     for (int j = 0; j < model.get_num_entities(layer); ++j) {
-      create_entity_item(EntityIndex(layer, j));
+      EntityModel& entity = model.get_entity(EntityIndex(layer, j));
+      create_entity_item(entity);
     }
   }
 
@@ -137,13 +136,13 @@ void MapScene::build() {
 
 /**
  * @brief Creates a graphic item for the specified entity.
- * @param index Index of a map entity.
+ * @param model A map entity.
  */
-void MapScene::create_entity_item(const EntityIndex& index) {
+void MapScene::create_entity_item(EntityModel& entity) {
 
-  EntityItem* item = new EntityItem(model, index);
+  EntityItem* item = new EntityItem(entity);
   addItem(item);
-  entity_items[index.layer].append(item);
+  entity_items[entity.get_layer()].append(item);
 }
 
 /**
@@ -226,20 +225,20 @@ void MapScene::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 /**
- * @brief Returns the index of the entity represented by the specified item.
+ * @brief Returns the entity represented by the specified item.
  * @param item An item of the scene.
- * @return The index of the entity, or an invalid index if the item does not
+ * @return The entity, or nullptr if the item does not
  * represent a map entity.
  */
-EntityIndex MapScene::get_item_index(const QGraphicsItem& item) {
+EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
 
   const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(&item);
   if (entity_item == nullptr) {
-    // Not a map entity.
-    return EntityIndex();
+   // Not a map entity.
+    return nullptr;
   }
 
-  return entity_item->get_index();
+  return &entity_item->get_entity();
 }
 
 /**
@@ -265,32 +264,30 @@ void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
 
 /**
  * @brief Creates an entity item.
- * @param map The map.
- * @param index Index of the entity on the map.
+ * @param entity The entity to represent.
  */
-EntityItem::EntityItem(MapModel& map, const EntityIndex& index) :
+EntityItem::EntityItem(EntityModel& entity) :
   QGraphicsItem(),
-  map(map),
-  index(index) {
+  entity(entity) {
 
   update_xy();
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
 
 /**
- * @brief Returns the index of the entity on the map.
- * @return The entity index.
+ * @brief Returns the entity represented by this item.
+ * @return The entity.
  */
-EntityIndex EntityItem::get_index() const {
-  return index;
+EntityModel& EntityItem::get_entity() const {
+  return entity;
 }
 
 /**
- * @brief Sets the index of the entity on the map.
- * @param index The new index.
+ * @brief Returns the index of the entity on the map.
+ * @return The entity index or an invalid index if the entity is not on the map.
  */
-void EntityItem::set_index(const EntityIndex& index) {
-  this->index = index;
+EntityIndex EntityItem::get_index() const {
+  return entity.get_index();
 }
 
 /**
@@ -299,7 +296,7 @@ void EntityItem::set_index(const EntityIndex& index) {
  */
 EntityType EntityItem::get_entity_type() const {
 
-  return map.get_entity_type(index);
+  return entity.get_type();
 }
 
 /**
@@ -309,7 +306,7 @@ EntityType EntityItem::get_entity_type() const {
 QRectF EntityItem::boundingRect() const {
 
   // FIXME this is not true for entities whose sprite is larger, like NPCs
-  return QRect(QPoint(0, 0), map.get_entity_size(index));
+  return QRect(QPoint(0, 0), entity.get_size());
 }
 
 /**
@@ -318,7 +315,7 @@ QRectF EntityItem::boundingRect() const {
  */
 void EntityItem::update_visibility(const ViewSettings& view_settings) {
 
-  Layer layer = map.get_entity_layer(index);
+  Layer layer = entity.get_layer();
   EntityType type = get_entity_type();
 
   const bool visible = view_settings.is_layer_visible(layer) &&
@@ -331,7 +328,7 @@ void EntityItem::update_visibility(const ViewSettings& view_settings) {
  */
 void EntityItem::update_xy() {
 
-  QPoint entity_top_left = map.get_entity_top_left(index);
+  const QPoint& entity_top_left = entity.get_top_left();
   setPos(MapScene::get_margin_top_left() + entity_top_left);
 }
 
@@ -348,18 +345,12 @@ void EntityItem::paint(QPainter* painter,
                         const QStyleOptionGraphicsItem* option,
                         QWidget* /* widget */) {
 
-  if (!map.entity_exists(index)) {
-    // Bug in the editor.
-    qCritical() << MapScene::tr("No such entity index on layer %1: %2").arg(index.layer, index.index);
-    return;
-  }
-
   // First, paint the item like if there was no selection, to avoid
   // Qt's built-in selection marker.
   const bool selected = option->state & QStyle::State_Selected;
   QStyleOptionGraphicsItem option_deselected = *option;
   option_deselected.state &= ~QStyle::State_Selected;
-  map.draw_entity(index, *painter);
+  entity.draw(*painter);
 
   // Add our selection marker.
   if (selected) {

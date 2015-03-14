@@ -60,6 +60,9 @@ public:
   const Quest& get_quest() const;
   const QuestResources& get_resources() const;
 
+  EntityIndex get_index() const;
+  void set_index(const EntityIndex& index);
+
   EntityType get_type() const;
   QString get_type_name() const;
 
