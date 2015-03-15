@@ -26,8 +26,11 @@ Pickable::Pickable(MapModel& map, const EntityIndex& index) :
 
   set_origin(QPoint(8, 13));
 
-  DrawSpriteInfo info;
-  info.sprite_id = "entities/items";
-  info.animation = get_field("treasure_name").toString();
-  set_draw_sprite_info(info);
+  QString treasure_name = get_field("treasure_name").toString();
+  if (!treasure_name.isEmpty()) {
+    DrawSpriteInfo info;
+    info.sprite_id = "entities/items";
+    info.animation = treasure_name;
+    set_draw_sprite_info(info);
+  }
 }
