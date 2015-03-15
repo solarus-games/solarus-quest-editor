@@ -374,6 +374,7 @@ void MapEditor::build_entity_creation_toolbar() {
     QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
     QAction* action = new QAction(QIcon(icon_name), text, nullptr);
     action->setCheckable(true);
+    action->setData(static_cast<int>(type));
     entity_creation_toolbar->addAction(action);
     connect(action, &QAction::triggered, [=](bool checked) {
       entity_creation_button_triggered(type, checked);
@@ -723,11 +724,18 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     EntityModels entities;
     entities.emplace_back(EntityModel::create(*model, type));
     ui.map_view->start_state_adding_entities(std::move(entities));
+    for (QAction* action : entity_creation_toolbar->actions()) {
+      bool ok = false;
+      EntityType action_type = static_cast<EntityType>(action->data().toInt(&ok));
+      if (ok && action_type != type) {
+          action->setChecked(false);
+      }
+    }
   }
   else {
     // Stop adding entities.
-    uncheck_entity_creation_buttons();
     ui.map_view->start_state_doing_nothing();
+    uncheck_entity_creation_buttons();
   }
 }
 
@@ -736,7 +744,6 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
  */
 void MapEditor::uncheck_entity_creation_buttons() {
 
-  // Uncheck all entity creation buttons.
   for (QAction* action : entity_creation_toolbar->actions()) {
     action->setChecked(false);
   }
