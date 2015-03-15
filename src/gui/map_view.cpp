@@ -90,9 +90,12 @@ class AddingEntitiesState : public MapView::State {
 public:
   AddingEntitiesState(MapView& view, EntityModels&& entities);
   void start() override;
+  bool mouse_moved(const QMouseEvent& event) override;
 
 private:
-  EntityModels entities;     /**< Entities to be added. */
+  EntityModels entities;                    /**< Entities to be added. */
+  std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
+  QPoint last_point;                        /**< Point where the mouse was last time it moved, in scene coordinates. */
 };
 
 }  // Anonymous namespace.
@@ -807,8 +810,13 @@ bool MovingEntitiesState::mouse_released(const QMouseEvent& event) {
  */
 AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities) :
   MapView::State(view),
-  entities(std::move(entities)) {
+  entities(std::move(entities)),
+  entity_items() {
 
+  for (const std::unique_ptr<EntityModel>& entity : this->entities) {
+    EntityItem* item = new EntityItem(*entity);
+    entity_items.push_back(item);
+  }
 }
 
 /**
@@ -816,8 +824,31 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities)
  */
 void AddingEntitiesState::start() {
 
-  for (const std::unique_ptr<EntityModel>& entity : entities) {
-    EntityItem* item = new EntityItem(*entity);
+  for (EntityItem* item : entity_items) {
     get_scene().addItem(item);
   }
+}
+
+/**
+ * @copydoc MapView::State::mouse_moved
+ */
+bool AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
+
+  MapView& view = get_view();
+
+  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
+  if (current_point == last_point) {
+    // No change after rounding.
+    return true;
+  }
+
+  // Make entities being added follow the mouse.
+  QPoint translation = current_point - last_point;
+  last_point = current_point;
+
+  for (EntityItem* item : entity_items) {
+    item->setPos(item->pos() + translation);
+  }
+
+  return true;
 }
