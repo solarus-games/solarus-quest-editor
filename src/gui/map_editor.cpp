@@ -340,7 +340,7 @@ MapModel& MapEditor::get_model() {
  */
 void MapEditor::build_entity_creation_toolbar() {
 
-  QToolBar* entity_creation_toolbar = new QToolBar(this);
+  entity_creation_toolbar = new QToolBar(this);
 
   // List of types proposed in the toolbar.
   // The list is specified here manually because we want to control the order
@@ -368,12 +368,11 @@ void MapEditor::build_entity_creation_toolbar() {
     { EntityType::CUSTOM, tr("Add custom entity") }
   };
 
-  QActionGroup* button_group = new QActionGroup(this);
   for (const auto& pair : types_in_toolbar) {
     EntityType type = pair.first;
     QString text = pair.second;
     QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
-    QAction* action = new QAction(QIcon(icon_name), text, button_group);
+    QAction* action = new QAction(QIcon(icon_name), text, nullptr);
     action->setCheckable(true);
     entity_creation_toolbar->addAction(action);
     connect(action, &QAction::triggered, [=](bool checked) {
@@ -726,6 +725,19 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     ui.map_view->start_state_adding_entities(std::move(entities));
   }
   else {
+    // Stop adding entities.
+    uncheck_entity_creation_buttons();
     ui.map_view->start_state_doing_nothing();
+  }
+}
+
+/**
+ * @brief Unchecks all buttons of the entity creation toolbar.
+ */
+void MapEditor::uncheck_entity_creation_buttons() {
+
+  // Uncheck all entity creation buttons.
+  for (QAction* action : entity_creation_toolbar->actions()) {
+    action->setChecked(false);
   }
 }

@@ -231,6 +231,10 @@ std::unique_ptr<EntityModel> EntityModel::create(
     break;
   }
 
+  if (!index.is_valid()) {
+    // New entity: initialize aligned x and y.
+    entity->set_top_left(QPoint(0, 0));
+  }
   return std::unique_ptr<EntityModel>(entity);
 }
 
@@ -395,6 +399,24 @@ QPoint EntityModel::get_top_left() const {
  */
 void EntityModel::set_top_left(const QPoint& top_left) {
   set_xy(top_left + get_origin());
+}
+
+/**
+ * @brief Returns the coordinates of the center point of this entity.
+ * @return The coordinates of the entity's center point.
+ */
+QPoint EntityModel::get_center() const {
+  return get_top_left() + QPoint(get_width() / 2, get_height() / 2);
+}
+
+/**
+ * @brief Sets the coordinates of the center point of this entity.
+ * @param center The coordinates of the entity's center point.
+ */
+void EntityModel::set_center(const QPoint& center) {
+
+  QPoint top_left = center - QPoint(get_width() / 2, get_height() / 2);
+  set_top_left(top_left);
 }
 
 /**

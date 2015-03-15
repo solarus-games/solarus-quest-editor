@@ -90,6 +90,7 @@ class AddingEntitiesState : public MapView::State {
 public:
   AddingEntitiesState(MapView& view, EntityModels&& entities);
   void start() override;
+  void stop() override;
   bool mouse_moved(const QMouseEvent& event) override;
 
 private:
@@ -824,8 +825,26 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities)
  */
 void AddingEntitiesState::start() {
 
+  MapView& view = get_view();
+  QPoint mouse_position = view.mapFromGlobal(QCursor::pos());
+  last_point = Point::round_8(view.mapToScene(mouse_position));
+
   for (EntityItem* item : entity_items) {
     get_scene().addItem(item);
+    EntityModel& entity = item->get_entity();
+    QPoint top_left = last_point - MapScene::get_margin_top_left() - Point::round_8(entity.get_center());
+    entity.set_top_left(top_left);
+    item->update_xy();
+  }
+}
+
+/**
+ * @copydoc MapView::State::stop
+ */
+void AddingEntitiesState::stop() {
+
+  for (EntityItem* item : entity_items) {
+    get_scene().removeItem(item);
   }
 }
 
@@ -847,7 +866,10 @@ bool AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
   last_point = current_point;
 
   for (EntityItem* item : entity_items) {
-    item->setPos(item->pos() + translation);
+    EntityModel& entity = item->get_entity();
+    QPoint xy = entity.get_xy() + translation;
+    entity.set_xy(xy);
+    item->update_xy();
   }
 
   return true;

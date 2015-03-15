@@ -21,6 +21,7 @@
 #include "ui_map_editor.h"
 
 class MapModel;
+class QToolBar;
 
 /**
  * \brief A widget to edit graphically a map file.
@@ -69,10 +70,12 @@ private:
   void build_entity_creation_toolbar();
   void build_status_bar();
   void entity_creation_button_triggered(EntityType type, bool checked);
+  void uncheck_entity_creation_buttons();
 
-  Ui::MapEditor ui;         /**< The map editor widgets. */
-  QString map_id;           /**< Id of the map being edited. */
-  MapModel* model;          /**< Map model being edited. */
+  Ui::MapEditor ui;                    /**< The map editor widgets. */
+  QString map_id;                      /**< Id of the map being edited. */
+  MapModel* model;                     /**< Map model being edited. */
+  QToolBar* entity_creation_toolbar;   /**< Toolbar allowing to add each type of entity. */
 
 };
 
