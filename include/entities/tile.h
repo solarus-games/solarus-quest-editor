@@ -29,6 +29,7 @@ public:
   Tile(MapModel& map, const EntityIndex& index);
 
   QString get_pattern_id() const;
+  void set_pattern_id(const QString& pattern_id);
 
   void draw(QPainter& painter) const override;
 

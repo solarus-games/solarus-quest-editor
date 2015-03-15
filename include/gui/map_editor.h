@@ -60,6 +60,8 @@ private slots:
   void update_music_field();
   void music_selector_activated();
   void update_tileset_view();
+  void update_tileset_id();
+  void tileset_selection_changed();
 
   void move_entities_requested(const QList<EntityIndex>& indexes,
                                const QPoint& translation,
@@ -72,10 +74,11 @@ private:
   void entity_creation_button_triggered(EntityType type, bool checked);
   void uncheck_entity_creation_buttons();
 
-  Ui::MapEditor ui;                    /**< The map editor widgets. */
-  QString map_id;                      /**< Id of the map being edited. */
-  MapModel* model;                     /**< Map model being edited. */
-  QToolBar* entity_creation_toolbar;   /**< Toolbar allowing to add each type of entity. */
+  Ui::MapEditor ui;                         /**< The map editor widgets. */
+  QString map_id;                           /**< Id of the map being edited. */
+  MapModel* model;                          /**< Map model being edited. */
+  QToolBar* entity_creation_toolbar;        /**< Toolbar allowing to add each type of entity. */
+  bool ignore_tileset_selection_changes;    /**< Blocks the tileset_selection_changed() slot. */
 
 };
 

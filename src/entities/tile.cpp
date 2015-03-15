@@ -49,6 +49,14 @@ QString Tile::get_pattern_id() const {
 }
 
 /**
+ * @brief Sets the pattern id used by this tile.
+ * @param pattern_id The new pattern id.
+ */
+void Tile::set_pattern_id(const QString& pattern_id) {
+  set_field("pattern", pattern_id);
+}
+
+/**
  * @copydoc EntityModel::draw
  */
 void Tile::draw(QPainter& painter) const {
@@ -58,6 +66,11 @@ void Tile::draw(QPainter& painter) const {
     const TilesetModel* tileset = get_tileset();
     if (tileset != nullptr) {
       int pattern_index = tileset->id_to_index(get_pattern_id());
+      if (pattern_index == -1) {
+        // The pattern no longer exists: fallback to a generic tile icon.
+        EntityModel::draw(painter);
+        return;
+      }
       int pattern_width = tileset->get_pattern_frame(pattern_index).width();
       pattern_image = tileset->get_pattern_image(pattern_index).scaledToWidth(pattern_width);
     }

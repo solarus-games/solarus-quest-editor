@@ -22,6 +22,8 @@
 #include "map_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "tileset_model.h"
+#include <QItemSelectionModel>
 #include <QStatusBar>
 #include <QToolBar>
 #include <QUndoStack>
@@ -224,7 +226,10 @@ private:
  */
 MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
-  model(nullptr) {
+  map_id(),
+  model(nullptr),
+  entity_creation_toolbar(nullptr),
+  ignore_tileset_selection_changes(false) {
 
   ui.setupUi(this);
   build_entity_creation_toolbar();
@@ -435,6 +440,7 @@ void MapEditor::update() {
   update_tileset_field();
   update_music_field();
   update_tileset_view();
+  update_tileset_id();
 }
 
 /**
@@ -692,7 +698,37 @@ void MapEditor::music_selector_activated() {
  */
 void MapEditor::update_tileset_view() {
 
-  ui.tileset_view->set_model(model->get_tileset_model());
+  TilesetModel* tileset = model->get_tileset_model();
+  ui.tileset_view->set_model(tileset);
+}
+
+/**
+ * @brief Slot called when another tileset is set on the map.
+ */
+void MapEditor::update_tileset_id() {
+
+  // Notify the tileset view.
+  update_tileset_view();
+
+  // Watch the selection of the tileset to correctly add new tiles.
+  TilesetModel* tileset = model->get_tileset_model();
+  if (tileset != nullptr) {
+    connect(&tileset->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this, SLOT(tileset_selection_changed()));
+  }
+}
+
+/**
+ * @brief Slot called when the user changes the selection in the tileset.
+ */
+void MapEditor::tileset_selection_changed() {
+
+  if (ignore_tileset_selection_changes) {
+    return;
+  }
+
+  uncheck_entity_creation_buttons();
+  ui.map_view->tileset_selection_changed();
 }
 
 /**
@@ -721,14 +757,27 @@ void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
 void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) {
 
   if (checked) {
+    // Create a new entity of this type.
     EntityModels entities;
     entities.emplace_back(EntityModel::create(*model, type));
     ui.map_view->start_state_adding_entities(std::move(entities));
+
+    // Unselect patterns in the tileset.
+    TilesetModel* tileset = model->get_tileset_model();
+    if (tileset != nullptr) {
+      // But don't react to this unselection, it does not come from the user.
+      ignore_tileset_selection_changes = true;
+      tileset->clear_selection();
+      ignore_tileset_selection_changes = false;
+    }
+
+    // Uncheck other entity creation buttons.
     for (QAction* action : entity_creation_toolbar->actions()) {
       bool ok = false;
       EntityType action_type = static_cast<EntityType>(action->data().toInt(&ok));
-      if (ok && action_type != type) {
-          action->setChecked(false);
+      if (ok) {
+        bool action_checked = (action_type == type);
+        action->setChecked(action_checked);
       }
     }
   }

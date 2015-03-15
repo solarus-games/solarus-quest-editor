@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/tile.h"
 #include "gui/entity_item.h"
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
@@ -23,6 +24,7 @@
 #include "gui/zoom_tool.h"
 #include "point.h"
 #include "rectangle.h"
+#include "tileset_model.h"
 #include "view_settings.h"
 #include <QGraphicsItem>
 #include <QMouseEvent>
@@ -41,6 +43,7 @@ public:
   DoingNothingState(MapView& view);
 
   bool mouse_pressed(const QMouseEvent& event) override;
+  void tileset_selection_changed() override;
 };
 
 /**
@@ -92,6 +95,7 @@ public:
   void start() override;
   void stop() override;
   bool mouse_moved(const QMouseEvent& event) override;
+  void tileset_selection_changed() override;
 
 private:
   EntityModels entities;                    /**< Entities to be added. */
@@ -260,6 +264,38 @@ void MapView::start_state_adding_entities(EntityModels&& entities) {
 }
 
 /**
+ * @brief Moves to the state of adding new entities, with new tiles
+ * corresponding to the selected patterns of the tileset.
+ */
+void MapView::start_adding_entities_from_tileset_selection() {
+
+  MapModel* map = get_model();
+  if (map == nullptr) {
+    return;
+  }
+
+  TilesetModel* tileset = get_model()->get_tileset_model();
+  if (tileset == nullptr) {
+    return;
+  }
+
+  EntityModels tiles;
+  const QList<int>& pattern_indexes = tileset->get_selected_indexes();
+  for (int pattern_index : pattern_indexes) {
+    QString pattern_id = tileset->index_to_id(pattern_index);
+    if (pattern_id.isEmpty()) {
+      continue;
+    }
+    QSize pattern_size = tileset->get_pattern_frame(pattern_index).size();
+    std::unique_ptr<EntityModel> tile = EntityModel::create(*map, EntityType::TILE);
+    tile->set_field("pattern", pattern_id);
+    tile->set_size(pattern_size);
+    tiles.emplace_back(std::move(tile));
+  }
+  start_state_adding_entities(std::move(tiles));
+}
+
+/**
  * @brief Sets the zoom level of the view from the settings.
  *
  * Zooming will be anchored at the mouse position.
@@ -365,6 +401,20 @@ void MapView::update_layer_visibility(Layer layer) {
 void MapView::update_entity_type_visibility(EntityType type) {
 
   scene->update_entity_type_visibility(type, *view_settings);
+}
+
+/**
+ * @brief Slot called when the pattern selection of the tileset is changed.
+ *
+ * Tiles with these new patterns are added if possible.
+ */
+void MapView::tileset_selection_changed() {
+
+  if (state == nullptr) {
+    return;
+  }
+
+  state->tileset_selection_changed();
 }
 
 /**
@@ -594,6 +644,15 @@ bool MapView::State::context_menu_requested(const QContextMenuEvent& event) {
 }
 
 /**
+ * @brief Called when the user changes the selection in the tileset.
+ *
+ * States may start or stop adding entities.
+ */
+void MapView::State::tileset_selection_changed() {
+
+}
+
+/**
  * @brief Constructor.
  * @param view The map view to manage.
  */
@@ -671,6 +730,23 @@ bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
   }
 
   return true;
+}
+
+/**
+ * @copydoc MapView::State::tileset_selection_changed
+ */
+void DoingNothingState::tileset_selection_changed() {
+
+  TilesetModel* tileset = get_map().get_tileset_model();
+  if (tileset == nullptr) {
+    return;
+  }
+  if (tileset->is_selection_empty()) {
+    return;
+  }
+
+  // The user just selected some patterns in the tileset: create corresponding tiles.
+  get_view().start_adding_entities_from_tileset_selection();
 }
 
 /**
@@ -873,4 +949,23 @@ bool AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
   }
 
   return true;
+}
+
+/**
+ * @copydoc MapView::State::tileset_selection_changed
+ */
+void AddingEntitiesState::tileset_selection_changed() {
+
+  TilesetModel* tileset = get_map().get_tileset_model();
+  if (tileset == nullptr) {
+    return;
+  }
+  if (tileset->is_selection_empty()) {
+    // Stop adding the tiles that were selected.
+    get_view().start_state_doing_nothing();
+    return;
+  }
+
+  // The user just selected some patterns in the tileset: create corresponding tiles.
+  get_view().start_adding_entities_from_tileset_selection();
 }
