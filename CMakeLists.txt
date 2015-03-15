@@ -91,6 +91,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/closable_tab_bar.h
   include/gui/editor.h
   include/gui/editor_tabs.h
+  include/gui/entity_item.h
   include/gui/external_script_dialog.h
   include/gui/enum_menus.h
   include/gui/enum_menus.inl
@@ -176,6 +177,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/closable_tab_bar.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
+  src/gui/entity_item.cpp
   src/gui/external_script_dialog.cpp
   src/gui/get_animation_name_dialog.cpp
   src/gui/gui_tools.cpp

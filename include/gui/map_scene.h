@@ -64,8 +64,8 @@ private:
 
   MapModel& model;            /**< The map represented. */
   std::array<EntityList, Layer::LAYER_NB>
-      entity_items;           /**< Entities item in the scene on each layer,
-                               * ordered as in the model. */
+      entity_items;           /**< Entities items on each layer,
+                               * ordered as in the map. */
 
 };
 

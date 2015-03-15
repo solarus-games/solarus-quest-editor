@@ -21,7 +21,6 @@
 #include "entities/entity_traits.h"
 #include "layer_traits.h"
 #include "sprite_model.h"
-#include <solarus/MapData.h>
 #include <deque>
 #include <memory>
 
@@ -29,8 +28,6 @@ class EntityModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
-
-using EntityIndex = Solarus::EntityIndex;
 
 /**
  * @brief Model that wraps a map.

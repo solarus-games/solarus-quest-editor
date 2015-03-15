@@ -268,6 +268,14 @@ void EntityModel::set_index(const EntityIndex& index) {
 }
 
 /**
+ * @brief Returns whether this entity is present on the map.
+ * @return @c true if the entity is on the map.
+ */
+bool EntityModel::is_on_map() const {
+  return get_index().is_valid();
+}
+
+/**
  * @brief Returns the Solarus entity wrapped.
  * @return The entity from the map, or the entity stub if it does not belong
  * to the map yet.

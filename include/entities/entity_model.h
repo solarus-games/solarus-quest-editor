@@ -62,6 +62,7 @@ public:
 
   EntityIndex get_index() const;
   void set_index(const EntityIndex& index);
+  bool is_on_map() const;
 
   EntityType get_type() const;
   QString get_type_name() const;

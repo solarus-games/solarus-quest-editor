@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/entity_item.h"
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
@@ -88,6 +89,7 @@ class AddingEntitiesState : public MapView::State {
 
 public:
   AddingEntitiesState(MapView& view, EntityModels&& entities);
+  void start() override;
 
 private:
   EntityModels entities;     /**< Entities to be added. */
@@ -807,4 +809,15 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities)
   MapView::State(view),
   entities(std::move(entities)) {
 
+}
+
+/**
+ * @copydoc MapView::State::start
+ */
+void AddingEntitiesState::start() {
+
+  for (const std::unique_ptr<EntityModel>& entity : entities) {
+    EntityItem* item = new EntityItem(*entity);
+    get_scene().addItem(item);
+  }
 }

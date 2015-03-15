@@ -19,9 +19,11 @@
 
 #include "enum_traits.h"
 #include <solarus/entities/EntityType.h>
+#include <solarus/MapData.h>
 
 using EntityType = Solarus::EntityType;
 using EntityTraits = EnumTraits<EntityType>;
+using EntityIndex = Solarus::EntityIndex;
 
 /**
  * \brief Provides useful properties of entity type enum values.
