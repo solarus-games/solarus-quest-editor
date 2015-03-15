@@ -86,8 +86,10 @@ public:
   QRect get_bounding_box() const;
   bool has_direction_property() const;
   int get_direction() const;
+  void set_direction(int direction);
   bool has_field(const QString& key) const;
   QVariant get_field(const QString& key) const;
+  void set_field(const QString& key, const QVariant& value);
 
   virtual void draw(QPainter& painter) const;
 

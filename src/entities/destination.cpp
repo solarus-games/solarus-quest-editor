@@ -39,4 +39,9 @@ Destination::Destination(MapModel& map, const EntityIndex& index) :
     info.images_by_direction.append(sub_image);
   }
   set_draw_image_info(info);
+
+  if (!is_on_map()) {
+    // Set default properties.
+    set_direction(1);  // North.
+  }
 }

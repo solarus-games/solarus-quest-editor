@@ -530,6 +530,22 @@ int EntityModel::get_direction() const {
 }
 
 /**
+ * @brief Sets the direction of this entity.
+ *
+ * Nothing is done if the entity has no direction field.
+ *
+ * @param direction The new direction or -1 to set no direction.
+ */
+void EntityModel::set_direction(int direction) {
+
+  if (!has_direction_property()) {
+    return;
+  }
+
+  set_field("direction", direction);
+}
+
+/**
  * @brief Returns if the entity has a field with the given name.
  * @param key Key of the field to get.
  * @return @c true if there is this field eixsts.
@@ -565,6 +581,32 @@ QVariant EntityModel::get_field(const QString& key) const {
   }
 
   return QVariant();
+}
+
+/**
+ * @brief Sets the value of a field of this entity.
+ * @param key Key of the field to set.
+ * @param value The corresponding value.
+ * It must have the expected type for the field.
+ */
+void EntityModel::set_field(const QString& key, const QVariant& value) {
+
+  std::string std_key = key.toStdString();
+
+  Solarus::EntityData& entity = get_entity();
+  if (entity.is_string(std_key)) {
+    entity.set_string(std_key, value.toString().toStdString());
+  }
+
+  else if (entity.is_integer(std_key)) {
+    bool ok = false;
+    entity.set_integer(std_key, value.toInt(&ok));
+  }
+
+  else if (entity.is_boolean(std_key)) {
+    entity.set_boolean(std_key, value.toBool());
+  }
+
 }
 
 /**
