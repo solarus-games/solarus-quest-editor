@@ -53,6 +53,14 @@ public:
     return editor.get_model();
   }
 
+  MapView& get_map_view() const {
+    return editor.get_map_view();
+  }
+
+  ViewSettings& get_view_settings() const {
+    return editor.get_view_settings();
+  }
+
 private:
 
   MapEditor& editor;
@@ -231,7 +239,8 @@ public:
   }
 
   void redo() override {
-    indexes = get_model().add_entities(entities, get_editor().get_view_settings());
+    indexes = get_model().add_entities(entities, get_view_settings());
+    get_editor().get_map_view().set_selected_entities(indexes);
   }
 
 private:
@@ -360,6 +369,14 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
  */
 MapModel& MapEditor::get_model() {
   return *model;
+}
+
+/**
+ * @brief Returns the map graphics view.
+ * @return The graphics view.
+ */
+MapView& MapEditor::get_map_view() {
+  return *ui.map_view;
 }
 
 /**

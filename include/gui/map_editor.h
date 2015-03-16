@@ -34,6 +34,7 @@ public:
   MapEditor(Quest& quest, const QString& path, QWidget* parent = nullptr);
 
   MapModel& get_model();
+  MapView& get_map_view();
 
   virtual void save() override;
 

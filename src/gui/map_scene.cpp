@@ -247,3 +247,38 @@ void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
 
   item->update_xy();
 }
+
+/**
+ * @brief Returns the indexes of selected entities.
+ * @return The selected entities.
+ */
+QList<EntityIndex> MapScene::get_selected_entities() {
+
+  QList<EntityIndex> result;
+  for (QGraphicsItem* item : selectedItems()) {
+    EntityModel* entity = get_entity_from_item(*item);
+    if (entity == nullptr) {
+      continue;
+    }
+    EntityIndex index = entity->get_index();
+    if (!index.is_valid()) {
+      continue;
+    }
+    result.append(index);
+  }
+  return result;
+}
+
+
+/**
+ * @brief Selects the specified entities and unselect the rest.
+ * @param indexes Indexes of the entities to make selecteded.
+ */
+void MapScene::set_selected_entities(const QList<EntityIndex>& indexes) {
+
+  clearSelection();
+  for (const EntityIndex& index : indexes) {
+    EntityItem* item = get_entity_item(index);
+    item->setSelected(true);
+  }
+}

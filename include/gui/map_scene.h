@@ -45,6 +45,9 @@ public:
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
+  QList<EntityIndex> get_selected_entities();
+  void set_selected_entities(const QList<EntityIndex>& indexes);
+
 protected:
 
   void drawBackground(QPainter* painter, const QRectF& rect) override;

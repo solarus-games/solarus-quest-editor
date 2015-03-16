@@ -84,6 +84,7 @@ public:
 
   // Selection.
   QList<EntityIndex> get_selected_entities();
+  void set_selected_entities(const QList<EntityIndex>& indexes);
 
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
 

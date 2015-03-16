@@ -491,23 +491,24 @@ void MapView::contextMenuEvent(QContextMenuEvent* event) {
  */
 QList<EntityIndex> MapView::get_selected_entities() {
 
-  QList<EntityIndex> result;
   if (scene == nullptr) {
-    return result;
+    return QList<EntityIndex>();
   }
 
-  for (QGraphicsItem* item : scene->selectedItems()) {
-    EntityModel* entity = scene->get_entity_from_item(*item);
-    if (entity == nullptr) {
-      continue;
-    }
-    EntityIndex index = entity->get_index();
-    if (!index.is_valid()) {
-      continue;
-    }
-    result.append(index);
+  return scene->get_selected_entities();
+}
+
+/**
+ * @brief Selects the specified entities and unselect the rest.
+ * @param indexes Indexes of the entities to make selecteded.
+ */
+void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
+
+  if (scene == nullptr) {
+    return;
   }
-  return result;
+
+  scene->set_selected_entities(indexes);
 }
 
 /**
