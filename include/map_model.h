@@ -113,6 +113,8 @@ public slots:
 
 private:
 
+  void shift_entity_indexes(Layer layer, int from_index, int to_index, int increment);
+
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */

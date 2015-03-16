@@ -310,7 +310,27 @@ int MapModel::get_num_entities(Layer layer) const {
  * @return @c true if there is an entity at this index.
  */
 bool MapModel::entity_exists(const EntityIndex& index) const {
-  return map.entity_exists(index);
+
+  if (!index.is_valid()) {
+    return false;
+  }
+
+  bool exists_in_solarus = map.entity_exists(index);
+  bool exists_in_model = (index.index >= 0 && index.index < (int) entities[index.layer].size());
+
+  if (exists_in_model != exists_in_solarus) {
+    // Inconsistency: bug in the editor or in Solarus.
+
+    if (exists_in_model) {
+      qCritical() << tr("Entity exists in the editor but not in the data");
+    }
+    else {
+      qCritical() << tr("Entity exists in the data but not in the editor");
+    }
+    return false;
+  }
+
+  return exists_in_model;
 }
 
 /**
@@ -537,7 +557,12 @@ QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSett
   QList<EntityIndex> indexes;
   for (std::unique_ptr<EntityModel>& entity : entities) {
 
-    // Sanity check.
+    // Sanity checks.
+    if (entity == nullptr) {
+      qCritical() << tr("Missing entity");
+      continue;
+    }
+
     if (entity->is_on_map()) {
       qCritical() << tr("This entity is already on the map");
       continue;
@@ -582,7 +607,8 @@ EntityModels MapModel::remove_entities(const QList<EntityIndex>& indexes) {
   }
 
   EntityModels entities;
-  for (const EntityIndex& index : indexes) {
+  QList<EntityIndex> updated_indexes = indexes;
+  for (const EntityIndex& index : updated_indexes) {
 
     // Sanity checks.
     if (!index.is_valid()) {
@@ -606,9 +632,47 @@ EntityModels MapModel::remove_entities(const QList<EntityIndex>& indexes) {
     this->entities[layer].erase(it);
     entity->set_index(EntityIndex());
 
+    // Indexes of remaining entities on the map get shifted.
+    int num_entities_on_layer = this->entities[layer].size();
+    shift_entity_indexes(layer, i, num_entities_on_layer - 1, -1);
+
+    // Indexes of other entities to be removed also get shifted.
+    for (EntityIndex& index : updated_indexes) {
+      if (index.layer == layer && index.index > i) {
+        --index.index;
+      }
+    }
+
     // Return the removed entity to the caller.
     entities.push_back(std::move(entity));
   }
 
   return entities;
+}
+
+/**
+ * @brief Updates entity indexes when an entity is added, moved or removed.
+ * @param layer Layer where the modification takes place.
+ * @param from_index First index to change.
+ * @param to_index Last index to change.
+ * @param increment Value to add to the index.
+ */
+void MapModel::shift_entity_indexes(Layer layer, int from_index, int to_index, int increment) {
+
+  if (from_index > to_index) {
+    // Nothing to do.
+    return;
+  }
+
+  const auto begin = entities[layer].begin() + from_index;
+  const auto end = entities[layer].begin() + to_index + 1;
+  for (auto it = begin; it != end; ++it) {
+    const std::unique_ptr<EntityModel>& entity = *it;
+    if (entity == nullptr) {
+      qCritical() << tr("Missing entity");
+    }
+    EntityIndex index = entity->get_index();
+    index.index += increment;
+    entity->set_index(index);
+  }
 }
