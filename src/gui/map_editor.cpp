@@ -439,7 +439,6 @@ void MapEditor::update() {
   update_location_field();
   update_tileset_field();
   update_music_field();
-  update_tileset_view();
   update_tileset_id();
 }
 
