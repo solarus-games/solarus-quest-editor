@@ -45,4 +45,5 @@ Bug fixes
 
 * Fix encoding of non-ascii characters in project_db.dat with Windows.
 * Fix Ctrl+S shortcut not always working.
+* Fix entities restored to the front when undoing removing entities.
 

@@ -239,13 +239,43 @@ public:
   }
 
   void redo() override {
+    // FIXME view settings can change in future redo calls
     indexes = get_model().add_entities(entities, get_view_settings());
     get_map_view().set_selected_entities(indexes);
   }
 
 private:
-  EntityModels entities;
-  QList<EntityIndex> indexes;
+  EntityModels entities;       // Entities to add.
+  QList<EntityIndex> indexes;  // Where they get added.
+};
+
+/**
+ * @brief Removing entities from the map.
+ */
+class RemoveEntitiesCommand : public MapEditorCommand {
+
+public:
+  RemoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Delete entities")),
+    indexes(indexes),
+    entities() {
+
+    qSort(this->indexes);
+  }
+
+  void undo() override {
+    // TODO restore entities with their initial index.
+//    get_model().add_entities(entiies, indexes);
+//    get_map_view().set_selected_entities(indexes);
+  }
+
+  void redo() override {
+    entities = get_model().remove_entities(indexes);
+  }
+
+private:
+  QList<EntityIndex> indexes;  // Sorted indexes of entities before removal.
+  EntityModels entities;       // The removed entities.
 };
 
 }  // Anonymous namespace.
