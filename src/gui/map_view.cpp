@@ -98,6 +98,8 @@ public:
   void tileset_selection_changed() override;
 
 private:
+  QPoint get_entities_center() const;
+
   EntityModels entities;                    /**< Entities to be added. */
   std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
   QPoint last_point;                        /**< Point where the mouse was last time it moved, in scene coordinates. */
@@ -279,6 +281,8 @@ void MapView::start_adding_entities_from_tileset_selection() {
     return;
   }
 
+  // Create a tile from each selected pattern.
+  // Arrange the relative position of tiles as in the tileset.
   EntityModels tiles;
   const QList<int>& pattern_indexes = tileset->get_selected_indexes();
   for (int pattern_index : pattern_indexes) {
@@ -286,12 +290,14 @@ void MapView::start_adding_entities_from_tileset_selection() {
     if (pattern_id.isEmpty()) {
       continue;
     }
-    QSize pattern_size = tileset->get_pattern_frame(pattern_index).size();
+    QRect pattern_frame = tileset->get_pattern_frame(pattern_index);
     std::unique_ptr<EntityModel> tile = EntityModel::create(*map, EntityType::TILE);
     tile->set_field("pattern", pattern_id);
-    tile->set_size(pattern_size);
+    tile->set_size(pattern_frame.size());
+    tile->set_xy(pattern_frame.topLeft());
     tiles.emplace_back(std::move(tile));
   }
+
   start_state_adding_entities(std::move(tiles));
 }
 
@@ -875,10 +881,14 @@ void AddingEntitiesState::start() {
   QPoint mouse_position = view.mapFromGlobal(QCursor::pos());
   last_point = Point::round_8(view.mapToScene(mouse_position));
 
+  // Determine the center of all entities in their current position.
+  QPoint center = get_entities_center();
+
+  // Adds the graphic item of each entity.
   for (EntityItem* item : entity_items) {
     get_scene().addItem(item);
     EntityModel& entity = item->get_entity();
-    QPoint top_left = last_point - MapScene::get_margin_top_left() - Point::round_8(entity.get_center());
+    QPoint top_left = last_point - MapScene::get_margin_top_left() - Point::round_8(center - entity.get_xy());
     entity.set_top_left(top_left);
     item->update_xy();
   }
@@ -892,6 +902,25 @@ void AddingEntitiesState::stop() {
   for (EntityItem* item : entity_items) {
     get_scene().removeItem(item);
   }
+}
+
+/**
+ * @brief Computes the center point of all entities to be added.
+ * @return The center point.
+ */
+QPoint AddingEntitiesState::get_entities_center() const {
+
+  QPoint top_left(1e9, 1e9);
+  QPoint bottom_right(-1e9, -1e9);
+  for (EntityItem* item : entity_items) {
+    EntityModel& entity = item->get_entity();
+    QRect box = entity.get_bounding_box();
+    top_left.setX(qMin(box.left(), top_left.x()));
+    top_left.setY(qMin(box.top(), top_left.y()));
+    bottom_right.setX(qMax(box.right(), bottom_right.x()));
+    bottom_right.setY(qMax(box.bottom(), bottom_right.y()));
+  }
+  return (top_left + bottom_right) / 2;
 }
 
 /**
