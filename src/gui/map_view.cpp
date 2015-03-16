@@ -42,7 +42,7 @@ class DoingNothingState : public MapView::State {
 public:
   DoingNothingState(MapView& view);
 
-  bool mouse_pressed(const QMouseEvent& event) override;
+  void mouse_pressed(const QMouseEvent& event) override;
   void tileset_selection_changed() override;
 };
 
@@ -57,8 +57,8 @@ public:
   void start() override;
   void stop() override;
 
-  bool mouse_moved(const QMouseEvent& event) override;
-  bool mouse_released(const QMouseEvent& event) override;
+  void mouse_moved(const QMouseEvent& event) override;
+  void mouse_released(const QMouseEvent& event) override;
 
 private:
   QPoint initial_point;                     /**< Point where the drawing started, in scene coordinates. */
@@ -76,8 +76,8 @@ class MovingEntitiesState : public MapView::State {
 public:
   MovingEntitiesState(MapView& view, const QPoint& initial_point);
 
-  bool mouse_moved(const QMouseEvent& event) override;
-  bool mouse_released(const QMouseEvent& event) override;
+  void mouse_moved(const QMouseEvent& event) override;
+  void mouse_released(const QMouseEvent& event) override;
 
 private:
   QPoint initial_point;      /**< Point where the dragging started, in scene coordinates. */
@@ -94,7 +94,7 @@ public:
   AddingEntitiesState(MapView& view, EntityModels&& entities);
   void start() override;
   void stop() override;
-  bool mouse_moved(const QMouseEvent& event) override;
+  void mouse_moved(const QMouseEvent& event) override;
   void tileset_selection_changed() override;
 
 private:
@@ -441,12 +441,8 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
 void MapView::mousePressEvent(QMouseEvent* event) {
 
   if (model != nullptr && get_scene() != nullptr) {
-    if (state->mouse_pressed(*event)) {
-      return;
-    }
+    state->mouse_pressed(*event);
   }
-
-  QGraphicsView::mousePressEvent(event);
 }
 
 /**
@@ -456,12 +452,8 @@ void MapView::mousePressEvent(QMouseEvent* event) {
 void MapView::mouseReleaseEvent(QMouseEvent* event) {
 
   if (model != nullptr && get_scene() != nullptr) {
-    if (state->mouse_released(*event)) {
-      return;
-    }
+    state->mouse_released(*event);
   }
-
-  QGraphicsView::mouseReleaseEvent(event);
 }
 
 /**
@@ -471,12 +463,8 @@ void MapView::mouseReleaseEvent(QMouseEvent* event) {
 void MapView::mouseMoveEvent(QMouseEvent* event) {
 
   if (model != nullptr && get_scene() != nullptr) {
-    if (state->mouse_moved(*event)) {
-      return;
-    }
+    state->mouse_moved(*event);
   }
-
-  QGraphicsView::mouseMoveEvent(event);
 }
 
 /**
@@ -486,12 +474,8 @@ void MapView::mouseMoveEvent(QMouseEvent* event) {
 void MapView::contextMenuEvent(QContextMenuEvent* event) {
 
   if (model != nullptr && get_scene() != nullptr) {
-    if (state->context_menu_requested(*event)) {
-      return;
-    }
+    state->context_menu_requested(*event);
   }
-
-  QGraphicsView::contextMenuEvent(event);
 }
 
 /**
@@ -592,12 +576,10 @@ void MapView::State::stop() {
  * Subclasses can reimplement this function to define what happens.
  *
  * @param event The event to handle.
- * @return @c true if the event was handled, @c false to propagate it further.
  */
-bool MapView::State::mouse_pressed(const QMouseEvent& event) {
+void MapView::State::mouse_pressed(const QMouseEvent& event) {
 
   Q_UNUSED(event);
-  return false;
 }
 
 /**
@@ -606,12 +588,10 @@ bool MapView::State::mouse_pressed(const QMouseEvent& event) {
  * Subclasses can reimplement this function to define what happens.
  *
  * @param event The event to handle.
- * @return @c true if the event was handled, @c false to propagate it further.
  */
-bool MapView::State::mouse_released(const QMouseEvent& event) {
+void MapView::State::mouse_released(const QMouseEvent& event) {
 
   Q_UNUSED(event);
-  return false;
 }
 
 /**
@@ -620,12 +600,10 @@ bool MapView::State::mouse_released(const QMouseEvent& event) {
  * Subclasses can reimplement this function to define what happens.
  *
  * @param event The event to handle.
- * @return @c true if the event was handled, @c false to propagate it further.
  */
-bool MapView::State::mouse_moved(const QMouseEvent& event) {
+void MapView::State::mouse_moved(const QMouseEvent& event) {
 
   Q_UNUSED(event);
-  return false;
 }
 
 /**
@@ -635,12 +613,10 @@ bool MapView::State::mouse_moved(const QMouseEvent& event) {
  * Subclasses can reimplement this function to define what happens.
  *
  * @param event The event to handle.
- * @return @c true if the event was handled, @c false to propagate it further.
  */
-bool MapView::State::context_menu_requested(const QContextMenuEvent& event) {
+void MapView::State::context_menu_requested(const QContextMenuEvent& event) {
 
   Q_UNUSED(event);
-  return false;
 }
 
 /**
@@ -664,10 +640,10 @@ DoingNothingState::DoingNothingState(MapView& view) :
 /**
  * @copydoc MapView::State::mouse_pressed
  */
-bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
+void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 
   if (event.button() != Qt::LeftButton && event.button() != Qt::RightButton) {
-    return true;
+    return;
   }
 
   MapView& view = get_view();
@@ -728,8 +704,6 @@ bool DoingNothingState::mouse_pressed(const QMouseEvent& event) {
       }
     }
   }
-
-  return true;
 }
 
 /**
@@ -786,7 +760,7 @@ void DrawingRectangleState::stop() {
 /**
  * @copydoc MapView::State::mouse_moved
  */
-bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
+void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
   MapScene& scene = get_scene();
@@ -797,7 +771,7 @@ bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
 
   if (current_point == previous_point) {
     // No change.
-    return true;
+    return;
   }
 
   // The area has changed: recalculate the rectangle.
@@ -815,18 +789,18 @@ bool DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
   for (QGraphicsItem* item : initial_selection) {
       item->setSelected(true);
   }
-  return true;
+  return;
 }
 
 /**
  * @copydoc MapView::State::mouse_released
  */
-bool DrawingRectangleState::mouse_released(const QMouseEvent& event) {
+void DrawingRectangleState::mouse_released(const QMouseEvent& event) {
 
   Q_UNUSED(event);
 
   get_view().start_state_doing_nothing();
-  return true;
+  return;
 }
 
 /**
@@ -845,14 +819,14 @@ MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_po
 /**
  * @copydoc MapView::State::mouse_moved
  */
-bool MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
+void MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
   QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
   if (current_point == last_point) {
     // No change after rounding.
-    return true;
+    return;
   }
 
   // Make selected entities follow the mouse while dragging.
@@ -864,20 +838,16 @@ bool MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
   const bool allow_merge_to_previous = first_move_done;
   view.move_selected_entities(translation, allow_merge_to_previous);
   first_move_done = true;
-
-  return true;
 }
 
 /**
  * @copydoc MapView::State::mouse_released
  */
-bool MovingEntitiesState::mouse_released(const QMouseEvent& event) {
+void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
 
   Q_UNUSED(event);
 
   get_view().start_state_doing_nothing();
-
-  return true;
 }
 
 /**
@@ -927,14 +897,14 @@ void AddingEntitiesState::stop() {
 /**
  * @copydoc MapView::State::mouse_moved
  */
-bool AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
+void AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
   QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
   if (current_point == last_point) {
     // No change after rounding.
-    return true;
+    return;
   }
 
   // Make entities being added follow the mouse.
@@ -947,8 +917,6 @@ bool AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
     entity.set_xy(xy);
     item->update_xy();
   }
-
-  return true;
 }
 
 /**

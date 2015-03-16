@@ -57,10 +57,10 @@ public:
     virtual void start();
     virtual void stop();
 
-    virtual bool mouse_pressed(const QMouseEvent& event);
-    virtual bool mouse_released(const QMouseEvent& event);
-    virtual bool mouse_moved(const QMouseEvent& event);
-    virtual bool context_menu_requested(const QContextMenuEvent& event);
+    virtual void mouse_pressed(const QMouseEvent& event);
+    virtual void mouse_released(const QMouseEvent& event);
+    virtual void mouse_moved(const QMouseEvent& event);
+    virtual void context_menu_requested(const QContextMenuEvent& event);
     virtual void tileset_selection_changed();
 
   private:
