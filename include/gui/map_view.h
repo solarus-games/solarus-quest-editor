@@ -29,7 +29,6 @@ class MapModel;
 class MapScene;
 class ViewSettings;
 
-using EntityIndex = Solarus::EntityIndex;
 using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
@@ -93,7 +92,12 @@ signals:
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
   void undo_requested();
-  void move_entities_requested(const QList<EntityIndex>& indexes, const QPoint& translation, bool allow_merge_to_previous);
+  void move_entities_requested(
+      const QList<EntityIndex>& indexes,
+      const QPoint& translation,
+      bool allow_merge_to_previous);
+  void add_entities_requested(
+      EntityModels& entities);
 
 public slots:
 

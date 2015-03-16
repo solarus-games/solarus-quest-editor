@@ -21,6 +21,7 @@
 #include "point.h"
 #include "size.h"
 #include "tileset_model.h"
+#include <QDebug>
 #include <QIcon>
 
 /**
@@ -417,6 +418,9 @@ QPoint MapModel::get_entity_xy(const EntityIndex& index) const {
 
 /**
  * @brief Sets the coordinates of an entity on the map.
+ *
+ * Emits entity_xy_changed() if there is a change.
+ *
  * @param index Index of the entity to change.
  * @param xy The new coordinates of the entity's origin point.
  * Does nothing if there is no entity with this index.
@@ -506,4 +510,58 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
   }
 
   return get_entity(index).get_bounding_box();
+}
+
+/**
+ * @brief Adds entities to the map.
+ *
+ * They should have a invalid index before the call.
+ * After this call, they belong to this object.
+ * Emits entity_added() for each entity.
+ *
+ * @param entities The entities to add.
+ * @param view_settings View settings to use to determine the layer.
+ * @return The created indexes.
+ */
+QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSettings& view_settings) {
+
+  if (entities.empty()) {
+    return QList<EntityIndex>();
+  }
+
+  // Sanity check.
+  for (const std::unique_ptr<EntityModel>& entity : entities) {
+    if (entity->is_on_map()) {
+      qCritical() << "This entity is already on the map";
+      return QList<EntityIndex>();
+    }
+  }
+
+  // Determine the best layer.
+  Layer layer = Layer::LAYER_LOW;
+  Q_UNUSED(view_settings);  // TODO determine the best layer
+
+  // Add each entity.
+  QList<EntityIndex> indexes;
+  for (std::unique_ptr<EntityModel>& entity : entities) {
+
+    // Add the entity on the Solarus side.
+    entity->set_layer(layer);
+    EntityIndex index = map.add_entity(entity->get_entity());
+    if (!index.is_valid()) {
+      qCritical() << "Failed to add entity";
+      continue;
+    }
+
+    // Update the entity model and the entity list in the map editor.
+    entity->set_index(index);
+    this->entities[layer].emplace_back(std::move(entity));
+
+    // Provide the newly created index to the caller.
+    indexes.push_back(index);
+
+    emit entity_added(index);
+  }
+
+  return indexes;
 }

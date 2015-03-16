@@ -67,6 +67,9 @@ public:
   EntityType get_type() const;
   QString get_type_name() const;
 
+  const Solarus::EntityData& get_entity() const;
+  Solarus::EntityData& get_entity();
+
   Layer get_layer() const;
   void set_layer(Layer layer);
   QPoint get_xy() const;
@@ -145,9 +148,6 @@ protected:
   };
 
   EntityModel(MapModel& map, const EntityIndex& index, EntityType type);
-
-  const Solarus::EntityData& get_entity() const;
-  Solarus::EntityData& get_entity();
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);

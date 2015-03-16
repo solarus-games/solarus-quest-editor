@@ -94,6 +94,7 @@ public:
   AddingEntitiesState(MapView& view, EntityModels&& entities);
   void start() override;
   void stop() override;
+  void mouse_pressed(const QMouseEvent& event) override;
   void mouse_moved(const QMouseEvent& event) override;
   void tileset_selection_changed() override;
 
@@ -921,6 +922,20 @@ QPoint AddingEntitiesState::get_entities_center() const {
     bottom_right.setY(qMax(box.bottom(), bottom_right.y()));
   }
   return (top_left + bottom_right) / 2;
+}
+
+/**
+ * @copydoc MapView::State::mouse_pressed
+ */
+void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+  MapView& view = get_view();
+
+  // Add the entities to the map and make them selected.
+  view.add_entities_requested(entities);
+
+  view.start_state_doing_nothing();
 }
 
 /**

@@ -28,6 +28,9 @@ class EntityModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
+class ViewSettings;
+
+using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
  * @brief Model that wraps a map.
@@ -82,6 +85,7 @@ public:
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
+  QList<EntityIndex> add_entities(EntityModels& entities, const ViewSettings& view_settings);
 
   const Solarus::EntityData& get_internal_entity(const EntityIndex& index) const;
   Solarus::EntityData& get_internal_entity(const EntityIndex& index);
@@ -98,6 +102,7 @@ signals:
   void tileset_id_changed(const QString& tileset_id);
   void music_id_changed(const QString& music_id);
 
+  void entity_added(const EntityIndex& index);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 public slots:

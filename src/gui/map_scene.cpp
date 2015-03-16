@@ -33,6 +33,8 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
 
   build();
 
+  connect(&model, SIGNAL(entity_added(EntityIndex)),
+          this, SLOT(entity_added(EntityIndex)));
   connect(&model, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
 }
@@ -205,6 +207,24 @@ EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
   }
 
   return &entity_item->get_entity();
+}
+
+/**
+ * @brief Slot called when an entity is added to the map.
+ *
+ * An item on the scene is created accordingly.
+ *
+ * @param index Index of the new entity.
+ */
+void MapScene::entity_added(const EntityIndex& index) {
+
+  if (!model.entity_exists(index)) {
+    // Bug in the map editor.
+    qCritical() << "Cannot find added entity";
+    return;
+  }
+
+  create_entity_item(model.get_entity(index));
 }
 
 /**

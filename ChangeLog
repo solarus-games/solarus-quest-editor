@@ -13,6 +13,7 @@ New features
 * Add a quest properties editor (quest.dat has to be edited by hand before).
 * Add a toolbar.
 * Add new keyboard shortcuts.
+* Map editor: multiple tiles from the tileset can now be added at once.
 * Tileset editor: undo/redo is now supported.
 * Tileset editor: multi-selection is now supported.
 * Tileset editor: showing the grid is now supported.
@@ -20,7 +21,7 @@ New features
 * Sprite editor: showing the grid is now supported.
 * Quest tree: organize the view in columns (file name, description, type).
 * Quest tree: show resources whose file is missing on the filesystem.
-* Quest tree: show files that look like resources but are not declared.
+* Quest tree: show files that look like resources but are not declared yet.
 * The quest tree now automatically refreshes after changes in the filesystem.
 * Resource selectors now show a hierarchical view of elements.
 * A file to open can now be passed on the command line.

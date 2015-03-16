@@ -51,6 +51,7 @@ protected:
 
 private slots:
 
+  void entity_added(const EntityIndex& index);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 private:

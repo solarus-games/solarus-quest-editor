@@ -66,6 +66,7 @@ private slots:
   void move_entities_requested(const QList<EntityIndex>& indexes,
                                const QPoint& translation,
                                bool allow_merge_to_previous);
+  void add_entities_requested(EntityModels& entities);
 
 private:
 

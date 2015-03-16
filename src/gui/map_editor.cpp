@@ -215,6 +215,30 @@ private:
   bool allow_merge_to_previous;
 };
 
+/**
+ * @brief Adding entities to the map.
+ */
+class AddEntitiesCommand : public MapEditorCommand {
+
+public:
+  AddEntitiesCommand(MapEditor& editor, EntityModels& entities) :
+    MapEditorCommand(editor, MapEditor::tr("Add entities")),
+    entities(entities),
+    indexes() { }
+
+  void undo() override {
+    // TODO entities = get_model().remove_entities(indexes);
+  }
+
+  void redo() override {
+    indexes = get_model().add_entities(entities, get_editor().get_view_settings());
+  }
+
+private:
+  EntityModels& entities;
+  QList<EntityIndex> indexes;
+};
+
 }  // Anonymous namespace.
 
 /**
@@ -326,6 +350,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint, bool)),
           this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint, bool)));
+  connect(ui.map_view, SIGNAL(add_entities_requested(EntityModels&)),
+          this, SLOT(add_entities_requested(EntityModels&)));
 }
 
 /**
@@ -745,6 +771,19 @@ void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
   }
 
   try_command(new MoveEntitiesCommand(*this, indexes, translation, allow_merge_to_previous));
+}
+
+/**
+ * @brief Slot called when the user wants to add entities.
+ * @param entities Entities ready to be added to the map.
+ */
+void MapEditor::add_entities_requested(EntityModels& entities) {
+
+  if (entities.empty()) {
+    return;
+  }
+
+  try_command(new AddEntitiesCommand(*this, entities));
 }
 
 /**
