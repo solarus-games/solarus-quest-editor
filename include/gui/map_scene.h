@@ -55,19 +55,20 @@ protected:
 private slots:
 
   void entity_added(const EntityIndex& index);
+  void entity_about_to_be_removed(const EntityIndex& index);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 private:
 
-  using EntityList = QList<EntityItem*>;
+  using EntityItems = QList<EntityItem*>;
 
   void build();
   void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
-  const EntityList& get_entities(Layer layer);
+  const EntityItems& get_entity_items(Layer layer);
 
   MapModel& model;            /**< The map represented. */
-  std::array<EntityList, Layer::LAYER_NB>
+  std::array<EntityItems, Layer::LAYER_NB>
       entity_items;           /**< Entities items on each layer,
                                * ordered as in the map. */
 

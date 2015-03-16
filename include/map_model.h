@@ -86,6 +86,7 @@ public:
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   QList<EntityIndex> add_entities(EntityModels& entities, const ViewSettings& view_settings);
+  EntityModels remove_entities(const QList<EntityIndex>& indexes);
 
   const Solarus::EntityData& get_internal_entity(const EntityIndex& index) const;
   Solarus::EntityData& get_internal_entity(const EntityIndex& index);
@@ -103,6 +104,7 @@ signals:
   void music_id_changed(const QString& music_id);
 
   void entity_added(const EntityIndex& index);
+  void entity_about_to_be_removed(const EntityIndex& index);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 public slots:

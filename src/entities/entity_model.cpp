@@ -226,8 +226,8 @@ std::unique_ptr<EntityModel> EntityModel::create(
   case EntityType::FIRE:
   case EntityType::HERO:
   case EntityType::HOOKSHOT:
-    qCritical() << "Unexpected entity type (not allowed in map files): " <<
-                   EntityTraits::get_lua_name(type);
+    qCritical() << MapModel::tr("Unexpected entity type (not allowed in map files): %1").arg(
+                      EntityTraits::get_lua_name(type));
     break;
   }
 

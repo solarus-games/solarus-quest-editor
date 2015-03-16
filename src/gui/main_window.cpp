@@ -728,7 +728,7 @@ void MainWindow::update_layer_visibility(Layer layer) {
     break;
 
   case Layer::LAYER_NB:
-    qCritical() << "Invalid layer: " << layer;
+    qCritical() << tr("Invalid layer: %1").arg(layer);
     break;
   }
 }
@@ -787,7 +787,7 @@ void MainWindow::update_entity_types_visibility() {
   ViewSettings& view_settings = editor->get_view_settings();
   for (QAction* action: show_entities_actions) {
     if (action == nullptr) {
-      qCritical() << "Missing show entity type action";
+      qCritical() << tr("Missing show entity type action");
       return;
     }
     if (action->data().isValid()) {  // Skip special actions.

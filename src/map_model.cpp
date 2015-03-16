@@ -515,7 +515,7 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
 /**
  * @brief Adds entities to the map.
  *
- * They should have a invalid index before the call.
+ * They should have a invalid index (not be on the map) before the call.
  * After this call, they belong to this object.
  * Emits entity_added() for each entity.
  *
@@ -529,14 +529,6 @@ QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSett
     return QList<EntityIndex>();
   }
 
-  // Sanity check.
-  for (const std::unique_ptr<EntityModel>& entity : entities) {
-    if (entity->is_on_map()) {
-      qCritical() << "This entity is already on the map";
-      return QList<EntityIndex>();
-    }
-  }
-
   // Determine the best layer.
   Layer layer = Layer::LAYER_LOW;
   Q_UNUSED(view_settings);  // TODO determine the best layer
@@ -545,11 +537,17 @@ QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSett
   QList<EntityIndex> indexes;
   for (std::unique_ptr<EntityModel>& entity : entities) {
 
+    // Sanity check.
+    if (entity->is_on_map()) {
+      qCritical() << tr("This entity is already on the map");
+      continue;
+    }
+
     // Add the entity on the Solarus side.
     entity->set_layer(layer);
     EntityIndex index = map.add_entity(entity->get_entity());
     if (!index.is_valid()) {
-      qCritical() << "Failed to add entity";
+      qCritical() << tr("Failed to add entity");
       continue;
     }
 
@@ -564,4 +562,53 @@ QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSett
   }
 
   return indexes;
+}
+
+/**
+ * @brief Remove entities from the map.
+ *
+ * They should have a valid index (be on the map) before the call.
+ * After this call, they belong to the caller.
+ * Emits entity_about_to_be_removed() for each entity.
+ *
+ * @param indexes Indexes of the entities to remove.
+ * @return The removed entities, with invalid indexes as they are no longer
+ * on the map.
+ */
+EntityModels MapModel::remove_entities(const QList<EntityIndex>& indexes) {
+
+  if (indexes.empty()) {
+    return EntityModels();
+  }
+
+  EntityModels entities;
+  for (const EntityIndex& index : indexes) {
+
+    // Sanity checks.
+    if (!index.is_valid()) {
+      qCritical() << tr("This entity is not on the map");
+      return EntityModels();
+    }
+    if (!entity_exists(index)) {
+      qCritical() << tr("Cannot find entity to remove");
+    }
+
+    emit entity_about_to_be_removed(index);
+
+    // Remove the entity on the Solarus side.
+    map.remove_entity(index);
+
+    // Update the entity model and the entity list in the map editor.
+    Layer layer = index.layer;
+    int i = index.index;
+    auto it = this->entities[layer].begin() + i;
+    std::unique_ptr<EntityModel> entity = std::move(*it);
+    this->entities[layer].erase(it);
+    entity->set_index(EntityIndex());
+
+    // Return the removed entity to the caller.
+    entities.push_back(std::move(entity));
+  }
+
+  return entities;
 }

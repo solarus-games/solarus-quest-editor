@@ -231,20 +231,20 @@ class AddEntitiesCommand : public MapEditorCommand {
 public:
   AddEntitiesCommand(MapEditor& editor, EntityModels& entities) :
     MapEditorCommand(editor, MapEditor::tr("Add entities")),
-    entities(entities),
+    entities(std::move(entities)),
     indexes() { }
 
   void undo() override {
-    // TODO entities = get_model().remove_entities(indexes);
+    entities = get_model().remove_entities(indexes);
   }
 
   void redo() override {
     indexes = get_model().add_entities(entities, get_view_settings());
-    get_editor().get_map_view().set_selected_entities(indexes);
+    get_map_view().set_selected_entities(indexes);
   }
 
 private:
-  EntityModels& entities;
+  EntityModels entities;
   QList<EntityIndex> indexes;
 };
 

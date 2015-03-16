@@ -35,6 +35,8 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
 
   connect(&model, SIGNAL(entity_added(EntityIndex)),
           this, SLOT(entity_added(EntityIndex)));
+  connect(&model, SIGNAL(entity_about_to_be_removed(EntityIndex)),
+          this, SLOT(entity_about_to_be_removed(EntityIndex)));
   connect(&model, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
 }
@@ -124,13 +126,13 @@ EntityItem* MapScene::get_entity_item(const EntityIndex& index) {
     return nullptr;
   }
 
-  const EntityList& entities = get_entities(index.layer);
-  if (index.index < 0 || index.index >= entities.size()) {
+  const EntityItems& items = get_entity_items(index.layer);
+  if (index.index < 0 || index.index >= items.size()) {
     // Index out of range.
     return nullptr;
   }
 
-  return entities.at(index.index);
+  return items.at(index.index);
 }
 
 /**
@@ -138,7 +140,7 @@ EntityItem* MapScene::get_entity_item(const EntityIndex& index) {
  * @param layer A layer.
  * @return Items of entities on that layer.
  */
-const MapScene::EntityList& MapScene::get_entities(Layer layer) {
+const MapScene::EntityItems& MapScene::get_entity_items(Layer layer) {
   return entity_items[layer];
 }
 
@@ -149,7 +151,7 @@ const MapScene::EntityList& MapScene::get_entities(Layer layer) {
  */
 void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_settings) {
 
-  for (EntityItem* item : get_entities(layer)) {
+  for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
   }
 }
@@ -163,7 +165,7 @@ void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
-    for (EntityItem* item : get_entities(layer)) {
+    for (EntityItem* item : get_entity_items(layer)) {
       if (item->get_entity_type() == type) {
         item->update_visibility(view_settings);
       }
@@ -220,11 +222,31 @@ void MapScene::entity_added(const EntityIndex& index) {
 
   if (!model.entity_exists(index)) {
     // Bug in the map editor.
-    qCritical() << "Cannot find added entity";
+    qCritical() << tr("Cannot find added entity");
     return;
   }
 
   create_entity_item(model.get_entity(index));
+}
+
+/**
+ * @brief Slot called when an entity is being removed from the map.
+ *
+ * Its item on the scene is deleted accordingly.
+ *
+ * @param index Index of the entity.
+ */
+void MapScene::entity_about_to_be_removed(const EntityIndex& index) {
+
+  EntityItem* item = get_entity_item(index);
+  if (item == nullptr) {
+    // Bug in the map editor.
+    qCritical() << tr("Missing entity graphics item");
+    return;
+  }
+
+  removeItem(item);
+  entity_items[index.layer].removeAt(index.index);
 }
 
 /**
@@ -242,7 +264,7 @@ void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
   EntityItem* item = get_entity_item(index);
   if (item == nullptr) {
     // Bug in the map editor.
-    qCritical() << "Missing entity item";
+    qCritical() << tr("Missing entity graphics item");
   }
 
   item->update_xy();
