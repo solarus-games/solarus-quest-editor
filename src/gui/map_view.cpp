@@ -26,7 +26,9 @@
 #include "rectangle.h"
 #include "tileset_model.h"
 #include "view_settings.h"
+#include <QAction>
 #include <QGraphicsItem>
+#include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
 
@@ -43,7 +45,11 @@ public:
   DoingNothingState(MapView& view);
 
   void mouse_pressed(const QMouseEvent& event) override;
+  void context_menu_requested(const QPoint& where) override;
   void tileset_selection_changed() override;
+
+private:
+  QAction* delete_entities_action;
 };
 
 /**
@@ -480,16 +486,40 @@ void MapView::mouseMoveEvent(QMouseEvent* event) {
  */
 void MapView::contextMenuEvent(QContextMenuEvent* event) {
 
-  if (model != nullptr && get_scene() != nullptr) {
-    state->context_menu_requested(*event);
+  if (model == nullptr || get_scene() == nullptr) {
+    return;
   }
+
+  QPoint where;
+  if (event->pos() != QPoint(0, 0)) {
+    where = event->pos() + QPoint(1, 1);
+  }
+  else {
+    QList<QGraphicsItem*> selected_items = scene->selectedItems();
+    where = mapFromScene(selected_items.first()->pos() + QPoint(8, 8));
+  }
+
+  state->context_menu_requested(viewport()->mapToGlobal(where));
+}
+
+/**
+ * @brief Returns the number of selected entities.
+ * @return The number of selected entities.
+ */
+int MapView::get_num_selected_entities() const {
+
+  if (scene == nullptr) {
+    return 0;
+  }
+
+  return scene->selectedItems().size();
 }
 
 /**
  * @brief Returns the indexes of selected entities.
  * @return The selected entities.
  */
-QList<EntityIndex> MapView::get_selected_entities() {
+QList<EntityIndex> MapView::get_selected_entities() const {
 
   if (scene == nullptr) {
     return QList<EntityIndex>();
@@ -519,6 +549,14 @@ void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
 void MapView::move_selected_entities(const QPoint& translation, bool allow_merge_to_previous) {
 
   emit move_entities_requested(get_selected_entities(), translation, allow_merge_to_previous);
+}
+
+/**
+ * @brief Requests to delete the selected entities.
+ */
+void MapView::remove_selected_entities() {
+
+  emit remove_entities_requested(get_selected_entities());
 }
 
 /**
@@ -618,13 +656,13 @@ void MapView::State::mouse_moved(const QMouseEvent& event) {
  * @brief Called when a context menu is requested in the map view during this
  * state.
  *
- * Subclasses can reimplement this function to define what happens.
+ * Subclasses can reimplement this function to show a context menu.
  *
- * @param event The event to handle.
+ * @param where Where to show the context menu, in global coordinates.
  */
-void MapView::State::context_menu_requested(const QContextMenuEvent& event) {
+void MapView::State::context_menu_requested(const QPoint& where) {
 
-  Q_UNUSED(event);
+  Q_UNUSED(where);
 }
 
 /**
@@ -642,6 +680,14 @@ void MapView::State::tileset_selection_changed() {
  */
 DoingNothingState::DoingNothingState(MapView& view) :
   MapView::State(view) {
+
+  delete_entities_action = new QAction(
+        QIcon(":/images/icon_delete.png"), MapView::tr("Delete..."), &view);
+  delete_entities_action->setShortcut(QKeySequence::Delete);
+  delete_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  QObject::connect(delete_entities_action, SIGNAL(triggered()),
+                  &view, SLOT(remove_selected_entities()));
+  view.addAction(delete_entities_action);
 
 }
 
@@ -712,6 +758,22 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
       }
     }
   }
+}
+
+/**
+ * @copydoc MapView::State::context_menu_requested
+ */
+void DoingNothingState::context_menu_requested(const QPoint& where) {
+
+  MapView& view = get_view();
+  if (view.get_num_selected_entities() == 0) {
+    return;
+  }
+
+  QMenu* menu = new QMenu(&view);
+  menu->addAction(delete_entities_action);
+
+  menu->popup(where);
 }
 
 /**

@@ -59,7 +59,7 @@ public:
     virtual void mouse_pressed(const QMouseEvent& event);
     virtual void mouse_released(const QMouseEvent& event);
     virtual void mouse_moved(const QMouseEvent& event);
-    virtual void context_menu_requested(const QContextMenuEvent& event);
+    virtual void context_menu_requested(const QPoint& where);
     virtual void tileset_selection_changed();
 
   private:
@@ -83,10 +83,9 @@ public:
   void start_adding_entities_from_tileset_selection();
 
   // Selection.
-  QList<EntityIndex> get_selected_entities();
+  int get_num_selected_entities() const;
+  QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
-
-  void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
 
 signals:
 
@@ -99,6 +98,7 @@ signals:
       bool allow_merge_to_previous);
   void add_entities_requested(
       EntityModels& entities);
+  void remove_entities_requested(const QList<EntityIndex>& indexes);
 
 public slots:
 
@@ -110,6 +110,9 @@ public slots:
   void update_layer_visibility(Layer layer);
   void update_entity_type_visibility(EntityType type);
   void tileset_selection_changed();
+
+  void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
+  void remove_selected_entities();
 
 protected:
 
