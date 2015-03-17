@@ -952,7 +952,9 @@ void AddingEntitiesState::start() {
   for (EntityItem* item : entity_items) {
     get_scene().addItem(item);
     EntityModel& entity = item->get_entity();
-    QPoint top_left = last_point - MapScene::get_margin_top_left() - Point::round_8(center - entity.get_xy());
+    QPoint top_left_in_group = center - entity.get_top_left();
+    QPoint top_left = last_point - top_left_in_group - MapScene::get_margin_top_left();
+    top_left = Point::round_8(top_left);
     entity.set_top_left(top_left);
     item->update_xy();
   }
