@@ -20,16 +20,12 @@
 #include "entity_traits.h"
 #include "layer_traits.h"
 #include "sprite_model.h"
-#include <solarus/MapData.h>
 #include <QPointer>
-#include <memory>
 
 class MapModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
-
-using EntityIndex = Solarus::EntityIndex;
 
 /**
  * @brief Model of a map entity.

@@ -24,13 +24,10 @@
 #include <deque>
 #include <memory>
 
-class EntityModel;
 class Quest;
 class QuestResources;
 class TilesetModel;
 class ViewSettings;
-
-using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
  * @brief Model that wraps a map.

@@ -21,15 +21,12 @@
 #include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
-#include <memory>
 #include <solarus/MapData.h>
 
 class EntityModel;
 class MapModel;
 class MapScene;
 class ViewSettings;
-
-using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
  * @brief Graphical view of the map image, allowing to manage entities.

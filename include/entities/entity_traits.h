@@ -20,10 +20,15 @@
 #include "enum_traits.h"
 #include <solarus/entities/EntityType.h>
 #include <solarus/MapData.h>
+#include <memory>
+#include <vector>
+
+class EntityModel;
 
 using EntityType = Solarus::EntityType;
 using EntityTraits = EnumTraits<EntityType>;
 using EntityIndex = Solarus::EntityIndex;
+using EntityModels = std::vector<std::unique_ptr<EntityModel>>;
 
 /**
  * \brief Provides useful properties of entity type enum values.
