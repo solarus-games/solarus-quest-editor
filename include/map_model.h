@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-class AddableEntity;
+struct AddableEntity;
 class Quest;
 class QuestResources;
 class TilesetModel;
