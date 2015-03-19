@@ -57,8 +57,11 @@ public:
   const QuestResources& get_resources() const;
 
   EntityIndex get_index() const;
-  void set_index(const EntityIndex& index);
+
   bool is_on_map() const;
+  void added_to_map(const EntityIndex& index);
+  void about_to_be_removed_from_map();
+  void index_changed(const EntityIndex& index);
 
   EntityType get_type() const;
   QString get_type_name() const;

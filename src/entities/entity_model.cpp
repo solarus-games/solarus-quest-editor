@@ -264,20 +264,68 @@ EntityIndex EntityModel::get_index() const {
 }
 
 /**
- * @brief Sets the index of this entity on the map.
- * @param The new index, or an invalid index if the entity is not on the map.
- */
-void EntityModel::set_index(const EntityIndex& index) {
-  this->index = index;
-  set_layer(index.layer);
-}
-
-/**
  * @brief Returns whether this entity is present on the map.
  * @return @c true if the entity is on the map.
  */
 bool EntityModel::is_on_map() const {
   return get_index().is_valid();
+}
+
+/**
+ * @brief Notifies this entity that it was added to the map.
+ * @param The index where it was added.
+ */
+void EntityModel::added_to_map(const EntityIndex& index) {
+
+  if (!index.is_valid()) {
+    qCritical() << MapModel::tr("Missing index of entity added");
+    return;
+  }
+
+  if (this->index.is_valid()) {
+    qCritical() << MapModel::tr("This entity already has a map index");
+    return;
+  }
+
+  this->index = index;
+  set_layer(index.layer);
+  map->get_internal_entity(index) = stub;  // Copy the data.
+}
+
+/**
+ * @brief Notifies this entity that it is about to be removed from the map.
+ *
+ * It can still be added again later.
+ */
+void EntityModel::about_to_be_removed_from_map() {
+
+  if (!index.is_valid()) {
+    qCritical() << MapModel::tr("Entity being removed is not on the map");
+    return;
+  }
+
+  stub = map->get_internal_entity(index);  // Save the data.
+  index = EntityIndex();  // Set an invalid index.
+}
+
+/**
+ * @brief Notifies this entity that its index on the map has changed.
+ * @param The new index.
+ */
+void EntityModel::index_changed(const EntityIndex& index) {
+
+  if (!this->index.is_valid()) {
+    qCritical() << MapModel::tr("This entity is not on the map");
+    return;
+  }
+
+  if (!index.is_valid()) {
+    qCritical() << MapModel::tr("Missing new index of entity");
+    return;
+  }
+
+  this->index = index;
+  set_layer(index.layer);
 }
 
 /**

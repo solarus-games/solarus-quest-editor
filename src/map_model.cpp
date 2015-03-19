@@ -585,9 +585,9 @@ void MapModel::add_entities(AddableEntities&& entities) {
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
     int i = index.index;
-    entity->set_index(index);
     auto it = this->entities[layer].begin() + i;
     this->entities[layer].emplace(it, std::move(entity));
+    get_entity(index).added_to_map(index);
 
     // Other indexes are now dirty, unless the entity was appended.
     if (i <= (int) this->entities[layer].size()) {
@@ -644,16 +644,16 @@ AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
       continue;
     }
 
-    // Remove the entity on the Solarus side.
-    map.remove_entity(index);
-
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
     int i = index.index;
     auto it2 = this->entities[layer].begin() + i;
     EntityModelPtr entity = std::move(*it2);
+    entity->about_to_be_removed_from_map();
     this->entities[layer].erase(it2);
-    entity->set_index(EntityIndex());
+
+    // Remove the entity on the Solarus side.
+    map.remove_entity(index);
 
     // Other indexes are now dirty, unless the entity was the last element.
     if (i < (int) this->entities[layer].size()) {
@@ -696,7 +696,7 @@ void MapModel::rebuild_entity_indexes(Layer layer) {
     }
     EntityIndex index = entity->get_index();
     index.index = i;
-    entity->set_index(index);
+    entity->index_changed(index);
     ++i;
   }
 }

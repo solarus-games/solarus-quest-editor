@@ -107,7 +107,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
 
   if (!entity.is_on_map()) {
     // Bug in the editor.
-    qCritical() << "This entity is not on the map";
+    qCritical() << tr("This entity is not on the map");
     return;
   }
 
@@ -117,7 +117,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
   const EntityIndex& index = entity.get_index();
   if (index.layer != entity.get_layer()) {
     // Bug in the editor.
-    qCritical() << "Inconsistent layer";
+    qCritical() << tr("Inconsistent layer");
     return;
   }
 
@@ -243,7 +243,7 @@ void MapScene::entities_added(const QList<EntityIndex>& indexes) {
     EntityModel& entity = map.get_entity(index);
     if (entity.get_index() != index) {
       // Bug in the map editor.
-      qCritical() << "Inconsistent index of entity added";
+      qCritical() << tr("Inconsistent index of entity added");
       continue;
     }
     create_entity_item(entity);
@@ -274,12 +274,12 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
     EntityModel& entity = map.get_entity(index);
     if (entity.get_index() != index) {
       // Bug in the map editor.
-      qCritical() << "Inconsistent index of entity being removed";
+      qCritical() << tr("Inconsistent index of entity being removed");
       continue;
     }
     if (&item->get_entity() != &entity) {
       // Bug in the map editor.
-      qCritical() << "Wrong entity item at this index";
+      qCritical() << tr("Wrong entity item at this index");
       continue;
     }
 
