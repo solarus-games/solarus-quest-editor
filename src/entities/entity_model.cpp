@@ -269,6 +269,7 @@ EntityIndex EntityModel::get_index() const {
  */
 void EntityModel::set_index(const EntityIndex& index) {
   this->index = index;
+  set_layer(index.layer);
 }
 
 /**
@@ -364,6 +365,7 @@ Layer EntityModel::get_layer() const {
 /**
  * @brief Sets the layer where this entity is on the map.
  * @param layer The layer.
+ * @warning This does not update the index of the entity.
  */
 void EntityModel::set_layer(Layer layer) {
   get_entity().set_layer(layer);

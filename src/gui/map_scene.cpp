@@ -24,20 +24,20 @@
 
 /**
  * @brief Creates a map scene.
- * @param model The map data to represent in the scene.
+ * @param map The map data to represent in the scene.
  * @param parent The parent object or nullptr.
  */
-MapScene::MapScene(MapModel& model, QObject* parent) :
+MapScene::MapScene(MapModel& map, QObject* parent) :
   QGraphicsScene(parent),
-  model(model) {
+  map(map) {
 
   build();
 
-  connect(&model, SIGNAL(entities_added(QList<EntityIndex>)),
+  connect(&map, SIGNAL(entities_added(QList<EntityIndex>)),
           this, SLOT(entities_added(QList<EntityIndex>)));
-  connect(&model, SIGNAL(entities_about_to_be_removed(QList<EntityIndex>)),
+  connect(&map, SIGNAL(entities_about_to_be_removed(QList<EntityIndex>)),
           this, SLOT(entities_about_to_be_removed(QList<EntityIndex>)));
-  connect(&model, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
+  connect(&map, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
 }
 
@@ -46,7 +46,7 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
  * @return The map.
  */
 const MapModel& MapScene::get_model() const {
-  return model;
+  return map;
 }
 
 /**
@@ -54,7 +54,7 @@ const MapModel& MapScene::get_model() const {
  * @return The quest.
  */
 const Quest& MapScene::get_quest() const {
-  return model.get_quest();
+  return map.get_quest();
 }
 
 /**
@@ -85,14 +85,14 @@ QSize MapScene::get_margin_size() {
  */
 void MapScene::build() {
 
-  setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + model.get_size()));
+  setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + map.get_size()));
   setBackgroundBrush(Qt::gray);
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     entity_items[i].clear();
-    for (int j = 0; j < model.get_num_entities(layer); ++j) {
-      EntityModel& entity = model.get_entity(EntityIndex(layer, j));
+    for (int j = 0; j < map.get_num_entities(layer); ++j) {
+      EntityModel& entity = map.get_entity(EntityIndex(layer, j));
       create_entity_item(entity);
     }
   }
@@ -101,18 +101,30 @@ void MapScene::build() {
 
 /**
  * @brief Creates a graphic item for the specified entity.
- * @param model A map entity.
+ * @param entity A map entity.
  */
 void MapScene::create_entity_item(EntityModel& entity) {
 
   if (!entity.is_on_map()) {
+    // Bug in the editor.
     qCritical() << "This entity is not on the map";
     return;
   }
 
   EntityItem* item = new EntityItem(entity);
   addItem(item);
-  entity_items[entity.get_layer()].append(item);
+
+  const EntityIndex& index = entity.get_index();
+  if (index.layer != entity.get_layer()) {
+    // Bug in the editor.
+    qCritical() << "Inconsistent layer";
+    return;
+  }
+
+  Layer layer = index.layer;
+  int i = index.index;
+  auto it = entity_items[layer].begin() + i;
+  entity_items[layer].insert(it, item);
 }
 
 /**
@@ -185,12 +197,12 @@ void MapScene::drawBackground(QPainter* painter, const QRectF& rect) {
   QGraphicsScene::drawBackground(painter, rect);
 
   // Draw the background color from the tileset.
-  TilesetModel* tileset = model.get_tileset_model();
+  TilesetModel* tileset = map.get_tileset_model();
   if (tileset == nullptr) {
     return;
   }
 
-  QRect rect_no_margins = rect.toRect().intersected(QRect(get_margin_top_left(), model.get_size()));
+  QRect rect_no_margins = rect.toRect().intersected(QRect(get_margin_top_left(), map.get_size()));
   painter->fillRect(rect_no_margins, tileset->get_background_color());
 }
 
@@ -222,13 +234,19 @@ void MapScene::entities_added(const QList<EntityIndex>& indexes) {
 
   for (const EntityIndex& index : indexes) {
 
-    if (!model.entity_exists(index)) {
+    if (!map.entity_exists(index)) {
       // Bug in the map editor.
       qCritical() << tr("Cannot find added entity");
       continue;
     }
 
-    create_entity_item(model.get_entity(index));
+    EntityModel& entity = map.get_entity(index);
+    if (entity.get_index() != index) {
+      // Bug in the map editor.
+      qCritical() << "Inconsistent index of entity added";
+      continue;
+    }
+    create_entity_item(entity);
   }
 }
 
@@ -250,6 +268,18 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
     if (item == nullptr) {
       // Bug in the map editor.
       qCritical() << tr("Missing entity graphics item");
+      continue;
+    }
+
+    EntityModel& entity = map.get_entity(index);
+    if (entity.get_index() != index) {
+      // Bug in the map editor.
+      qCritical() << "Inconsistent index of entity being removed";
+      continue;
+    }
+    if (&item->get_entity() != &entity) {
+      // Bug in the map editor.
+      qCritical() << "Wrong entity item at this index";
       continue;
     }
 

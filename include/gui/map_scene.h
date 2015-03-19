@@ -67,7 +67,7 @@ private:
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityItems& get_entity_items(Layer layer);
 
-  MapModel& model;            /**< The map represented. */
+  MapModel& map;              /**< The map represented. */
   std::array<EntityItems, Layer::LAYER_NB>
       entity_items;           /**< Entities items on each layer,
                                * ordered as in the map. */

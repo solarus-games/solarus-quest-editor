@@ -23,7 +23,6 @@
 #include <QPointer>
 #include <solarus/MapData.h>
 
-class EntityModel;
 class MapModel;
 class MapScene;
 class ViewSettings;
