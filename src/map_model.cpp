@@ -560,7 +560,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
   QSet<Layer> layers_with_dirty_indexes;
   for (AddableEntity& addable_entity : entities) {
 
-    std::unique_ptr<EntityModel>& entity(addable_entity.entity);
+    EntityModelPtr& entity(addable_entity.entity);
 
     // Sanity checks.
     if (entity == nullptr) {
@@ -651,7 +651,7 @@ AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
     Layer layer = index.layer;
     int i = index.index;
     auto it2 = this->entities[layer].begin() + i;
-    std::unique_ptr<EntityModel> entity = std::move(*it2);
+    EntityModelPtr entity = std::move(*it2);
     this->entities[layer].erase(it2);
     entity->set_index(EntityIndex());
 
@@ -689,7 +689,7 @@ void MapModel::rebuild_entity_indexes(Layer layer) {
   int i = 0;
   for (auto it = entities[layer].begin(); it != entities[layer].end(); ++it) {
 
-    const std::unique_ptr<EntityModel>& entity = *it;
+    const EntityModelPtr& entity = *it;
     if (entity == nullptr) {
       qCritical() << tr("Missing entity");
       continue;

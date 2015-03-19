@@ -42,9 +42,9 @@ class EntityModel {
 
 public:
 
-  static std::unique_ptr<EntityModel> create(
+  static EntityModelPtr create(
       MapModel& map, EntityType type);
-  static std::unique_ptr<EntityModel> create(
+  static EntityModelPtr create(
       MapModel& map, const EntityIndex& index);
 
   virtual ~EntityModel();
@@ -161,7 +161,7 @@ protected:
 
 private:
 
-  static std::unique_ptr<EntityModel> create(
+  static EntityModelPtr create(
       MapModel& map, const EntityIndex& index, EntityType type);
 
   QPointer<MapModel> map;         /**< The map this entity belongs to

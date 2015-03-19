@@ -307,7 +307,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
       continue;
     }
     QRect pattern_frame = tileset->get_pattern_frame(pattern_index);
-    std::unique_ptr<EntityModel> tile = EntityModel::create(*map, EntityType::TILE);
+    EntityModelPtr tile = EntityModel::create(*map, EntityType::TILE);
     tile->set_field("pattern", pattern_id);
     tile->set_size(pattern_frame.size());
     tile->set_xy(pattern_frame.topLeft());
@@ -939,7 +939,7 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities)
   entities(std::move(entities)),
   entity_items() {
 
-  for (const std::unique_ptr<EntityModel>& entity : this->entities) {
+  for (const EntityModelPtr& entity : this->entities) {
     EntityItem* item = new EntityItem(*entity);
     entity_items.push_back(item);
   }
@@ -1014,7 +1014,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // TODO Determine the best layer.
   Layer layer = Layer::LAYER_LOW;
   int i = map.get_num_entities(layer);
-  for (std::unique_ptr<EntityModel>& entity : entities) {
+  for (EntityModelPtr& entity : entities) {
     EntityIndex index = { layer, i };
     ++i;
     addable_entities.emplace_back(std::move(entity), index);

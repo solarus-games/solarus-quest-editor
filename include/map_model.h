@@ -18,11 +18,10 @@
 #define SOLARUSEDITOR_MAP_MODEL_H
 
 #include "entities/entity_model.h"
-#include "entities/entity_traits.h"
 #include "layer_traits.h"
 #include "sprite_model.h"
+#include <array>
 #include <memory>
-#include <vector>
 
 struct AddableEntity;
 class Quest;
@@ -47,8 +46,7 @@ public:
   static constexpr int NO_FLOOR = Solarus::MapData::NO_FLOOR;
 
   // Creation.
-  MapModel(
-      Quest& quest, const QString& map_id, QObject* parent = nullptr);
+  MapModel(Quest& quest, const QString& map_id, QObject* parent = nullptr);
 
   const Quest& get_quest() const;
   Quest& get_quest();
@@ -121,7 +119,7 @@ private:
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
-  std::array<std::deque<std::unique_ptr<EntityModel>>, Layer::LAYER_NB>
+  std::array<EntityModels, Layer::LAYER_NB>
       entities;                   /**< All entities. */
 
 };
@@ -133,7 +131,7 @@ struct AddableEntity {
 
 public:
 
-  AddableEntity(std::unique_ptr<EntityModel>&& entity, const EntityIndex& index) :
+  AddableEntity(EntityModelPtr&& entity, const EntityIndex& index) :
     entity(std::move(entity)),
     index(index) {
   }
@@ -144,7 +142,7 @@ public:
   bool operator>=(const AddableEntity& other) const { return index >= other.index; }
   bool operator>(const AddableEntity& other) const  { return index > other.index; }
 
-  std::unique_ptr<EntityModel> entity;
+  EntityModelPtr entity;
   EntityIndex index;
 
 };

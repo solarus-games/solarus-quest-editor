@@ -91,7 +91,7 @@ EntityModel::~EntityModel() {
  * @param type Type of entity to create.
  * @return The created model.
  */
-std::unique_ptr<EntityModel> EntityModel::create(
+EntityModelPtr EntityModel::create(
     MapModel& map, EntityType type) {
 
   return create(map, EntityIndex(), type);
@@ -104,7 +104,7 @@ std::unique_ptr<EntityModel> EntityModel::create(
  * @param index Index of the entity in the map
  * @return The created model.
  */
-std::unique_ptr<EntityModel> EntityModel::create(
+EntityModelPtr EntityModel::create(
     MapModel& map, const EntityIndex& index) {
 
   return create(map, index, map.get_internal_entity(index).get_type());
@@ -119,7 +119,7 @@ std::unique_ptr<EntityModel> EntityModel::create(
  * in the map yet).
  * @return The created model.
  */
-std::unique_ptr<EntityModel> EntityModel::create(
+EntityModelPtr EntityModel::create(
     MapModel& map, const EntityIndex& index, EntityType type) {
 
   EntityModel* entity = nullptr;
@@ -235,7 +235,7 @@ std::unique_ptr<EntityModel> EntityModel::create(
     // New entity: initialize aligned x and y.
     entity->set_top_left(QPoint(0, 0));
   }
-  return std::unique_ptr<EntityModel>(entity);
+  return EntityModelPtr(entity);
 }
 
 /**
