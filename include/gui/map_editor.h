@@ -18,9 +18,9 @@
 #define SOLARUSEDITOR_MAP_EDITOR_H
 
 #include "gui/editor.h"
+#include "map_model.h"
 #include "ui_map_editor.h"
 
-class MapModel;
 class QToolBar;
 
 /**
@@ -67,7 +67,8 @@ private slots:
   void move_entities_requested(const QList<EntityIndex>& indexes,
                                const QPoint& translation,
                                bool allow_merge_to_previous);
-  void add_entities_requested(EntityModels& entities);
+  void add_entities_requested(AddableEntities& entities);
+  void remove_entities_requested(const QList<EntityIndex>& indexes);
 
 private:
 

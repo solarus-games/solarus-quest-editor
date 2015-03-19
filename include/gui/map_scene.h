@@ -54,8 +54,8 @@ protected:
 
 private slots:
 
-  void entity_added(const EntityIndex& index);
-  void entity_about_to_be_removed(const EntityIndex& index);
+  void entities_added(const QList<EntityIndex>& indexes);
+  void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 private:

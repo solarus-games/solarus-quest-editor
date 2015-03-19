@@ -995,10 +995,22 @@ QPoint AddingEntitiesState::get_entities_center() const {
 void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
 
   Q_UNUSED(event);
+  MapModel& map = get_map();
   MapView& view = get_view();
 
   // Add the entities to the map and make them selected.
-  view.add_entities_requested(entities);
+
+  AddableEntities addable_entities;
+
+  // TODO Determine the best layer.
+  Layer layer = Layer::LAYER_LOW;
+  int i = map.get_num_entities(layer);
+  for (std::unique_ptr<EntityModel>& entity : entities) {
+    EntityIndex index = { layer, i };
+    ++i;
+    addable_entities.emplace_back(std::move(entity), index);
+  }
+  view.add_entities_requested(addable_entities);
 
   view.start_state_doing_nothing();
 }

@@ -94,7 +94,7 @@ signals:
       const QPoint& translation,
       bool allow_merge_to_previous);
   void add_entities_requested(
-      EntityModels& entities);
+      AddableEntities& entities);
   void remove_entities_requested(const QList<EntityIndex>& indexes);
 
 public slots:

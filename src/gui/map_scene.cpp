@@ -33,10 +33,10 @@ MapScene::MapScene(MapModel& model, QObject* parent) :
 
   build();
 
-  connect(&model, SIGNAL(entity_added(EntityIndex)),
-          this, SLOT(entity_added(EntityIndex)));
-  connect(&model, SIGNAL(entity_about_to_be_removed(EntityIndex)),
-          this, SLOT(entity_about_to_be_removed(EntityIndex)));
+  connect(&model, SIGNAL(entities_added(QList<EntityIndex>)),
+          this, SLOT(entities_added(QList<EntityIndex>)));
+  connect(&model, SIGNAL(entities_about_to_be_removed(QList<EntityIndex>)),
+          this, SLOT(entities_about_to_be_removed(QList<EntityIndex>)));
   connect(&model, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
 }
@@ -212,41 +212,50 @@ EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
 }
 
 /**
- * @brief Slot called when an entity is added to the map.
+ * @brief Slot called when entity have just been added to the map.
  *
- * An item on the scene is created accordingly.
+ * Items on the scene is created accordingly.
  *
- * @param index Index of the new entity.
+ * @param indexes Indexes of the new entities in ascending order of indexes.
  */
-void MapScene::entity_added(const EntityIndex& index) {
+void MapScene::entities_added(const QList<EntityIndex>& indexes) {
 
-  if (!model.entity_exists(index)) {
-    // Bug in the map editor.
-    qCritical() << tr("Cannot find added entity");
-    return;
+  for (const EntityIndex& index : indexes) {
+
+    if (!model.entity_exists(index)) {
+      // Bug in the map editor.
+      qCritical() << tr("Cannot find added entity");
+      continue;
+    }
+
+    create_entity_item(model.get_entity(index));
   }
-
-  create_entity_item(model.get_entity(index));
 }
 
 /**
- * @brief Slot called when an entity is being removed from the map.
+ * @brief Slot called when entities are about to be removed from the map.
  *
- * Its item on the scene is deleted accordingly.
+ * Their items on the scene are deleted accordingly.
  *
- * @param index Index of the entity.
+ * @param indexes Index of the entities in ascending order of indexes.
  */
-void MapScene::entity_about_to_be_removed(const EntityIndex& index) {
+void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
 
-  EntityItem* item = get_entity_item(index);
-  if (item == nullptr) {
-    // Bug in the map editor.
-    qCritical() << tr("Missing entity graphics item");
-    return;
+  // Traverse the list from the end to keep correct indexes.
+  for (auto it = indexes.end(); it != indexes.begin();) {
+    --it;
+
+    const EntityIndex& index = *it;
+    EntityItem* item = get_entity_item(index);
+    if (item == nullptr) {
+      // Bug in the map editor.
+      qCritical() << tr("Missing entity graphics item");
+      continue;
+    }
+
+    removeItem(item);
+    entity_items[index.layer].removeAt(index.index);
   }
-
-  removeItem(item);
-  entity_items[index.layer].removeAt(index.index);
 }
 
 /**

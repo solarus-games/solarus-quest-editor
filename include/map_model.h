@@ -21,13 +21,16 @@
 #include "entities/entity_traits.h"
 #include "layer_traits.h"
 #include "sprite_model.h"
-#include <deque>
 #include <memory>
+#include <vector>
 
+class AddableEntity;
 class Quest;
 class QuestResources;
 class TilesetModel;
 class ViewSettings;
+
+using AddableEntities = std::deque<AddableEntity>;
 
 /**
  * @brief Model that wraps a map.
@@ -82,8 +85,8 @@ public:
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
-  QList<EntityIndex> add_entities(EntityModels& entities, const ViewSettings& view_settings);
-  EntityModels remove_entities(const QList<EntityIndex>& indexes);
+  void add_entities(AddableEntities&& entities);
+  AddableEntities remove_entities(const QList<EntityIndex>& indexes);
 
   const Solarus::EntityData& get_internal_entity(const EntityIndex& index) const;
   Solarus::EntityData& get_internal_entity(const EntityIndex& index);
@@ -100,8 +103,10 @@ signals:
   void tileset_id_changed(const QString& tileset_id);
   void music_id_changed(const QString& music_id);
 
-  void entity_added(const EntityIndex& index);
-  void entity_about_to_be_removed(const EntityIndex& index);
+  void entities_about_to_be_added(const QList<EntityIndex>& indexes);
+  void entities_added(const QList<EntityIndex>& indexes);
+  void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
+  void entities_removed(const QList<EntityIndex>& indexes);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
 
 public slots:
@@ -110,7 +115,7 @@ public slots:
 
 private:
 
-  void shift_entity_indexes(Layer layer, int from_index, int to_index, int increment);
+  void rebuild_entity_indexes(Layer layer);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */
@@ -118,6 +123,29 @@ private:
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
   std::array<std::deque<std::unique_ptr<EntityModel>>, Layer::LAYER_NB>
       entities;                   /**< All entities. */
+
+};
+
+/**
+ * @brief Wraps an entity ready to be added to a map and its future index.
+ */
+struct AddableEntity {
+
+public:
+
+  AddableEntity(std::unique_ptr<EntityModel>&& entity, const EntityIndex& index) :
+    entity(std::move(entity)),
+    index(index) {
+  }
+
+  // Comparison operators useful to sort lists.
+  bool operator<=(const AddableEntity& other) const { return index <= other.index; }
+  bool operator<(const AddableEntity& other) const  { return index < other.index; }
+  bool operator>=(const AddableEntity& other) const { return index >= other.index; }
+  bool operator>(const AddableEntity& other) const  { return index > other.index; }
+
+  std::unique_ptr<EntityModel> entity;
+  EntityIndex index;
 
 };
 

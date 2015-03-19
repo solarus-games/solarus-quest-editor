@@ -23,6 +23,7 @@
 #include "tileset_model.h"
 #include <QDebug>
 #include <QIcon>
+#include <QSet>
 
 /**
  * @brief Creates a map model.
@@ -536,26 +537,30 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
  * @brief Adds entities to the map.
  *
  * They should have a invalid index (not be on the map) before the call.
- * After this call, they belong to this object.
- * Emits entity_added() for each entity.
+ * After this call, they belong to this map object.
+ * Emits entities_added() before added them and
+ * entities_added() after.
  *
- * @param entities The entities to add.
- * @param view_settings View settings to use to determine the layer.
- * @return The created indexes.
+ * @param entities The entities to add and their future indexes.
+ * They must be sorted in ascending order of indexes.
  */
-QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSettings& view_settings) {
+void MapModel::add_entities(AddableEntities&& entities) {
 
   if (entities.empty()) {
-    return QList<EntityIndex>();
+    return;
   }
 
-  // Determine the best layer.
-  Layer layer = Layer::LAYER_LOW;
-  Q_UNUSED(view_settings);  // TODO determine the best layer
-
-  // Add each entity.
   QList<EntityIndex> indexes;
-  for (std::unique_ptr<EntityModel>& entity : entities) {
+  for (const AddableEntity& addable_entity : entities) {
+    indexes.append(addable_entity.index);
+  }
+  emit entities_about_to_be_added(indexes);
+
+  // Add each entity in ascending order.
+  QSet<Layer> layers_with_dirty_indexes;
+  for (AddableEntity& addable_entity : entities) {
+
+    std::unique_ptr<EntityModel>& entity(addable_entity.entity);
 
     // Sanity checks.
     if (entity == nullptr) {
@@ -568,58 +573,76 @@ QList<EntityIndex> MapModel::add_entities(EntityModels& entities, const ViewSett
       continue;
     }
 
-    // Add the entity on the Solarus side.
-    entity->set_layer(layer);
-    EntityIndex index = map.add_entity(entity->get_entity());
+    const EntityIndex& index = addable_entity.index;
     if (!index.is_valid()) {
-      qCritical() << tr("Failed to add entity");
+      qCritical() << tr("Invalid index of entity to add");
       continue;
     }
 
+    // Add the entity on the Solarus side.
+    map.insert_entity(entity->get_entity(), index);
+
     // Update the entity model and the entity list in the map editor.
+    Layer layer = index.layer;
+    int i = index.index;
     entity->set_index(index);
-    this->entities[layer].emplace_back(std::move(entity));
+    auto it = this->entities[layer].begin() + i;
+    this->entities[layer].emplace(it, std::move(entity));
 
-    // Provide the newly created index to the caller.
-    indexes.push_back(index);
-
-    emit entity_added(index);
+    // Other indexes are now dirty, unless the entity was appended.
+    if (i <= (int) this->entities[layer].size()) {
+      layers_with_dirty_indexes.insert(layer);
+    }
   }
 
-  return indexes;
+  // Each entity stores its own index, so they might get shifted.
+  for (Layer layer : layers_with_dirty_indexes) {
+    rebuild_entity_indexes(layer);
+  }
+
+  // Notify people now that indexes are clean.
+  emit entities_added(indexes);
 }
 
 /**
  * @brief Remove entities from the map.
  *
  * They should have a valid index (be on the map) before the call.
- * After this call, they belong to the caller.
- * Emits entity_about_to_be_removed() for each entity.
+ * After this call, they have an invalid index and belong to the caller.
+ * Emits entities_about_to_be_removed() before removing them
+ * and entities_removed() after.
  *
  * @param indexes Indexes of the entities to remove.
- * @return The removed entities, with invalid indexes as they are no longer
- * on the map.
+ * @return The removed entities and their old indexes.
+ * They must be sorted in ascending order of indexes.
  */
-EntityModels MapModel::remove_entities(const QList<EntityIndex>& indexes) {
+AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
 
   if (indexes.empty()) {
-    return EntityModels();
+    return AddableEntities();
   }
 
-  EntityModels entities;
-  QList<EntityIndex> updated_indexes = indexes;
-  for (const EntityIndex& index : updated_indexes) {
+  emit entities_about_to_be_removed(indexes);
+
+  QSet<Layer> layers_with_dirty_indexes;
+
+  AddableEntities entities;
+  // Remove entities in descending order so that indexes to remove don't shift.
+  for (auto it = indexes.end(); it != indexes.begin(); ) {
+    --it;
+
+    const EntityIndex& index = *it;
 
     // Sanity checks.
     if (!index.is_valid()) {
       qCritical() << tr("This entity is not on the map");
-      return EntityModels();
-    }
-    if (!entity_exists(index)) {
-      qCritical() << tr("Cannot find entity to remove");
+      continue;
     }
 
-    emit entity_about_to_be_removed(index);
+    if (!entity_exists(index)) {
+      qCritical() << tr("Cannot find entity to remove");
+      continue;
+    }
 
     // Remove the entity on the Solarus side.
     map.remove_entity(index);
@@ -627,52 +650,53 @@ EntityModels MapModel::remove_entities(const QList<EntityIndex>& indexes) {
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
     int i = index.index;
-    auto it = this->entities[layer].begin() + i;
-    std::unique_ptr<EntityModel> entity = std::move(*it);
-    this->entities[layer].erase(it);
+    auto it2 = this->entities[layer].begin() + i;
+    std::unique_ptr<EntityModel> entity = std::move(*it2);
+    this->entities[layer].erase(it2);
     entity->set_index(EntityIndex());
 
-    // Indexes of remaining entities on the map get shifted.
-    int num_entities_on_layer = this->entities[layer].size();
-    shift_entity_indexes(layer, i, num_entities_on_layer - 1, -1);
-
-    // Indexes of other entities to be removed also get shifted.
-    for (EntityIndex& index : updated_indexes) {
-      if (index.layer == layer && index.index > i) {
-        --index.index;
-      }
+    // Other indexes are now dirty, unless the entity was the last element.
+    if (i < (int) this->entities[layer].size()) {
+      layers_with_dirty_indexes.insert(layer);
     }
 
     // Return the removed entity to the caller.
-    entities.push_back(std::move(entity));
+    entities.emplace_front(std::move(entity), index);
   }
+
+  // Each entity stores its own index, so they might get shifted.
+  for (Layer layer : layers_with_dirty_indexes) {
+    rebuild_entity_indexes(layer);
+  }
+
+  // Notify people now that indexes are clean.
+  emit entities_removed(indexes);
 
   return entities;
 }
 
 /**
- * @brief Updates entity indexes when an entity is added, moved or removed.
- * @param layer Layer where the modification takes place.
- * @param from_index First index to change.
- * @param to_index Last index to change.
- * @param increment Value to add to the index.
+ * @brief Sets the indexes of all entities on a layer from their rank in the
+ * entities list.
+ *
+ * This function should be called when entities are added, moved or removed
+ * because each entity stores its own index.
+ *
+ * @param layer Layer to update.
  */
-void MapModel::shift_entity_indexes(Layer layer, int from_index, int to_index, int increment) {
+void MapModel::rebuild_entity_indexes(Layer layer) {
 
-  if (from_index > to_index) {
-    // Nothing to do.
-    return;
-  }
+  int i = 0;
+  for (auto it = entities[layer].begin(); it != entities[layer].end(); ++it) {
 
-  const auto begin = entities[layer].begin() + from_index;
-  const auto end = entities[layer].begin() + to_index + 1;
-  for (auto it = begin; it != end; ++it) {
     const std::unique_ptr<EntityModel>& entity = *it;
     if (entity == nullptr) {
       qCritical() << tr("Missing entity");
+      continue;
     }
     EntityIndex index = entity->get_index();
-    index.index += increment;
+    index.index = i;
     entity->set_index(index);
+    ++i;
   }
 }

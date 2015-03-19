@@ -15,7 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/entity_model.h"
-#include "entities/entity_traits.h"
 #include "gui/gui_tools.h"
 #include "gui/map_editor.h"
 #include "editor_exception.h"
@@ -229,24 +228,33 @@ private:
 class AddEntitiesCommand : public MapEditorCommand {
 
 public:
-  AddEntitiesCommand(MapEditor& editor, EntityModels& entities) :
+  AddEntitiesCommand(MapEditor& editor, AddableEntities&& entities) :
     MapEditorCommand(editor, MapEditor::tr("Add entities")),
     entities(std::move(entities)),
-    indexes() { }
+    indexes() {
+
+    std::sort(this->entities.begin(), this->entities.end());
+
+    // Store indexes alone in a separate list (useful for undo and for selection).
+    for (const AddableEntity& entity : this->entities) {
+      indexes.append(entity.index);
+    }
+  }
 
   void undo() override {
+    // Remove entities that were added, keep them in this class.
     entities = get_model().remove_entities(indexes);
   }
 
   void redo() override {
-    // FIXME view settings can change in future redo calls
-    indexes = get_model().add_entities(entities, get_view_settings());
+    // Add entities and make them selected.
+    get_model().add_entities(std::move(entities));
     get_map_view().set_selected_entities(indexes);
   }
 
 private:
-  EntityModels entities;       // Entities to add.
-  QList<EntityIndex> indexes;  // Where they get added.
+  AddableEntities entities;    // Entities to be added and where (sorted).
+  QList<EntityIndex> indexes;  // Indexes where they should be added (redundant info).
 };
 
 /**
@@ -257,25 +265,26 @@ class RemoveEntitiesCommand : public MapEditorCommand {
 public:
   RemoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes) :
     MapEditorCommand(editor, MapEditor::tr("Delete entities")),
-    indexes(indexes),
-    entities() {
+    entities(),
+    indexes(indexes) {
 
-    qSort(this->indexes);
+    std::sort(this->indexes.begin(), this->indexes.end());
   }
 
   void undo() override {
-    // TODO restore entities with their initial index.
-//    get_model().add_entities(entiies, indexes);
-//    get_map_view().set_selected_entities(indexes);
+    // Restore entities with their old index.
+    get_model().add_entities(std::move(entities));
+    get_map_view().set_selected_entities(indexes);
   }
 
   void redo() override {
+    // Remove entities from the map, keep them and their index in this class.
     entities = get_model().remove_entities(indexes);
   }
 
 private:
-  QList<EntityIndex> indexes;  // Sorted indexes of entities before removal.
-  EntityModels entities;       // The removed entities.
+  AddableEntities entities;    // Entities to remove and their indexes before removal (sorted).
+  QList<EntityIndex> indexes;  // Indexes before removal (redunant info).
 };
 
 }  // Anonymous namespace.
@@ -389,8 +398,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint, bool)),
           this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint, bool)));
-  connect(ui.map_view, SIGNAL(add_entities_requested(EntityModels&)),
-          this, SLOT(add_entities_requested(EntityModels&)));
+  connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
+          this, SLOT(add_entities_requested(AddableEntities&)));
+  connect(ui.map_view, SIGNAL(remove_entities_requested(QList<EntityIndex>)),
+          this, SLOT(remove_entities_requested(QList<EntityIndex>)));
 }
 
 /**
@@ -824,13 +835,26 @@ void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
  * @brief Slot called when the user wants to add entities.
  * @param entities Entities ready to be added to the map.
  */
-void MapEditor::add_entities_requested(EntityModels& entities) {
+void MapEditor::add_entities_requested(AddableEntities& entities) {
 
   if (entities.empty()) {
     return;
   }
 
-  try_command(new AddEntitiesCommand(*this, entities));
+  try_command(new AddEntitiesCommand(*this, std::move(entities)));
+}
+
+/**
+ * @brief Slot called when the user wants to delete entities.
+ * @param indexes Indexes of entities to remove.
+ */
+void MapEditor::remove_entities_requested(const QList<EntityIndex>& indexes) {
+
+  if (indexes.empty()) {
+    return;
+  }
+
+  try_command(new RemoveEntitiesCommand(*this, indexes));
 }
 
 /**
