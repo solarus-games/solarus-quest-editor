@@ -111,18 +111,23 @@ void MapScene::create_entity_item(EntityModel& entity) {
     return;
   }
 
+  const EntityIndex& index = entity.get_index();
+  Layer layer = index.layer;
+  int i = index.index;
+
   EntityItem* item = new EntityItem(entity);
   addItem(item);
+  if (i < entity_items[layer].size()) {
+    // Insert rather than append.
+    item->stackBefore(get_entity_item({ layer, i }));
+  }
 
-  const EntityIndex& index = entity.get_index();
   if (index.layer != entity.get_layer()) {
     // Bug in the editor.
     qCritical() << tr("Inconsistent layer");
     return;
   }
 
-  Layer layer = index.layer;
-  int i = index.index;
   auto it = entity_items[layer].begin() + i;
   entity_items[layer].insert(it, item);
 }
