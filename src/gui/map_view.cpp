@@ -48,8 +48,6 @@ public:
   void context_menu_requested(const QPoint& where) override;
   void tileset_selection_changed() override;
 
-private:
-  QAction* delete_entities_action;
 };
 
 /**
@@ -122,7 +120,9 @@ MapView::MapView(QWidget* parent) :
   QGraphicsView(parent),
   scene(nullptr),
   view_settings(nullptr),
-  zoom(1.0) {
+  zoom(1.0),
+  state(),
+  remove_entities_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -131,6 +131,15 @@ MapView::MapView(QWidget* parent) :
 
   // Necessary because we draw a custom background.
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+
+  // Initialize actions.
+  remove_entities_action = new QAction(
+        QIcon(":/images/icon_delete.png"), MapView::tr("Delete..."), this);
+  remove_entities_action->setShortcut(QKeySequence::Delete);
+  remove_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  QObject::connect(remove_entities_action, SIGNAL(triggered()),
+                   this, SLOT(remove_selected_entities()));
+  addAction(remove_entities_action);
 }
 
 /**
@@ -306,6 +315,14 @@ void MapView::start_adding_entities_from_tileset_selection() {
   }
 
   start_state_adding_entities(std::move(tiles));
+}
+
+/**
+ * @brief Returns the action of removing selected entities.
+ * @return The remove entities action.
+ */
+QAction& MapView::get_remove_entities_action() {
+  return *remove_entities_action;
 }
 
 /**
@@ -681,14 +698,6 @@ void MapView::State::tileset_selection_changed() {
 DoingNothingState::DoingNothingState(MapView& view) :
   MapView::State(view) {
 
-  delete_entities_action = new QAction(
-        QIcon(":/images/icon_delete.png"), MapView::tr("Delete..."), &view);
-  delete_entities_action->setShortcut(QKeySequence::Delete);
-  delete_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  QObject::connect(delete_entities_action, SIGNAL(triggered()),
-                  &view, SLOT(remove_selected_entities()));
-  view.addAction(delete_entities_action);
-
 }
 
 /**
@@ -771,7 +780,7 @@ void DoingNothingState::context_menu_requested(const QPoint& where) {
   }
 
   QMenu* menu = new QMenu(&view);
-  menu->addAction(delete_entities_action);
+  menu->addAction(&view.get_remove_entities_action());
 
   menu->popup(where);
 }

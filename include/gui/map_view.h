@@ -84,6 +84,9 @@ public:
   QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
 
+  // Actions.
+  QAction& get_remove_entities_action();
+
 signals:
 
   void mouse_map_coordinates_changed(const QPoint& xy);
@@ -131,6 +134,7 @@ private:
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
 
+  QAction* remove_entities_action; /**< Action of deleting the selected entities. */
 };
 
 #endif
