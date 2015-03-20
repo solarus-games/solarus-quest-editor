@@ -61,7 +61,7 @@ TilesetView::TilesetView(QWidget* parent) :
 
   delete_patterns_action = new QAction(
         QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
-  // TODO delete_patterns_action->setShortcut(QKeySequence::Delete);
+  delete_patterns_action->setShortcut(QKeySequence::Delete);
   delete_patterns_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(delete_patterns_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_patterns_requested()));
