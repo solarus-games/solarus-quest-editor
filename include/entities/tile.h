@@ -37,6 +37,8 @@ protected:
 
   Tile(MapModel& map, const EntityIndex& index, EntityType type);
 
+  void notify_field_changed(const QString& key, const QVariant& value) override;
+
 private:
 
   mutable QPixmap pattern_image;     /**< Cached image of the tile pattern. */

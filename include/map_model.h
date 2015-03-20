@@ -83,6 +83,8 @@ public:
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
+  QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
+  void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);
   void add_entities(AddableEntities&& entities);
   AddableEntities remove_entities(const QList<EntityIndex>& indexes);
 
@@ -106,6 +108,7 @@ signals:
   void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
   void entities_removed(const QList<EntityIndex>& indexes);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
+  void entity_field_changed(const EntityIndex& index, const QString& key, const QVariant& value);
 
 public slots:
 

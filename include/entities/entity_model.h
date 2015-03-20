@@ -110,6 +110,7 @@ public:
   // Resizing from the editor.
   bool is_resizable() const;
   ResizeMode get_resize_mode() const;
+  QSize get_base_size() const;
 
   // Displaying in the editor.
   virtual void draw(QPainter& painter) const;
@@ -167,7 +168,11 @@ protected:
 
   EntityModel(MapModel& map, const EntityIndex& index, EntityType type);
 
+  void set_resizable(bool resizable);
   void set_resize_mode(ResizeMode resize_mode);
+  void set_base_size(const QSize& base_size);
+
+  virtual void notify_field_changed(const QString& key, const QVariant& value);
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);
@@ -195,6 +200,7 @@ private:
   Solarus::EntityData stub;       /**< Stub of entity, used before it gets added to the map. */
   QPoint origin;                  /**< Origin point of the entity relative to its top-left corner. */
   QSize size;                     /**< Size of the entity for the editor. */
+  QSize base_size;                /**< Reference size when resizing. */
   ResizeMode resize_mode;         /**< How the entity can be resized. */
 
   // Displaying.

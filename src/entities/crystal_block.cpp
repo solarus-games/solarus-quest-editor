@@ -24,6 +24,9 @@
 CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::CRYSTAL_BLOCK) {
 
+  set_resizable(true);
+  set_base_size(QSize(16, 16));
+
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal_block";
   info.tiled = true;

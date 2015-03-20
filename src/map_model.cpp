@@ -534,6 +534,55 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Returns a field of an entity on the map.
+ * @param index Index of an entity.
+ * @param key Key of the field to get.
+ * @return The corresponding value.
+ * Returns an invalid QVariant() if there is no entity with this index
+ * or no such field.
+ */
+QVariant MapModel::get_entity_field(const EntityIndex& index, const QString& key) const {
+
+  if (!entity_exists(index)) {
+    return QPoint();
+  }
+
+  return get_entity(index).get_field(key);
+}
+
+/**
+ * @brief Sets a field of an entity on the map.
+ *
+ * Emits entity_field_changed() if there is a change.
+ *
+ * @param index Index of the entity to change.
+ * @param key Key of the field to set.
+ * @param value The new value.
+ * Does nothing if there is no entity with this index, no such field or if the
+ * value has an incorrect type.
+ */
+void MapModel::set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  if (!value.isValid()) {
+    return;
+  }
+
+  EntityModel& entity = get_entity(index);
+
+  if (value == entity.get_field(key)) {
+    // No change.
+    return;
+  }
+
+  entity.set_field(key, value);
+  emit entity_field_changed(index, key, value);
+}
+
+/**
  * @brief Adds entities to the map.
  *
  * They should have a invalid index (not be on the map) before the call.

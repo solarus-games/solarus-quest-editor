@@ -30,6 +30,9 @@ Jumper::Jumper(MapModel& map, const EntityIndex& index) :
   info.background_color = QColor(48, 184, 208);
   info.between_border_color = QColor(144, 224, 240);
   set_draw_shape_info(info);
+
+  // TODO change the resizable setting when the direction is changed.
+  set_resizable(true);
 }
 
 /**

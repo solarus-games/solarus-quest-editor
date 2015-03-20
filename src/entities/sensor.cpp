@@ -25,6 +25,9 @@ Sensor::Sensor(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::SENSOR) {
 
   set_origin(QPoint(8, 13));
+  set_base_size(QSize(16, 16));
+
+  set_resizable(true);
 
   DrawShapeInfo info;
   info.enabled = true;

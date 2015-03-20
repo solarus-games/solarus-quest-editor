@@ -24,6 +24,9 @@
 Wall::Wall(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::WALL) {
 
+  set_resizable(true);
+  set_base_size(QSize(8, 8));
+
   DrawShapeInfo info;
   info.enabled = true;
   info.between_border_color = QColor(240, 142, 142);

@@ -38,6 +38,7 @@ Tile::Tile(MapModel& map, const EntityIndex& index) :
 Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
   EntityModel(map, index, type) {
 
+  set_resizable(true);
 }
 
 /**
@@ -53,7 +54,30 @@ QString Tile::get_pattern_id() const {
  * @param pattern_id The new pattern id.
  */
 void Tile::set_pattern_id(const QString& pattern_id) {
+
   set_field("pattern", pattern_id);
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Tile::notify_field_changed(const QString& key, const QVariant& value) {
+
+  if (key == "pattern") {
+
+    // Update the base size.
+    const TilesetModel* tileset = get_tileset();
+    if (tileset != nullptr) {
+      QString pattern_id = value.toString();
+      int pattern_index = tileset->id_to_index(pattern_id);
+      if (pattern_index != -1) {
+        set_base_size(tileset->get_pattern_frame(pattern_index).size());
+      }
+    }
+
+    // Invalidate the cached image.
+    pattern_image = QPixmap();
+  }
 }
 
 /**

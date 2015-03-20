@@ -379,11 +379,20 @@ QAction& MapView::get_remove_entities_action() {
 }
 
 /**
+ * @brief Returns whether all entities of a list are resizable.
+ * @param indexes Indexes of entities to resize.
+ * @return @c true if they are all resizable, @c false if at least one is not.
+ */
+bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
+  return get_best_resize_mode(indexes) != ResizeMode::NONE;
+}
+
+/**
  * @brief Determines the best possible common resize mode for the given entities.
  * @param indexes Indexes of entities to resize.
  * @return The best resize mode.
  */
-ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) {
+ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) const {
 
   if (model == nullptr) {
     return ResizeMode::NONE;

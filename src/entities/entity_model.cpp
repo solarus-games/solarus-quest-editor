@@ -65,6 +65,7 @@ EntityModel::EntityModel(
   stub(type),
   origin(0, 0),
   size(16, 16),
+  base_size(16, 16),
   resize_mode(ResizeMode::NONE),
   draw_sprite_info(),
   sprite_model(nullptr),
@@ -658,6 +659,7 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
     entity.set_boolean(std_key, value.toBool());
   }
 
+  notify_field_changed(key, value);
 }
 
 /**
@@ -665,7 +667,23 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
  * @return @c true if the entity is resizable.
  */
 bool EntityModel::is_resizable() const {
+
   return get_resize_mode() != ResizeMode::NONE;
+}
+
+/**
+ * @brief Sets whether this entity can be resized.
+ *
+ * If you need finer control of how it should be able to be resized,
+ * use set_resize_mode().
+ *
+ * @param @c true to make the entity resizable (with mode
+ * Resizable::MULTI_DIRECTION, the most usual one), @c false to forbid
+ * resizing.
+ */
+void EntityModel::set_resizable(bool resizable) {
+
+  set_resize_mode(resizable ? ResizeMode::MULTI_DIRECTION : ResizeMode::NONE);
 }
 
 /**
@@ -682,6 +700,52 @@ ResizeMode EntityModel::get_resize_mode() const {
  */
 void EntityModel::set_resize_mode(ResizeMode resize_mode) {
   this->resize_mode = resize_mode;
+}
+
+/**
+ * @brief Returns the base size to consider when resizing this entity.
+ *
+ * In all modes, dimenions that can be resized remain multiple of the ones
+ * of this base size.
+ *
+ * In mode ResizeMode::HORIZONTAL_ONLY, the width remains equal to the
+ * width of this base size.
+ * In mode ResizeMode::VERTICAL_ONLY, the height remains equal to the
+ * height of this base size.
+ * In mode ResizeMode::SINGLE_DIRECTION, at least one of both dimensions
+ * has to be equal to the one of this base size.
+ *
+ * @return The base size.
+ */
+QSize EntityModel::get_base_size() const {
+  return base_size;
+}
+
+/**
+ * @brief Sets the base size to consider when resizing with modes where a
+ * direction is fixed.
+ *
+ * See get_base_size() for details about how the base size exactly works.
+ *
+ * @return The base size.
+ */
+void EntityModel::set_base_size(const QSize& base_size) {
+  this->base_size = base_size;
+}
+
+/**
+ * @brief This function is called when a field of this entity was just set.
+ *
+ * Subclasses can reimplement it to react to the change.
+ *
+ * @param key Key of the field.
+ * @param value The new value.
+ */
+void EntityModel::notify_field_changed(const QString& key, const QVariant& value) {
+
+  // Nothing done by default.
+  Q_UNUSED(key);
+  Q_UNUSED(value);
 }
 
 /**

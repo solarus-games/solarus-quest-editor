@@ -14,6 +14,7 @@ New features
 * Add a toolbar.
 * Add new keyboard shortcuts.
 * Map editor: multiple tiles from the tileset can now be added at once.
+* Map editor: improved the resizing of multiple entities.
 * Tileset editor: undo/redo is now supported.
 * Tileset editor: multi-selection is now supported.
 * Tileset editor: showing the grid is now supported.
@@ -35,8 +36,8 @@ Missing features
 ----------------
 
 The rewriting is currently in progress.
-At this moment, some important features of the old editor are still to be
-done in the new one.
+At this moment, some important features of the old editor are still in progress
+in the new one.
 
 * Edit maps.
 
@@ -46,4 +47,5 @@ Bug fixes
 * Fix encoding of non-ascii characters in project_db.dat with Windows.
 * Fix Ctrl+S shortcut not always working.
 * Fix entities restored to the front when undoing removing entities.
+* Fix separators resizing that could allow illegal sizes.
 
