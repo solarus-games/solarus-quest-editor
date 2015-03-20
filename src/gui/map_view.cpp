@@ -99,11 +99,11 @@ public:
   ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
 
 private:
-  QList<EntityIndex> entities;    /**< Entities to resize. */
-  EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
-                                   * Other ones reproduce an equivalent change. */
-  ResizeMode resize_mode;         /**< How the resizing can be done. */
-  bool first_move_done;           /**< Whether at least one move was done during the state. */
+// TODO  QList<EntityIndex> entities;    /**< Entities to resize. */
+//  EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
+//                                   * Other ones reproduce an equivalent change. */
+//  ResizeMode resize_mode;         /**< How the resizing can be done. */
+//  bool first_move_done;           /**< Whether at least one move was done during the state. */
 };
 
 /**
@@ -1068,16 +1068,16 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
  */
 ResizingEntitiesState::ResizingEntitiesState(
     MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode) :
-  MapView::State(view),
+  MapView::State(view)
+/*
   entities(entities),
   leader_index(),
   resize_mode(resize_mode),
-  first_move_done(false) {
+  first_move_done(false) */
+{
 
-  Q_UNUSED(this->entities);
-  Q_UNUSED(this->leader_index);
-  Q_UNUSED(this->resize_mode);
-  Q_UNUSED(this->first_move_done);
+  Q_UNUSED(entities);
+  Q_UNUSED(resize_mode);
 }
 
 /**
