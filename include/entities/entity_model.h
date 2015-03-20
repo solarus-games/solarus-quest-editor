@@ -28,6 +28,19 @@ class QuestResources;
 class TilesetModel;
 
 /**
+ * @brief How an entity can be resized.
+ */
+enum class ResizeMode {
+  NONE,                      /**< Cannot be resized. */
+  HORIZONTAL_ONLY,           /**< Can only be resized horizontally. */
+  VERTICAL_ONLY,             /**< Can only be resized vertically. */
+  SINGLE_DIRECTION,          /**< Can be resized horizontally or vertically
+                              * but not both. */
+  MULTI_DIRECTION            /**< Can be resized horizontally, vertically
+                              * or both. */
+};
+
+/**
  * @brief Model of a map entity.
  *
  * This class wraps an entity from the Solarus library and
@@ -56,8 +69,8 @@ public:
   const Quest& get_quest() const;
   const QuestResources& get_resources() const;
 
+  // Index on the map.
   EntityIndex get_index() const;
-
   bool is_on_map() const;
   void added_to_map(const EntityIndex& index);
   void about_to_be_removed_from_map();
@@ -69,6 +82,7 @@ public:
   const Solarus::EntityData& get_entity() const;
   Solarus::EntityData& get_entity();
 
+  // Access data.
   Layer get_layer() const;
   void set_layer(Layer layer);
   QPoint get_xy() const;
@@ -93,6 +107,11 @@ public:
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
 
+  // Resizing from the editor.
+  bool is_resizable() const;
+  ResizeMode get_resize_mode() const;
+
+  // Displaying in the editor.
   virtual void draw(QPainter& painter) const;
 
 protected:
@@ -148,6 +167,8 @@ protected:
 
   EntityModel(MapModel& map, const EntityIndex& index, EntityType type);
 
+  void set_resize_mode(ResizeMode resize_mode);
+
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);
   const DrawShapeInfo& get_draw_shape_info() const;
@@ -174,6 +195,7 @@ private:
   Solarus::EntityData stub;       /**< Stub of entity, used before it gets added to the map. */
   QPoint origin;                  /**< Origin point of the entity relative to its top-left corner. */
   QSize size;                     /**< Size of the entity for the editor. */
+  ResizeMode resize_mode;         /**< How the entity can be resized. */
 
   // Displaying.
   DrawSpriteInfo

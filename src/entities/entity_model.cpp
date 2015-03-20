@@ -65,6 +65,7 @@ EntityModel::EntityModel(
   stub(type),
   origin(0, 0),
   size(16, 16),
+  resize_mode(ResizeMode::NONE),
   draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
@@ -657,6 +658,30 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
     entity.set_boolean(std_key, value.toBool());
   }
 
+}
+
+/**
+ * @brief Returns whether this entity can be resized.
+ * @return @c true if the entity is resizable.
+ */
+bool EntityModel::is_resizable() const {
+  return get_resize_mode() != ResizeMode::NONE;
+}
+
+/**
+ * @brief Returns how this entity can be resized.
+ * @return The resize mode.
+ */
+ResizeMode EntityModel::get_resize_mode() const {
+  return resize_mode;
+}
+
+/**
+ * @brief Sets how this entity can be resized.
+ * @param resize_mode The resize mode.
+ */
+void EntityModel::set_resize_mode(ResizeMode resize_mode) {
+  this->resize_mode = resize_mode;
 }
 
 /**

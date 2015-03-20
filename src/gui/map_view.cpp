@@ -27,6 +27,7 @@
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QAction>
+#include <QDebug>
 #include <QGraphicsItem>
 #include <QMenu>
 #include <QMouseEvent>
@@ -90,13 +91,19 @@ private:
 };
 
 /**
- * @brief State of the map view of resizing the selected entities.
+ * @brief State of the map view of resizing entities.
  */
 class ResizingEntitiesState : public MapView::State {
 
 public:
-  ResizingEntitiesState(MapView& view);
+  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
 
+private:
+  QList<EntityIndex> entities;    /**< Entities to resize. */
+  EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
+                                   * Other ones reproduce an equivalent change. */
+  ResizeMode resize_mode;         /**< How the resizing can be done. */
+  bool first_move_done;           /**< Whether at least one move was done during the state. */
 };
 
 /**
@@ -293,10 +300,20 @@ void MapView::start_state_moving_entities(const QPoint& initial_point) {
 
 /**
  * @brief Moves to the state of resizing the selected entities.
+ *
+ * Does nothing if there is no selected entity or if the selection is not
+ * resizable.
  */
 void MapView::start_state_resizing_entities() {
 
-  set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this)));
+  const QList<EntityIndex> selection = get_selected_entities();
+  ResizeMode resize_mode = get_best_resize_mode(selection);
+  if (resize_mode == ResizeMode::NONE) {
+    // The selection is empty or not resizable.
+    return;
+  }
+
+  set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this, selection, resize_mode)));
 }
 
 /**
@@ -359,6 +376,68 @@ QAction& MapView::get_resize_entities_action() {
  */
 QAction& MapView::get_remove_entities_action() {
   return *remove_entities_action;
+}
+
+/**
+ * @brief Determines the best possible common resize mode for the given entities.
+ * @param indexes Indexes of entities to resize.
+ * @return The best resize mode.
+ */
+ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) {
+
+  if (model == nullptr) {
+    return ResizeMode::NONE;
+  }
+
+  if (indexes.isEmpty()) {
+    return ResizeMode::NONE;
+  }
+
+  // Start with the most permissive mode.
+  ResizeMode candidate_mode = ResizeMode::MULTI_DIRECTION;
+  for (const EntityIndex& index : indexes) {
+
+    if (!model->entity_exists(index)) {
+      // Bug in the editor.
+      qCritical() << tr("No such entity");
+      continue;
+    }
+    const EntityModel& entity = model->get_entity(index);
+    ResizeMode current_resize_mode = entity.get_resize_mode();
+    switch (current_resize_mode) {
+
+    case ResizeMode::NONE:
+      // At least one entity is not resizable: no need to check others.
+      return ResizeMode::NONE;
+
+    case ResizeMode::HORIZONTAL_ONLY:
+      if (candidate_mode == ResizeMode::VERTICAL_ONLY) {
+        // Incompatible modes.
+        return ResizeMode::NONE;
+      }
+      candidate_mode = ResizeMode::HORIZONTAL_ONLY;
+      break;
+
+    case ResizeMode::VERTICAL_ONLY:
+      if (candidate_mode == ResizeMode::HORIZONTAL_ONLY) {
+        // Incompatible modes.
+        return ResizeMode::NONE;
+      }
+      candidate_mode = ResizeMode::VERTICAL_ONLY;
+      break;
+
+    case ResizeMode::SINGLE_DIRECTION:
+      if (candidate_mode == ResizeMode::MULTI_DIRECTION) {
+        candidate_mode = ResizeMode::SINGLE_DIRECTION;
+      }
+      break;
+
+    case ResizeMode::MULTI_DIRECTION:
+      break;
+    }
+  }
+
+  return candidate_mode;
 }
 
 /**
@@ -811,12 +890,17 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 void DoingNothingState::context_menu_requested(const QPoint& where) {
 
   MapView& view = get_view();
-  if (view.get_num_selected_entities() == 0) {
+  const QList<EntityIndex>& selection = view.get_selected_entities();
+  if (selection.isEmpty()) {
     return;
   }
 
+  QAction& resize_action = view.get_resize_entities_action();
+  bool resizable = view.get_best_resize_mode(selection) != ResizeMode::NONE;
+  resize_action.setEnabled(resizable);
+
   QMenu* menu = new QMenu(&view);
-  menu->addAction(&view.get_resize_entities_action());
+  menu->addAction(&resize_action);
   menu->addAction(&view.get_remove_entities_action());
 
   menu->popup(where);
@@ -970,8 +1054,13 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
  * @brief Constructor.
  * @param view The map view to manage.
  */
-ResizingEntitiesState::ResizingEntitiesState(MapView& view) :
-  MapView::State(view) {
+ResizingEntitiesState::ResizingEntitiesState(
+    MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode) :
+  MapView::State(view),
+  entities(entities),
+  leader_index(),
+  resize_mode(resize_mode),
+  first_move_done(false) {
 
 }
 

@@ -84,6 +84,8 @@ public:
   void start_state_adding_entities(EntityModels&& entities);
   void start_adding_entities_from_tileset_selection();
 
+  ResizeMode get_best_resize_mode(const QList<EntityIndex>& indexes);
+
   // Actions.
   QAction& get_resize_entities_action();
   QAction& get_remove_entities_action();
