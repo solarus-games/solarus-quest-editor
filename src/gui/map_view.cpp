@@ -410,7 +410,7 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
 
   // When we resize multiple entities, allow at most to do it only one
   // direction at a time.
-  ResizeMode candidate_mode = ResizeMode::SINGLE_DIRECTION;
+  ResizeMode candidate_mode = ResizeMode::SINGLE_DIMENSION;
 
   // Then see if some entities are more restrictive than that.
   for (const EntityIndex& index : indexes) {
@@ -439,11 +439,11 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
       candidate_mode = ResizeMode::VERTICAL_ONLY;
       break;
 
-    case ResizeMode::SINGLE_DIRECTION:
+    case ResizeMode::SINGLE_DIMENSION:
       // No further restriction.
       break;
 
-    case ResizeMode::MULTI_DIRECTION:
+    case ResizeMode::MULTI_DIMENSION:
       // No further restriction.
       break;
     }

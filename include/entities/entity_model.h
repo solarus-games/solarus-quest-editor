@@ -34,9 +34,9 @@ enum class ResizeMode {
   NONE,                      /**< Cannot be resized. */
   HORIZONTAL_ONLY,           /**< Can only be resized horizontally. */
   VERTICAL_ONLY,             /**< Can only be resized vertically. */
-  SINGLE_DIRECTION,          /**< Can be resized horizontally or vertically
+  SINGLE_DIMENSION,          /**< Can be resized horizontally or vertically
                               * but not both. */
-  MULTI_DIRECTION            /**< Can be resized horizontally, vertically
+  MULTI_DIMENSION            /**< Can be resized horizontally, vertically
                               * or both. */
 };
 

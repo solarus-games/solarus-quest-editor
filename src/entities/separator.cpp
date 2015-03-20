@@ -25,7 +25,7 @@ Separator::Separator(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::SEPARATOR) {
 
   // Separators can be extended either horizontally or vertically, but not both.
-  set_resize_mode(ResizeMode::SINGLE_DIRECTION);
+  set_resize_mode(ResizeMode::SINGLE_DIMENSION);
   set_base_size(QSize(16, 16));  // One of the width or height must remain equal to 16.
 
   DrawShapeInfo info;

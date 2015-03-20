@@ -678,12 +678,12 @@ bool EntityModel::is_resizable() const {
  * use set_resize_mode().
  *
  * @param @c true to make the entity resizable (with mode
- * Resizable::MULTI_DIRECTION, the most usual one), @c false to forbid
+ * Resizable::MULTI_DIMENSION, the most usual one), @c false to forbid
  * resizing.
  */
 void EntityModel::set_resizable(bool resizable) {
 
-  set_resize_mode(resizable ? ResizeMode::MULTI_DIRECTION : ResizeMode::NONE);
+  set_resize_mode(resizable ? ResizeMode::MULTI_DIMENSION : ResizeMode::NONE);
 }
 
 /**
@@ -705,14 +705,14 @@ void EntityModel::set_resize_mode(ResizeMode resize_mode) {
 /**
  * @brief Returns the base size to consider when resizing this entity.
  *
- * In all modes, dimenions that can be resized remain multiple of the ones
+ * In all modes, dimensions that can be resized remain multiple of the ones
  * of this base size.
  *
  * In mode ResizeMode::HORIZONTAL_ONLY, the width remains equal to the
  * width of this base size.
  * In mode ResizeMode::VERTICAL_ONLY, the height remains equal to the
  * height of this base size.
- * In mode ResizeMode::SINGLE_DIRECTION, at least one of both dimensions
+ * In mode ResizeMode::SINGLE_DIMENSION, at least one of both dimensions
  * has to be equal to the one of this base size.
  *
  * @return The base size.
