@@ -90,6 +90,16 @@ private:
 };
 
 /**
+ * @brief State of the map view of resizing the selected entities.
+ */
+class ResizingEntitiesState : public MapView::State {
+
+public:
+  ResizingEntitiesState(MapView& view);
+
+};
+
+/**
  * @brief State of the map view of adding new entities.
  */
 class AddingEntitiesState : public MapView::State {
@@ -122,6 +132,7 @@ MapView::MapView(QWidget* parent) :
   view_settings(nullptr),
   zoom(1.0),
   state(),
+  resize_entities_action(nullptr),
   remove_entities_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -133,6 +144,15 @@ MapView::MapView(QWidget* parent) :
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   // Initialize actions.
+  resize_entities_action = new QAction(
+      MapView::tr("Resize"), this);
+  resize_entities_action->setShortcut(tr("R"));
+  resize_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  QObject::connect(resize_entities_action, &QAction::triggered, [&]() {
+    start_state_resizing_entities();
+  });
+  addAction(resize_entities_action);
+
   remove_entities_action = new QAction(
         QIcon(":/images/icon_delete.png"), MapView::tr("Delete"), this);
   remove_entities_action->setShortcut(QKeySequence::Delete);
@@ -272,6 +292,14 @@ void MapView::start_state_moving_entities(const QPoint& initial_point) {
 }
 
 /**
+ * @brief Moves to the state of resizing the selected entities.
+ */
+void MapView::start_state_resizing_entities() {
+
+  set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this)));
+}
+
+/**
  * @brief Moves to the state of adding new entities.
  * @param entities The entities to be added.
  * They must not belong to the map yet.
@@ -315,6 +343,14 @@ void MapView::start_adding_entities_from_tileset_selection() {
   }
 
   start_state_adding_entities(std::move(tiles));
+}
+
+/**
+ * @brief Returns the action of resizing selected entities.
+ * @return The resize entities action.
+ */
+QAction& MapView::get_resize_entities_action() {
+  return *resize_entities_action;
 }
 
 /**
@@ -780,6 +816,7 @@ void DoingNothingState::context_menu_requested(const QPoint& where) {
   }
 
   QMenu* menu = new QMenu(&view);
+  menu->addAction(&view.get_resize_entities_action());
   menu->addAction(&view.get_remove_entities_action());
 
   menu->popup(where);
@@ -927,6 +964,15 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
   Q_UNUSED(event);
 
   get_view().start_state_doing_nothing();
+}
+
+/**
+ * @brief Constructor.
+ * @param view The map view to manage.
+ */
+ResizingEntitiesState::ResizingEntitiesState(MapView& view) :
+  MapView::State(view) {
+
 }
 
 /**

@@ -71,19 +71,21 @@ public:
   void set_model(MapModel* map);
   void set_view_settings(ViewSettings& view_settings);
 
-  // State of the view.
-  void start_state_doing_nothing();
-  void start_state_drawing_rectangle(const QPoint& initial_point);
-  void start_state_moving_entities(const QPoint& initial_point);
-  void start_state_adding_entities(EntityModels&& entities);
-  void start_adding_entities_from_tileset_selection();
-
   // Selection.
   int get_num_selected_entities() const;
   QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
 
+  // State of the view.
+  void start_state_doing_nothing();
+  void start_state_drawing_rectangle(const QPoint& initial_point);
+  void start_state_moving_entities(const QPoint& initial_point);
+  void start_state_resizing_entities();
+  void start_state_adding_entities(EntityModels&& entities);
+  void start_adding_entities_from_tileset_selection();
+
   // Actions.
+  QAction& get_resize_entities_action();
   QAction& get_remove_entities_action();
 
 signals:
@@ -133,6 +135,7 @@ private:
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
 
+  QAction* resize_entities_action; /**< Action of resizing the selected entities. */
   QAction* remove_entities_action; /**< Action of deleting the selected entities. */
 };
 
