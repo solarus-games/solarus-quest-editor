@@ -1074,6 +1074,10 @@ ResizingEntitiesState::ResizingEntitiesState(
   resize_mode(resize_mode),
   first_move_done(false) {
 
+  Q_UNUSED(this->entities);
+  Q_UNUSED(this->leader_index);
+  Q_UNUSED(this->resize_mode);
+  Q_UNUSED(this->first_move_done);
 }
 
 /**
