@@ -134,7 +134,7 @@ MapView::MapView(QWidget* parent) :
 
   // Initialize actions.
   remove_entities_action = new QAction(
-        QIcon(":/images/icon_delete.png"), MapView::tr("Delete..."), this);
+        QIcon(":/images/icon_delete.png"), MapView::tr("Delete"), this);
   remove_entities_action->setShortcut(QKeySequence::Delete);
   remove_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   QObject::connect(remove_entities_action, SIGNAL(triggered()),
