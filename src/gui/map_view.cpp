@@ -388,7 +388,7 @@ bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
 }
 
 /**
- * @brief Determines the best possible common resize mode for the given entities.
+ * @brief Determines the most appropriate resize mode for the given entities.
  * @param indexes Indexes of entities to resize.
  * @return The best resize mode.
  */
@@ -402,15 +402,19 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
     return ResizeMode::NONE;
   }
 
-  // Start with the most permissive mode.
-  ResizeMode candidate_mode = ResizeMode::MULTI_DIRECTION;
+  if (indexes.size() == 1) {
+    // Resizing a single entity: simply return its mode.
+    const EntityModel& entity = model->get_entity(indexes.first());
+    return entity.get_resize_mode();
+  }
+
+  // When we resize multiple entities, allow at most to do it only one
+  // direction at a time.
+  ResizeMode candidate_mode = ResizeMode::SINGLE_DIRECTION;
+
+  // Then see if some entities are more restrictive than that.
   for (const EntityIndex& index : indexes) {
 
-    if (!model->entity_exists(index)) {
-      // Bug in the editor.
-      qCritical() << tr("No such entity");
-      continue;
-    }
     const EntityModel& entity = model->get_entity(index);
     ResizeMode current_resize_mode = entity.get_resize_mode();
     switch (current_resize_mode) {
@@ -436,12 +440,11 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
       break;
 
     case ResizeMode::SINGLE_DIRECTION:
-      if (candidate_mode == ResizeMode::MULTI_DIRECTION) {
-        candidate_mode = ResizeMode::SINGLE_DIRECTION;
-      }
+      // No further restriction.
       break;
 
     case ResizeMode::MULTI_DIRECTION:
+      // No further restriction.
       break;
     }
   }
