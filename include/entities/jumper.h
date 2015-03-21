@@ -28,9 +28,15 @@ public:
 
   Jumper(MapModel& map, const EntityIndex& index);
 
-  bool is_diagonal() const;
+  bool is_jump_horizontal() const;
+  bool is_jump_vertical() const;
+  bool is_jump_diagonal() const;
 
   void draw(QPainter& painter) const override;
+
+protected:
+
+  void notify_field_changed(const QString& key, const QVariant& value) override;
 
 };
 

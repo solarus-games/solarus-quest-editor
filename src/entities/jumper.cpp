@@ -36,10 +36,46 @@ Jumper::Jumper(MapModel& map, const EntityIndex& index) :
 }
 
 /**
+ * @brief Returns whether the jump is horizontal.
+ *
+ * If yes, the jumper's shape is vertical.
+ *
+ * @return @c true if the jump is horizontal.
+ */
+bool Jumper::is_jump_horizontal() const {
+
+  const int direction = get_direction();
+  if (direction == -1) {
+    // No value is set.
+    return false;
+  }
+
+  return direction == 0 || direction == 4;
+}
+
+/**
+ * @brief Returns whether the jump is vertical.
+ *
+ * If yes, the jumper's shape is horizontal.
+ *
+ * @return @c true if the jump is vertical.
+ */
+bool Jumper::is_jump_vertical() const {
+
+  const int direction = get_direction();
+  if (direction == -1) {
+    // No value is set.
+    return false;
+  }
+
+  return direction == 2 || direction == 6;
+}
+
+/**
  * @brief Returns whether this jumper is a diagonal one.
  * @return @c true if the jumper is diagonal.
  */
-bool Jumper::is_diagonal() const {
+bool Jumper::is_jump_diagonal() const {
 
   const int direction = get_direction();
   if (direction == -1) {
@@ -48,6 +84,32 @@ bool Jumper::is_diagonal() const {
   }
 
   return direction % 2 != 0;
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
+
+  Q_UNUSED(value);
+  if (key == "direction") {
+
+    // Update the resizing rules.
+    if (is_jump_diagonal()) {
+      set_resize_mode(ResizeMode::SQUARE);
+      set_size(QSize(32, 32));
+    }
+    else {
+      if (is_jump_horizontal()) {
+        set_resize_mode(ResizeMode::VERTICAL_ONLY);
+        set_size(QSize(8, 32));
+      }
+      else {
+        set_resize_mode(ResizeMode::HORIZONTAL_ONLY);
+        set_size(QSize(32, 0));
+      }
+    }
+  }
 }
 
 /**
@@ -60,7 +122,7 @@ void Jumper::draw(QPainter& painter) const {
   const int w = get_width();
   const int h = get_height();
 
-  if (!is_diagonal() || w != h) {
+  if (!is_jump_diagonal() || w != h) {
     // Horizontal or vertical, or diagonal but with wrong size.
     EntityModel::draw(painter);
     return;

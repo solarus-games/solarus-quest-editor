@@ -433,7 +433,7 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
       return ResizeMode::NONE;
 
     case ResizeMode::HORIZONTAL_ONLY:
-      if (candidate_mode == ResizeMode::VERTICAL_ONLY) {
+      if (candidate_mode == ResizeMode::VERTICAL_ONLY || candidate_mode == ResizeMode::SQUARE) {
         // Incompatible modes.
         return ResizeMode::NONE;
       }
@@ -441,15 +441,24 @@ ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) cons
       break;
 
     case ResizeMode::VERTICAL_ONLY:
-      if (candidate_mode == ResizeMode::HORIZONTAL_ONLY) {
+      if (candidate_mode == ResizeMode::HORIZONTAL_ONLY || candidate_mode == ResizeMode::SQUARE) {
         // Incompatible modes.
         return ResizeMode::NONE;
       }
       candidate_mode = ResizeMode::VERTICAL_ONLY;
       break;
 
+    case ResizeMode::SQUARE:
+      if (candidate_mode != ResizeMode::SQUARE && candidate_mode != ResizeMode::MULTI_DIMENSION) {
+        // Incompatible modes.
+        return ResizeMode::NONE;
+      }
+
     case ResizeMode::SINGLE_DIMENSION:
-      // No further restriction.
+      if (candidate_mode == ResizeMode::SQUARE) {
+        // Incompatible modes.
+        return ResizeMode::NONE;
+      }
       break;
 
     case ResizeMode::MULTI_DIMENSION:
