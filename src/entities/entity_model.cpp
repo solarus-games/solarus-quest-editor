@@ -556,7 +556,15 @@ QSize EntityModel::get_size() const {
  * @param size The size of this entity.
  */
 void EntityModel::set_size(const QSize& size) {
+
+  // Set the size specific to the editor.
   this->size = size;
+
+  // If there is size field in the map file, change it as well.
+  if (has_field("width") && has_field("height")) {
+    set_field("width", size.width());
+    set_field("height", size.height());
+  }
 }
 
 /**

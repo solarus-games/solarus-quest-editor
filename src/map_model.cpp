@@ -519,6 +519,29 @@ QSize MapModel::get_entity_size(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Sets the size of an entity on the map.
+ * @param index Index of the entity to set.
+ * @param size The new size of this entity.
+ * Does nothing if there is no entity with this index.
+ */
+void MapModel::set_entity_size(const EntityIndex& index, const QSize& size) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  EntityModel& entity = get_entity(index);
+
+  if (size == entity.get_size()) {
+    // No change.
+    return;
+  }
+
+  entity.set_size(size);
+  emit entity_size_changed(index, size);
+}
+
+/**
  * @brief Returns the bounding box of an entity for the editor.
  * @param index Index of the entity to get.
  * @return The bounding box, or an empty rectangle if there is no entity
