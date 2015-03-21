@@ -89,6 +89,8 @@ public:
   void set_xy(const QPoint& xy);
   QPoint get_top_left() const;
   void set_top_left(const QPoint& top_left);
+  QPoint get_bottom_right() const;
+  void set_bottom_right(const QPoint& bottom_right);
   QPoint get_center() const;
   void set_center(const QPoint& center);
   QPoint get_origin() const;

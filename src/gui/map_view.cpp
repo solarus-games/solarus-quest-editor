@@ -29,6 +29,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QGraphicsItem>
+#include <QMap>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
@@ -96,14 +97,22 @@ private:
 class ResizingEntitiesState : public MapView::State {
 
 public:
-  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
+  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);  
+  void start() override;
+  void mouse_moved(const QMouseEvent& event) override;
 
 private:
-// TODO  QList<EntityIndex> entities;    /**< Entities to resize. */
-//  EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
-//                                   * Other ones reproduce an equivalent change. */
-//  ResizeMode resize_mode;         /**< How the resizing can be done. */
-//  bool first_move_done;           /**< Whether at least one move was done during the state. */
+  void update_box(const EntityIndex& index, const QPoint& second_xy);
+
+  QList<EntityIndex> entities;    /**< Entities to resize. */
+  QMap<EntityIndex, QRect>
+      old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
+  EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
+                                   * Other ones reproduce an equivalent change. */
+  //ResizeMode resize_mode;         /**< How the resizing can be done. */
+  QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
+  //bool first_move_done;           /**< Whether at least one move was done during the state. */
+
 };
 
 /**
@@ -1068,16 +1077,80 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
  */
 ResizingEntitiesState::ResizingEntitiesState(
     MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode) :
-  MapView::State(view)
-/*
+  MapView::State(view),
   entities(entities),
+  old_boxes(),
   leader_index(),
-  resize_mode(resize_mode),
-  first_move_done(false) */
+  //resize_mode(resize_mode)
+  last_point()
+//  first_move_done(false)
 {
-
-  Q_UNUSED(entities);
   Q_UNUSED(resize_mode);
+}
+
+/**
+ * @copydoc MapView::State::start
+ */
+void ResizingEntitiesState::start() {
+
+  MapView& view = get_view();
+  MapModel& map = get_map();
+  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
+  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
+
+  // Choose the leader: it will be the entity whose bottom-right corner
+  // is the nearest to the mouse.
+  int min_distance = std::numeric_limits<int>::max();
+  for (const EntityIndex& index : entities) {
+    const EntityModel& entity = map.get_entity(index);
+    const QPoint& bottom_right = entity.get_bottom_right();
+    int distance = (bottom_right - mouse_position).manhattanLength();
+    if (distance < min_distance) {
+      leader_index = index;
+      min_distance = distance;
+    }
+
+    // Also save the initial position of entities.
+    old_boxes.insert(index, entity.get_bounding_box());
+  }
+
+  Q_ASSERT(leader_index.is_valid());
+}
+
+/**
+ * @copydoc MapView::State::mouse_moved
+ */
+void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
+
+  MapView& view = get_view();
+
+  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
+  if (current_point == last_point) {
+    // No change after rounding.
+    return;
+  }
+  last_point = current_point;
+
+  const QRect& old_master_box = old_boxes.value(leader_index);
+  for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
+    const EntityIndex& index = it.key();
+    const QRect& old_box = it.value();
+
+    QPoint master_offset(old_box.bottomRight() - old_master_box.bottomRight());
+    update_box(index, master_offset + current_point);
+  }
+}
+
+/**
+ * @brief Updates with new coordinates the rectangle of one entity.
+ * @param index Index of the entity to resize.
+ * @param second_xy Coordinate of the second point of the rectangle to set for this entity.
+ */
+void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
+
+  Q_UNUSED(index);
+  Q_UNUSED(second_xy);
+  // TODO
 }
 
 /**

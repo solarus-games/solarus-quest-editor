@@ -454,6 +454,24 @@ void EntityModel::set_top_left(const QPoint& top_left) {
 }
 
 /**
+ * @brief Returns the coordinates of the bottom-right corner of this entity.
+ * @return The coordinates of the entity's bottom-right corner.
+ */
+QPoint EntityModel::get_bottom_right() const {
+
+  return get_top_left() + QPoint(get_width(), get_height());
+}
+
+/**
+ * @brief Sets the coordinates of the bottom-right corner of this entity.
+ * @param bottom_right The coordinates of the entity's bottom-right corner.
+ */
+void EntityModel::set_bottom_right(const QPoint& bottom_right) {
+
+  set_top_left(bottom_right - QPoint(get_width(), get_height()));
+}
+
+/**
  * @brief Returns the coordinates of the center point of this entity.
  * @return The coordinates of the entity's center point.
  */
