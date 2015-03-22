@@ -63,7 +63,7 @@ SpriteModel::SpriteModel(
     animations.append(animation);
   }
 
-  // use the first tileset of the quest
+  // Use the first tileset of the quest.
   QStringList tilesets =
       quest.get_resources().get_elements(ResourceType::TILESET);
   if (tilesets.size() > 0) {
