@@ -100,6 +100,9 @@ signals:
       const QList<EntityIndex>& indexes,
       const QPoint& translation,
       bool allow_merge_to_previous);
+  void resize_entities_requested(
+      const QMap<EntityIndex, QRect>& indexes,
+      bool allow_merge_to_previous);
   void add_entities_requested(
       AddableEntities& entities);
   void remove_entities_requested(const QList<EntityIndex>& indexes);
@@ -116,6 +119,7 @@ public slots:
   void tileset_selection_changed();
 
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
+  void resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous);
   void remove_selected_entities();
 
 protected:

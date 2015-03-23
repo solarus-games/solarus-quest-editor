@@ -100,9 +100,10 @@ public:
   ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
   void start() override;
   void mouse_moved(const QMouseEvent& event) override;
+  void mouse_released(const QMouseEvent& event) override;
 
 private:
-  void update_box(const EntityIndex& index, const QPoint& second_xy);
+  QRect update_box(const EntityIndex& index, const QPoint& second_xy);
 
   QList<EntityIndex> entities;    /**< Entities to resize. */
   QMap<EntityIndex, QRect>
@@ -111,7 +112,7 @@ private:
                                    * Other ones reproduce an equivalent change. */
   ResizeMode resize_mode;         /**< How the resizing can be done. */
   QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
-  //bool first_move_done;           /**< Whether at least one move was done during the state. */
+  bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
 
 };
 
@@ -704,13 +705,23 @@ void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
 }
 
 /**
- * @brief Requests to move the selected entities with the specified translation.
+ * @brief Requests to resize the given entities with the specified bounding boxes.
  * @param translation XY coordinates to add.
  * @param allow_merge_to_previous @c true to merge this move with the previous one if any.
  */
 void MapView::move_selected_entities(const QPoint& translation, bool allow_merge_to_previous) {
 
   emit move_entities_requested(get_selected_entities(), translation, allow_merge_to_previous);
+}
+
+/**
+ * @brief Requests to move the selected entities with the specified translation.
+ * @param boxes The new bounding box to set to each entity.
+ * @param allow_merge_to_previous @c true to merge this resizing with the previous one if any.
+ */
+void MapView::resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous) {
+
+  emit resize_entities_requested(boxes, allow_merge_to_previous);
 }
 
 /**
@@ -1091,8 +1102,8 @@ ResizingEntitiesState::ResizingEntitiesState(
   old_boxes(),
   leader_index(),
   resize_mode(resize_mode),
-  last_point()
-//  first_move_done(false)
+  last_point(),
+  first_resize_done(false)
 {
 }
 
@@ -1139,14 +1150,30 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   }
   last_point = current_point;
 
+  QMap<EntityIndex, QRect> new_boxes;
   const QRect& old_master_box = old_boxes.value(leader_index);
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
     QPoint master_offset(old_box.bottomRight() - old_master_box.bottomRight());
-    update_box(index, master_offset + current_point - MapScene::get_margin_top_left());
+    QRect new_box = update_box(index, master_offset + current_point - MapScene::get_margin_top_left());
+    new_boxes.insert(index, new_box);
   }
+
+  const bool allow_merge_to_previous = first_resize_done;
+  view.resize_entities(new_boxes, allow_merge_to_previous);
+  first_resize_done = true;
+}
+
+/**
+ * @copydoc MapView::State::mouse_released
+ */
+void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
+
+  Q_UNUSED(event);
+
+  get_view().start_state_doing_nothing();
 }
 
 /**
@@ -1154,18 +1181,20 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
  * @param index Index of the entity to resize.
  * @param second_xy Coordinate of the second point of the rectangle to set for this entity,
  * in map coordinates.
+ * @return A new bounding box for the entity.
+ * Returns a null rectangle in case of error.
  */
-void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
+QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
 
   if (resize_mode == ResizeMode::NONE) {
-    return;
+    return QRect();
   }
 
   MapModel& map = get_map();
   if (!map.entity_exists(index)) {
     // Bug in the editor.
     qCritical() << MapView::tr("No such entity index");
-    return;
+    return QRect();
   }
   EntityModel& entity = map.get_entity(index);
   const QRect& old_box = old_boxes.value(index);
@@ -1240,8 +1269,7 @@ void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& s
         qAbs(point_b.y() - point_a.y())
   );
 
-  // TODO undo/redo
-  map.set_entity_bounding_box(index, QRect(top_left, size));
+  return QRect(top_left, size);
 }
 
 /**

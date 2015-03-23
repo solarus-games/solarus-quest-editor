@@ -22,6 +22,7 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
+#include <QDebug>
 #include <QItemSelectionModel>
 #include <QStatusBar>
 #include <QToolBar>
@@ -31,6 +32,7 @@
 namespace {
 
 constexpr int move_entities_command_id = 1;
+constexpr int resize_entities_command_id = 2;
 
 /**
  * @brief Parent class of all undoable commands of the map editor.
@@ -223,6 +225,68 @@ private:
 };
 
 /**
+ * @brief Resizing entities on the map.
+ */
+class ResizeEntitiesCommand : public MapEditorCommand {
+
+public:
+  ResizeEntitiesCommand(MapEditor& editor, const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous) :
+    MapEditorCommand(editor, MapEditor::tr("Resize entities")),
+    boxes_before(),
+    boxes_after(boxes),
+    allow_merge_to_previous(allow_merge_to_previous) {
+
+    // Remember the old box of each entity to allow undo.
+    MapModel& map = get_model();
+    for (auto it = boxes.begin(); it != boxes.end(); ++it) {
+      const EntityIndex& index = it.key();
+      Q_ASSERT(map.entity_exists(index));
+      boxes_before.insert(index, map.get_entity_bounding_box(index));
+    }
+  }
+
+  void undo() override {
+    for (auto it = boxes_before.begin(); it != boxes_before.end(); ++it) {
+      get_model().set_entity_bounding_box(it.key(), it.value());
+    }
+  }
+
+  void redo() override {
+    for (auto it = boxes_after.begin(); it != boxes_after.end(); ++it) {
+      get_model().set_entity_bounding_box(it.key(), it.value());
+    }
+  }
+
+  int id() const override {
+    return resize_entities_command_id;
+  }
+
+  bool mergeWith(const QUndoCommand* other) override {
+
+    if (other->id() != id()) {
+      return false;
+    }
+    const ResizeEntitiesCommand& other_resize = *static_cast<const ResizeEntitiesCommand*>(other);
+    if (!other_resize.allow_merge_to_previous) {
+      return false;
+    }
+
+    for (auto it = other_resize.boxes_after.begin();
+         it != other_resize.boxes_after.end();
+         ++it) {
+      const EntityIndex& index = it.key();
+      boxes_after[index] = it.value();
+    }
+    return true;
+  }
+
+private:
+  QMap<EntityIndex, QRect> boxes_before;
+  QMap<EntityIndex, QRect> boxes_after;
+  bool allow_merge_to_previous;
+};
+
+/**
  * @brief Adding entities to the map.
  */
 class AddEntitiesCommand : public MapEditorCommand {
@@ -398,6 +462,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint, bool)),
           this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint, bool)));
+  connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
+          this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
   connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
           this, SLOT(add_entities_requested(AddableEntities&)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(QList<EntityIndex>)),
@@ -829,6 +895,21 @@ void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
   }
 
   try_command(new MoveEntitiesCommand(*this, indexes, translation, allow_merge_to_previous));
+}
+
+/**
+ * @brief Slot called when the user wants to resize entities.
+ * @param boxes New bounding box of each entity to change.
+ * @param allow_merge_to_previous @c true to merge this resizing with the previous one if any.
+ */
+void MapEditor::resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
+                                          bool allow_merge_to_previous) {
+
+  if (boxes.isEmpty()) {
+    return;
+  }
+
+  try_command(new ResizeEntitiesCommand(*this, boxes, allow_merge_to_previous));
 }
 
 /**
