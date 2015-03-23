@@ -1157,6 +1157,10 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
  */
 void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
 
+  if (resize_mode == ResizeMode::NONE) {
+    return;
+  }
+
   MapModel& map = get_map();
   if (!map.entity_exists(index)) {
     // Bug in the editor.
@@ -1179,21 +1183,51 @@ void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& s
   int sign_x = diff.x() >= 0 ? 1 : -1;
   int sign_y = diff.y() >= 0 ? 1 : -1;
 
-  // Calculate the coordinates of the second point such that the size of the
-  // rectangle from the first to the second point is a multiple of base_size.
+  // Calculate the coordinates of B such that the size of the
+  // rectangle from A to B is a multiple of base_size.
   point_b += QPoint(
         sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_width)),
         sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
   );
 
   if (resize_mode == ResizeMode::SQUARE) {
-    // TODO
+    QPoint abs_diff = QPoint(
+          qAbs(point_b.x() - point_a.x()),
+          qAbs(point_b.y() - point_a.y())
+    );
+    int length = qMax(abs_diff.x(), abs_diff.y());  // Length of the square.
+    point_b = QPoint(
+          point_a.x() + sign_x * length,
+          point_a.y() + sign_y * length
+    );
   }
   else {
-    // Make sure the entity is extended only in allowed directions,
-    // and the size is never zero.
-    // TODO
+    // Make sure that the entity is extended only in allowed directions,
+    // and that the size is never zero.
+    if (resize_mode == ResizeMode::VERTICAL_ONLY) {
+      // Extensible only vertically: in this case, the x coordinate of B is fixed.
+      point_b.setX(point_a.x() + base_width);
+    }
+    else {
+      // Extensible horizontally.
+      if (point_b.x() <= point_a.x()) {
+        // B is actually before A: in this case, set A to its right coordinate.
+        point_a.setX(point_a.x() + base_width);
+      }
+    }
+
+    if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
+      // Extensible only horizontally: in this case, the y coordinate of B is fixed.
+      point_b.setY(point_a.y() + base_height);
+    }
+    else {
+      if (point_b.y() <= point_a.y()) {
+        // B is actually before A: in this case, set A to its bottom coordinate.
+        point_a.setY(point_a.y() + base_height);
+      }
+    }
   }
+  // TODO implement SINGLE_DIMENSION
 
   // Compute the final bounding box from A to B.
   // Note that A is not necessarily the top-left corner of the rectangle.

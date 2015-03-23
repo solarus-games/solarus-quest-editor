@@ -31,8 +31,8 @@ Jumper::Jumper(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(144, 224, 240);
   set_draw_shape_info(info);
 
-  // TODO change the resizable setting when the direction is changed.
-  set_resizable(true);
+  set_base_size(QSize(8, 8));
+  update_resize_mode();
 }
 
 /**
@@ -93,21 +93,38 @@ void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
 
   Q_UNUSED(value);
   if (key == "direction") {
-
-    // Update the resizing rules.
+    // Set the default size for the new direction.
     if (is_jump_diagonal()) {
-      set_resize_mode(ResizeMode::SQUARE);
       set_size(QSize(32, 32));
     }
     else {
       if (is_jump_horizontal()) {
-        set_resize_mode(ResizeMode::VERTICAL_ONLY);
         set_size(QSize(8, 32));
       }
       else {
-        set_resize_mode(ResizeMode::HORIZONTAL_ONLY);
         set_size(QSize(32, 0));
       }
+    }
+    // Update the resizing rules.
+    update_resize_mode();
+  }
+}
+
+/**
+ * @brief Sets the resizing mode according to the jump direction.
+ */
+void Jumper::update_resize_mode() {
+
+  // Update the resizing rules.
+  if (is_jump_diagonal()) {
+    set_resize_mode(ResizeMode::SQUARE);
+  }
+  else {
+    if (is_jump_horizontal()) {
+      set_resize_mode(ResizeMode::VERTICAL_ONLY);
+    }
+    else {
+      set_resize_mode(ResizeMode::HORIZONTAL_ONLY);
     }
   }
 }
