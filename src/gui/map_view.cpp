@@ -1182,7 +1182,7 @@ void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& s
   // Calculate the coordinates of the second point such that the size of the
   // rectangle from the first to the second point is a multiple of base_size.
   point_b += QPoint(
-        sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_height)),
+        sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_width)),
         sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
   );
 
