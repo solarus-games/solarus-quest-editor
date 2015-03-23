@@ -41,6 +41,8 @@ protected:
 
 private:
 
+  void update_pattern();
+
   mutable QPixmap pattern_image;     /**< Cached image of the tile pattern. */
 
 };

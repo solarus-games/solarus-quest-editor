@@ -39,6 +39,7 @@ Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
   EntityModel(map, index, type) {
 
   set_resizable(true);
+  update_pattern();
 }
 
 /**
@@ -63,21 +64,30 @@ void Tile::set_pattern_id(const QString& pattern_id) {
  */
 void Tile::notify_field_changed(const QString& key, const QVariant& value) {
 
+  Q_UNUSED(value);
   if (key == "pattern") {
-
-    // Update the base size.
-    const TilesetModel* tileset = get_tileset();
-    if (tileset != nullptr) {
-      QString pattern_id = value.toString();
-      int pattern_index = tileset->id_to_index(pattern_id);
-      if (pattern_index != -1) {
-        set_base_size(tileset->get_pattern_frame(pattern_index).size());
-      }
-    }
-
-    // Invalidate the cached image.
-    pattern_image = QPixmap();
+    update_pattern();
   }
+}
+
+/**
+ * @brief Updates the representation of the tile.
+ *
+ * This function should be called when the pattern changes.
+ */
+void Tile::update_pattern() {
+
+  // Update the base size.
+  const TilesetModel* tileset = get_tileset();
+  if (tileset != nullptr) {
+    int pattern_index = tileset->id_to_index(get_pattern_id());
+    if (pattern_index != -1) {
+      set_base_size(tileset->get_pattern_frame(pattern_index).size());
+    }
+  }
+
+  // Invalidate the cached image.
+  pattern_image = QPixmap();
 }
 
 /**
