@@ -92,6 +92,16 @@ void EntityItem::update_xy() {
 }
 
 /**
+ * @brief Sets the size of this entity item according to the model.
+ */
+void EntityItem::update_size() {
+
+  // The change of size is implemented by a change of the result of boundingRect().
+  // prepareGeometryChange() tells Qt the bounding rectangle is changing.
+  prepareGeometryChange();
+}
+
+/**
  * @brief Paints the pattern item.
  *
  * Draws our own selection marker.

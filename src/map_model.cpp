@@ -464,11 +464,18 @@ void MapModel::set_entity_xy(const EntityIndex& index, const QPoint& xy) {
 
 /**
  * @brief Applies a translation to an entity on the map.
+ *
+ * Emits entity_xy_changed() if there is a change.
+ *
  * @param index Index of the entity to change.
  * @param xy The coordinates to add.
  * Does nothing if there is no entity with this index.
  */
 void MapModel::add_entity_xy(const EntityIndex& index, const QPoint& translation) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
 
   set_entity_xy(index, get_entity_xy(index) + translation);
 }
@@ -486,6 +493,24 @@ QPoint MapModel::get_entity_top_left(const EntityIndex& index) const {
   }
 
   return get_entity(index).get_top_left();
+}
+
+/**
+ * @brief Sets the coordinates of the upper-left corner of an entity.
+ *
+ * Emits entity_xy_changed() if there is a change.
+ *
+ * @param index Index of the entity to change.
+ * @param top_left The new coordinates of the entity's upper-left corner.
+ * Does nothing if there is no entity with this index.
+ */
+void MapModel::set_entity_top_left(const EntityIndex& index, const QPoint& top_left) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  set_entity_xy(index, top_left + get_entity_origin(index));
 }
 
 /**
@@ -520,6 +545,9 @@ QSize MapModel::get_entity_size(const EntityIndex& index) const {
 
 /**
  * @brief Sets the size of an entity on the map.
+ *
+ * Emits entity_size_changed() if there is a change.
+ *
  * @param index Index of the entity to set.
  * @param size The new size of this entity.
  * Does nothing if there is no entity with this index.
@@ -554,6 +582,26 @@ QRect MapModel::get_entity_bounding_box(const EntityIndex& index) const {
   }
 
   return get_entity(index).get_bounding_box();
+}
+
+/**
+ * @brief Sets the position and size of an entity for the editor.
+ *
+ * Emits entity_xy_changed() if the coordinates change,
+ * and entity_size_changed() if the size changes.
+ *
+ * @param index Index of the entity to change.
+ * @param bounding_box The new bounding box.
+ * Does nothing if there is no entity with this index.
+ */
+void MapModel::set_entity_bounding_box(const EntityIndex& index, const QRect& bounding_box) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  set_entity_top_left(index, bounding_box.topLeft());
+  set_entity_size(index, bounding_box.size());
 }
 
 /**

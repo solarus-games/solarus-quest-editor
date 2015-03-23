@@ -80,10 +80,12 @@ public:
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
   void add_entity_xy(const EntityIndex& index, const QPoint& translation);
   QPoint get_entity_top_left(const EntityIndex& index) const;
+  void set_entity_top_left(const EntityIndex& index, const QPoint& top_left);
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   void set_entity_size(const EntityIndex& index, const QSize& size);
   QRect get_entity_bounding_box(const EntityIndex& index) const;
+  void set_entity_bounding_box(const EntityIndex& index, const QRect& bounding_box);
   QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
   void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);
   void add_entities(AddableEntities&& entities);

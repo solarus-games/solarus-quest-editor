@@ -48,6 +48,7 @@ public:
 
   void update_visibility(const ViewSettings& view_settings);
   void update_xy();
+  void update_size();
 
 protected:
 

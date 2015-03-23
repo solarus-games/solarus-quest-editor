@@ -39,6 +39,8 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
           this, SLOT(entities_about_to_be_removed(QList<EntityIndex>)));
   connect(&map, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
+  connect(&map, SIGNAL(entity_size_changed(EntityIndex, QSize)),
+          this, SLOT(entity_size_changed(EntityIndex, QSize)));
 }
 
 /**
@@ -312,6 +314,27 @@ void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
   }
 
   item->update_xy();
+}
+
+/**
+ * @brief Slot called when the size of an entity has changed.
+ *
+ * Its item on the scene is updated accordingly.
+ *
+ * @param index Index of an entity.
+ * @param size Its new size.
+ */
+void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) {
+
+  Q_UNUSED(size);
+
+  EntityItem* item = get_entity_item(index);
+  if (item == nullptr) {
+    // Bug in the map editor.
+    qCritical() << tr("Missing entity graphics item");
+  }
+
+  item->update_size();
 }
 
 /**

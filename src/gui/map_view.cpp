@@ -97,7 +97,7 @@ private:
 class ResizingEntitiesState : public MapView::State {
 
 public:
-  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);  
+  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
   void start() override;
   void mouse_moved(const QMouseEvent& event) override;
 
@@ -109,7 +109,7 @@ private:
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
-  //ResizeMode resize_mode;         /**< How the resizing can be done. */
+  ResizeMode resize_mode;         /**< How the resizing can be done. */
   QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
   //bool first_move_done;           /**< Whether at least one move was done during the state. */
 
@@ -1090,11 +1090,10 @@ ResizingEntitiesState::ResizingEntitiesState(
   entities(entities),
   old_boxes(),
   leader_index(),
-  //resize_mode(resize_mode)
+  resize_mode(resize_mode),
   last_point()
 //  first_move_done(false)
 {
-  Q_UNUSED(resize_mode);
 }
 
 /**
@@ -1146,20 +1145,69 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     const QRect& old_box = it.value();
 
     QPoint master_offset(old_box.bottomRight() - old_master_box.bottomRight());
-    update_box(index, master_offset + current_point);
+    update_box(index, master_offset + current_point - MapScene::get_margin_top_left());
   }
 }
 
 /**
  * @brief Updates with new coordinates the rectangle of one entity.
  * @param index Index of the entity to resize.
- * @param second_xy Coordinate of the second point of the rectangle to set for this entity.
+ * @param second_xy Coordinate of the second point of the rectangle to set for this entity,
+ * in map coordinates.
  */
 void ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
 
-  Q_UNUSED(index);
-  Q_UNUSED(second_xy);
-  // TODO
+  MapModel& map = get_map();
+  if (!map.entity_exists(index)) {
+    // Bug in the editor.
+    qCritical() << MapView::tr("No such entity index");
+    return;
+  }
+  EntityModel& entity = map.get_entity(index);
+  const QRect& old_box = old_boxes.value(index);
+  const QSize& base_size = entity.get_base_size();
+  int base_width = base_size.width();
+  int base_height = base_size.height();
+
+  QPoint point_a = old_box.topLeft();
+  QPoint point_b = second_xy;
+  // A is the original point of the rectangle we are drawing.
+  // B is the second point of the rectangle, determined by the mouse position.
+
+  // We want to extend the entity's rectangle with units of base_size() from A to B.
+  QPoint diff = point_b - point_a;
+  int sign_x = diff.x() >= 0 ? 1 : -1;
+  int sign_y = diff.y() >= 0 ? 1 : -1;
+
+  // Calculate the coordinates of the second point such that the size of the
+  // rectangle from the first to the second point is a multiple of base_size.
+  point_b += QPoint(
+        sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_height)),
+        sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
+  );
+
+  if (resize_mode == ResizeMode::SQUARE) {
+    // TODO
+  }
+  else {
+    // Make sure the entity is extended only in allowed directions,
+    // and the size is never zero.
+    // TODO
+  }
+
+  // Compute the final bounding box from A to B.
+  // Note that A is not necessarily the top-left corner of the rectangle.
+  QPoint top_left(
+        qMin(point_a.x(), point_b.x()),
+        qMin(point_a.y(), point_b.y())
+  );
+  QSize size(
+        qAbs(point_b.x() - point_a.x()),
+        qAbs(point_b.y() - point_a.y())
+  );
+
+  // TODO undo/redo
+  map.set_entity_bounding_box(index, QRect(top_left, size));
 }
 
 /**

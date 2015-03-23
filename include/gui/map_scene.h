@@ -57,6 +57,7 @@ private slots:
   void entities_added(const QList<EntityIndex>& indexes);
   void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
+  void entity_size_changed(const EntityIndex& index, const QSize& size);
 
 private:
 
