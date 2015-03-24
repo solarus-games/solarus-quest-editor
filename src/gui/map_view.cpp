@@ -393,16 +393,12 @@ QAction& MapView::get_remove_entities_action() {
  */
 bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
 
-  if (indexes.isEmpty()) {
-    return false;
-  }
-
   for (const EntityIndex& index : indexes) {
-    if (!model->get_entity(index).is_resizable()) {
-      return false;
+    if (model->get_entity(index).is_resizable()) {
+      return true;
     }
   }
-  return true;
+  return false;
 }
 
 /**
