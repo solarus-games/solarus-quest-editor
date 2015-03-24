@@ -192,12 +192,16 @@ public:
     for (const EntityIndex& index : indexes) {
       get_model().add_entity_xy(index, -translation);
     }
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes);
   }
 
   void redo() override {
     for (const EntityIndex& index : indexes) {
       get_model().add_entity_xy(index, translation);
     }
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes);
   }
 
   int id() const override {
@@ -246,15 +250,29 @@ public:
   }
 
   void undo() override {
+
+    QList<EntityIndex> indexes;
     for (auto it = boxes_before.begin(); it != boxes_before.end(); ++it) {
-      get_model().set_entity_bounding_box(it.key(), it.value());
+      const EntityIndex& index = it.key();
+      get_model().set_entity_bounding_box(index, it.value());
+      indexes.append(index);
     }
+
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes);
   }
 
   void redo() override {
+
+    QList<EntityIndex> indexes;
     for (auto it = boxes_after.begin(); it != boxes_after.end(); ++it) {
-      get_model().set_entity_bounding_box(it.key(), it.value());
+      const EntityIndex& index = it.key();
+      get_model().set_entity_bounding_box(index, it.value());
+      indexes.append(index);
     }
+
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes);
   }
 
   int id() const override {
