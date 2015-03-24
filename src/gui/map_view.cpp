@@ -1085,19 +1085,21 @@ void ResizingEntitiesState::start() {
 void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
-
   QPoint current_point = view.mapToScene(event.pos()).toPoint() - MapScene::get_margin_top_left();
 
   QMap<EntityIndex, QRect> new_boxes;
   const QRect& old_leader_box = old_boxes.value(leader_index);
 
-  QPoint leader_distance_to_mouse = current_point - old_leader_box.topLeft();
+  // Choose once for all entitites the preferred dimension to use
+  // in case resizing is constrained.
+  QPoint leader_distance_to_mouse = current_point - old_leader_box.bottomRight();
   leader_distance_to_mouse = QPoint(
         qAbs(leader_distance_to_mouse.x()),
         qAbs(leader_distance_to_mouse.y())
   );
   bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
 
+  // Compute the new size and position of each entity.
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
