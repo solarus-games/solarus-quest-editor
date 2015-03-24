@@ -130,6 +130,7 @@ public:
 
 private:
   QPoint get_entities_center() const;
+  Layer find_best_layer() const;
 
   EntityModels entities;                    /**< Entities to be added. */
   std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
@@ -1322,20 +1323,22 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   MapModel& map = get_map();
   MapView& view = get_view();
 
-  // Add the entities to the map and make them selected.
+  // Determine the best layer.
+  Layer layer = find_best_layer();
 
+  // Make entities ready to be added at their specific index.
   AddableEntities addable_entities;
-
-  // TODO Determine the best layer.
-  Layer layer = Layer::LAYER_LOW;
   int i = map.get_num_entities(layer);
   for (EntityModelPtr& entity : entities) {
     EntityIndex index = { layer, i };
     ++i;
     addable_entities.emplace_back(std::move(entity), index);
   }
+
+  // Add them.
   view.add_entities_requested(addable_entities);
 
+  // Get back to normal state.
   view.start_state_doing_nothing();
 }
 
@@ -1381,4 +1384,12 @@ void AddingEntitiesState::tileset_selection_changed() {
 
   // The user just selected some patterns in the tileset: create corresponding tiles.
   get_view().start_adding_entities_from_tileset_selection();
+}
+
+/**
+ * @brief Determines the appropriate layer where to add the entities.
+ * @return The layer.
+ */
+Layer AddingEntitiesState::find_best_layer() const {
+  return Layer::LAYER_LOW;
 }
