@@ -110,7 +110,6 @@ private:
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
-  QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
   int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
@@ -1033,7 +1032,6 @@ ResizingEntitiesState::ResizingEntitiesState(
   entities(entities),
   old_boxes(),
   leader_index(),
-  last_point(),
   first_resize_done(false),
   num_free_entities(0) {
 }
@@ -1079,21 +1077,16 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
-  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
-  if (current_point == last_point) {
-    // No change after rounding.
-    return;
-  }
-  last_point = current_point;
+  QPoint current_point = view.mapToScene(event.pos()).toPoint() - MapScene::get_margin_top_left();
 
   QMap<EntityIndex, QRect> new_boxes;
-  const QRect& old_master_box = old_boxes.value(leader_index);
+  const QRect& old_leader_box = old_boxes.value(leader_index);
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
-    QPoint master_offset(old_box.bottomRight() - old_master_box.bottomRight());
-    QRect new_box = update_box(index, master_offset + current_point - MapScene::get_margin_top_left());
+    QPoint leader_offset(old_box.bottomRight() - old_leader_box.bottomRight());
+    QRect new_box = update_box(index, leader_offset + current_point);
     new_boxes.insert(index, new_box);
   }
 
