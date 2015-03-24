@@ -112,7 +112,7 @@ private:
                                    * Other ones reproduce an equivalent change. */
   QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
-  int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION). */
+  int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
 };
 
@@ -1064,7 +1064,7 @@ void ResizingEntitiesState::start() {
     old_boxes.insert(index, entity.get_bounding_box());
 
     // Count entities freely resizable.
-    if (entity.get_resize_mode() == ResizeMode::MULTI_DIMENSION) {
+    if (entity.get_resize_mode() == ResizeMode::MULTI_DIMENSION_ALL) {
       ++num_free_entities;
     }
   }
@@ -1135,9 +1135,9 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
   int base_height = base_size.height();
 
   ResizeMode resize_mode = entity.get_resize_mode();
-  if (num_free_entities > 1 && resize_mode == ResizeMode::MULTI_DIMENSION) {
+  if (num_free_entities > 1 && resize_mode == ResizeMode::MULTI_DIMENSION_ALL) {
     // Multiple resize: restrict the resizing to only one dimension.
-    resize_mode = ResizeMode::SINGLE_DIMENSION;
+    resize_mode = ResizeMode::MULTI_DIMENSION_ONE;
   }
 
   const QRect& old_box = old_boxes.value(index);
@@ -1186,8 +1186,13 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
     }
 
     if (resize_mode == ResizeMode::VERTICAL_ONLY) {
-      // Extensible only vertically: in this case, the x coordinate of B is fixed.
+      // Extensible only vertically with the x coordinate of B fixed to the base width.
       point_b.setX(point_a.x() + base_width);
+    }
+    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
+             abs_diff.y() > abs_diff.x()) {
+      // Extensible only vertically with the x coordinate of B fixed to the current width.
+      point_b.setX(point_a.x() + old_box.width());
     }
     else {
       // Extensible horizontally.
@@ -1198,10 +1203,16 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
     }
 
     if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
-      // Extensible only horizontally: in this case, the y coordinate of B is fixed.
+      // Extensible only horizontally with the y coordinate of B fixed to the base height.
       point_b.setY(point_a.y() + base_height);
     }
+    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
+             abs_diff.x() >= abs_diff.y()) {
+      // Extensible only horizontally with the y coordinate of B fixed to the current height.
+      point_b.setY(point_a.y() + old_box.height());
+    }
     else {
+      // Extensible vertically.
       if (point_b.y() <= point_a.y()) {
         // B is actually before A: in this case, set A to its bottom coordinate.
         point_a.setY(point_a.y() + base_height);

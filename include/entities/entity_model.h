@@ -37,8 +37,10 @@ enum class ResizeMode {
   SQUARE,                    /**< Can only stay square. */
   SINGLE_DIMENSION,          /**< Can be resized horizontally or vertically
                               * but not both. */
-  MULTI_DIMENSION            /**< Can be resized horizontally, vertically
-                              * or both. */
+  MULTI_DIMENSION_ONE,       /**< Can be resized horizontally, vertically
+                              * or both but not at the same time. */
+  MULTI_DIMENSION_ALL        /**< Can be resized horizontally, vertically
+                              * or both even at the same time. */
 };
 
 /**

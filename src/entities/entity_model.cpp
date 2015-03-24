@@ -704,12 +704,12 @@ bool EntityModel::is_resizable() const {
  * use set_resize_mode().
  *
  * @param @c true to make the entity resizable (with mode
- * Resizable::MULTI_DIMENSION, the most usual one), @c false to forbid
+ * Resizable::MULTI_DIMENSION_ALL, the most usual one), @c false to forbid
  * resizing.
  */
 void EntityModel::set_resizable(bool resizable) {
 
-  set_resize_mode(resizable ? ResizeMode::MULTI_DIMENSION : ResizeMode::NONE);
+  set_resize_mode(resizable ? ResizeMode::MULTI_DIMENSION_ALL : ResizeMode::NONE);
 }
 
 /**
