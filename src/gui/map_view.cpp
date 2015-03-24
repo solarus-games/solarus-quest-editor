@@ -103,7 +103,7 @@ public:
   void mouse_released(const QMouseEvent& event) override;
 
 private:
-  QRect update_box(const EntityIndex& index, const QPoint& second_xy);
+  QRect update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred);
 
   QList<EntityIndex> entities;    /**< Entities to resize. */
   QMap<EntityIndex, QRect>
@@ -1090,12 +1090,20 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   QMap<EntityIndex, QRect> new_boxes;
   const QRect& old_leader_box = old_boxes.value(leader_index);
+
+  QPoint leader_distance_to_mouse = current_point - old_leader_box.topLeft();
+  leader_distance_to_mouse = QPoint(
+        qAbs(leader_distance_to_mouse.x()),
+        qAbs(leader_distance_to_mouse.y())
+  );
+  bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
+
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
     QPoint leader_offset(old_box.bottomRight() - old_leader_box.bottomRight());
-    QRect new_box = update_box(index, leader_offset + current_point);
+    QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred);
     new_boxes.insert(index, new_box);
   }
 
@@ -1119,10 +1127,12 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  * @param index Index of the entity to resize.
  * @param second_xy Coordinate of the second point of the rectangle to set for this entity,
  * in map coordinates.
+ * @param horizontal_preferred When only one of both dimensions can be resized, whether
+ * this should be the horizontal or vertical dimension.
  * @return A new bounding box for the entity.
  * Returns a null rectangle in case of error.
  */
-QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
+QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred) {
 
   MapModel& map = get_map();
   if (!map.entity_exists(index)) {
@@ -1179,12 +1189,7 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
     // Make sure that the entity is extended only in allowed directions,
     // and that the size is never zero.
     if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
-      if (abs_diff.x() >= abs_diff.y()) {
-        resize_mode = ResizeMode::HORIZONTAL_ONLY;
-      }
-      else {
-        resize_mode = ResizeMode::VERTICAL_ONLY;
-      }
+      resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
     }
 
     if (resize_mode == ResizeMode::VERTICAL_ONLY) {
@@ -1192,7 +1197,7 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       point_b.setX(point_a.x() + base_width);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             abs_diff.y() > abs_diff.x()) {
+             !horizontal_preferred) {
       // Extensible only vertically with the x coordinate of B fixed to the current width.
       point_b.setX(point_a.x() + old_box.width());
     }
@@ -1209,7 +1214,7 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       point_b.setY(point_a.y() + base_height);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             abs_diff.x() >= abs_diff.y()) {
+             horizontal_preferred) {
       // Extensible only horizontally with the y coordinate of B fixed to the current height.
       point_b.setY(point_a.y() + old_box.height());
     }
