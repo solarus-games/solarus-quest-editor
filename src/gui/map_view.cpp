@@ -549,6 +549,9 @@ void MapView::mousePressEvent(QMouseEvent* event) {
   if (model != nullptr && get_scene() != nullptr) {
     state->mouse_pressed(*event);
   }
+
+  // Don't forward the event to the parent because it would select the item
+  // clicked. We only do this explicitly from specific states.
 }
 
 /**
@@ -560,6 +563,8 @@ void MapView::mouseReleaseEvent(QMouseEvent* event) {
   if (model != nullptr && get_scene() != nullptr) {
     state->mouse_released(*event);
   }
+
+  QGraphicsView::mouseReleaseEvent(event);
 }
 
 /**
@@ -571,6 +576,10 @@ void MapView::mouseMoveEvent(QMouseEvent* event) {
   if (model != nullptr && get_scene() != nullptr) {
     state->mouse_moved(*event);
   }
+
+  // The parent class tracks the mouse movements for internal needs
+  // such as anchoring the viewport to the mouse when zooming.
+  QGraphicsView::mouseMoveEvent(event);
 }
 
 /**
