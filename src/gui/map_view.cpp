@@ -112,6 +112,7 @@ private:
                                    * Other ones reproduce an equivalent change. */
   QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
+  int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION). */
 
 };
 
@@ -1033,8 +1034,8 @@ ResizingEntitiesState::ResizingEntitiesState(
   old_boxes(),
   leader_index(),
   last_point(),
-  first_resize_done(false)
-{
+  first_resize_done(false),
+  num_free_entities(0) {
 }
 
 /**
@@ -1061,6 +1062,11 @@ void ResizingEntitiesState::start() {
 
     // Also save the initial position of entities.
     old_boxes.insert(index, entity.get_bounding_box());
+
+    // Count entities freely resizable.
+    if (entity.get_resize_mode() == ResizeMode::MULTI_DIMENSION) {
+      ++num_free_entities;
+    }
   }
 
   Q_ASSERT(leader_index.is_valid());
@@ -1124,19 +1130,20 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
   }
   EntityModel& entity = map.get_entity(index);
 
-  ResizeMode resize_mode = entity.get_resize_mode();
-  if (entities.size() > 1 && resize_mode == ResizeMode::MULTI_DIMENSION) {
-    // Multiple resize: restrict the resizing to only one dimension.
-    resize_mode = ResizeMode::SINGLE_DIMENSION;
-  }
-  if (resize_mode == ResizeMode::NONE) {
-    return QRect();
-  }
-
-  const QRect& old_box = old_boxes.value(index);
   const QSize& base_size = entity.get_base_size();
   int base_width = base_size.width();
   int base_height = base_size.height();
+
+  ResizeMode resize_mode = entity.get_resize_mode();
+  if (num_free_entities > 1 && resize_mode == ResizeMode::MULTI_DIMENSION) {
+    // Multiple resize: restrict the resizing to only one dimension.
+    resize_mode = ResizeMode::SINGLE_DIMENSION;
+  }
+
+  const QRect& old_box = old_boxes.value(index);
+  if (resize_mode == ResizeMode::NONE) {
+    return old_box;
+  }
 
   QPoint point_a = old_box.topLeft();
   QPoint point_b = second_xy;
