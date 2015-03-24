@@ -97,7 +97,7 @@ private:
 class ResizingEntitiesState : public MapView::State {
 
 public:
-  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode);
+  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities);
   void start() override;
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
@@ -110,7 +110,6 @@ private:
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
-  ResizeMode resize_mode;         /**< How the resizing can be done. */
   QPoint last_point;              /**< Point where the mouse was last time it moved, in scene coordinates. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
 
@@ -317,13 +316,12 @@ void MapView::start_state_moving_entities(const QPoint& initial_point) {
 void MapView::start_state_resizing_entities() {
 
   const QList<EntityIndex> selection = get_selected_entities();
-  ResizeMode resize_mode = get_best_resize_mode(selection);
-  if (resize_mode == ResizeMode::NONE) {
+  if (!are_entities_resizable(selection)) {
     // The selection is empty or not resizable.
     return;
   }
 
-  set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this, selection, resize_mode)));
+  set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this, selection)));
 }
 
 /**
@@ -389,86 +387,22 @@ QAction& MapView::get_remove_entities_action() {
 }
 
 /**
- * @brief Returns whether all entities of a list are resizable.
+ * @brief Returns whether at least one entitie of a list is resizable.
  * @param indexes Indexes of entities to resize.
- * @return @c true if they are all resizable, @c false if at least one is not.
+ * @return @c true at least one is resizable.
  */
 bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
-  return get_best_resize_mode(indexes) != ResizeMode::NONE;
-}
-
-/**
- * @brief Determines the most appropriate resize mode for the given entities.
- * @param indexes Indexes of entities to resize.
- * @return The best resize mode.
- */
-ResizeMode MapView::get_best_resize_mode(const QList<EntityIndex>& indexes) const {
-
-  if (model == nullptr) {
-    return ResizeMode::NONE;
-  }
 
   if (indexes.isEmpty()) {
-    return ResizeMode::NONE;
+    return false;
   }
 
-  if (indexes.size() == 1) {
-    // Resizing a single entity: simply return its mode.
-    const EntityModel& entity = model->get_entity(indexes.first());
-    return entity.get_resize_mode();
-  }
-
-  // When we resize multiple entities, allow at most to do it only one
-  // direction at a time.
-  ResizeMode candidate_mode = ResizeMode::SINGLE_DIMENSION;
-
-  // Then see if some entities are more restrictive than that.
   for (const EntityIndex& index : indexes) {
-
-    const EntityModel& entity = model->get_entity(index);
-    ResizeMode current_resize_mode = entity.get_resize_mode();
-    switch (current_resize_mode) {
-
-    case ResizeMode::NONE:
-      // At least one entity is not resizable: no need to check others.
-      return ResizeMode::NONE;
-
-    case ResizeMode::HORIZONTAL_ONLY:
-      if (candidate_mode == ResizeMode::VERTICAL_ONLY || candidate_mode == ResizeMode::SQUARE) {
-        // Incompatible modes.
-        return ResizeMode::NONE;
-      }
-      candidate_mode = ResizeMode::HORIZONTAL_ONLY;
-      break;
-
-    case ResizeMode::VERTICAL_ONLY:
-      if (candidate_mode == ResizeMode::HORIZONTAL_ONLY || candidate_mode == ResizeMode::SQUARE) {
-        // Incompatible modes.
-        return ResizeMode::NONE;
-      }
-      candidate_mode = ResizeMode::VERTICAL_ONLY;
-      break;
-
-    case ResizeMode::SQUARE:
-      if (candidate_mode != ResizeMode::SQUARE && candidate_mode != ResizeMode::MULTI_DIMENSION) {
-        // Incompatible modes.
-        return ResizeMode::NONE;
-      }
-
-    case ResizeMode::SINGLE_DIMENSION:
-      if (candidate_mode == ResizeMode::SQUARE) {
-        // Incompatible modes.
-        return ResizeMode::NONE;
-      }
-      break;
-
-    case ResizeMode::MULTI_DIMENSION:
-      // No further restriction.
-      break;
+    if (!model->get_entity(index).is_resizable()) {
+      return false;
     }
   }
-
-  return candidate_mode;
+  return true;
 }
 
 /**
@@ -937,7 +871,7 @@ void DoingNothingState::context_menu_requested(const QPoint& where) {
   }
 
   QAction& resize_action = view.get_resize_entities_action();
-  bool resizable = view.get_best_resize_mode(selection) != ResizeMode::NONE;
+  bool resizable = view.are_entities_resizable(selection);
   resize_action.setEnabled(resizable);
 
   QMenu* menu = new QMenu(&view);
@@ -1094,14 +1028,14 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
 /**
  * @brief Constructor.
  * @param view The map view to manage.
+ * @param entities The entities to resize.
  */
 ResizingEntitiesState::ResizingEntitiesState(
-    MapView& view, const QList<EntityIndex>& entities, ResizeMode resize_mode) :
+    MapView& view, const QList<EntityIndex>& entities) :
   MapView::State(view),
   entities(entities),
   old_boxes(),
   leader_index(),
-  resize_mode(resize_mode),
   last_point(),
   first_resize_done(false)
 {
@@ -1186,10 +1120,6 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  */
 QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy) {
 
-  if (resize_mode == ResizeMode::NONE) {
-    return QRect();
-  }
-
   MapModel& map = get_map();
   if (!map.entity_exists(index)) {
     // Bug in the editor.
@@ -1197,6 +1127,16 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
     return QRect();
   }
   EntityModel& entity = map.get_entity(index);
+
+  ResizeMode resize_mode = entity.get_resize_mode();
+  if (entities.size() > 1 && resize_mode == ResizeMode::MULTI_DIMENSION) {
+    // Multiple resize: restrict the resizing to only one dimension.
+    resize_mode = ResizeMode::SINGLE_DIMENSION;
+  }
+  if (resize_mode == ResizeMode::NONE) {
+    return QRect();
+  }
+
   const QRect& old_box = old_boxes.value(index);
   const QSize& base_size = entity.get_base_size();
   int base_width = base_size.width();
@@ -1219,11 +1159,11 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
         sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
   );
 
+  QPoint abs_diff = QPoint(
+        qAbs(point_b.x() - point_a.x()),
+        qAbs(point_b.y() - point_a.y())
+  );
   if (resize_mode == ResizeMode::SQUARE) {
-    QPoint abs_diff = QPoint(
-          qAbs(point_b.x() - point_a.x()),
-          qAbs(point_b.y() - point_a.y())
-    );
     int length = qMax(abs_diff.x(), abs_diff.y());  // Length of the square.
     point_b = QPoint(
           point_a.x() + sign_x * length,
@@ -1233,6 +1173,15 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
   else {
     // Make sure that the entity is extended only in allowed directions,
     // and that the size is never zero.
+    if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
+      if (abs_diff.x() >= abs_diff.y()) {
+        resize_mode = ResizeMode::HORIZONTAL_ONLY;
+      }
+      else {
+        resize_mode = ResizeMode::VERTICAL_ONLY;
+      }
+    }
+
     if (resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible only vertically: in this case, the x coordinate of B is fixed.
       point_b.setX(point_a.x() + base_width);
