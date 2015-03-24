@@ -102,7 +102,7 @@ void MapScene::build() {
 }
 
 /**
- * @brief Creates a graphic item for the specified entity.
+ * @brief Creates a graphic item for the specified entity on the map.
  * @param entity A map entity.
  */
 void MapScene::create_entity_item(EntityModel& entity) {
@@ -118,6 +118,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
   int i = index.index;
 
   EntityItem* item = new EntityItem(entity);
+  item->setZValue(static_cast<int>(layer));
   addItem(item);
   if (i < entity_items[layer].size()) {
     // Insert rather than append.

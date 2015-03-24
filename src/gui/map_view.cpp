@@ -1205,7 +1205,6 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       }
     }
   }
-  // TODO implement SINGLE_DIMENSION
 
   // Compute the final bounding box from A to B.
   // Note that A is not necessarily the top-left corner of the rectangle.
@@ -1233,6 +1232,7 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities)
 
   for (const EntityModelPtr& entity : this->entities) {
     EntityItem* item = new EntityItem(*entity);
+    item->setZValue(Layer::LAYER_NB);
     entity_items.push_back(item);
   }
 }
