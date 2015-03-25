@@ -220,11 +220,27 @@ void MapScene::drawBackground(QPainter* painter, const QRectF& rect) {
  * @return The entity, or nullptr if the item does not
  * represent a map entity.
  */
+const EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) const {
+
+  const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(&item);
+  if (entity_item == nullptr) {
+    // Not a map entity.
+    return nullptr;
+  }
+
+  return &entity_item->get_entity();
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
+ */
 EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
 
   const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(&item);
   if (entity_item == nullptr) {
-   // Not a map entity.
+    // Not a map entity.
     return nullptr;
   }
 
@@ -372,3 +388,45 @@ void MapScene::set_selected_entities(const QList<EntityIndex>& indexes) {
     item->setSelected(true);
   }
 }
+
+
+/**
+ * @brief Returns the highest layer where a specified rectangle overlaps an
+ * existing visible entity.
+ * @param rectangle A rectangle in map coordinates.
+ * If nullptr, all entities are considered visible.
+ * @return The highest layer where an entity exists in this rectangle,
+ * or Layer::LAYER_LOW if there is nothing here.
+ */
+Layer MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
+
+  QRect scene_rectangle = rectangle;
+  scene_rectangle.translate(get_margin_top_left());
+  const QList<QGraphicsItem*>& items_in_rectangle = items(
+        scene_rectangle, Qt::IntersectsItemBoundingRect
+  );
+
+  int max_layer = Layer::LAYER_LOW;
+  for (QGraphicsItem* item : items_in_rectangle) {
+
+    if (item->zValue() >= static_cast<int>(Layer::LAYER_NB)) {
+      // This is the case of the selection rectangle and
+      // of entities being added.
+      continue;
+    }
+    const EntityModel* entity = get_entity_from_item(*item);
+    if (entity == nullptr) {
+      // Not a map entity.
+      continue;
+    }
+
+    if (!item->isVisible()) {
+      // The item is hidden by view settings.
+      continue;
+    }
+
+    max_layer = qMax(max_layer, static_cast<int>(entity->get_layer()));
+  }
+  return static_cast<Layer>(max_layer);
+}
+

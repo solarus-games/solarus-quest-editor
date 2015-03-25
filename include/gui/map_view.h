@@ -45,8 +45,11 @@ public:
     State(MapView& view);
     virtual ~State();
 
+    const MapView& get_view() const;
     MapView& get_view();
+    const MapScene& get_scene() const;
     MapScene& get_scene();
+    const MapModel& get_map() const;
     MapModel& get_map();
 
     virtual void start();
@@ -69,6 +72,7 @@ public:
   MapModel* get_model();
   MapScene* get_scene();
   void set_model(MapModel* map);
+  const ViewSettings* get_view_settings() const;
   void set_view_settings(ViewSettings& view_settings);
 
   // Selection.

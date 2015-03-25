@@ -37,6 +37,7 @@ public:
 
   const MapModel& get_model() const;
   const Quest& get_quest() const;
+  const EntityModel* get_entity_from_item(const QGraphicsItem& item) const;
   EntityModel* get_entity_from_item(const QGraphicsItem& item);
 
   static QPoint get_margin_top_left();
@@ -47,6 +48,10 @@ public:
 
   QList<EntityIndex> get_selected_entities();
   void set_selected_entities(const QList<EntityIndex>& indexes);
+
+  Layer get_layer_in_rectangle(
+      const QRect& rectangle
+  ) const;
 
 protected:
 

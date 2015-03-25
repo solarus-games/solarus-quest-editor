@@ -130,7 +130,7 @@ public:
 
 private:
   QPoint get_entities_center() const;
-  Layer find_best_layer() const;
+  Layer find_best_layer(const EntityModel& entity) const;
 
   EntityModels entities;                    /**< Entities to be added. */
   std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
@@ -230,6 +230,14 @@ void MapView::set_model(MapModel* model) {
  */
 MapScene* MapView::get_scene() {
   return scene;
+}
+
+/**
+ * @brief Returns the view settings for this map view.
+ * @return The view settings, or nullptr if none were set.
+ */
+const ViewSettings* MapView::get_view_settings() const {
+  return view_settings;
 }
 
 /**
@@ -692,6 +700,15 @@ MapView::State::~State() {
  * @brief Returns the map view managed by this state.
  * @return The map view.
  */
+const MapView& MapView::State::get_view() const {
+  return view;
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
+ */
 MapView& MapView::State::get_view() {
   return view;
 }
@@ -699,6 +716,16 @@ MapView& MapView::State::get_view() {
 /**
  * @brief Returns the map scene managed by this state.
  * @return The map scene.
+ */
+const MapScene& MapView::State::get_scene() const {
+
+  return *view.get_scene();
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
  */
 MapScene& MapView::State::get_scene() {
 
@@ -708,6 +735,15 @@ MapScene& MapView::State::get_scene() {
 /**
  * @brief Returns the map model represented in the view.
  * @return The map model.
+ */
+const MapModel& MapView::State::get_map() const {
+  return *view.get_model();
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
  */
 MapModel& MapView::State::get_map() {
   return *view.get_model();
@@ -1324,15 +1360,19 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   MapModel& map = get_map();
   MapView& view = get_view();
 
-  // Determine the best layer.
-  Layer layer = find_best_layer();
-
   // Make entities ready to be added at their specific index.
   AddableEntities addable_entities;
-  int i = map.get_num_entities(layer);
+  QMap<Layer, int> num_entities_layer;
   for (EntityModelPtr& entity : entities) {
+    // Determine the best layer.
+    Layer layer = find_best_layer(*entity);
+
+    if (!num_entities_layer.contains(layer)) {
+      num_entities_layer[layer] = map.get_num_entities(layer);
+    }
+    int i = num_entities_layer[layer];
     EntityIndex index = { layer, i };
-    ++i;
+    ++num_entities_layer[layer];
     addable_entities.emplace_back(std::move(entity), index);
   }
 
@@ -1388,9 +1428,27 @@ void AddingEntitiesState::tileset_selection_changed() {
 }
 
 /**
- * @brief Determines the appropriate layer where to add the entities.
+ * @brief Determines the appropriate layer where to add an entity.
+ * @param entity The entity to add.
  * @return The layer.
  */
-Layer AddingEntitiesState::find_best_layer() const {
-  return Layer::LAYER_LOW;
+Layer AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
+
+  Layer layer_under = get_scene().get_layer_in_rectangle(
+        entity.get_bounding_box()
+  );
+  if (!entity.get_has_preferred_layer()) {
+    // The entity has no preferred layer.
+    return layer_under;
+  }
+
+  // The entity has a preferred layer:
+  // see if there is something above its preferred layer.
+  Layer preferred_layer = entity.get_preferred_layer();
+  if (static_cast<int>(layer_under) > static_cast<int>(preferred_layer)) {
+      // Don't use the preferred layer in this case.
+      return layer_under;
+  }
+
+  return preferred_layer;
 }

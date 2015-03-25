@@ -39,6 +39,7 @@ Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
   EntityModel(map, index, type) {
 
   set_resizable(true);
+  set_has_preferred_layer(true);
   update_pattern();
 }
 
@@ -77,12 +78,15 @@ void Tile::notify_field_changed(const QString& key, const QVariant& value) {
  */
 void Tile::update_pattern() {
 
-  // Update the base size.
   const TilesetModel* tileset = get_tileset();
   if (tileset != nullptr) {
     int pattern_index = tileset->id_to_index(get_pattern_id());
     if (pattern_index != -1) {
+      // Update the base size.
       set_base_size(tileset->get_pattern_frame(pattern_index).size());
+
+      // Update the preferred initial layer.
+      set_preferred_layer(tileset->get_pattern_default_layer(pattern_index));
     }
   }
 
