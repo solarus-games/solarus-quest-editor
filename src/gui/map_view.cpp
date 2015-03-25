@@ -388,7 +388,7 @@ QAction& MapView::get_remove_entities_action() {
 }
 
 /**
- * @brief Returns whether at least one entitie of a list is resizable.
+ * @brief Returns whether at least one entity of a list is resizable.
  * @param indexes Indexes of entities to resize.
  * @return @c true at least one is resizable.
  */
