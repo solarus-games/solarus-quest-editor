@@ -105,6 +105,8 @@ public:
   QSize get_size() const;
   void set_size(const QSize& size);
   QRect get_bounding_box() const;
+  bool get_has_preferred_layer() const;
+  Layer get_preferred_layer() const;
   bool has_direction_property() const;
   int get_direction() const;
   void set_direction(int direction);
@@ -177,6 +179,9 @@ protected:
   void set_resize_mode(ResizeMode resize_mode);
   void set_base_size(const QSize& base_size);
 
+  void set_has_preferred_layer(bool has_preferred_layer);
+  void set_preferred_layer(Layer preferred_layer);
+
   virtual void notify_field_changed(const QString& key, const QVariant& value);
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
@@ -207,6 +212,8 @@ private:
   QSize size;                     /**< Size of the entity for the editor. */
   QSize base_size;                /**< Reference size when resizing. */
   ResizeMode resize_mode;         /**< How the entity can be resized. */
+  bool has_preferred_layer;       /**< Whether the entity has a preferred layer when added to the map. */
+  Layer preferred_layer;          /**< The preferred layer if has_preferred_layer is true. */
 
   // Displaying.
   DrawSpriteInfo

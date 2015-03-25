@@ -67,6 +67,8 @@ EntityModel::EntityModel(
   size(16, 16),
   base_size(16, 16),
   resize_mode(ResizeMode::NONE),
+  has_preferred_layer(false),
+  preferred_layer(Layer::LAYER_LOW),
   draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
@@ -573,6 +575,41 @@ void EntityModel::set_size(const QSize& size) {
  */
 QRect EntityModel::get_bounding_box() const {
   return QRect(get_top_left(), get_size());
+}
+
+/**
+ * @brief Returns whether the entity has a preferred initial layer when added to the map.
+ * @return @c true if there is a preferred layer.
+ */
+bool EntityModel::get_has_preferred_layer() const {
+  return has_preferred_layer;
+}
+
+/**
+ * @brief Sets whether the entity has a preferred initial layer when added to the map.
+ * @param has_preferred_layer @c true if there is a preferred layer.
+ */
+void EntityModel::set_has_preferred_layer(bool has_preferred_layer) {
+  this->has_preferred_layer = has_preferred_layer;
+}
+
+/**
+ * @brief Returns the preferred initial layer if there is one.
+ * @return The preferred layer.
+ */
+Layer EntityModel::get_preferred_layer() const {
+  return preferred_layer;
+}
+
+/**
+ * @brief Sets the preferred initial layer if there is one.
+ *
+ * This function only makes sense if get_has_preferred_layer() is @c true.
+ *
+ * @param preferred_layer The new preferred layer.
+ */
+void EntityModel::set_preferred_layer(Layer preferred_layer) {
+  this->preferred_layer = preferred_layer;
 }
 
 /**
