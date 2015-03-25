@@ -923,6 +923,7 @@ DrawingRectangleState::DrawingRectangleState(MapView& view, const QPoint& initia
 void DrawingRectangleState::start() {
 
   current_area_item = new QGraphicsRectItem();
+  current_area_item->setZValue(4);
   current_area_item->setPen(QPen(Qt::yellow));
   get_scene().addItem(current_area_item);
   initial_selection = get_scene().selectedItems();
