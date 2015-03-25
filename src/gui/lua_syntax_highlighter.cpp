@@ -76,7 +76,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
 
   // Comments.
   single_line_comment_format.setForeground(Qt::darkGreen);
-  // Avoids to highlight comments in strings.
+  // Avoid to highlight comments in strings.
   rule.pattern = QRegExp(not_in_a_single_line_string + "(--[^\n]*)$");
   rule.format = single_line_comment_format;
   rules.append(rule);
