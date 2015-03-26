@@ -62,6 +62,8 @@ public:
       MapModel& map, EntityType type);
   static EntityModelPtr create(
       MapModel& map, const EntityIndex& index);
+  static EntityModelPtr clone(
+      MapModel& map, const EntityIndex& index);
 
   virtual ~EntityModel();
 
