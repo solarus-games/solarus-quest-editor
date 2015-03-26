@@ -21,7 +21,6 @@
 #include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
-#include <solarus/MapData.h>
 
 class MapModel;
 class MapScene;
