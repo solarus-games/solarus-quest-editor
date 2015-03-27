@@ -105,13 +105,31 @@ EntityModelPtr EntityModel::create(
  * @brief Creates an entity model of the appropriate concrete type
  * from the an existing entity of the map.
  * @param map The map that contains the entity.
- * @param index Index of the entity in the map
+ * @param index Index of the entity in the map.
  * @return The created model.
  */
 EntityModelPtr EntityModel::create(
     MapModel& map, const EntityIndex& index) {
 
   return create(map, index, map.get_internal_entity(index).get_type());
+}
+
+/**
+ * @brief Clones an existing entity of the map.
+ *
+ * The created clone is not on the map.
+ *
+ * @param map The map that contains the existing entity.
+ * @param index Index of the entity to clone.
+ * @return The created model.
+ */
+EntityModelPtr EntityModel::clone(
+    MapModel& map, const EntityIndex& index) {
+
+  const Solarus::EntityData& existing_data = map.get_internal_entity(index);
+  EntityModelPtr clone = create(map, EntityIndex(), existing_data.get_type());
+  clone->get_entity() = existing_data;
+  return clone;
 }
 
 /**

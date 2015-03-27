@@ -653,6 +653,24 @@ void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
 }
 
 /**
+ * @brief Creates copies of all selected entities.
+ *
+ * The created copies are not on the map.
+ *
+ * @return The created copies.
+ */
+EntityModels MapView::clone_selected_entities() const {
+
+  EntityModels clones;
+  QList<EntityIndex> indexes = get_selected_entities();
+  for (const EntityIndex& index : indexes) {
+    EntityModelPtr clone = EntityModel::clone(*model, index);
+    clones.emplace_back(std::move(clone));
+  }
+  return clones;
+}
+
+/**
  * @brief Requests to resize the given entities with the specified bounding boxes.
  * @param translation XY coordinates to add.
  * @param allow_merge_to_previous @c true to merge this move with the previous one if any.
@@ -1379,8 +1397,15 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // Add them.
   view.add_entities_requested(addable_entities);
 
-  // Get back to normal state.
-  view.start_state_doing_nothing();
+  if (event.button() == Qt::LeftButton) {
+    // Left click: start resizing the newly added entities
+    // (until the mouse button is released).
+    view.start_state_resizing_entities();
+  }
+  else {
+    // Right click: continue to add entities.
+    view.start_state_adding_entities(view.clone_selected_entities());
+  }
 }
 
 /**

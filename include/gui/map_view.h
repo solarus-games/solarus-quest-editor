@@ -21,7 +21,6 @@
 #include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
-#include <solarus/MapData.h>
 
 class MapModel;
 class MapScene;
@@ -79,6 +78,7 @@ public:
   int get_num_selected_entities() const;
   QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
+  EntityModels clone_selected_entities() const;
 
   // State of the view.
   void start_state_doing_nothing();
