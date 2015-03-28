@@ -19,6 +19,7 @@
 #include "gui/map_editor.h"
 #include "editor_exception.h"
 #include "map_model.h"
+#include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
@@ -572,10 +573,7 @@ void MapEditor::build_status_bar() {
 
   connect(ui.map_view, &MapView::mouse_map_coordinates_changed, [=](const QPoint& xy) {
 
-    QPoint snapped_xy(xy + QPoint(4, 4));
-    snapped_xy = snapped_xy - QPoint(
-          snapped_xy.x() % 8,
-          snapped_xy.y() % 8);
+    QPoint snapped_xy(Point::round_8(xy));
     QString message = tr("%1,%2").arg(snapped_xy.x()).arg(snapped_xy.y());
     status_bar->showMessage(message);
   });
