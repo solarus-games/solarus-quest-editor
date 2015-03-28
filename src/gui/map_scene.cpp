@@ -125,11 +125,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
     item->stackBefore(get_entity_item({ layer, i }));
   }
 
-  if (index.layer != entity.get_layer()) {
-    // Bug in the editor.
-    qCritical() << tr("Inconsistent layer");
-    return;
-  }
+  Q_ASSERT(layer == entity.get_layer());
 
   auto it = entity_items[layer].begin() + i;
   entity_items[layer].insert(it, item);
@@ -307,8 +303,10 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
       continue;
     }
 
+    Q_ASSERT(entity_items[index.layer][index.index] == item);
     removeItem(item);
     entity_items[index.layer].removeAt(index.index);
+    delete item;
   }
 }
 

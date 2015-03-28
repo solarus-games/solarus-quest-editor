@@ -309,8 +309,8 @@ void EntityModel::added_to_map(const EntityIndex& index) {
     return;
   }
 
-  this->index = index;
   set_layer(index.layer);
+  this->index = index;
   map->get_internal_entity(index) = stub;  // Copy the data.
 }
 

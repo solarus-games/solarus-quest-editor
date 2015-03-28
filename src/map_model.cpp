@@ -710,7 +710,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
     get_entity(index).added_to_map(index);
 
     // Other indexes are now dirty, unless the entity was appended.
-    if (i <= (int) this->entities[layer].size()) {
+    if (i < (int) this->entities[layer].size() - 1) {
       layers_with_dirty_indexes.insert(layer);
     }
   }
