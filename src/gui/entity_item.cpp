@@ -27,7 +27,8 @@
  */
 EntityItem::EntityItem(EntityModel& entity) :
   QGraphicsItem(),
-  entity(entity) {
+  entity(entity),
+  size(entity.get_size()) {
 
   update_xy();
   setFlags(ItemIsSelectable | ItemIsFocusable);
@@ -64,8 +65,7 @@ EntityType EntityItem::get_entity_type() const {
  */
 QRectF EntityItem::boundingRect() const {
 
-  // FIXME this is not true for entities whose sprite is larger, like NPCs
-  return QRect(QPoint(0, 0), entity.get_size());
+  return QRect(QPoint(), size);
 }
 
 /**
@@ -96,9 +96,9 @@ void EntityItem::update_xy() {
  */
 void EntityItem::update_size() {
 
-  // The change of size is implemented by a change of the result of boundingRect().
-  // prepareGeometryChange() tells Qt the bounding rectangle is changing.
+  // prepareGeometryChange() tells Qt the result of boundingRect() will changed.
   prepareGeometryChange();
+  this->size = entity.get_size();  // TODO this is not true for entities whose sprite is larger, like NPCs
 }
 
 /**

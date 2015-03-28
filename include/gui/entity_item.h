@@ -30,8 +30,6 @@ class EntityItem : public QGraphicsItem {
 
 public:
 
-  explicit EntityItem(EntityModel& entity);
-
   // Enable the use of qgraphicsitem_cast with this item.
   enum {
     Type = UserType + 2
@@ -40,6 +38,8 @@ public:
   int type() const override {
     return Type;
   }
+
+  explicit EntityItem(EntityModel& entity);
 
   EntityModel& get_entity() const;
   EntityIndex get_index() const;
@@ -59,6 +59,9 @@ protected:
 private:
 
   EntityModel& entity;      /**< The entity represented. */
+  QSize size;               /**< Current size of the item.
+                             * TODO for some entities like NPC, it could be larger
+                             * than the entity's bounding box because of sprites. */
 
 };
 
