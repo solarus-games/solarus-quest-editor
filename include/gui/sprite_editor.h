@@ -35,7 +35,7 @@ public:
 
   SpriteModel& get_model();
 
-  virtual void save() override;
+  void save() override;
 
 public slots:
 
