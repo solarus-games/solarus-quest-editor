@@ -147,7 +147,7 @@ void TextEditor::save() {
 }
 
 /**
- * @copydoc Editor::can_cut()
+ * @copydoc Editor::can_cut
  */
 bool TextEditor::can_cut() const {
   return !text_widget->isReadOnly() && can_copy();
@@ -162,7 +162,7 @@ void TextEditor::cut() {
 }
 
 /**
- * @copydoc Editor::can_copy()
+ * @copydoc Editor::can_copy
  */
 bool TextEditor::can_copy() const {
   return text_widget->textCursor().hasSelection();
@@ -177,7 +177,7 @@ void TextEditor::copy() {
 }
 
 /**
- * @copydoc Editor::can_paste()
+ * @copydoc Editor::can_paste
  */
 bool TextEditor::can_paste() const {
   return true;

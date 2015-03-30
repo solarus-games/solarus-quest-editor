@@ -147,6 +147,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   file_path(file_path),
   title(get_file_name()),
   undo_stack(new QUndoStack(this)),
+  common_actions(),
   zoom_supported(false),
   grid_supported(false),
   layer_visibility_supported(false),
@@ -293,6 +294,26 @@ void Editor::set_close_confirm_message(const QString& message) {
  */
 QUndoStack& Editor::get_undo_stack() {
   return *undo_stack;
+}
+
+/**
+ * @brief Returns the actions available to all editors.
+ * @return The common actions.
+ */
+const QMap<QString, QAction*>& Editor::get_common_actions() const {
+  return common_actions;
+}
+
+/**
+ * @brief Sets the actions available to all editors.
+ *
+ * This function should be called at initialization time to make these actions
+ * available.
+ *
+ * @param common_actions The common actions.
+ */
+void Editor::set_common_actions(const QMap<QString, QAction*>& common_actions) {
+  this->common_actions = common_actions;
 }
 
 /**

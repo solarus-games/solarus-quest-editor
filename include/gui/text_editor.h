@@ -34,13 +34,13 @@ public:
   QString create_title() const;
   QIcon create_icon() const;
 
-  virtual void save() override;
-  virtual bool can_cut() const override;
-  virtual void cut() override;
-  virtual bool can_copy() const override;
-  virtual void copy() override;
-  virtual bool can_paste() const override;
-  virtual void paste() override;
+  void save() override;
+  bool can_cut() const override;
+  void cut() override;
+  bool can_copy() const override;
+  void copy() override;
+  bool can_paste() const override;
+  void paste() override;
 
 private:
 

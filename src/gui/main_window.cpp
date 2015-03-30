@@ -50,7 +50,12 @@ using EntityType = Solarus::EntityType;
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
   zoom_menu(nullptr),
-  zoom_button(nullptr) {
+  zoom_button(nullptr),
+  zoom_actions(),
+  show_entities_menu(nullptr),
+  show_entities_button(nullptr),
+  show_entities_actions(),
+  common_actions() {
 
   // Set up widgets.
   ui.setupUi(this);
@@ -101,6 +106,12 @@ MainWindow::MainWindow(QWidget* parent) :
   show_entities_button->setPopupMode(QToolButton::InstantPopup);
   ui.tool_bar->insertWidget(nullptr, show_entities_button);
   ui.menu_view->insertMenu(nullptr, show_entities_menu);
+
+  common_actions["cut"] = ui.action_cut;
+  common_actions["copy"] = ui.action_copy;
+  common_actions["paste"] = ui.action_paste;
+  common_actions["undo"] = undo_action;
+  common_actions["redo"] = redo_action;
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);
@@ -665,6 +676,7 @@ void MainWindow::current_editor_changed(int /* index */) {
             this, SLOT(update_entity_type_visibility(EntityType)));
     update_entity_types_visibility();
 
+    editor->set_common_actions(common_actions);
   }
 }
 

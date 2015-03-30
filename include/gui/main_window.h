@@ -104,6 +104,8 @@ private:
                                    * The key is the entity type name or
                                    * "action_show_all" or "action_hide_all". */
 
+  QMap<QString, QAction*>
+      common_actions;             /**< Actions available to all editors. */
 };
 
 #endif

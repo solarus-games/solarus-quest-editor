@@ -49,6 +49,8 @@ public:
   QString get_title() const;
   QIcon get_icon() const;
   QUndoStack& get_undo_stack();
+  const QMap<QString, QAction*>& get_common_actions() const;
+  void set_common_actions(const QMap<QString, QAction*>& common_actions);
   bool confirm_close();
 
   bool is_zoom_supported() const;
@@ -94,6 +96,7 @@ private:
   QIcon icon;                               /**< Icon representing the file. */
   QString close_confirm_message;            /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;                   /**< The undo/redo history of editing this file. */
+  QMap<QString, QAction*> common_actions;   /**< Actions available to all editors. */
   bool zoom_supported;                      /**< Whether the editor supports zooming. */
   bool grid_supported;                      /**< Whether the editor supports showing/hiding a grid. */
   bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */

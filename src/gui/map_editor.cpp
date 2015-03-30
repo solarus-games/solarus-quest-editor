@@ -17,6 +17,7 @@
 #include "entities/entity_model.h"
 #include "gui/gui_tools.h"
 #include "gui/map_editor.h"
+#include "gui/map_scene.h"
 #include "editor_exception.h"
 #include "map_model.h"
 #include "point.h"
@@ -429,6 +430,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.tileset_view->set_read_only(true);
   ui.map_view->set_model(model);
   ui.map_view->set_view_settings(get_view_settings());
+  ui.map_view->set_common_actions(&get_common_actions());
   update();
 
   // Make connections.
@@ -487,6 +489,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(add_entities_requested(AddableEntities&)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(QList<EntityIndex>)),
           this, SLOT(remove_entities_requested(QList<EntityIndex>)));
+
+  connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
+          this, SLOT(map_selection_changed()));
 }
 
 /**
@@ -590,6 +595,52 @@ void MapEditor::build_status_bar() {
 void MapEditor::save() {
 
   model->save();
+}
+
+/**
+ * @copydoc Editor::can_cut
+ */
+bool MapEditor::can_cut() const {
+  return can_copy();
+}
+
+/**
+ * @copydoc Editor::cut
+ */
+void MapEditor::cut() {
+
+  ui.map_view->cut();
+}
+
+/**
+ * @copydoc Editor::can_copy
+ */
+bool MapEditor::can_copy() const {
+
+  return !ui.map_view->is_selection_empty();
+}
+
+/**
+ * @copydoc Editor::copy
+ */
+void MapEditor::copy() {
+
+  ui.map_view->copy();
+}
+
+/**
+ * @copydoc Editor::can_paste
+ */
+bool MapEditor::can_paste() const {
+  return true;
+}
+
+/**
+ * @copydoc Editor::paste
+ */
+void MapEditor::paste() {
+
+  ui.map_view->paste();
 }
 
 /**
@@ -894,6 +945,19 @@ void MapEditor::tileset_selection_changed() {
 
   uncheck_entity_creation_buttons();
   ui.map_view->tileset_selection_changed();
+}
+
+/**
+ * @brief Slot called when the user changes the selection in the map.
+ */
+void MapEditor::map_selection_changed() {
+
+  // Update whether cut/copy are available.
+  bool empty_selection = ui.map_view->is_selection_empty();
+  can_cut_changed(!empty_selection);
+  can_copy_changed(!empty_selection);
+
+  // TODO update the status bar.
 }
 
 /**

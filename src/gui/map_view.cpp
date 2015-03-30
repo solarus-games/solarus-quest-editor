@@ -149,8 +149,9 @@ MapView::MapView(QWidget* parent) :
   view_settings(nullptr),
   zoom(1.0),
   state(),
-  resize_entities_action(nullptr),
-  remove_entities_action(nullptr) {
+  common_actions(nullptr),
+  resize_action(nullptr),
+  remove_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -161,22 +162,22 @@ MapView::MapView(QWidget* parent) :
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   // Initialize actions.
-  resize_entities_action = new QAction(
-      MapView::tr("Resize"), this);
-  resize_entities_action->setShortcut(tr("R"));
-  resize_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  QObject::connect(resize_entities_action, &QAction::triggered, [&]() {
+  resize_action = new QAction(
+      tr("Resize"), this);
+  resize_action->setShortcut(tr("R"));
+  resize_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(resize_action, &QAction::triggered, [&]() {
     start_state_resizing_entities();
   });
-  addAction(resize_entities_action);
+  addAction(resize_action);
 
-  remove_entities_action = new QAction(
-        QIcon(":/images/icon_delete.png"), MapView::tr("Delete"), this);
-  remove_entities_action->setShortcut(QKeySequence::Delete);
-  remove_entities_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  QObject::connect(remove_entities_action, SIGNAL(triggered()),
+  remove_action = new QAction(
+        QIcon(":/images/icon_delete.png"), tr("Delete"), this);
+  remove_action->setShortcut(QKeySequence::Delete);
+  remove_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(remove_action, SIGNAL(triggered()),
                    this, SLOT(remove_selected_entities()));
-  addAction(remove_entities_action);
+  addAction(remove_action);
 }
 
 /**
@@ -267,6 +268,26 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
 
   horizontalScrollBar()->setValue(0);
   verticalScrollBar()->setValue(0);
+}
+
+/**
+ * @brief Returns the common actions of the editor.
+ * @return The common actions or nullptr if unset.
+ */
+const QMap<QString, QAction*>* MapView::get_common_actions() const {
+  return common_actions;
+}
+
+/**
+ * @brief Sets the common actions of the editor.
+ *
+ * This function should be called at initialization time to make actions
+ * available in the context menu.
+ *
+ * @param common_actions The common actions.
+ */
+void MapView::set_common_actions(const QMap<QString, QAction*>* common_actions) {
+  this->common_actions = common_actions;
 }
 
 /**
@@ -402,13 +423,36 @@ QMenu* MapView::create_context_menu() {
 
   QMenu* menu = new QMenu(this);
   QList<EntityIndex> indexes = get_selected_entities();
-  bool resizable = are_entities_resizable(indexes);
-  resize_entities_action->setEnabled(resizable);
 
-  menu->addAction(resize_entities_action);
-  menu->addAction(remove_entities_action);
+  bool resizable = are_entities_resizable(indexes);
+  resize_action->setEnabled(resizable);
+
+  if (common_actions != nullptr) {
+    // Global actions are available.
+    menu->addAction(common_actions->value("cut"));
+    menu->addAction(common_actions->value("copy"));
+    menu->addAction(common_actions->value("paste"));
+    menu->addSeparator();
+  }
+  menu->addAction(resize_action);
+  menu->addAction(remove_action);
 
   return menu;
+}
+
+/**
+ * TODO
+ */
+void MapView::cut() {
+
+}
+
+void MapView::copy() {
+
+}
+
+void MapView::paste() {
+
 }
 
 /**
@@ -612,6 +656,19 @@ void MapView::contextMenuEvent(QContextMenuEvent* event) {
   }
 
   state->context_menu_requested(viewport()->mapToGlobal(where));
+}
+
+/**
+ * @brief Returns whether the selection is empty.
+ * @return @c true if the number of selected entities is zero.
+ */
+bool MapView::is_selection_empty() const {
+
+  if (scene == nullptr) {
+    return true;
+  }
+
+  return scene->selectedItems().isEmpty();
 }
 
 /**
@@ -926,7 +983,7 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 void DoingNothingState::context_menu_requested(const QPoint& where) {
 
   MapView& view = get_view();
-  if (view.get_num_selected_entities() == 0) {
+  if (view.is_selection_empty()) {
     return;
   }
 

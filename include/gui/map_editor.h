@@ -36,7 +36,13 @@ public:
   MapModel& get_model();
   MapView& get_map_view();
 
-  virtual void save() override;
+  void save() override;
+  bool can_cut() const override;
+  void cut() override;
+  bool can_copy() const override;
+  void copy() override;
+  bool can_paste() const override;
+  void paste() override;
 
 private slots:
 
@@ -63,6 +69,7 @@ private slots:
   void update_tileset_view();
   void update_tileset_id();
   void tileset_selection_changed();
+  void map_selection_changed();
 
   void move_entities_requested(const QList<EntityIndex>& indexes,
                                const QPoint& translation,

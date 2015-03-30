@@ -73,8 +73,11 @@ public:
   void set_model(MapModel* map);
   const ViewSettings* get_view_settings() const;
   void set_view_settings(ViewSettings& view_settings);
+  const QMap<QString, QAction*>* get_common_actions() const;
+  void set_common_actions(const QMap<QString, QAction*>* common_actions);
 
   // Selection.
+  bool is_selection_empty() const;
   int get_num_selected_entities() const;
   QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
@@ -111,6 +114,9 @@ signals:
 
 public slots:
 
+  void cut();
+  void copy();
+  void paste();
   void update_zoom();
   void zoom_in();
   void zoom_out();
@@ -144,8 +150,10 @@ private:
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
 
-  QAction* resize_entities_action; /**< Action of resizing the selected entities. */
-  QAction* remove_entities_action; /**< Action of deleting the selected entities. */
+  const QMap<QString, QAction*>*
+      common_actions;              /**< Common actions for the context menu. */
+  QAction* resize_action;          /**< Action of resizing the selected entities. */
+  QAction* remove_action;          /**< Action of deleting the selected entities. */
 };
 
 #endif
