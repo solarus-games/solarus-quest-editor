@@ -91,8 +91,7 @@ public:
   bool are_entities_resizable(const QList<EntityIndex>& indexes) const;
 
   // Actions.
-  QAction& get_resize_entities_action();
-  QAction& get_remove_entities_action();
+  QMenu* create_context_menu();
 
 signals:
 

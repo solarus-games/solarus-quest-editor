@@ -380,22 +380,6 @@ void MapView::start_adding_entities_from_tileset_selection() {
 }
 
 /**
- * @brief Returns the action of resizing selected entities.
- * @return The resize entities action.
- */
-QAction& MapView::get_resize_entities_action() {
-  return *resize_entities_action;
-}
-
-/**
- * @brief Returns the action of removing selected entities.
- * @return The remove entities action.
- */
-QAction& MapView::get_remove_entities_action() {
-  return *remove_entities_action;
-}
-
-/**
  * @brief Returns whether at least one entity of a list is resizable.
  * @param indexes Indexes of entities to resize.
  * @return @c true at least one is resizable.
@@ -408,6 +392,23 @@ bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
     }
   }
   return false;
+}
+
+/**
+ * @brief Creates a context menu for the selected entities.
+ * @return A context menu.
+ */
+QMenu* MapView::create_context_menu() {
+
+  QMenu* menu = new QMenu(this);
+  QList<EntityIndex> indexes = get_selected_entities();
+  bool resizable = are_entities_resizable(indexes);
+  resize_entities_action->setEnabled(resizable);
+
+  menu->addAction(resize_entities_action);
+  menu->addAction(remove_entities_action);
+
+  return menu;
 }
 
 /**
@@ -925,19 +926,11 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 void DoingNothingState::context_menu_requested(const QPoint& where) {
 
   MapView& view = get_view();
-  const QList<EntityIndex>& selection = view.get_selected_entities();
-  if (selection.isEmpty()) {
+  if (view.get_num_selected_entities() == 0) {
     return;
   }
 
-  QAction& resize_action = view.get_resize_entities_action();
-  bool resizable = view.are_entities_resizable(selection);
-  resize_action.setEnabled(resizable);
-
-  QMenu* menu = new QMenu(&view);
-  menu->addAction(&resize_action);
-  menu->addAction(&view.get_remove_entities_action());
-
+  QMenu* menu = view.create_context_menu();
   menu->popup(where);
 }
 
