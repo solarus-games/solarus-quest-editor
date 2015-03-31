@@ -22,6 +22,7 @@
 #include "gui/tileset_editor.h"
 #include "gui/sprite_editor.h"
 #include "gui/quest_properties_editor.h"
+#include "gui/strings_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include <QFileInfo>
@@ -266,12 +267,33 @@ void EditorTabs::open_dialogs_editor(
 /**
  * @brief Opens a file with a language strings list editor in a new tab.
  * @param quest A Solarus quest.
- * @param path Path of the strings file to open.
+ * @param language_id Language id of the strings file to open.
  */
 void EditorTabs::open_strings_editor(
-    Quest& quest, const QString& path) {
+    Quest& quest, const QString& language_id) {
 
-  open_text_editor(quest, path);  // TODO strings list editor.
+  // Get the strings file path.
+  QString path = quest.get_strings_path(language_id);
+
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new StringsEditor(quest, language_id));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**
@@ -430,7 +452,7 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     open_dialogs_editor(quest, canonical_path);
   }
   else if (quest.is_strings_file(canonical_path, element_id)) {
-    open_strings_editor(quest, canonical_path);
+    open_strings_editor(quest, element_id);
   }
   else if (quest.is_script(canonical_path)) {
     // A Lua script that is not a resource element.

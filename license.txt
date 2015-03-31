@@ -55,6 +55,8 @@ resources/images/icon_stop.png
 resources/images/icon_undo.png
 resources/images/icon_web.png
 resources/images/icon_doc.png
+resources/images/icon_string.png
+resources/images/icon_strings.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 

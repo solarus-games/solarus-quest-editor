@@ -123,5 +123,7 @@
         <file>images/entity_custom_entity.png</file>
         <file>images/icon_doc.png</file>
         <file>images/icon_web.png</file>
+        <file>images/icon_string.png</file>
+        <file>images/icon_strings.png</file>
     </qresource>
 </RCC>

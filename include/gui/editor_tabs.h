@@ -53,7 +53,7 @@ public:
   void open_dialogs_editor(
       Quest& quest, const QString& path);
   void open_strings_editor(
-      Quest& quest, const QString& path);
+      Quest& quest, const QString &language_id);
 
   int find_editor(const QString& path);
   bool show_editor(const QString& path);
