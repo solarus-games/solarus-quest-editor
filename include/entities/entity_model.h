@@ -115,6 +115,7 @@ public:
   bool has_field(const QString& key) const;
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
+  QString to_string() const;
 
   // Resizing from the editor.
   bool is_resizable() const;

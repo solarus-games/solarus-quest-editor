@@ -27,6 +27,8 @@
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QAction>
+#include <QApplication>
+#include <QClipboard>
 #include <QDebug>
 #include <QGraphicsItem>
 #include <QMap>
@@ -441,18 +443,52 @@ QMenu* MapView::create_context_menu() {
 }
 
 /**
- * TODO
+ * @brief Copies the selected entities to the clipboard and removes them.
  */
 void MapView::cut() {
 
+  if (is_selection_empty()) {
+    return;
+  }
+
+  copy();
+  remove_selected_entities();
 }
 
+/**
+ * @brief Copies the selected entities to the clipboard.
+ */
 void MapView::copy() {
 
+  if (model == nullptr) {
+    return;
+  }
+
+  const QList<EntityIndex>& indexes = get_selected_entities();
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  QStringList entity_strings;
+  for (const EntityIndex& index : indexes) {
+    Q_ASSERT(model->entity_exists(index));
+    const EntityModel& entity = model->get_entity(index);
+    QString entity_string = entity.to_string();
+    Q_ASSERT(!entity_string.isEmpty());
+    entity_strings << entity_string;
+  }
+
+  QString text = entity_strings.join("");
+  QApplication::clipboard()->setText(text);
 }
 
+/**
+ * @brief Adds entities from the clipboard.
+ */
 void MapView::paste() {
 
+  // TODO
+  // Also take care of names uniqueness.
 }
 
 /**

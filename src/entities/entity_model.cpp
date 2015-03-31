@@ -744,6 +744,20 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
 }
 
 /**
+ * @brief Returns the string representing this entity in map files or scripts.
+ * @return The string form of this entity.
+ * Returns an empty string in case of error.
+ */
+QString EntityModel::to_string() const {
+
+  std::string buffer;
+  if (!get_entity().export_to_buffer(buffer)) {
+    return QString();
+  }
+  return QString::fromStdString(buffer);
+}
+
+/**
  * @brief Returns whether this entity can be resized.
  * @return @c true if the entity is resizable.
  */
