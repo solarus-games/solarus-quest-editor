@@ -78,6 +78,17 @@
         <source>New string key for string &apos;%1&apos;:</source>
         <translation>Nouvelle clé de texte pour le texte &apos;%1&apos; :</translation>
     </message>
+    <message>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="92"/>
+        <source>Invalid string key: %1</source>
+        <translation>Clé de texte invalide: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="101"/>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="106"/>
+        <source>The string key &apos;%1&apos; already exists</source>
+        <translation>Le texte &apos;%1&apos; existe déjà</translation>
+    </message>
 </context>
 <context>
     <name>Editor</name>
@@ -2777,32 +2788,37 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Changer clé de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="125"/>
+        <location filename="../src/gui/strings_editor.cpp" line="127"/>
+        <source>Change string key prefix</source>
+        <translation>Changer préfixe de clés de texte</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_editor.cpp" line="165"/>
         <source>Delete string</source>
         <translation>Supprimer texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="156"/>
+        <location filename="../src/gui/strings_editor.cpp" line="196"/>
         <source>Change string value</source>
         <translation>Changer valeur de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="204"/>
+        <location filename="../src/gui/strings_editor.cpp" line="244"/>
         <source>Strings %1</source>
         <translation>Textes %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="207"/>
+        <location filename="../src/gui/strings_editor.cpp" line="247"/>
         <source>Strings &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Les textes &apos;%1&apos; ont été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="221"/>
+        <location filename="../src/gui/strings_editor.cpp" line="261"/>
         <source>&lt;No language&gt;</source>
         <translation>&lt;Aucune langue&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="323"/>
+        <location filename="../src/gui/strings_editor.cpp" line="363"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -2811,7 +2827,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>StringsModel</name>
     <message>
         <location filename="../src/strings_model.cpp" line="43"/>
-        <location filename="../src/strings_model.cpp" line="644"/>
+        <location filename="../src/strings_model.cpp" line="725"/>
         <source>Cannot open strings data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de textes &apos;%1&apos;</translation>
     </message>
@@ -2841,24 +2857,25 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Traduction</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="359"/>
-        <location filename="../src/strings_model.cpp" line="450"/>
+        <location filename="../src/strings_model.cpp" line="391"/>
+        <location filename="../src/strings_model.cpp" line="482"/>
         <source>Invalid string Key: %1</source>
         <translation>Clé de texte invalide: %1</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="363"/>
-        <location filename="../src/strings_model.cpp" line="446"/>
+        <location filename="../src/strings_model.cpp" line="395"/>
+        <location filename="../src/strings_model.cpp" line="478"/>
+        <location filename="../src/strings_model.cpp" line="557"/>
         <source>String &apos;%1&apos; already exists</source>
         <translation>Le texte &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="442"/>
+        <location filename="../src/strings_model.cpp" line="474"/>
         <source>String &apos;%1&apos; no exists</source>
         <translation>Le texte &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="512"/>
+        <location filename="../src/strings_model.cpp" line="593"/>
         <source>Invalid string key: %1</source>
         <translation>Clé de texte invalide: %1</translation>
     </message>
