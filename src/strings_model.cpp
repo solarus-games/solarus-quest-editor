@@ -625,6 +625,22 @@ void StringsModel::delete_string(const QString& key) {
 }
 
 /**
+ * @brief Removes all strings with a specific prefix.
+ * @param prefix The prefix key of strings to remove.
+ * @return The list of all removed strings (key, value).
+ * @throws EditorException in case of error.
+ */
+QList<QPair<QString, QString>> StringsModel::delete_prefix(const QString& prefix) {
+
+  QList<QPair<QString, QString>> list;
+  for (QString key : get_keys(prefix)) {
+    list.push_back(QPair<QString, QString>(key, get_string(key)));
+    delete_string(key);
+  }
+  return list;
+}
+
+/**
  * @brief Returns the selection model.
  * @return The selection info.
  */

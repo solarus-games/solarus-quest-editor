@@ -78,6 +78,7 @@ public:
   QList<QPair<QString, QString> > set_string_key_prefix(
       const QString& old_prefix, const QString& new_prefix);
   void delete_string(const QString& key);
+  QList<QPair<QString, QString>> delete_prefix(const QString& prefix);
 
   // Selection.
   QItemSelectionModel& get_selection_model();

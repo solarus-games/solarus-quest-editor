@@ -22,6 +22,7 @@
 #include "quest.h"
 #include "strings_model.h"
 #include <QUndoStack>
+#include <QMessageBox>
 
 namespace {
 
@@ -182,6 +183,39 @@ private:
 
   QString key;
   QString value;
+};
+
+/**
+ * @brief Delete several strings.
+ */
+class DeleteStringsCommand : public StingsEditorCommand {
+
+public:
+
+  DeleteStringsCommand(StringsEditor& editor, const QString& prefix) :
+    StingsEditorCommand(editor, StringsEditor::tr("Delete strings")),
+    prefix(prefix) {
+  }
+
+  virtual void undo() override {
+
+    for (auto pair : values) {
+      get_model().create_string(pair.first, pair.second);
+    }
+    if (!values.isEmpty()) {
+      get_model().set_selected_key(values.front().first);
+    }
+  }
+
+  virtual void redo() override {
+
+    values = get_model().delete_prefix(prefix);
+  }
+
+private:
+
+  QString prefix;
+  QList<QPair<QString, QString>> values;
 };
 
 /**
@@ -388,8 +422,9 @@ void StringsEditor::update_selection() {
   }
 
   // Update buttons
-  ui.set_key_button->setEnabled(model->prefix_exists(key));
-  ui.delete_button->setEnabled(model->string_exists(key));
+  bool enable = model->prefix_exists(key);
+  ui.set_key_button->setEnabled(enable);
+  ui.delete_button->setEnabled(enable);
 }
 
 /**
@@ -457,12 +492,27 @@ void StringsEditor::change_string_key_requested() {
 void StringsEditor::delete_string_requested() {
 
   QString key = model->get_selected_key();
-  if (key.isEmpty()) {
+  if (key.isEmpty() || !model->prefix_exists(key)) {
     // No selection.
     return;
   }
 
-  try_command(new DeleteStringCommand(*this, key));
+  if (model->string_exists(key)) {
+    try_command(new DeleteStringCommand(*this, key));
+    return;
+  }
+
+  QMessageBox::StandardButton answer = QMessageBox::question(
+        this,
+        tr("Delete confirmation"),
+        tr("Do you really want to delete all strings prefixed by '%1'?").arg(key),
+        QMessageBox::Yes | QMessageBox::No);
+
+  if (answer != QMessageBox::Yes) {
+    return;
+  }
+
+  try_command(new DeleteStringsCommand(*this, key));
 }
 
 /**
