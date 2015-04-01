@@ -115,6 +115,46 @@ private:
 };
 
 /**
+ * @brief Change string key.
+ */
+class SetKeyPrefixCommand : public StingsEditorCommand {
+
+public:
+
+  SetKeyPrefixCommand(
+      StringsEditor& editor, const QString& olf_prefix,
+      const QString& new_prefix) :
+    StingsEditorCommand(editor, StringsEditor::tr("Change string key prefix")),
+    old_prefix(olf_prefix),
+    new_prefix(new_prefix) {
+  }
+
+  virtual void undo() override {
+
+    for (auto pair : edited_keys) {
+      get_model().set_string_key(pair.second, pair.first);
+    }
+    if (!edited_keys.isEmpty()) {
+      get_model().set_selected_key(edited_keys.front().first);
+    }
+  }
+
+  virtual void redo() override {
+
+    edited_keys = get_model().set_string_key_prefix(old_prefix, new_prefix);
+    if (!edited_keys.isEmpty()) {
+      get_model().set_selected_key(edited_keys.front().second);
+    }
+  }
+
+private:
+
+  QString old_prefix;
+  QString new_prefix;
+  QList<QPair<QString, QString>> edited_keys;
+};
+
+/**
  * @brief Delete a string.
  */
 class DeleteStringCommand : public StingsEditorCommand {
@@ -348,9 +388,8 @@ void StringsEditor::update_selection() {
   }
 
   // Update buttons
-  bool enable = model->string_exists(model->get_selected_key());
-  ui.set_key_button->setEnabled(enable);
-  ui.delete_button->setEnabled(enable);
+  ui.set_key_button->setEnabled(model->prefix_exists(key));
+  ui.delete_button->setEnabled(model->string_exists(key));
 }
 
 /**
@@ -375,16 +414,24 @@ void StringsEditor::create_string_requested() {
  */
 void StringsEditor::change_string_key_requested() {
 
-  // TODO: check if exists key(s) with this prefix.
-  // and try to change prefix key of all concerning strings.
-
   QString old_key = model->get_selected_key();
+  QStringList prefix_keys = model->get_keys(old_key);
+  bool exists = false;
+  bool is_prefix = false;
 
-  if (!model->string_exists(old_key)) {
+  if (prefix_keys.size() > 0) {
+    if (model->string_exists(old_key)) {
+      exists = true;
+      is_prefix = prefix_keys.size() > 1;
+    } else {
+      is_prefix = true;
+    }
+  } else {
     return;
   }
 
-  ChangeStringKeyDialog dialog(model, old_key, false, false, this);
+  ChangeStringKeyDialog dialog(
+        model, old_key, is_prefix, is_prefix && exists, this);
 
   int result = dialog.exec();
   if (result != QDialog::Accepted) {
@@ -397,7 +444,11 @@ void StringsEditor::change_string_key_requested() {
     return;
   }
 
-  try_command(new SetStringKeyCommand(*this, old_key, new_key));
+  if (dialog.get_prefix()) {
+    try_command(new SetKeyPrefixCommand(*this, old_key, new_key));
+  } else {
+    try_command(new SetStringKeyCommand(*this, old_key, new_key));
+  }
 }
 
 /**

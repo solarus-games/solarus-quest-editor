@@ -320,6 +320,38 @@ bool StringsModel::string_exists(const QString& key) const {
 }
 
 /**
+ * @brief Returns whether exists key starts with a specified prefix.
+ * @param prefix The prefix to test.
+ * @return @c true if a key that starts with the specified prefix exists.
+ */
+bool StringsModel::prefix_exists(const QString& prefix) const {
+
+  for (const auto& kvp : resources.get_strings()) {
+    if (QString::fromStdString(kvp.first).startsWith(prefix)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * @brief Returns all the existing keys that start with the specified prefix.
+ * @param prefix The prefix to test.
+ * @return The list of all keys that starts with the specified prefix.
+ */
+QStringList StringsModel::get_keys(const QString& prefix) const {
+
+  QStringList list;
+  for (const auto& kvp : resources.get_strings()) {
+    QString key = QString::fromStdString(kvp.first);
+    if (key.startsWith(prefix)) {
+      list.push_back(key);
+    }
+  }
+  return list;
+}
+
+/**
  * @brief Returns the value of a string with the specified key.
  * @param key The key to test.
  * @return the value of the specified string or an empty string if no exists.
@@ -425,9 +457,9 @@ void StringsModel::set_string(const QString& key, const QString& value) {
  * The selection is cleared before the operations and restored after,
  * updated with the new indexes.
  *
- * @param keu Key of an existing string.
+ * @param key Key of an existing string.
  * @param new_key The new key to set.
- * @return The new key of the pattern.
+ * @return The new key of the string.
  * @throws EditorException in case of error.
  */
 QString StringsModel::set_string_key(const QString& key, const QString& new_key) {
@@ -439,15 +471,15 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
 
   // Make some checks first.
   if (!string_exists(key)) {
-      throw EditorException(tr("String '%1' no exists").arg(key));
+    throw EditorException(tr("String '%1' no exists").arg(key));
   }
 
   if (string_exists(new_key)) {
-      throw EditorException(tr("String '%1' already exists").arg(new_key));
+    throw EditorException(tr("String '%1' already exists").arg(new_key));
   }
 
   if (!is_valid_key(new_key)) {
-      throw EditorException(tr("Invalid string Key: %1").arg(new_key));
+    throw EditorException(tr("Invalid string Key: %1").arg(new_key));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -486,6 +518,55 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
   // Restore the selection.
   set_selected_key(old_selection);
   return new_key;
+}
+
+/**
+ * @brief Returns whether the prefix of string keys can be changed.
+ * @param old_prefix[in] The prefix key of strings to change.
+ * @param new_prefix[in] The new prefix to set.
+ * @param key[out] The key that already exists in case of error.
+ * @return @c true if the prefix can be changed.
+ */
+bool StringsModel::can_set_string_key_prefix(
+    const QString& old_prefix, const QString& new_prefix, QString& key) {
+
+  for (QString prefixed_key : get_keys(old_prefix)) {
+
+    prefixed_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
+    if (string_exists(prefixed_key)) {
+      key = prefixed_key;
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Changes the prefix of string keys.
+ * @param old_prefix The prefix key of strings to change.
+ * @param new_prefix The new prefix to set.
+ * @return The new keys of the string.
+ * @throws EditorException in case of error.
+ */
+QList<QPair<QString, QString>> StringsModel::set_string_key_prefix(
+    const QString& old_prefix, const QString& new_prefix) {
+
+  // Check if the prefix can be changed.
+  QString key;
+  if (!can_set_string_key_prefix(old_prefix, new_prefix, key)) {
+    throw EditorException(tr("String '%1' already exists").arg(key));
+  }
+
+  // change the string keys.
+  QList<QPair<QString, QString>> list;
+  for (QString old_key : get_keys(old_prefix)) {
+
+    QString new_key = old_key;
+    new_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
+    list.push_back(
+      QPair<QString, QString>(old_key, set_string_key(old_key, new_key)));
+  }
+  return list;
 }
 
 /**

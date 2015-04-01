@@ -89,13 +89,23 @@ void ChangeStringKeyDialog::done(int result) {
     QString key = get_string_key();
 
     if (!StringsModel::is_valid_key(key)) {
-      GuiTools::error_dialog("Invalid string key");
+      GuiTools::error_dialog(tr("Invalid string key: %1").arg(key));
       return;
     }
 
-    if (model->string_exists(key) && key != initial_key) {
-      GuiTools::error_dialog("This string key already exists");
-      return;
+    if (key != initial_key) {
+      if (get_prefix()) {
+        QString error_key;
+        if (!model->can_set_string_key_prefix(initial_key, key, error_key)) {
+          GuiTools::error_dialog(
+                tr("The string key '%1' already exists").arg(error_key));
+          return;
+        }
+      } else if (model->string_exists(key)) {
+        GuiTools::error_dialog(
+              tr("The string key '%1' already exists").arg(key));
+        return;
+      }
     }
   }
 

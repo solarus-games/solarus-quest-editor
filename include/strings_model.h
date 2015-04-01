@@ -67,10 +67,16 @@ public:
   QModelIndex key_to_index(const QString& key, int column = 0) const;
 
   bool string_exists(const QString& key) const;
+  bool prefix_exists(const QString& prefix) const;
+  QStringList get_keys(const QString& prefix) const;
   QString get_string(const QString& key) const;
   void create_string(const QString& key, const QString& value);
   void set_string(const QString& key, const QString& value);
   QString set_string_key(const QString& key, const QString& new_key);
+  bool can_set_string_key_prefix(
+      const QString& old_prefix, const QString& new_prefix, QString& key);
+  QList<QPair<QString, QString> > set_string_key_prefix(
+      const QString& old_prefix, const QString& new_prefix);
   void delete_string(const QString& key);
 
   // Selection.
