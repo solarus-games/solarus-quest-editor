@@ -227,6 +227,8 @@ QVariant StringsModel::data(const QModelIndex& model_index, int role) const {
 QVariant StringsModel::headerData(
     int section, Qt::Orientation orientation, int role) const {
 
+  Q_UNUSED(orientation);
+
   if (role == Qt::DisplayRole) {
     // Text of each header.
     switch (section) {

@@ -109,8 +109,8 @@ public:
 
 private:
 
-  QString new_key;
   QString old_key;
+  QString new_key;
 };
 
 /**
@@ -189,9 +189,9 @@ private:
 StringsEditor::StringsEditor(
     Quest& quest, const QString& language_id, QWidget* parent) :
   Editor(quest, quest.get_strings_path(language_id), parent),
+  language_id(language_id),
   model(nullptr),
-  quest(quest),
-  language_id(language_id) {
+  quest(quest) {
 
   ui.setupUi(this);
 

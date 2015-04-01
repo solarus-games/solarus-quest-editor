@@ -79,12 +79,12 @@ private:
     int type;       /**< Type of the node. */
 
     std::map<QString, Node*, NaturalComparator>
-      childs;       /**< Childrens of the node. */
+      children;     /**< Children of the node. */
   };
 
   Node* get_child(const QString& key) const;
 
-  Node *get_sub_child(const Node* node, const QString& sub_key) const;
+  Node* get_sub_child(const Node* node, const QString& sub_key) const;
 
   bool add_child(const QString& key, int type, QString& parent_key, int& index);
 
@@ -94,7 +94,7 @@ private:
 
   void build_index_map(const Node* node) const;
 
-  void clear_childs(Node *node);
+  void clear_children(Node *node);
 
   QString separator;  /**< The separator character. */
   Node* root;         /**< The root node of the tree. */

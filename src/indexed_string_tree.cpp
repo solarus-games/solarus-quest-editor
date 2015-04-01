@@ -61,7 +61,7 @@ int IndexedStringTree::get_row_count(const QString& key) const {
   if (node == nullptr) {
     return -1;
   }
-  return node->childs.size();
+  return node->children.size();
 }
 
 /**
@@ -93,11 +93,11 @@ QString IndexedStringTree::get_row_key(
 
   Node* node = get_child(parent_key);
 
-  if (node == nullptr || index < 0 || index >= node->childs.size()) {
+  if (node == nullptr || index < 0 || index >= (int) node->children.size()) {
     return "";
   }
 
-  auto it = node->childs.begin();
+  auto it = node->children.begin();
   std::advance(it, index);
   return it->second->key;
 }
@@ -217,7 +217,7 @@ bool IndexedStringTree::remove_ref(const QString& key, bool keep_key) {
  * @brief Clears the tree.
  */
 void IndexedStringTree::clear() {
-  clear_childs(root);
+  clear_children(root);
 }
 
 /**
@@ -252,8 +252,8 @@ IndexedStringTree::Node* IndexedStringTree::get_child(const QString& key) const 
 IndexedStringTree::Node* IndexedStringTree::get_sub_child(
     const Node *node, const QString& sub_key) const {
 
-  auto it = node->childs.find(sub_key);
-  if (it == node->childs.end()) {
+  auto it = node->children.find(sub_key);
+  if (it == node->children.end()) {
     return nullptr;
   }
   return it->second;
@@ -315,7 +315,7 @@ bool IndexedStringTree::add_child(
     }
 
     // Add the node and rebuild the index map.
-    parent->childs.emplace(sub_key, node);
+    parent->children.emplace(sub_key, node);
     build_index_map(parent);
 
     // Set the index of the first added child.
@@ -350,14 +350,14 @@ bool IndexedStringTree::can_remove_child(
 
   // Check if the node have childs.
   Node* node = get_child(key);
-  if (node->childs.size() > 0 || node->type != type) {
+  if (node->children.size() > 0 || node->type != type) {
     return false;
   }
 
   // Get the first real parent in the hierarchy (or root).
   Node* parent = node->parent;
   while (parent != root && parent != nullptr &&
-         parent->type == CONTAINER && parent->childs.size() == 1) {
+         parent->type == CONTAINER && parent->children.size() == 1) {
 
     node = parent;
     parent = node->parent;
@@ -407,12 +407,12 @@ bool IndexedStringTree::remove_child(const QString& key, int type, bool keep_key
 
   // Get the parent and the iterator of the node.
   Node* parent = get_child(parent_key);
-  auto it = parent->childs.begin();
+  auto it = parent->children.begin();
   std::advance(it, index);
 
   // Remove the node and rebuild the index map.
   delete it->second;
-  parent->childs.erase(it);
+  parent->children.erase(it);
   build_index_map(parent);
   return true;
 }
@@ -429,7 +429,7 @@ bool IndexedStringTree::remove_child(const QString& key, int type, bool keep_key
 void IndexedStringTree::build_index_map(const Node* node) const {
 
   int index = 0;
-  for (auto& kvp : node->childs) {
+  for (auto& kvp : node->children) {
     kvp.second->index = index++;
   }
 }
@@ -438,13 +438,13 @@ void IndexedStringTree::build_index_map(const Node* node) const {
  * @brief Clears childs of a node.
  * @param node The node.
  */
-void IndexedStringTree::clear_childs(Node* node) {
+void IndexedStringTree::clear_children(Node* node) {
 
-  auto it = node->childs.begin();
-  while (it != node->childs.end()) {
-    clear_childs(it->second);
+  auto it = node->children.begin();
+  while (it != node->children.end()) {
+    clear_children(it->second);
     delete it->second;
     it++;
   }
-  node->childs.clear();
+  node->children.clear();
 }
