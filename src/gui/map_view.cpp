@@ -487,8 +487,42 @@ void MapView::copy() {
  */
 void MapView::paste() {
 
-  // TODO
-  // Also take care of names uniqueness.
+  QString text = QApplication::clipboard()->text();
+  if (text.isEmpty()) {
+    return;
+  }
+
+  QStringList entity_strings = text.split(QRegExp("[\n\r]\\}[\n\r]"), QString::SkipEmptyParts);
+
+  EntityModels entities;
+  for (int i = 0; i < entity_strings.size(); ++i) {
+
+    QString entity_string = entity_strings.at(i);
+
+    if (entity_string.simplified().isEmpty()) {
+      // Only whitespaces: skip.
+      continue;
+    }
+
+    if (i < entity_strings.size() - 1) {
+      entity_string = entity_string + "}";  // Restore the closing brace removed by split().
+    }
+    EntityModelPtr entity = EntityModel::create(*get_model(), entity_string);
+    if (entity == nullptr) {
+      // The text data from the clipboard is not a valid entity.
+      return;
+    }
+
+    entities.push_back(std::move(entity));
+  }
+
+  if (entities.empty()) {
+    return;
+  }
+
+  start_state_adding_entities(std::move(entities));
+
+  // TODO also take care of names uniqueness.
 }
 
 /**

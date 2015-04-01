@@ -61,6 +61,8 @@ public:
   static EntityModelPtr create(
       MapModel& map, EntityType type);
   static EntityModelPtr create(
+      MapModel& map, const QString& entity_string);
+  static EntityModelPtr create(
       MapModel& map, const EntityIndex& index);
   static EntityModelPtr clone(
       MapModel& map, const EntityIndex& index);

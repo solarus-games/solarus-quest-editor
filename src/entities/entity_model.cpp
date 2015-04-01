@@ -102,6 +102,31 @@ EntityModelPtr EntityModel::create(
 }
 
 /**
+ * @brief Creates an entity model for a new entity from a string.
+ * @param map The map that will contain the entity.
+ * @param string The string representation of the entity.
+ * @return The created model or nullptr if the string is invalid.
+ */
+EntityModelPtr EntityModel::create(
+    MapModel& map, const QString& entity_string) {
+
+  Solarus::EntityData data;
+  if (entity_string.simplified().isEmpty()) {
+    // Empty string or only whitespaces.
+    return nullptr;
+  }
+
+  if (!data.import_from_buffer(entity_string.toStdString())) {
+    return nullptr;
+  }
+
+  EntityModelPtr entity = create(map, EntityIndex(), data.get_type());
+  entity->get_entity() = data;
+
+  return entity;
+}
+
+/**
  * @brief Creates an entity model of the appropriate concrete type
  * from the an existing entity of the map.
  * @param map The map that contains the entity.
