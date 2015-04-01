@@ -74,6 +74,7 @@ resources/images/icon_layer_0.png
 resources/images/icon_layer_1.png
 resources/images/icon_layer_2.png
 resources/images/icon_resource_language.png
+resources/images/icon_missing.png
 resources/images/icon_resource_enemy_missing.png
 resources/images/icon_resource_entity_missing.png
 resources/images/icon_resource_font_missing.png
@@ -84,6 +85,8 @@ resources/images/icon_resource_music_missing.png
 resources/images/icon_resource_sound_missing.png
 resources/images/icon_resource_sprite_missing.png
 resources/images/icon_resource_tileset_missing.png
+resources/images/icon_string_missing.png
+resources/images/icon_strings_missing.png
 
 - By Andrew Tyler:
 http://www.andrewtyler.net
