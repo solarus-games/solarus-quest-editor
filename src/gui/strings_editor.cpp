@@ -17,6 +17,7 @@
 #include "gui/gui_tools.h"
 #include "gui/strings_editor.h"
 #include "gui/new_string_dialog.h"
+#include "gui/change_string_key_dialog.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "strings_model.h"
@@ -373,7 +374,30 @@ void StringsEditor::create_string_requested() {
  * @brief Slot called when the user wants to change the key of a string.
  */
 void StringsEditor::change_string_key_requested() {
-  // TODO ...
+
+  // TODO: check if exists key(s) with this prefix.
+  // and try to change prefix key of all concerning strings.
+
+  QString old_key = model->get_selected_key();
+
+  if (!model->string_exists(old_key)) {
+    return;
+  }
+
+  ChangeStringKeyDialog dialog(model, old_key, false, false, this);
+
+  int result = dialog.exec();
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString new_key = dialog.get_string_key();
+
+  if (new_key == old_key) {
+    return;
+  }
+
+  try_command(new SetStringKeyCommand(*this, old_key, new_key));
 }
 
 /**

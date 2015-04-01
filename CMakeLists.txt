@@ -125,6 +125,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/zoom_tool.h
   include/gui/strings_editor.h
   include/gui/new_string_dialog.h
+  include/gui/change_string_key_dialog.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -211,6 +212,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/zoom_tool.cpp
   src/gui/strings_editor.cpp
   src/gui/new_string_dialog.cpp
+  src/gui/change_string_key_dialog.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp
@@ -251,6 +253,7 @@ set(solarus_quest_editor_FORMS
   src/gui/quest_properties_editor.ui
   src/gui/strings_editor.ui
   src/gui/new_string_dialog.ui
+  src/gui/change_string_key_dialog.ui
 )
 
 # Generate .h from .ui.

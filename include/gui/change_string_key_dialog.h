@@ -14,33 +14,33 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_NEW_STRING_DIALOG_H
-#define SOLARUSEDITOR_NEW_STRING_DIALOG_H
+#ifndef SOLARUSEDITOR_CHANGE_STRING_KEY_DIALOG_H
+#define SOLARUSEDITOR_CHANGE_STRING_KEY_DIALOG_H
 
-#include "ui_new_string_dialog.h"
+#include "ui_change_string_key_dialog.h"
 #include <QDialog>
 
 class StringsModel;
 
 /**
- * @brief A dialog to create a new string in the strings editor.
+ * @brief A dialog to change key of string in the strings editor.
  *
  * This dialog is similar to a standard QInputDialog but with two line edit.
  */
-class NewStringDialog : public QDialog {
+class ChangeStringKeyDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  NewStringDialog(
+  ChangeStringKeyDialog(
       StringsModel* model, const QString& initial_key,
-      const QString& initial_value = "", QWidget* parent = 0);
+      bool is_prefix = false, bool allow_prefix = false, QWidget* parent = 0);
 
   QString get_string_key() const;
   void set_string_key(const QString& key);
 
-  QString get_string_value() const;
-  void set_string_value(const QString& value);
+  bool get_prefix() const;
+  void set_prefix(bool prefix);
 
 public slots:
 
@@ -48,7 +48,8 @@ public slots:
 
 private:
 
-  Ui::NewStringDialog ui;   /**< The widgets. */
+  Ui::ChangeStringKeyDialog ui;   /**< The widgets. */
+  QString initial_key;
   StringsModel* model;
 
 };

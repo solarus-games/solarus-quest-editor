@@ -14,32 +14,39 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/new_string_dialog.h"
+#include "gui/change_string_key_dialog.h"
 #include "gui/gui_tools.h"
 #include "strings_model.h"
 
 /**
  * @brief Creates a change string key dialog.
- * @param key Key of the string to change.
- * @param initial_value Initial value of the string.
+ * @param initial_key Initial key of the string.
+ * @param is_prefix If the key is a prefix key.
+ * @param allow_prefix Allows to change the prefix value.
  * @param parent Parent object or nullptr.
  */
-NewStringDialog::NewStringDialog (
+ChangeStringKeyDialog::ChangeStringKeyDialog (
     StringsModel *model, const QString &initial_key,
-    const QString &initial_value, QWidget *parent) :
+    bool is_prefix, bool allow_prefix, QWidget *parent) :
   QDialog(parent),
+  initial_key(initial_key),
   model(model) {
 
   ui.setupUi(this);
+
+  ui.string_key_label->setText(
+        tr("New string key for string '%1':").arg(initial_key));
+  ui.prefix_mode_field->setEnabled(allow_prefix);
+
   set_string_key(initial_key);
-  set_string_value(initial_value);
+  set_prefix(is_prefix);
 }
 
 /**
  * @brief Returns string key entered by the user.
  * @return The string key.
  */
-QString NewStringDialog::get_string_key() const {
+QString ChangeStringKeyDialog::get_string_key() const {
 
   return ui.string_key_field->text();
 }
@@ -48,52 +55,46 @@ QString NewStringDialog::get_string_key() const {
  * @brief Sets the string key displayed in the text edit.
  * @param key The key to set.
  */
-void NewStringDialog::set_string_key(const QString& key) {
+void ChangeStringKeyDialog::set_string_key(const QString& key) {
 
   ui.string_key_field->setText(key);
 }
 
 /**
- * @brief Returns string value entered by the user.
- * @return The string value.
+ * @brief Returns prefix value entered by the user.
+ * @return The prefix value.
  */
-QString NewStringDialog::get_string_value() const {
+bool ChangeStringKeyDialog::get_prefix() const {
 
-  return ui.string_value_field->text();
+  return ui.prefix_mode_field->isChecked();
 }
 
 /**
- * @brief Sets the string value displayed in the text edit.
- * @param value The value to set.
+ * @brief Sets the prefix value displayed in the text edit.
+ * @param prefix The prefix to set.
  */
-void NewStringDialog::set_string_value(const QString& value) {
+void ChangeStringKeyDialog::set_prefix(bool prefix) {
 
-  ui.string_value_field->setText(value);
+  ui.prefix_mode_field->setChecked(prefix);
 }
 
 /**
  * @brief Closes the dialog unless the user tries to set invalid data.
  * @param result Result code of the dialog.
  */
-void NewStringDialog::done(int result) {
+void ChangeStringKeyDialog::done(int result) {
 
   if (result == QDialog::Accepted) {
 
     QString key = get_string_key();
-    QString value = get_string_value();
 
     if (!StringsModel::is_valid_key(key)) {
       GuiTools::error_dialog("Invalid string key");
       return;
     }
 
-    if (model->string_exists(key)) {
+    if (model->string_exists(key) && key != initial_key) {
       GuiTools::error_dialog("This string key already exists");
-      return;
-    }
-
-    if (value.isEmpty()) {
-      GuiTools::error_dialog("Value cannot be empty");
       return;
     }
   }
