@@ -125,5 +125,7 @@
         <file>images/icon_web.png</file>
         <file>images/icon_string.png</file>
         <file>images/icon_strings.png</file>
+        <file>images/icon_string_missing.png</file>
+        <file>images/icon_strings_missing.png</file>
     </qresource>
 </RCC>

@@ -44,9 +44,14 @@ StringsModel::StringsModel(
   }
 
   // Create the indexed tree.
-  for (const auto& kvp : resources.get_strings()) {
-    string_tree.add_key(QString::fromStdString(kvp.first));
-  }
+  build_string_tree();
+}
+
+/**
+ * @brief Destructor.
+ */
+StringsModel::~StringsModel() {
+  string_tree.clear();
 }
 
 /**
@@ -83,7 +88,7 @@ void StringsModel::save() const {
  * @return The number of columns.
  */
 int StringsModel::columnCount(const QModelIndex& /* parent */) const {
-  return 2;
+  return 3;
 }
 
 /**
@@ -180,8 +185,17 @@ QVariant StringsModel::data(const QModelIndex& model_index, int role) const {
         case Qt::DisplayRole: return key.split(".").back(); break;
 
         case Qt::DecorationRole:
-          if (!resources.has_string(key.toStdString())) {
+          if (!string_exists(key)) {
+
+            if (translated_string_exists(key)) {
+              if (string_tree.get_row_count(key) == 0) {
+                return QIcon(":/images/icon_string_missing.png");
+              } else {
+                return QIcon(":/images/icon_strings_missing.png");
+              }
+            }
             return QIcon(":/images/icon_folder_open.png");
+
           } else {
             if (string_tree.get_row_count(key) == 0) {
               return QIcon(":/images/icon_string.png");
@@ -194,6 +208,10 @@ QVariant StringsModel::data(const QModelIndex& model_index, int role) const {
   } else if (column == 1 && string_exists(key) &&
              (role == Qt::DisplayRole || role == Qt::EditRole)) {
     return get_string(key);
+  } else if (column == 2 && role == Qt::DisplayRole) {
+    if (translated_string_exists(key)) {
+      return get_translated_string(key);
+    }
   }
 
   return QVariant();
@@ -214,6 +232,11 @@ QVariant StringsModel::headerData(
     switch (section) {
     case 0: return tr("Key");
     case 1: return tr("Value");
+    case 2:
+      if (!translation_id.isEmpty()) {
+        return tr("Translation (%1)").arg(translation_id);
+      }
+      return tr("Translation");
     }
   }
 
@@ -354,7 +377,7 @@ void StringsModel::create_string(const QString& key, const QString& value) {
     beginInsertRows(key_to_index(parent_key), index, index);
     endInsertRows();
   } else {
-    dataChanged(key_to_index(key), key_to_index(key, 1));
+    dataChanged(key_to_index(key), key_to_index(key, 2));
   }
 
   // Notify people.
@@ -442,7 +465,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
     string_tree.remove_key(key);
     endRemoveRows();
   } else if (string_tree.remove_key(key)) {
-    dataChanged(key_to_index(key), key_to_index(key, 1));
+    dataChanged(key_to_index(key), key_to_index(key, 2));
   }
 
   // Add to the indexed tree.
@@ -452,7 +475,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
     beginInsertRows(key_to_index(parent_key), index, index);
     endInsertRows();
   } else {
-    dataChanged(key_to_index(key), key_to_index(key, 1));
+    dataChanged(key_to_index(key), key_to_index(key, 2));
   }
 
   // Notify people.
@@ -508,7 +531,7 @@ void StringsModel::delete_string(const QString& key) {
     // chance to know new indexes before receiving selection signals.
     endRemoveRows();
   } else if (string_tree.remove_key(key)) {
-    dataChanged(key_to_index(key), key_to_index(key, 1));
+    dataChanged(key_to_index(key), key_to_index(key, 2));
   }
 
   // Notify people.
@@ -558,7 +581,7 @@ void StringsModel::set_selected_key(const QString& key) {
     return clear_selection();
   }
 
-  QItemSelection selection(key_to_index(key), key_to_index(key, 1));
+  QItemSelection selection(key_to_index(key), key_to_index(key, 2));
   selection_model.select(selection, QItemSelectionModel::ClearAndSelect);
 }
 
@@ -567,4 +590,131 @@ void StringsModel::set_selected_key(const QString& key) {
  */
 void StringsModel::clear_selection() {
   selection_model.clear();
+}
+
+/**
+ * @brief Returns the language id of the current translation.
+ * @return The language if of the translation.
+ */
+QString StringsModel::get_translation_id() const {
+  return translation_id;
+}
+
+/**
+ * @brief Changes the language of the current translation.
+ * @param language_id The language id of the translation.
+ */
+void StringsModel::set_translation_id(const QString& language_id) {
+
+  if (language_id == translation_id) {
+    return;
+  }
+  translation_id = language_id;
+  reload_translation();
+}
+
+/**
+ * @brief Removes the current translation.
+ */
+void StringsModel::clear_translation() {
+
+  if (translation_id.isEmpty()) {
+    return;
+  }
+
+  translation_id = "";
+  clear_translation_from_tree();
+  translation_resources.clear();
+  headerDataChanged(Qt::Horizontal, 2, 2);
+}
+
+/**
+ * @brief Reload the current translation.
+ */
+void StringsModel::reload_translation() {
+
+  clear_translation_from_tree();
+
+  QString path = quest.get_strings_path(translation_id);
+  translation_resources.clear();
+  if (!translation_resources.import_from_file(path.toStdString())) {
+    translation_id = "";
+    throw EditorException(tr("Cannot open strings data file '%1'").arg(path));
+  }
+
+  for (const auto& kvp : translation_resources.get_strings()) {
+    QString key = QString::fromStdString(kvp.first);
+    QString parent_key;
+    int index;
+    if (string_tree.add_ref(key, parent_key, index)) {
+      beginInsertRows(key_to_index(parent_key), index, index);
+      endInsertRows();
+    } else {
+      QModelIndex model_index = key_to_index(key, 2);
+      dataChanged(model_index, model_index);
+    }
+  }
+
+  headerDataChanged(Qt::Horizontal, 2, 2);
+}
+
+/**
+ * @brief Returns whether a translated string exists.
+ * @param key The key of the string.
+ * @return @c true if the translated string exists.
+ */
+bool StringsModel::translated_string_exists(const QString& key) const {
+
+  return translation_resources.has_string(key.toStdString());
+}
+
+/**
+ * @brief Returns a translated string.
+ * @param key The key of the string.
+ * @return The translated string or an empty string if no exists.
+ */
+QString StringsModel::get_translated_string(const QString& key) const {
+
+  if (!translated_string_exists(key)) {
+    return "";
+  }
+  return QString::fromStdString(
+        translation_resources.get_string(key.toStdString()));
+}
+
+/**
+ * @brief Builds or rebuilds the indexed string tree.
+ */
+void StringsModel::build_string_tree() {
+
+  string_tree.clear();
+  for (const auto& kvp : resources.get_strings()) {
+    QString key = QString::fromStdString(kvp.first);
+    string_tree.add_key(key);
+  }
+}
+
+/**
+ * @brief Removes all translated string from the indexed string tree.
+ */
+void StringsModel::clear_translation_from_tree() {
+
+  for (const auto& kvp : translation_resources.get_strings()) {
+    QString key = QString::fromStdString(kvp.first);
+    QString parent_key;
+    int index;
+    if (string_tree.can_remove_ref(key, parent_key, index)) {
+      if (!string_exists(key)) {
+        beginRemoveRows(key_to_index(parent_key), index, index);
+        string_tree.remove_ref(key, false);
+        endRemoveRows();
+      } else if (string_tree.remove_ref(key, true)) {
+        QModelIndex model_index = key_to_index(key, 2);
+        dataChanged(model_index, model_index);
+      }
+    } else if (string_tree.remove_ref(key, string_exists(key))) {
+      QModelIndex model_index = key_to_index(key, 2);
+      dataChanged(model_index, model_index);
+    }
+  }
 }

@@ -210,6 +210,16 @@ StringsEditor::StringsEditor(
   ui.strings_tree_view->setModel(model);
   ui.strings_tree_view->selectionModel()->deleteLater();
   ui.strings_tree_view->setSelectionModel(&model->get_selection_model());
+  ui.strings_tree_view->setAlternatingRowColors(true);
+  ui.strings_tree_view->setColumnWidth(0, 300);
+  ui.strings_tree_view->setColumnHidden(2, true);
+
+  ui.translation_field->set_resource_type(ResourceType::LANGUAGE);
+  ui.translation_field->set_quest(quest);
+  ui.translation_field->remove_id(language_id);
+  ui.translation_field->add_special_value("", tr("<No language>"), 0);
+  ui.translation_field->set_selected_id("");
+
   update();
 
   // Make connections.
@@ -232,6 +242,11 @@ StringsEditor::StringsEditor(
 
   connect(model, SIGNAL(set_value_requested(QString,QString)),
           this, SLOT(set_value_requested(QString,QString)));
+
+  connect(ui.translation_field, SIGNAL(activated(QString)),
+          this, SLOT(translation_selector_activated()));
+  connect(ui.translation_refresh_button, SIGNAL(clicked()),
+          this, SLOT(translation_refresh_requested()));
 }
 
 /**
@@ -385,7 +400,9 @@ void StringsEditor::set_value_requested(
 
   // If no exists, try to create.
   if (!model->string_exists(key)) {
-    try_command(new CreateStringCommand(*this, key, value));
+    if (!value.isEmpty()) {
+      try_command(new CreateStringCommand(*this, key, value));
+    }
   }
   // Else,
   else {
@@ -398,4 +415,54 @@ void StringsEditor::set_value_requested(
       try_command(new SetStringValueCommand(*this, key, value));
     }
   }
+}
+
+/**
+ * @brief Slot called when the user changes the language in the selector.
+ */
+void StringsEditor::translation_selector_activated() {
+
+  const QString& old_language_id = model->get_translation_id();
+  const QString& new_language_id = ui.translation_field->get_selected_id();
+  if (new_language_id == old_language_id) {
+    // No change.
+    return;
+  }
+
+  // If language id is empty.
+  if (new_language_id.isEmpty()) {
+    // Clear the translation and hide his column, return.
+    model->clear_translation();
+    ui.strings_tree_view->setColumnHidden(2, true);
+    ui.translation_refresh_button->setEnabled(false);
+    return;
+  }
+
+
+  // If the translation column is hide.
+  if (ui.strings_tree_view->isColumnHidden(2)) {
+    // Show the column.
+    ui.strings_tree_view->setColumnHidden(2, false);
+
+    // Resize value and translation columns.
+    int col_width = ui.strings_tree_view->columnWidth(0);
+    int width = ui.strings_tree_view->viewport()->width() - col_width;
+    col_width = std::floor(width / 2.0);
+    ui.strings_tree_view->setColumnWidth(1, col_width);
+    ui.strings_tree_view->setColumnWidth(2, col_width);
+  }
+
+  // Set the translation.
+  model->set_translation_id(new_language_id);
+  ui.translation_refresh_button->setEnabled(true);
+}
+
+/**
+ * @brief Slot called when the user wants to refresh the translation language.
+ */
+void StringsEditor::translation_refresh_requested() {
+  if (ui.translation_field->get_selected_id().isEmpty()) {
+    return;
+  }
+  model->reload_translation();
 }

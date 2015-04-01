@@ -40,6 +40,8 @@ public:
 
   void add_special_value(
       const QString& id, const QString& text, int index);
+  void remove_id(const QString& id);
+
   QModelIndex get_element_index(const QString& element_id) const;
 
 private slots:

@@ -48,7 +48,18 @@ public:
   bool can_remove_key(const QString& key, QString& parent_key, int& index);
   bool remove_key(const QString& key);
 
+  bool add_ref(const QString &key, QString& parent_key, int& index);
+
+  bool can_remove_ref(const QString& key, QString& parent_key, int& index);
+  bool remove_ref(const QString& key, bool keep_key = false);
+
+  void clear();
+
 private:
+
+  static const int CONTAINER = 0;
+  static const int REAL_KEY = 1;
+  static const int REF_KEY = 2;
 
   /**
    * @brief A node of the indexed string tree.
@@ -56,7 +67,7 @@ private:
   struct Node {
 
     /** Constructor. */
-    Node() : parent(nullptr), index(0), is_real(false) {
+    Node() : parent(nullptr), index(0), type(CONTAINER) {
     }
 
     Node* parent;   /**< The parent node. */
@@ -65,8 +76,7 @@ private:
     QString key;    /**< The internal key of the node
                      * (complete key from the root). */
 
-    bool is_real;   /**< If this node represents an existing key that was added.
-                     * If not, the node is just a simple container. */
+    int type;       /**< Type of the node. */
 
     std::map<QString, Node*, NaturalComparator>
       childs;       /**< Childrens of the node. */
@@ -76,7 +86,15 @@ private:
 
   Node *get_sub_child(const Node* node, const QString& sub_key) const;
 
+  bool add_child(const QString& key, int type, QString& parent_key, int& index);
+
+  bool can_remove_child(
+      const QString& key, int type, QString& parent_key, int& index);
+  bool remove_child(const QString& key, int type, bool keep_key = false);
+
   void build_index_map(const Node* node) const;
+
+  void clear_childs(Node *node);
 
   QString separator;  /**< The separator character. */
   Node* root;         /**< The root node of the tree. */

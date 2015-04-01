@@ -93,6 +93,14 @@ void ResourceSelector::add_special_value(
 }
 
 /**
+ * @brief Removes from the model the item with the specified id.
+ * @param id Id of the resource to remove.
+ */
+void ResourceSelector::remove_id(const QString& id) {
+  model->remove_id(id);
+}
+
+/**
  * @brief Returns the id of the selected resource element.
  * @return The selected id.
  */

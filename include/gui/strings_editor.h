@@ -54,6 +54,9 @@ public slots:
 
   void set_value_requested(const QString& key, const QString& value);
 
+  void translation_selector_activated();
+  void translation_refresh_requested();
+
 private:
 
   Ui::StringsEditor ui;      /**< The strings editor widgets. */

@@ -43,6 +43,7 @@ public:
   StringsModel(
       const Quest& quest, const QString& language_id,
       QObject* parent = nullptr);
+  ~StringsModel();
 
   const Quest& get_quest() const;
   QString get_language_id() const;
@@ -79,6 +80,15 @@ public:
   void set_selected_key(const QString& key);
   void clear_selection();
 
+  // Translation.
+  QString get_translation_id() const;
+  void set_translation_id(const QString &language_id);
+  void clear_translation();
+  void reload_translation();
+
+  bool translated_string_exists(const QString& key) const;
+  QString get_translated_string(const QString& key) const;
+
 signals:
 
   void string_created(const QString& key);
@@ -94,6 +104,9 @@ public slots:
 
 private:
 
+  void build_string_tree();
+  void clear_translation_from_tree();
+
   const Quest& quest;             /**< The quest the strings belongs to. */
   const QString language_id;      /**< Language of the strings. */
   Solarus::StringResources
@@ -101,6 +114,10 @@ private:
 
   IndexedStringTree string_tree;  /**< Indexed tree of string keys.
                                    * The order is determined here. */
+
+  QString translation_id;
+  Solarus::StringResources translation_resources;
+
   QItemSelectionModel
     selection_model;              /**< String currently selected. */
 };

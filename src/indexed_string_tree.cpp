@@ -138,64 +138,7 @@ QString IndexedStringTree::get_parent(const QString& key) const {
 bool IndexedStringTree::add_key(
     const QString& key, QString& parent_key, int& index) {
 
-  // Split the key with the separator.
-  QStringList key_list = key.split(separator);
-
-  // Get the first existing parent.
-  Node* parent = root;
-  Node* node = parent;
-
-  while (node != nullptr && !key_list.isEmpty()) {
-
-    node = get_sub_child(parent, key_list.front());
-
-    if (node != nullptr) {
-      parent = node;
-      key_list.pop_front();
-    }
-  }
-
-  // If the node already exists.
-  if (node != nullptr) {
-    // Ensure that the node is real, return false.
-    node->is_real = true;
-    return false;
-  }
-
-  // Set the key of the first existing parent, clear the index.
-  parent_key = parent->key;
-  index = -1;
-
-  // Add missing childs.
-  while (!key_list.isEmpty()) {
-
-    QString sub_key = key_list.front();
-
-    // Create the new node.
-    node = new Node();
-    node->parent = parent;
-    if (!parent->key.isEmpty()) {
-      node->key = parent->key + separator + sub_key;
-    } else {
-      node->key = sub_key;
-    }
-
-    // Add the node and rebuild the index map.
-    parent->childs.emplace(sub_key, node);
-    build_index_map(parent);
-
-    // Set the index of the first added child.
-    if (index == -1) {
-      index = node->index;
-    }
-
-    parent = node;
-    key_list.pop_front();
-  }
-
-  // Set the last added node real.
-  node->is_real = true;
-  return true;
+  return add_child(key, REAL_KEY, parent_key, index);
 }
 
 /**
@@ -220,30 +163,7 @@ bool IndexedStringTree::add_key(const QString &key) {
 bool IndexedStringTree::can_remove_key(
     const QString& key, QString& parent_key, int& index) {
 
-  // Check if the key exists.
-  if (!key_exists(key)) {
-    return false;
-  }
-
-  // Check if the node have childs.
-  Node* node = get_child(key);
-  if (node->childs.size() > 0) {
-    return false;
-  }
-
-  // Get the first real parent in the hierarchy (or root).
-  Node* parent = node->parent;
-  while (parent != root && parent != nullptr &&
-         !parent->is_real && parent->childs.size() == 1) {
-
-    node = parent;
-    parent = node->parent;
-  }
-
-  // Set the parent_key and the index, return true.
-  parent_key = parent != nullptr ? parent->key : "";
-  index = node->index;
-  return true;
+  return can_remove_child(key, REAL_KEY, parent_key, index);
 }
 
 /**
@@ -253,30 +173,51 @@ bool IndexedStringTree::can_remove_key(
  */
 bool IndexedStringTree::remove_key(const QString& key) {
 
-  QString parent_key;
-  int index;
+  return remove_child(key, REAL_KEY);
+}
 
-  // If no need to be removed.
-  if (!can_remove_key(key, parent_key, index)) {
+/**
+ * @brief Add a ref in the tree.
+ * @param key[in] The key of the ref to add.
+ * @param parent_key[out] The key of the first node that add a new child.
+ * @param index[out] The index of the first new child that was added.
+ * @return @c true in case of success, @c false if already exists.
+ */
+bool IndexedStringTree::add_ref(
+    const QString &key, QString& parent_key, int& index) {
 
-    // If the key exists, set the node no real and return true.
-    if (key_exists(key)) {
-      Node* node = get_child(key);
-      node->is_real = false;
-      return true;
-    }
-    return false;
-  }
+  return add_child(key, REF_KEY, parent_key, index);
+}
 
-  // Get the parent and the iterator of the node.
-  Node* parent = get_child(parent_key);
-  auto it = parent->childs.begin();
-  std::advance(it, index);
+/**
+ * @brief Check if can remove a ref from the tree.
+ * @param key[in] The key of the ref to remove.
+ * @param parent_key[out] The key of the parent that contains the key to remove.
+ * @param index[out] The index of the ref to remove in his parent.
+ * @return @c true if the ref can be removed, @c false if the ref have childs.
+ */
+bool IndexedStringTree::can_remove_ref(
+    const QString& key, QString& parent_key, int& index) {
 
-  // Remove the node and rebuild the index map.
-  parent->childs.erase(it);
-  build_index_map(parent);
-  return true;
+  return can_remove_child(key, REF_KEY, parent_key, index);
+}
+
+/**
+ * @brief Removes a ref from the tree.
+ * @param key The key of the ref to remove.
+ * @param keep_key To transform the ref to a simple value node.
+ * @return @c true in case of success.
+ */
+bool IndexedStringTree::remove_ref(const QString& key, bool keep_key) {
+
+  return remove_child(key, REF_KEY, keep_key);
+}
+
+/**
+ * @brief Clears the tree.
+ */
+void IndexedStringTree::clear() {
+  clear_childs(root);
 }
 
 /**
@@ -319,6 +260,164 @@ IndexedStringTree::Node* IndexedStringTree::get_sub_child(
 }
 
 /**
+ * @brief Add a child (key or ref) in the tree.
+ * @param key[in] The key of the child to add.
+ * @param type[in] The type of the child to add.
+ * @param parent_key[out] The key of the first node that add a new child.
+ * @param index[out] The index of the first new child that was added.
+ * @return @c true in case of success, @c false if already exists.
+ */
+bool IndexedStringTree::add_child(
+    const QString& key, int type, QString& parent_key, int& index) {
+
+  // Split the key with the separator.
+  QStringList key_list = key.split(separator);
+
+  // Get the first existing parent.
+  Node* parent = root;
+  Node* node = parent;
+
+  while (node != nullptr && !key_list.isEmpty()) {
+
+    node = get_sub_child(parent, key_list.front());
+
+    if (node != nullptr) {
+      parent = node;
+      key_list.pop_front();
+    }
+  }
+
+  // If the node already exists.
+  if (node != nullptr) {
+    // Set the node type, return false.
+    if (type == REF_KEY || node->type == CONTAINER) {
+      node->type = type;
+    }
+    return false;
+  }
+
+  // Set the key of the first existing parent, clear the index.
+  parent_key = parent->key;
+  index = -1;
+
+  // Add missing childs.
+  while (!key_list.isEmpty()) {
+
+    QString sub_key = key_list.front();
+
+    // Create the new node.
+    node = new Node();
+    node->parent = parent;
+    if (!parent->key.isEmpty()) {
+      node->key = parent->key + separator + sub_key;
+    } else {
+      node->key = sub_key;
+    }
+
+    // Add the node and rebuild the index map.
+    parent->childs.emplace(sub_key, node);
+    build_index_map(parent);
+
+    // Set the index of the first added child.
+    if (index == -1) {
+      index = node->index;
+    }
+
+    parent = node;
+    key_list.pop_front();
+  }
+
+  // Set the last added node real.
+  node->type = type;
+  return true;
+}
+
+/**
+ * @brief Check if can remove a child of a specific type from the tree.
+ * @param key[in] The key of the child to remove.
+ * @param type[in] The to of the child to remove.
+ * @param parent_key[out] The key of the parent that contains the key to remove.
+ * @param index[out] The index of the key to remove in his parent.
+ * @return @c true if the key can be removed, @c false if the key have childs.
+ */
+bool IndexedStringTree::can_remove_child(
+    const QString& key, int type, QString& parent_key, int& index) {
+
+  // Check if the key exists.
+  if (!key_exists(key)) {
+    return false;
+  }
+
+  // Check if the node have childs.
+  Node* node = get_child(key);
+  if (node->childs.size() > 0 || node->type != type) {
+    return false;
+  }
+
+  // Get the first real parent in the hierarchy (or root).
+  Node* parent = node->parent;
+  while (parent != root && parent != nullptr &&
+         parent->type == CONTAINER && parent->childs.size() == 1) {
+
+    node = parent;
+    parent = node->parent;
+  }
+
+  // Set the parent_key and the index, return true.
+  parent_key = parent != nullptr ? parent->key : "";
+  index = node->index;
+  return true;
+}
+
+/**
+ * @brief Removes a child with a specific key and specific type from the tree.
+ * @param key The key of the child to remove.
+ * @param type The type of the child to remove.
+ * @return @c true in case of success.
+ */
+bool IndexedStringTree::remove_child(const QString& key, int type, bool keep_key) {
+
+  QString parent_key;
+  int index;
+
+  // If no need to be removed.
+  if (!can_remove_child(key, type, parent_key, index)) {
+
+    // Check if the key exists.
+    if (!key_exists(key)) {
+      return false;
+    }
+
+    Node* node = get_child(key);
+    if (type == node->type) {
+      if (type == REF_KEY && keep_key) {
+        node->type = REAL_KEY;
+      } else {
+        node->type = CONTAINER;
+      }
+    }
+    return true;
+  }
+
+  if (type == REF_KEY && keep_key) {
+    Node* node = get_child(key);
+    node->type = REAL_KEY;
+    return true;
+  }
+
+  // Get the parent and the iterator of the node.
+  Node* parent = get_child(parent_key);
+  auto it = parent->childs.begin();
+  std::advance(it, index);
+
+  // Remove the node and rebuild the index map.
+  delete it->second;
+  parent->childs.erase(it);
+  build_index_map(parent);
+  return true;
+}
+
+/**
  * @brief Builds or rebuilds the internal mapping of a node that gives
  * indexes from keys.
  *
@@ -333,4 +432,19 @@ void IndexedStringTree::build_index_map(const Node* node) const {
   for (auto& kvp : node->childs) {
     kvp.second->index = index++;
   }
+}
+
+/**
+ * @brief Clears childs of a node.
+ * @param node The node.
+ */
+void IndexedStringTree::clear_childs(Node* node) {
+
+  auto it = node->childs.begin();
+  while (it != node->childs.end()) {
+    clear_childs(it->second);
+    delete it->second;
+    it++;
+  }
+  node->childs.clear();
 }

@@ -96,6 +96,19 @@ void ResourceModel::add_special_value(
 }
 
 /**
+ * @brief Removes from the model the item with the specified id.
+ * @param id Id of the resource to remove.
+ */
+void ResourceModel::remove_id(const QString& id) {
+
+  const QStandardItem* item = get_element_item(id);
+  if (item == nullptr) {
+    return;
+  }
+  remove_element(id);
+}
+
+/**
  * @brief Adds to the model an item for the specified resource element.
  * @param element_id Id of the resource element to add.
  */

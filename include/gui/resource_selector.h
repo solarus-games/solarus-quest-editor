@@ -43,6 +43,7 @@ public:
   void set_resource_type(ResourceType resource_type);
 
   void add_special_value(const QString& id, const QString& text, int index);
+  void remove_id(const QString& id);
 
   QString get_selected_id() const;
   void set_selected_id(const QString& element_id);
