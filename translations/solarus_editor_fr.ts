@@ -2783,56 +2783,71 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="63"/>
+        <location filename="../src/gui/strings_editor.cpp" line="64"/>
         <source>Create string</source>
         <translation>Créer texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="94"/>
+        <location filename="../src/gui/strings_editor.cpp" line="95"/>
         <source>Change string key</source>
         <translation>Changer clé de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="127"/>
+        <location filename="../src/gui/strings_editor.cpp" line="128"/>
         <source>Change string key prefix</source>
         <translation>Changer préfixe de clés de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="165"/>
+        <location filename="../src/gui/strings_editor.cpp" line="166"/>
         <source>Delete string</source>
         <translation>Supprimer texte</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.cpp" line="196"/>
+        <source>Delete strings</source>
+        <translation>Supprimer textes</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_editor.cpp" line="230"/>
         <source>Change string value</source>
         <translation>Changer valeur de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="244"/>
+        <location filename="../src/gui/strings_editor.cpp" line="278"/>
         <source>Strings %1</source>
         <translation>Textes %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="247"/>
+        <location filename="../src/gui/strings_editor.cpp" line="281"/>
         <source>Strings &apos;%1&apos; has been modified. Save changes?</source>
         <translation>Les textes &apos;%1&apos; ont été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="261"/>
+        <location filename="../src/gui/strings_editor.cpp" line="295"/>
         <source>&lt;No language&gt;</source>
         <translation>&lt;Aucune langue&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="363"/>
+        <location filename="../src/gui/strings_editor.cpp" line="397"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_editor.cpp" line="507"/>
+        <source>Delete confirmation</source>
+        <translation>Confirmer la suppression</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_editor.cpp" line="508"/>
+        <source>Do you really want to delete all strings prefixed by &apos;%1&apos;?</source>
+        <translation>Voulez-vous vraiment supprimer les textes préfixés par &apos;%1&apos; ?</translation>
     </message>
 </context>
 <context>
     <name>StringsModel</name>
     <message>
         <location filename="../src/strings_model.cpp" line="43"/>
-        <location filename="../src/strings_model.cpp" line="725"/>
+        <location filename="../src/strings_model.cpp" line="741"/>
         <source>Cannot open strings data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de textes &apos;%1&apos;</translation>
     </message>
