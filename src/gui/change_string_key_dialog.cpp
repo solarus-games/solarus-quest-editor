@@ -34,8 +34,13 @@ ChangeStringKeyDialog::ChangeStringKeyDialog (
 
   ui.setupUi(this);
 
-  ui.string_key_label->setText(
-        tr("New string key for string '%1':").arg(initial_key));
+  if (!allow_prefix && is_prefix) {
+    ui.string_key_label->setText(
+      tr("New key for strings prefixed by '%1':").arg(initial_key));
+  } else {
+    ui.string_key_label->setText(
+      tr("New key for string '%1':").arg(initial_key));
+  }
   ui.prefix_mode_field->setEnabled(allow_prefix);
 
   set_string_key(initial_key);
@@ -98,12 +103,12 @@ void ChangeStringKeyDialog::done(int result) {
         QString error_key;
         if (!model->can_set_string_key_prefix(initial_key, key, error_key)) {
           GuiTools::error_dialog(
-                tr("The string key '%1' already exists").arg(error_key));
+                tr("The string '%1' already exists").arg(error_key));
           return;
         }
       } else if (model->string_exists(key)) {
         GuiTools::error_dialog(
-              tr("The string key '%1' already exists").arg(key));
+              tr("The string '%1' already exists").arg(key));
         return;
       }
     }

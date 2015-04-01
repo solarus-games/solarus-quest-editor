@@ -74,19 +74,24 @@
         <translation>Changer la clé de tous les textes avec cette clé comme préfixe</translation>
     </message>
     <message>
-        <location filename="../src/gui/change_string_key_dialog.cpp" line="38"/>
-        <source>New string key for string &apos;%1&apos;:</source>
-        <translation>Nouvelle clé de texte pour le texte &apos;%1&apos; :</translation>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="39"/>
+        <source>New key for strings prefixed by &apos;%1&apos;:</source>
+        <translation>Nouvelle clé pour les textes préfixés par &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/change_string_key_dialog.cpp" line="92"/>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="42"/>
+        <source>New key for string &apos;%1&apos;:</source>
+        <translation>Nouvelle clé pour le texte &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="97"/>
         <source>Invalid string key: %1</source>
         <translation>Clé de texte invalide: %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/change_string_key_dialog.cpp" line="101"/>
         <location filename="../src/gui/change_string_key_dialog.cpp" line="106"/>
-        <source>The string key &apos;%1&apos; already exists</source>
+        <location filename="../src/gui/change_string_key_dialog.cpp" line="111"/>
+        <source>The string &apos;%1&apos; already exists</source>
         <translation>Le texte &apos;%1&apos; existe déjà</translation>
     </message>
 </context>
