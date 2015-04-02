@@ -103,6 +103,9 @@ EntityModelPtr EntityModel::create(
 
 /**
  * @brief Creates an entity model for a new entity from a string.
+ *
+ * The created clone is not on the map yet.
+ *
  * @param map The map that will contain the entity.
  * @param string The string representation of the entity.
  * @return The created model or nullptr if the string is invalid.
@@ -122,6 +125,7 @@ EntityModelPtr EntityModel::create(
 
   EntityModelPtr entity = create(map, EntityIndex(), data.get_type());
   entity->get_entity() = data;
+  entity->index = EntityIndex();
 
   return entity;
 }
@@ -144,7 +148,8 @@ EntityModelPtr EntityModel::create(
  *
  * The created clone is not on the map.
  *
- * @param map The map that contains the existing entity.
+ * @param map The map that contains the existing entity and will contain the
+ * new one.
  * @param index Index of the entity to clone.
  * @return The created model.
  */
@@ -154,6 +159,7 @@ EntityModelPtr EntityModel::clone(
   const Solarus::EntityData& existing_data = map.get_internal_entity(index);
   EntityModelPtr clone = create(map, EntityIndex(), existing_data.get_type());
   clone->get_entity() = existing_data;
+  clone->index = EntityIndex();
   return clone;
 }
 
