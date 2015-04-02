@@ -302,6 +302,8 @@ StringsEditor::StringsEditor(
 
   connect(ui.create_button, SIGNAL(clicked()),
           this, SLOT(create_string_requested()));
+  connect(ui.strings_tree_view, SIGNAL(create_string_requested()),
+          this, SLOT(create_string_requested()));
 
   connect(ui.set_key_button, SIGNAL(clicked()),
           this, SLOT(change_string_key_requested()));

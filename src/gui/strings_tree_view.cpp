@@ -31,6 +31,12 @@ StringsTreeView::StringsTreeView(QWidget* parent) :
   setSelectionMode(QAbstractItemView::SingleSelection);
   setAlternatingRowColors(true);
 
+  create_action = new QAction(
+        QIcon(":/images/icon_add.png"), tr("New string..."), this);
+  connect(create_action, SIGNAL(triggered()),
+          this, SIGNAL(create_string_requested()));
+  addAction(create_action);
+
   set_key_action = new QAction(
         QIcon(":/images/icon_rename.png"), tr("Change key..."), this);
   set_key_action->setShortcut(tr("F2"));
@@ -58,15 +64,17 @@ void StringsTreeView::contextMenuEvent(QContextMenuEvent *event) {
     return;
   }
 
+  QMenu* menu = new QMenu(this);
+  menu->addAction(create_action);
+
   QString key = model->get_selected_key();
-  if (!model->prefix_exists(key)) {
-    return;
+  if (model->prefix_exists(key)) {
+    menu->addSeparator();
+    menu->addAction(set_key_action);
+    menu->addSeparator();
+    menu->addAction(delete_action);
   }
 
-  QMenu* menu = new QMenu(this);
-  menu->addAction(set_key_action);
-  menu->addSeparator();
-  menu->addAction(delete_action);
   menu->popup(viewport()->mapToGlobal(event->pos()) + QPoint(1, 1));
 }
 

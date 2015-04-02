@@ -37,6 +37,7 @@ public:
 
 signals:
 
+  void create_string_requested();
   void set_string_key_requested();
   void delete_string_requested();
 
@@ -48,6 +49,8 @@ private:
 
   StringsModel*
     model;          /**< The strings model. */
+  QAction*
+    create_action;  /**< Action of create a new string(s). */
   QAction*
     set_key_action; /**< Action of change the key of the selected string(s). */
   QAction*
