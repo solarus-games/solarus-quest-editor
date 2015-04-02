@@ -426,7 +426,7 @@ void StringsEditor::update_selection() {
   }
 
   // Update buttons
-  bool enable = model->prefix_exists(key);
+  bool enable = !key.isEmpty() && model->prefix_exists(key);
   ui.set_key_button->setEnabled(enable);
   ui.delete_button->setEnabled(enable);
 }
@@ -452,6 +452,10 @@ void StringsEditor::create_string_requested() {
  * @brief Slot called when the user wants to change the key of a string.
  */
 void StringsEditor::change_string_key_requested() {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
 
   QString old_key = model->get_selected_key();
   QStringList prefix_keys = model->get_keys(old_key);
@@ -495,9 +499,12 @@ void StringsEditor::change_string_key_requested() {
  */
 void StringsEditor::delete_string_requested() {
 
+  if (model->is_selection_empty()) {
+    return;
+  }
+
   QString key = model->get_selected_key();
-  if (key.isEmpty() || !model->prefix_exists(key)) {
-    // No selection.
+  if (!model->prefix_exists(key)) {
     return;
   }
 
