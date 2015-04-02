@@ -129,6 +129,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/change_string_key_dialog.h
   include/gui/dialogs_editor.h
   include/gui/dialogs_tree_view.h
+  include/gui/dialog_properties_table.h
   include/gui/plain_text_edit.h
   include/gui/change_dialog_id_dialog.h
   include/color.h
@@ -222,6 +223,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/change_string_key_dialog.cpp
   src/gui/dialogs_editor.cpp
   src/gui/dialogs_tree_view.cpp
+  src/gui/dialog_properties_table.cpp
   src/gui/change_dialog_id_dialog.cpp
   src/color.cpp
   src/editor_exception.cpp

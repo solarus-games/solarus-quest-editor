@@ -489,11 +489,11 @@ void DialogsModel::set_dialog_text(const QString &id, const QString &text) {
 void DialogsModel::set_dialog_property(
     const QString& id, const QString& key, const QString& value) {
 
-  if (get_dialog_property(id, key) == value) {
+  bool exists = dialog_property_exists(id, key);
+  if (exists && get_dialog_property(id, key) == value) {
     // No change.
     return;
   }
-  bool exists = dialog_property_exists(id, key);
 
   resources.get_dialog(id.toStdString()).set_property(
         key.toStdString(), value.toStdString());

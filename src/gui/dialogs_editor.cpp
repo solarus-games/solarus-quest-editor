@@ -257,6 +257,151 @@ private:
   QString new_text;
 };
 
+/**
+ * @brief Create a dialog property.
+ */
+class CreateDialogPropertyCommand : public DialogsEditorCommand {
+
+public:
+
+  CreateDialogPropertyCommand(
+      DialogsEditor& editor, const QString& id,
+      const QString& key, const QString& value) :
+    DialogsEditorCommand(editor, DialogsEditor::tr("Create dialog property")),
+    id(id),
+    key(key),
+    value(value) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_dialog_property(id, key);
+    get_editor().update_properties_buttons();
+  }
+
+  virtual void redo() override {
+
+    get_model().set_dialog_property(id, key, value);
+    get_editor().set_selected_property(key);
+  }
+
+private:
+
+  QString id;
+  QString key;
+  QString value;
+};
+
+/**
+ * @brief Delete a dialog property.
+ */
+class DeleteDialogPropertyCommand : public DialogsEditorCommand {
+
+public:
+
+  DeleteDialogPropertyCommand(
+      DialogsEditor& editor, const QString& id, const QString& key) :
+    DialogsEditorCommand(editor, DialogsEditor::tr("Delete dialog property")),
+    id(id),
+    key(key),
+    value(get_model().get_dialog_property(id, key)) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_dialog_property(id, key, value);
+    get_editor().set_selected_property(key);
+  }
+
+  virtual void redo() override {
+
+    get_model().delete_dialog_property(id, key);
+    get_editor().update_properties_buttons();
+  }
+
+private:
+
+  QString id;
+  QString key;
+  QString value;
+};
+
+/**
+ * @brief Change a dialog property key.
+ */
+class SetDialogPropertyKeyCommand : public DialogsEditorCommand {
+
+public:
+
+  SetDialogPropertyKeyCommand(
+      DialogsEditor& editor, const QString& id,
+      const QString& old_key, const QString& new_key) :
+    DialogsEditorCommand(editor, DialogsEditor::tr("Change dialog property key")),
+    id(id),
+    old_key(old_key),
+    new_key(new_key),
+    value(get_model().get_dialog_property(id, old_key)) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_dialog_property(id, new_key);
+    get_model().set_dialog_property(id, old_key, value);
+    get_editor().set_selected_property(old_key);
+  }
+
+  virtual void redo() override {
+
+    get_model().delete_dialog_property(id, old_key);
+    get_model().set_dialog_property(id, new_key, value);
+    get_editor().set_selected_property(new_key);
+  }
+
+private:
+
+  QString id;
+  QString old_key;
+  QString new_key;
+  QString value;
+};
+
+/**
+ * @brief Change a dialog property value.
+ */
+class SetDialogPropertyValueCommand : public DialogsEditorCommand {
+
+public:
+
+  SetDialogPropertyValueCommand(
+      DialogsEditor& editor, const QString& id,
+      const QString& key, const QString& new_value) :
+    DialogsEditorCommand(editor, DialogsEditor::tr("Change dialog property")),
+    id(id),
+    key(key),
+    old_value(get_model().get_dialog_property(id, key)),
+    new_value(new_value) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_dialog_property(id, key, old_value);
+    get_editor().set_selected_property(key);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_dialog_property(id, key, new_value);
+    get_editor().set_selected_property(key);
+  }
+
+private:
+
+  QString id;
+  QString key;
+  QString old_value;
+  QString new_value;
+};
+
 }
 
 /**
@@ -287,6 +432,7 @@ DialogsEditor::DialogsEditor(
 
   // Prepare the gui.
   ui.dialogs_tree_view->set_model(model);
+  ui.dialog_properties_table->set_model(model);
 
   ui.translation_field->set_resource_type(ResourceType::LANGUAGE);
   ui.translation_field->set_quest(quest);
@@ -321,6 +467,8 @@ DialogsEditor::DialogsEditor(
   connect(&model->get_selection_model(),
           SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_selection()));
+  connect(ui.dialog_properties_table, SIGNAL(itemSelectionChanged()),
+          this, SLOT(update_properties_buttons()));
 
   connect(model, SIGNAL(dialog_id_changed(QString,QString)),
           this, SLOT(update_dialog_id_field()));
@@ -329,6 +477,28 @@ DialogsEditor::DialogsEditor(
           this, SLOT(update_dialog_text_field()));
   connect(ui.dialog_text_field, SIGNAL(editing_finished()),
           this, SLOT(change_dialog_text_requested()));
+
+  connect(ui.create_property_button, SIGNAL(clicked()),
+          this, SLOT(create_dialog_property_requested()));
+  connect(ui.dialog_properties_table, SIGNAL(create_property_requested()),
+          this, SLOT(create_dialog_property_requested()));
+
+  connect(ui.set_property_key_button, SIGNAL(clicked()),
+          this, SLOT(change_dialog_property_key_requested()));
+  connect(ui.dialog_properties_table, SIGNAL(set_property_key_requested()),
+          this, SLOT(change_dialog_property_key_requested()));
+
+  connect(ui.dialog_properties_table,
+          SIGNAL(set_property_value_requested(QString,QString)),
+          this, SLOT(change_dialog_property_value_requested(QString,QString)));
+
+  connect(ui.delete_property_button, SIGNAL(clicked()),
+          this, SLOT(delete_dialog_property_requested()));
+  connect(ui.dialog_properties_table, SIGNAL(delete_property_requested()),
+          this, SLOT(delete_dialog_property_requested()));
+
+  connect(ui.dialog_properties_table, SIGNAL(set_from_translation_requested()),
+          this, SLOT(set_dialog_property_from_translation_requested()));
 
   connect(ui.translation_field, SIGNAL(activated(QString)),
           this, SLOT(translation_selector_activated()));
@@ -351,6 +521,16 @@ DialogsEditor::~DialogsEditor() {
  */
 DialogsModel& DialogsEditor::get_model() {
   return *model;
+}
+
+/**
+ * @brief Changes the current selected property.
+ * @param key The key of the property to select.
+ */
+void DialogsEditor::set_selected_property(const QString& key) {
+
+  ui.dialog_properties_table->set_selected_property(key);
+  update_properties_buttons();
 }
 
 /**
@@ -561,6 +741,7 @@ void DialogsEditor::update_dialog_view() {
   update_dialog_id_field();
   update_dialog_text_field();
   update_translation_text_field();
+  update_properties_buttons();
 }
 
 /**
@@ -633,6 +814,124 @@ void DialogsEditor::update_translation_text_field() {
 }
 
 /**
+ * @brief Updates the properties buttons.
+ */
+void DialogsEditor::update_properties_buttons() {
+
+  QString id = model->get_selected_id();
+  QString key = ui.dialog_properties_table->get_selected_property();
+
+  bool enable = model->dialog_property_exists(id, key);
+  ui.set_property_key_button->setEnabled(enable);
+  ui.delete_property_button->setEnabled(enable);
+}
+
+/**
+ * @brief Slot called when the user wants to create a new dialog property.
+ */
+void DialogsEditor::create_dialog_property_requested() {
+
+  bool ok;
+  QString key = QInputDialog::getText(
+        this, tr("New dialog property"),
+        tr("New property key:"), QLineEdit::Normal,
+        ui.dialog_properties_table->get_selected_property(), &ok);
+
+  if (!ok || key.isEmpty()) {
+    return;
+  }
+
+  QString id = model->get_selected_id();
+  if (model->dialog_property_exists(id, key)) {
+    GuiTools::error_dialog(
+      tr("The property '%1' already exists in the dialog '%2'").arg(key, id));
+    return;
+  }
+
+  try_command(new CreateDialogPropertyCommand(*this, id, key, ""));
+}
+
+/**
+ * @brief Slot called when the user wants to delete a dialog property.
+ */
+void DialogsEditor::delete_dialog_property_requested() {
+
+  QString id = model->get_selected_id();
+  QString key = ui.dialog_properties_table->get_selected_property();
+
+  if (!model->dialog_property_exists(id, key)) {
+    return;
+  }
+
+  try_command(new DeleteDialogPropertyCommand(*this, id, key));
+}
+
+/**
+ * @brief Slot called when the user wants to change the key of a dialog property.
+ */
+void DialogsEditor::change_dialog_property_key_requested() {
+
+  QString id = model->get_selected_id();
+  QString old_key = ui.dialog_properties_table->get_selected_property();
+
+  if (old_key.isEmpty() || !model->dialog_property_exists(id, old_key)) {
+    return;
+  }
+
+  bool ok;
+  QString new_key = QInputDialog::getText(
+        this, tr("Change dialog property key"),
+        tr("Change the key of the property '%1':").arg(old_key),
+        QLineEdit::Normal, old_key, &ok);
+
+  if (!ok || new_key == old_key) {
+    return;
+  }
+
+  if (new_key.isEmpty()) {
+    GuiTools::error_dialog(tr("The property key cannot be empty"));
+    return;
+  }
+
+  try_command(new SetDialogPropertyKeyCommand(*this, id, old_key, new_key));
+}
+
+/**
+ * @brief Slot called when the user change the value of a dialog property.
+ */
+void DialogsEditor::change_dialog_property_value_requested(
+    const QString& key, const QString& value) {
+
+  QString id = model->get_selected_id();
+  if (!model->dialog_exists(id)) {
+    return;
+  }
+
+  if (!model->dialog_property_exists(id, key)) {
+    try_command(new CreateDialogPropertyCommand(*this, id, key, value));
+  } else if (value != model->get_dialog_property(id, key)) {
+    try_command(new SetDialogPropertyValueCommand(*this, id, key, value));
+  }
+}
+
+/**
+ * @brief Slot called when the user wants to copy a dialog property from the translation.
+ */
+void DialogsEditor::set_dialog_property_from_translation_requested() {
+
+  QString id = model->get_selected_id();
+  QString key = ui.dialog_properties_table->get_selected_property();
+  if (!model->dialog_exists(id) ||
+      model->dialog_property_exists(id, key) ||
+      !model->translated_dialog_exists(id)) {
+    return;
+  }
+
+  QString value = model->get_translated_dialog_property(id, key);
+  try_command(new CreateDialogPropertyCommand(*this, id, key, value));
+}
+
+/**
  * @brief Slot called when the user changes the language in the selector.
  */
 void DialogsEditor::translation_selector_activated() {
@@ -657,6 +956,7 @@ void DialogsEditor::translation_selector_activated() {
   }
 
   update_translation_text_field();
+  ui.dialog_properties_table->update();
 }
 
 /**
@@ -670,4 +970,5 @@ void DialogsEditor::translation_refresh_requested() {
   model->reload_translation();
 
   update_translation_text_field();
+  ui.dialog_properties_table->update();
 }

@@ -36,6 +36,8 @@ public:
 
   DialogsModel& get_model();
 
+  void set_selected_property(const QString &key);
+
   virtual void save() override;
 
 public slots:
@@ -58,6 +60,15 @@ public slots:
   void update_dialog_text_field();
   void change_dialog_text_requested();
   void update_translation_text_field();
+
+  void update_properties_buttons();
+
+  void create_dialog_property_requested();
+  void delete_dialog_property_requested();
+  void change_dialog_property_key_requested();
+  void change_dialog_property_value_requested(
+      const QString &key, const QString &value);
+  void set_dialog_property_from_translation_requested();
 
   void translation_selector_activated();
   void translation_refresh_requested();
