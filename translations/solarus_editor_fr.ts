@@ -2,6 +2,48 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>ChangeDialogIdDialog</name>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.ui" line="14"/>
+        <location filename="../build/ui_change_dialog_id_dialog.h" line="74"/>
+        <source>Change dialog id</source>
+        <translation>Changer l&apos;id d&apos;un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.ui" line="20"/>
+        <location filename="../build/ui_change_dialog_id_dialog.h" line="75"/>
+        <source>New dialog id:</source>
+        <translation>Nouveau id de dialogue :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.ui" line="30"/>
+        <location filename="../build/ui_change_dialog_id_dialog.h" line="76"/>
+        <source>Change the id of all dialogs with this id as prefix</source>
+        <translation>Changer l&apos;id de tous les dialogues avec cet id comme préfixe</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.cpp" line="39"/>
+        <source>New id for dialogs prefixed by &apos;%1&apos;:</source>
+        <translation>Nouvel id pour les dialogues préfixés par &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.cpp" line="42"/>
+        <source>New id for dialog &apos;%1&apos;:</source>
+        <translation>Nouvel id du dialogue &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.cpp" line="97"/>
+        <source>Invalid dialog id: %1</source>
+        <translation>Id de dialogue invalide : %1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/change_dialog_id_dialog.cpp" line="106"/>
+        <location filename="../src/gui/change_dialog_id_dialog.cpp" line="111"/>
+        <source>The dialog &apos;%1&apos; already exists</source>
+        <translation>Le dialogue &apos;%1&apos; existe déjà</translation>
+    </message>
+</context>
+<context>
     <name>ChangePatternIdDialog</name>
     <message>
         <location filename="../src/gui/change_pattern_id_dialog.ui" line="24"/>
@@ -93,6 +135,343 @@
         <location filename="../src/gui/change_string_key_dialog.cpp" line="111"/>
         <source>The string &apos;%1&apos; already exists</source>
         <translation>Le texte &apos;%1&apos; existe déjà</translation>
+    </message>
+</context>
+<context>
+    <name>DialogPropertiesTable</name>
+    <message>
+        <location filename="../src/gui/dialog_properties_table.cpp" line="32"/>
+        <source>New property...</source>
+        <translation>Nouvelle propriété...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialog_properties_table.cpp" line="38"/>
+        <source>Change key...</source>
+        <translation>Changer la clé...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialog_properties_table.cpp" line="39"/>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialog_properties_table.cpp" line="46"/>
+        <source>Delete...</source>
+        <translation>Supprimer...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialog_properties_table.cpp" line="54"/>
+        <source>Set from translation...</source>
+        <translation>Définir depuis la traduction...</translation>
+    </message>
+</context>
+<context>
+    <name>DialogsEditor</name>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="14"/>
+        <location filename="../build/ui_dialogs_editor.h" line="343"/>
+        <source>Dialogss editor</source>
+        <translation>Éditeur de dialogues</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="20"/>
+        <location filename="../build/ui_dialogs_editor.h" line="344"/>
+        <source>Language properties</source>
+        <translation>Propriétés de la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="29"/>
+        <location filename="../build/ui_dialogs_editor.h" line="348"/>
+        <source>Language id</source>
+        <translation>Id de la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="36"/>
+        <location filename="../build/ui_dialogs_editor.h" line="350"/>
+        <source>Folder name of the language</source>
+        <translation>Nom du dossier de la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="46"/>
+        <location filename="../build/ui_dialogs_editor.h" line="353"/>
+        <source>Language description</source>
+        <translation>Description de la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="53"/>
+        <location filename="../build/ui_dialogs_editor.h" line="355"/>
+        <source>User-friendly description to show in the editor</source>
+        <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="78"/>
+        <location filename="../build/ui_dialogs_editor.h" line="357"/>
+        <source>Compare to language</source>
+        <translation>Comparer à la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="91"/>
+        <location filename="../build/ui_dialogs_editor.h" line="359"/>
+        <source>Refresh language</source>
+        <translation>Recharger la langue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="94"/>
+        <location filename="../build/ui_dialogs_editor.h" line="361"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="143"/>
+        <location filename="../build/ui_dialogs_editor.h" line="363"/>
+        <source>Add dialog</source>
+        <translation>Ajouter un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="181"/>
+        <location filename="../build/ui_dialogs_editor.h" line="367"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="98"/>
+        <source>Change dialog id</source>
+        <translation>Changer l&apos;id du dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="219"/>
+        <location filename="../build/ui_dialogs_editor.h" line="371"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="169"/>
+        <source>Delete dialog</source>
+        <translation>Supprimer le dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="257"/>
+        <location filename="../build/ui_dialogs_editor.h" line="374"/>
+        <source>Dialog properties</source>
+        <translation>Propriétés du dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="265"/>
+        <location filename="../build/ui_dialogs_editor.h" line="375"/>
+        <source>Dialog id:</source>
+        <translation>Id du dialogue :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="310"/>
+        <location filename="../build/ui_dialogs_editor.h" line="377"/>
+        <source>Text:</source>
+        <translation>Texte :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="326"/>
+        <location filename="../build/ui_dialogs_editor.h" line="378"/>
+        <source>Translation:</source>
+        <translation>Traduction :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="345"/>
+        <location filename="../build/ui_dialogs_editor.h" line="379"/>
+        <source>Properties :</source>
+        <translation>Propriétés :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="375"/>
+        <location filename="../build/ui_dialogs_editor.h" line="382"/>
+        <source>Value</source>
+        <translation>Valeur</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="380"/>
+        <location filename="../build/ui_dialogs_editor.h" line="381"/>
+        <source>Translation</source>
+        <translation>Traduction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="396"/>
+        <location filename="../build/ui_dialogs_editor.h" line="384"/>
+        <source>Add property</source>
+        <translation>Nouvelle propriété</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="434"/>
+        <location filename="../build/ui_dialogs_editor.h" line="388"/>
+        <source>Change property key</source>
+        <translation>Changer la clé de la propriété</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="472"/>
+        <location filename="../build/ui_dialogs_editor.h" line="392"/>
+        <source>Delete property</source>
+        <translation>Supprimer la propriété</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="65"/>
+        <source>Create dialog</source>
+        <translation>Créer dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="131"/>
+        <source>Change dialog id prefix</source>
+        <translation>Changer préfixe des ids de dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="201"/>
+        <source>Delete dialogs</source>
+        <translation>Supprimer dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="235"/>
+        <source>Change dialog text</source>
+        <translation>Changer le texte d&apos;un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="270"/>
+        <source>Create dialog property</source>
+        <translation>Créer une propriété d&apos;un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="304"/>
+        <source>Delete dialog property</source>
+        <translation>Supprimer une propriété d&apos;un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="339"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="883"/>
+        <source>Change dialog property key</source>
+        <translation>Changer la clé d&apos;une propriété de dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="378"/>
+        <source>Change dialog property</source>
+        <translation>Changer la propriété d&apos;un dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="428"/>
+        <source>Dialogs %1</source>
+        <translation>Dialogues %1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="431"/>
+        <source>Dialogs &apos;%1&apos; has been modified. Save changes?</source>
+        <translation>Les Dialogues &apos;%1&apos; ont été modifié. Enregistrer les changements ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="440"/>
+        <source>&lt;No language&gt;</source>
+        <translation>&lt;Aucune langue&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="589"/>
+        <source>Invalid description</source>
+        <translation>Description invalide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="631"/>
+        <source>New dialog</source>
+        <translation>Nouveau dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="631"/>
+        <source>New dialog id:</source>
+        <translation>Nouvel id de dialogue :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="639"/>
+        <source>Invalid dialog id: %1</source>
+        <translation>Id de dialogue invalide : %1</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="644"/>
+        <source>Dialog &apos;%1&apos; already exists</source>
+        <translation>Le dialogue &apos;%1&apos; existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="718"/>
+        <source>Delete confirmation</source>
+        <translation>Confirmer la suppression</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="719"/>
+        <source>Do you really want to delete all dialogs prefixed by &apos;%1&apos;?</source>
+        <translation>Voulez-vous vraiment supprimer tous les dialogues préfixés par &apos;%1&apos; ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="836"/>
+        <source>New dialog property</source>
+        <translation>Nouvelle propriété de dialogue</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="837"/>
+        <source>New property key:</source>
+        <translation>Nouvelle clé de propriété :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="847"/>
+        <source>The property &apos;%1&apos; already exists in the dialog &apos;%2&apos;</source>
+        <translation>La propriété &apos;%1&apos; existe déjà dans le dialogue &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="884"/>
+        <source>Change the key of the property &apos;%1&apos;:</source>
+        <translation>Changer la clé de la propriété &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.cpp" line="892"/>
+        <source>The property key cannot be empty</source>
+        <translation>La clé de propriété ne peut pas être vide</translation>
+    </message>
+</context>
+<context>
+    <name>DialogsModel</name>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="44"/>
+        <location filename="../src/dialogs_model.cpp" line="827"/>
+        <source>Cannot open dialogs data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;ouvrir le fichier de dialogues &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="82"/>
+        <source>Cannot save dialogs data file &apos;%1&apos;</source>
+        <translation>Impossible d&apos;enregistrer le fichier de dialogues &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="393"/>
+        <location filename="../src/dialogs_model.cpp" line="545"/>
+        <location filename="../src/dialogs_model.cpp" line="658"/>
+        <source>Invalid dialog id: %1</source>
+        <translation>Id de dialogue invalide : %1</translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="397"/>
+        <location filename="../src/dialogs_model.cpp" line="541"/>
+        <location filename="../src/dialogs_model.cpp" line="622"/>
+        <source>Dialog &apos;%1&apos; already exists</source>
+        <translation>Le dialogue &apos;%1&apos; existe déjà</translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="537"/>
+        <source>Dialog &apos;%1&apos; no exists</source>
+        <translation>Le dialogue &apos;%1&apos; n&apos;existe pas</translation>
+    </message>
+</context>
+<context>
+    <name>DialogsTreeView</name>
+    <message>
+        <location filename="../src/gui/dialogs_tree_view.cpp" line="35"/>
+        <source>New dialog...</source>
+        <translation>Nouveau dialogue...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_tree_view.cpp" line="41"/>
+        <source>Change id...</source>
+        <translation>Changer l&apos;id...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_tree_view.cpp" line="42"/>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_tree_view.cpp" line="49"/>
+        <source>Delete...</source>
+        <translation>Supprimer...</translation>
     </message>
 </context>
 <context>
@@ -2153,15 +2532,6 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>ResourceModel</name>
-    <message>
-        <location filename="../src/gui/resource_model.cpp" line="284"/>
-        <location filename="../src/gui/resource_model.cpp" line="310"/>
-        <source>Missing resource element in selector: &apos;%1&apos;</source>
-        <translation>Ressource manquante dans le sélecteur : &apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
     <name>SpriteEditor</name>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="14"/>
@@ -2712,73 +3082,73 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>StringsEditor</name>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="14"/>
-        <location filename="../build/ui_strings_editor.h" line="184"/>
+        <location filename="../build/ui_strings_editor.h" line="185"/>
         <source>Strings editor</source>
         <translation>Éditeur de textes</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="20"/>
-        <location filename="../build/ui_strings_editor.h" line="185"/>
+        <location filename="../build/ui_strings_editor.h" line="186"/>
         <source>Language properties</source>
         <translation>Propriétés de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="29"/>
-        <location filename="../build/ui_strings_editor.h" line="189"/>
+        <location filename="../build/ui_strings_editor.h" line="190"/>
         <source>Language id</source>
         <translation>Id de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="36"/>
-        <location filename="../build/ui_strings_editor.h" line="191"/>
+        <location filename="../build/ui_strings_editor.h" line="192"/>
         <source>Folder name of the language</source>
         <translation>Nom du dossier de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="46"/>
-        <location filename="../build/ui_strings_editor.h" line="194"/>
+        <location filename="../build/ui_strings_editor.h" line="195"/>
         <source>Language description</source>
         <translation>Description de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="53"/>
-        <location filename="../build/ui_strings_editor.h" line="196"/>
+        <location filename="../build/ui_strings_editor.h" line="197"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="65"/>
-        <location filename="../build/ui_strings_editor.h" line="198"/>
+        <location filename="../build/ui_strings_editor.h" line="199"/>
         <source>Compare to language</source>
         <translation>Comparer à la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="78"/>
-        <location filename="../build/ui_strings_editor.h" line="200"/>
+        <location filename="../build/ui_strings_editor.h" line="201"/>
         <source>Refresh language</source>
         <translation>Recharger la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="81"/>
-        <location filename="../build/ui_strings_editor.h" line="202"/>
+        <location filename="../build/ui_strings_editor.h" line="203"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.ui" line="126"/>
-        <location filename="../build/ui_strings_editor.h" line="204"/>
+        <location filename="../src/gui/strings_editor.ui" line="130"/>
+        <location filename="../build/ui_strings_editor.h" line="205"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.ui" line="164"/>
-        <location filename="../build/ui_strings_editor.h" line="208"/>
+        <location filename="../src/gui/strings_editor.ui" line="168"/>
+        <location filename="../build/ui_strings_editor.h" line="209"/>
         <source>Change key</source>
         <translation>Changer la clé</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.ui" line="202"/>
-        <location filename="../build/ui_strings_editor.h" line="212"/>
+        <location filename="../src/gui/strings_editor.ui" line="206"/>
+        <location filename="../build/ui_strings_editor.h" line="213"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
@@ -2828,19 +3198,19 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>&lt;Aucune langue&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="399"/>
+        <location filename="../src/gui/strings_editor.cpp" line="401"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="509"/>
+        <location filename="../src/gui/strings_editor.cpp" line="518"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="510"/>
+        <location filename="../src/gui/strings_editor.cpp" line="519"/>
         <source>Do you really want to delete all strings prefixed by &apos;%1&apos;?</source>
-        <translation>Voulez-vous vraiment supprimer les textes préfixés par &apos;%1&apos; ?</translation>
+        <translation>Voulez-vous vraiment supprimer tous les textes préfixés par &apos;%1&apos; ?</translation>
     </message>
 </context>
 <context>
@@ -2904,16 +3274,21 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>StringsTreeView</name>
     <message>
         <location filename="../src/gui/strings_tree_view.cpp" line="35"/>
+        <source>New string...</source>
+        <translation>Nouveau texte...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_tree_view.cpp" line="41"/>
         <source>Change key...</source>
         <translation>Changer la clé...</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_tree_view.cpp" line="36"/>
+        <location filename="../src/gui/strings_tree_view.cpp" line="42"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_tree_view.cpp" line="43"/>
+        <location filename="../src/gui/strings_tree_view.cpp" line="49"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
     </message>
