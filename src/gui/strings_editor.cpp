@@ -281,11 +281,7 @@ StringsEditor::StringsEditor(
         tr("Strings '%1' has been modified. Save changes?").arg(language_id));
 
   // Prepare the gui.
-  ui.strings_tree_view->setSelectionMode(QAbstractItemView::SingleSelection);
-  ui.strings_tree_view->setModel(model);
-  ui.strings_tree_view->selectionModel()->deleteLater();
-  ui.strings_tree_view->setSelectionModel(&model->get_selection_model());
-  ui.strings_tree_view->setAlternatingRowColors(true);
+  ui.strings_tree_view->set_model(model);
   ui.strings_tree_view->setColumnWidth(0, 300);
   ui.strings_tree_view->setColumnHidden(2, true);
 
@@ -306,9 +302,15 @@ StringsEditor::StringsEditor(
 
   connect(ui.create_button, SIGNAL(clicked()),
           this, SLOT(create_string_requested()));
+
   connect(ui.set_key_button, SIGNAL(clicked()),
           this, SLOT(change_string_key_requested()));
+  connect(ui.strings_tree_view, SIGNAL(set_string_key_requested()),
+          this, SLOT(change_string_key_requested()));
+
   connect(ui.delete_button, SIGNAL(clicked()),
+          this, SLOT(delete_string_requested()));
+  connect(ui.strings_tree_view, SIGNAL(delete_string_requested()),
           this, SLOT(delete_string_requested()));
 
   connect(&model->get_selection_model(),

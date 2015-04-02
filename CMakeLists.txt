@@ -124,6 +124,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/tileset_view.h
   include/gui/zoom_tool.h
   include/gui/strings_editor.h
+  include/gui/strings_tree_view.h
   include/gui/new_string_dialog.h
   include/gui/change_string_key_dialog.h
   include/color.h
@@ -211,6 +212,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/tileset_view.cpp
   src/gui/zoom_tool.cpp
   src/gui/strings_editor.cpp
+  src/gui/strings_tree_view.cpp
   src/gui/new_string_dialog.cpp
   src/gui/change_string_key_dialog.cpp
   src/color.cpp

@@ -110,7 +110,7 @@
    <item>
     <layout class="QHBoxLayout" name="strings_layout">
      <item>
-      <widget class="QTreeView" name="strings_tree_view"/>
+      <widget class="StringsTreeView" name="strings_tree_view"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="boutton_layout">
@@ -240,6 +240,11 @@
    <class>ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>gui/resource_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>StringsTreeView</class>
+   <extends>QTreeView</extends>
+   <header>gui/strings_tree_view.h</header>
   </customwidget>
  </customwidgets>
  <resources>

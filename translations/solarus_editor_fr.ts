@@ -2823,22 +2823,22 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Les textes &apos;%1&apos; ont été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="295"/>
+        <location filename="../src/gui/strings_editor.cpp" line="291"/>
         <source>&lt;No language&gt;</source>
         <translation>&lt;Aucune langue&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="397"/>
+        <location filename="../src/gui/strings_editor.cpp" line="399"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="507"/>
+        <location filename="../src/gui/strings_editor.cpp" line="509"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/strings_editor.cpp" line="508"/>
+        <location filename="../src/gui/strings_editor.cpp" line="510"/>
         <source>Do you really want to delete all strings prefixed by &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer les textes préfixés par &apos;%1&apos; ?</translation>
     </message>
@@ -2898,6 +2898,24 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <location filename="../src/strings_model.cpp" line="593"/>
         <source>Invalid string key: %1</source>
         <translation>Clé de texte invalide: %1</translation>
+    </message>
+</context>
+<context>
+    <name>StringsTreeView</name>
+    <message>
+        <location filename="../src/gui/strings_tree_view.cpp" line="35"/>
+        <source>Change key...</source>
+        <translation>Changer la clé...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_tree_view.cpp" line="36"/>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/strings_tree_view.cpp" line="43"/>
+        <source>Delete...</source>
+        <translation>Supprimer...</translation>
     </message>
 </context>
 <context>
