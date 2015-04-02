@@ -57,6 +57,9 @@ resources/images/icon_web.png
 resources/images/icon_doc.png
 resources/images/icon_string.png
 resources/images/icon_strings.png
+resources/images/icon_dialog.png
+resources/images/icon_dialogs.png
+resources/images/icon_property.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 
@@ -87,6 +90,9 @@ resources/images/icon_resource_sprite_missing.png
 resources/images/icon_resource_tileset_missing.png
 resources/images/icon_string_missing.png
 resources/images/icon_strings_missing.png
+resources/images/icon_dialog_missing.png
+resources/images/icon_dialogs_missing.png
+resources/images/icon_property_missing.png
 
 - By Andrew Tyler:
 http://www.andrewtyler.net

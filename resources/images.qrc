@@ -127,5 +127,11 @@
         <file>images/icon_strings.png</file>
         <file>images/icon_string_missing.png</file>
         <file>images/icon_strings_missing.png</file>
+        <file>images/icon_dialog.png</file>
+        <file>images/icon_dialogs.png</file>
+        <file>images/icon_dialog_missing.png</file>
+        <file>images/icon_dialogs_missing.png</file>
+        <file>images/icon_property.png</file>
+        <file>images/icon_property_missing.png</file>
     </qresource>
 </RCC>

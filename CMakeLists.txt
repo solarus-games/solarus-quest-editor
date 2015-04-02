@@ -153,6 +153,7 @@ set(solarus_quest_editor_SOURCES
   include/tileset_model.h
   include/view_settings.h
   include/strings_model.h
+  include/dialogs_model.h
   include/indexed_string_tree.h
   src/entities/block.cpp
   src/entities/chest.cpp
@@ -238,6 +239,7 @@ set(solarus_quest_editor_SOURCES
   src/tileset_model.cpp
   src/view_settings.cpp
   src/strings_model.cpp
+  src/dialogs_model.cpp
   src/indexed_string_tree.cpp
 )
 
