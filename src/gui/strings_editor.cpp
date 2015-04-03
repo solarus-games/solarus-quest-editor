@@ -29,11 +29,11 @@ namespace {
 /**
  * @brief Parent class of all undoable commands of the strings editor.
  */
-class StingsEditorCommand : public QUndoCommand {
+class StringsEditorCommand : public QUndoCommand {
 
 public:
 
-  StingsEditorCommand(StringsEditor& editor, const QString& text) :
+  StringsEditorCommand(StringsEditor& editor, const QString& text) :
     QUndoCommand(text),
     editor(editor) {
   }
@@ -55,13 +55,13 @@ private:
 /**
  * @brief Create a string.
  */
-class CreateStringCommand : public StingsEditorCommand {
+class CreateStringCommand : public StringsEditorCommand {
 
 public:
 
   CreateStringCommand(
       StringsEditor& editor, const QString& key, const QString& value = "") :
-    StingsEditorCommand(editor, StringsEditor::tr("Create string")),
+    StringsEditorCommand(editor, StringsEditor::tr("Create string")),
     key(key),
     value(value) {
   }
@@ -86,13 +86,13 @@ private:
 /**
  * @brief Change string key.
  */
-class SetStringKeyCommand : public StingsEditorCommand {
+class SetStringKeyCommand : public StringsEditorCommand {
 
 public:
 
   SetStringKeyCommand(
       StringsEditor& editor, const QString& key, const QString& new_key) :
-    StingsEditorCommand(editor, StringsEditor::tr("Change string key")),
+    StringsEditorCommand(editor, StringsEditor::tr("Change string key")),
     old_key(key),
     new_key(new_key) {
   }
@@ -118,14 +118,14 @@ private:
 /**
  * @brief Change string key.
  */
-class SetKeyPrefixCommand : public StingsEditorCommand {
+class SetKeyPrefixCommand : public StringsEditorCommand {
 
 public:
 
   SetKeyPrefixCommand(
       StringsEditor& editor, const QString& olf_prefix,
       const QString& new_prefix) :
-    StingsEditorCommand(editor, StringsEditor::tr("Change string key prefix")),
+    StringsEditorCommand(editor, StringsEditor::tr("Change string key prefix")),
     old_prefix(olf_prefix),
     new_prefix(new_prefix) {
   }
@@ -158,12 +158,12 @@ private:
 /**
  * @brief Delete a string.
  */
-class DeleteStringCommand : public StingsEditorCommand {
+class DeleteStringCommand : public StringsEditorCommand {
 
 public:
 
   DeleteStringCommand(StringsEditor& editor, const QString& key) :
-    StingsEditorCommand(editor, StringsEditor::tr("Delete string")),
+    StringsEditorCommand(editor, StringsEditor::tr("Delete string")),
     key(key),
     value(get_model().get_string(key)) {
   }
@@ -188,12 +188,12 @@ private:
 /**
  * @brief Delete several strings.
  */
-class DeleteStringsCommand : public StingsEditorCommand {
+class DeleteStringsCommand : public StringsEditorCommand {
 
 public:
 
   DeleteStringsCommand(StringsEditor& editor, const QString& prefix) :
-    StingsEditorCommand(editor, StringsEditor::tr("Delete strings")),
+    StringsEditorCommand(editor, StringsEditor::tr("Delete strings")),
     prefix(prefix) {
   }
 
@@ -221,13 +221,13 @@ private:
 /**
  * @brief Change string value.
  */
-class SetStringValueCommand : public StingsEditorCommand {
+class SetStringValueCommand : public StringsEditorCommand {
 
 public:
 
   SetStringValueCommand(
       StringsEditor& editor, const QString& key, const QString& value) :
-    StingsEditorCommand(editor, StringsEditor::tr("Change string value")),
+    StringsEditorCommand(editor, StringsEditor::tr("Change string value")),
     key(key),
     old_value(get_model().get_string(key)),
     new_value(value) {
