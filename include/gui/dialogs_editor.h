@@ -73,6 +73,8 @@ public slots:
   void translation_selector_activated();
   void translation_refresh_requested();
 
+  void update_display_margin();
+
 private:
 
   Ui::DialogsEditor ui;      /**< The dialogs editor widgets. */

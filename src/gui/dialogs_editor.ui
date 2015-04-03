@@ -312,10 +312,51 @@
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="display_margin_check_box">
+           <property name="text">
+            <string>Display right margin at column:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="display_margin_field">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>255</number>
+           </property>
+           <property name="value">
+            <number>23</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="PlainTextEdit" name="dialog_text_field">
          <property name="font">
           <font>
            <family>Monospace</family>
+           <pointsize>10</pointsize>
           </font>
          </property>
         </widget>
@@ -328,11 +369,15 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="translation_text_field">
+        <widget class="PlainTextEdit" name="translation_text_field">
          <property name="font">
           <font>
            <family>Monospace</family>
+           <pointsize>10</pointsize>
           </font>
+         </property>
+         <property name="undoRedoEnabled">
+          <bool>false</bool>
          </property>
          <property name="readOnly">
           <bool>true</bool>

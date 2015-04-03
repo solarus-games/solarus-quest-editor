@@ -18,10 +18,13 @@
 #define SOLARUSEDITOR_PLAIN_TEXT_EDIT_H
 
 #include <QPlainTextEdit>
+#include <QPainter>
 
 /**
  * @brief A plain text editor that sends editing_finished() signal when the text
  * was changed and focus is lost.
+ * This editor provides also a method to display a margin line at a specific
+ * column.
  */
 class PlainTextEdit : public QPlainTextEdit {
   Q_OBJECT
@@ -30,9 +33,24 @@ public:
 
   inline PlainTextEdit(QWidget* parent = nullptr) :
     QPlainTextEdit(parent),
-    changed(false) {
+    changed(false),
+    show_margin(false) {
+
     setTabChangesFocus(true);
+    setLineWrapMode(LineWrapMode::NoWrap);
+
+    QTextCharFormat char_format = currentCharFormat();
+    char_format.setFontFixedPitch(true);
+    setCurrentCharFormat(char_format);
+
     connect(this, SIGNAL(textChanged()), this, SLOT(handle_text_changed()));
+  }
+
+  inline void set_show_margin(bool show_margin, int margin = 0) {
+
+    this->show_margin = show_margin && margin > 0;
+    this->margin = margin;
+    viewport()->repaint();
   }
 
 signals:
@@ -41,12 +59,29 @@ signals:
 
 protected:
 
-    inline virtual void focusOutEvent(QFocusEvent *event) override {
+    inline virtual void focusOutEvent(QFocusEvent* event) override {
       if (changed) {
         emit editing_finished();
         changed = false;
       }
       QPlainTextEdit::focusOutEvent(event);
+    }
+
+    inline virtual void paintEvent(QPaintEvent* event) override {
+
+      if (show_margin) {
+        const QRect rect = event->rect();
+        const QFont font = currentCharFormat().font();
+        int x = round(QFontMetrics(font).maxWidth() * margin)
+              + contentOffset().x()
+              + document()->documentMargin();
+
+        QPainter p(viewport());
+        p.setPen(QPen(isEnabled() ? "blue" : "gray"));
+        p.drawLine(x, rect.top(), x, rect.bottom());
+      }
+
+      QPlainTextEdit::paintEvent(event);
     }
 
 private slots:
@@ -58,6 +93,8 @@ private slots:
 private:
 
   bool changed;
+  bool show_margin;
+  int margin;
 
 };
 

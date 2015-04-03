@@ -504,6 +504,11 @@ DialogsEditor::DialogsEditor(
           this, SLOT(translation_selector_activated()));
   connect(ui.translation_refresh_button, SIGNAL(clicked()),
           this, SLOT(translation_refresh_requested()));
+
+  connect(ui.display_margin_check_box, SIGNAL(clicked()),
+          this, SLOT(update_display_margin()));
+  connect(ui.display_margin_field, SIGNAL(editingFinished()),
+          this, SLOT(update_display_margin()));
 }
 
 /**
@@ -971,4 +976,17 @@ void DialogsEditor::translation_refresh_requested() {
 
   update_translation_text_field();
   ui.dialog_properties_table->update();
+}
+
+/**
+ * @brief Slot called when the user changes the displayed margin in text edit.
+ */
+void DialogsEditor::update_display_margin() {
+
+  bool display_margin = ui.display_margin_check_box->isChecked();
+  int margin = ui.display_margin_field->value();
+
+  ui.display_margin_field->setEnabled(display_margin);
+  ui.dialog_text_field->set_show_margin(display_margin, margin);
+  ui.translation_text_field->set_show_margin(display_margin, margin);
 }
