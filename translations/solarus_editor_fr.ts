@@ -169,135 +169,141 @@
     <name>DialogsEditor</name>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="14"/>
-        <location filename="../build/ui_dialogs_editor.h" line="343"/>
+        <location filename="../build/ui_dialogs_editor.h" line="373"/>
         <source>Dialogss editor</source>
         <translation>Éditeur de dialogues</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="20"/>
-        <location filename="../build/ui_dialogs_editor.h" line="344"/>
+        <location filename="../build/ui_dialogs_editor.h" line="374"/>
         <source>Language properties</source>
         <translation>Propriétés de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="29"/>
-        <location filename="../build/ui_dialogs_editor.h" line="348"/>
+        <location filename="../build/ui_dialogs_editor.h" line="378"/>
         <source>Language id</source>
         <translation>Id de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="36"/>
-        <location filename="../build/ui_dialogs_editor.h" line="350"/>
+        <location filename="../build/ui_dialogs_editor.h" line="380"/>
         <source>Folder name of the language</source>
         <translation>Nom du dossier de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="46"/>
-        <location filename="../build/ui_dialogs_editor.h" line="353"/>
+        <location filename="../build/ui_dialogs_editor.h" line="383"/>
         <source>Language description</source>
         <translation>Description de la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="53"/>
-        <location filename="../build/ui_dialogs_editor.h" line="355"/>
+        <location filename="../build/ui_dialogs_editor.h" line="385"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="78"/>
-        <location filename="../build/ui_dialogs_editor.h" line="357"/>
+        <location filename="../build/ui_dialogs_editor.h" line="387"/>
         <source>Compare to language</source>
         <translation>Comparer à la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="91"/>
-        <location filename="../build/ui_dialogs_editor.h" line="359"/>
+        <location filename="../build/ui_dialogs_editor.h" line="389"/>
         <source>Refresh language</source>
         <translation>Recharger la langue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="94"/>
-        <location filename="../build/ui_dialogs_editor.h" line="361"/>
+        <location filename="../build/ui_dialogs_editor.h" line="391"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="143"/>
-        <location filename="../build/ui_dialogs_editor.h" line="363"/>
+        <location filename="../build/ui_dialogs_editor.h" line="393"/>
         <source>Add dialog</source>
         <translation>Ajouter un dialogue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="181"/>
-        <location filename="../build/ui_dialogs_editor.h" line="367"/>
+        <location filename="../build/ui_dialogs_editor.h" line="397"/>
         <location filename="../src/gui/dialogs_editor.cpp" line="98"/>
         <source>Change dialog id</source>
         <translation>Changer l&apos;id du dialogue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="219"/>
-        <location filename="../build/ui_dialogs_editor.h" line="371"/>
+        <location filename="../build/ui_dialogs_editor.h" line="401"/>
         <location filename="../src/gui/dialogs_editor.cpp" line="169"/>
         <source>Delete dialog</source>
         <translation>Supprimer le dialogue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="257"/>
-        <location filename="../build/ui_dialogs_editor.h" line="374"/>
+        <location filename="../build/ui_dialogs_editor.h" line="404"/>
         <source>Dialog properties</source>
         <translation>Propriétés du dialogue</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="265"/>
-        <location filename="../build/ui_dialogs_editor.h" line="375"/>
+        <location filename="../build/ui_dialogs_editor.h" line="405"/>
         <source>Dialog id:</source>
         <translation>Id du dialogue :</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="310"/>
-        <location filename="../build/ui_dialogs_editor.h" line="377"/>
+        <location filename="../build/ui_dialogs_editor.h" line="407"/>
         <source>Text:</source>
         <translation>Texte :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="326"/>
-        <location filename="../build/ui_dialogs_editor.h" line="378"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="332"/>
+        <location filename="../build/ui_dialogs_editor.h" line="408"/>
+        <source>Display right margin at column:</source>
+        <translation>Afficher une marge à la colonne :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/dialogs_editor.ui" line="367"/>
+        <location filename="../build/ui_dialogs_editor.h" line="409"/>
         <source>Translation:</source>
         <translation>Traduction :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="345"/>
-        <location filename="../build/ui_dialogs_editor.h" line="379"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="390"/>
+        <location filename="../build/ui_dialogs_editor.h" line="410"/>
         <source>Properties :</source>
         <translation>Propriétés :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="375"/>
-        <location filename="../build/ui_dialogs_editor.h" line="382"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="420"/>
+        <location filename="../build/ui_dialogs_editor.h" line="413"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="380"/>
-        <location filename="../build/ui_dialogs_editor.h" line="381"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="425"/>
+        <location filename="../build/ui_dialogs_editor.h" line="412"/>
         <source>Translation</source>
         <translation>Traduction</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="396"/>
-        <location filename="../build/ui_dialogs_editor.h" line="384"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="441"/>
+        <location filename="../build/ui_dialogs_editor.h" line="415"/>
         <source>Add property</source>
         <translation>Nouvelle propriété</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="434"/>
-        <location filename="../build/ui_dialogs_editor.h" line="388"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="479"/>
+        <location filename="../build/ui_dialogs_editor.h" line="419"/>
         <source>Change property key</source>
         <translation>Changer la clé de la propriété</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.ui" line="472"/>
-        <location filename="../build/ui_dialogs_editor.h" line="392"/>
+        <location filename="../src/gui/dialogs_editor.ui" line="517"/>
+        <location filename="../build/ui_dialogs_editor.h" line="423"/>
         <source>Delete property</source>
         <translation>Supprimer la propriété</translation>
     </message>
@@ -333,7 +339,7 @@
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.cpp" line="339"/>
-        <location filename="../src/gui/dialogs_editor.cpp" line="883"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="888"/>
         <source>Change dialog property key</source>
         <translation>Changer la clé d&apos;une propriété de dialogue</translation>
     </message>
@@ -358,62 +364,62 @@
         <translation>&lt;Aucune langue&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="589"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="594"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="631"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="636"/>
         <source>New dialog</source>
         <translation>Nouveau dialogue</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="631"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="636"/>
         <source>New dialog id:</source>
         <translation>Nouvel id de dialogue :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="639"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="644"/>
         <source>Invalid dialog id: %1</source>
         <translation>Id de dialogue invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="644"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="649"/>
         <source>Dialog &apos;%1&apos; already exists</source>
         <translation>Le dialogue &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="718"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="723"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="719"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="724"/>
         <source>Do you really want to delete all dialogs prefixed by &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer tous les dialogues préfixés par &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="836"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="841"/>
         <source>New dialog property</source>
         <translation>Nouvelle propriété de dialogue</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="837"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="842"/>
         <source>New property key:</source>
         <translation>Nouvelle clé de propriété :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="847"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="852"/>
         <source>The property &apos;%1&apos; already exists in the dialog &apos;%2&apos;</source>
         <translation>La propriété &apos;%1&apos; existe déjà dans le dialogue &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="884"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="889"/>
         <source>Change the key of the property &apos;%1&apos;:</source>
         <translation>Changer la clé de la propriété &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="892"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="897"/>
         <source>The property key cannot be empty</source>
         <translation>La clé de propriété ne peut pas être vide</translation>
     </message>
