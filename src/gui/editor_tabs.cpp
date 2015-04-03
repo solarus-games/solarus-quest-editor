@@ -506,7 +506,26 @@ void EditorTabs::close_file_requested(int index) {
  */
 void EditorTabs::file_renamed(const QString& old_path, const QString& /* new_path */) {
 
-  int index = find_editor(old_path);
+  if (get_editor() == nullptr) {
+    return;
+  }
+
+  Quest& quest = get_editor()->get_quest();
+  ResourceType resource_type;
+  QString language_id;
+
+  QString path = old_path;
+  if (quest.is_potential_resource_element(path, resource_type, language_id) &&
+      resource_type == ResourceType::LANGUAGE) {
+
+    int index = find_editor(quest.get_strings_path(language_id));
+    if (index != -1) {
+      remove_editor(index);
+    }
+    path = quest.get_dialogs_path(language_id);
+  }
+
+  int index = find_editor(path);
   if (index != -1) {
     remove_editor(index);
   }
