@@ -101,13 +101,13 @@ public:
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
 
-  // QStandardItemModel interface.
-  virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-  virtual QModelIndex parent(const QModelIndex& model_index) const override;
-  virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
-  virtual QVariant data(const QModelIndex& model_index, int role) const override;
+  // QAbstractItemModel interface.
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+  QModelIndex parent(const QModelIndex& model_index) const override;
+  bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex& model_index, int role) const override;
 
   // Animation.
   int get_animation_nb(const Index& index) const;
