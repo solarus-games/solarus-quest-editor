@@ -853,7 +853,14 @@ void DialogsEditor::create_dialog_property_requested() {
     return;
   }
 
-  try_command(new CreateDialogPropertyCommand(*this, id, key, ""));
+  if (!model->dialog_exists(id)) {
+    QMap<QString, QString> properties;
+    properties.insert(key, "");
+    try_command(new CreateDialogCommand(*this, id, "", properties));
+
+  } else {
+    try_command(new CreateDialogPropertyCommand(*this, id, key, ""));
+  }
 }
 
 /**
@@ -908,12 +915,15 @@ void DialogsEditor::change_dialog_property_value_requested(
     const QString& key, const QString& value) {
 
   QString id = model->get_selected_id();
-  if (!model->dialog_exists(id)) {
-    return;
-  }
 
-  if (!model->dialog_property_exists(id, key)) {
+  if (!model->dialog_exists(id)) {
+    QMap<QString, QString> properties;
+    properties.insert(key, value);
+    try_command(new CreateDialogCommand(*this, id, "", properties));
+
+  } else if (!model->dialog_property_exists(id, key)) {
     try_command(new CreateDialogPropertyCommand(*this, id, key, value));
+
   } else if (value != model->get_dialog_property(id, key)) {
     try_command(new SetDialogPropertyValueCommand(*this, id, key, value));
   }
@@ -926,14 +936,21 @@ void DialogsEditor::set_dialog_property_from_translation_requested() {
 
   QString id = model->get_selected_id();
   QString key = ui.dialog_properties_table->get_selected_property();
-  if (!model->dialog_exists(id) ||
-      model->dialog_property_exists(id, key) ||
+  if (model->dialog_property_exists(id, key) ||
       !model->translated_dialog_exists(id)) {
     return;
   }
 
   QString value = model->get_translated_dialog_property(id, key);
-  try_command(new CreateDialogPropertyCommand(*this, id, key, value));
+
+  if (!model->dialog_exists(id)) {
+    QMap<QString, QString> properties;
+    properties.insert(key, value);
+    try_command(new CreateDialogCommand(*this, id, "", properties));
+
+  } else {
+    try_command(new CreateDialogPropertyCommand(*this, id, key, value));
+  }
 }
 
 /**
