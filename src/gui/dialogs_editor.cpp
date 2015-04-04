@@ -507,7 +507,7 @@ DialogsEditor::DialogsEditor(
 
   connect(ui.display_margin_check_box, SIGNAL(clicked()),
           this, SLOT(update_display_margin()));
-  connect(ui.display_margin_field, SIGNAL(editingFinished()),
+  connect(ui.display_margin_field, SIGNAL(valueChanged(int)),
           this, SLOT(update_display_margin()));
 }
 
