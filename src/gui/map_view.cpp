@@ -1276,6 +1276,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
 
   // Compute the new size and position of each entity.
+  bool changed = false;
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
@@ -1283,6 +1284,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     QPoint leader_offset(old_box.bottomRight() - old_leader_box.bottomRight());
     QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred);
     new_boxes.insert(index, new_box);
+    changed |= new_box != old_box;
   }
 
   const bool allow_merge_to_previous = first_resize_done;
