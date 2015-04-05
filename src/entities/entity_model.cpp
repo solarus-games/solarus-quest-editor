@@ -124,10 +124,7 @@ EntityModelPtr EntityModel::create(
   }
 
   EntityModelPtr entity = create(map, EntityIndex(), data.get_type());
-  entity->get_entity() = data;
-  if (data.is_integer("width") && data.is_integer("height")) {
-    entity->set_size(QSize(data.get_integer("width"), data.get_integer("height")));
-  }
+  entity->set_entity(data);
   entity->index = EntityIndex();
 
   return entity;
@@ -161,7 +158,7 @@ EntityModelPtr EntityModel::clone(
 
   const Solarus::EntityData& existing_data = map.get_internal_entity(index);
   EntityModelPtr clone = create(map, EntityIndex(), existing_data.get_type());
-  clone->get_entity() = existing_data;
+  clone->set_entity(existing_data);
   clone->index = EntityIndex();
   return clone;
 }
@@ -408,6 +405,28 @@ Solarus::EntityData& EntityModel::get_entity() {
     return map->get_internal_entity(index);
   }
   return stub;
+}
+
+/**
+ * @brief Changes the entity data wrapped.
+ * @param entity The new data.
+ */
+void EntityModel::set_entity(const EntityData& entity) {
+
+  Q_ASSERT(!is_on_map());
+  Q_ASSERT(entity.get_type() == get_type());
+
+  this->stub = entity;
+
+  if (entity.is_integer("width") && entity.is_integer("height")) {
+    set_size(QSize(entity.get_integer("width"), entity.get_integer("height")));
+  }
+
+  for (const auto& kvp : entity.get_fields()) {
+    QString key = QString::fromStdString(kvp.first);
+    QVariant value = get_field(key);
+    notify_field_changed(key, value);
+  }
 }
 
 /**

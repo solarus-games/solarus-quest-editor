@@ -207,6 +207,7 @@ private:
 
   static EntityModelPtr create(
       MapModel& map, const EntityIndex& index, EntityType type);
+  void set_entity(const Solarus::EntityData& entity);
 
   QPointer<MapModel> map;         /**< The map this entity belongs to
                                    * (could be a reference but we want operator=). */
