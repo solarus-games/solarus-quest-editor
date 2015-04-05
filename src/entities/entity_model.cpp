@@ -125,6 +125,9 @@ EntityModelPtr EntityModel::create(
 
   EntityModelPtr entity = create(map, EntityIndex(), data.get_type());
   entity->get_entity() = data;
+  if (data.is_integer("width") && data.is_integer("height")) {
+    entity->set_size(QSize(data.get_integer("width"), data.get_integer("height")));
+  }
   entity->index = EntityIndex();
 
   return entity;
