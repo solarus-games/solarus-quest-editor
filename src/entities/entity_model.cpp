@@ -291,6 +291,9 @@ EntityModelPtr EntityModel::create(
     // New entity: initialize aligned x and y.
     entity->set_top_left(QPoint(0, 0));
   }
+  else {
+    entity->name = QString::fromStdString(map.get_internal_entity(index).get_name());
+  }
   return EntityModelPtr(entity);
 }
 

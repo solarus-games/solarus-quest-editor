@@ -21,6 +21,7 @@
 #include "map_model.h"
 #include "ui_map_editor.h"
 
+class QStatusBar;
 class QToolBar;
 
 /**
@@ -70,6 +71,7 @@ private slots:
   void update_tileset_id();
   void tileset_selection_changed();
   void map_selection_changed();
+  void update_status_bar();
 
   void move_entities_requested(const QList<EntityIndex>& indexes,
                                const QPoint& translation,
@@ -90,6 +92,7 @@ private:
   QString map_id;                           /**< Id of the map being edited. */
   MapModel* model;                          /**< Map model being edited. */
   QToolBar* entity_creation_toolbar;        /**< Toolbar allowing to add each type of entity. */
+  QStatusBar* status_bar;                   /**< Status bar with information about the map view. */
   bool ignore_tileset_selection_changes;    /**< Blocks the tileset_selection_changed() slot. */
 
 };

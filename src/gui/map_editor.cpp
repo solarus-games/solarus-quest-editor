@@ -385,6 +385,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   map_id(),
   model(nullptr),
   entity_creation_toolbar(nullptr),
+  status_bar(nullptr),
   ignore_tileset_selection_changes(false) {
 
   ui.setupUi(this);
@@ -573,20 +574,13 @@ void MapEditor::build_entity_creation_toolbar() {
  */
 void MapEditor::build_status_bar() {
 
-  QStatusBar* status_bar = new QStatusBar();
+  status_bar = new QStatusBar();
   ui.entity_creation_layout->addWidget(status_bar);
 
-  connect(ui.map_view, &MapView::mouse_map_coordinates_changed, [=](const QPoint& xy) {
-
-    QPoint snapped_xy(Point::round_8(xy));
-    QString message = tr("%1,%2").arg(snapped_xy.x()).arg(snapped_xy.y());
-    status_bar->showMessage(message);
-  });
-
-  connect(ui.map_view, &MapView::mouse_left, [=]() {
-
-    status_bar->clearMessage();
-  });
+  connect(ui.map_view, SIGNAL(mouse_map_coordinates_changed(QPoint)),
+          this, SLOT(update_status_bar()));
+  connect(ui.map_view, SIGNAL(mouse_left()),
+          this, SLOT(update_status_bar()));
 }
 
 /**
@@ -957,7 +951,49 @@ void MapEditor::map_selection_changed() {
   can_cut_changed(!empty_selection);
   can_copy_changed(!empty_selection);
 
-  // TODO update the status bar.
+  // Show info about the selection in the status bar.
+  update_status_bar();
+}
+
+/**
+ * @brief Shows in the status bar information about the cursor and the selection.
+ */
+void MapEditor::update_status_bar() {
+
+  if (status_bar == nullptr) {
+    return;
+  }
+
+  status_bar->clearMessage();
+
+  // Show mouse coordinates.
+  QString mouse_coordinates_string;
+  QPoint view_xy = ui.map_view->mapFromGlobal(QCursor::pos());
+  if (view_xy.x() >= 0 &&
+      view_xy.x() < ui.map_view->width() &&
+      view_xy.y() >= 0 &&
+      view_xy.y() < ui.map_view->height()) {
+    QPoint map_xy = ui.map_view->mapToScene(view_xy).toPoint() + MapScene::get_margin_top_left();
+    QPoint snapped_xy(Point::round_8(map_xy));
+    mouse_coordinates_string = tr("%1,%2 ").arg(snapped_xy.x()).arg(snapped_xy.y());
+  }
+
+  // Show the name of the selected entity.
+  QString selection_string;
+  QList<EntityIndex> indexes = ui.map_view->get_selected_entities();
+  if (indexes.size() == 1) {
+    EntityIndex index = indexes.first();
+    QString name = model->get_entity_name(index);
+    QString type_name = EntityTraits::get_friendly_name(model->get_entity_type(index));
+    if (name.isEmpty()) {
+      selection_string = type_name;
+    }
+    else {
+      selection_string = tr("%1: %2").arg(type_name, name);
+    }
+  }
+
+  status_bar->showMessage(mouse_coordinates_string + selection_string);
 }
 
 /**
