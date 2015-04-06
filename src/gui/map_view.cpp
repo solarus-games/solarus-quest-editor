@@ -851,6 +851,31 @@ EntityModels MapView::clone_selected_entities() const {
 }
 
 /**
+ * @brief Returns the index of the entity under the cursor if any.
+ * @return The index of the entity under the cursor of an invalid index.
+ */
+EntityIndex MapView::get_entity_index_under_cursor() const {
+
+  if (scene == nullptr) {
+    return EntityIndex();
+  }
+
+  QGraphicsItem* item = itemAt(mapFromGlobal(QCursor::pos()));
+  if (item == nullptr) {
+    // No entity under the mouse.
+    return EntityIndex();
+  }
+
+  EntityModel* entity = scene->get_entity_from_item(*item);
+  if (entity == nullptr) {
+    // Not an entity.
+    return EntityIndex();
+  }
+
+  return entity->get_index();
+}
+
+/**
  * @brief Requests to resize the given entities with the specified bounding boxes.
  * @param translation XY coordinates to add.
  * @param allow_merge_to_previous @c true to merge this move with the previous one if any.

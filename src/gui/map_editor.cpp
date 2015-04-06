@@ -956,7 +956,7 @@ void MapEditor::map_selection_changed() {
 }
 
 /**
- * @brief Shows in the status bar information about the cursor and the selection.
+ * @brief Shows in the status bar information about the cursor.
  */
 void MapEditor::update_status_bar() {
 
@@ -973,27 +973,26 @@ void MapEditor::update_status_bar() {
       view_xy.x() < ui.map_view->width() &&
       view_xy.y() >= 0 &&
       view_xy.y() < ui.map_view->height()) {
-    QPoint map_xy = ui.map_view->mapToScene(view_xy).toPoint() + MapScene::get_margin_top_left();
+    QPoint map_xy = ui.map_view->mapToScene(view_xy).toPoint() - MapScene::get_margin_top_left();
     QPoint snapped_xy(Point::round_8(map_xy));
     mouse_coordinates_string = tr("%1,%2 ").arg(snapped_xy.x()).arg(snapped_xy.y());
   }
 
-  // Show the name of the selected entity.
-  QString selection_string;
-  QList<EntityIndex> indexes = ui.map_view->get_selected_entities();
-  if (indexes.size() == 1) {
-    EntityIndex index = indexes.first();
+  // Show information about the entity under the mouse.
+  QString entity_string;
+  EntityIndex index = ui.map_view->get_entity_index_under_cursor();
+  if (index.is_valid()) {
     QString name = model->get_entity_name(index);
     QString type_name = EntityTraits::get_friendly_name(model->get_entity_type(index));
     if (name.isEmpty()) {
-      selection_string = type_name;
+      entity_string = type_name;
     }
     else {
-      selection_string = tr("%1: %2").arg(type_name, name);
+      entity_string = tr("%1: %2").arg(type_name, name);
     }
   }
 
-  status_bar->showMessage(mouse_coordinates_string + selection_string);
+  status_bar->showMessage(mouse_coordinates_string + entity_string);
 }
 
 /**

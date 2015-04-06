@@ -82,6 +82,7 @@ public:
   QList<EntityIndex> get_selected_entities() const;
   void set_selected_entities(const QList<EntityIndex>& indexes);
   EntityModels clone_selected_entities() const;
+  EntityIndex get_entity_index_under_cursor() const;
 
   // State of the view.
   void start_state_doing_nothing();
