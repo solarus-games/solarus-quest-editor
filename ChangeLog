@@ -11,6 +11,8 @@ New features
 * French translation available.
 * The quest can now be run from the editor.
 * Add a quest properties editor (quest.dat has to be edited by hand before).
+* Add a strings editor (by Maxs).
+* Add a dialogs editor (by Maxs).
 * Add a toolbar.
 * Add new keyboard shortcuts.
 * Map editor: multiple tiles from the tileset can now be added at once.
