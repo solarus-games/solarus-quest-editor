@@ -142,6 +142,7 @@ protected:
 private:
 
   void set_state(std::unique_ptr<State> state);
+  void ensure_entity_name_unique(EntityModel& entity);
 
   QPointer<MapModel> model;        /**< The map model. */
   MapScene* scene;                 /**< The scene viewed. */

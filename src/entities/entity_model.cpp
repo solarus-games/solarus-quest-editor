@@ -63,6 +63,7 @@ EntityModel::EntityModel(
   map(&map),
   index(index),
   stub(type),
+  name(),
   origin(0, 0),
   size(16, 16),
   base_size(16, 16),
@@ -126,6 +127,7 @@ EntityModelPtr EntityModel::create(
   EntityModelPtr entity = create(map, EntityIndex(), data.get_type());
   entity->set_entity(data);
   entity->index = EntityIndex();
+  entity->name = QString::fromStdString(data.get_name());
 
   return entity;
 }
@@ -160,6 +162,7 @@ EntityModelPtr EntityModel::clone(
   EntityModelPtr clone = create(map, EntityIndex(), existing_data.get_type());
   clone->set_entity(existing_data);
   clone->index = EntityIndex();
+  clone->name = map.get_entity_name(index);
   return clone;
 }
 
@@ -343,6 +346,9 @@ void EntityModel::added_to_map(const EntityIndex& index) {
   set_layer(index.layer);
   this->index = index;
   map->get_internal_entity(index) = stub;  // Copy the data.
+  bool name_ok = map->set_entity_name(index, name);
+  Q_ASSERT(name_ok);
+  Q_UNUSED(name_ok);
 }
 
 /**
@@ -475,6 +481,32 @@ EntityType EntityModel::get_type() const {
 */
 QString EntityModel::get_type_name() const {
   return QString::fromStdString(get_entity().get_type_name());
+}
+
+/**
+ * @brief Returns whether this entity has a name.
+ * @return @c true if the name is not empty.
+ */
+bool EntityModel::has_name() const {
+  return !name.isEmpty();
+}
+
+/**
+ * @brief Returns the name of this entity.
+ * @return The name or an empty string if the entity has no name.
+ */
+QString EntityModel::get_name() const {
+  return name;
+}
+
+/**
+ * @brief Sets the name of this entity.
+ * @param name The name to set.
+ */
+void EntityModel::set_name(const QString& name) {
+
+  this->name = name;
+  get_entity().set_name(name.toStdString());
 }
 
 /**

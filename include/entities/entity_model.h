@@ -90,6 +90,9 @@ public:
   Solarus::EntityData& get_entity();
 
   // Access data.
+  bool has_name() const;
+  QString get_name() const;
+  void set_name(const QString& name);
   Layer get_layer() const;
   void set_layer(Layer layer);
   QPoint get_xy() const;
@@ -214,6 +217,7 @@ private:
   EntityIndex index;              /**< Index of this entity in the map.
                                    * When invalid, the entity is not added to the map yet. */
   Solarus::EntityData stub;       /**< Stub of entity, used before it gets added to the map. */
+  QString name;                   /**< Name of the entity. */
   QPoint origin;                  /**< Origin point of the entity relative to its top-left corner. */
   QSize size;                     /**< Size of the entity for the editor. */
   QSize base_size;                /**< Reference size when resizing. */

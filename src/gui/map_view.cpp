@@ -350,7 +350,7 @@ void MapView::start_state_resizing_entities() {
   const QList<EntityIndex> selection = get_selected_entities();
   if (!are_entities_resizable(selection)) {
     // The selection is empty or not resizable.
-    return;
+    start_state_doing_nothing();
   }
 
   set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this, selection)));
@@ -513,6 +513,10 @@ void MapView::paste() {
       return;
     }
 
+    if (entity->has_name()) {
+      ensure_entity_name_unique(*entity);
+    }
+
     entities.push_back(std::move(entity));
   }
 
@@ -521,8 +525,56 @@ void MapView::paste() {
   }
 
   start_state_adding_entities(std::move(entities));
+}
 
-  // TODO also take care of names uniqueness.
+/**
+ * @brief Renames an entity if necessary to make sure its name is unique on the map.
+ * @param entity The entity to check.
+ */
+void MapView::ensure_entity_name_unique(EntityModel& entity) {
+
+  QString name = entity.get_name();
+  EntityIndex index = model->find_entity_by_name(name);
+  if (!index.is_valid()) {
+    // The name is not used.
+    return;
+  }
+
+  if (index == entity.get_index()) {
+    // The name is used but only by this entity.
+    return;
+  }
+
+  int counter = 2;
+  QStringList words = name.split('_');
+  if (words.size() == 1) {
+    name = name + "_";
+  }
+  else {
+    QString last_word = words.last();
+    bool is_int = false;
+    counter = last_word.toInt(&is_int);
+    if (!is_int) {
+      counter = 2;
+      name = name + "_";
+    }
+    else {
+      words.removeLast();
+      name = "";
+      for (QString word : words) {
+        name = name + "_" + word;
+      }
+      name = name + "_";
+    }
+  }
+
+  QString counter_string = QString::number(counter);
+  while (model->entity_name_exists(name + counter_string)) {
+    ++counter;
+    counter_string = QString::number(counter);
+  }
+  name = name + counter_string;
+  entity.set_name(name);
 }
 
 /**
@@ -1505,6 +1557,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   QMap<Layer, int> num_entities_layer;
   for (EntityModelPtr& entity : entities) {
     // Determine the best layer.
+    Q_ASSERT(entity != nullptr);
     Layer layer = find_best_layer(*entity);
 
     if (!num_entities_layer.contains(layer)) {

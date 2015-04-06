@@ -407,6 +407,71 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Returns the name of an entity.
+ * @param index Index of a map entity.
+ * @return The name or an empty string if the entity has no name.
+ * Returns an empty string if there is no entity at this index.
+ */
+QString MapModel::get_entity_name(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return QString();
+  }
+
+  return get_entity(index).get_name();
+}
+
+/**
+ * @brief Sets the name of an entity.
+ *
+ * Emits entity_name_changed() if there is a change.
+ *
+ * @param index Index of a map entity.
+ * @param name The new name or an empty string to set no name.
+ * @return @c true in case of success, @c false if the name was already in use.
+ * Does nothing and returns @c false if there is no entity with this index.
+ */
+bool MapModel::set_entity_name(const EntityIndex& index, const QString& name) {
+
+  if (!entity_exists(index)) {
+    // No such entity.
+    return false;
+  }
+
+  // Make the change on the engine side.
+  if (!map.set_entity_name(index, name.toStdString())) {
+    return false;
+  }
+
+  // Update the entity from the editor side.
+  get_entity(index).set_name(name);
+
+  emit entity_name_changed(name);
+  return true;
+}
+
+/**
+ * @brief Returns whether there exists an entity with the given name.
+ * @param name The name to check
+ * @return @c true if this name is already in use.
+ */
+bool MapModel::entity_name_exists(const QString& name) const {
+
+  return map.entity_exists(name.toStdString());
+}
+
+/**
+ * @brief Find the entity with the specified name.
+ * @param name The name to get.
+ * @return The index of corresponding entity or an invalid index.
+ */
+EntityIndex MapModel::find_entity_by_name(const QString& name) const {
+
+  return map.get_entity_index(name.toStdString());
+}
+
+/**
  * @brief Returns the layer where an entity is on the map.
  * @param index Index of a map entity.
  * @return The layer.
@@ -700,7 +765,11 @@ void MapModel::add_entities(AddableEntities&& entities) {
     }
 
     // Add the entity on the Solarus side.
-    map.insert_entity(entity->get_entity(), index);
+    bool inserted = map.insert_entity(entity->get_entity(), index);
+    if (!inserted) {
+      qCritical() << tr("Failed to add entity");
+      continue;
+    }
 
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;

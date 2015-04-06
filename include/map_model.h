@@ -75,6 +75,10 @@ public:
   bool entity_exists(const EntityIndex& index) const;
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
+  QString get_entity_name(const EntityIndex& index) const;
+  bool set_entity_name(const EntityIndex& index, const QString& name);
+  bool entity_name_exists(const QString& name) const;
+  EntityIndex find_entity_by_name(const QString& name) const;
   Layer get_entity_layer(const EntityIndex& index) const;
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
@@ -110,6 +114,7 @@ signals:
   void entities_added(const QList<EntityIndex>& indexes);
   void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
   void entities_removed(const QList<EntityIndex>& indexes);
+  void entity_name_changed(const QString& name);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
   void entity_field_changed(const EntityIndex& index, const QString& key, const QVariant& value);
