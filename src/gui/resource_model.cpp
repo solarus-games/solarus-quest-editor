@@ -96,6 +96,19 @@ void ResourceModel::add_special_value(
 }
 
 /**
+ * @brief Removes from the model the item with the specified id.
+ * @param id Id of the resource to remove.
+ */
+void ResourceModel::remove_id(const QString& id) {
+
+  const QStandardItem* item = get_element_item(id);
+  if (item == nullptr) {
+    return;
+  }
+  remove_element(id);
+}
+
+/**
  * @brief Adds to the model an item for the specified resource element.
  * @param element_id Id of the resource element to add.
  */
@@ -124,6 +137,7 @@ void ResourceModel::remove_element(const QString& element_id) {
   }
 
   removeRow(index.row(), index.parent());
+  items.erase(element_id);
 }
 
 /**
@@ -268,7 +282,8 @@ void ResourceModel::element_renamed(
 
   QStandardItem* item = get_element_item(old_id);
   if (item == nullptr) {
-    qCritical() << tr("Missing resource element in selector: '%1'").arg(old_id);
+    // Item not found, maybe it has been removed dynamicaly
+    // (e.g. in StringsEditor).
     return;
   }
 
@@ -294,7 +309,8 @@ void ResourceModel::element_description_changed(
 
   QStandardItem* item = get_element_item(id);
   if (item == nullptr) {
-    qCritical() << tr("Missing resource element in selector: '%1'").arg(id);
+    // Item not found, maybe it has been removed dynamicaly
+    // (e.g. in StringsEditor).
     return;
   }
 

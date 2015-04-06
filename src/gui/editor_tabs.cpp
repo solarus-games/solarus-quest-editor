@@ -22,6 +22,8 @@
 #include "gui/tileset_editor.h"
 #include "gui/sprite_editor.h"
 #include "gui/quest_properties_editor.h"
+#include "gui/strings_editor.h"
+#include "gui/dialogs_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include <QFileInfo>
@@ -80,7 +82,7 @@ void EditorTabs::open_resource(
 
   case ResourceType::LANGUAGE:
     // Open the dialogs file.
-    open_dialogs_editor(quest, quest.get_dialogs_path(id));
+    open_dialogs_editor(quest, id);
     break;
 
   case ResourceType::SPRITE:
@@ -257,21 +259,62 @@ void EditorTabs::open_sprite_editor(
  * @param quest A Solarus quest.
  * @param path Path of the dialogs file to open.
  */
-void EditorTabs::open_dialogs_editor(
-    Quest& quest, const QString& path) {
+void EditorTabs::open_dialogs_editor(Quest& quest, const QString& language_id) {
 
-  open_text_editor(quest, path);  // TODO dialogs editor.
+  // Get the strings file path.
+  QString path = quest.get_dialogs_path(language_id);
+
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new DialogsEditor(quest, language_id));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**
  * @brief Opens a file with a language strings list editor in a new tab.
  * @param quest A Solarus quest.
- * @param path Path of the strings file to open.
+ * @param language_id Language id of the strings file to open.
  */
 void EditorTabs::open_strings_editor(
-    Quest& quest, const QString& path) {
+    Quest& quest, const QString& language_id) {
 
-  open_text_editor(quest, path);  // TODO strings list editor.
+  // Get the strings file path.
+  QString path = quest.get_strings_path(language_id);
+
+  if (!quest.is_in_root_path(path)) {
+    // Not a file of this quest.
+    return;
+  }
+
+  // Find the existing tab if any.
+  int index = find_editor(path);
+  if (index != -1) {
+    // Already open.
+    setCurrentIndex(index);
+    return;
+  }
+
+  try {
+    add_editor(new StringsEditor(quest, language_id));
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**
@@ -427,10 +470,10 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     open_resource(quest, resource_type, element_id);
   }
   else if (quest.is_dialogs_file(canonical_path, element_id)) {
-    open_dialogs_editor(quest, canonical_path);
+    open_dialogs_editor(quest, element_id);
   }
   else if (quest.is_strings_file(canonical_path, element_id)) {
-    open_strings_editor(quest, canonical_path);
+    open_strings_editor(quest, element_id);
   }
   else if (quest.is_script(canonical_path)) {
     // A Lua script that is not a resource element.
@@ -463,7 +506,26 @@ void EditorTabs::close_file_requested(int index) {
  */
 void EditorTabs::file_renamed(const QString& old_path, const QString& /* new_path */) {
 
-  int index = find_editor(old_path);
+  if (get_editor() == nullptr) {
+    return;
+  }
+
+  Quest& quest = get_editor()->get_quest();
+  ResourceType resource_type;
+  QString language_id;
+
+  QString path = old_path;
+  if (quest.is_potential_resource_element(path, resource_type, language_id) &&
+      resource_type == ResourceType::LANGUAGE) {
+
+    int index = find_editor(quest.get_strings_path(language_id));
+    if (index != -1) {
+      remove_editor(index);
+    }
+    path = quest.get_dialogs_path(language_id);
+  }
+
+  int index = find_editor(path);
   if (index != -1) {
     remove_editor(index);
   }
