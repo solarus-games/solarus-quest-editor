@@ -984,11 +984,9 @@ void MapEditor::update_status_bar() {
   if (index.is_valid()) {
     QString name = model->get_entity_name(index);
     QString type_name = EntityTraits::get_friendly_name(model->get_entity_type(index));
-    if (name.isEmpty()) {
-      entity_string = type_name;
-    }
-    else {
-      entity_string = tr("%1: %2").arg(type_name, name);
+    entity_string = tr(" - %1").arg(type_name);
+    if (!name.isEmpty()) {
+      entity_string += tr(": %1").arg(name);
     }
   }
 

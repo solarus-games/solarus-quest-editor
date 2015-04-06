@@ -15,6 +15,7 @@ New features
 * Add new keyboard shortcuts.
 * Map editor: multiple tiles from the tileset can now be added at once.
 * Map editor: improved the resizing of multiple entities.
+* Map editor: show information about the entity under the cursor.
 * Tileset editor: undo/redo is now supported.
 * Tileset editor: multi-selection is now supported.
 * Tileset editor: showing the grid is now supported.

@@ -860,7 +860,16 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
     return EntityIndex();
   }
 
-  QGraphicsItem* item = itemAt(mapFromGlobal(QCursor::pos()));
+  QPoint xy = mapFromGlobal(QCursor::pos());
+  if (xy.x() < 0 ||
+      xy.x() >= width() ||
+      xy.y() < 0 ||
+      xy.y() >= height()) {
+    // The mouse is outside the widget.
+    return EntityIndex();
+  }
+
+  QGraphicsItem* item = itemAt(xy);
   if (item == nullptr) {
     // No entity under the mouse.
     return EntityIndex();
