@@ -317,7 +317,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
   }
 
   bool exists_in_solarus = map.entity_exists(index);
-  bool exists_in_model = (index.index >= 0 && index.index < (int) entities[index.layer].size());
+  bool exists_in_model = (index.order >= 0 && index.order < (int) entities[index.layer].size());
 
   if (exists_in_model != exists_in_solarus) {
     // Inconsistency: bug in the editor or in Solarus.
@@ -340,7 +340,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  * @return The corresponding entity model.
  */
 const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
-  return *entities[index.layer].at(index.index);
+  return *entities[index.layer].at(index.order);
 }
 
 /**
@@ -349,7 +349,7 @@ const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
  * Non-const version.
  */
 EntityModel& MapModel::get_entity(const EntityIndex& index) {
-  return *entities[index.layer].at(index.index);
+  return *entities[index.layer].at(index.order);
 }
 
 /**
@@ -773,7 +773,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
 
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
-    int i = index.index;
+    int i = index.order;
     auto it = this->entities[layer].begin() + i;
     this->entities[layer].emplace(it, std::move(entity));
     get_entity(index).added_to_map(index);
@@ -835,7 +835,7 @@ AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
 
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
-    int i = index.index;
+    int i = index.order;
     auto it2 = this->entities[layer].begin() + i;
     EntityModelPtr entity = std::move(*it2);
     entity->about_to_be_removed_from_map();
@@ -884,7 +884,7 @@ void MapModel::rebuild_entity_indexes(Layer layer) {
       continue;
     }
     EntityIndex index = entity->get_index();
-    index.index = i;
+    index.order = i;
     entity->index_changed(index);
     ++i;
   }

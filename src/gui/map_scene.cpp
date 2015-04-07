@@ -115,7 +115,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
 
   const EntityIndex& index = entity.get_index();
   Layer layer = index.layer;
-  int i = index.index;
+  int i = index.order;
 
   EntityItem* item = new EntityItem(entity);
   item->setZValue(static_cast<int>(layer));
@@ -143,12 +143,12 @@ EntityItem* MapScene::get_entity_item(const EntityIndex& index) {
   }
 
   const EntityItems& items = get_entity_items(index.layer);
-  if (index.index < 0 || index.index >= items.size()) {
+  if (index.order < 0 || index.order >= items.size()) {
     // Index out of range.
     return nullptr;
   }
 
-  return items.at(index.index);
+  return items.at(index.order);
 }
 
 /**
@@ -303,9 +303,9 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
       continue;
     }
 
-    Q_ASSERT(entity_items[index.layer][index.index] == item);
+    Q_ASSERT(entity_items[index.layer][index.order] == item);
     removeItem(item);
-    entity_items[index.layer].removeAt(index.index);
+    entity_items[index.layer].removeAt(index.order);
     delete item;
   }
 }
