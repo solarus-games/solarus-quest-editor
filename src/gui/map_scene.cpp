@@ -354,7 +354,7 @@ void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) 
 
 /**
  * @brief Returns the indexes of selected entities.
- * @return The selected entities.
+ * @return The selected entities, sorted in the order of the map.
  */
 QList<EntityIndex> MapScene::get_selected_entities() {
 
@@ -370,6 +370,8 @@ QList<EntityIndex> MapScene::get_selected_entities() {
     }
     result.append(index);
   }
+
+  qSort(result);
   return result;
 }
 
