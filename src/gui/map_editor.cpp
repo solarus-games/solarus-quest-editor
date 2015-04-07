@@ -950,9 +950,6 @@ void MapEditor::map_selection_changed() {
   bool empty_selection = ui.map_view->is_selection_empty();
   can_cut_changed(!empty_selection);
   can_copy_changed(!empty_selection);
-
-  // Show info about the selection in the status bar.
-  update_status_bar();
 }
 
 /**
