@@ -123,10 +123,19 @@ void EntityItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
+    QColor line_color = Qt::green;
+    QRect bounding_rect = boundingRect().toRect();
+
+    // Draw both a thick line and a a line with thickness zero
+    // so that the thickness of the selection rectangle grows with the zoom,
+    // but is also still visible with low zoom settings.
     GuiTools::draw_rectangle_border(
           *painter,
-          boundingRect().toRect(),
-          Qt::green,
+          bounding_rect,
+          line_color,
           1);
+
+    painter->setPen(QPen(line_color, 0, Qt::SolidLine));
+    painter->drawRect(bounding_rect);
   }
 }
