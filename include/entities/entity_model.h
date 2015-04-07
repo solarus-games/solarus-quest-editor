@@ -93,6 +93,7 @@ public:
   bool has_name() const;
   QString get_name() const;
   void set_name(const QString& name);
+  void ensure_name_unique();
   Layer get_layer() const;
   void set_layer(Layer layer);
   QPoint get_xy() const;

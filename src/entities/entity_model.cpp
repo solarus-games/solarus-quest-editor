@@ -128,6 +128,7 @@ EntityModelPtr EntityModel::create(
   entity->set_entity(data);
   entity->index = EntityIndex();
   entity->name = QString::fromStdString(data.get_name());
+  entity->ensure_name_unique();
 
   return entity;
 }
@@ -163,6 +164,7 @@ EntityModelPtr EntityModel::clone(
   clone->set_entity(existing_data);
   clone->index = EntityIndex();
   clone->name = map.get_entity_name(index);
+  clone->ensure_name_unique();
   return clone;
 }
 
@@ -510,6 +512,62 @@ void EntityModel::set_name(const QString& name) {
 
   this->name = name;
   get_entity().set_name(name.toStdString());
+}
+
+/**
+ * @brief Renames this entity if necessary so that its name is unique on the map.
+ *
+ * This function should be called before adding the entity on the map.
+ */
+void EntityModel::ensure_name_unique() {
+
+  QString name = get_name();
+  if (name.isEmpty()) {
+    // No name is always okay.
+    return;
+  }
+
+  EntityIndex index = map->find_entity_by_name(name);
+  if (!index.is_valid()) {
+    // The name is not used.
+    return;
+  }
+
+  if (index == get_index()) {
+    // The name is used but only by this entity.
+    return;
+  }
+
+  int counter = 2;
+  QStringList words = name.split('_');
+  if (words.size() == 1) {
+    name = name + "_";
+  }
+  else {
+    QString last_word = words.last();
+    bool is_int = false;
+    counter = last_word.toInt(&is_int);
+    if (!is_int) {
+      counter = 2;
+      name = name + "_";
+    }
+    else {
+      words.removeLast();
+      name = "";
+      for (QString word : words) {
+        name = name + "_" + word;
+      }
+      name = name + "_";
+    }
+  }
+
+  QString counter_string = QString::number(counter);
+  while (map->entity_name_exists(name + counter_string)) {
+    ++counter;
+    counter_string = QString::number(counter);
+  }
+  name = name + counter_string;
+  set_name(name);
 }
 
 /**
