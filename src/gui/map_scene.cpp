@@ -19,7 +19,6 @@
 #include "map_model.h"
 #include "tileset_model.h"
 #include "view_settings.h"
-#include <QDebug>
 #include <QPainter>
 
 /**
@@ -107,11 +106,7 @@ void MapScene::build() {
  */
 void MapScene::create_entity_item(EntityModel& entity) {
 
-  if (!entity.is_on_map()) {
-    // Bug in the editor.
-    qCritical() << tr("This entity is not on the map");
-    return;
-  }
+  Q_ASSERT(entity.is_on_map());
 
   const EntityIndex& index = entity.get_index();
   Layer layer = index.layer;
@@ -254,18 +249,9 @@ void MapScene::entities_added(const QList<EntityIndex>& indexes) {
 
   for (const EntityIndex& index : indexes) {
 
-    if (!map.entity_exists(index)) {
-      // Bug in the map editor.
-      qCritical() << tr("Cannot find added entity");
-      continue;
-    }
-
+    Q_ASSERT(map.entity_exists(index));
     EntityModel& entity = map.get_entity(index);
-    if (entity.get_index() != index) {
-      // Bug in the map editor.
-      qCritical() << tr("Inconsistent index of entity added");
-      continue;
-    }
+    Q_ASSERT(entity.get_index() == index);
     create_entity_item(entity);
   }
 }
@@ -285,24 +271,11 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
 
     const EntityIndex& index = *it;
     EntityItem* item = get_entity_item(index);
-    if (item == nullptr) {
-      // Bug in the map editor.
-      qCritical() << tr("Missing entity graphics item");
-      continue;
-    }
+    Q_ASSERT(item != nullptr);
 
     EntityModel& entity = map.get_entity(index);
-    if (entity.get_index() != index) {
-      // Bug in the map editor.
-      qCritical() << tr("Inconsistent index of entity being removed");
-      continue;
-    }
-    if (&item->get_entity() != &entity) {
-      // Bug in the map editor.
-      qCritical() << tr("Wrong entity item at this index");
-      continue;
-    }
-
+    Q_ASSERT(entity.get_index() == index);
+    Q_ASSERT(&item->get_entity() == &entity);
     Q_ASSERT(entity_items[index.layer][index.order] == item);
     removeItem(item);
     entity_items[index.layer].removeAt(index.order);
@@ -323,10 +296,7 @@ void MapScene::entity_xy_changed(const EntityIndex& index, const QPoint& xy) {
   Q_UNUSED(xy);
 
   EntityItem* item = get_entity_item(index);
-  if (item == nullptr) {
-    // Bug in the map editor.
-    qCritical() << tr("Missing entity graphics item");
-  }
+  Q_ASSERT(item != nullptr);
 
   item->update_xy();
 }
@@ -344,10 +314,7 @@ void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) 
   Q_UNUSED(size);
 
   EntityItem* item = get_entity_item(index);
-  if (item == nullptr) {
-    // Bug in the map editor.
-    qCritical() << tr("Missing entity graphics item");
-  }
+  Q_ASSERT(item != nullptr);
 
   item->update_size();
 }

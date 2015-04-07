@@ -24,7 +24,6 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
-#include <QDebug>
 #include <QItemSelectionModel>
 #include <QStatusBar>
 #include <QToolBar>

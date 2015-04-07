@@ -21,7 +21,6 @@
 #include "point.h"
 #include "size.h"
 #include "tileset_model.h"
-#include <QDebug>
 #include <QIcon>
 #include <QSet>
 
@@ -318,18 +317,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
 
   bool exists_in_solarus = map.entity_exists(index);
   bool exists_in_model = (index.order >= 0 && index.order < (int) entities[index.layer].size());
-
-  if (exists_in_model != exists_in_solarus) {
-    // Inconsistency: bug in the editor or in Solarus.
-
-    if (exists_in_model) {
-      qCritical() << tr("Entity exists in the editor but not in the data");
-    }
-    else {
-      qCritical() << tr("Entity exists in the data but not in the editor");
-    }
-    return false;
-  }
+  Q_ASSERT(exists_in_model == exists_in_solarus);
 
   return exists_in_model;
 }
@@ -816,15 +804,8 @@ AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
     const EntityIndex& index = *it;
 
     // Sanity checks.
-    if (!index.is_valid()) {
-      qCritical() << tr("This entity is not on the map");
-      continue;
-    }
-
-    if (!entity_exists(index)) {
-      qCritical() << tr("Cannot find entity to remove");
-      continue;
-    }
+    Q_ASSERT(index.is_valid());
+    Q_ASSERT(entity_exists(index));
 
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;
@@ -872,10 +853,7 @@ void MapModel::rebuild_entity_indexes(Layer layer) {
   for (auto it = entities[layer].begin(); it != entities[layer].end(); ++it) {
 
     const EntityModelPtr& entity = *it;
-    if (entity == nullptr) {
-      qCritical() << tr("Missing entity");
-      continue;
-    }
+    Q_ASSERT(entity != nullptr);
     EntityIndex index = entity->get_index();
     index.order = i;
     entity->index_changed(index);

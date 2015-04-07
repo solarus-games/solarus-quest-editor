@@ -348,15 +348,8 @@ bool EntityModel::is_on_map() const {
  */
 void EntityModel::added_to_map(const EntityIndex& index) {
 
-  if (!index.is_valid()) {
-    qCritical() << MapModel::tr("Missing index of entity added");
-    return;
-  }
-
-  if (this->index.is_valid()) {
-    qCritical() << MapModel::tr("This entity already has a map index");
-    return;
-  }
+  Q_ASSERT(index.is_valid());
+  Q_ASSERT(!this->index.is_valid());
 
   set_layer(index.layer);
   this->index = index;
@@ -373,10 +366,7 @@ void EntityModel::added_to_map(const EntityIndex& index) {
  */
 void EntityModel::about_to_be_removed_from_map() {
 
-  if (!index.is_valid()) {
-    qCritical() << MapModel::tr("Entity being removed is not on the map");
-    return;
-  }
+  Q_ASSERT(index.is_valid());
 
   stub = map->get_internal_entity(index);  // Save the data.
   index = EntityIndex();  // Set an invalid index.
@@ -388,15 +378,8 @@ void EntityModel::about_to_be_removed_from_map() {
  */
 void EntityModel::index_changed(const EntityIndex& index) {
 
-  if (!this->index.is_valid()) {
-    qCritical() << MapModel::tr("This entity is not on the map");
-    return;
-  }
-
-  if (!index.is_valid()) {
-    qCritical() << MapModel::tr("Missing new index of entity");
-    return;
-  }
+  Q_ASSERT(this->index.is_valid());
+  Q_ASSERT(index.is_valid());
 
   this->index = index;
   set_layer(index.layer);

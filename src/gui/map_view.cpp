@@ -29,7 +29,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
-#include <QDebug>
 #include <QGraphicsItem>
 #include <QMap>
 #include <QMenu>
@@ -1347,11 +1346,7 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred) {
 
   MapModel& map = get_map();
-  if (!map.entity_exists(index)) {
-    // Bug in the editor.
-    qCritical() << MapView::tr("No such entity index");
-    return QRect();
-  }
+  Q_ASSERT(map.entity_exists(index));
   EntityModel& entity = map.get_entity(index);
 
   const QSize& base_size = entity.get_base_size();
