@@ -26,6 +26,26 @@ Enemy::Enemy(MapModel& map, const EntityIndex& index) :
 
   set_origin(QPoint(8, 13));
 
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Enemy::notify_field_changed(const QString& key, const QVariant& value) {
+
+  Q_UNUSED(value);
+  if (key == "breed") {
+    update_breed();
+  }
+}
+
+/**
+ * @brief Updates the representation of the enemy.
+ *
+ * This function should be called when the breed changes.
+ */
+void Enemy::update_breed() {
+
   DrawSpriteInfo info;
   info.sprite_id = QString("enemies/") + get_field("breed").toString();
   info.animation = "stopped";

@@ -40,7 +40,6 @@ Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
 
   set_resizable(true);
   set_has_preferred_layer(true);
-  update_pattern();
 }
 
 /**

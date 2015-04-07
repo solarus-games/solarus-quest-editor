@@ -296,6 +296,13 @@ EntityModelPtr EntityModel::create(
   else {
     entity->name = QString::fromStdString(map.get_internal_entity(index).get_name());
   }
+
+  for (const auto& kvp : entity->get_entity().get_fields()) {
+    QString key = QString::fromStdString(kvp.first);
+    QVariant value = entity->get_field(key);
+    entity->notify_field_changed(key, value);
+  }
+
   return EntityModelPtr(entity);
 }
 
@@ -976,6 +983,8 @@ void EntityModel::set_base_size(const QSize& base_size) {
 /**
  * @brief This function is called when a field of this entity was just set.
  *
+ * This function is also called at initialization time when creating an entity
+ * model from data.
  * Subclasses can reimplement it to react to the change.
  *
  * @param key Key of the field.

@@ -42,6 +42,8 @@ private:
 
   void update_resize_mode();
 
+  int direction;   /**< Current direction of the jumper, necessary to detect changes. */
+
 };
 
 #endif

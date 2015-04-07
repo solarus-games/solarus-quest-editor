@@ -28,6 +28,14 @@ public:
 
   Enemy(MapModel& map, const EntityIndex& index);
 
+protected:
+
+  void notify_field_changed(const QString& key, const QVariant& value) override;
+
+private:
+
+  void update_breed();
+
 };
 
 #endif

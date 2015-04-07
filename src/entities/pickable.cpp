@@ -25,6 +25,25 @@ Pickable::Pickable(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::PICKABLE) {
 
   set_origin(QPoint(8, 13));
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Pickable::notify_field_changed(const QString& key, const QVariant& value) {
+
+  Q_UNUSED(value);
+  if (key == "treasure_name") {
+    update_treasure();
+  }
+}
+
+/**
+ * @brief Updates the representation of the pickable.
+ *
+ * This function should be called when the treasure changes.
+ */
+void Pickable::update_treasure() {
 
   QString treasure_name = get_field("treasure_name").toString();
   if (!treasure_name.isEmpty()) {

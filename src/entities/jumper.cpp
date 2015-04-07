@@ -23,7 +23,8 @@
  * @param index Index of the entity in the map.
  */
 Jumper::Jumper(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index, EntityType::JUMPER) {
+  EntityModel(map, index, EntityType::JUMPER),
+  direction(-1) {
 
   DrawShapeInfo info;
   info.enabled = true;
@@ -93,6 +94,12 @@ void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
 
   Q_UNUSED(value);
   if (key == "direction") {
+    int direction = get_direction();
+    if (direction == this->direction) {
+      // No change.
+      return;
+    }
+
     // Set the default size for the new direction.
     if (is_jump_diagonal()) {
       set_size(QSize(32, 32));
