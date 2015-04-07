@@ -961,8 +961,6 @@ void MapEditor::update_status_bar() {
     return;
   }
 
-  status_bar->clearMessage();
-
   // Show mouse coordinates.
   QString mouse_coordinates_string;
   QPoint view_xy = ui.map_view->mapFromGlobal(QCursor::pos());
@@ -987,7 +985,13 @@ void MapEditor::update_status_bar() {
     }
   }
 
-  status_bar->showMessage(mouse_coordinates_string + entity_string);
+  QString message = mouse_coordinates_string + entity_string;
+  if (message.isEmpty()) {
+    status_bar->clearMessage();
+  }
+  else {
+    status_bar->showMessage(message);
+  }
 }
 
 /**
