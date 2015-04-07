@@ -274,6 +274,7 @@ void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
     Q_ASSERT(item != nullptr);
 
     EntityModel& entity = map.get_entity(index);
+    Q_UNUSED(entity);
     Q_ASSERT(entity.get_index() == index);
     Q_ASSERT(&item->get_entity() == &entity);
     Q_ASSERT(entity_items[index.layer][index.order] == item);

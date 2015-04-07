@@ -317,6 +317,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
 
   bool exists_in_solarus = map.entity_exists(index);
   bool exists_in_model = (index.order >= 0 && index.order < (int) entities[index.layer].size());
+  Q_UNUSED(exists_in_solarus);
   Q_ASSERT(exists_in_model == exists_in_solarus);
 
   return exists_in_model;
@@ -745,11 +746,13 @@ void MapModel::add_entities(AddableEntities&& entities) {
     // Check the name uniqueness.
     entity->ensure_name_unique();
     const std::string& std_name = entity->get_entity().get_name();
+    Q_UNUSED(std_name);
     Q_ASSERT(entity->get_name().toStdString() == std_name);
     Q_ASSERT(!map.entity_exists(std_name));
 
     // Add the entity on the Solarus side.
     bool inserted = map.insert_entity(entity->get_entity(), index);
+    Q_UNUSED(inserted);
     Q_ASSERT(inserted);
 
     // Update the entity model and the entity list in the map editor.
