@@ -748,28 +748,21 @@ void MapModel::add_entities(AddableEntities&& entities) {
     EntityModelPtr& entity(addable_entity.entity);
 
     // Sanity checks.
-    if (entity == nullptr) {
-      qCritical() << tr("Missing entity");
-      continue;
-    }
-
-    if (entity->is_on_map()) {
-      qCritical() << tr("This entity is already on the map");
-      continue;
-    }
+    Q_ASSERT(entity != nullptr);
+    Q_ASSERT(!entity->is_on_map());
 
     const EntityIndex& index = addable_entity.index;
-    if (!index.is_valid()) {
-      qCritical() << tr("Invalid index of entity to add");
-      continue;
-    }
+    Q_ASSERT(index.is_valid());
+
+    // Check the name uniqueness.
+    entity->ensure_name_unique();
+    const std::string& std_name = entity->get_entity().get_name();
+    Q_ASSERT(entity->get_name().toStdString() == std_name);
+    Q_ASSERT(!map.entity_exists(std_name));
 
     // Add the entity on the Solarus side.
     bool inserted = map.insert_entity(entity->get_entity(), index);
-    if (!inserted) {
-      qCritical() << tr("Failed to add entity");
-      continue;
-    }
+    Q_ASSERT(inserted);
 
     // Update the entity model and the entity list in the map editor.
     Layer layer = index.layer;

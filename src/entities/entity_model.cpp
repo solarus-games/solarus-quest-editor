@@ -128,7 +128,6 @@ EntityModelPtr EntityModel::create(
   entity->set_entity(data);
   entity->index = EntityIndex();
   entity->name = QString::fromStdString(data.get_name());
-  entity->ensure_name_unique();
 
   return entity;
 }
@@ -164,7 +163,6 @@ EntityModelPtr EntityModel::clone(
   clone->set_entity(existing_data);
   clone->index = EntityIndex();
   clone->name = map.get_entity_name(index);
-  clone->ensure_name_unique();
   return clone;
 }
 
