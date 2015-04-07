@@ -77,11 +77,6 @@ EntityModel::EntityModel(
   draw_image_info(),
   icon() {
 
-  // If the entity has explicit size information in its properties, use it.
-  const EntityData& entity = get_entity();
-  if (entity.is_integer("width") && entity.is_integer("height")) {
-    set_size(QSize(entity.get_integer("width"), entity.get_integer("height")));
-  }
 }
 
 /**
@@ -295,6 +290,16 @@ EntityModelPtr EntityModel::create(
     entity->name = QString::fromStdString(map.get_internal_entity(index).get_name());
   }
 
+  // If the entity has explicit size information in its properties, use it.
+  if (entity->has_field("width") && entity->has_field("height")) {
+    entity->set_size(QSize(
+        entity->get_field("width").toInt(),
+        entity->get_field("height").toInt())
+    );
+  }
+
+  // Notify the entity of its properties.
+  // Do this after its constructor because of the virtual call.
   for (const auto& kvp : entity->get_entity().get_fields()) {
     QString key = QString::fromStdString(kvp.first);
     QVariant value = entity->get_field(key);

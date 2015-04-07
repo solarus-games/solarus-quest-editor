@@ -88,6 +88,40 @@ bool Jumper::is_jump_diagonal() const {
 }
 
 /**
+ * @brief Returns whether this jumper has a legal size.
+ *
+ * The allowed size depends on the jumper's direction.
+ */
+bool Jumper::is_size_valid() const {
+
+  const QSize& size = get_size();
+  int width = size.width();
+  int height = size.height();
+  if (width < 8 || height < 8) {
+    return false;
+  }
+
+  if (width % 8 != 0 || height % 8 != 0) {
+    return false;
+  }
+
+  if (is_jump_diagonal()) {
+    return width == height;
+  }
+
+  if (is_jump_horizontal()) {
+    return width == 8;
+  }
+
+  if (is_jump_vertical()) {
+    return height == 8;
+  }
+
+  // The direction is unset.
+  return false;
+}
+
+/**
  * @copydoc EntityModel::notify_field_changed
  */
 void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
@@ -100,18 +134,23 @@ void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
       return;
     }
 
-    // Set the default size for the new direction.
-    if (is_jump_diagonal()) {
-      set_size(QSize(32, 32));
-    }
-    else {
-      if (is_jump_horizontal()) {
-        set_size(QSize(8, 32));
+    // If the size becomes illegal,
+    // set the default size for the new direction.
+    if (!is_size_valid()) {
+      if (is_jump_diagonal()) {
+        set_size(QSize(32, 32));
       }
       else {
-        set_size(QSize(32, 0));
+        if (is_jump_horizontal()) {
+          set_size(QSize(8, 32));
+        }
+        else {
+          set_size(QSize(32, 8));
+        }
       }
     }
+    this->direction = direction;
+
     // Update the resizing rules.
     update_resize_mode();
   }
