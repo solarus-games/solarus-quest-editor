@@ -20,6 +20,7 @@
 #include "enum_traits.h"
 #include <solarus/entities/EntityType.h>
 #include <solarus/MapData.h>
+#include <QList>
 #include <memory>
 
 class EntityModel;
@@ -27,8 +28,9 @@ class EntityModel;
 using EntityType = Solarus::EntityType;
 using EntityTraits = EnumTraits<EntityType>;
 using EntityIndex = Solarus::EntityIndex;
+using EntityIndexes = QList<EntityIndex>;
 using EntityModelPtr = std::unique_ptr<EntityModel>;
-using EntityModels = std::deque<EntityModelPtr>;
+using EntityModels = std::deque<EntityModelPtr>;  // STL container because of std::unique_ptr.
 
 /**
  * \brief Provides useful properties of entity type enum values.

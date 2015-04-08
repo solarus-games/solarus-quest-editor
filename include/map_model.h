@@ -93,7 +93,7 @@ public:
   QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
   void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);
   void add_entities(AddableEntities&& entities);
-  AddableEntities remove_entities(const QList<EntityIndex>& indexes);
+  AddableEntities remove_entities(const EntityIndexes& indexes);
 
   const Solarus::EntityData& get_internal_entity(const EntityIndex& index) const;
   Solarus::EntityData& get_internal_entity(const EntityIndex& index);
@@ -110,10 +110,10 @@ signals:
   void tileset_id_changed(const QString& tileset_id);
   void music_id_changed(const QString& music_id);
 
-  void entities_about_to_be_added(const QList<EntityIndex>& indexes);
-  void entities_added(const QList<EntityIndex>& indexes);
-  void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
-  void entities_removed(const QList<EntityIndex>& indexes);
+  void entities_about_to_be_added(const EntityIndexes& indexes);
+  void entities_added(const EntityIndexes& indexes);
+  void entities_about_to_be_removed(const EntityIndexes& indexes);
+  void entities_removed(const EntityIndexes& indexes);
   void entity_name_changed(const QString& name);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);

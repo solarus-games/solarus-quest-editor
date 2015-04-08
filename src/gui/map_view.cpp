@@ -99,7 +99,7 @@ private:
 class ResizingEntitiesState : public MapView::State {
 
 public:
-  ResizingEntitiesState(MapView& view, const QList<EntityIndex>& entities);
+  ResizingEntitiesState(MapView& view, const EntityIndexes& entities);
   void start() override;
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
@@ -107,7 +107,7 @@ public:
 private:
   QRect update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred);
 
-  QList<EntityIndex> entities;    /**< Entities to resize. */
+  EntityIndexes entities;    /**< Entities to resize. */
   QMap<EntityIndex, QRect>
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
@@ -337,7 +337,7 @@ void MapView::start_state_moving_entities(const QPoint& initial_point) {
  */
 void MapView::start_state_resizing_entities() {
 
-  const QList<EntityIndex> selection = get_selected_entities();
+  const EntityIndexes selection = get_selected_entities();
   if (!are_entities_resizable(selection)) {
     // The selection is empty or not resizable.
     start_state_doing_nothing();
@@ -397,7 +397,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
  * @param indexes Indexes of entities to resize.
  * @return @c true at least one is resizable.
  */
-bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
+bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
 
   for (const EntityIndex& index : indexes) {
     if (model->get_entity(index).is_resizable()) {
@@ -477,7 +477,7 @@ void MapView::build_context_menu_actions() {
 QMenu* MapView::create_context_menu() {
 
   QMenu* menu = new QMenu(this);
-  QList<EntityIndex> indexes = get_selected_entities();
+  EntityIndexes indexes = get_selected_entities();
 
   Q_ASSERT(edit_action != nullptr);
 
@@ -532,7 +532,7 @@ void MapView::copy() {
     return;
   }
 
-  const QList<EntityIndex>& indexes = get_selected_entities();
+  const EntityIndexes& indexes = get_selected_entities();
   if (indexes.isEmpty()) {
     return;
   }
@@ -824,10 +824,10 @@ int MapView::get_num_selected_entities() const {
  * @brief Returns the indexes of selected entities.
  * @return The selected entities.
  */
-QList<EntityIndex> MapView::get_selected_entities() const {
+EntityIndexes MapView::get_selected_entities() const {
 
   if (scene == nullptr) {
-    return QList<EntityIndex>();
+    return EntityIndexes();
   }
 
   return scene->get_selected_entities();
@@ -837,7 +837,7 @@ QList<EntityIndex> MapView::get_selected_entities() const {
  * @brief Selects the specified entities and unselect the rest.
  * @param indexes Indexes of the entities to make selecteded.
  */
-void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
+void MapView::set_selected_entities(const EntityIndexes& indexes) {
 
   if (scene == nullptr) {
     return;
@@ -856,7 +856,7 @@ void MapView::set_selected_entities(const QList<EntityIndex>& indexes) {
 EntityModels MapView::clone_selected_entities() const {
 
   EntityModels clones;
-  QList<EntityIndex> indexes = get_selected_entities();
+  EntityIndexes indexes = get_selected_entities();
   for (const EntityIndex& index : indexes) {
     EntityModelPtr clone = EntityModel::clone(*model, index);
     clones.emplace_back(std::move(clone));
@@ -1330,7 +1330,7 @@ void MovingEntitiesState::mouse_released(const QMouseEvent& event) {
  * @param entities The entities to resize.
  */
 ResizingEntitiesState::ResizingEntitiesState(
-    MapView& view, const QList<EntityIndex>& entities) :
+    MapView& view, const EntityIndexes& entities) :
   MapView::State(view),
   entities(entities),
   old_boxes(),

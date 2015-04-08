@@ -183,7 +183,7 @@ private:
 class MoveEntitiesCommand : public MapEditorCommand {
 
 public:
-  MoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes, const QPoint& translation, bool allow_merge_to_previous) :
+  MoveEntitiesCommand(MapEditor& editor, const EntityIndexes& indexes, const QPoint& translation, bool allow_merge_to_previous) :
     MapEditorCommand(editor, MapEditor::tr("Move entities")),
     indexes(indexes),
     translation(translation),
@@ -224,7 +224,7 @@ public:
   }
 
 private:
-  QList<EntityIndex> indexes;
+  EntityIndexes indexes;
   QPoint translation;
   bool allow_merge_to_previous;
 };
@@ -252,7 +252,7 @@ public:
 
   void undo() override {
 
-    QList<EntityIndex> indexes;
+    EntityIndexes indexes;
     for (auto it = boxes_before.begin(); it != boxes_before.end(); ++it) {
       const EntityIndex& index = it.key();
       get_model().set_entity_bounding_box(index, it.value());
@@ -265,7 +265,7 @@ public:
 
   void redo() override {
 
-    QList<EntityIndex> indexes;
+    EntityIndexes indexes;
     for (auto it = boxes_after.begin(); it != boxes_after.end(); ++it) {
       const EntityIndex& index = it.key();
       get_model().set_entity_bounding_box(index, it.value());
@@ -337,7 +337,7 @@ public:
 
 private:
   AddableEntities entities;    // Entities to be added and where (sorted).
-  QList<EntityIndex> indexes;  // Indexes where they should be added (redundant info).
+  EntityIndexes indexes;  // Indexes where they should be added (redundant info).
 };
 
 /**
@@ -346,7 +346,7 @@ private:
 class RemoveEntitiesCommand : public MapEditorCommand {
 
 public:
-  RemoveEntitiesCommand(MapEditor& editor, const QList<EntityIndex>& indexes) :
+  RemoveEntitiesCommand(MapEditor& editor, const EntityIndexes& indexes) :
     MapEditorCommand(editor, MapEditor::tr("Delete entities")),
     entities(),
     indexes(indexes) {
@@ -367,7 +367,7 @@ public:
 
 private:
   AddableEntities entities;    // Entities to remove and their indexes before removal (sorted).
-  QList<EntityIndex> indexes;  // Indexes before removal (redunant info).
+  EntityIndexes indexes;  // Indexes before removal (redunant info).
 };
 
 }  // Anonymous namespace.
@@ -481,14 +481,14 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(model, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
-  connect(ui.map_view, SIGNAL(move_entities_requested(QList<EntityIndex>, QPoint, bool)),
-          this, SLOT(move_entities_requested(QList<EntityIndex>, QPoint, bool)));
+  connect(ui.map_view, SIGNAL(move_entities_requested(EntityIndexes, QPoint, bool)),
+          this, SLOT(move_entities_requested(EntityIndexes, QPoint, bool)));
   connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
   connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
           this, SLOT(add_entities_requested(AddableEntities&)));
-  connect(ui.map_view, SIGNAL(remove_entities_requested(QList<EntityIndex>)),
-          this, SLOT(remove_entities_requested(QList<EntityIndex>)));
+  connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
+          this, SLOT(remove_entities_requested(EntityIndexes)));
 
   connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
           this, SLOT(map_selection_changed()));
@@ -999,7 +999,7 @@ void MapEditor::update_status_bar() {
  * @param translation XY translation to make.
  * @param allow_merge_to_previous @c true to merge this move with the previous one if any.
  */
-void MapEditor::move_entities_requested(const QList<EntityIndex>& indexes,
+void MapEditor::move_entities_requested(const EntityIndexes& indexes,
                                         const QPoint& translation,
                                         bool allow_merge_to_previous) {
 
@@ -1042,7 +1042,7 @@ void MapEditor::add_entities_requested(AddableEntities& entities) {
  * @brief Slot called when the user wants to delete entities.
  * @param indexes Indexes of entities to remove.
  */
-void MapEditor::remove_entities_requested(const QList<EntityIndex>& indexes) {
+void MapEditor::remove_entities_requested(const EntityIndexes& indexes) {
 
   if (indexes.empty()) {
     return;

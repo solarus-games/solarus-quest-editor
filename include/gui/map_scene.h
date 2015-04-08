@@ -46,8 +46,8 @@ public:
   void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
-  QList<EntityIndex> get_selected_entities();
-  void set_selected_entities(const QList<EntityIndex>& indexes);
+  EntityIndexes get_selected_entities();
+  void set_selected_entities(const EntityIndexes& indexes);
 
   Layer get_layer_in_rectangle(
       const QRect& rectangle
@@ -59,8 +59,8 @@ protected:
 
 private slots:
 
-  void entities_added(const QList<EntityIndex>& indexes);
-  void entities_about_to_be_removed(const QList<EntityIndex>& indexes);
+  void entities_added(const EntityIndexes& indexes);
+  void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
 

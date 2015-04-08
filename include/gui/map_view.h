@@ -79,8 +79,8 @@ public:
   // Selection.
   bool is_selection_empty() const;
   int get_num_selected_entities() const;
-  QList<EntityIndex> get_selected_entities() const;
-  void set_selected_entities(const QList<EntityIndex>& indexes);
+  EntityIndexes get_selected_entities() const;
+  void set_selected_entities(const EntityIndexes& indexes);
   EntityModels clone_selected_entities() const;
   EntityIndex get_entity_index_under_cursor() const;
 
@@ -92,7 +92,7 @@ public:
   void start_state_adding_entities(EntityModels&& entities);
   void start_adding_entities_from_tileset_selection();
 
-  bool are_entities_resizable(const QList<EntityIndex>& indexes) const;
+  bool are_entities_resizable(const EntityIndexes& indexes) const;
 
   // Actions.
   QMenu* create_context_menu();
@@ -103,24 +103,24 @@ signals:
   void mouse_left();
   void undo_requested();
   void move_entities_requested(
-      const QList<EntityIndex>& indexes,
+      const EntityIndexes& indexes,
       const QPoint& translation,
       bool allow_merge_to_previous);
   void resize_entities_requested(
       const QMap<EntityIndex, QRect>& indexes,
       bool allow_merge_to_previous);
   void convert_tiles_requested(
-      const QList<EntityIndex>& indexes);
+      const EntityIndexes& indexes);
   void set_entities_layer_requested(
-      const QList<EntityIndex>& indexes,
+      const EntityIndexes& indexes,
       Layer layer);
   void bring_entities_to_front_requested(
-      const QList<EntityIndex>& indexes);
+      const EntityIndexes& indexes);
   void bring_entities_to_back_requested(
-      const QList<EntityIndex>& indexes);
+      const EntityIndexes& indexes);
   void add_entities_requested(
       AddableEntities& entities);
-  void remove_entities_requested(const QList<EntityIndex>& indexes);
+  void remove_entities_requested(const EntityIndexes& indexes);
 
 public slots:
 

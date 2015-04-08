@@ -724,7 +724,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
     return;
   }
 
-  QList<EntityIndex> indexes;
+  EntityIndexes indexes;
   for (const AddableEntity& addable_entity : entities) {
     indexes.append(addable_entity.index);
   }
@@ -789,7 +789,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
  * @return The removed entities and their old indexes.
  * They must be sorted in ascending order of indexes.
  */
-AddableEntities MapModel::remove_entities(const QList<EntityIndex>& indexes) {
+AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
 
   if (indexes.empty()) {
     return AddableEntities();

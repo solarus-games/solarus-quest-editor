@@ -32,10 +32,10 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
 
   build();
 
-  connect(&map, SIGNAL(entities_added(QList<EntityIndex>)),
-          this, SLOT(entities_added(QList<EntityIndex>)));
-  connect(&map, SIGNAL(entities_about_to_be_removed(QList<EntityIndex>)),
-          this, SLOT(entities_about_to_be_removed(QList<EntityIndex>)));
+  connect(&map, SIGNAL(entities_added(EntityIndexes)),
+          this, SLOT(entities_added(EntityIndexes)));
+  connect(&map, SIGNAL(entities_about_to_be_removed(EntityIndexes)),
+          this, SLOT(entities_about_to_be_removed(EntityIndexes)));
   connect(&map, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
   connect(&map, SIGNAL(entity_size_changed(EntityIndex, QSize)),
@@ -245,7 +245,7 @@ EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
  *
  * @param indexes Indexes of the new entities in ascending order of indexes.
  */
-void MapScene::entities_added(const QList<EntityIndex>& indexes) {
+void MapScene::entities_added(const EntityIndexes& indexes) {
 
   for (const EntityIndex& index : indexes) {
 
@@ -263,7 +263,7 @@ void MapScene::entities_added(const QList<EntityIndex>& indexes) {
  *
  * @param indexes Index of the entities in ascending order of indexes.
  */
-void MapScene::entities_about_to_be_removed(const QList<EntityIndex>& indexes) {
+void MapScene::entities_about_to_be_removed(const EntityIndexes& indexes) {
 
   // Traverse the list from the end to keep correct indexes.
   for (auto it = indexes.end(); it != indexes.begin();) {
@@ -324,9 +324,9 @@ void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) 
  * @brief Returns the indexes of selected entities.
  * @return The selected entities, sorted in the order of the map.
  */
-QList<EntityIndex> MapScene::get_selected_entities() {
+EntityIndexes MapScene::get_selected_entities() {
 
-  QList<EntityIndex> result;
+  EntityIndexes result;
   for (QGraphicsItem* item : selectedItems()) {
     EntityModel* entity = get_entity_from_item(*item);
     if (entity == nullptr) {
@@ -348,7 +348,7 @@ QList<EntityIndex> MapScene::get_selected_entities() {
  * @brief Selects the specified entities and unselect the rest.
  * @param indexes Indexes of the entities to make selecteded.
  */
-void MapScene::set_selected_entities(const QList<EntityIndex>& indexes) {
+void MapScene::set_selected_entities(const EntityIndexes& indexes) {
 
   clearSelection();
   for (const EntityIndex& index : indexes) {
