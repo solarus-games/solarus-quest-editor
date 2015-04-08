@@ -16,6 +16,7 @@
  */
 #include "entities/tile.h"
 #include "gui/entity_item.h"
+#include "gui/enum_menus.h"
 #include "gui/gui_tools.h"
 #include "gui/map_scene.h"
 #include "gui/map_view.h"
@@ -151,7 +152,12 @@ MapView::MapView(QWidget* parent) :
   zoom(1.0),
   state(),
   common_actions(nullptr),
+  edit_action(nullptr),
   resize_action(nullptr),
+  convert_tiles_action(nullptr),
+  set_layer_actions(),
+  bring_to_front_action(nullptr),
+  bring_to_back_action(nullptr),
   remove_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -163,22 +169,7 @@ MapView::MapView(QWidget* parent) :
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
   // Initialize actions.
-  resize_action = new QAction(
-      tr("Resize"), this);
-  resize_action->setShortcut(tr("R"));
-  resize_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(resize_action, &QAction::triggered, [&]() {
-    start_state_resizing_entities();
-  });
-  addAction(resize_action);
-
-  remove_action = new QAction(
-        QIcon(":/images/icon_delete.png"), tr("Delete"), this);
-  remove_action->setShortcut(QKeySequence::Delete);
-  remove_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(remove_action, SIGNAL(triggered()),
-                   this, SLOT(remove_selected_entities()));
-  addAction(remove_action);
+  build_context_menu_actions();
 }
 
 /**
@@ -417,6 +408,69 @@ bool MapView::are_entities_resizable(const QList<EntityIndex>& indexes) const {
 }
 
 /**
+ * @brief Creates all actions to be used by context menus.
+ */
+void MapView::build_context_menu_actions() {
+
+  edit_action = new QAction(
+        tr("Edit"), this);
+  edit_action->setShortcut(tr("Return"));
+  edit_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(edit_action, SIGNAL(triggered()),
+          this, SLOT(edit_selected_entity()));
+  addAction(edit_action);
+
+  resize_action = new QAction(
+        tr("Resize"), this);
+  resize_action->setShortcut(tr("R"));
+  resize_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(resize_action, &QAction::triggered, [&]() {
+    start_state_resizing_entities();
+  });
+  addAction(resize_action);
+
+  convert_tiles_action = new QAction(
+        tr("Convert to dynamic tile"), this);
+  connect(convert_tiles_action, SIGNAL(triggered()),
+          this, SLOT(convert_selected_tiles()));
+  addAction(convert_tiles_action);
+
+  set_layer_actions = EnumMenus<Layer>::create_actions(
+      *this,
+      EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+      [&](Layer layer) {
+        emit set_entities_layer_requested(get_selected_entities(), layer);
+      }
+  );
+
+  bring_to_front_action = new QAction(
+        tr("Bring to front"), this);
+  bring_to_front_action->setShortcut(tr("T"));
+  bring_to_front_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(bring_to_front_action, &QAction::triggered, [&]() {
+    emit bring_entities_to_front_requested(get_selected_entities());
+  });
+  addAction(bring_to_front_action);
+
+  bring_to_back_action = new QAction(
+        tr("Bring to back"), this);
+  bring_to_back_action->setShortcut(tr("B"));
+  bring_to_back_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(bring_to_back_action, &QAction::triggered, [&]() {
+    emit bring_entities_to_back_requested(get_selected_entities());
+  });
+  addAction(bring_to_back_action);
+
+  remove_action = new QAction(
+        QIcon(":/images/icon_delete.png"), tr("Delete"), this);
+  remove_action->setShortcut(QKeySequence::Delete);
+  remove_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(remove_action, SIGNAL(triggered()),
+          this, SLOT(remove_selected_entities()));
+  addAction(remove_action);
+}
+
+/**
  * @brief Creates a context menu for the selected entities.
  * @return A context menu.
  */
@@ -425,8 +479,24 @@ QMenu* MapView::create_context_menu() {
   QMenu* menu = new QMenu(this);
   QList<EntityIndex> indexes = get_selected_entities();
 
+  Q_ASSERT(edit_action != nullptr);
+
+  bool multi_selection = indexes.size() > 1;
+  edit_action->setEnabled(!multi_selection);
   bool resizable = are_entities_resizable(indexes);
   resize_action->setEnabled(resizable);
+
+  // Layout of the context menu (line breaks are separators):
+  //
+  // Edit, Resize
+  // Convert to dynamic/normal tiles
+  // Cut, Copy, Paste
+  // Direction, Low layer, Intermediate Layer, High Layer, Bring to front, Bring to back
+  // Delete
+
+  menu->addAction(edit_action);
+  menu->addAction(resize_action);
+  menu->addSeparator();
 
   if (common_actions != nullptr) {
     // Global actions are available.
@@ -435,7 +505,6 @@ QMenu* MapView::create_context_menu() {
     menu->addAction(common_actions->value("paste"));
     menu->addSeparator();
   }
-  menu->addAction(resize_action);
   menu->addAction(remove_action);
 
   return menu;
@@ -827,6 +896,24 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
   }
 
   return entity->get_index();
+}
+
+/**
+ * @brief Opens a dialog to edit the selected entity.
+ *
+ * Does nothing if the number of selected entities is not 1.
+ */
+void MapView::edit_selected_entity() {
+
+  // TODO edit dialog
+}
+
+/**
+ * @brief Converts the selected tiles to dynamic tiles or to normal tiles.
+ */
+void MapView::convert_selected_tiles() {
+
+  emit convert_tiles_requested(get_selected_entities());
 }
 
 /**

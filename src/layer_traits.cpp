@@ -39,13 +39,13 @@ QString EnumTraits<Layer>::get_friendly_name(Layer value) {
   switch (value) {
 
   case Solarus::LAYER_LOW:
-    return QApplication::tr("Low", "Layer");
+    return QApplication::tr("Low layer");
 
   case Solarus::LAYER_INTERMEDIATE:
-    return QApplication::tr("Intermediate", "Layer");
+    return QApplication::tr("Intermediate layer");
 
   case Solarus::LAYER_HIGH:
-    return QApplication::tr("High", "Layer");
+    return QApplication::tr("High layer");
 
   case Solarus::LAYER_NB:
     return "";
@@ -60,7 +60,8 @@ QString EnumTraits<Layer>::get_friendly_name(Layer value) {
  * @param value A value.
  * @return The corresponding icon.
  */
-QIcon EnumTraits<Layer>::get_icon(Layer /* value */) {
-  // No icon for now.
-  return QIcon();
+QIcon EnumTraits<Layer>::get_icon(Layer value) {
+
+  int i = static_cast<int>(value);
+  return QIcon(QString(":/images/icon_layer_%1.png").arg(i));
 }

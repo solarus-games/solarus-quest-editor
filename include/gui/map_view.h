@@ -109,6 +109,15 @@ signals:
   void resize_entities_requested(
       const QMap<EntityIndex, QRect>& indexes,
       bool allow_merge_to_previous);
+  void convert_tiles_requested(
+      const QList<EntityIndex>& indexes);
+  void set_entities_layer_requested(
+      const QList<EntityIndex>& indexes,
+      Layer layer);
+  void bring_entities_to_front_requested(
+      const QList<EntityIndex>& indexes);
+  void bring_entities_to_back_requested(
+      const QList<EntityIndex>& indexes);
   void add_entities_requested(
       AddableEntities& entities);
   void remove_entities_requested(const QList<EntityIndex>& indexes);
@@ -127,8 +136,10 @@ public slots:
   void update_entity_type_visibility(EntityType type);
   void tileset_selection_changed();
 
+  void edit_selected_entity();
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
   void resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous);
+  void convert_selected_tiles();
   void remove_selected_entities();
 
 protected:
@@ -142,6 +153,7 @@ protected:
 
 private:
 
+  void build_context_menu_actions();
   void set_state(std::unique_ptr<State> state);
 
   QPointer<MapModel> model;        /**< The map model. */
@@ -151,9 +163,16 @@ private:
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
 
+  // Actions of the context menu.
   const QMap<QString, QAction*>*
       common_actions;              /**< Common actions for the context menu. */
+  QAction* edit_action;            /**< Action of editing the selected entity. */
   QAction* resize_action;          /**< Action of resizing the selected entities. */
+  QAction* convert_tiles_action;   /**< Action of converting tiles to/from dynamic ones. */
+  QList<QAction*>
+      set_layer_actions;           /**< Actions of changing the layer of the selected entities. */
+  QAction* bring_to_front_action;  /**< Action of bringing the selected entities to front. */
+  QAction* bring_to_back_action;   /**< Action of bringing the selected entities to back. */
   QAction* remove_action;          /**< Action of deleting the selected entities. */
 };
 

@@ -39,7 +39,7 @@ QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 /**
  * @brief Creates actions corresponding to all values of the enum.
  *
- * The data() of each action is the enum value converted as an integer.
+ * The data() of each action is the enum value converted to an integer.
  *
  * @param parent Parent of actions to create. They will be added to this widget.
  * @param checkable How checkable actions should be.
