@@ -68,9 +68,9 @@ public:
 
   MapView(QWidget* parent = nullptr);
 
-  MapModel* get_model();
+  MapModel* get_map();
   MapScene* get_scene();
-  void set_model(MapModel* map);
+  void set_map(MapModel* map);
   const ViewSettings* get_view_settings() const;
   void set_view_settings(ViewSettings& view_settings);
   const QMap<QString, QAction*>* get_common_actions() const;
@@ -82,7 +82,12 @@ public:
   EntityIndexes get_selected_entities() const;
   void set_selected_entities(const EntityIndexes& indexes);
   EntityModels clone_selected_entities() const;
+
+  // Information about entities.
   EntityIndex get_entity_index_under_cursor() const;
+  bool is_common_type(const EntityIndexes& indexes, EntityType& type);
+  bool is_common_layer(const EntityIndexes& indexes, Layer& layer);
+  bool is_common_direction(const EntityIndexes& indexes, int& direction);
 
   // State of the view.
   void start_state_doing_nothing();
@@ -156,7 +161,7 @@ private:
   void build_context_menu_actions();
   void set_state(std::unique_ptr<State> state);
 
-  QPointer<MapModel> model;        /**< The map model. */
+  QPointer<MapModel> map;          /**< The map model. */
   MapScene* scene;                 /**< The scene viewed. */
   QPointer<ViewSettings>
       view_settings;               /**< What is displayed in the view. */

@@ -428,7 +428,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.music_field->add_special_value("none", tr("<No music>"), 0);
   ui.music_field->add_special_value("same", tr("<Same as before>"), 1);
   ui.tileset_view->set_read_only(true);
-  ui.map_view->set_model(model);
+  ui.map_view->set_map(model);
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
   update();

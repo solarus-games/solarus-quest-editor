@@ -90,6 +90,10 @@ public:
   void set_entity_size(const EntityIndex& index, const QSize& size);
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   void set_entity_bounding_box(const EntityIndex& index, const QRect& bounding_box);
+  bool has_entity_direction_field(const EntityIndex& index) const;
+  int get_entity_direction(const EntityIndex& index) const;
+  void set_entity_direction(const EntityIndex& index, int direction);
+  bool has_entity_field(const EntityIndex& index, const QString& key) const;
   QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
   void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);
   void add_entities(AddableEntities&& entities);
@@ -114,9 +118,10 @@ signals:
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entities_removed(const EntityIndexes& indexes);
-  void entity_name_changed(const QString& name);
+  void entity_name_changed(const EntityIndex&, const QString& name);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
+  void entity_direction_changed(const EntityIndex& name, int direction);
   void entity_field_changed(const EntityIndex& index, const QString& key, const QVariant& value);
 
 public slots:

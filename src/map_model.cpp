@@ -436,7 +436,7 @@ bool MapModel::set_entity_name(const EntityIndex& index, const QString& name) {
   // Update the entity from the editor side.
   get_entity(index).set_name(name);
 
-  emit entity_name_changed(name);
+  emit entity_name_changed(index, name);
   return true;
 }
 
@@ -659,11 +659,81 @@ void MapModel::set_entity_bounding_box(const EntityIndex& index, const QRect& bo
 }
 
 /**
+ * @brief Returns whether an entity has a direction field.
+ * @param index Index of an entity.
+ * @return @c true if a direction field exists, even if it is unset.
+ * Returns @c false if there is no entity with this index.
+ */
+bool MapModel::has_entity_direction_field(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return false;
+  }
+
+  return get_entity(index).has_direction_property();
+}
+
+/**
+ * @brief Returns the direction of an entity.
+ * @param index Index of an entity.
+ * @return The direction of this entity, or -1 if the entity has no direction
+ * field or if it is unset.
+ * Returns -1 if there is no entity with this index.
+ */
+int MapModel::get_entity_direction(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return -1;
+  }
+
+  return get_entity(index).get_direction();
+}
+
+/**
+ * @brief Sets the direction of an entity.
+ * @param index Index of an entity.
+ * @param direction The direction to set, or -1 to set no direction.
+ * Does nothing if there is no entity with this index or if the entity has no
+ * direction field.
+ */
+void MapModel::set_entity_direction(const EntityIndex& index, int direction) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  EntityModel& entity = get_entity(index);
+  if (direction == entity.get_direction()) {
+    // No change.
+    return;
+  }
+
+  get_entity(index).set_direction(direction);
+  emit entity_direction_changed(index, direction);
+}
+
+/**
+ * @brief Returns whether an entity has a field with the given name.
+ * @param index Index of an entity.
+ * @param key Key of the field to check.
+ * @return @c true if such a field exists.
+ * Returns @c false if there is no entity with this index.
+ */
+bool MapModel::has_entity_field(const EntityIndex& index, const QString& key) const {
+
+  if (!entity_exists(index)) {
+    return false;
+  }
+
+  return get_entity(index).has_field(key);
+}
+
+/**
  * @brief Returns a field of an entity on the map.
  * @param index Index of an entity.
  * @param key Key of the field to get.
  * @return The corresponding value.
- * Returns an invalid QVariant() if there is no entity with this index
+ * Returns an invalid QVariant if there is no entity with this index
  * or no such field.
  */
 QVariant MapModel::get_entity_field(const EntityIndex& index, const QString& key) const {

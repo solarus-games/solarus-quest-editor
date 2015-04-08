@@ -147,6 +147,7 @@ private:
  */
 MapView::MapView(QWidget* parent) :
   QGraphicsView(parent),
+  map(),
   scene(nullptr),
   view_settings(nullptr),
   zoom(1.0),
@@ -176,28 +177,28 @@ MapView::MapView(QWidget* parent) :
  * @brief Returns the map represented in this view.
  * @return The map model or nullptr if none was set.
  */
-MapModel* MapView::get_model() {
-  return model.data();
+MapModel* MapView::get_map() {
+  return map.data();
 }
 
 /**
  * @brief Sets the map to represent in this view.
- * @param model The map model, or nullptr to remove any model.
- * This class does not take ownership on the model.
- * The model can be deleted safely.
+ * @param map The map model, or nullptr to remove any model.
+ * This class does not take ownership on the map.
+ * The map can be deleted safely.
  */
-void MapView::set_model(MapModel* model) {
+void MapView::set_map(MapModel* map) {
 
-  if (this->model != nullptr) {
-    this->model = nullptr;
+  if (this->map != nullptr) {
+    this->map = nullptr;
     this->scene = nullptr;
   }
 
-  this->model = model;
+  this->map = map;
 
-  if (model != nullptr) {
-    // Create the scene from the model.
-    scene = new MapScene(*model, this);
+  if (map != nullptr) {
+    // Create the scene from the map.
+    scene = new MapScene(*map, this);
     setScene(scene);
 
     // Enable useful features if there is an image.
@@ -219,7 +220,7 @@ void MapView::set_model(MapModel* model) {
 
 /**
  * @brief Returns the map scene represented in this view.
- * @return The scene or nullptr if no map model was set.
+ * @return The scene or nullptr if no map was set.
  */
 MapScene* MapView::get_scene() {
   return scene;
@@ -362,12 +363,12 @@ void MapView::start_state_adding_entities(EntityModels&& entities) {
  */
 void MapView::start_adding_entities_from_tileset_selection() {
 
-  MapModel* map = get_model();
+  MapModel* map = get_map();
   if (map == nullptr) {
     return;
   }
 
-  TilesetModel* tileset = get_model()->get_tileset_model();
+  TilesetModel* tileset = map->get_tileset_model();
   if (tileset == nullptr) {
     return;
   }
@@ -400,7 +401,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
 bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
 
   for (const EntityIndex& index : indexes) {
-    if (model->get_entity(index).is_resizable()) {
+    if (map->get_entity(index).is_resizable()) {
       return true;
     }
   }
@@ -476,28 +477,47 @@ void MapView::build_context_menu_actions() {
  */
 QMenu* MapView::create_context_menu() {
 
-  QMenu* menu = new QMenu(this);
-  EntityIndexes indexes = get_selected_entities();
-
-  Q_ASSERT(edit_action != nullptr);
-
-  bool multi_selection = indexes.size() > 1;
-  edit_action->setEnabled(!multi_selection);
-  bool resizable = are_entities_resizable(indexes);
-  resize_action->setEnabled(resizable);
-
   // Layout of the context menu (line breaks are separators):
   //
   // Edit, Resize
-  // Convert to dynamic/normal tiles
+  // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
   // Direction, Low layer, Intermediate Layer, High Layer, Bring to front, Bring to back
   // Delete
 
+  QMenu* menu = new QMenu(this);
+  const EntityIndexes& indexes = get_selected_entities();
+
+  // Edit.
+  const bool single_selection = indexes.size() <= 1;
+  Q_ASSERT(edit_action != nullptr);
+  edit_action->setEnabled(single_selection);
   menu->addAction(edit_action);
+
+  // Resize.
+  const bool resizable = are_entities_resizable(indexes);
+  resize_action->setEnabled(resizable);
   menu->addAction(resize_action);
   menu->addSeparator();
 
+  // Convert to dynamic/static tile(s).
+  EntityType type;
+  const bool show_convert_tiles_action = is_common_type(indexes, type) &&
+      (type == EntityType::TILE || type == EntityType::DYNAMIC_TILE);
+  if (show_convert_tiles_action) {
+    QString text;
+    if (type == EntityType::TILE) {
+      text = single_selection ? tr("Convert to dynamic tile") : tr("Convert to dynamic tiles");
+    }
+    else {
+      text = single_selection ? tr("Convert to static tile") : tr("Convert to static tiles");
+    }
+    convert_tiles_action->setText(text);
+    menu->addAction(convert_tiles_action);
+    menu->addSeparator();
+  }
+
+  // Cut, copy, paste.
   if (common_actions != nullptr) {
     // Global actions are available.
     menu->addAction(common_actions->value("cut"));
@@ -505,6 +525,20 @@ QMenu* MapView::create_context_menu() {
     menu->addAction(common_actions->value("paste"));
     menu->addSeparator();
   }
+
+  // TODO Direction.
+
+  // Layer.
+  for (QAction* set_layer_action : set_layer_actions) {
+    menu->addAction(set_layer_action);
+  }
+
+  // Bring to front/back.
+  menu->addAction(bring_to_front_action);
+  menu->addAction(bring_to_back_action);
+  menu->addSeparator();
+
+  // Remove.
   menu->addAction(remove_action);
 
   return menu;
@@ -528,7 +562,7 @@ void MapView::cut() {
  */
 void MapView::copy() {
 
-  if (model == nullptr) {
+  if (map == nullptr) {
     return;
   }
 
@@ -539,8 +573,8 @@ void MapView::copy() {
 
   QStringList entity_strings;
   for (const EntityIndex& index : indexes) {
-    Q_ASSERT(model->entity_exists(index));
-    const EntityModel& entity = model->get_entity(index);
+    Q_ASSERT(map->entity_exists(index));
+    const EntityModel& entity = map->get_entity(index);
     QString entity_string = entity.to_string();
     Q_ASSERT(!entity_string.isEmpty());
     entity_strings << entity_string;
@@ -554,6 +588,10 @@ void MapView::copy() {
  * @brief Adds entities from the clipboard.
  */
 void MapView::paste() {
+
+  if (scene == nullptr) {
+    return;
+  }
 
   QString text = QApplication::clipboard()->text();
   if (text.isEmpty()) {
@@ -575,7 +613,7 @@ void MapView::paste() {
     if (i < entity_strings.size() - 1) {
       entity_string = entity_string + "}";  // Restore the closing brace removed by split().
     }
-    EntityModelPtr entity = EntityModel::create(*get_model(), entity_string);
+    EntityModelPtr entity = EntityModel::create(*get_map(), entity_string);
     if (entity == nullptr) {
       // The text data from the clipboard is not a valid entity.
       return;
@@ -736,7 +774,7 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
  */
 void MapView::mousePressEvent(QMouseEvent* event) {
 
-  if (model != nullptr && get_scene() != nullptr) {
+  if (map != nullptr && get_scene() != nullptr) {
     state->mouse_pressed(*event);
   }
 
@@ -750,7 +788,7 @@ void MapView::mousePressEvent(QMouseEvent* event) {
  */
 void MapView::mouseReleaseEvent(QMouseEvent* event) {
 
-  if (model != nullptr && get_scene() != nullptr) {
+  if (map != nullptr && get_scene() != nullptr) {
     state->mouse_released(*event);
   }
 
@@ -763,7 +801,7 @@ void MapView::mouseReleaseEvent(QMouseEvent* event) {
  */
 void MapView::mouseMoveEvent(QMouseEvent* event) {
 
-  if (model != nullptr && get_scene() != nullptr) {
+  if (map != nullptr && get_scene() != nullptr) {
     state->mouse_moved(*event);
   }
 
@@ -778,7 +816,7 @@ void MapView::mouseMoveEvent(QMouseEvent* event) {
  */
 void MapView::contextMenuEvent(QContextMenuEvent* event) {
 
-  if (model == nullptr || get_scene() == nullptr) {
+  if (map == nullptr || get_scene() == nullptr) {
     return;
   }
 
@@ -858,7 +896,7 @@ EntityModels MapView::clone_selected_entities() const {
   EntityModels clones;
   EntityIndexes indexes = get_selected_entities();
   for (const EntityIndex& index : indexes) {
-    EntityModelPtr clone = EntityModel::clone(*model, index);
+    EntityModelPtr clone = EntityModel::clone(*map, index);
     clones.emplace_back(std::move(clone));
   }
   return clones;
@@ -945,6 +983,48 @@ void MapView::remove_selected_entities() {
 }
 
 /**
+ * @brief Returns whether the given entities all have the same type.
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] type The common type found if any.
+ * @return @c true if they all have the same type.
+ */
+bool MapView::is_common_type(const EntityIndexes& indexes, EntityType& type) {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  type = map->get_entity_type(indexes.first());
+  for (const EntityIndex& index : indexes) {
+    if (map->get_entity_type(index) != type) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Returns whether the given entities all have the same layer.
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] layer The common layer found if any.
+ * @return @c true if they all have the same layer.
+ */
+bool MapView::is_common_layer(const EntityIndexes& indexes, Layer& layer) {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  layer = indexes.first().layer;
+  for (const EntityIndex& index : indexes) {
+    if (index.layer != layer) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * @brief Creates a state.
  * @param view The map view to manage.
  */
@@ -1001,7 +1081,7 @@ MapScene& MapView::State::get_scene() {
  * @return The map model.
  */
 const MapModel& MapView::State::get_map() const {
-  return *view.get_model();
+  return *view.get_map();
 }
 
 /**
@@ -1010,7 +1090,7 @@ const MapModel& MapView::State::get_map() const {
  * Non-const version.
  */
 MapModel& MapView::State::get_map() {
-  return *view.get_model();
+  return *view.get_map();
 }
 
 /**
