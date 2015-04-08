@@ -72,6 +72,8 @@ public:
   // Entities.
   int get_num_entities() const;
   int get_num_entities(Layer layer) const;
+  int get_num_tiles(Layer layer) const;
+  int get_num_dynamic_entities(Layer layer) const;
   bool entity_exists(const EntityIndex& index) const;
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;

@@ -85,6 +85,7 @@ public:
 
   EntityType get_type() const;
   QString get_type_name() const;
+  bool is_dynamic() const;
 
   const Solarus::EntityData& get_entity() const;
   Solarus::EntityData& get_entity();

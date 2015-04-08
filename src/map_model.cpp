@@ -296,12 +296,30 @@ int MapModel::get_num_entities() const {
 }
 
 /**
- * @brief Returns the number of entities on a layer of the map.
+ * @brief Returns the total number of entities on a layer of the map.
  * @param layer A layer.
- * @return The number of entities on that layer.
+ * @return The total number of entities on that layer (tiles and dynamic entities).
  */
 int MapModel::get_num_entities(Layer layer) const {
   return map.get_num_entities(layer);
+}
+
+/**
+ * @brief Returns the number of tiles on a layer of the map.
+ * @param layer A layer.
+ * @return The number of tiles on that layer.
+ */
+int MapModel::get_num_tiles(Layer layer) const {
+  return map.get_num_tiles(layer);
+}
+
+/**
+ * @brief Returns the number of dynamic entities on a layer of the map.
+ * @param layer A layer.
+ * @return The number of dynamic entities on that layer.
+ */
+int MapModel::get_num_dynamic_entities(Layer layer) const {
+  return map.get_num_dynamic_entities(layer);
 }
 
 /**

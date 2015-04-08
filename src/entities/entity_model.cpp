@@ -482,6 +482,14 @@ QString EntityModel::get_type_name() const {
 }
 
 /**
+ * @brief Returns whether the type of entity is a dynamic one.
+ * @return @c true if this is a dynamic entity, @c false if this is a tile.
+ */
+bool EntityModel::is_dynamic() const {
+  return get_type() != EntityType::TILE;
+}
+
+/**
  * @brief Returns whether this entity has a name.
  * @return @c true if the name is not empty.
  */

@@ -1696,18 +1696,30 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
 
   // Make entities ready to be added at their specific index.
   AddableEntities addable_entities;
-  QMap<Layer, int> num_entities_layer;
+  QMap<Layer, int> num_tiles_by_layer;     // Index where to append a tile.
+  QMap<Layer, int> num_entities_by_layer;  // Index where to append a dynamic entity.
   for (EntityModelPtr& entity : entities) {
     // Determine the best layer.
     Q_ASSERT(entity != nullptr);
     Layer layer = find_best_layer(*entity);
 
-    if (!num_entities_layer.contains(layer)) {
-      num_entities_layer[layer] = map.get_num_entities(layer);
+    int i = 0;
+    if (entity->is_dynamic()) {
+      if (!num_entities_by_layer.contains(layer)) {
+        num_entities_by_layer[layer] = map.get_num_entities(layer);
+      }
+      i = num_entities_by_layer[layer];
+      ++num_entities_by_layer[layer];
     }
-    int i = num_entities_layer[layer];
+    else {
+      if (!num_tiles_by_layer.contains(layer)) {
+        num_tiles_by_layer[layer] = map.get_num_tiles(layer);
+      }
+      i = num_tiles_by_layer[layer];
+      ++num_tiles_by_layer[layer];
+    }
+
     EntityIndex index = { layer, i };
-    ++num_entities_layer[layer];
     addable_entities.emplace_back(std::move(entity), index);
   }
 
