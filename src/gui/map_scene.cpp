@@ -300,15 +300,16 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
   EntityItem* item = get_entity_item(index_before);
   Q_ASSERT(item != nullptr);
 
-  EntityModel& entity = map.get_entity(index_before);
   Layer layer_before = index_before.layer;
   Layer layer_after = index_after.layer;
   int order_before = index_before.order;
   int order_after = index_after.order;
+
+  EntityModel& entity = map.get_entity(index_after);
   Q_UNUSED(entity);
-  Q_ASSERT(entity.get_index() == index_before);
+  Q_ASSERT(entity.get_index() == index_after);
   Q_ASSERT(&item->get_entity() == &entity);
-  Q_ASSERT(entity_items[layer_before][order_before] == item);
+  Q_ASSERT(get_entity_item(index_before) == item);
 
   item->setZValue(static_cast<int>(layer_after));
   if (order_after < entity_items[layer_after].size()) {
@@ -336,14 +337,14 @@ void MapScene::entity_order_changed(const EntityIndex& index_before,
   EntityItem* item = get_entity_item(index_before);
   Q_ASSERT(item != nullptr);
 
-  EntityModel& entity = map.get_entity(index_before);
   Layer layer = index_before.layer;
+  EntityIndex index_after(layer, order_after);
+  EntityModel& entity = map.get_entity(index_after);
   Q_UNUSED(entity);
-  Q_ASSERT(entity.get_index() == index_before);
+  Q_ASSERT(entity.get_index() == index_after);
   Q_ASSERT(&item->get_entity() == &entity);
   Q_ASSERT(entity_items[layer][index_before.order] == item);
 
-  EntityIndex index_after(layer, order_after);
   item->stackBefore(get_entity_item(index_after));
   entity_items[layer].move(index_before.order, order_after);
 

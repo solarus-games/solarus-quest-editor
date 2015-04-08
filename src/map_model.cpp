@@ -505,20 +505,43 @@ Layer MapModel::get_entity_layer(const EntityIndex& index) const {
  * @return The new index of the entity.
  * Does nothing if there is no entity with this index.
  */
-EntityIndex MapModel::set_entity_layer(const EntityIndex& index, Layer layer) {
+EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer layer_after) {
 
-  if (!entity_exists(index)) {
+  if (!entity_exists(index_before)) {
     return EntityIndex();
   }
 
-  if (layer == index.layer) {
+  Layer layer_before = index_before.layer;
+  int order_before = index_before.order;
+  if (layer_after == layer_before) {
     // No change.
-    return index;
+    return index_before;
   }
 
-  EntityIndex index_after = map.set_entity_layer(index, layer);
+  EntityIndex index_after = map.set_entity_layer(index_before, layer_after);
+  int order_after = index_after.order;
+  Q_ASSERT(index_after.layer == layer_after);
 
-  emit entity_layer_changed(index, index_after);
+  auto it_before = entities[layer_before].begin() + order_before;
+  EntityModelPtr entity_ptr = std::move(*it_before);
+  Q_ASSERT(entity_ptr != nullptr);
+  EntityModel* entity_before = entity_ptr.get();
+  entities[layer_before].erase(it_before);
+
+  auto it_after = entities[layer_after].begin() + order_after;
+  entities[layer_after].insert(it_after, std::move(entity_ptr));
+
+  Q_ASSERT(entity_exists(index_after));
+  EntityModel* entity_after = &get_entity(index_after);
+  Q_ASSERT(entity_after == entity_before);
+  Q_UNUSED(entity_before);
+  entity_after->index_changed(index_after);
+
+  // FIXME set_entities_layer() for performance
+  rebuild_entity_indexes(layer_before);
+  rebuild_entity_indexes(layer_after);
+
+  emit entity_layer_changed(index_before, index_after);
 
   return index_after;
 }
@@ -545,7 +568,7 @@ void MapModel::set_entity_order(const EntityIndex& index, int order) {
     return;
   }
 
-  const EntityModel& entity = get_entity(index);
+  EntityModel& entity = get_entity(index);
   Layer layer = index.layer;
   bool dynamic = entity.is_dynamic();
   int min_order = dynamic ? get_num_tiles(layer) : 0;
@@ -554,6 +577,11 @@ void MapModel::set_entity_order(const EntityIndex& index, int order) {
   Q_ASSERT(order <= max_order);
 
   map.set_entity_order(index, order);
+
+  EntityIndex index_after(layer, order);
+  entity.index_changed(index_after);
+
+  // FIXME update this->entities() and rebuild entity indexes
 
   emit entity_order_changed(index, order);
 }

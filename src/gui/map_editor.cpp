@@ -324,7 +324,6 @@ public:
     for (int i = indexes_after.size() - 1; i >= 0; --i) {
       const EntityIndex& index_before = indexes_before.at(i);
       const EntityIndex& index_after = indexes_after.at(i);
-      ++i;
       get_map().set_entity_layer(index_after, index_before.layer);
       get_map().set_entity_order({ index_before.layer, index_after.order }, index_before.order);
     }

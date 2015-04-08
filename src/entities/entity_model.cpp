@@ -383,6 +383,8 @@ void EntityModel::index_changed(const EntityIndex& index) {
 
   this->index = index;
   set_layer(index.layer);
+
+  Q_ASSERT(&map->get_entity(index) == this);
 }
 
 /**
