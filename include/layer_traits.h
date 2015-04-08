@@ -21,6 +21,7 @@
 #include <solarus/entities/Layer.h>
 
 using Layer = Solarus::Layer;
+using LayerTraits = EnumTraits<Layer>;
 
 /**
  * \brief Provides useful properties of layer enum values.

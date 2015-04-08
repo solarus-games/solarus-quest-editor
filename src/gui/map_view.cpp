@@ -529,8 +529,19 @@ QMenu* MapView::create_context_menu() {
   // TODO Direction.
 
   // Layer.
-  for (QAction* set_layer_action : set_layer_actions) {
-    menu->addAction(set_layer_action);
+  Layer common_layer = Layer::LAYER_LOW;
+  bool has_common_layer = is_common_layer(indexes, common_layer);
+  for (int i = 0; i < Layer::LAYER_NB; ++i) {
+    Layer current_layer = static_cast<Layer>(i);
+    QAction* action = set_layer_actions[i];
+    action->setChecked(false);
+    action->setText(LayerTraits::get_friendly_name(current_layer));
+    if (has_common_layer && current_layer == common_layer) {
+      action->setChecked(true);
+      // Add a checkmark (there is none when there is already an icon).
+      action->setText("\u2714 " + action->text());
+    }
+    menu->addAction(action);
   }
 
   // Bring to front/back.
