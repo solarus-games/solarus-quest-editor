@@ -300,25 +300,18 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
   EntityItem* item = get_entity_item(index_before);
   Q_ASSERT(item != nullptr);
 
-  Layer layer_before = index_before.layer;
-  Layer layer_after = index_after.layer;
-  int order_before = index_before.order;
-  int order_after = index_after.order;
-
   EntityModel& entity = map.get_entity(index_after);
   Q_UNUSED(entity);
   Q_ASSERT(entity.get_index() == index_after);
   Q_ASSERT(&item->get_entity() == &entity);
   Q_ASSERT(get_entity_item(index_before) == item);
 
-  item->setZValue(static_cast<int>(layer_after));
-  if (order_after < entity_items[layer_after].size()) {
-    // Insert rather than append.
-    item->stackBefore(get_entity_item(index_after));
-  }
+  entity_items[index_before.layer].removeAt(index_before.order);
 
-  entity_items[layer_before].removeAt(order_before);
-  entity_items[layer_after].insert(order_after, item);
+  // Delete and recreate the item because it does not work
+  // with setZValue() + stackBefore() and I can't figure out why.
+  delete item;
+  create_entity_item(entity);
 
   Q_ASSERT(get_entity_item(index_after) == item);
 }
