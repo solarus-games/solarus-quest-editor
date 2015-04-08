@@ -495,6 +495,70 @@ Layer MapModel::get_entity_layer(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Sets the layer of an entity on the map.
+ *
+ * Emits entity_layer_changed() if there is a change.
+ *
+ * @param index Index of the entity to change.
+ * @param layer The new layer. The entity will be on top of other entities
+ * of that layer. Returns an invalid layer in case of error.
+ * @return The new index of the entity.
+ * Does nothing if there is no entity with this index.
+ */
+EntityIndex MapModel::set_entity_layer(const EntityIndex& index, Layer layer) {
+
+  if (!entity_exists(index)) {
+    return EntityIndex();
+  }
+
+  if (layer == index.layer) {
+    // No change.
+    return index;
+  }
+
+  EntityIndex index_after = map.set_entity_layer(index, layer);
+
+  emit entity_layer_changed(index, index_after);
+
+  return index_after;
+}
+
+/**
+ * @brief Changes the order of an entity in its layer.
+ *
+ * Emits entity_order_changed() if there is a change.
+ *
+ * @param index The current index of the entity to change.
+ * @param order The new order to set.
+ * It must be valid: in particular, tiles must remain before dynamic entities.
+ * Does nothing if there is no entity with this index or if the requested
+ * order is invalid.
+ */
+void MapModel::set_entity_order(const EntityIndex& index, int order) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  if (order == index.order) {
+    // No change.
+    return;
+  }
+
+  const EntityModel& entity = get_entity(index);
+  Layer layer = index.layer;
+  bool dynamic = entity.is_dynamic();
+  int min_order = dynamic ? get_num_tiles(layer) : 0;
+  int max_order = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
+  Q_ASSERT(order >= min_order);
+  Q_ASSERT(order <= max_order);
+
+  map.set_entity_order(index, order);
+
+  emit entity_order_changed(index, order);
+}
+
+/**
  * @brief Returns the coordinates of an entity on the map.
  * @param index Index of the entity to get.
  * @return The coordinates of the entity's origin point.

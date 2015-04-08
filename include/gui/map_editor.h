@@ -34,7 +34,7 @@ public:
 
   MapEditor(Quest& quest, const QString& path, QWidget* parent = nullptr);
 
-  MapModel& get_model();
+  MapModel& get_map();
   MapView& get_map_view();
 
   void save() override;
@@ -77,7 +77,9 @@ private slots:
                                const QPoint& translation,
                                bool allow_merge_to_previous);
   void resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
-                               bool allow_merge_to_previous);
+                                 bool allow_merge_to_previous);
+  void set_entities_layer_requested(const EntityIndexes& indexes,
+                                    Layer layer);
   void add_entities_requested(AddableEntities& entities);
   void remove_entities_requested(const EntityIndexes& indexes);
 
@@ -90,7 +92,7 @@ private:
 
   Ui::MapEditor ui;                         /**< The map editor widgets. */
   QString map_id;                           /**< Id of the map being edited. */
-  MapModel* model;                          /**< Map model being edited. */
+  MapModel* map;                            /**< Map model being edited. */
   QToolBar* entity_creation_toolbar;        /**< Toolbar allowing to add each type of entity. */
   QStatusBar* status_bar;                   /**< Status bar with information about the map view. */
   bool ignore_tileset_selection_changes;    /**< Blocks the tileset_selection_changed() slot. */

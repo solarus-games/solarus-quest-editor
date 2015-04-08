@@ -82,6 +82,8 @@ public:
   bool entity_name_exists(const QString& name) const;
   EntityIndex find_entity_by_name(const QString& name) const;
   Layer get_entity_layer(const EntityIndex& index) const;
+  EntityIndex set_entity_layer(const EntityIndex& index, Layer layer);
+  void set_entity_order(const EntityIndex& index, int order);
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
   void add_entity_xy(const EntityIndex& index, const QPoint& translation);
@@ -120,7 +122,9 @@ signals:
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entities_removed(const EntityIndexes& indexes);
-  void entity_name_changed(const EntityIndex&, const QString& name);
+  void entity_layer_changed(const EntityIndex& index_before, const EntityIndex& index_after);
+  void entity_order_changed(const EntityIndex& index_before, int order_after);
+  void entity_name_changed(const EntityIndex& index, const QString& name);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
   void entity_direction_changed(const EntityIndex& name, int direction);

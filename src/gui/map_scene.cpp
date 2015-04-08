@@ -36,6 +36,10 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
           this, SLOT(entities_added(EntityIndexes)));
   connect(&map, SIGNAL(entities_about_to_be_removed(EntityIndexes)),
           this, SLOT(entities_about_to_be_removed(EntityIndexes)));
+  connect(&map, SIGNAL(entity_layer_changed(EntityIndex, EntityIndex)),
+          this, SLOT(entity_layer_changed(EntityIndex, EntityIndex)));
+  connect(&map, SIGNAL(entity_order_changed(EntityIndex, int)),
+          this, SLOT(entity_order_changed(EntityIndex, int)));
   connect(&map, SIGNAL(entity_xy_changed(EntityIndex, QPoint)),
           this, SLOT(entity_xy_changed(EntityIndex, QPoint)));
   connect(&map, SIGNAL(entity_size_changed(EntityIndex, QSize)),
@@ -97,7 +101,6 @@ void MapScene::build() {
       create_entity_item(entity);
     }
   }
-
 }
 
 /**
@@ -122,8 +125,7 @@ void MapScene::create_entity_item(EntityModel& entity) {
 
   Q_ASSERT(layer == entity.get_layer());
 
-  auto it = entity_items[layer].begin() + i;
-  entity_items[layer].insert(it, item);
+  entity_items[layer].insert(i, item);
 }
 
 /**
@@ -282,6 +284,70 @@ void MapScene::entities_about_to_be_removed(const EntityIndexes& indexes) {
     entity_items[index.layer].removeAt(index.order);
     delete item;
   }
+}
+
+/**
+ * @brief Slot called when the layer of an entity has changed.
+ *
+ * Its item on the scene is updated accordingly.
+ *
+ * @param index_before Index of the entity before the change.
+ * @param index_after Index of the entity after the change.
+ */
+void MapScene::entity_layer_changed(const EntityIndex& index_before,
+                                    const EntityIndex& index_after) {
+
+  EntityItem* item = get_entity_item(index_before);
+  Q_ASSERT(item != nullptr);
+
+  EntityModel& entity = map.get_entity(index_before);
+  Layer layer_before = index_before.layer;
+  Layer layer_after = index_after.layer;
+  int order_before = index_before.order;
+  int order_after = index_after.order;
+  Q_UNUSED(entity);
+  Q_ASSERT(entity.get_index() == index_before);
+  Q_ASSERT(&item->get_entity() == &entity);
+  Q_ASSERT(entity_items[layer_before][order_before] == item);
+
+  item->setZValue(static_cast<int>(layer_after));
+  if (order_after < entity_items[layer_after].size()) {
+    // Insert rather than append.
+    item->stackBefore(get_entity_item(index_after));
+  }
+
+  entity_items[layer_before].removeAt(order_before);
+  entity_items[layer_after].insert(order_after, item);
+
+  Q_ASSERT(get_entity_item(index_after) == item);
+}
+
+/**
+ * @brief Slot called when the order of an entity has changed.
+ *
+ * Its item on the scene is updated accordingly.
+ *
+ * @param index_before Index of the entity before the change.
+ * @param order_after The new order of the entity in its layer.
+ */
+void MapScene::entity_order_changed(const EntityIndex& index_before,
+                                    int order_after) {
+
+  EntityItem* item = get_entity_item(index_before);
+  Q_ASSERT(item != nullptr);
+
+  EntityModel& entity = map.get_entity(index_before);
+  Layer layer = index_before.layer;
+  Q_UNUSED(entity);
+  Q_ASSERT(entity.get_index() == index_before);
+  Q_ASSERT(&item->get_entity() == &entity);
+  Q_ASSERT(entity_items[layer][index_before.order] == item);
+
+  EntityIndex index_after(layer, order_after);
+  item->stackBefore(get_entity_item(index_after));
+  entity_items[layer].move(index_before.order, order_after);
+
+  Q_ASSERT(get_entity_item(index_after) == item);
 }
 
 /**

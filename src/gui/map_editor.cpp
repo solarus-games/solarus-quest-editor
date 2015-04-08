@@ -51,8 +51,8 @@ public:
     return editor;
   }
 
-  MapModel& get_model() const {
-    return editor.get_model();
+  MapModel& get_map() const {
+    return editor.get_map();
   }
 
   MapView& get_map_view() const {
@@ -77,11 +77,11 @@ class SetSizeCommand : public MapEditorCommand {
 public:
   SetSizeCommand(MapEditor& editor, const QSize& size) :
     MapEditorCommand(editor, MapEditor::tr("Map size")),
-    before(get_model().get_size()),
+    before(get_map().get_size()),
     after(size) { }
 
-  void undo() override { get_model().set_size(before); }
-  void redo() override { get_model().set_size(after); }
+  void undo() override { get_map().set_size(before); }
+  void redo() override { get_map().set_size(after); }
 
 private:
   QSize before, after;
@@ -95,11 +95,11 @@ class SetWorldCommand : public MapEditorCommand {
 public:
   SetWorldCommand(MapEditor& editor, const QString& world) :
     MapEditorCommand(editor, MapEditor::tr("Map world")),
-    before(get_model().get_world()),
+    before(get_map().get_world()),
     after(world) { }
 
-  void undo() override { get_model().set_world(before); }
-  void redo() override { get_model().set_world(after); }
+  void undo() override { get_map().set_world(before); }
+  void redo() override { get_map().set_world(after); }
 
 private:
   QString before, after;
@@ -113,11 +113,11 @@ class SetFloorCommand : public MapEditorCommand {
 public:
   SetFloorCommand(MapEditor& editor, int floor) :
     MapEditorCommand(editor, MapEditor::tr("Map floor")),
-    before(get_model().get_floor()),
+    before(get_map().get_floor()),
     after(floor) { }
 
-  void undo() override { get_model().set_floor(before); }
-  void redo() override { get_model().set_floor(after); }
+  void undo() override { get_map().set_floor(before); }
+  void redo() override { get_map().set_floor(after); }
 
 private:
   int before, after;
@@ -131,11 +131,11 @@ class SetLocationCommand : public MapEditorCommand {
 public:
   SetLocationCommand(MapEditor& editor, const QPoint& location) :
     MapEditorCommand(editor, MapEditor::tr("Map location")),
-    before(get_model().get_location()),
+    before(get_map().get_location()),
     after(location) { }
 
-  void undo() override { get_model().set_location(before); }
-  void redo() override { get_model().set_location(after); }
+  void undo() override { get_map().set_location(before); }
+  void redo() override { get_map().set_location(after); }
 
 private:
   QPoint before, after;
@@ -149,11 +149,11 @@ class SetTilesetCommand : public MapEditorCommand {
 public:
   SetTilesetCommand(MapEditor& editor, const QString& tileset_id) :
     MapEditorCommand(editor, MapEditor::tr("Tileset")),
-    before(get_model().get_tileset_id()),
+    before(get_map().get_tileset_id()),
     after(tileset_id) { }
 
-  void undo() override { get_model().set_tileset_id(before); }
-  void redo() override { get_model().set_tileset_id(after); }
+  void undo() override { get_map().set_tileset_id(before); }
+  void redo() override { get_map().set_tileset_id(after); }
 
 private:
   QString before, after;
@@ -167,11 +167,11 @@ class SetMusicCommand : public MapEditorCommand {
 public:
   SetMusicCommand(MapEditor& editor, const QString& music_id) :
     MapEditorCommand(editor, MapEditor::tr("Music")),
-    before(get_model().get_music_id()),
+    before(get_map().get_music_id()),
     after(music_id) { }
 
-  void undo() override { get_model().set_music_id(before); }
-  void redo() override { get_model().set_music_id(after); }
+  void undo() override { get_map().set_music_id(before); }
+  void redo() override { get_map().set_music_id(after); }
 
 private:
   QString before, after;
@@ -191,7 +191,7 @@ public:
 
   void undo() override {
     for (const EntityIndex& index : indexes) {
-      get_model().add_entity_xy(index, -translation);
+      get_map().add_entity_xy(index, -translation);
     }
     // Selected impacted entities.
     get_map_view().set_selected_entities(indexes);
@@ -199,7 +199,7 @@ public:
 
   void redo() override {
     for (const EntityIndex& index : indexes) {
-      get_model().add_entity_xy(index, translation);
+      get_map().add_entity_xy(index, translation);
     }
     // Selected impacted entities.
     get_map_view().set_selected_entities(indexes);
@@ -242,7 +242,7 @@ public:
     allow_merge_to_previous(allow_merge_to_previous) {
 
     // Remember the old box of each entity to allow undo.
-    MapModel& map = get_model();
+    MapModel& map = get_map();
     for (auto it = boxes.begin(); it != boxes.end(); ++it) {
       const EntityIndex& index = it.key();
       Q_ASSERT(map.entity_exists(index));
@@ -255,7 +255,7 @@ public:
     EntityIndexes indexes;
     for (auto it = boxes_before.begin(); it != boxes_before.end(); ++it) {
       const EntityIndex& index = it.key();
-      get_model().set_entity_bounding_box(index, it.value());
+      get_map().set_entity_bounding_box(index, it.value());
       indexes.append(index);
     }
 
@@ -268,7 +268,7 @@ public:
     EntityIndexes indexes;
     for (auto it = boxes_after.begin(); it != boxes_after.end(); ++it) {
       const EntityIndex& index = it.key();
-      get_model().set_entity_bounding_box(index, it.value());
+      get_map().set_entity_bounding_box(index, it.value());
       indexes.append(index);
     }
 
@@ -306,6 +306,49 @@ private:
 };
 
 /**
+ * @brief Changing the layer of entities on the map.
+ */
+class SetEntitiesLayerCommand : public MapEditorCommand {
+
+public:
+  SetEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes, Layer layer) :
+    MapEditorCommand(editor, MapEditor::tr("Set layer")),
+    indexes_before(indexes),
+    indexes_after(),
+    layer_after(layer) {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+    for (int i = indexes_after.size() - 1; i >= 0; --i) {
+      const EntityIndex& index_before = indexes_before.at(i);
+      const EntityIndex& index_after = indexes_after.at(i);
+      ++i;
+      get_map().set_entity_layer(index_after, index_before.layer);
+      get_map().set_entity_order({ index_before.layer, index_after.order }, index_before.order);
+    }
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+    indexes_after.clear();
+    for (const EntityIndex& index_before : indexes_before) {
+      EntityIndex index_after = get_map().set_entity_layer(index_before, layer_after);
+      indexes_after.append(index_after);
+    }
+    // Selected impacted entities.
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;
+  EntityIndexes indexes_after;
+  Layer layer_after;
+};
+
+/**
  * @brief Adding entities to the map.
  */
 class AddEntitiesCommand : public MapEditorCommand {
@@ -326,12 +369,12 @@ public:
 
   void undo() override {
     // Remove entities that were added, keep them in this class.
-    entities = get_model().remove_entities(indexes);
+    entities = get_map().remove_entities(indexes);
   }
 
   void redo() override {
     // Add entities and make them selected.
-    get_model().add_entities(std::move(entities));
+    get_map().add_entities(std::move(entities));
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -356,13 +399,13 @@ public:
 
   void undo() override {
     // Restore entities with their old index.
-    get_model().add_entities(std::move(entities));
+    get_map().add_entities(std::move(entities));
     get_map_view().set_selected_entities(indexes);
   }
 
   void redo() override {
     // Remove entities from the map, keep them and their index in this class.
-    entities = get_model().remove_entities(indexes);
+    entities = get_map().remove_entities(indexes);
   }
 
 private:
@@ -382,7 +425,7 @@ private:
 MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
   map_id(),
-  model(nullptr),
+  map(nullptr),
   entity_creation_toolbar(nullptr),
   status_bar(nullptr),
   ignore_tileset_selection_changes(false) {
@@ -413,7 +456,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_entity_type_visibility_supported(true);
 
   // Open the file.
-  model = new MapModel(quest, map_id, this);
+  map = new MapModel(quest, map_id, this);
   get_undo_stack().setClean();
 
   // Prepare the gui.
@@ -428,7 +471,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.music_field->add_special_value("none", tr("<No music>"), 0);
   ui.music_field->add_special_value("same", tr("<Same as before>"), 1);
   ui.tileset_view->set_read_only(true);
-  ui.map_view->set_map(model);
+  ui.map_view->set_map(map);
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
   update();
@@ -443,48 +486,50 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(change_size_requested()));
   connect(ui.height_field, SIGNAL(editingFinished()),
           this, SLOT(change_size_requested()));
-  connect(model, SIGNAL(size_changed(QSize)),
+  connect(map, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
   connect(ui.world_field, SIGNAL(editingFinished()),
           this, SLOT(change_world_requested()));
-  connect(model, SIGNAL(world_changed(QString)),
+  connect(map, SIGNAL(world_changed(QString)),
           this, SLOT(update_world_field()));
 
   connect(ui.floor_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(floor_check_box_changed()));
   connect(ui.floor_field, SIGNAL(editingFinished()),
           this, SLOT(change_floor_requested()));
-  connect(model, SIGNAL(floor_changed(int)),
+  connect(map, SIGNAL(floor_changed(int)),
           this, SLOT(update_floor_field()));
 
   connect(ui.x_field, SIGNAL(editingFinished()),
           this, SLOT(change_location_requested()));
   connect(ui.y_field, SIGNAL(editingFinished()),
           this, SLOT(change_location_requested()));
-  connect(model, SIGNAL(location_changed(QPoint)),
+  connect(map, SIGNAL(location_changed(QPoint)),
           this, SLOT(update_location_field()));
 
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
-  connect(model, SIGNAL(tileset_id_changed(QString)),
+  connect(map, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(update_tileset_field()));
-  connect(model, SIGNAL(tileset_id_changed(QString)),
+  connect(map, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(update_tileset_view()));
   connect(ui.tileset_edit_button, SIGNAL(clicked()),
           this, SLOT(open_tileset_requested()));
 
   connect(ui.music_field, SIGNAL(activated(QString)),
           this, SLOT(music_selector_activated()));
-  connect(model, SIGNAL(music_id_changed(QString)),
+  connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
   connect(ui.map_view, SIGNAL(move_entities_requested(EntityIndexes, QPoint, bool)),
           this, SLOT(move_entities_requested(EntityIndexes, QPoint, bool)));
   connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
+  connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, Layer)),
+          this, SLOT(set_entities_layer_requested(EntityIndexes, Layer)));
   connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
           this, SLOT(add_entities_requested(AddableEntities&)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
@@ -498,8 +543,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
  * @brief Returns the map model being edited.
  * @return The map model.
  */
-MapModel& MapEditor::get_model() {
-  return *model;
+MapModel& MapEditor::get_map() {
+  return *map;
 }
 
 /**
@@ -587,7 +632,7 @@ void MapEditor::build_status_bar() {
  */
 void MapEditor::save() {
 
-  model->save();
+  map->save();
 }
 
 /**
@@ -705,7 +750,7 @@ void MapEditor::set_description_from_gui() {
  */
 void MapEditor::update_size_field() {
 
-  const QSize& size = model->get_size();
+  const QSize& size = map->get_size();
   ui.width_field->setValue(size.width());
   ui.height_field->setValue(size.height());
 }
@@ -716,7 +761,7 @@ void MapEditor::update_size_field() {
 void MapEditor::change_size_requested() {
 
   QSize size(ui.width_field->value(), ui.height_field->value());
-  if (size == model->get_size()) {
+  if (size == map->get_size()) {
     return;
   }
   try_command(new SetSizeCommand(*this, size));
@@ -727,7 +772,7 @@ void MapEditor::change_size_requested() {
  */
 void MapEditor::update_world_field() {
 
-  const QString& world = model->get_world();
+  const QString& world = map->get_world();
   if (world.isEmpty()) {
     ui.world_check_box->setChecked(false);
     ui.world_field->setEnabled(false);
@@ -747,7 +792,7 @@ void MapEditor::world_check_box_changed() {
   bool checked = ui.world_check_box->isChecked();
   if (checked) {
     ui.world_field->setEnabled(true);
-    if (!model->has_world() &&
+    if (!map->has_world() &&
         !ui.world_field->text().isEmpty()) {
       // Use the text that was still in the disabled field.
       try_command(new SetWorldCommand(*this, ui.world_field->text()));
@@ -755,7 +800,7 @@ void MapEditor::world_check_box_changed() {
   }
   else {
     ui.world_field->setEnabled(false);
-    if (model->has_world()) {
+    if (map->has_world()) {
       // Remove the world but keep the text in the field.
       try_command(new SetWorldCommand(*this, ""));
     }
@@ -768,7 +813,7 @@ void MapEditor::world_check_box_changed() {
 void MapEditor::change_world_requested() {
 
   QString world = ui.world_field->text();
-  if (world == model->get_world()) {
+  if (world == map->get_world()) {
     return;
   }
   try_command(new SetWorldCommand(*this, world));
@@ -779,7 +824,7 @@ void MapEditor::change_world_requested() {
  */
 void MapEditor::update_floor_field() {
 
-  int floor = model->get_floor();
+  int floor = map->get_floor();
   if (floor == MapModel::NO_FLOOR) {
     ui.floor_check_box->setChecked(false);
     ui.floor_field->setEnabled(false);
@@ -799,14 +844,14 @@ void MapEditor::floor_check_box_changed() {
   bool checked = ui.floor_check_box->isChecked();
   if (checked) {
     ui.floor_field->setEnabled(true);
-    if (!model->has_floor()) {
+    if (!map->has_floor()) {
       // Use the value that was still in the disabled field.
       try_command(new SetFloorCommand(*this, ui.floor_field->value()));
     }
   }
   else {
     ui.floor_field->setEnabled(false);
-    if (model->has_floor()) {
+    if (map->has_floor()) {
       // Remove the floor but keep the value in the field.
       try_command(new SetFloorCommand(*this, MapModel::NO_FLOOR));
     }
@@ -819,7 +864,7 @@ void MapEditor::floor_check_box_changed() {
 void MapEditor::change_floor_requested() {
 
   int floor = ui.floor_field->value();
-  if (floor == model->get_floor()) {
+  if (floor == map->get_floor()) {
     return;
   }
   try_command(new SetFloorCommand(*this, floor));
@@ -830,7 +875,7 @@ void MapEditor::change_floor_requested() {
  */
 void MapEditor::update_location_field() {
 
-  const QPoint& location = model->get_location();
+  const QPoint& location = map->get_location();
   ui.x_field->setValue(location.x());
   ui.y_field->setValue(location.y());
 }
@@ -841,7 +886,7 @@ void MapEditor::update_location_field() {
 void MapEditor::change_location_requested() {
 
   QPoint location(ui.x_field->value(), ui.y_field->value());
-  if (location == model->get_location()) {
+  if (location == map->get_location()) {
     return;
   }
   try_command(new SetLocationCommand(*this, location));
@@ -852,7 +897,7 @@ void MapEditor::change_location_requested() {
  */
 void MapEditor::update_tileset_field() {
 
-  ui.tileset_field->set_selected_id(model->get_tileset_id());
+  ui.tileset_field->set_selected_id(map->get_tileset_id());
 }
 
 /**
@@ -860,7 +905,7 @@ void MapEditor::update_tileset_field() {
  */
 void MapEditor::tileset_selector_activated() {
 
-  const QString& old_tileset_id = model->get_tileset_id();
+  const QString& old_tileset_id = map->get_tileset_id();
   const QString& new_tileset_id = ui.tileset_field->get_selected_id();
   if (new_tileset_id == old_tileset_id) {
     // No change.
@@ -876,7 +921,7 @@ void MapEditor::tileset_selector_activated() {
 void MapEditor::open_tileset_requested() {
 
   emit open_file_requested(
-        get_quest(), get_quest().get_tileset_data_file_path(model->get_tileset_id()));
+        get_quest(), get_quest().get_tileset_data_file_path(map->get_tileset_id()));
 }
 
 /**
@@ -884,7 +929,7 @@ void MapEditor::open_tileset_requested() {
  */
 void MapEditor::update_music_field() {
 
-  ui.music_field->set_selected_id(model->get_music_id());
+  ui.music_field->set_selected_id(map->get_music_id());
 }
 
 /**
@@ -892,7 +937,7 @@ void MapEditor::update_music_field() {
  */
 void MapEditor::music_selector_activated() {
 
-  const QString& old_music_id = model->get_music_id();
+  const QString& old_music_id = map->get_music_id();
   const QString& new_music_id = ui.music_field->get_selected_id();
   if (new_music_id == old_music_id) {
     // No change.
@@ -907,7 +952,7 @@ void MapEditor::music_selector_activated() {
  */
 void MapEditor::update_tileset_view() {
 
-  TilesetModel* tileset = model->get_tileset_model();
+  TilesetModel* tileset = map->get_tileset_model();
   ui.tileset_view->set_model(tileset);
 }
 
@@ -920,7 +965,7 @@ void MapEditor::update_tileset_id() {
   update_tileset_view();
 
   // Watch the selection of the tileset to correctly add new tiles.
-  TilesetModel* tileset = model->get_tileset_model();
+  TilesetModel* tileset = map->get_tileset_model();
   if (tileset != nullptr) {
     connect(&tileset->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(tileset_selection_changed()));
@@ -976,8 +1021,8 @@ void MapEditor::update_status_bar() {
   QString entity_string;
   EntityIndex index = ui.map_view->get_entity_index_under_cursor();
   if (index.is_valid()) {
-    QString name = model->get_entity_name(index);
-    QString type_name = EntityTraits::get_friendly_name(model->get_entity_type(index));
+    QString name = map->get_entity_name(index);
+    QString type_name = EntityTraits::get_friendly_name(map->get_entity_type(index));
     entity_string = tr(" - %1").arg(type_name);
     if (!name.isEmpty()) {
       entity_string += tr(": %1").arg(name);
@@ -1026,6 +1071,21 @@ void MapEditor::resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
 }
 
 /**
+ * @brief Slot called when the user wants to change the layer of some entities.
+ * @param indexes Indexes of the entities to change.
+ * @param layer The layer to set.
+ */
+void MapEditor::set_entities_layer_requested(const EntityIndexes& indexes,
+                                             Layer layer) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new SetEntitiesLayerCommand(*this, indexes, layer));
+}
+
+/**
  * @brief Slot called when the user wants to add entities.
  * @param entities Entities ready to be added to the map.
  */
@@ -1062,11 +1122,11 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
   if (checked) {
     // Create a new entity of this type.
     EntityModels entities;
-    entities.emplace_back(EntityModel::create(*model, type));
+    entities.emplace_back(EntityModel::create(*map, type));
     ui.map_view->start_state_adding_entities(std::move(entities));
 
     // Unselect patterns in the tileset.
-    TilesetModel* tileset = model->get_tileset_model();
+    TilesetModel* tileset = map->get_tileset_model();
     if (tileset != nullptr) {
       // But don't react to this unselection, it does not come from the user.
       ignore_tileset_selection_changes = true;

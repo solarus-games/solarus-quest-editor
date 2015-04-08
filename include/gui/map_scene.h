@@ -61,6 +61,9 @@ private slots:
 
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
+  void entity_layer_changed(const EntityIndex& index_before,
+                            const EntityIndex& index_after);
+  void entity_order_changed(const EntityIndex& index_before, int order_after);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
 
