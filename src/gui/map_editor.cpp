@@ -324,8 +324,8 @@ public:
     for (int i = indexes_after.size() - 1; i >= 0; --i) {
       const EntityIndex& index_before = indexes_before.at(i);
       const EntityIndex& index_after = indexes_after.at(i);
-      get_map().set_entity_layer(index_after, index_before.layer);
-      get_map().set_entity_order({ index_before.layer, index_after.order }, index_before.order);
+      EntityIndex tmp_index = get_map().set_entity_layer(index_after, index_before.layer);
+      get_map().set_entity_order(tmp_index, index_before.order);
     }
     // Selected impacted entities.
     get_map_view().set_selected_entities(indexes_before);
@@ -1078,6 +1078,13 @@ void MapEditor::set_entities_layer_requested(const EntityIndexes& indexes,
                                              Layer layer) {
 
   if (indexes.isEmpty()) {
+    return;
+  }
+
+  Layer common_layer = Layer::LAYER_LOW;
+  if (map->is_common_layer(indexes, common_layer) &&
+      layer == common_layer) {
+    // Nothing to do.
     return;
   }
 

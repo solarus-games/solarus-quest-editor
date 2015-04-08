@@ -502,7 +502,7 @@ QMenu* MapView::create_context_menu() {
 
   // Convert to dynamic/static tile(s).
   EntityType type;
-  const bool show_convert_tiles_action = is_common_type(indexes, type) &&
+  const bool show_convert_tiles_action = map->is_common_type(indexes, type) &&
       (type == EntityType::TILE || type == EntityType::DYNAMIC_TILE);
   if (show_convert_tiles_action) {
     QString text;
@@ -530,7 +530,7 @@ QMenu* MapView::create_context_menu() {
 
   // Layer.
   Layer common_layer = Layer::LAYER_LOW;
-  bool has_common_layer = is_common_layer(indexes, common_layer);
+  bool has_common_layer = map->is_common_layer(indexes, common_layer);
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer current_layer = static_cast<Layer>(i);
     QAction* action = set_layer_actions[i];
@@ -991,48 +991,6 @@ void MapView::resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_
 void MapView::remove_selected_entities() {
 
   emit remove_entities_requested(get_selected_entities());
-}
-
-/**
- * @brief Returns whether the given entities all have the same type.
- * @param[in] indexes Indexes of the entities to check.
- * @param[out] type The common type found if any.
- * @return @c true if they all have the same type.
- */
-bool MapView::is_common_type(const EntityIndexes& indexes, EntityType& type) {
-
-  if (indexes.isEmpty()) {
-    return false;
-  }
-
-  type = map->get_entity_type(indexes.first());
-  for (const EntityIndex& index : indexes) {
-    if (map->get_entity_type(index) != type) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
- * @brief Returns whether the given entities all have the same layer.
- * @param[in] indexes Indexes of the entities to check.
- * @param[out] layer The common layer found if any.
- * @return @c true if they all have the same layer.
- */
-bool MapView::is_common_layer(const EntityIndexes& indexes, Layer& layer) {
-
-  if (indexes.isEmpty()) {
-    return false;
-  }
-
-  layer = indexes.first().layer;
-  for (const EntityIndex& index : indexes) {
-    if (index.layer != layer) {
-      return false;
-    }
-  }
-  return true;
 }
 
 /**

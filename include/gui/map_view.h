@@ -85,9 +85,6 @@ public:
 
   // Information about entities.
   EntityIndex get_entity_index_under_cursor() const;
-  bool is_common_type(const EntityIndexes& indexes, EntityType& type);
-  bool is_common_layer(const EntityIndexes& indexes, Layer& layer);
-  bool is_common_direction(const EntityIndexes& indexes, int& direction);
 
   // State of the view.
   void start_state_doing_nothing();

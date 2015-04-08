@@ -77,12 +77,14 @@ public:
   bool entity_exists(const EntityIndex& index) const;
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
+  bool is_common_type(const EntityIndexes& indexes, EntityType& type) const;
   QString get_entity_name(const EntityIndex& index) const;
   bool set_entity_name(const EntityIndex& index, const QString& name);
   bool entity_name_exists(const QString& name) const;
   EntityIndex find_entity_by_name(const QString& name) const;
   Layer get_entity_layer(const EntityIndex& index) const;
   EntityIndex set_entity_layer(const EntityIndex& index, Layer layer);
+  bool is_common_layer(const EntityIndexes& indexes, Layer& layer) const;
   void set_entity_order(const EntityIndex& index, int order);
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
@@ -97,6 +99,7 @@ public:
   bool has_entity_direction_field(const EntityIndex& index) const;
   int get_entity_direction(const EntityIndex& index) const;
   void set_entity_direction(const EntityIndex& index, int direction);
+  bool is_common_direction(const EntityIndexes& indexes, int& direction) const;
   bool has_entity_field(const EntityIndex& index, const QString& key) const;
   QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
   void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);

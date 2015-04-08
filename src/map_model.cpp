@@ -414,6 +414,27 @@ QString MapModel::get_entity_type_name(const EntityIndex& index) const {
 }
 
 /**
+ * @brief Returns whether the given entities all have the same type.
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] type The common type found if any.
+ * @return @c true if they all have the same type.
+ */
+bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) const {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  type = get_entity_type(indexes.first());
+  for (const EntityIndex& index : indexes) {
+    if (get_entity_type(index) != type) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * @brief Returns the name of an entity.
  * @param index Index of a map entity.
  * @return The name or an empty string if the entity has no name.
@@ -523,13 +544,13 @@ EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer la
   Q_ASSERT(index_after.layer == layer_after);
 
   auto it_before = entities[layer_before].begin() + order_before;
-  EntityModelPtr entity_ptr = std::move(*it_before);
-  Q_ASSERT(entity_ptr != nullptr);
-  EntityModel* entity_before = entity_ptr.get();
+  EntityModelPtr entity = std::move(*it_before);
+  Q_ASSERT(entity != nullptr);
+  EntityModel* entity_before = entity.get();
   entities[layer_before].erase(it_before);
 
   auto it_after = entities[layer_after].begin() + order_after;
-  entities[layer_after].insert(it_after, std::move(entity_ptr));
+  entities[layer_after].insert(it_after, std::move(entity));
 
   Q_ASSERT(entity_exists(index_after));
   EntityModel* entity_after = &get_entity(index_after);
@@ -547,6 +568,27 @@ EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer la
 }
 
 /**
+ * @brief Returns whether the given entities all have the same layer.
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] layer The common layer found if any.
+ * @return @c true if they all have the same layer.
+ */
+bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  layer = indexes.first().layer;
+  for (const EntityIndex& index : indexes) {
+    if (index.layer != layer) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * @brief Changes the order of an entity in its layer.
  *
  * Emits entity_order_changed() if there is a change.
@@ -557,33 +599,46 @@ EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer la
  * Does nothing if there is no entity with this index or if the requested
  * order is invalid.
  */
-void MapModel::set_entity_order(const EntityIndex& index, int order) {
+void MapModel::set_entity_order(const EntityIndex& index_before, int order_after) {
 
-  if (!entity_exists(index)) {
+  if (!entity_exists(index_before)) {
     return;
   }
 
-  if (order == index.order) {
+  int order_before = index_before.order;
+  if (order_after == order_before) {
     // No change.
     return;
   }
 
-  EntityModel& entity = get_entity(index);
-  Layer layer = index.layer;
-  bool dynamic = entity.is_dynamic();
+  Layer layer = index_before.layer;
+  auto it = entities[layer].begin() + order_before;
+  EntityModelPtr entity = std::move(*it);
+  EntityModel* entity_before = entity.get();
+  Q_ASSERT(entity != nullptr);
+  bool dynamic = entity->is_dynamic();
   int min_order = dynamic ? get_num_tiles(layer) : 0;
   int max_order = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
-  Q_ASSERT(order >= min_order);
-  Q_ASSERT(order <= max_order);
+  Q_ASSERT(order_after >= min_order);
+  Q_ASSERT(order_after <= max_order);
 
-  map.set_entity_order(index, order);
+  map.set_entity_order(index_before, order_after);
 
-  EntityIndex index_after(layer, order);
-  entity.index_changed(index_after);
+  entities[layer].erase(it);
+  it = entities[layer].begin() + order_after;
+  entities[layer].emplace(it, std::move(entity));
 
-  // FIXME update this->entities() and rebuild entity indexes
+  EntityIndex index_after(layer, order_after);
+  EntityModel* entity_after = &get_entity(index_after);
+  Q_ASSERT(entity_exists(index_after));
+  Q_ASSERT(entity_after == entity_before);
+  Q_UNUSED(entity_before);
+  entity_after->index_changed(index_after);
 
-  emit entity_order_changed(index, order);
+  // FIXME set_entities_order() for performance
+  rebuild_entity_indexes(layer);
+
+  emit entity_order_changed(index_before, order_after);
 }
 
 /**
@@ -1027,6 +1082,8 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
  *
  * This function should be called when entities are added, moved or removed
  * because each entity stores its own index.
+ * All entities of the layer should already know their correct layer,
+ * only the order on this layer is updated.
  *
  * @param layer Layer to update.
  */
