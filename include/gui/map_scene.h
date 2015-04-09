@@ -80,6 +80,8 @@ private:
   std::array<EntityItems, Layer::LAYER_NB>
       entity_items;           /**< Entities items on each layer,
                                * ordered as in the map. */
+  std::array<QGraphicsItem*, Layer::LAYER_NB>
+      layer_parent_items;     /**< Artificial parent item of everything on a layer. */
 
 };
 

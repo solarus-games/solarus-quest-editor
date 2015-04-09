@@ -21,6 +21,8 @@
 #include "view_settings.h"
 #include <QPainter>
 
+#include <QDebug>  // TODO
+
 /**
  * @brief Creates a map scene.
  * @param map The map data to represent in the scene.
@@ -28,7 +30,9 @@
  */
 MapScene::MapScene(MapModel& map, QObject* parent) :
   QGraphicsScene(parent),
-  map(map) {
+  map(map),
+  entity_items(),
+  layer_parent_items() {
 
   build();
 
@@ -95,6 +99,17 @@ void MapScene::build() {
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
+
+    // Create the parent item of everything that will be on this layer.
+    if (layer_parent_items[i] != nullptr) {
+      removeItem(layer_parent_items[i]);
+      delete layer_parent_items[i];
+    }
+    layer_parent_items[i] = new QGraphicsPixmapItem(nullptr);
+    layer_parent_items[i]->setZValue(i);
+    addItem(layer_parent_items[i]);
+
+    // Create the items on this layer.
     entity_items[i].clear();
     for (int j = 0; j < map.get_num_entities(layer); ++j) {
       EntityModel& entity = map.get_entity(EntityIndex(layer, j));
@@ -115,12 +130,12 @@ void MapScene::create_entity_item(EntityModel& entity) {
   Layer layer = index.layer;
   int i = index.order;
 
-  EntityItem* item = new EntityItem(entity);
-  item->setZValue(static_cast<int>(layer));
-  addItem(item);
+  QGraphicsItem* parent_item = layer_parent_items[static_cast<int>(layer)];
+  Q_ASSERT(parent_item != nullptr);
+  EntityItem* item = new EntityItem(entity, parent_item);
+
   if (i < entity_items[layer].size()) {
-    // Insert rather than append.
-    item->stackBefore(get_entity_item({ layer, i }));
+    item->stackBefore(get_entity_item(index));
   }
 
   Q_ASSERT(layer == entity.get_layer());
@@ -308,10 +323,16 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
 
   entity_items[index_before.layer].removeAt(index_before.order);
 
-  // Delete and recreate the item because it does not work
-  // with setZValue() + stackBefore() and I can't figure out why.
-  delete item;
-  create_entity_item(entity);
+  removeItem(item);
+  addItem(item);
+  int layer_after = static_cast<int>(index_after.layer);
+  int order_after = index_after.order;
+  item->setParentItem(layer_parent_items[layer_after]);
+  if (order_after < entity_items[layer_after].size()) {
+    item->stackBefore(get_entity_item(index_after));
+  }
+
+  entity_items[layer_after].insert(order_after, item);
 }
 
 /**
@@ -329,15 +350,22 @@ void MapScene::entity_order_changed(const EntityIndex& index_before,
   Q_ASSERT(item != nullptr);
 
   Layer layer = index_before.layer;
+  int order_before = index_before.order;
   EntityIndex index_after(layer, order_after);
   EntityModel& entity = map.get_entity(index_after);
   Q_UNUSED(entity);
   Q_ASSERT(entity.get_index() == index_after);
   Q_ASSERT(&item->get_entity() == &entity);
-  Q_ASSERT(entity_items[layer][index_before.order] == item);
+  Q_ASSERT(entity_items[layer][order_before] == item);
 
-  item->stackBefore(get_entity_item(index_after));
-  entity_items[layer].move(index_before.order, order_after);
+  removeItem(item);
+  addItem(item);
+  item->setParentItem(layer_parent_items[static_cast<int>(layer)]);
+  if (order_after < entity_items[layer].size() - 1) {
+    item->stackBefore(get_entity_item(index_after));
+  }
+
+  entity_items[layer].move(order_before, order_after);
 
   Q_ASSERT(get_entity_item(index_after) == item);
 }

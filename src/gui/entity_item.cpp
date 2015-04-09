@@ -24,9 +24,10 @@
 /**
  * @brief Creates an entity item.
  * @param entity The entity to represent.
+ * @param parent The parent item or nullptr.
  */
-EntityItem::EntityItem(EntityModel& entity) :
-  QGraphicsItem(),
+EntityItem::EntityItem(EntityModel& entity, QGraphicsItem* parent) :
+  QGraphicsItem(parent),
   entity(entity),
   size(entity.get_size()) {
 
@@ -96,7 +97,7 @@ void EntityItem::update_xy() {
  */
 void EntityItem::update_size() {
 
-  // prepareGeometryChange() tells Qt the result of boundingRect() will changed.
+  // prepareGeometryChange() tells Qt the result of boundingRect() will change.
   prepareGeometryChange();
   this->size = entity.get_size();  // TODO this is not true for entities whose sprite is larger, like NPCs
 }

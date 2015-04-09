@@ -39,7 +39,7 @@ public:
     return Type;
   }
 
-  explicit EntityItem(EntityModel& entity);
+  EntityItem(EntityModel& entity, QGraphicsItem* parent = nullptr);
 
   EntityModel& get_entity() const;
   EntityIndex get_index() const;
