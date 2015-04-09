@@ -600,6 +600,9 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const
  */
 EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after) {
 
+  // TODO possible improvement: entities whose layer do not change should also
+  // be moved to keep the relative order of the whole group.
+
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
   for (const EntityIndex& index_before : indexes_before) {
@@ -620,6 +623,38 @@ EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, 
   }
 
   return indexes_after;
+}
+
+/**
+ * @brief Reverts what was done by a call to set_entities_layer().
+ *
+ * No other index change should have happened in the meantime.
+ * The initial stacking order is restored.
+ *
+ * @param indexes_after Indexes after the change, as returned by set_entities_layer().
+ * @param indexes_before Indexes before the change, as passed to set_entities_layer().
+ */
+void MapModel::undo_set_entities_layer(const EntityIndexes& indexes_after, const EntityIndexes& indexes_before) {
+
+  Q_ASSERT(indexes_after.size() == indexes_before.size());
+
+  // Work on entities instead of indexes, because indexes change during the traversal.
+  QList<EntityModel*> entities;
+  for (const EntityIndex& index_after : indexes_after) {
+    entities.append(&get_entity(index_after));
+  }
+
+  for (int i = 0; i < entities.size(); ++i) {
+    EntityModel* entity = entities.at(i);
+    const EntityIndex& index_before = indexes_before.at(i);
+    const EntityIndex& index_after = entity->get_index();  // The entity knows its own updated index.
+    if (index_before.layer == index_after.layer) {
+      // Nothing to do for this entity.
+      continue;
+    }
+    EntityIndex tmp_index = set_entity_layer(index_after, index_before.layer);
+    set_entity_order(tmp_index, index_before.order);
+  }
 }
 
 /**
@@ -653,9 +688,6 @@ void MapModel::set_entity_order(const EntityIndex& index_before, int order_after
   bool dynamic = entity->is_dynamic();
   int min_order = dynamic ? get_num_tiles(layer) : 0;
   int max_order = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
-  if (order_after < min_order) {
-    // BP
-  }
   Q_ASSERT(order_after >= min_order);
   Q_ASSERT(order_after <= max_order);
   Q_UNUSED(min_order);
