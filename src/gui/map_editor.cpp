@@ -193,7 +193,7 @@ public:
     for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, -translation);
     }
-    // Selected impacted entities.
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -201,7 +201,7 @@ public:
     for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, translation);
     }
-    // Selected impacted entities.
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -259,7 +259,7 @@ public:
       indexes.append(index);
     }
 
-    // Selected impacted entities.
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -272,7 +272,7 @@ public:
       indexes.append(index);
     }
 
-    // Selected impacted entities.
+    // Selecteimpacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -314,32 +314,38 @@ public:
   SetEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes, Layer layer) :
     MapEditorCommand(editor, MapEditor::tr("Set layer")),
     indexes_before(indexes),
-    indexes_after(),
+    entities(),
     layer_after(layer) {
 
     qSort(this->indexes_before);
+
+    for (const EntityIndex& index_before : indexes_before) {
+      entities.append(&get_map().get_entity(index_before));
+    }
   }
 
   void undo() override {
-    for (int i = indexes_after.size() - 1; i >= 0; --i) {
+    // TODO move to a separate function in MapModel.
+    for (int i = 0; i < entities.size(); ++i) {
+      EntityModel* entity = entities.at(i);
       const EntityIndex& index_before = indexes_before.at(i);
-      const EntityIndex& index_after = indexes_after.at(i);
+      const EntityIndex& index_after = entity->get_index();  // The entity knows its up-to-date index.
       EntityIndex tmp_index = get_map().set_entity_layer(index_after, index_before.layer);
       get_map().set_entity_order(tmp_index, index_before.order);
     }
-    // Selected impacted entities.
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes_before);
   }
 
   void redo() override {
-    indexes_after = get_map().set_entities_layer(indexes_before, layer_after);
-    // Selected impacted entities.
+    EntityIndexes indexes_after = get_map().set_entities_layer(indexes_before, layer_after);
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes_after);
   }
 
 private:
-  EntityIndexes indexes_before;
-  EntityIndexes indexes_after;
+  EntityIndexes indexes_before;  // Sorted indexes before the change.
+  QList<EntityModel*> entities;  // Entities sorted as before the change.
   Layer layer_after;
 };
 

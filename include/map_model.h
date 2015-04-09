@@ -83,10 +83,10 @@ public:
   bool entity_name_exists(const QString& name) const;
   EntityIndex find_entity_by_name(const QString& name) const;
   Layer get_entity_layer(const EntityIndex& index) const;
-  EntityIndex set_entity_layer(const EntityIndex& index, Layer layer);
+  EntityIndex set_entity_layer(const EntityIndex& index_before, Layer layer_after);
   bool is_common_layer(const EntityIndexes& indexes, Layer& layer) const;
   EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after);
-  void set_entity_order(const EntityIndex& index, int order);
+  void set_entity_order(const EntityIndex& index_before, int order_after);
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
   void add_entity_xy(const EntityIndex& index, const QPoint& translation);

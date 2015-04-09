@@ -594,16 +594,16 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const
  * Emits entity_layer_changed() for each change.
  *
  * @param indexes_before Sorted indexes of the entities to change.
- * @param layer The new layer. Each entity will be polaced on top of other entities
+ * @param layer The new layer. Each entity will be placed on top of other entities
  * of that layer.
  * @return The new indexes of the entities.
  */
 EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after) {
 
   // Work on entities instead of indexes, because indexes change during the traversal.
-  std::vector<EntityModel*> entities;
+  QList<EntityModel*> entities;
   for (const EntityIndex& index_before : indexes_before) {
-    entities.push_back(&get_entity(index_before));
+    entities.append(&get_entity(index_before));
   }
 
   for (const EntityModel* entity : entities) {
