@@ -600,23 +600,23 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const
  */
 EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after) {
 
-  // Indexes are sorted. Traverse them in ascending order.
-  EntityIndexes indexes_after;
-  Layer current_layer = Layer::LAYER_LOW;
-  int delta = 0;
+  // Work on entities instead of indexes, because indexes change during the traversal.
+  std::vector<EntityModel*> entities;
   for (const EntityIndex& index_before : indexes_before) {
-    if (index_before.layer != current_layer) {
-      current_layer = index_before.layer;
-      delta = 0;
+    entities.push_back(&get_entity(index_before));
+  }
+
+  for (const EntityModel* entity : entities) {
+    Q_ASSERT(entity != nullptr);
+    if (entity->get_layer() != layer_after) {
+      set_entity_layer(entity->get_index(), layer_after);
     }
-    EntityIndex updated_index_before = index_before;
-    updated_index_before.order += delta;
-    if (layer_after != index_before.layer) {
-      // The entity disappears from this layer: indexes after this one are shifted downwards.
-      --delta;
-    }
-    EntityIndex index_after = set_entity_layer(updated_index_before, layer_after);
-    indexes_after.append(index_after);
+  }
+
+  // Now all indexes have finished their changes.
+  EntityIndexes indexes_after;
+  for (const EntityModel* entity : entities) {
+    indexes_after.append(entity->get_index());
   }
 
   return indexes_after;
