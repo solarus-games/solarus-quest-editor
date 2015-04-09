@@ -332,9 +332,22 @@ public:
   }
 
   void redo() override {
+    // TODO move this code to a function map.set_entities_layer(indexes_before, layer_after)
     indexes_after.clear();
+    Layer current_layer = Layer::LAYER_LOW;
+    int delta = 0;
     for (const EntityIndex& index_before : indexes_before) {
-      EntityIndex index_after = get_map().set_entity_layer(index_before, layer_after);
+      if (index_before.layer != current_layer) {
+        current_layer = index_before.layer;
+        delta = 0;
+      }
+      EntityIndex updated_index_before = index_before;
+      updated_index_before.order += delta;
+      if (layer_after != index_before.layer) {
+        // The entity disappears from this layer: indexes after this one are shifted downwards.
+        --delta;
+      }
+      EntityIndex index_after = get_map().set_entity_layer(updated_index_before, layer_after);
       indexes_after.append(index_after);
     }
     // Selected impacted entities.
