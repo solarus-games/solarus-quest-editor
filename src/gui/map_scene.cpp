@@ -312,8 +312,6 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
   // with setZValue() + stackBefore() and I can't figure out why.
   delete item;
   create_entity_item(entity);
-
-  Q_ASSERT(get_entity_item(index_after) == item);
 }
 
 /**
