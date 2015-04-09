@@ -408,11 +408,38 @@ public:
   }
 
   void undo() override {
-    // TODO
+
+    MapModel& map = get_map();
+    QList<EntityModel*> entities;
+    for (const EntityIndex& index_after: indexes_after) {
+      entities.append(&map.get_entity(index_after));
+    }
+
+    for (int i = entities.size() - 1; i >= 0; --i) {
+      EntityModel* entity = entities[i];
+      map.set_entity_order(entity->get_index(), indexes_before[i].order);
+    }
+
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_before);
   }
 
   void redo() override {
-    // TODO
+
+    indexes_after.clear();
+    MapModel& map = get_map();
+    QList<EntityModel*> entities;
+    for (const EntityIndex& index_before: indexes_before) {
+      entities.append(&map.get_entity(index_before));
+    }
+
+    for (const EntityModel* entity : entities) {
+      EntityIndex index_after = map.bring_entity_to_back(entity->get_index());
+      indexes_after.append(index_after);
+    }
+
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_after);
   }
 
 private:
