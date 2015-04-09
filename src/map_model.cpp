@@ -653,6 +653,9 @@ void MapModel::set_entity_order(const EntityIndex& index_before, int order_after
   bool dynamic = entity->is_dynamic();
   int min_order = dynamic ? get_num_tiles(layer) : 0;
   int max_order = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
+  if (order_after < min_order) {
+    // BP
+  }
   Q_ASSERT(order_after >= min_order);
   Q_ASSERT(order_after <= max_order);
   Q_UNUSED(min_order);

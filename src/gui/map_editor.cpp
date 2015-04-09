@@ -330,6 +330,10 @@ public:
       EntityModel* entity = entities.at(i);
       const EntityIndex& index_before = indexes_before.at(i);
       const EntityIndex& index_after = entity->get_index();  // The entity knows its up-to-date index.
+      if (index_before.layer == layer_after) {
+        // Nothing to do for this entity.
+        continue;
+      }
       EntityIndex tmp_index = get_map().set_entity_layer(index_after, index_before.layer);
       get_map().set_entity_order(tmp_index, index_before.order);
     }
