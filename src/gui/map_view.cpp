@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/tile.h"
+#include "gui/edit_entity_dialog.h"
 #include "gui/entity_item.h"
 #include "gui/enum_menus.h"
 #include "gui/gui_tools.h"
@@ -785,9 +786,11 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
  */
 void MapView::mousePressEvent(QMouseEvent* event) {
 
-  if (map != nullptr && get_scene() != nullptr) {
-    state->mouse_pressed(*event);
+  if (map == nullptr || get_scene() == nullptr) {
+    return;
   }
+
+  state->mouse_pressed(*event);
 
   // Don't forward the event to the parent because it would select the item
   // clicked. We only do this explicitly from specific states.
@@ -819,6 +822,28 @@ void MapView::mouseMoveEvent(QMouseEvent* event) {
   // The parent class tracks the mouse movements for internal needs
   // such as anchoring the viewport to the mouse when zooming.
   QGraphicsView::mouseMoveEvent(event);
+}
+
+/**
+ * @brief Receives a mouse double click event.
+ * @param event The event to handle.
+ */
+void MapView::mouseDoubleClickEvent(QMouseEvent* event) {
+
+  if (get_num_selected_entities() == 1) {
+
+    QList<QGraphicsItem*> items_under_mouse = items(
+          QRect(event->pos(), QSize(1, 1)),
+          Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+    );
+    if (!items_under_mouse.isEmpty()) {
+      QGraphicsItem* item = items_under_mouse.first();
+      EntityModel* entity = scene->get_entity_from_item(*item);
+      if (entity != nullptr) {
+        edit_selected_entity();
+      }
+    }
+  }
 }
 
 /**
@@ -954,7 +979,8 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
  */
 void MapView::edit_selected_entity() {
 
-  // TODO edit dialog
+  EditEntityDialog dialog(get_map()->get_quest());
+  dialog.exec();
 }
 
 /**
