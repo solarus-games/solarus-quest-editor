@@ -85,6 +85,7 @@ public:
   Layer get_entity_layer(const EntityIndex& index) const;
   EntityIndex set_entity_layer(const EntityIndex& index, Layer layer);
   bool is_common_layer(const EntityIndexes& indexes, Layer& layer) const;
+  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after);
   void set_entity_order(const EntityIndex& index, int order);
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);

@@ -522,9 +522,9 @@ Layer MapModel::get_entity_layer(const EntityIndex& index) const {
  *
  * @param index Index of the entity to change.
  * @param layer The new layer. The entity will be on top of other entities
- * of that layer. Returns an invalid layer in case of error.
+ * of that layer.
  * @return The new index of the entity.
- * Does nothing if there is no entity with this index.
+ * Returns an invalid index in case of error.
  */
 EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer layer_after) {
 
@@ -586,6 +586,40 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const
     }
   }
   return true;
+}
+
+/**
+ * @brief Sets the layer of some entities on the map.
+ *
+ * Emits entity_layer_changed() for each change.
+ *
+ * @param indexes_before Sorted indexes of the entities to change.
+ * @param layer The new layer. Each entity will be polaced on top of other entities
+ * of that layer.
+ * @return The new indexes of the entities.
+ */
+EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after) {
+
+  // Indexes are sorted. Traverse them in ascending order.
+  EntityIndexes indexes_after;
+  Layer current_layer = Layer::LAYER_LOW;
+  int delta = 0;
+  for (const EntityIndex& index_before : indexes_before) {
+    if (index_before.layer != current_layer) {
+      current_layer = index_before.layer;
+      delta = 0;
+    }
+    EntityIndex updated_index_before = index_before;
+    updated_index_before.order += delta;
+    if (layer_after != index_before.layer) {
+      // The entity disappears from this layer: indexes after this one are shifted downwards.
+      --delta;
+    }
+    EntityIndex index_after = set_entity_layer(updated_index_before, layer_after);
+    indexes_after.append(index_after);
+  }
+
+  return indexes_after;
 }
 
 /**
