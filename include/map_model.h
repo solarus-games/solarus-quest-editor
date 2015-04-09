@@ -88,6 +88,7 @@ public:
   EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after);
   void undo_set_entities_layer(const EntityIndexes& indexes_after, const EntityIndexes& indexes_before);
   void set_entity_order(const EntityIndex& index_before, int order_after);
+  EntityIndex bring_entity_to_front(const EntityIndex& index_before);
   QPoint get_entity_xy(const EntityIndex& index) const;
   void set_entity_xy(const EntityIndex& index, const QPoint& xy);
   void add_entity_xy(const EntityIndex& index, const QPoint& translation);

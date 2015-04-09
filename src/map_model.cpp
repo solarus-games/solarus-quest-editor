@@ -706,10 +706,33 @@ void MapModel::set_entity_order(const EntityIndex& index_before, int order_after
   Q_UNUSED(entity_before);
   entity_after->index_changed(index_after);
 
-  // FIXME set_entities_order() for performance
   rebuild_entity_indexes(layer);
 
   emit entity_order_changed(index_before, order_after);
+}
+
+/**
+ * @brief Moves an entity to the front in its layer.
+ *
+ * This function makes sure that tiles remain before dynamic entities.
+ * Emits entity_order_changed() if there is a change.
+ *
+ * @param index The current index of the entity to change.
+ * @return The new index of the entity.
+ * Does nothing if there is no entity with this index.
+ */
+EntityIndex MapModel::bring_entity_to_front(const EntityIndex& index_before) {
+
+  if (!entity_exists(index_before)) {
+    return EntityIndex();
+  }
+
+  Layer layer = index_before.layer;
+  bool dynamic = get_entity(index_before).is_dynamic();
+  int order_after = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
+  set_entity_order(index_before, order_after);
+
+  return { layer, order_after };
 }
 
 /**

@@ -314,6 +314,7 @@ public:
   SetEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes, Layer layer) :
     MapEditorCommand(editor, MapEditor::tr("Set layer")),
     indexes_before(indexes),
+    indexes_after(),
     layer_after(layer) {
 
     qSort(this->indexes_before);
@@ -335,6 +336,88 @@ private:
   EntityIndexes indexes_before;  // Sorted indexes before the change.
   EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
   Layer layer_after;
+};
+
+/**
+ * @brief Bringing some entities to the front.
+ */
+class BringEntitiesToFrontCommand : public MapEditorCommand {
+
+public:
+  BringEntitiesToFrontCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Bring to front")),
+    indexes_before(indexes),
+    indexes_after(indexes) {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+
+    MapModel& map = get_map();
+    QList<EntityModel*> entities;
+    for (const EntityIndex& index_after: indexes_after) {
+      entities.append(&map.get_entity(index_after));
+    }
+
+    int i = 0;
+    for (const EntityModel* entity : entities) {
+      map.set_entity_order(entity->get_index(), indexes_before[i].order);
+      ++i;
+    }
+
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+
+    indexes_after.clear();
+    MapModel& map = get_map();
+    QList<EntityModel*> entities;
+    for (const EntityIndex& index_before: indexes_before) {
+      entities.append(&map.get_entity(index_before));
+    }
+
+    for (const EntityModel* entity : entities) {
+      EntityIndex index_after = map.bring_entity_to_front(entity->get_index());
+      indexes_after.append(index_after);
+    }
+
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;  // Sorted indexes before the change.
+  EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
+};
+
+/**
+ * @brief Bringing some entities to the back.
+ */
+class BringEntitiesToBackCommand : public MapEditorCommand {
+
+public:
+  BringEntitiesToBackCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Bring to back")),
+    indexes_before(indexes),
+    indexes_after(indexes) {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+    // TODO
+  }
+
+  void redo() override {
+    // TODO
+  }
+
+private:
+  EntityIndexes indexes_before;  // Sorted indexes before the change.
+  EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
 };
 
 /**
@@ -519,6 +602,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
   connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, Layer)),
           this, SLOT(set_entities_layer_requested(EntityIndexes, Layer)));
+  connect(ui.map_view, SIGNAL(bring_entities_to_front_requested(EntityIndexes)),
+          this, SLOT(bring_entities_to_front_requested(EntityIndexes)));
+  connect(ui.map_view, SIGNAL(bring_entities_to_back_requested(EntityIndexes)),
+          this, SLOT(bring_entities_to_back_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
           this, SLOT(add_entities_requested(AddableEntities&)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
@@ -1079,6 +1166,32 @@ void MapEditor::set_entities_layer_requested(const EntityIndexes& indexes,
   }
 
   try_command(new SetEntitiesLayerCommand(*this, indexes, layer));
+}
+
+/**
+ * @brief Slot called when the user wants to bring some entities to the front.
+ * @param indexes Indexes of the entities to change.
+ */
+void MapEditor::bring_entities_to_front_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new BringEntitiesToFrontCommand(*this, indexes));
+}
+
+/**
+ * @brief Slot called when the user wants to bring some entities to the back.
+ * @param indexes Indexes of the entities to change.
+ */
+void MapEditor::bring_entities_to_back_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new BringEntitiesToBackCommand(*this, indexes));
 }
 
 /**

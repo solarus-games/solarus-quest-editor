@@ -80,6 +80,8 @@ private slots:
                                  bool allow_merge_to_previous);
   void set_entities_layer_requested(const EntityIndexes& indexes,
                                     Layer layer);
+  void bring_entities_to_front_requested(const EntityIndexes& indexes);
+  void bring_entities_to_back_requested(const EntityIndexes& indexes);
   void add_entities_requested(AddableEntities& entities);
   void remove_entities_requested(const EntityIndexes& indexes);
 
