@@ -435,7 +435,10 @@ public:
       entities.append(&map.get_entity(index_before));
     }
 
-    for (const EntityModel* entity : entities) {
+    // Iterate from the end to preserve the relative order of entities.
+    for (auto it = entities.end(); it != entities.begin();) {
+      --it;
+      EntityModel* entity = *it;
       map.bring_entity_to_back(entity->get_index());
     }
 
