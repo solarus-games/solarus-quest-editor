@@ -1317,7 +1317,12 @@ bool EntityModel::draw_as_shape(QPainter& painter) const {
       int x = get_width() - pixmap.width() / 2;  // Actually get_width() * 2 / 2 - pixmap.width() / 2
                                                  // because we want the double size.
       int y = get_height() - pixmap.height() / 2;
-      painter.drawPixmap(x, y, pixmap.width(), pixmap.height(), pixmap);
+      int width = pixmap.width();
+      int height = pixmap.height();
+      if (x >= 0 && y >= 0) {
+        // Only draw the pixmap if the entity is big enough.
+        painter.drawPixmap(x, y, width, height, pixmap);
+      }
     }
 
     painter.scale(2, 2);
