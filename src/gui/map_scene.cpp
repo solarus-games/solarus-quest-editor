@@ -358,16 +358,12 @@ void MapScene::entity_order_changed(const EntityIndex& index_before,
   Q_ASSERT(&item->get_entity() == &entity);
   Q_ASSERT(entity_items[layer][order_before] == item);
 
-  removeItem(item);
-  addItem(item);
-  item->setParentItem(layer_parent_items[static_cast<int>(layer)]);
-  if (order_after < entity_items[layer].size() - 1) {
-    item->stackBefore(get_entity_item(index_after));
-  }
-
-  entity_items[layer].move(order_before, order_after);
-
-  Q_ASSERT(get_entity_item(index_after) == item);
+  // Delete and recreate the item again.
+  // Just removing and adding it does not seem to work when bringing entities
+  // to the front.
+  entity_items[layer].removeAt(order_before);
+  delete item;
+  create_entity_item(entity);
 }
 
 /**
