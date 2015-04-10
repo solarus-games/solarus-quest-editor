@@ -372,7 +372,6 @@ public:
 
   void redo() override {
 
-    indexes_after.clear();
     MapModel& map = get_map();
     QList<EntityModel*> entities;
     for (const EntityIndex& index_before: indexes_before) {
@@ -380,8 +379,12 @@ public:
     }
 
     for (const EntityModel* entity : entities) {
-      EntityIndex index_after = map.bring_entity_to_front(entity->get_index());
-      indexes_after.append(index_after);
+      map.bring_entity_to_front(entity->get_index());
+    }
+
+    indexes_after.clear();
+    for (const EntityModel* entity : entities) {
+      indexes_after.append(entity->get_index());
     }
 
     // Select impacted entities.
@@ -426,7 +429,6 @@ public:
 
   void redo() override {
 
-    indexes_after.clear();
     MapModel& map = get_map();
     QList<EntityModel*> entities;
     for (const EntityIndex& index_before: indexes_before) {
@@ -434,8 +436,12 @@ public:
     }
 
     for (const EntityModel* entity : entities) {
-      EntityIndex index_after = map.bring_entity_to_back(entity->get_index());
-      indexes_after.append(index_after);
+      map.bring_entity_to_back(entity->get_index());
+    }
+
+    indexes_after.clear();
+    for (const EntityModel* entity : entities) {
+      indexes_after.append(entity->get_index());
     }
 
     // Select impacted entities.
