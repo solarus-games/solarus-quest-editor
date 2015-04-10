@@ -113,6 +113,9 @@ signals:
       bool allow_merge_to_previous);
   void convert_tiles_requested(
       const EntityIndexes& indexes);
+  void set_entities_direction_requested(
+      const EntityIndexes& indexes,
+      int direction);
   void set_entities_layer_requested(
       const EntityIndexes& indexes,
       Layer layer);
@@ -157,6 +160,7 @@ protected:
 private:
 
   void build_context_menu_actions();
+  QMenu* create_direction_context_menu(const EntityIndexes& indexes);
   void set_state(std::unique_ptr<State> state);
 
   QPointer<MapModel> map;          /**< The map model. */

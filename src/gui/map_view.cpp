@@ -527,7 +527,10 @@ QMenu* MapView::create_context_menu() {
     menu->addSeparator();
   }
 
-  // TODO Direction.
+  // Direction.
+  QMenu* direction_menu = create_direction_context_menu(indexes);
+  Q_ASSERT(direction_menu != nullptr);
+  menu->addMenu(direction_menu);
 
   // Layer.
   Layer common_layer = Layer::LAYER_LOW;
@@ -555,6 +558,93 @@ QMenu* MapView::create_context_menu() {
 
   return menu;
 }
+
+/**
+ * @brief Creates a context menu to select the direction of entities.
+ *
+ * Returns a disabled menu if the direction rules of the given entities are incompatible.
+ *
+ * @param indexes Indexes of entity to treat.
+ * @return The direction context menu.
+ */
+QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
+
+  QMenu* menu = new QMenu(tr("Direction"), this);
+
+  int num_directions = 0;
+  QString no_direction_text;
+  if (!map->is_common_direction_rules(indexes, num_directions, no_direction_text)) {
+    // Directions rules are incompatible.
+    menu->setEnabled(false);
+    return menu;
+  }
+
+  if (num_directions == 0) {
+    // There is no direction field on these entities.
+    menu->setEnabled(false);
+    return menu;
+  }
+
+  std::vector<QString> texts;
+  if (num_directions == 4) {
+    texts = {
+      tr("Right"),
+      tr("Up"),
+      tr("Left"),
+      tr("Down")
+    };
+  }
+  else if (num_directions == 8) {
+    texts = {
+      tr("Right"),
+      tr("Right-up"),
+      tr("Up"),
+      tr("Left-up"),
+      tr("Left"),
+      tr("Left-down"),
+      tr("Down"),
+      tr("Right-down"),
+    };
+  }
+  else {
+    for (int i = 0; i < num_directions; ++num_directions) {
+      texts.push_back(QString::number(i));
+    }
+  }
+
+  // Create the actions.
+  if (!no_direction_text.isEmpty()) {
+    // Special no-direction value.
+    QAction* action = new QAction(no_direction_text, menu);
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, [&]() {
+      emit set_entities_direction_requested(indexes, -1);
+    });
+    menu->addAction(action);
+  }
+  for (int i = 0; i < num_directions; ++i) {
+    // Normal direction.
+    QAction* action = new QAction(texts[i], menu);
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, [&]() {
+      emit set_entities_direction_requested(indexes, i);
+    });
+    menu->addAction(action);
+  }
+
+  // Check the common direction if any.
+  int direction = -1;
+  if (map->is_common_direction(indexes, direction)) {
+    int i = direction;
+    if (!no_direction_text.isEmpty()) {
+      ++i;
+    }
+    menu->actions().at(i)->setChecked(true);
+  }
+
+  return menu;
+}
+
 
 /**
  * @brief Copies the selected entities to the clipboard and removes them.
