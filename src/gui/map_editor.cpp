@@ -307,6 +307,8 @@ private:
 
 /**
  * @brief Changing the direction of entities on the map.
+ *
+ * For some entities, the size is also changed if it becomes invalid.
  */
 class SetEntitiesDirectionCommand : public MapEditorCommand {
 
@@ -322,17 +324,36 @@ public:
     int i = 0;
     for (const EntityIndex& index : indexes) {
       get_map().set_entity_direction(index, directions_before.at(i));
+      get_map().set_entity_size(index, sizes_before.at(i));
       ++i;
     }
     get_map_view().set_selected_entities(indexes);
   }
 
   void redo() override {
+
+    MapModel& map = get_map();
+
+    // Change the direction.
     directions_before.clear();
+    sizes_before.clear();
     for (const EntityIndex& index : indexes) {
-      directions_before.append(get_map().get_entity_direction(index));
-      get_map().set_entity_direction(index, direction_after);
+      bool was_size_valid = map.is_entity_size_valid(index);
+      directions_before.append(map.get_entity_direction(index));
+      sizes_before.append(map.get_entity_size(index));
+
+      map.set_entity_direction(index, direction_after);
+
+      // Check that the size is still okay in the new direction.
+      if (was_size_valid && !map.is_entity_size_valid(index)) {
+        // The entity size is no longer valid in the new direction:
+        // set a new size right now if there is only one entity selected.
+        map.set_entity_size(index, map.get_entity_valid_size(index));
+      }
+
     }
+
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
@@ -340,6 +361,7 @@ private:
   EntityIndexes indexes;
   QList<int> directions_before;
   int direction_after;
+  QList<QSize> sizes_before;
 };
 
 /**

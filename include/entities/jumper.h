@@ -31,7 +31,10 @@ public:
   bool is_jump_horizontal() const;
   bool is_jump_vertical() const;
   bool is_jump_diagonal() const;
-  bool is_size_valid() const;
+
+  bool is_size_valid() const override;
+  QSize get_valid_size() const override;
+
 
   void draw(QPainter& painter) const override;
 
@@ -42,8 +45,6 @@ protected:
 private:
 
   void update_resize_mode();
-
-  int direction;   /**< Current direction of the jumper, necessary to detect changes. */
 
 };
 

@@ -25,4 +25,6 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::STAIRS) {
 
   set_num_directions(4);
+
+  // TODO show a pixmap depending on the subtype and the direction.
 }

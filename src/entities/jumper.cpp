@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/jumper.h"
+#include "map_model.h"
 #include <QPainter>
 
 /**
@@ -23,8 +24,7 @@
  * @param index Index of the entity in the map.
  */
 Jumper::Jumper(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index, EntityType::JUMPER),
-  direction(-1) {
+  EntityModel(map, index, EntityType::JUMPER) {
 
   DrawShapeInfo info;
   info.enabled = true;
@@ -90,23 +90,19 @@ bool Jumper::is_jump_diagonal() const {
 }
 
 /**
- * @brief Returns whether this jumper has a legal size.
+ * @copydoc EntityModel::get_valid_size
  *
  * The allowed size depends on the jumper's direction.
  */
 bool Jumper::is_size_valid() const {
 
+  if (!EntityModel::is_size_valid()) {
+    return false;
+  }
+
   const QSize& size = get_size();
   int width = size.width();
   int height = size.height();
-  if (width < 8 || height < 8) {
-    return false;
-  }
-
-  if (width % 8 != 0 || height % 8 != 0) {
-    return false;
-  }
-
   if (is_jump_diagonal()) {
     return width == height;
   }
@@ -124,35 +120,33 @@ bool Jumper::is_size_valid() const {
 }
 
 /**
+ * @copydoc EntityModel::get_valid_size
+ */
+QSize Jumper::get_valid_size() const {
+
+  if (is_jump_diagonal()) {
+    return QSize(32, 32);
+  }
+
+  if (is_jump_horizontal()) {
+    return QSize(8, 32);
+  }
+
+  if (is_jump_vertical()) {
+    return QSize(32, 8);
+  }
+
+  // The direction is unset.
+  return EntityModel::get_valid_size();
+}
+
+/**
  * @copydoc EntityModel::notify_field_changed
  */
 void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
 
   Q_UNUSED(value);
   if (key == "direction") {
-    int direction = get_direction();
-    if (direction == this->direction) {
-      // No change.
-      return;
-    }
-
-    // If the size becomes illegal,
-    // set the default size for the new direction.
-    if (!is_size_valid()) {
-      if (is_jump_diagonal()) {
-        set_size(QSize(32, 32));
-      }
-      else {
-        if (is_jump_horizontal()) {
-          set_size(QSize(8, 32));
-        }
-        else {
-          set_size(QSize(32, 8));
-        }
-      }
-    }
-    this->direction = direction;
-
     // Update the resizing rules.
     update_resize_mode();
   }

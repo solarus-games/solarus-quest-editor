@@ -131,6 +131,8 @@ public:
   bool is_resizable() const;
   ResizeMode get_resize_mode() const;
   QSize get_base_size() const;
+  virtual bool is_size_valid() const;
+  virtual QSize get_valid_size() const;
 
   // Displaying in the editor.
   virtual void draw(QPainter& painter) const;

@@ -1048,6 +1048,42 @@ void EntityModel::set_base_size(const QSize& base_size) {
 }
 
 /**
+ * @brief Returns whether this entity has a legal size.
+ *
+ * By default, the size should be non-null and a multiple of 8.
+ * Subclasses may reimplement this function to add constraints.
+ */
+bool EntityModel::is_size_valid() const {
+
+  const QSize& size = get_size();
+  int width = size.width();
+  int height = size.height();
+  if (width < 8 || height < 8) {
+    return false;
+  }
+
+  if (width % 8 != 0 || height % 8 != 0) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Returns a legal size for this entity.
+ *
+ * This size can be used as an initial size if needed.
+ * By default, this function returns @c QSize(16, 16),
+ * a valid size with respect to the default is_size_valid() implementation.
+ *
+ * @return A valid size.
+ */
+QSize EntityModel::get_valid_size() const {
+
+  return QSize(16, 16);
+}
+
+/**
  * @brief This function is called when a field of this entity was just set.
  *
  * This function is also called at initialization time when creating an entity

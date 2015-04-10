@@ -907,6 +907,36 @@ void MapModel::set_entity_size(const EntityIndex& index, const QSize& size) {
 }
 
 /**
+ * @brief Returns whether an entity has a legal size.
+ * @param index Index of the entity to check.
+ * @return @c true if its size is valid.
+ * Returns @c false if there is no entity with this index.
+ */
+bool MapModel::is_entity_size_valid(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return false;
+  }
+
+  return get_entity(index).is_size_valid();
+}
+
+/**
+ * @brief Returns a legal size for an entity.
+ * @param index Index of an entity.
+ * @return A valid size that can be set.
+ * Returns @c QSize() if there is no entity with this index.
+ */
+QSize MapModel::get_entity_valid_size(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return QSize();
+  }
+
+  return get_entity(index).get_valid_size();
+}
+
+/**
  * @brief Returns the bounding box of an entity for the editor.
  * @param index Index of the entity to get.
  * @return The bounding box, or an empty rectangle if there is no entity
