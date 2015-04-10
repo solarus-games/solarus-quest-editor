@@ -1580,9 +1580,25 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
  */
 void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 
-  Q_UNUSED(event);
+  MapView& view = get_view();
+  if (event.button() == Qt::RightButton) {
+    // The right button was pressed during the resize:
+    // add copies of the entities.
+    EntityModels clones = view.clone_selected_entities();
 
-  get_view().start_state_doing_nothing();
+    if (clones.size() == 1 && first_resize_done) {
+      // A real resize was done.
+      // We are probably adding successive entities like tiles and resizing
+      // each one (contrary to just copying entities).
+      // In this case, each new clone should be reset to the base size.
+      const EntityModelPtr& clone = *clones.begin();
+      clone->set_size(clone->get_base_size());
+    }
+    view.start_state_adding_entities(std::move(clones));
+  }
+  else {
+    get_view().start_state_doing_nothing();
+  }
 }
 
 /**
@@ -1811,15 +1827,9 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // Add them.
   view.add_entities_requested(addable_entities);
 
-  if (event.button() == Qt::LeftButton) {
-    // Left click: start resizing the newly added entities
-    // (until the mouse button is released).
-    view.start_state_resizing_entities();
-  }
-  else {
-    // Right click: continue to add entities.
-    view.start_state_adding_entities(view.clone_selected_entities());
-  }
+  // Start resizing the newly added entities
+  // (until the mouse button is released).
+  view.start_state_resizing_entities();
 }
 
 /**
