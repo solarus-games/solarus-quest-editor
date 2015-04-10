@@ -480,10 +480,10 @@ QMenu* MapView::create_context_menu() {
 
   // Layout of the context menu (line breaks are separators):
   //
-  // Edit, Resize
+  // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
-  // Direction, Low layer, Intermediate Layer, High Layer, Bring to front, Bring to back
+  // Low layer, Intermediate Layer, High Layer, Bring to front, Bring to back
   // Delete
 
   QMenu* menu = new QMenu(this);
@@ -499,6 +499,11 @@ QMenu* MapView::create_context_menu() {
   const bool resizable = are_entities_resizable(indexes);
   resize_action->setEnabled(resizable);
   menu->addAction(resize_action);
+
+  // Direction.
+  QMenu* direction_menu = create_direction_context_menu(indexes);
+  Q_ASSERT(direction_menu != nullptr);
+  menu->addMenu(direction_menu);
   menu->addSeparator();
 
   // Convert to dynamic/static tile(s).
@@ -526,11 +531,6 @@ QMenu* MapView::create_context_menu() {
     menu->addAction(common_actions->value("paste"));
     menu->addSeparator();
   }
-
-  // Direction.
-  QMenu* direction_menu = create_direction_context_menu(indexes);
-  Q_ASSERT(direction_menu != nullptr);
-  menu->addMenu(direction_menu);
 
   // Layer.
   Layer common_layer = Layer::LAYER_LOW;
