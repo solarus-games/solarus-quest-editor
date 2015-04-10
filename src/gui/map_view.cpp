@@ -617,7 +617,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     // Special no-direction value.
     QAction* action = new QAction(no_direction_text, menu);
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [&]() {
+    connect(action, &QAction::triggered, [=]() {
       emit set_entities_direction_requested(indexes, -1);
     });
     menu->addAction(action);
@@ -626,7 +626,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     // Normal direction.
     QAction* action = new QAction(texts[i], menu);
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [&]() {
+    connect(action, &QAction::triggered, [=]() {
       emit set_entities_direction_requested(indexes, i);
     });
     menu->addAction(action);

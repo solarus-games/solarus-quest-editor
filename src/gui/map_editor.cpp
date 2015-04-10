@@ -306,6 +306,43 @@ private:
 };
 
 /**
+ * @brief Changing the direction of entities on the map.
+ */
+class SetEntitiesDirectionCommand : public MapEditorCommand {
+
+public:
+  SetEntitiesDirectionCommand(MapEditor& editor, const EntityIndexes& indexes, int direction) :
+    MapEditorCommand(editor, MapEditor::tr("Set direction")),
+    indexes(indexes),
+    directions_before(),
+    direction_after(direction) {
+  }
+
+  void undo() override {
+    int i = 0;
+    for (const EntityIndex& index : indexes) {
+      get_map().set_entity_direction(index, directions_before.at(i));
+      ++i;
+    }
+    get_map_view().set_selected_entities(indexes);
+  }
+
+  void redo() override {
+    directions_before.clear();
+    for (const EntityIndex& index : indexes) {
+      directions_before.append(get_map().get_entity_direction(index));
+      get_map().set_entity_direction(index, direction_after);
+    }
+    get_map_view().set_selected_entities(indexes);
+  }
+
+private:
+  EntityIndexes indexes;
+  QList<int> directions_before;
+  int direction_after;
+};
+
+/**
  * @brief Changing the layer of entities on the map.
  */
 class SetEntitiesLayerCommand : public MapEditorCommand {
@@ -636,6 +673,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(move_entities_requested(EntityIndexes, QPoint, bool)));
   connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
+  connect(ui.map_view, SIGNAL(set_entities_direction_requested(EntityIndexes, int)),
+          this, SLOT(set_entities_direction_requested(EntityIndexes, int)));
   connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, Layer)),
           this, SLOT(set_entities_layer_requested(EntityIndexes, Layer)));
   connect(ui.map_view, SIGNAL(bring_entities_to_front_requested(EntityIndexes)),
@@ -1180,6 +1219,28 @@ void MapEditor::resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
   }
 
   try_command(new ResizeEntitiesCommand(*this, boxes, allow_merge_to_previous));
+}
+
+/**
+ * @brief Slot called when the user wants to change the direction of some entities.
+ * @param indexes Indexes of the entities to change.
+ * @param direction The direction to set.
+ */
+void MapEditor::set_entities_direction_requested(const EntityIndexes& indexes,
+                                                 int direction) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  int num_directions;
+  QString no_direction_text;
+  if (!map->is_common_direction_rules(indexes, num_directions, no_direction_text)) {
+    // Incompatible direction rules.
+    return;
+  }
+
+  try_command(new SetEntitiesDirectionCommand(*this, indexes, direction));
 }
 
 /**

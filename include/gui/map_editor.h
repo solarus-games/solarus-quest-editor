@@ -78,6 +78,8 @@ private slots:
                                bool allow_merge_to_previous);
   void resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
                                  bool allow_merge_to_previous);
+  void set_entities_direction_requested(const EntityIndexes& indexes,
+                                        int direction);
   void set_entities_layer_requested(const EntityIndexes& indexes,
                                     Layer layer);
   void bring_entities_to_front_requested(const EntityIndexes& indexes);
