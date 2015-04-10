@@ -101,6 +101,10 @@ public:
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   void set_entity_bounding_box(const EntityIndex& index, const QRect& bounding_box);
   bool has_entity_direction_field(const EntityIndex& index) const;
+  bool is_entity_no_direction_allowed(const EntityIndex& index) const;
+  QString get_entity_no_direction_text(const EntityIndex& index) const;
+  int get_entity_num_directions(const EntityIndex& index) const;
+  bool is_common_direction_rules(const EntityIndexes& indexes, int& num_directions, QString& no_direction_text) const;
   int get_entity_direction(const EntityIndex& index) const;
   void set_entity_direction(const EntityIndex& index, int direction);
   bool is_common_direction(const EntityIndexes& indexes, int& direction) const;

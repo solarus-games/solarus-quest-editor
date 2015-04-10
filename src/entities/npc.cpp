@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/npc.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -25,4 +26,8 @@ Npc::Npc(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::NPC) {
 
   set_origin(QPoint(8, 13));
+
+  set_num_directions(4);
+  set_no_direction_allowed(true);
+  set_no_direction_text(MapModel::tr("Any"));
 }

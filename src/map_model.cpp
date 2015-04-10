@@ -953,7 +953,99 @@ bool MapModel::has_entity_direction_field(const EntityIndex& index) const {
     return false;
   }
 
-  return get_entity(index).has_direction_property();
+  return get_entity(index).has_direction_field();
+}
+
+/**
+ * @brief Returns whether an entity allows the special direction value -1.
+ * @param index Index of an entity.
+ * @return @c true if the entity can have no direction.
+ * Returns @c false if there is no entity with this index or if the entity has
+ * no direction field.
+ */
+bool MapModel::is_entity_no_direction_allowed(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return false;
+  }
+
+  return get_entity(index).is_no_direction_allowed();
+}
+
+/**
+ * @brief Returns the text to show in a GUI for the special no-direction value
+ * -1 of an entity.
+ * @param index Index of an entity.
+ * @return The no-direction text.
+ * Returns an empty string if there is no entity with this index.
+ */
+QString MapModel::get_entity_no_direction_text(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return "";
+  }
+
+  return get_entity(index).get_no_direction_text();
+}
+
+/**
+ * @brief Returns the number of possible directions of an entity.
+ *
+ * This does not include the special value -1 (if it is allowed).
+ *
+ * @param index Index of an entity.
+ * @return The number of possible directions for this entity.
+ * Returns 0 if there is no entity with this index or if the entity has
+ * no direction field.
+ */
+int MapModel::get_entity_num_directions(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return 0;
+  }
+
+  return get_entity(index).get_num_directions();
+}
+
+/**
+ * @brief Returns whether the given entities all have the same direction rules.
+ *
+ * It means that they have the same number of possible directions,
+ * the same setting of allowing the special no-direction value
+ * and the same no-direction text.
+ *
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] num_directions The common number of directions found if any.
+ * @param[out] no_direction_text The text corresponding to the special
+ * no-direction value if allowed (an empty string means not allowed).
+ * @return @c true if they all have the same direction rules.
+ */
+bool MapModel::is_common_direction_rules(
+    const EntityIndexes& indexes,
+    int& num_directions,
+    QString& no_direction_text) const {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  const EntityIndex& first = indexes.first();
+  num_directions = get_entity_num_directions(first);
+  bool no_direction_allowed = is_entity_no_direction_allowed(first);
+  no_direction_text = get_entity_no_direction_text(first);
+
+  for (const EntityIndex& index : indexes) {
+    if (get_entity_num_directions(index) != num_directions ||
+        is_entity_no_direction_allowed(index) != no_direction_allowed ||
+        get_entity_no_direction_text(index) != no_direction_text) {
+      return false;
+    }
+  }
+
+  if (!no_direction_allowed) {
+    no_direction_text.clear();
+  }
+  return true;
 }
 
 /**
@@ -993,6 +1085,43 @@ void MapModel::set_entity_direction(const EntityIndex& index, int direction) {
 
   get_entity(index).set_direction(direction);
   emit entity_direction_changed(index, direction);
+}
+
+/**
+ * @brief Returns whether the given entities all have the same direction.
+ *
+ * This is only possible when the direction rules match: the number of
+ * possible directions should be the same and the setting of allowing the
+ * special no-direction value -1 should be the same.
+ *
+ * @param[in] indexes Indexes of the entities to check.
+ * @param[out] direction The common direction found if any.
+ * It can be -1 and still be legal if all entities have the special
+ * no-direction value -1.
+ * @return @c true if they all have the same direction value and the same
+ * direction rules.
+ */
+bool MapModel::is_common_direction(const EntityIndexes& indexes, int& direction) const {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  int num_directions = 0;
+  QString no_direction_text;
+  if (!is_common_direction_rules(indexes, num_directions, no_direction_text)) {
+    return false;
+  }
+
+  const EntityIndex& first = indexes.first();
+  direction = get_entity_direction(first);
+
+  for (const EntityIndex& index : indexes) {
+    if (get_entity_direction(index) != direction) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /**

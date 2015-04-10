@@ -70,6 +70,9 @@ EntityModel::EntityModel(
   resize_mode(ResizeMode::NONE),
   has_preferred_layer(false),
   preferred_layer(Layer::LAYER_LOW),
+  num_directions(1),
+  no_direction_allowed(false),
+  no_direction_text(MapModel::tr("No direction")),
   draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
@@ -782,9 +785,77 @@ void EntityModel::set_preferred_layer(Layer preferred_layer) {
  * @brief Returns whether this entity has a "direction" field.
  * @return @c true if a direction property exists.
  */
-bool EntityModel::has_direction_property() const {
+bool EntityModel::has_direction_field() const {
 
   return has_field("direction");
+}
+
+/**
+ * @brief Returns whether the special direction -1 is legal for this entity.
+ * @return @c true if the entity has a direction field but can have no direction value.
+ */
+bool EntityModel::is_no_direction_allowed() const {
+  return has_direction_field() && no_direction_allowed;
+}
+
+/**
+ * @brief Sets whether the special direction -1 is legal for this entity.
+ * @param no_direction_allowed @c true if the entity can have no direction.
+ */
+void EntityModel::set_no_direction_allowed(bool no_direction_allowed) {
+  this->no_direction_allowed = no_direction_allowed;
+}
+
+/**
+ * @brief Returns the text to show in a GUI for the special no-direction value
+ * -1 of this entity.
+ * @return The no-direction text.
+ * Returns an empty string if there is no direction field.
+ */
+QString EntityModel::get_no_direction_text() const {
+
+  if (!has_direction_field()) {
+    return QString();
+  }
+
+  return no_direction_text;
+}
+
+/**
+ * @brief Sets the text to show in a GUI for the special no-direction value
+ * -1 of this entity.
+ * @param no_direction_text The no-direction text.
+ */
+void EntityModel::set_no_direction_text(const QString& no_direction_text) {
+  this->no_direction_text = no_direction_text;
+}
+
+/**
+ * @brief Returns the number of possible directions.
+ *
+ * This does not include the special value -1 (if it is allowed).
+ *
+ * @return The number of possible directions for this entity.
+ * Returns 0 if the entity has no direction field.
+ */
+int EntityModel::get_num_directions() const {
+
+  if (!has_direction_field()) {
+    return 0;
+  }
+
+  return num_directions;
+}
+
+/**
+ * @brief Sets the number of possible directions.
+ *
+ * This does not include the special value -1 (if it is allowed).
+ *
+ * @param num_directions The number of possible directions for this entity.
+ */
+void EntityModel::set_num_directions(int num_directions) {
+  this->num_directions = num_directions;
 }
 
 /**
@@ -797,7 +868,7 @@ bool EntityModel::has_direction_property() const {
  */
 int EntityModel::get_direction() const {
 
-  if (!has_direction_property()) {
+  if (!has_direction_field()) {
     return -1;
   }
 
@@ -819,7 +890,7 @@ int EntityModel::get_direction() const {
  */
 void EntityModel::set_direction(int direction) {
 
-  if (!has_direction_property()) {
+  if (!has_direction_field()) {
     return;
   }
 

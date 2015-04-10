@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/destination.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -25,6 +26,10 @@ Destination::Destination(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DESTINATION) {
 
   set_origin(QPoint(8, 13));
+
+  set_num_directions(4);
+  set_no_direction_allowed(true);
+  set_no_direction_text(MapModel::tr("Keep the same direction"));
 
   // Draw an image that depends on a direction.
   DrawImageInfo info;

@@ -26,8 +26,9 @@ CustomEntity::CustomEntity(MapModel& map, const EntityIndex& index) :
 
   set_origin(QPoint(8, 13));
   set_base_size(QSize(8, 8));
-
   set_resizable(true);
+
+  set_num_directions(4);
 
   DrawShapeInfo info;
   info.enabled = true;

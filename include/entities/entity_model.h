@@ -116,7 +116,10 @@ public:
   QRect get_bounding_box() const;
   bool get_has_preferred_layer() const;
   Layer get_preferred_layer() const;
-  bool has_direction_property() const;
+  bool has_direction_field() const;
+  bool is_no_direction_allowed() const;
+  QString get_no_direction_text() const;
+  int get_num_directions() const;
   int get_direction() const;
   void set_direction(int direction);
   bool has_field(const QString& key) const;
@@ -192,6 +195,10 @@ protected:
   void set_has_preferred_layer(bool has_preferred_layer);
   void set_preferred_layer(Layer preferred_layer);
 
+  void set_num_directions(int num_directions);
+  void set_no_direction_allowed(bool no_direction_allowed);
+  void set_no_direction_text(const QString& no_direction_text);
+
   virtual void notify_field_changed(const QString& key, const QVariant& value);
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
@@ -226,6 +233,9 @@ private:
   ResizeMode resize_mode;         /**< How the entity can be resized. */
   bool has_preferred_layer;       /**< Whether the entity has a preferred layer when added to the map. */
   Layer preferred_layer;          /**< The preferred layer if has_preferred_layer is true. */
+  int num_directions;             /**< Number of possible directions (except the possible special one -1). */
+  bool no_direction_allowed;      /**< Whether the special no-value -1 is an allowed direction. */
+  QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed).*/
 
   // Displaying.
   DrawSpriteInfo

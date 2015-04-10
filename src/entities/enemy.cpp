@@ -25,7 +25,7 @@ Enemy::Enemy(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::ENEMY) {
 
   set_origin(QPoint(8, 13));
-
+  set_num_directions(4);
 }
 
 /**

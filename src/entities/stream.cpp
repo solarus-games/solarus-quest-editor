@@ -25,6 +25,7 @@ Stream::Stream(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::STREAM) {
 
   set_origin(QPoint(8, 13));
+  set_num_directions(8);
 
   // When no sprite is set, draw an image that depends on a direction.
   DrawImageInfo info;
