@@ -51,5 +51,7 @@ Bug fixes
 * Fix encoding of non-ascii characters in project_db.dat with Windows.
 * Fix Ctrl+S shortcut not always working.
 * Fix entities restored to the front when undoing removing entities.
+* Fix entities restored to the front when undoing changing their layer. 
 * Fix separators resizing that could allow illegal sizes.
+* Fix jumpers size reset after undoing changing their direction.
 
