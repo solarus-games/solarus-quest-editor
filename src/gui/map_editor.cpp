@@ -695,6 +695,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(move_entities_requested(EntityIndexes, QPoint, bool)));
   connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
+  connect(ui.map_view, SIGNAL(convert_tiles_requested(EntityIndexes)),
+          this, SLOT(convert_tiles_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(set_entities_direction_requested(EntityIndexes, int)),
           this, SLOT(set_entities_direction_requested(EntityIndexes, int)));
   connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, Layer)),
@@ -1241,6 +1243,19 @@ void MapEditor::resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
   }
 
   try_command(new ResizeEntitiesCommand(*this, boxes, allow_merge_to_previous));
+}
+
+/**
+ * @brief Slot called when the user wants to convert tiles to or from dynamic ones.
+ * @param indexes Indexes of the tiles or dynamic tiles to convert.
+ */
+void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  // TODO
 }
 
 /**
