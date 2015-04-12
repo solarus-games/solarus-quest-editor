@@ -1255,7 +1255,7 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
     return;
   }
 
-  // TODO
+  // TODO try_command(new ConvertTilesCommand(*this, indexes));
 }
 
 /**
