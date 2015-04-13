@@ -306,6 +306,62 @@ private:
 };
 
 /**
+ * @brief Converting normal tiles to dynamic tiles.
+ */
+class ConvertTilesToDynamicCommand : public MapEditorCommand {
+
+public:
+  ConvertTilesToDynamicCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Convert tiles")),
+    indexes_before(indexes) {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+    // TODO
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+    // TODO
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;
+  EntityIndexes indexes_after;
+};
+
+/**
+ * @brief Converting dynamic tiles to normal tiles.
+ */
+class ConvertTilesFromDynamicCommand : public MapEditorCommand {
+
+public:
+  ConvertTilesFromDynamicCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Convert tiles")),
+    indexes_before(indexes) {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+    // TODO
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+    // TODO
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;
+  EntityIndexes indexes_after;
+};
+
+/**
  * @brief Changing the direction of entities on the map.
  *
  * For some entities, the size is also changed if it becomes invalid.
@@ -1255,7 +1311,24 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
     return;
   }
 
-  // TODO try_command(new ConvertTilesCommand(*this, indexes));
+  const bool dynamic = map->get_entity(indexes.first()).is_dynamic();
+
+  for (const EntityIndex& index : indexes) {
+    EntityType current_type = map->get_entity_type(index);
+    if (current_type != EntityType::TILE && current_type != EntityType::DYNAMIC_TILE) {
+      return;
+    }
+    if (map->get_entity(index).is_dynamic() != dynamic) {
+      return;
+    }
+  }
+
+  if (dynamic) {
+    try_command(new ConvertTilesFromDynamicCommand(*this, indexes));
+  }
+  else {
+    try_command(new ConvertTilesToDynamicCommand(*this, indexes));
+  }
 }
 
 /**
