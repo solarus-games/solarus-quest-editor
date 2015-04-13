@@ -378,18 +378,48 @@ public:
   }
 
   void undo() override {
-    // TODO
+    get_map().remove_entities(indexes_after);
+    get_map().add_entities(std::move(removed_tiles));
     get_map_view().set_selected_entities(indexes_before);
   }
 
   void redo() override {
-    // TODO
+    MapModel& map = get_map();
+    AddableEntities tiles;
+
+    // Create the dynamic tiles.
+    for (const EntityIndex& index_before : indexes_before) {
+      EntityModelPtr tile = Tile::create_from_dynamic_tile(map, index_before);
+      Layer layer = index_before.layer;
+      EntityIndex index_after = { layer, -1 };
+      tiles.emplace_back(std::move(tile), index_after);
+    }
+
+    // Remove the dynamic ones.
+    removed_tiles = map.remove_entities(indexes_before);
+
+    // Determine the indexes where to place the dynamic ones.
+    indexes_after.clear();
+    std::vector<int> order_after_by_layer;
+    for (int i = Layer::LAYER_LOW; i < Layer::LAYER_NB; ++i) {
+      Layer layer = static_cast<Layer>(i);
+      order_after_by_layer.push_back(map.get_num_tiles(layer));
+    }
+    for (AddableEntity& addable : tiles) {
+      addable.index.order = order_after_by_layer[addable.index.layer];
+      ++order_after_by_layer[addable.index.layer];
+      indexes_after.append(addable.index);
+    }
+
+    // Add the normal tiles and make them selected.
+    map.add_entities(std::move(tiles));
     get_map_view().set_selected_entities(indexes_after);
   }
 
 private:
   EntityIndexes indexes_before;
   EntityIndexes indexes_after;
+  AddableEntities removed_tiles;
 };
 
 /**

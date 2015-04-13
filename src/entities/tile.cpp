@@ -43,6 +43,23 @@ Tile::Tile(MapModel& map, const EntityIndex& index, EntityType type) :
 }
 
 /**
+ * @brief Creates a normal tile from a dynamic one.
+ * @param map The map.
+ * @param tile_index index of the dynamic tile to clone.
+ * @return The tile created. It is not on the map yet.
+ */
+EntityModelPtr Tile::create_from_dynamic_tile(MapModel& map, const EntityIndex& dynamic_tile_index) {
+
+  Q_ASSERT(map.get_entity_type(dynamic_tile_index) == EntityType::DYNAMIC_TILE);
+
+  EntityModelPtr tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", map.get_entity_field(dynamic_tile_index, "pattern"));
+  tile->set_xy(map.get_entity_xy(dynamic_tile_index));
+  tile->set_size(map.get_entity_size(dynamic_tile_index));
+  return tile;
+}
+
+/**
  * @brief Returns the pattern id used by this tile.
  * @return The pattern id.
  */

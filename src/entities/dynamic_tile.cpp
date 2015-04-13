@@ -37,6 +37,8 @@ DynamicTile::DynamicTile(MapModel& map, const EntityIndex& index) :
  */
 EntityModelPtr DynamicTile::create_from_normal_tile(MapModel& map, const EntityIndex& tile_index) {
 
+  Q_ASSERT(map.get_entity_type(tile_index) == EntityType::TILE);
+
   EntityModelPtr dynamic_tile = EntityModel::create(map, EntityType::DYNAMIC_TILE);
   dynamic_tile->set_field("pattern", map.get_entity_field(tile_index, "pattern"));
   dynamic_tile->set_xy(map.get_entity_xy(tile_index));

@@ -27,6 +27,7 @@ class Tile : public EntityModel {
 public:
 
   Tile(MapModel& map, const EntityIndex& index);
+  static EntityModelPtr create_from_dynamic_tile(MapModel& map, const EntityIndex& dynamic_tile_index);
 
   QString get_pattern_id() const;
   void set_pattern_id(const QString& pattern_id);
