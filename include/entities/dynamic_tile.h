@@ -28,6 +28,8 @@ public:
 
   DynamicTile(MapModel& map, const EntityIndex& index);
 
+  static EntityModelPtr create_from_normal_tile(MapModel& map, const EntityIndex& tile_index);
+
 };
 
 #endif

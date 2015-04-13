@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/entity_model.h"
+#include "entities/dynamic_tile.h"
 #include "gui/gui_tools.h"
 #include "gui/map_editor.h"
 #include "gui/map_scene.h"
@@ -319,18 +320,48 @@ public:
   }
 
   void undo() override {
-    // TODO
+    get_map().remove_entities(indexes_after);
+    get_map().add_entities(std::move(removed_tiles));
     get_map_view().set_selected_entities(indexes_before);
   }
 
   void redo() override {
-    // TODO
+    MapModel& map = get_map();
+    AddableEntities dynamic_tiles;
+
+    // Create the dynamic tiles.
+    for (const EntityIndex& index_before : indexes_before) {
+      EntityModelPtr dynamic_tile = DynamicTile::create_from_normal_tile(map, index_before);
+      Layer layer = index_before.layer;
+      EntityIndex index_after = { layer, -1 };
+      dynamic_tiles.emplace_back(std::move(dynamic_tile), index_after);
+    }
+
+    // Remove the static ones.
+    removed_tiles = map.remove_entities(indexes_before);
+
+    // Determine the indexes where to place the dynamic ones.
+    indexes_after.clear();
+    std::vector<int> order_after_by_layer;
+    for (int i = Layer::LAYER_LOW; i < Layer::LAYER_NB; ++i) {
+      Layer layer = static_cast<Layer>(i);
+      order_after_by_layer.push_back(map.get_num_entities(layer));
+    }
+    for (AddableEntity& addable : dynamic_tiles) {
+      addable.index.order = order_after_by_layer[addable.index.layer];
+      ++order_after_by_layer[addable.index.layer];
+      indexes_after.append(addable.index);
+    }
+
+    // Add the dynamic tiles and make them selected.
+    map.add_entities(std::move(dynamic_tiles));
     get_map_view().set_selected_entities(indexes_after);
   }
 
 private:
   EntityIndexes indexes_before;
   EntityIndexes indexes_after;
+  AddableEntities removed_tiles;
 };
 
 /**
