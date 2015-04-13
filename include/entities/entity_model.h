@@ -136,6 +136,7 @@ public:
 
   // Displaying in the editor.
   virtual void draw(QPainter& painter) const;
+  virtual void notify_tileset_changed(const QString& tileset_id);
 
 protected:
 

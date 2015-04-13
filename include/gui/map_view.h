@@ -140,6 +140,7 @@ public slots:
   void update_layer_visibility(Layer layer);
   void update_entity_type_visibility(EntityType type);
   void tileset_selection_changed();
+  void tileset_id_changed(const QString& tileset_id);
 
   void edit_selected_entity();
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);

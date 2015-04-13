@@ -33,6 +33,7 @@ public:
   void set_pattern_id(const QString& pattern_id);
 
   void draw(QPainter& painter) const override;
+  void notify_tileset_changed(const QString& tileset_id) override;
 
 protected:
 

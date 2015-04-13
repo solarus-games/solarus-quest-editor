@@ -132,3 +132,12 @@ void Tile::draw(QPainter& painter) const {
 
   painter.drawTiledPixmap(0, 0, get_width(), get_height(), pattern_image);
 }
+
+/**
+ * @copydoc EntityModel::notify_tileset_changed
+ */
+void Tile::notify_tileset_changed(const QString& tileset_id) {
+
+  EntityModel::notify_tileset_changed(tileset_id);
+  update_pattern();
+}

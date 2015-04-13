@@ -251,6 +251,13 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
+  // Notify children.
+  for (EntityModels& layer_entities : entities) {
+    for (EntityModelPtr& entity : layer_entities) {
+      entity->notify_tileset_changed(tileset_id);
+    }
+  }
+
   emit tileset_id_changed(tileset_id);
 }
 

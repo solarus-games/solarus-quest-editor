@@ -1408,3 +1408,18 @@ bool EntityModel::draw_as_icon(QPainter& painter) const {
 
   return true;
 }
+
+/**
+ * @brief Notifies this entity that the tileset of the map has changed.
+ *
+ * Entities whose displaying depends on the tileset may reimplement this function.
+ *
+ * @param tileset_id The new tileset id of the map.
+ */
+void EntityModel::notify_tileset_changed(const QString& tileset_id) {
+
+  if (sprite_model != nullptr) {
+    sprite_model->set_tileset_id(tileset_id);
+    sprite_image = QPixmap();  // Clear the cached image.
+  }
+}

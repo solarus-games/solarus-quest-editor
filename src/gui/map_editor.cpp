@@ -797,9 +797,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
   connect(map, SIGNAL(tileset_id_changed(QString)),
-          this, SLOT(update_tileset_field()));
-  connect(map, SIGNAL(tileset_id_changed(QString)),
-          this, SLOT(update_tileset_view()));
+          this, SLOT(tileset_id_changed(QString)));
   connect(ui.tileset_edit_button, SIGNAL(clicked()),
           this, SLOT(open_tileset_requested()));
 
@@ -986,7 +984,7 @@ void MapEditor::update() {
   update_location_field();
   update_tileset_field();
   update_music_field();
-  update_tileset_id();
+  tileset_id_changed(map->get_tileset_id());
 }
 
 /**
@@ -1250,8 +1248,12 @@ void MapEditor::update_tileset_view() {
 
 /**
  * @brief Slot called when another tileset is set on the map.
+ * @param tileset_id The new tileset id.
  */
-void MapEditor::update_tileset_id() {
+void MapEditor::tileset_id_changed(const QString& tileset_id) {
+
+  // Show the correct tileset in the combobox.
+  update_tileset_field();
 
   // Notify the tileset view.
   update_tileset_view();
@@ -1262,6 +1264,9 @@ void MapEditor::update_tileset_id() {
     connect(&tileset->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(tileset_selection_changed()));
   }
+
+  // Notify the map view.
+  ui.map_view->tileset_id_changed(tileset_id);
 }
 
 /**

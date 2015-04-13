@@ -838,8 +838,8 @@ void MapView::update_entity_type_visibility(EntityType type) {
 
   scene->update_entity_type_visibility(type, *view_settings);
 }
-
 /**
+
  * @brief Slot called when the pattern selection of the tileset is changed.
  *
  * Tiles with these new patterns are added if possible.
@@ -851,6 +851,19 @@ void MapView::tileset_selection_changed() {
   }
 
   state->tileset_selection_changed();
+}
+
+/**
+ * @brief Slot called when another tileset is set on the map.
+ * @param tileset_id The new tileset id.
+ */
+void MapView::tileset_id_changed(const QString& tileset_id) {
+
+  Q_UNUSED(tileset_id);
+  if (scene == nullptr) {
+    return;
+  }
+  scene->update();
 }
 
 /**
