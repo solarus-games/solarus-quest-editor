@@ -13,7 +13,7 @@
         <location filename="../src/gui/change_dialog_id_dialog.ui" line="20"/>
         <location filename="../build/ui_change_dialog_id_dialog.h" line="75"/>
         <source>New dialog id:</source>
-        <translation>Nouveau id de dialogue :</translation>
+        <translation>Nouvel id de dialogue :</translation>
     </message>
     <message>
         <location filename="../src/gui/change_dialog_id_dialog.ui" line="30"/>
@@ -339,7 +339,7 @@
     </message>
     <message>
         <location filename="../src/gui/dialogs_editor.cpp" line="339"/>
-        <location filename="../src/gui/dialogs_editor.cpp" line="888"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="895"/>
         <source>Change dialog property key</source>
         <translation>Changer la clé d&apos;une propriété de dialogue</translation>
     </message>
@@ -414,12 +414,12 @@
         <translation>La propriété &apos;%1&apos; existe déjà dans le dialogue &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="889"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="896"/>
         <source>Change the key of the property &apos;%1&apos;:</source>
         <translation>Changer la clé de la propriété &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/dialogs_editor.cpp" line="897"/>
+        <location filename="../src/gui/dialogs_editor.cpp" line="904"/>
         <source>The property key cannot be empty</source>
         <translation>La clé de propriété ne peut pas être vide</translation>
     </message>
@@ -478,6 +478,118 @@
         <location filename="../src/gui/dialogs_tree_view.cpp" line="49"/>
         <source>Delete...</source>
         <translation>Supprimer...</translation>
+    </message>
+</context>
+<context>
+    <name>DocWidget</name>
+    <message>
+        <location filename="../build/ui_doc_widget.h" line="62"/>
+        <source>MainWindow</source>
+        <translation>MainWindow</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_doc_widget.h" line="63"/>
+        <source>toolBar</source>
+        <translation>toolBar</translation>
+    </message>
+</context>
+<context>
+    <name>EditEntityDialog</name>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="20"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="306"/>
+        <source>Edit an entity</source>
+        <translation>Modifier une entité</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="31"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="307"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="44"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="308"/>
+        <source>Enemy</source>
+        <translation>Ennemi</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="51"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="309"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="61"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="310"/>
+        <source>Layer</source>
+        <translation>Couche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="71"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="311"/>
+        <source>Position</source>
+        <translation>Position</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="90"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="312"/>
+        <source>,</source>
+        <translation>,</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="122"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="313"/>
+        <source>Size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="141"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="314"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="173"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="315"/>
+        <source>Direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="200"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="316"/>
+        <source>Sprite</source>
+        <translation>Sprite</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="210"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="317"/>
+        <source>Subtype</source>
+        <translation>Sous-type</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="220"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="318"/>
+        <source>Treasure</source>
+        <translation>Trésor</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="234"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="319"/>
+        <source>Variant of this item</source>
+        <translation>Variante de cet item</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="259"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="320"/>
+        <source>Save the treasure state</source>
+        <translation>Sauvegarder l&apos;état du trésor</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="268"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="321"/>
+        <source>Savegame variable</source>
+        <translation>Variable de sauvegarde</translation>
     </message>
 </context>
 <context>
@@ -574,6 +686,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
         <location filename="../build/ui_main_window.h" line="228"/>
+        <location filename="../build/ui_mainwindow.h" line="113"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
@@ -586,12 +699,14 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
         <location filename="../build/ui_main_window.h" line="260"/>
+        <location filename="../build/ui_mainwindow.h" line="123"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="86"/>
         <location filename="../build/ui_main_window.h" line="261"/>
+        <location filename="../build/ui_mainwindow.h" line="124"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
@@ -610,30 +725,35 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="141"/>
         <location filename="../build/ui_main_window.h" line="229"/>
+        <location filename="../build/ui_mainwindow.h" line="114"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="146"/>
         <location filename="../build/ui_main_window.h" line="230"/>
+        <location filename="../build/ui_mainwindow.h" line="116"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="151"/>
         <location filename="../build/ui_main_window.h" line="231"/>
+        <location filename="../build/ui_mainwindow.h" line="118"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="160"/>
         <location filename="../build/ui_main_window.h" line="232"/>
+        <location filename="../build/ui_mainwindow.h" line="120"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="163"/>
         <location filename="../build/ui_main_window.h" line="233"/>
+        <location filename="../build/ui_mainwindow.h" line="121"/>
         <source>F9</source>
         <translation></translation>
     </message>
@@ -857,6 +977,26 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="115"/>
+        <source>Ctrl+N</source>
+        <translation>Ctrl+N</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="117"/>
+        <source>Ctrl+O</source>
+        <translation>Ctrl+O</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="119"/>
+        <source>Ctrl+Q</source>
+        <translation>Ctrl+Q</translation>
+    </message>
+    <message>
+        <location filename="../build/ui_mainwindow.h" line="122"/>
+        <source>Quest</source>
+        <translation>Quête</translation>
+    </message>
 </context>
 <context>
     <name>MapEditor</name>
@@ -1032,150 +1172,190 @@ Votre quête a été conservée inchangée au format %1.</translation>
     <message>
         <location filename="../src/gui/map_editor.cpp" line="240"/>
         <source>Resize entities</source>
-        <translation type="unfinished"></translation>
+        <translation>Redimensionner entités</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.cpp" line="316"/>
+        <location filename="../src/gui/map_editor.cpp" line="374"/>
+        <source>Convert tiles</source>
+        <translation>Convertir tiles</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="434"/>
+        <source>Set direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="491"/>
+        <source>Set layer</source>
+        <translation>Couche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="524"/>
+        <source>Bring to front</source>
+        <translation>Mettre au premier plan</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="582"/>
+        <source>Bring to back</source>
+        <translation>Mettre en arrière-plan</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="642"/>
         <source>Add entities</source>
         <translation>Ajouter entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="351"/>
+        <location filename="../src/gui/map_editor.cpp" line="677"/>
         <source>Delete entities</source>
         <translation>Supprimer entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="400"/>
+        <location filename="../src/gui/map_editor.cpp" line="727"/>
         <source>File &apos;%1&apos; is not a map</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas une map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="405"/>
+        <location filename="../src/gui/map_editor.cpp" line="732"/>
         <source>Map %1</source>
         <translation>Map %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="408"/>
+        <location filename="../src/gui/map_editor.cpp" line="735"/>
         <source>Map &apos;%1&apos; has been modified. Save changes?</source>
         <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="428"/>
+        <location filename="../src/gui/map_editor.cpp" line="755"/>
         <source>&lt;No music&gt;</source>
         <translation>&lt;Pas de musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="429"/>
+        <location filename="../src/gui/map_editor.cpp" line="756"/>
         <source>&lt;Same as before&gt;</source>
         <translation>&lt;Garder la même musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="528"/>
+        <location filename="../src/gui/map_editor.cpp" line="863"/>
         <source>Add destination</source>
         <translation>Ajouter une destination</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="529"/>
+        <location filename="../src/gui/map_editor.cpp" line="864"/>
         <source>Add teletransporter</source>
         <translation>Ajouter un téléporteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="530"/>
+        <location filename="../src/gui/map_editor.cpp" line="865"/>
         <source>Add pickable</source>
         <translation>Ajouter un trésor ramassable</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="531"/>
+        <location filename="../src/gui/map_editor.cpp" line="866"/>
         <source>Add destructible</source>
         <translation>Ajouter un destructible</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="532"/>
+        <location filename="../src/gui/map_editor.cpp" line="867"/>
         <source>Add chest</source>
         <translation>Ajouter un coffre</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="533"/>
+        <location filename="../src/gui/map_editor.cpp" line="868"/>
         <source>Add jumper</source>
         <translation>Ajouter un sauteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="534"/>
+        <location filename="../src/gui/map_editor.cpp" line="869"/>
         <source>Add enemy</source>
         <translation>Ajouter un ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="535"/>
+        <location filename="../src/gui/map_editor.cpp" line="870"/>
         <source>Add non-playing character</source>
         <translation>Ajouter un personnage non-joueur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="536"/>
+        <location filename="../src/gui/map_editor.cpp" line="871"/>
         <source>Add block</source>
         <translation>Ajouter un bloc</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="537"/>
+        <location filename="../src/gui/map_editor.cpp" line="872"/>
         <source>Add switch</source>
         <translation>Ajouter un bouton</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="538"/>
+        <location filename="../src/gui/map_editor.cpp" line="873"/>
         <source>Add wall</source>
         <translation>Ajouter un mur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="539"/>
+        <location filename="../src/gui/map_editor.cpp" line="874"/>
         <source>Add sensor</source>
         <translation>Ajouter un capteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="540"/>
+        <location filename="../src/gui/map_editor.cpp" line="875"/>
         <source>Add crystal</source>
         <translation>Ajouter un cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="541"/>
+        <location filename="../src/gui/map_editor.cpp" line="876"/>
         <source>Add crystal block</source>
         <translation>Ajouter un plot de cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="542"/>
+        <location filename="../src/gui/map_editor.cpp" line="877"/>
         <source>Add shop treasure</source>
         <translation>Ajouter un article de magasin</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="543"/>
+        <location filename="../src/gui/map_editor.cpp" line="878"/>
         <source>Add stream</source>
         <translation>Ajouter un flux</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="544"/>
+        <location filename="../src/gui/map_editor.cpp" line="879"/>
         <source>Add door</source>
         <translation>Ajouter une porte</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="545"/>
+        <location filename="../src/gui/map_editor.cpp" line="880"/>
         <source>Add stairs</source>
         <translation>Ajouter un escalier</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="546"/>
+        <location filename="../src/gui/map_editor.cpp" line="881"/>
         <source>Add separator</source>
         <translation>Ajouter un séparateur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="547"/>
+        <location filename="../src/gui/map_editor.cpp" line="882"/>
         <source>Add custom entity</source>
         <translation>Ajouter une entité custom</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="582"/>
-        <source>%1,%2</source>
-        <translation>%1,%2</translation>
+        <location filename="../src/gui/map_editor.cpp" line="1314"/>
+        <source>%1,%2 </source>
+        <translation>%1,%2 </translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="695"/>
+        <location filename="../src/gui/map_editor.cpp" line="1323"/>
+        <source> - %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="1325"/>
+        <source>: %1</source>
+        <translation> : %1</translation>
+    </message>
+    <message>
+        <source>%1,%2</source>
+        <translation type="vanished">%1,%2</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="1023"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -1183,134 +1363,224 @@ Votre quête a été conservée inchangée au format %1.</translation>
 <context>
     <name>MapModel</name>
     <message>
-        <location filename="../src/map_model.cpp" line="48"/>
+        <location filename="../src/map_model.cpp" line="47"/>
         <source>Cannot open map data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="99"/>
+        <location filename="../src/map_model.cpp" line="98"/>
         <source>Cannot save map data file &apos;%1&apos;</source>
         <translation>Impossible d&apos;enregistrer le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="326"/>
         <source>Entity exists in the editor but not in the data</source>
-        <translation>L&apos;entité existe dans l&apos;éditeur mais pas dans les données</translation>
+        <translation type="vanished">L&apos;entité existe dans l&apos;éditeur mais pas dans les données</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="329"/>
         <source>Entity exists in the data but not in the editor</source>
-        <translation>L&apos;entité existe dans les données mais pas dans l&apos;éditeur</translation>
+        <translation type="vanished">L&apos;entité existe dans les données mais pas dans l&apos;éditeur</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="687"/>
-        <location filename="../src/map_model.cpp" line="814"/>
         <source>Missing entity</source>
-        <translation>Entité manquante</translation>
+        <translation type="vanished">Entité manquante</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="692"/>
         <source>This entity is already on the map</source>
-        <translation>Cette entité est déjà sur la map</translation>
+        <translation type="vanished">Cette entité est déjà sur la map</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="698"/>
         <source>Invalid index of entity to add</source>
-        <translation>Index invalide pour l&apos;entité à ajouter</translation>
+        <translation type="vanished">Index invalide pour l&apos;entité à ajouter</translation>
     </message>
     <message>
-        <location filename="../src/map_model.cpp" line="763"/>
         <source>Cannot find entity to remove</source>
-        <translation>Impossible de trouver l&apos;entité à supprimer</translation>
+        <translation type="vanished">Impossible de trouver l&apos;entité à supprimer</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="251"/>
+        <location filename="../src/entities/entity_model.cpp" line="75"/>
+        <source>No direction</source>
+        <translation>Aucune direction</translation>
+    </message>
+    <message>
+        <location filename="../src/entities/entity_model.cpp" line="283"/>
         <source>Unexpected entity type (not allowed in map files): %1</source>
         <translation>Type d&apos;entité inattendu (non autorisé dans les fichiers de map) : %1</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="303"/>
         <source>Missing index of entity added</source>
-        <translation>Index de l&apos;entité à ajouter manquant</translation>
+        <translation type="vanished">Index de l&apos;entité à ajouter manquant</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="308"/>
         <source>This entity already has a map index</source>
-        <translation>Cette entité a déjà un index</translation>
+        <translation type="vanished">Cette entité a déjà un index</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="325"/>
         <source>Entity being removed is not on the map</source>
-        <translation>L&apos;entité à supprimer n&apos;est pas sur la map</translation>
+        <translation type="vanished">L&apos;entité à supprimer n&apos;est pas sur la map</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="340"/>
-        <location filename="../src/map_model.cpp" line="758"/>
         <source>This entity is not on the map</source>
-        <translation>Cette entité n&apos;est pas sur la map</translation>
+        <translation type="vanished">Cette entité n&apos;est pas sur la map</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_model.cpp" line="345"/>
         <source>Missing new index of entity</source>
-        <translation>Nouvel index manquant pour l&apos;entité</translation>
+        <translation type="vanished">Nouvel index manquant pour l&apos;entité</translation>
+    </message>
+    <message>
+        <location filename="../src/entities/block.cpp" line="32"/>
+        <location filename="../src/entities/npc.cpp" line="32"/>
+        <source>Any</source>
+        <translation>Toutes</translation>
+    </message>
+    <message>
+        <location filename="../src/entities/destination.cpp" line="32"/>
+        <source>Keep the same direction</source>
+        <translation>Conserver la même direction</translation>
     </message>
 </context>
 <context>
     <name>MapScene</name>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="112"/>
         <source>This entity is not on the map</source>
-        <translation>Cette entité n&apos;est pas sur la map</translation>
+        <translation type="vanished">Cette entité n&apos;est pas sur la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="259"/>
         <source>Cannot find added entity</source>
-        <translation>L&apos;entité ajoutée est introuvable</translation>
+        <translation type="vanished">L&apos;entité ajoutée est introuvable</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="266"/>
         <source>Inconsistent index of entity added</source>
-        <translation>L&apos;index de l&apos;entité ajoutée est incohérent</translation>
+        <translation type="vanished">L&apos;index de l&apos;entité ajoutée est incohérent</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="290"/>
-        <location filename="../src/gui/map_scene.cpp" line="328"/>
-        <location filename="../src/gui/map_scene.cpp" line="349"/>
         <source>Missing entity graphics item</source>
-        <translation>Item graphique d&apos;entité manquant</translation>
+        <translation type="vanished">Item graphique d&apos;entité manquant</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="297"/>
         <source>Inconsistent index of entity being removed</source>
-        <translation>L&apos;index de l&apos;entité à supprimer est incohérent</translation>
+        <translation type="vanished">L&apos;index de l&apos;entité à supprimer est incohérent</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_scene.cpp" line="302"/>
         <source>Wrong entity item at this index</source>
-        <translation>L&apos;entité à cet index a un index incorrect</translation>
+        <translation type="vanished">L&apos;entité à cet index a un index incorrect</translation>
     </message>
 </context>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="166"/>
+        <location filename="../src/gui/map_view.cpp" line="418"/>
+        <source>Edit</source>
+        <translation>Modifier</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="419"/>
+        <source>Return</source>
+        <translation>Entrée</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="426"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="167"/>
+        <location filename="../src/gui/map_view.cpp" line="427"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="175"/>
+        <location filename="../src/gui/map_view.cpp" line="435"/>
+        <location filename="../src/gui/map_view.cpp" line="516"/>
+        <source>Convert to dynamic tile</source>
+        <translation>Convertir en tile dynamique</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="449"/>
+        <source>Bring to front</source>
+        <translation>Mettre au premier plan</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="450"/>
+        <source>T</source>
+        <translation>T</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="458"/>
+        <source>Bring to back</source>
+        <translation>Mettre en arrière-plan</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="459"/>
+        <source>B</source>
+        <translation>B</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="467"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="1248"/>
-        <source>No such entity index</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/gui/map_view.cpp" line="516"/>
+        <source>Convert to dynamic tiles</source>
+        <translation>Convertir en tiles dynamiques</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="519"/>
+        <source>Convert to static tile</source>
+        <translation>Convertir en tile statique</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="519"/>
+        <source>Convert to static tiles</source>
+        <translation>Convertir en tiles statiques</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="572"/>
+        <source>Direction</source>
+        <translation>Direction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="591"/>
+        <location filename="../src/gui/map_view.cpp" line="599"/>
+        <source>Right</source>
+        <translation>Droite</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="592"/>
+        <location filename="../src/gui/map_view.cpp" line="601"/>
+        <source>Up</source>
+        <translation>Haut</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="593"/>
+        <location filename="../src/gui/map_view.cpp" line="603"/>
+        <source>Left</source>
+        <translation>Gauche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="594"/>
+        <location filename="../src/gui/map_view.cpp" line="605"/>
+        <source>Down</source>
+        <translation>Bas</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="600"/>
+        <source>Right-up</source>
+        <translation>Haut-droite</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="602"/>
+        <source>Left-up</source>
+        <translation>Haut-gauche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="604"/>
+        <source>Left-down</source>
+        <translation>Bas-gauche</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_view.cpp" line="606"/>
+        <source>Right-down</source>
+        <translation>Bas-droite</translation>
     </message>
 </context>
 <context>
@@ -1704,22 +1974,19 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation>Lave</translation>
     </message>
     <message>
-        <location filename="../src/layer_traits.cpp" line="42"/>
         <source>Low</source>
         <comment>Layer</comment>
-        <translation>Basse</translation>
+        <translation type="vanished">Basse</translation>
     </message>
     <message>
-        <location filename="../src/layer_traits.cpp" line="45"/>
         <source>Intermediate</source>
         <comment>Layer</comment>
-        <translation>Intermédiaire</translation>
+        <translation type="vanished">Intermédiaire</translation>
     </message>
     <message>
-        <location filename="../src/layer_traits.cpp" line="48"/>
         <source>High</source>
         <comment>Layer</comment>
-        <translation>Haute</translation>
+        <translation type="vanished">Haute</translation>
     </message>
     <message>
         <location filename="../src/pattern_animation_traits.cpp" line="48"/>
@@ -1820,6 +2087,21 @@ Veuillez télécharger la dernière version de l&apos;éditeur sur www.solarus-g
 Please upgrade your quest  data files to Solarus %2.</source>
         <translation>Le format de cette quête (%1) est obsolète.
 Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/layer_traits.cpp" line="42"/>
+        <source>Low layer</source>
+        <translation>Couche basse</translation>
+    </message>
+    <message>
+        <location filename="../src/layer_traits.cpp" line="45"/>
+        <source>Intermediate layer</source>
+        <translation>Couche intermédiaire</translation>
+    </message>
+    <message>
+        <location filename="../src/layer_traits.cpp" line="48"/>
+        <source>High layer</source>
+        <translation>Couche haute</translation>
     </message>
 </context>
 <context>
