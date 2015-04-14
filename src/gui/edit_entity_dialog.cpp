@@ -81,7 +81,7 @@ EntityModel& EditEntityDialog::get_entity_before() const {
  */
 EntityModelPtr EditEntityDialog::get_entity_after() const {
 
-  EntityModelPtr entity_after = EntityModel::create(get_map(), entity_before.get_type());
+  EntityModelPtr entity_after = EntityModel::clone(get_map(), entity_before.get_index());
   entity_after->set_name(ui.name_field->text());
   entity_after->set_layer(ui.layer_field->get_selected_value());
   entity_after->set_xy(QPoint(ui.x_field->value(), ui.y_field->value()));
