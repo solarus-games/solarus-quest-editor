@@ -585,7 +585,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     return menu;
   }
 
-  std::vector<QString> texts;
+  QStringList texts;
   if (num_directions == 4) {
     texts = {
       tr("Right"),
@@ -608,7 +608,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
   }
   else {
     for (int i = 0; i < num_directions; ++num_directions) {
-      texts.push_back(QString::number(i));
+      texts.append(QString::number(i));
     }
   }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>424</width>
-    <height>628</height>
+    <height>644</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QFormLayout" name="form_layout">
      <property name="fieldGrowthPolicy">
       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
      </property>
@@ -72,50 +72,6 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <layout class="QHBoxLayout" name="horizontal_layout">
-       <item>
-        <widget class="QSpinBox" name="x_field">
-         <property name="maximum">
-          <number>999999</number>
-         </property>
-         <property name="singleStep">
-          <number>8</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>,</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="y_field">
-         <property name="maximum">
-          <number>999999</number>
-         </property>
-         <property name="singleStep">
-          <number>8</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontal_spacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
      <item row="4" column="0">
       <widget class="QLabel" name="size_label">
        <property name="text">
@@ -123,76 +79,12 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <layout class="QHBoxLayout" name="size_field">
-       <item>
-        <widget class="QSpinBox" name="width_field">
-         <property name="maximum">
-          <number>999999</number>
-         </property>
-         <property name="singleStep">
-          <number>8</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>x</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="height_field">
-         <property name="maximum">
-          <number>999999</number>
-         </property>
-         <property name="singleStep">
-          <number>8</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontal_spacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="direction_label">
        <property name="text">
         <string>Direction</string>
        </property>
       </widget>
-     </item>
-     <item row="5" column="1">
-      <layout class="QHBoxLayout" name="horizontal_layout_2">
-       <item>
-        <widget class="QSpinBox" name="direction_field"/>
-       </item>
-       <item>
-        <spacer name="horizontal_spacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="sprite_label">
@@ -220,61 +112,6 @@
         <string>Treasure</string>
        </property>
       </widget>
-     </item>
-     <item row="8" column="1">
-      <layout class="QVBoxLayout" name="treasure_field">
-       <item>
-        <widget class="ResourceSelector" name="treasure_name_field"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontal_layout_3">
-         <item>
-          <widget class="QLabel" name="treasure_variant_label">
-           <property name="text">
-            <string>Variant of this item</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="treasure_variant_field"/>
-         </item>
-         <item>
-          <spacer name="horizontal_spacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="save_treasure_checkbox">
-         <property name="text">
-          <string>Save the treasure state</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontal_layout_4">
-         <item>
-          <widget class="QLabel" name="treasure_savegame_variable_label">
-           <property name="text">
-            <string>Savegame variable</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="treasure_savegame_variable_field"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
      </item>
      <item row="9" column="0">
       <widget class="QLabel" name="enabled_at_start_label">
@@ -342,6 +179,225 @@
        <property name="text">
         <string>Set as the default destination</string>
        </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QWidget" name="size_layout" native="true">
+       <layout class="QHBoxLayout" name="layout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="width_field">
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+          <property name="singleStep">
+           <number>8</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="size_cross_label">
+          <property name="text">
+           <string>x</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="height_field">
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+          <property name="singleStep">
+           <number>8</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="size_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QWidget" name="xy_layout" native="true">
+       <layout class="QHBoxLayout" name="layout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="x_field">
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+          <property name="singleStep">
+           <number>8</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="xy_comma_label">
+          <property name="text">
+           <string>,</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="y_field">
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+          <property name="singleStep">
+           <number>8</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="xy_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QWidget" name="direction_layout" native="true">
+       <layout class="QHBoxLayout" name="layout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QComboBox" name="direction_field"/>
+        </item>
+        <item>
+         <spacer name="direction_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QWidget" name="treasure_layout" native="true">
+       <layout class="QVBoxLayout" name="layout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="ResourceSelector" name="treasure_name_field"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontal_layout_3">
+          <item>
+           <widget class="QLabel" name="treasure_variant_label">
+            <property name="text">
+             <string>Variant of this item</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="treasure_variant_field"/>
+          </item>
+          <item>
+           <spacer name="horizontal_spacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="save_treasure_checkbox">
+          <property name="text">
+           <string>Save the treasure state</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontal_layout_4">
+          <item>
+           <widget class="QLabel" name="treasure_savegame_variable_label">
+            <property name="text">
+             <string>Savegame variable</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="treasure_savegame_variable_field"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

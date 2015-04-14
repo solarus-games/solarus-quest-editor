@@ -37,7 +37,7 @@ EditEntityDialog::EditEntityDialog(EntityModel& entity_before, QWidget* parent) 
   ui.destination_map_field->set_quest(get_quest());
   ui.destination_map_field->set_resource_type(ResourceType::MAP);
 
-  initialize_values();
+  initialize();
 }
 
 /**
@@ -91,7 +91,7 @@ EntityModelPtr EditEntityDialog::get_entity_after() const {
   }
 
   if (entity_after->has_direction_field()) {
-    entity_after->set_direction(ui.direction_field->value());
+    entity_after->set_direction(ui.direction_field->currentData().toInt());
   }
 
   if (entity_after->has_field("sprite")) {
@@ -109,13 +109,150 @@ EntityModelPtr EditEntityDialog::get_entity_after() const {
 /**
  * @brief Fills the fields from the existing entity.
  */
-void EditEntityDialog::initialize_values() {
+void EditEntityDialog::initialize() {
 
+  initialize_type();
+  initialize_name();
+  initialize_layer();
+  initialize_xy();
+  initialize_size();
+  initialize_direction();
+  initialize_sprite();
   initialize_transition();
+
+  adjustSize();
 }
 
 /**
- * @brief Initialize the transition field.
+ * @brief Removes a row of the form layout.
+ * @param label Label of the row.
+ * @param field Field of the row.
+ */
+void EditEntityDialog::remove_field(QWidget* label, QWidget* field) {
+
+  label->hide();
+  ui.form_layout->removeWidget(label);
+  field->hide();
+  ui.form_layout->removeWidget(field);
+}
+
+/**
+ * @brief Initializes the type field.
+ */
+void EditEntityDialog::initialize_type() {
+
+  ui.type_field->setText(EntityTraits::get_friendly_name(entity_before.get_type()));
+}
+
+/**
+ * @brief Initializes the name field.
+ */
+void EditEntityDialog::initialize_name() {
+
+  if (entity_before.is_dynamic()) {
+    ui.name_field->setText(entity_before.get_name());
+  }
+  else {
+    remove_field(ui.name_label, ui.name_field);
+  }
+}
+
+/**
+ * @brief Initializes the layer field.
+ */
+void EditEntityDialog::initialize_layer() {
+
+  ui.layer_field->set_selected_value(entity_before.get_layer());
+}
+
+/**
+ * @brief Initializes the position field.
+ */
+void EditEntityDialog::initialize_xy() {
+
+  QPoint xy = entity_before.get_xy();
+  ui.x_field->setValue(xy.x());
+  ui.y_field->setValue(xy.y());
+}
+
+/**
+ * @brief Initializes the size field.
+ */
+void EditEntityDialog::initialize_size() {
+
+  if (entity_before.has_size_fields()) {
+    QSize size = entity_before.get_size();
+    ui.width_field->setValue(size.width());
+    ui.height_field->setValue(size.height());
+  }
+  else {
+    remove_field(ui.size_label, ui.size_layout);
+  }
+}
+
+/**
+ * @brief Initializes the direction field.
+ */
+void EditEntityDialog::initialize_direction() {
+
+  if (entity_before.has_direction_field()) {
+    int num_directions = entity_before.get_num_directions();
+    if (entity_before.is_no_direction_allowed()) {
+      ui.direction_field->addItem(entity_before.get_no_direction_text(), -1);
+    }
+
+    QStringList texts;
+    if (num_directions == 4) {
+      texts = {
+        tr("Right"),
+        tr("Up"),
+        tr("Left"),
+        tr("Down")
+      };
+    }
+    else if (num_directions == 8) {
+      texts = {
+        tr("Right"),
+        tr("Right-up"),
+        tr("Up"),
+        tr("Left-up"),
+        tr("Left"),
+        tr("Left-down"),
+        tr("Down"),
+        tr("Right-down"),
+      };
+    }
+    else {
+      for (int i = 0; i < num_directions; ++num_directions) {
+        texts.append(QString::number(i));
+      }
+    }
+    for (int i = 0; i < texts.size(); ++i) {
+      ui.direction_field->addItem(texts[i], i);
+    }
+    ui.direction_field->setCurrentIndex(entity_before.get_direction());
+  }
+  else {
+    remove_field(ui.direction_label, ui.direction_layout);
+  }
+}
+
+/**
+ * @brief Initializes the sprite field.
+ */
+void EditEntityDialog::initialize_sprite() {
+
+  if (entity_before.has_field("sprite")) {
+    QString sprite = entity_before.get_field("sprite").toString();
+    ui.sprite_field->set_selected_id(sprite);
+  }
+  else {
+    remove_field(ui.sprite_label, ui.sprite_field);
+  }
+}
+
+/**
+ * @brief Initializes the transition field.
  */
 void EditEntityDialog::initialize_transition() {
 
@@ -124,9 +261,7 @@ void EditEntityDialog::initialize_transition() {
     ui.transition_field->set_selected_value(TransitionTraits::get_by_lua_name(transition_name));
   }
   else {
-    delete ui.transition_label;
-    ui.transition_label = nullptr;
-    delete ui.transition_field;
-    ui.transition_field = nullptr;
+    remove_field(ui.transition_label, ui.transition_label);
   }
 }
+

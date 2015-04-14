@@ -37,8 +37,17 @@ public:
 
 private:
 
-  void initialize_values();
+  void initialize();
+  void initialize_type();
+  void initialize_name();
+  void initialize_layer();
+  void initialize_xy();
+  void initialize_size();
+  void initialize_direction();
+  void initialize_sprite();
   void initialize_transition();
+
+  void remove_field(QWidget* label, QWidget* field);
 
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;    /**< The entity to edit. */
