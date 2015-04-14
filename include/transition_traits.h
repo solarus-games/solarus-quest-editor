@@ -14,34 +14,29 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_EDIT_ENTITY_DIALOG_H
-#define SOLARUSEDITOR_EDIT_ENTITY_DIALOG_H
+#ifndef SOLARUSEDITOR_TRANSITION_TRAITS_H
+#define SOLARUSEDITOR_TRANSITION_TRAITS_H
 
-#include "ui_edit_entity_dialog.h"
-#include "entities/entity_traits.h"
+#include "enum_traits.h"
+#include <solarus/Transition.h>
 
-class MapModel;
+using TransitionStyle = Solarus::Transition::Style;
+using TransitionTraits = EnumTraits<TransitionStyle>;
 
-class EditEntityDialog : public QDialog {
-  Q_OBJECT
+/**
+ * \brief Provides useful properties of TransitionStyle enum values.
+ */
+template<>
+class EnumTraits<TransitionStyle> {
 
 public:
 
-  explicit EditEntityDialog(const EntityModel& entity_before, QWidget* parent = nullptr);
+  static QList<TransitionStyle> get_values();
+  static QString get_friendly_name(TransitionStyle value);
+  static QIcon get_icon(TransitionStyle value);
 
-  const Quest& get_quest() const;
-  const MapModel& get_map() const;
-  EntityIndex get_entity_index() const;
-  const EntityModel& get_entity_before() const;
-  EntityModelPtr get_entity_after() const;
-
-private:
-
-  void initialize_values();
-  void initialize_transition();
-
-  Ui::EditEntityDialog ui;             /**< The widgets. */
-  const EntityModel& entity_before;    /**< The entity to edit. */
+  static QString get_lua_name(TransitionStyle value);
+  static TransitionStyle get_by_lua_name(const QString& name);
 
 };
 

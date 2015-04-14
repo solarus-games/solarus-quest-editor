@@ -1093,13 +1093,17 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
  */
 void MapView::edit_selected_entity() {
 
+  if (map == nullptr) {
+    return;
+  }
+
   EntityIndexes indexes = get_selected_entities();
   if (indexes.size() != 1) {
     return;
   }
 
   EntityIndex index = indexes.first();
-  EditEntityDialog dialog(*get_map(), indexes.first());
+  EditEntityDialog dialog(map->get_entity(index));
   int result = dialog.exec();
   if (result == QDialog::Rejected) {
     return;

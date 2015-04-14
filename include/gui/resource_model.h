@@ -33,10 +33,10 @@ class ResourceModel : public QStandardItemModel {
 
 public:
 
-  ResourceModel(Quest& quest, ResourceType resource_type, QObject* parent = nullptr);
+  ResourceModel(const Quest& quest, ResourceType resource_type, QObject* parent = nullptr);
 
-  Quest& get_quest();
-  QuestResources& get_resources();
+  const Quest& get_quest() const;
+  const QuestResources& get_resources() const;
 
   void add_special_value(
       const QString& id, const QString& text, int index);
@@ -66,7 +66,7 @@ private:
   const QStandardItem* get_element_item(const QString& element_id) const;
   QStandardItem* get_element_item(const QString& element_id);
 
-  Quest& quest;                   /**< The quest. */
+  const Quest& quest;             /**< The quest. */
   ResourceType resource_type;     /**< The resource type represented in the model. */
   std::map<QString, QStandardItem*>
       items;                      /**< Mapping of items from element ids. */

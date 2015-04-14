@@ -25,7 +25,7 @@
  * @param resource_type Type of resources to show.
  * @param parent The parent object or nullptr.
  */
-ResourceModel::ResourceModel(Quest& quest, ResourceType resource_type, QObject* parent) :
+ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QObject* parent) :
   QStandardItemModel(parent),
   quest(quest),
   resource_type(resource_type) {
@@ -35,7 +35,7 @@ ResourceModel::ResourceModel(Quest& quest, ResourceType resource_type, QObject* 
     add_element(id);
   }
 
-  QuestResources& resources = get_resources();
+  const QuestResources& resources = get_resources();
   connect(&resources, SIGNAL(element_added(ResourceType, QString, QString)),
           this, SLOT(element_added(ResourceType, QString, QString)));
   connect(&resources, SIGNAL(element_removed(ResourceType, QString)),
@@ -50,7 +50,7 @@ ResourceModel::ResourceModel(Quest& quest, ResourceType resource_type, QObject* 
  * @brief Returns the quest.
  * @return The quest.
  */
-Quest& ResourceModel::get_quest() {
+const Quest& ResourceModel::get_quest() const {
   return quest;
 }
 
@@ -58,7 +58,7 @@ Quest& ResourceModel::get_quest() {
  * @brief Returns the resources of the quest.
  * @return The resources.
  */
-QuestResources& ResourceModel::get_resources() {
+const QuestResources& ResourceModel::get_resources() const {
   return quest.get_resources();
 }
 

@@ -37,7 +37,7 @@ public:
 
   ResourceSelector(QWidget* parent);
 
-  void set_quest(Quest& quest);
+  void set_quest(const Quest& quest);
 
   ResourceType get_resource_type() const;
   void set_resource_type(ResourceType resource_type);

@@ -308,7 +308,7 @@
       </widget>
      </item>
      <item row="11" column="1">
-      <widget class="QComboBox" name="transition_field"/>
+      <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
      </item>
      <item row="12" column="0">
       <widget class="QLabel" name="destination_map_label">
@@ -371,6 +371,11 @@
    <class>EnumSelector&lt;Layer&gt;</class>
    <extends>QComboBox</extends>
    <header>layer_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;TransitionStyle&gt;</class>
+   <extends>QComboBox</extends>
+   <header>transition_traits.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

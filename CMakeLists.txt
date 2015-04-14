@@ -157,6 +157,7 @@ set(solarus_quest_editor_SOURCES
   include/size.h
   include/sprite_model.h
   include/tileset_model.h
+  include/transition_traits.h
   include/view_settings.h
   include/strings_model.h
   include/dialogs_model.h
@@ -248,6 +249,7 @@ set(solarus_quest_editor_SOURCES
   src/size.cpp
   src/sprite_model.cpp
   src/tileset_model.cpp
+  src/transition_traits.cpp
   src/view_settings.cpp
   src/strings_model.cpp
   src/dialogs_model.cpp

@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_TELETRANSPORTER_H
 
 #include "entity_model.h"
+#include "transition_traits.h"
 
 /**
  * @brief An editable teletransporter.

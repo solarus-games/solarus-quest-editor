@@ -61,7 +61,7 @@ void ResourceSelector::set_resource_type(ResourceType resource_type) {
  * @brief Sets the quest whose resources will be shown.
  * @param quest The quest.
  */
-void ResourceSelector::set_quest(Quest& quest) {
+void ResourceSelector::set_quest(const Quest& quest) {
 
   model = new ResourceModel(quest, resource_type);
   setModel(model);
