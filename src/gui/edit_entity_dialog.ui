@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>372</width>
-    <height>440</height>
+    <width>424</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -212,7 +212,7 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="subtype_field"/>
      </item>
      <item row="8" column="0">
       <widget class="QLabel" name="treasure_label">
@@ -275,6 +275,74 @@
         </layout>
        </item>
       </layout>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="enabled_at_start_label">
+       <property name="text">
+        <string>Visibility</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QCheckBox" name="enabled_at_start_field">
+       <property name="text">
+        <string>Enabled at start</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QCheckBox" name="sound_checkbox">
+       <property name="text">
+        <string>Play a sound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="ResourceSelector" name="sound_field"/>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="transition_label">
+       <property name="text">
+        <string>Transition</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QComboBox" name="transition_field"/>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="destination_map_label">
+       <property name="text">
+        <string>Destination map</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="ResourceSelector" name="destination_map_field"/>
+     </item>
+     <item row="13" column="0">
+      <widget class="QLabel" name="destination_label">
+       <property name="text">
+        <string>Destination</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="QComboBox" name="destination_field"/>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="default_label">
+       <property name="text">
+        <string>Default</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="QCheckBox" name="default_field">
+       <property name="text">
+        <string>Set as the default destination</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
