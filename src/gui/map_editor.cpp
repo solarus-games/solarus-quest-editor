@@ -190,24 +190,47 @@ public:
     entity_after(std::move(entity_after)) { }
 
   void undo() override {
-    // TODO
-    get_map_view().set_selected_entity(index_after);
+
+    MapModel& map = get_map();
+
+    // Remove the new entity created by redo().
+    AddableEntities removed_entities = map.remove_entities(EntityIndexes() << index_after);
+    AddableEntity& removed_entity = *removed_entities.begin();
+    entity_after = std::move(removed_entity.entity);
+
+    // Restore the old one.
+    AddableEntities addable_entities;
+    addable_entities.emplace_back(std::move(entity_before), index_before);
+    map.add_entities(std::move(addable_entities));
+
+    // Make it selected.
+    get_map_view().set_selected_entity(index_before);
   }
 
   void redo() override {
 
     MapModel& map = get_map();
-    EntityIndex index_after = index_before;
+
+    // To implement the change, remove the old entity and add the new one.
+    index_after = index_before;
     if (entity_after->get_layer() != index_before.layer) {
       // The layer changes: put the entity to the front.
       index_after.layer = entity_after->get_layer();
       index_after.order = entity_after->is_dynamic() ?
             map.get_num_entities(index_after.layer) : map.get_num_tiles(index_after.layer);
     }
+
+    // Remove the initial entity.
+    AddableEntities removed_entities = map.remove_entities(EntityIndexes() << index_before);
+    AddableEntity& removed_entity = *removed_entities.begin();
+    entity_before = std::move(removed_entity.entity);
+
+    // Add the new one to replace it.
     AddableEntities addable_entities;
     addable_entities.emplace_back(std::move(entity_after), index_after);
-    map.remove_entities(EntityIndexes() << index_before);
     map.add_entities(std::move(addable_entities));
+
+    // Make the new one selected.
     get_map_view().set_selected_entity(index_after);
   }
 
