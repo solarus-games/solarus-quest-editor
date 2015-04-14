@@ -103,7 +103,9 @@ void EditEntityDialog::initialize_transition() {
     ui.transition_field->set_selected_value(TransitionTraits::get_by_lua_name(transition_name));
   }
   else {
-    ui.transition_label->hide();
-    ui.transition_field->hide();
+    delete ui.transition_label;
+    ui.transition_label = nullptr;
+    delete ui.transition_field;
+    ui.transition_field = nullptr;
   }
 }
