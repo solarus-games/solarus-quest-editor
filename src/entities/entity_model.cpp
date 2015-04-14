@@ -683,6 +683,14 @@ void EntityModel::set_origin(const QPoint& origin) {
 }
 
 /**
+ * @brief Returns whether fields width and height exist for this entity.
+ * @return @c true if this entity has size fields.
+ */
+bool EntityModel::has_size_fields() const {
+  return has_field("width") && has_field("height");
+}
+
+/**
  * @brief Returns the width of this entity's bounding box.
  * @return The width.
  */

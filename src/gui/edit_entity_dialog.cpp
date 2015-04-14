@@ -22,7 +22,7 @@
  * @param entity_before The entity to edit. It may or may not already be on the map.
  * @param parent The parent widget or nullptr.
  */
-EditEntityDialog::EditEntityDialog(const EntityModel& entity_before, QWidget* parent) :
+EditEntityDialog::EditEntityDialog(EntityModel& entity_before, QWidget* parent) :
   QDialog(parent),
   entity_before(entity_before) {
 
@@ -52,7 +52,7 @@ const Quest& EditEntityDialog::get_quest() const {
  * @brief Returns the map the entity edited belongs to.
  * @return The map.
  */
-const MapModel& EditEntityDialog::get_map() const {
+MapModel& EditEntityDialog::get_map() const {
   return get_entity_before().get_map();
 }
 
@@ -68,7 +68,7 @@ EntityIndex EditEntityDialog::get_entity_index() const {
  * @brief Returns the entity being edited, before any change.
  * @return The entity edited.
  */
-const EntityModel& EditEntityDialog::get_entity_before() const {
+EntityModel& EditEntityDialog::get_entity_before() const {
   return entity_before;
 }
 
@@ -81,8 +81,29 @@ const EntityModel& EditEntityDialog::get_entity_before() const {
  */
 EntityModelPtr EditEntityDialog::get_entity_after() const {
 
-  // TODO
-  return EntityModelPtr();
+  EntityModelPtr entity_after = EntityModel::create(get_map(), entity_before.get_type());
+  entity_after->set_name(ui.name_field->text());
+  entity_after->set_layer(ui.layer_field->get_selected_value());
+  entity_after->set_xy(QPoint(ui.x_field->value(), ui.y_field->value()));
+
+  if (entity_after->has_size_fields()) {
+    entity_after->set_size(QSize(ui.width_field->value(), ui.height_field->value()));
+  }
+
+  if (entity_after->has_direction_field()) {
+    entity_after->set_direction(ui.direction_field->value());
+  }
+
+  if (entity_after->has_field("sprite")) {
+    entity_after->set_field("sprite", ui.sprite_field->get_selected_id());
+  }
+
+  if (entity_after->has_field("transition")) {
+    TransitionStyle transition = ui.transition_field->get_selected_value();
+    entity_after->set_field("transition", TransitionTraits::get_lua_name(transition));
+  }
+
+  return entity_after;
 }
 
 /**

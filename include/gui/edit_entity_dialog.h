@@ -27,12 +27,12 @@ class EditEntityDialog : public QDialog {
 
 public:
 
-  explicit EditEntityDialog(const EntityModel& entity_before, QWidget* parent = nullptr);
+  explicit EditEntityDialog(EntityModel& entity_before, QWidget* parent = nullptr);
 
   const Quest& get_quest() const;
-  const MapModel& get_map() const;
+  MapModel& get_map() const;
   EntityIndex get_entity_index() const;
-  const EntityModel& get_entity_before() const;
+  EntityModel& get_entity_before() const;
   EntityModelPtr get_entity_after() const;
 
 private:
@@ -41,7 +41,7 @@ private:
   void initialize_transition();
 
   Ui::EditEntityDialog ui;             /**< The widgets. */
-  const EntityModel& entity_before;    /**< The entity to edit. */
+  EntityModel& entity_before;    /**< The entity to edit. */
 
 };
 

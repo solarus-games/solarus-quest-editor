@@ -107,6 +107,7 @@ public:
   void set_center(const QPoint& center);
   QPoint get_origin() const;
   void set_origin(const QPoint& origin);
+  bool has_size_fields() const;
   int get_width() const;
   void set_width(int width);
   int get_height() const;

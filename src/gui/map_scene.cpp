@@ -435,7 +435,10 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
   clearSelection();
   for (const EntityIndex& index : indexes) {
     EntityItem* item = get_entity_item(index);
-    item->setSelected(true);
+    Q_ASSERT(item != nullptr);
+    if (item != nullptr) {
+      item->setSelected(true);
+    }
   }
 }
 

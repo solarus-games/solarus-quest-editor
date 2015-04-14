@@ -184,22 +184,36 @@ private:
 class EditEntityCommand : public MapEditorCommand {
 
 public:
-  EditEntityCommand(MapEditor& editor, const EntityIndex& index, EntityModelPtr entity_after) :
+  EditEntityCommand(MapEditor& editor, const EntityIndex& index_before, EntityModelPtr entity_after) :
     MapEditorCommand(editor, MapEditor::tr("Edit entity")),
-    index(index),
+    index_before(index_before),
     entity_after(std::move(entity_after)) { }
 
   void undo() override {
     // TODO
-    get_map_view().set_selected_entity(index);
+    get_map_view().set_selected_entity(index_after);
   }
 
   void redo() override {
-    get_map_view().set_selected_entity(index);
+
+    MapModel& map = get_map();
+    EntityIndex index_after = index_before;
+    if (entity_after->get_layer() != index_before.layer) {
+      // The layer changes: put the entity to the front.
+      index_after.layer = entity_after->get_layer();
+      index_after.order = entity_after->is_dynamic() ?
+            map.get_num_entities(index_after.layer) : map.get_num_tiles(index_after.layer);
+    }
+    AddableEntities addable_entities;
+    addable_entities.emplace_back(std::move(entity_after), index_after);
+    map.remove_entities(EntityIndexes() << index_before);
+    map.add_entities(std::move(addable_entities));
+    get_map_view().set_selected_entity(index_after);
   }
 
 private:
-  EntityIndex index;
+  EntityIndex index_before;
+  EntityIndex index_after;
   EntityModelPtr entity_before;
   EntityModelPtr entity_after;
 };
