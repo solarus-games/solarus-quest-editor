@@ -73,6 +73,8 @@ private slots:
   void map_selection_changed();
   void update_status_bar();
 
+  void edit_entity_requested(const EntityIndex& index,
+                             EntityModelPtr& entity_after);
   void move_entities_requested(const EntityIndexes& indexes,
                                const QPoint& translation,
                                bool allow_merge_to_previous);

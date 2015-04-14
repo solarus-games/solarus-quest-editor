@@ -18,17 +18,27 @@
 #define SOLARUSEDITOR_EDIT_ENTITY_DIALOG_H
 
 #include "ui_edit_entity_dialog.h"
+#include "entities/entity_traits.h"
+
+class MapModel;
 
 class EditEntityDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  explicit EditEntityDialog(Quest& quest, QWidget* parent = nullptr);
+  explicit EditEntityDialog(MapModel& map, const EntityIndex& index, QWidget* parent = nullptr);
+
+  Quest& get_quest() const;
+  MapModel& get_map() const;
+  EntityIndex get_entity_index() const;
+  EntityModelPtr get_entity_after() const;
 
 private:
 
   Ui::EditEntityDialog ui;      /**< The widgets. */
+  MapModel& map;                /**< The map of the entity to edit. */
+  EntityIndex index;            /**< Index of the entity to edit. */
 
 };
 

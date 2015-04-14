@@ -1024,6 +1024,17 @@ void MapView::set_selected_entities(const EntityIndexes& indexes) {
 }
 
 /**
+ * @brief Selects the specified entity and unselect the rest.
+ * @param index Index of the entity to make selecteded.
+ */
+void MapView::set_selected_entity(const EntityIndex& index) {
+
+  EntityIndexes indexes;
+  indexes << index;
+  set_selected_entities(indexes);
+}
+
+/**
  * @brief Creates copies of all selected entities.
  *
  * The created copies are not on the map.
@@ -1082,8 +1093,20 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
  */
 void MapView::edit_selected_entity() {
 
-  EditEntityDialog dialog(get_map()->get_quest());
-  dialog.exec();
+  EntityIndexes indexes = get_selected_entities();
+  if (indexes.size() != 1) {
+    return;
+  }
+
+  EntityIndex index = indexes.first();
+  EditEntityDialog dialog(*get_map(), indexes.first());
+  int result = dialog.exec();
+  if (result == QDialog::Rejected) {
+    return;
+  }
+
+  EntityModelPtr entity_after = std::move(dialog.get_entity_after());
+  emit edit_entity_requested(index, entity_after);
 }
 
 /**

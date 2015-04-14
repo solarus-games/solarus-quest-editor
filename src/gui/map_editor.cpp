@@ -179,6 +179,32 @@ private:
 };
 
 /**
+ * @brief Editing an entity.
+ */
+class EditEntityCommand : public MapEditorCommand {
+
+public:
+  EditEntityCommand(MapEditor& editor, const EntityIndex& index, EntityModelPtr entity_after) :
+    MapEditorCommand(editor, MapEditor::tr("Edit entity")),
+    index(index),
+    entity_after(std::move(entity_after)) { }
+
+  void undo() override {
+    // TODO
+    get_map_view().set_selected_entity(index);
+  }
+
+  void redo() override {
+    get_map_view().set_selected_entity(index);
+  }
+
+private:
+  EntityIndex index;
+  EntityModelPtr entity_before;
+  EntityModelPtr entity_after;
+};
+
+/**
  * @brief Moving entities on the map.
  */
 class MoveEntitiesCommand : public MapEditorCommand {
@@ -806,6 +832,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
+  connect(ui.map_view, SIGNAL(edit_entity_requested(EntityIndex, EntityModelPtr&)),
+          this, SLOT(edit_entity_requested(EntityIndex, EntityModelPtr&)));
   connect(ui.map_view, SIGNAL(move_entities_requested(EntityIndexes, QPoint, bool)),
           this, SLOT(move_entities_requested(EntityIndexes, QPoint, bool)));
   connect(ui.map_view, SIGNAL(resize_entities_requested(QMap<EntityIndex, QRect>, bool)),
@@ -1333,6 +1361,17 @@ void MapEditor::update_status_bar() {
   else {
     status_bar->showMessage(message);
   }
+}
+
+/**
+ * @brief Slot called when the user wants to edit an entity.
+ * @param index Index of the entity to change.
+ * @param entity_after An entity representing the new values to set.
+ */
+void MapEditor::edit_entity_requested(const EntityIndex& index,
+                                      EntityModelPtr& entity_after) {
+
+  try_command(new EditEntityCommand(*this, index, std::move(entity_after)));
 }
 
 /**

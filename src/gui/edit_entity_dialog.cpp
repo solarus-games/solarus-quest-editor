@@ -15,19 +15,60 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "include/gui/edit_entity_dialog.h"
+#include "map_model.h"
 
 /**
  * @brief Creates an edit entity dialog.
- * @param quest The quest.
+ * @param map The map of the entity to edit.
+ * @param index Index of the entity to edit on the map.
  * @param parent The parent widget or nullptr.
  */
-EditEntityDialog::EditEntityDialog(Quest& quest, QWidget* parent) :
-  QDialog(parent) {
+EditEntityDialog::EditEntityDialog(MapModel& map, const EntityIndex& index, QWidget* parent) :
+  QDialog(parent),
+  map(map),
+  index(index) {
 
   ui.setupUi(this);
 
-  ui.sprite_field->set_quest(quest);
+  ui.sprite_field->set_quest(get_quest());
   ui.sprite_field->set_resource_type(ResourceType::SPRITE);
-  ui.treasure_name_field->set_quest(quest);
+  ui.treasure_name_field->set_quest(get_quest());
   ui.treasure_name_field->set_resource_type(ResourceType::ITEM);
+}
+
+/**
+ * @brief Returns the quest the map belongs to.
+ * @return The quest.
+ */
+Quest& EditEntityDialog::get_quest() const {
+  return get_map().get_quest();
+}
+
+/**
+ * @brief Returns the map the entity edited belongs to.
+ * @return The map.
+ */
+MapModel& EditEntityDialog::get_map() const {
+  return map;
+}
+
+/**
+ * @brief Returns the index of the entity being edited.
+ * @return The entity index on the map.
+ */
+EntityIndex EditEntityDialog::get_entity_index() const {
+  return index;
+}
+
+/**
+ * @brief Creates and returns an entity representing the new input data.
+ *
+ * The created entity is not on the map.
+ *
+ * @return The new data.
+ */
+EntityModelPtr EditEntityDialog::get_entity_after() const {
+
+  // TODO
+  return EntityModelPtr();
 }

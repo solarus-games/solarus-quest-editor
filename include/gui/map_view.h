@@ -81,6 +81,7 @@ public:
   int get_num_selected_entities() const;
   EntityIndexes get_selected_entities() const;
   void set_selected_entities(const EntityIndexes& indexes);
+  void set_selected_entity(const EntityIndex& index);
   EntityModels clone_selected_entities() const;
 
   // Information about entities.
@@ -104,6 +105,8 @@ signals:
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
   void undo_requested();
+  void edit_entity_requested(const EntityIndex& index,
+                             EntityModelPtr& values);
   void move_entities_requested(
       const EntityIndexes& indexes,
       const QPoint& translation,
