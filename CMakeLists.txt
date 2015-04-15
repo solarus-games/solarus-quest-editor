@@ -93,11 +93,12 @@ set(solarus_quest_editor_SOURCES
   include/gui/editor.h
   include/gui/editor_tabs.h
   include/gui/entity_item.h
-  include/gui/external_script_dialog.h
+  include/gui/entity_selector.h
   include/gui/enum_menus.h
   include/gui/enum_menus.inl
   include/gui/enum_selector.h
   include/gui/enum_selector.inl
+  include/gui/external_script_dialog.h
   include/gui/get_animation_name_dialog.h
   include/gui/gui_tools.h
   include/gui/lua_syntax_highlighter.h
@@ -193,6 +194,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
   src/gui/entity_item.cpp
+  src/gui/entity_selector.cpp
   src/gui/external_script_dialog.cpp
   src/gui/get_animation_name_dialog.cpp
   src/gui/gui_tools.cpp
