@@ -41,7 +41,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Enemy</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -359,7 +359,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="treasure_variant_field"/>
+           <widget class="QSpinBox" name="treasure_variant_field">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="horizontal_spacer_4">
@@ -388,7 +395,7 @@
           <item>
            <widget class="QLabel" name="treasure_savegame_variable_label">
             <property name="text">
-             <string>Savegame variable</string>
+             <string>in variable</string>
             </property>
            </widget>
           </item>

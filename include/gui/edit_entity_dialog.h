@@ -38,14 +38,16 @@ public:
 private:
 
   void initialize();
-  void initialize_type();
-  void initialize_name();
-  void initialize_layer();
-  void initialize_xy();
-  void initialize_size();
   void initialize_direction();
+  void initialize_layer();
+  void initialize_name();
+  void initialize_size();
   void initialize_sprite();
+  void initialize_subtype();
   void initialize_transition();
+  void initialize_treasure();
+  void initialize_type();
+  void initialize_xy();
 
   void remove_field(QWidget* label, QWidget* field);
 
