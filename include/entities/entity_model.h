@@ -124,6 +124,8 @@ public:
   int get_direction() const;
   void set_direction(int direction);
   bool has_field(const QString& key) const;
+  bool is_field_optional(const QString& key) const;
+  bool is_field_unset(const QString& key) const;
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
   QString to_string() const;

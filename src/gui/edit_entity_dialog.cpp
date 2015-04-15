@@ -142,6 +142,59 @@ void EditEntityDialog::apply() {
 }
 
 /**
+ * @brief Sets up the behavior of a field with a checkbox or a label depending
+ * on whether it is optional.
+ * @param field_name The field to initialize.
+ * @param label_layout Parent layout of the checkbox and label to handle
+ * (one of them is removed). If nullptr, nothing is removed.
+ * @param label A label to be used when the field is mandatory.
+ * Can be nullptr.
+ * @param checkbox A checkbox to be used instead of the label when the field
+ * is optional. Can be nullptr.
+ * @param field The field widget to disable when the checkbox is disabled.
+ * Can be nullptr.
+ */
+void EditEntityDialog::initialize_possibly_optional_field(const QString& field_name,
+                                                          QLayout* label_layout,
+                                                          QWidget* label,
+                                                          QCheckBox* checkbox,
+                                                          QWidget* field) {
+
+  if (!entity_before.is_field_optional(field_name)) {
+    // Mandatory field: remove the checkbox if any, keep the label.
+    if (label_layout != nullptr && checkbox != nullptr) {
+      checkbox->setChecked(true);  // Make it check even if hidden to simplify apply_xxx() functions.
+      checkbox->hide();
+      label_layout->removeWidget(checkbox);
+    }
+    return;
+  }
+
+  // Optional field: remove the label if any, keep the checkbox.
+  if (label_layout != nullptr && label != nullptr) {
+    label->hide();
+    label_layout->removeWidget(label);
+  }
+
+  bool unset = entity_before.is_field_unset(field_name);
+
+  if (unset) {
+    if (field != nullptr) {
+      field->setEnabled(false);
+    }
+  }
+  else {
+    if (checkbox != nullptr) {
+      checkbox->setChecked(true);
+    }
+  }
+  if (checkbox != nullptr && field != nullptr) {
+    connect(checkbox, SIGNAL(toggled(bool)),
+            field, SLOT(setEnabled(bool)));
+  }
+}
+
+/**
  * @brief Removes a row of the form layout.
  * @param label Label of the row.
  * @param field Field of the row.
@@ -385,17 +438,14 @@ void EditEntityDialog::initialize_sound() {
 
   ui.sound_field->set_quest(get_quest());
   ui.sound_field->set_resource_type(ResourceType::SOUND);
+  initialize_possibly_optional_field(
+        sound_field_name,
+        nullptr,
+        nullptr,
+        ui.sound_checkbox,
+        ui.sound_field);
   QString sound = entity_before.get_field(sound_field_name).toString();
-
-  if (sound.isEmpty()) {
-    ui.sound_field->setEnabled(false);
-  }
-  else {
-    ui.sound_field->set_selected_id(sound);
-    ui.sound_checkbox->setChecked(true);
-  }
-  connect(ui.sound_checkbox, SIGNAL(toggled(bool)),
-          ui.sound_field, SLOT(setEnabled(bool)));
+  ui.sound_field->set_selected_id(sound);
 }
 
 /**
@@ -417,10 +467,16 @@ void EditEntityDialog::apply_sound() {
 void EditEntityDialog::initialize_sprite() {
 
   if (!entity_before.has_field(sprite_field_name)) {
-    remove_field(ui.sprite_label, ui.sprite_field);
+    remove_field(ui.sprite_label_checkbox, ui.sprite_field);
     return;
   }
 
+  initialize_possibly_optional_field(
+        sprite_field_name,
+        ui.sprite_label_checkbox->layout(),
+        ui.sprite_label,
+        ui.sprite_checkbox,
+        ui.sprite_field);
   ui.sprite_field->set_quest(get_quest());
   ui.sprite_field->set_resource_type(ResourceType::SPRITE);
   QString sprite = entity_before.get_field(sprite_field_name).toString();
@@ -433,7 +489,8 @@ void EditEntityDialog::initialize_sprite() {
 void EditEntityDialog::apply_sprite() {
 
   if (entity_after->has_field(sprite_field_name)) {
-    entity_after->set_field(sprite_field_name, ui.sprite_field->get_selected_id());
+    entity_after->set_field(sprite_field_name, ui.sprite_checkbox->isChecked() ?
+                              ui.sprite_field->get_selected_id() : "");
   }
 }
 

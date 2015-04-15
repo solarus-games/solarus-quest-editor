@@ -70,6 +70,11 @@ private:
   void initialize_xy();
   void apply_xy();
 
+  void initialize_possibly_optional_field(const QString& field_name,
+                                          QLayout* label_layout,
+                                          QWidget* label,
+                                          QCheckBox* checkbox,
+                                          QWidget* field);
   void remove_field(QWidget* label, QWidget* field);
 
   Ui::EditEntityDialog ui;             /**< The widgets. */

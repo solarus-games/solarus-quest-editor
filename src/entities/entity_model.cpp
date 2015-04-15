@@ -912,8 +912,28 @@ void EntityModel::set_direction(int direction) {
  */
 bool EntityModel::has_field(const QString& key) const {
 
-  std::string std_key = key.toStdString();
-  return get_entity().get_field(std_key).value_type != EntityData::EntityFieldType::NIL;
+  return get_entity().has_field(key.toStdString());
+}
+
+/**
+ * @brief Returns whether a field of the entity is optional.
+ * @param key Key of the field to check.
+ * @return @c true if this field exists and is optional.
+ */
+bool EntityModel::is_field_optional(const QString& key) const {
+
+  return get_entity().is_field_optional(key.toStdString());
+}
+
+/**
+ * @brief Returns whether an optional field of the entity is unset.
+ * @param key Key of the field to check.
+ * @return @c true if the field exists, is optional and is equal
+ * to its default value.
+ */
+bool EntityModel::is_field_unset(const QString& key) const {
+
+  return get_entity().is_field_unset(key.toStdString());
 }
 
 /**
