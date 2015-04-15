@@ -33,26 +33,48 @@ public:
   MapModel& get_map() const;
   EntityIndex get_entity_index() const;
   EntityModel& get_entity_before() const;
-  EntityModelPtr get_entity_after() const;
+  EntityModelPtr get_entity_after();
 
 private:
 
   void initialize();
+  void apply();
+  void initialize_default();
+  void apply_default();
+  void initialize_destination();
+  void apply_destination();
+  void initialize_destination_map();
+  void apply_destination_map();
   void initialize_direction();
+  void apply_direction();
+  void initialize_enabled_at_start();
+  void apply_enabled_at_start();
   void initialize_layer();
+  void apply_layer();
   void initialize_name();
+  void apply_name();
   void initialize_size();
+  void apply_size();
+  void initialize_sound();
+  void apply_sound();
   void initialize_sprite();
+  void apply_sprite();
   void initialize_subtype();
+  void apply_subtype();
   void initialize_transition();
+  void apply_transition();
   void initialize_treasure();
+  void apply_treasure();
   void initialize_type();
+  void apply_type();
   void initialize_xy();
+  void apply_xy();
 
   void remove_field(QWidget* label, QWidget* field);
 
   Ui::EditEntityDialog ui;             /**< The widgets. */
-  EntityModel& entity_before;    /**< The entity to edit. */
+  EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
+  EntityModelPtr entity_after;         /**< A copy of the entity with the modified data. */
 
 };
 
