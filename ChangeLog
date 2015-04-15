@@ -54,4 +54,5 @@ Bug fixes
 * Fix entities restored to the front when undoing changing their layer. 
 * Fix separators resizing that could allow illegal sizes.
 * Fix jumpers size reset after undoing changing their direction.
+* Fix walls being initially traversable by everything when they are created.
 

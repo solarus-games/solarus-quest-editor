@@ -34,3 +34,19 @@ Wall::Wall(MapModel& map, const EntityIndex& index) :
   info.tiled_pixmap = true;
   set_draw_shape_info(info);
 }
+
+/**
+ * @copydoc EntityModel::set_initial_values
+ */
+void Wall::set_initial_values() {
+
+  EntityModel::set_initial_values();
+
+  // Default values in the data file format are poor: the wall is traversable
+  // by everything.
+  set_field("stops_hero", true);
+  set_field("stops_npcs", true);
+  set_field("stops_enemies", true);
+  set_field("stops_blocks", true);
+  set_field("stops_projectiles", true);
+}

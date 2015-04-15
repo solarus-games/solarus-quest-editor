@@ -206,6 +206,7 @@ protected:
   void set_no_direction_text(const QString& no_direction_text);
 
   virtual void notify_field_changed(const QString& key, const QVariant& value);
+  virtual void set_initial_values();
 
   const DrawSpriteInfo& get_draw_sprite_info() const;
   void set_draw_sprite_info(const DrawSpriteInfo& draw_sprite_info);

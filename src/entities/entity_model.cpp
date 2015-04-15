@@ -286,8 +286,8 @@ EntityModelPtr EntityModel::create(
   }
 
   if (!index.is_valid()) {
-    // New entity: initialize aligned x and y.
-    entity->set_top_left(QPoint(0, 0));
+    // New entity: choose some appropriate initial values.
+    entity->set_initial_values();
   }
   else {
     entity->name = QString::fromStdString(map.get_internal_entity(index).get_name());
@@ -1126,6 +1126,20 @@ void EntityModel::notify_field_changed(const QString& key, const QVariant& value
   // Nothing done by default.
   Q_UNUSED(key);
   Q_UNUSED(value);
+}
+
+/**
+ * @brief This function is called when this is a new entity.
+ *
+ * Field values are initially set to their default value as specified by
+ * Solarus.
+ * Subclasses can reimplement this function to set more appropriate initial
+ * values for the user.
+ */
+void EntityModel::set_initial_values() {
+
+  // Choose an initial position aligned to the grid.
+  set_top_left(QPoint(0, 0));
 }
 
 /**
