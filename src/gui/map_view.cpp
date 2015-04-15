@@ -587,7 +587,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
 
   QStringList texts;
   if (num_directions == 4) {
-    texts = {
+    texts = QStringList{
       tr("Right"),
       tr("Up"),
       tr("Left"),
@@ -595,7 +595,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     };
   }
   else if (num_directions == 8) {
-    texts = {
+    texts = QStringList{
       tr("Right"),
       tr("Right-up"),
       tr("Up"),

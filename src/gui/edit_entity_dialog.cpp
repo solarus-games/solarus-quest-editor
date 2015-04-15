@@ -296,7 +296,7 @@ void EditEntityDialog::initialize_direction() {
 
   QStringList texts;
   if (num_directions == 4) {
-    texts = {
+    texts = QStringList{
       tr("Right"),
       tr("Up"),
       tr("Left"),
@@ -304,7 +304,7 @@ void EditEntityDialog::initialize_direction() {
     };
   }
   else if (num_directions == 8) {
-    texts = {
+    texts = QStringList{
       tr("Right"),
       tr("Right-up"),
       tr("Up"),
