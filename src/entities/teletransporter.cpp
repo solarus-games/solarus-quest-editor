@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/teletransporter.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -33,4 +34,15 @@ Teletransporter::Teletransporter(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(240, 215, 142);
   info.pixmap = QPixmap(":/images/entity_teletransporter_resizable.png");
   set_draw_shape_info(info);
+}
+
+/**
+ * @copydoc EntityModel::set_initial_values
+ */
+void Teletransporter::set_initial_values() {
+
+  EntityModel::set_initial_values();
+
+  // Initially propose to stay on the same map.
+  set_field("destination_map", get_map().get_map_id());
 }
