@@ -418,9 +418,17 @@ void EditEntityDialog::initialize_size() {
     return;
   }
 
-  QSize size = entity_before.get_size();
+  // Show the current size in the spinboxes.
+  const QSize& size = entity_before.get_size();
   ui.width_field->setValue(size.width());
   ui.height_field->setValue(size.height());
+
+  // Tell spinboxes to only make multiples of the base size.
+  const QSize& base_size = entity_before.get_base_size();
+  ui.width_field->setMinimum(base_size.width());
+  ui.width_field->setSingleStep(base_size.width());
+  ui.height_field->setMinimum(base_size.height());
+  ui.height_field->setSingleStep(base_size.height());
 }
 
 /**

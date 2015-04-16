@@ -1049,11 +1049,12 @@ void EntityModel::set_resize_mode(ResizeMode resize_mode) {
  *
  * In all modes, dimensions that can be resized remain multiple of the ones
  * of this base size.
+ * The base size is also the minimum size when resizing.
  *
- * In mode ResizeMode::HORIZONTAL_ONLY, the width remains equal to the
- * width of this base size.
- * In mode ResizeMode::VERTICAL_ONLY, the height remains equal to the
+ * In mode ResizeMode::HORIZONTAL_ONLY, the height remains equal to the
  * height of this base size.
+ * In mode ResizeMode::VERTICAL_ONLY, the width remains equal to the
+ * width of this base size.
  * In mode ResizeMode::SINGLE_DIMENSION, at least one of both dimensions
  * has to be equal to the one of this base size.
  *
