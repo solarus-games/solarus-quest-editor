@@ -85,7 +85,8 @@ EntityType EntitySelector::get_entity_type_filter() const {
 /**
  * @brief Sets the type used to filter entities.
  *
- * This function only has an effect if is_filtered_by_entity_type() is @c true.
+ * This setting only has an effect if is_filtered_by_entity_type() is @c true.
+ *
  * @param type The type to show.
  */
 void EntitySelector::set_entity_type_filter(EntityType type) {
