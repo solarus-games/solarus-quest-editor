@@ -82,6 +82,7 @@ public:
   bool set_entity_name(const EntityIndex& index, const QString& name);
   bool entity_name_exists(const QString& name) const;
   EntityIndex find_entity_by_name(const QString& name) const;
+  QMap<QString, EntityIndex> get_named_entities() const;
   Layer get_entity_layer(const EntityIndex& index) const;
   EntityIndex set_entity_layer(const EntityIndex& index_before, Layer layer_after);
   bool is_common_layer(const EntityIndexes& indexes, Layer& layer) const;

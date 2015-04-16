@@ -29,7 +29,7 @@ public:
 
   explicit EditEntityDialog(EntityModel& entity_before, QWidget* parent = nullptr);
 
-  const Quest& get_quest() const;
+  Quest& get_quest() const;
   MapModel& get_map() const;
   EntityIndex get_entity_index() const;
   EntityModel& get_entity_before() const;

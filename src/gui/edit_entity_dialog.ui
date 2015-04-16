@@ -416,7 +416,7 @@
       </widget>
      </item>
      <item row="13" column="1">
-      <widget class="QComboBox" name="destination_field"/>
+      <widget class="EntitySelector" name="destination_field"/>
      </item>
      <item row="14" column="0">
       <widget class="QLabel" name="default_label">
@@ -464,6 +464,11 @@
    <class>EnumSelector&lt;TransitionStyle&gt;</class>
    <extends>QComboBox</extends>
    <header>transition_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EntitySelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/entity_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

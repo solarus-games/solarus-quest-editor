@@ -19,8 +19,11 @@
 
 #include "entities/entity_traits.h"
 #include <QComboBox>
+#include <QMap>
+#include <QPair>
+#include <QPointer>
 
-class MapModel;
+class Quest;
 
 /**
  * @brief A combo box that allows to choose a map entity from its name.
@@ -32,8 +35,8 @@ public:
 
   EntitySelector(QWidget* parent);
 
-  const MapModel* get_map() const;
-  void set_map(const MapModel* map);
+  const QString& get_map_id() const;
+  void set_map_id(Quest& quest, const QString& map_id);
   bool is_filtered_by_entity_type() const;
   void set_filtered_by_entity_type(bool filtered);
   EntityType get_entity_type_filter() const;
@@ -49,10 +52,11 @@ public slots:
 
 private:
 
-  using SpecialValue = std::pair<QString, QString>;
+  using SpecialValue = QPair<QString, QString>;   // Name and text.
 
-  const MapModel* map;                       /**< The map from where to show entities. */
-  std::vector<SpecialValue> special_values;  /**< Non-entity values added to the list. */
+  QPointer<Quest> quest;                     /**< The quest or nullptr if it is not set yet. */
+  QString map_id;                            /**< Id of the map from where to show entities or an empty string. */
+  QList<SpecialValue> special_values;        /**< Non-entity values added to the list. */
   bool filtered_by_entity_type;              /**< Whether only one type of entity is proposed. */
   EntityType entity_type_filter;             /**< The type of entity to only show. */
 

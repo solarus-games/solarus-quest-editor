@@ -15,6 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/entity_selector.h"
+#include "editor_exception.h"
+#include "map_model.h"
+#include "quest.h"
 
 /**
  * @brief Creates an empty entity selector.
@@ -25,7 +28,8 @@
  */
 EntitySelector::EntitySelector(QWidget* parent) :
   QComboBox(parent),
-  map(nullptr),
+  quest(nullptr),
+  map_id(),
   special_values(),
   filtered_by_entity_type(false),
   entity_type_filter(EntityType()) {
@@ -33,55 +37,95 @@ EntitySelector::EntitySelector(QWidget* parent) :
 }
 
 /**
- * @brief Returns the map where entities come from.
- * @return The map or nullptr if it is not set yet.
+ * @brief Returns the id of the map where entities come from.
+ * @return The map id or an empty string if it is not set yet.
  */
-const MapModel* EntitySelector::get_map() const {
-  return map;
+const QString& EntitySelector::get_map_id() const {
+  return map_id;
 }
 
 /**
  * @brief Sets the map where entities should come from.
- * @param map
+ * @param quest The quest the map belongs to.
+ * @param map_id Id of the map.
  */
-void EntitySelector::set_map(const MapModel* map) {
+void EntitySelector::set_map_id(Quest& quest, const QString& map_id) {
 
-  if (map == this->map) {
-    return;
-  }
-
-  this->map = map;
-  clear();  // The map has changed, don't keep old entiites.
+  this->quest = &quest;
+  this->map_id = map_id;
 }
 
+/**
+ * @brief Returns whether only one type of entity is shown.
+ * @return @c true if entities are filtered by type.
+ */
 bool EntitySelector::is_filtered_by_entity_type() const {
   return filtered_by_entity_type;
 }
 
+/**
+ * @brief Sets whether only one type of entity is shown.
+ *
+ * Use set_entity_type_filter to indicate which one.
+ *
+ * @param filtered @c true to filter entities by type.
+ */
 void EntitySelector::set_filtered_by_entity_type(bool filtered) {
   this->filtered_by_entity_type = filtered;
 }
 
+/**
+ * @brief Returns the type used to filter entities if any.
+ * @return The type shown.
+ */
 EntityType EntitySelector::get_entity_type_filter() const {
   return entity_type_filter;
 }
 
+/**
+ * @brief Sets the type used to filter entities.
+ *
+ * This function only has an effect if is_filtered_by_entity_type() is @c true.
+ * @param type The type to show.
+ */
 void EntitySelector::set_entity_type_filter(EntityType type) {
   this->entity_type_filter = type;
 }
 
+/**
+ * @brief Adds a non-entity item to the beginning of the combobox.
+ * @param name Internal name to set instead of the name of an entity.
+ * @param text Text to display to the user.
+ */
 void EntitySelector::add_special_value(const QString& name, const QString& text) {
-  special_values.emplace_back(std::make_pair(name, text));
+  special_values.append(qMakePair(name, text));
 }
 
+/**
+ * @brief Returns the name in the selected item.
+ *
+ * It can be the name of an entity of the name of a special value item.
+ *
+ * @return The selected name.
+ */
 QString EntitySelector::get_selected_name() const {
-  // TODO
-  return QString();
+
+  return currentData().toString();
 }
 
+/**
+ * @brief Selects the specified item.
+ * @return The name to make selected.
+ * It can be the name of an entity of the name of a special value item.
+ */
 void EntitySelector::set_selected_name(const QString& name) {
-  // TODO
-  Q_UNUSED(name);
+
+  int index = findData(name, Qt::UserRole);
+  if (index == -1) {
+    return;
+  }
+
+  setCurrentIndex(index);
 }
 
 /**
@@ -91,7 +135,33 @@ void EntitySelector::build() {
 
   clear();
 
-  if (map == nullptr) {
+  if (quest == nullptr || map_id.isEmpty()) {
     return;
+  }
+
+  try {
+    MapModel map(*quest, map_id);
+
+    // Add special value items first.
+    for (const SpecialValue& special_value : special_values) {
+      addItem(special_value.second, special_value.first);
+    }
+
+    // Add entities.
+    const QMap<QString, EntityIndex>& indexes = map.get_named_entities();
+    for (auto it = indexes.begin(); it != indexes.end(); ++it) {
+      const QString& name = it.key();
+      const EntityIndex& index = it.value();
+      if (is_filtered_by_entity_type() &&
+          map.get_entity_type(index) != get_entity_type_filter()) {
+        // Not the wanted entity type.
+        continue;
+      }
+      addItem(name, name);
+    }
+  }
+  catch (const EditorException& ex) {
+    // The map file could not be opened: the map id is probably unset or incorrect.
+    Q_UNUSED(ex);
   }
 }

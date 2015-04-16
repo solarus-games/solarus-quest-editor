@@ -507,6 +507,20 @@ EntityIndex MapModel::find_entity_by_name(const QString& name) const {
 }
 
 /**
+ * @brief Returns all entity indexes of the map that have a non-empty name.
+ * @return The named entities.
+ */
+QMap<QString, EntityIndex> MapModel::get_named_entities() const {
+
+  const std::map<std::string, EntityIndex>& solarus_indexes = map.get_named_entities_indexes();
+  QMap<QString, EntityIndex> indexes;
+  for (const auto& kvp : solarus_indexes) {
+    indexes.insert(QString::fromStdString(kvp.first), kvp.second);
+  }
+  return indexes;
+}
+
+/**
  * @brief Returns the layer where an entity is on the map.
  * @param index Index of a map entity.
  * @return The layer.
