@@ -1307,12 +1307,15 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
 
   // Try to draw the sprite from the sprite field if any.
   const QString& sprite_field_value = get_field("sprite").toString();
-  if (draw_as_sprite(painter, sprite_field_value, "")) {
+  if (draw_as_sprite(painter, sprite_field_value, "", 0)) {
     return true;
   }
 
   // Otherwise try to draw the one that was set by set_draw_sprite_info().
-  return draw_as_sprite(painter, draw_sprite_info.sprite_id, draw_sprite_info.animation);
+  return draw_as_sprite(painter,
+                        draw_sprite_info.sprite_id,
+                        draw_sprite_info.animation,
+                        draw_sprite_info.frame);
 }
 
 /**
@@ -1321,9 +1324,15 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
  * @param sprite_id Sprite to use.
  * @param animation Animation to use in this sprite.
  * If it does not exists, the default animation will be used.
+ * @param frame Frame to show. If negative, we count from the end
+ * (-1 is the last frame).
  * @return @c true if the sprite was successfully drawn.
  */
-bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, const QString& animation) const {
+bool EntityModel::draw_as_sprite(
+    QPainter& painter,
+    const QString& sprite_id,
+    const QString& animation,
+    int frame) const {
 
   if (sprite_id.isEmpty()) {
     // No sprite sheet.
@@ -1368,7 +1377,11 @@ bool EntityModel::draw_as_sprite(QPainter& painter, const QString& sprite_id, co
 
   // Lazily create the image.
   if (sprite_image.isNull()) {
-    sprite_image = sprite_model->get_direction_frame(index);
+    int frame_positive_number = frame;
+    if (frame_positive_number < 0) {
+      frame_positive_number = sprite_model->get_direction_num_frames(index) + frame_positive_number;
+    }
+    sprite_image = sprite_model->get_direction_frame(index, frame_positive_number);
     if (sprite_image.isNull()) {
       // The sprite model did not give a valid image.
       return false;

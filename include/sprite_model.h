@@ -140,7 +140,7 @@ public:
 
   Solarus::SpriteAnimationDirectionData
     get_direction_data(const Index& index) const;
-  QRect get_direction_frame_rect(const Index& index) const;
+  QRect get_direction_first_frame_rect(const Index& index) const;
   QRect get_direction_all_frames_rect(const Index& index) const;
   QList<QRect> get_direction_frames(const Index& index) const;
   QPoint get_direction_position(const Index& index) const;
@@ -158,7 +158,8 @@ public:
   // Images.
   QImage get_animation_image(const Index& index) const;
   QList<QPixmap> get_direction_all_frames(const Index& index) const;
-  QPixmap get_direction_frame(const Index& index) const;
+  QPixmap get_direction_first_frame(const Index& index) const;
+  QPixmap get_direction_frame(const Index& index, int frame) const;
   QPixmap get_direction_icon(const Index& index) const;
 
   // Selection.

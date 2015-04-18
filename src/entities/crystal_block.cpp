@@ -28,14 +28,36 @@ CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
   set_resizable(true);
   set_base_size(QSize(16, 16));
 
-  DrawSpriteInfo info;
-  info.sprite_id = "entities/crystal_block";
-  info.tiled = true;
-  set_draw_sprite_info(info);
-
   SubtypeList subtypes = {
     { "0", MapModel::tr("Initially lowered") },
     { "1", MapModel::tr("Initially raised") }
   };
   set_existing_subtypes(subtypes);
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void CrystalBlock::notify_field_changed(const QString& key, const QVariant& value) {
+
+  Q_UNUSED(value);
+  if (key == "subtype") {
+    update_subtype();
+  }
+}
+
+/**
+ * @brief Updates the representation of the crystal block.
+ *
+ * This function should be called when the subtype changes.
+ */
+void CrystalBlock::update_subtype() {
+
+  DrawSpriteInfo info;
+  info.sprite_id = "entities/crystal_block";
+  info.animation = (get_subtype() == "0") ? "orange_lowered" : "blue_raised";
+  info.frame = -1;
+  info.tiled = true;
+  set_draw_sprite_info(info);
+
 }

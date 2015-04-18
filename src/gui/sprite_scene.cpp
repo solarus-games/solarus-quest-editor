@@ -285,7 +285,7 @@ DirectionItem::DirectionItem(
   model(model),
   index(index) {
 
-  QRect frame = model.get_direction_frame_rect(index);
+  QRect frame = model.get_direction_first_frame_rect(index);
   setPos(frame.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
 }
@@ -337,7 +337,7 @@ void DirectionItem::paint(QPainter* painter,
     return;
   }
 
-  QRect box = model.get_direction_frame_rect(index);
+  QRect box = model.get_direction_first_frame_rect(index);
   QPoint top_left = box.topLeft();
   box.translate(-top_left);
 

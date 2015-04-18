@@ -1056,7 +1056,7 @@ SpriteAnimationDirectionData SpriteModel::get_direction_data(
  * @param index A direction index.
  * @return The direction's first frame.
  */
-QRect SpriteModel::get_direction_frame_rect(const Index& index) const {
+QRect SpriteModel::get_direction_first_frame_rect(const Index& index) const {
 
   if (!direction_exists(index)) {
     return QRect();
@@ -1075,7 +1075,7 @@ QRect SpriteModel::get_direction_all_frames_rect(const Index& index) const {
     return QRect();
   }
 
-  QRect rect = get_direction_frame_rect(index);
+  QRect rect = get_direction_first_frame_rect(index);
   for (const QRect& frame: get_direction_frames(index)) {
     rect.setBottom(qMax(frame.bottom(), rect.bottom()));
     rect.setRight(qMax(frame.right(), rect.right()));
@@ -1372,18 +1372,35 @@ QList<QPixmap> SpriteModel::get_direction_all_frames(const Index& index) const {
 /**
  * @brief Returns an image representing the first frame of a specified direction.
  * @param index A direction index.
- * @return The corresponding images.
+ * @return The corresponding image.
  * Returns a null pixmap if the animation image is not loaded.
  */
-QPixmap SpriteModel::get_direction_frame(const Index& index) const {
+QPixmap SpriteModel::get_direction_first_frame(const Index& index) const {
+
+  return get_direction_frame(index, 0);
+}
+
+/**
+ * @brief Returns an image representing a frame of a specified direction.
+ * @param index A direction index.
+ * @param frame The frame number.
+ * @return The corresponding image.
+ * Returns a null pixmap if the animation image is not loaded
+ * or if the frame number is out of range.
+ */
+QPixmap SpriteModel::get_direction_frame(const Index& index, int frame) const {
 
   QList<QPixmap> frames = get_direction_all_frames(index);
 
-  if (frames.size() > 0) {
-    return frames[0];
+  if (frames.empty()) {
+    return QPixmap();
   }
 
-  return QPixmap();
+  if (frame < 0 || frame >= frames.size()) {
+    return QPixmap();
+  }
+
+  return frames[frame];
 }
 
 /**
@@ -1394,7 +1411,7 @@ QPixmap SpriteModel::get_direction_frame(const Index& index) const {
  */
 QPixmap SpriteModel::get_direction_icon(const Index& index) const {
 
-  QPixmap pixmap = get_direction_frame(index);
+  QPixmap pixmap = get_direction_first_frame(index);
 
   if (pixmap.isNull()) {
     // No image available.
