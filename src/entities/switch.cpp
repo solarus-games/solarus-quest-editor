@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/switch.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -24,4 +25,10 @@
 Switch::Switch(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::SWITCH) {
 
+  SubtypeList subtypes = {
+    { "walkable", MapModel::tr("Walkable") },
+    { "arrow_target", MapModel::tr("Arrow target") },
+    { "solid", MapModel::tr("Solid") }
+  };
+  set_existing_subtypes(subtypes);
 }

@@ -27,7 +27,6 @@ const QString destination_map_field_name = "destination_map";
 const QString enabled_at_start_field_name = "enabled_at_start";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
-const QString subtype_field_name = "subtype";
 const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
 const QString treasure_variant_field_name = "treasure_variant";
@@ -520,12 +519,21 @@ void EditEntityDialog::apply_sprite() {
  */
 void EditEntityDialog::initialize_subtype() {
 
-  if (!entity_before.has_field(subtype_field_name)) {
+  if (!entity_before.has_subtype_field()) {
     remove_field(ui.subtype_label, ui.subtype_field);
     return;
   }
 
-  // TODO
+  int i = 0;
+  const SubtypeList& subtypes = entity_before.get_existing_subtypes();
+  for (const QPair<QString, QString>& subtype : subtypes) {
+    ui.subtype_field->addItem(subtype.second, subtype.first);
+
+    if (entity_before.get_subtype() == subtype.first) {
+      ui.subtype_field->setCurrentIndex(i);
+    }
+    ++i;
+  }
 }
 
 /**
@@ -533,8 +541,8 @@ void EditEntityDialog::initialize_subtype() {
  */
 void EditEntityDialog::apply_subtype() {
 
-  if (entity_after->has_field(subtype_field_name)) {
-    // TODO
+  if (entity_after->has_subtype_field()) {
+    entity_after->set_subtype(ui.subtype_field->currentData().toString());
   }
 }
 

@@ -27,6 +27,8 @@ class Quest;
 class QuestResources;
 class TilesetModel;
 
+using SubtypeList = QList<QPair<QString, QString>>;
+
 /**
  * @brief How an entity can be resized.
  */
@@ -123,6 +125,10 @@ public:
   int get_num_directions() const;
   int get_direction() const;
   void set_direction(int direction);
+  bool has_subtype_field() const;
+  SubtypeList get_existing_subtypes() const;
+  QString get_subtype() const;
+  void set_subtype(const QString& subtype);
   bool has_field(const QString& key) const;
   bool is_field_optional(const QString& key) const;
   bool is_field_unset(const QString& key) const;
@@ -205,6 +211,8 @@ protected:
   void set_no_direction_allowed(bool no_direction_allowed);
   void set_no_direction_text(const QString& no_direction_text);
 
+  void set_existing_subtypes(const SubtypeList& subtypes);
+
   virtual void notify_field_changed(const QString& key, const QVariant& value);
   virtual void set_initial_values();
 
@@ -242,7 +250,8 @@ private:
   Layer preferred_layer;          /**< The preferred layer if has_preferred_layer is true. */
   int num_directions;             /**< Number of possible directions (except the possible special one -1). */
   bool no_direction_allowed;      /**< Whether the special no-value -1 is an allowed direction. */
-  QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed).*/
+  QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed). */
+  SubtypeList subtypes;           /**< Existing subtypes of this entity type. */
 
   // Displaying.
   DrawSpriteInfo

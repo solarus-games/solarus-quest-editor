@@ -30,4 +30,10 @@ Npc::Npc(MapModel& map, const EntityIndex& index) :
   set_num_directions(4);
   set_no_direction_allowed(true);
   set_no_direction_text(MapModel::tr("Any"));
+
+  SubtypeList subtypes = {
+    { "1", MapModel::tr("Generalized NPC (something)") },
+    { "0", MapModel::tr("Usual NPC (somebody)") }
+  };
+  set_existing_subtypes(subtypes);
 }

@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/crystal_block.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -31,4 +32,10 @@ CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
   info.sprite_id = "entities/crystal_block";
   info.tiled = true;
   set_draw_sprite_info(info);
+
+  SubtypeList subtypes = {
+    { "0", MapModel::tr("Initially lowered") },
+    { "1", MapModel::tr("Initially raised") }
+  };
+  set_existing_subtypes(subtypes);
 }

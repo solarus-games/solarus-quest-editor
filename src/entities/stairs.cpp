@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/stairs.h"
+#include "map_model.h"
 
 /**
  * @brief Constructor.
@@ -27,4 +28,13 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
   set_num_directions(4);
 
   // TODO show a pixmap depending on the subtype and the direction.
+
+  SubtypeList subtypes = {
+    { "0", MapModel::tr("Spiral staircase (going upstairs)") },
+    { "1", MapModel::tr("Spiral staircase (going downstairs)") },
+    { "2", MapModel::tr("Straight staircase (going upstairs)") },
+    { "3", MapModel::tr("Straight staircase (going downstairs)") },
+    { "4", MapModel::tr("Inside a single floor") }
+  };
+  set_existing_subtypes(subtypes);
 }

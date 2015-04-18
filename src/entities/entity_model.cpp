@@ -906,6 +906,64 @@ void EntityModel::set_direction(int direction) {
 }
 
 /**
+ * @brief Returns whether this entity has a "subtype" field.
+ * @return @c true if a subtype property exists.
+ */
+bool EntityModel::has_subtype_field() const {
+
+  return has_field("subtype");
+}
+
+/**
+ * @brief Returns the possible subtypes of this entity type.
+ * @return The list of possible subtypes.
+ * Each one is a key-value pair: the key is the subtype namespace
+ * and the value is a user-friendly name.
+ */
+SubtypeList EntityModel::get_existing_subtypes() const {
+  return subtypes;
+}
+
+/**
+ * @brief Sets the possible subtypes of this entity type.
+ * @param subtypes The list of possible subtypes.
+ * Each one is a key-value pair: the key is the subtype namespace
+ * and the value is a user-friendly name.
+ */
+void EntityModel::set_existing_subtypes(const SubtypeList& subtypes) {
+  this->subtypes = subtypes;
+}
+
+/**
+ * @brief Returns the current subtype of this entity.
+ * @return The current subtype or an empty string if there is no subtype field.
+ */
+QString EntityModel::get_subtype() const {
+
+  if (!has_subtype_field()) {
+    return QString();
+  }
+
+  return get_field("subtype").toString();
+}
+
+/**
+ * @brief Sets the subtype of this entity.
+ *
+ * Nothing is done if the entity has no subtype field.
+ *
+ * @param subtype The new subtype.
+ */
+void EntityModel::set_subtype(const QString& subtype) {
+
+  if (!has_subtype_field()) {
+    return;
+  }
+
+  set_field("subtype", subtype);
+}
+
+/**
  * @brief Returns if the entity has a field with the given name.
  * @param key Key of the field to get.
  * @return @c true if there is this field eixsts.
