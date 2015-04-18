@@ -257,7 +257,7 @@ void EditEntityDialog::initialize_destination() {
 void EditEntityDialog::apply_destination() {
 
   if (entity_before.has_field(destination_field_name)) {
-    // TODO entity_after->set_field(destination_field_name, ui.destination_field->get_selected_entity_name());
+    entity_after->set_field(destination_field_name, ui.destination_field->get_selected_name());
   }
 }
 
@@ -274,6 +274,12 @@ void EditEntityDialog::initialize_destination_map() {
   ui.destination_map_field->set_quest(get_quest());
   ui.destination_map_field->set_resource_type(ResourceType::MAP);
   ui.destination_map_field->set_selected_id(entity_before.get_field(destination_map_field_name).toString());
+
+  connect(ui.destination_map_field, &QComboBox::currentTextChanged, [&](const QString&) {
+    QString map_id = ui.destination_map_field->currentData().toString();
+    ui.destination_field->set_map_id(get_quest(), map_id);
+    ui.destination_field->build();
+  });
 }
 
 /**
