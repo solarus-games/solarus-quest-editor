@@ -24,6 +24,7 @@ namespace {
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
 const QString sound_field_name = "sound";
+const QString destruction_sound_field_name = "destruction_sound";
 const QString sprite_field_name = "sprite";
 const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
@@ -451,7 +452,15 @@ void EditEntityDialog::apply_size() {
  */
 void EditEntityDialog::initialize_sound() {
 
-  if (!entity_before.has_field(sound_field_name)) {
+  QString field_name;
+  if (entity_before.has_field(sound_field_name)) {
+    field_name = sound_field_name;
+  }
+  else if (entity_before.has_field(destruction_sound_field_name)) {
+    ui.sound_checkbox->setText(tr("Play a sound when destroyed"));
+    field_name = destruction_sound_field_name;
+  }
+  else {
     remove_field(ui.sound_checkbox, ui.sound_field);
     return;
   }
@@ -459,12 +468,12 @@ void EditEntityDialog::initialize_sound() {
   ui.sound_field->set_quest(get_quest());
   ui.sound_field->set_resource_type(ResourceType::SOUND);
   initialize_possibly_optional_field(
-        sound_field_name,
+        field_name,
         nullptr,
         nullptr,
         ui.sound_checkbox,
         ui.sound_field);
-  QString sound = entity_before.get_field(sound_field_name).toString();
+  QString sound = entity_before.get_field(field_name).toString();
   ui.sound_field->set_selected_id(sound);
 }
 
@@ -473,11 +482,18 @@ void EditEntityDialog::initialize_sound() {
  */
 void EditEntityDialog::apply_sound() {
 
-  if (!entity_after->has_field(sound_field_name)) {
+  QString field_name;
+  if (entity_before.has_field(sound_field_name)) {
+    field_name = sound_field_name;
+  }
+  else if (entity_before.has_field(destruction_sound_field_name)) {
+    field_name = destruction_sound_field_name;
+  }
+  else {
     return;
   }
 
-  entity_after->set_field(sound_field_name, ui.sound_checkbox->isChecked() ?
+  entity_after->set_field(field_name, ui.sound_checkbox->isChecked() ?
                             ui.sound_field->get_selected_id() : "");
 }
 
