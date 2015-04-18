@@ -21,10 +21,8 @@ namespace {
 
 // Put field names in constants to avoid repeated identical literals.
 
-const QString default_field_name = "default";  // This is a field called "default", not a default name.
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
-const QString enabled_at_start_field_name = "enabled_at_start";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
 const QString transition_field_name = "transition";
@@ -99,11 +97,11 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
  */
 void EditEntityDialog::initialize() {
 
-  initialize_default();
+  initialize_simple_booleans();
+
   initialize_destination();
   initialize_destination_map();
   initialize_direction();
-  initialize_enabled_at_start();
   initialize_layer();
   initialize_name();
   initialize_size();
@@ -123,11 +121,11 @@ void EditEntityDialog::initialize() {
  */
 void EditEntityDialog::apply() {
 
-  apply_default();
+  apply_simple_booleans();
+
   apply_destination();
   apply_destination_map();
   apply_direction();
-  apply_enabled_at_start();
   apply_layer();
   apply_name();
   apply_size();
@@ -207,25 +205,50 @@ void EditEntityDialog::remove_field(QWidget* label, QWidget* field) {
 }
 
 /**
- * @brief Initializes the default field.
+ * @brief Initializes the simple boolean fields.
  */
-void EditEntityDialog::initialize_default() {
+void EditEntityDialog::initialize_simple_booleans() {
 
-  if (!entity_before.has_field(default_field_name)) {
-    remove_field(ui.default_label, ui.default_field);
-    return;
+  // TODO when setting a destination as the default one, unset the previous one.
+  simple_boolean_fields <<
+    SimpleBooleanField("enabled_at_start", tr("Visiblity"), tr("Enabled at start")) <<
+    SimpleBooleanField("default", tr("Default"), tr("Set as the default destination")) <<
+    SimpleBooleanField("can_be_cut", tr("Cutting the object"), tr("Can be cut")) <<
+    SimpleBooleanField("can_explode", tr("Exploding"), tr("Can explode")) <<
+    SimpleBooleanField("can_regenerate", tr("Regeneration"), tr("Can regenerate")) <<
+    SimpleBooleanField("pushable", tr("Interactions"), tr("Can be pushed")) <<
+    SimpleBooleanField("pullable", "", tr("Can be pulled")) <<
+    SimpleBooleanField("needs_block", tr("Activation"), tr("Requires a block to be activated")) <<
+    SimpleBooleanField("inactivate_when_leaving", tr("Stay on switch"), tr("Inactivate the switch when leaving")) <<
+    SimpleBooleanField("stops_hero", tr("Hero"), tr("Obstacle for the hero")) <<
+    SimpleBooleanField("stops_enemies", tr("Enemies"), tr("Obstacle for enemies")) <<
+    SimpleBooleanField("stops_npcs", tr("NPCs"), tr("Obstacle for NPCs")) <<
+    SimpleBooleanField("stops_blocks", tr("Blocks"), tr("Obstacle for blocks")) <<
+    SimpleBooleanField("stops_projectiles", tr("Projectiles"), tr("Obstacle for projectiles")) <<
+    SimpleBooleanField("allow_movement", tr("Movements"), tr("Allow to move")) <<
+    SimpleBooleanField("allow_attack", tr("Sword"), tr("Allow to use the sword")) <<
+    SimpleBooleanField("allow_item", tr("Items"), tr("Allow to use equipment items"));
+
+  for (SimpleBooleanField& field : simple_boolean_fields) {
+    if (entity_before.has_field(field.field_name)) {
+      QLabel* label = new QLabel(field.label_text, this);
+      QCheckBox* checkbox = new QCheckBox(field.checkbox_text, this);
+      checkbox->setChecked(entity_before.get_field(field.field_name).toBool());
+      field.checkbox = checkbox;
+      ui.form_layout->addRow(label, checkbox);
+    }
   }
-
-  ui.default_field->setChecked(entity_before.get_field(default_field_name).toBool());
 }
 
 /**
- * @brief Updates the entity from the default field.
+ * @brief Updates the entity from the simple boolean fields.
  */
-void EditEntityDialog::apply_default() {
+void EditEntityDialog::apply_simple_booleans() {
 
-  if (entity_before.has_field(default_field_name)) {
-    entity_after->set_field(default_field_name, ui.default_field->isChecked());
+  for (const SimpleBooleanField& field : simple_boolean_fields) {
+    if (entity_before.has_field(field.field_name)) {
+      entity_after->set_field(field.field_name, field.checkbox->isChecked());
+    }
   }
 }
 
@@ -350,29 +373,6 @@ void EditEntityDialog::apply_direction() {
 
   if (entity_after->has_direction_field()) {
     entity_after->set_direction(ui.direction_field->currentData().toInt());
-  }
-}
-
-/**
- * @brief Initializes the enabled at start field.
- */
-void EditEntityDialog::initialize_enabled_at_start() {
-
-  if (!entity_before.has_field(enabled_at_start_field_name)) {
-    remove_field(ui.enabled_at_start_label, ui.enabled_at_start_field);
-    return;
-  }
-
-  ui.enabled_at_start_field->setChecked(entity_before.get_field(enabled_at_start_field_name).toBool());
-}
-
-/**
- * @brief Updates the entity from the enabled at start field.
- */
-void EditEntityDialog::apply_enabled_at_start() {
-
-  if (entity_before.has_field(enabled_at_start_field_name)) {
-    entity_after->set_field(enabled_at_start_field_name, ui.enabled_at_start_field->isChecked());
   }
 }
 

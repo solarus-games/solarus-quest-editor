@@ -39,16 +39,14 @@ private:
 
   void initialize();
   void apply();
-  void initialize_default();
-  void apply_default();
+  void initialize_simple_booleans();
+  void apply_simple_booleans();
   void initialize_destination();
   void apply_destination();
   void initialize_destination_map();
   void apply_destination_map();
   void initialize_direction();
   void apply_direction();
-  void initialize_enabled_at_start();
-  void apply_enabled_at_start();
   void initialize_layer();
   void apply_layer();
   void initialize_name();
@@ -80,6 +78,26 @@ private:
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
   EntityModelPtr entity_after;         /**< A copy of the entity with the modified data. */
+
+  /**
+   * @brief Info about basic boolean fields represented by a checkbox.
+   */
+  struct SimpleBooleanField {
+
+    SimpleBooleanField(const QString& field_name, const QString& label_text, const QString& checkbox_text) :
+      field_name(field_name),
+      label_text(label_text),
+      checkbox_text(checkbox_text),
+      checkbox(nullptr) {
+    }
+
+    QString field_name;
+    QString label_text;
+    QString checkbox_text;
+    const QCheckBox* checkbox;
+  };
+
+  QList<SimpleBooleanField> simple_boolean_fields;
 
 };
 
