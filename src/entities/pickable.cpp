@@ -32,7 +32,8 @@ Pickable::Pickable(MapModel& map, const EntityIndex& index) :
  */
 void Pickable::notify_field_changed(const QString& key, const QVariant& value) {
 
-  Q_UNUSED(value);
+  EntityModel::notify_field_changed(key, value);
+
   if (key == "treasure_name") {
     update_treasure();
   }

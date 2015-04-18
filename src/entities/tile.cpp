@@ -81,7 +81,8 @@ void Tile::set_pattern_id(const QString& pattern_id) {
  */
 void Tile::notify_field_changed(const QString& key, const QVariant& value) {
 
-  Q_UNUSED(value);
+  EntityModel::notify_field_changed(key, value);
+
   if (key == "pattern") {
     update_pattern();
   }

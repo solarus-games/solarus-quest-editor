@@ -28,6 +28,14 @@ public:
 
   Stairs(MapModel& map, const EntityIndex& index);
 
+protected:
+
+  void notify_field_changed(const QString& key, const QVariant& value) override;
+
+private:
+
+  void update_drawing_info();
+
 };
 
 #endif

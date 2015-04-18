@@ -27,8 +27,6 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
 
   set_num_directions(4);
 
-  // TODO show a pixmap depending on the subtype and the direction.
-
   SubtypeList subtypes = {
     { "0", MapModel::tr("Spiral staircase (going upstairs)") },
     { "1", MapModel::tr("Spiral staircase (going downstairs)") },
@@ -37,4 +35,41 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
     { "4", MapModel::tr("Inside a single floor") }
   };
   set_existing_subtypes(subtypes);
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Stairs::notify_field_changed(const QString& key, const QVariant& value) {
+
+  EntityModel::notify_field_changed(key, value);
+
+  if (key == "subtype") {
+    update_drawing_info();
+  }
+}
+
+/**
+ * @brief Updates the representation of the stairs.
+ *
+ * This function should be called when the subtype or direction changes.
+ */
+void Stairs::update_drawing_info() {
+
+  QString subtype = get_subtype();
+  bool ok = false;
+  int subtype_index = subtype.toInt(&ok);
+  Q_ASSERT(ok);
+  int x = subtype_index * 32;
+
+  DrawImageInfo info;
+  for (int i = 0; i < 4; ++i) {
+    int y = i * 32;
+    SubImage sub_image;
+    sub_image.file_name = ":/images/entity_stairs_all.png";
+    sub_image.src_rect = QRect(x, y, 32, 32);
+    info.images_by_direction << sub_image;
+    info.scale = 2.0;
+  }
+  set_draw_image_info(info);
 }

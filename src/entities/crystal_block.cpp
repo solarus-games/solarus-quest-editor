@@ -40,7 +40,8 @@ CrystalBlock::CrystalBlock(MapModel& map, const EntityIndex& index) :
  */
 void CrystalBlock::notify_field_changed(const QString& key, const QVariant& value) {
 
-  Q_UNUSED(value);
+  EntityModel::notify_field_changed(key, value);
+
   if (key == "subtype") {
     update_subtype();
   }

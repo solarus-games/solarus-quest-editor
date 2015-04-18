@@ -33,7 +33,8 @@ Enemy::Enemy(MapModel& map, const EntityIndex& index) :
  */
 void Enemy::notify_field_changed(const QString& key, const QVariant& value) {
 
-  Q_UNUSED(value);
+  EntityModel::notify_field_changed(key, value);
+
   if (key == "breed") {
     update_breed();
   }

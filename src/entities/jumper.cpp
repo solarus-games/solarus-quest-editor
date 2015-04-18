@@ -145,7 +145,8 @@ QSize Jumper::get_valid_size() const {
  */
 void Jumper::notify_field_changed(const QString& key, const QVariant& value) {
 
-  Q_UNUSED(value);
+  EntityModel::notify_field_changed(key, value);
+
   if (key == "direction") {
     // Update the resizing rules.
     update_resize_mode();
