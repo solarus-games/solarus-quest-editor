@@ -32,6 +32,9 @@ allow_movement
 allow_attack
 allow_item
 destruction_sound
+price
+jump_length
+speed
 
 
 To do:
@@ -44,14 +47,8 @@ rank
 savegame_variable
 behavior
 maximum_moves
-
-Simple integers:
-
 weight
 damage_on_enemies
-price
-jump_length
-speed
 
 Simple strings:
 

@@ -28,6 +28,10 @@ public:
 
   ShopTreasure(MapModel& map, const EntityIndex& index);
 
+protected:
+
+  void set_initial_values() override;
+
 };
 
 #endif

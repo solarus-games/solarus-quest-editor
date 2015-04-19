@@ -33,3 +33,14 @@ ShopTreasure::ShopTreasure(MapModel& map, const EntityIndex& index) :
   info.pixmap = QPixmap(":/images/entity_shop_treasure.png");
   set_draw_shape_info(info);
 }
+
+/**
+ * @copydoc EntityModel::set_initial_values
+ */
+void ShopTreasure::set_initial_values() {
+
+  EntityModel::set_initial_values();
+
+  // The default price in the data file format is poor (0).
+  set_field("price", 10);
+}

@@ -99,6 +99,7 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 void EditEntityDialog::initialize() {
 
   initialize_simple_booleans();
+  initialize_simple_integers();
 
   initialize_destination();
   initialize_destination_map();
@@ -123,6 +124,7 @@ void EditEntityDialog::initialize() {
 void EditEntityDialog::apply() {
 
   apply_simple_booleans();
+  apply_simple_integers();
 
   apply_destination();
   apply_destination_map();
@@ -210,7 +212,6 @@ void EditEntityDialog::remove_field(QWidget* label, QWidget* field) {
  */
 void EditEntityDialog::initialize_simple_booleans() {
 
-  // TODO when setting a destination as the default one, unset the previous one.
   simple_boolean_fields <<
     SimpleBooleanField("enabled_at_start", tr("Initial state"), tr("Enabled at start")) <<
     SimpleBooleanField("default", tr("Default"), tr("Set as the default destination")) <<
@@ -247,8 +248,43 @@ void EditEntityDialog::initialize_simple_booleans() {
 void EditEntityDialog::apply_simple_booleans() {
 
   for (const SimpleBooleanField& field : simple_boolean_fields) {
-    if (entity_before.has_field(field.field_name)) {
+    if (entity_before.has_field(field.field_name) && field.checkbox != nullptr) {
       entity_after->set_field(field.field_name, field.checkbox->isChecked());
+    }
+  }
+}
+
+/**
+ * @brief Initializes the simple integer fields.
+ */
+void EditEntityDialog::initialize_simple_integers() {
+
+  simple_integer_fields <<
+    SimpleIntegerField("price", tr("Price"), 0, 10) <<
+    SimpleIntegerField("jump_length", tr("Jump length"), 16, 8) <<
+    SimpleIntegerField("speed", tr("Speed"), 1, 8);
+
+  for (SimpleIntegerField& field : simple_integer_fields) {
+    if (entity_before.has_field(field.field_name)) {
+      QLabel* label = new QLabel(field.label_text, this);
+      QSpinBox* spinbox = new QSpinBox(this);
+      spinbox->setMinimum(field.minimum);
+      spinbox->setValue(entity_before.get_field(field.field_name).toInt());
+      spinbox->setSingleStep(field.step);
+      field.spinbox = spinbox;
+      ui.form_layout->addRow(label, spinbox);
+    }
+  }
+}
+
+/**
+ * @brief Updates the entity from the simple integer fields.
+ */
+void EditEntityDialog::apply_simple_integers() {
+
+  for (const SimpleIntegerField& field : simple_integer_fields) {
+    if (entity_before.has_field(field.field_name) && field.spinbox != nullptr) {
+      entity_after->set_field(field.field_name, field.spinbox->value());
     }
   }
 }

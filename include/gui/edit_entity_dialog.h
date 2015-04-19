@@ -41,6 +41,8 @@ private:
   void apply();
   void initialize_simple_booleans();
   void apply_simple_booleans();
+  void initialize_simple_integers();
+  void apply_simple_integers();
   void initialize_destination();
   void apply_destination();
   void initialize_destination_map();
@@ -81,6 +83,8 @@ private:
 
   /**
    * @brief Info about basic boolean fields represented by a checkbox.
+   *
+   * This is used for fields that do not need special code.
    */
   struct SimpleBooleanField {
 
@@ -97,8 +101,34 @@ private:
     const QCheckBox* checkbox;
   };
 
-  QList<SimpleBooleanField> simple_boolean_fields;
+  /**
+   * @brief Info about basic integer fields represented by a spinbox.
+   *
+   * This is used for integer fields that do not need special code.
+   */
+  struct SimpleIntegerField {
 
+    SimpleIntegerField(
+        const QString& field_name,
+        const QString& label_text,
+        int minimum,
+        int step) :
+      field_name(field_name),
+      label_text(label_text),
+      minimum(minimum),
+      step(step),
+      spinbox(nullptr) {
+    }
+
+    QString field_name;
+    QString label_text;
+    int minimum;
+    int step;
+    const QSpinBox* spinbox;
+  };
+
+  QList<SimpleBooleanField> simple_boolean_fields;  
+  QList<SimpleIntegerField> simple_integer_fields;
 };
 
 #endif
