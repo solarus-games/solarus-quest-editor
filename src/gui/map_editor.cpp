@@ -203,6 +203,14 @@ public:
     addable_entities.emplace_back(std::move(entity_before), index_before);
     map.add_entities(std::move(addable_entities));
 
+    // Restore the previous default destination.
+    if (entity_after->get_type() == EntityType::DESTINATION &&
+        entity_after->get_field("default").toBool() &&
+        default_destination_index_before.is_valid() &&
+        default_destination_index_before != index_before) {
+      map.set_entity_field(default_destination_index_before, "default", true);
+    }
+
     // Make it selected.
     get_map_view().set_selected_entity(index_before);
   }
@@ -218,6 +226,16 @@ public:
       index_after.layer = entity_after->get_layer();
       index_after.order = entity_after->is_dynamic() ?
             map.get_num_entities(index_after.layer) : map.get_num_tiles(index_after.layer);
+    }
+
+    // Make sure there is only one destination.
+    default_destination_index_before = map.find_default_destination_index();
+    if (entity_after->get_type() == EntityType::DESTINATION &&
+        entity_after->get_field("default").toBool() &&
+        default_destination_index_before.is_valid() &&
+        default_destination_index_before != index_before
+    ) {
+      map.set_entity_field(default_destination_index_before, "default", false);
     }
 
     // Remove the initial entity.
@@ -239,6 +257,7 @@ private:
   EntityIndex index_after;
   EntityModelPtr entity_before;
   EntityModelPtr entity_after;
+  EntityIndex default_destination_index_before;
 };
 
 /**

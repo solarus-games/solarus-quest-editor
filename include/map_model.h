@@ -78,6 +78,8 @@ public:
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
   bool is_common_type(const EntityIndexes& indexes, EntityType& type) const;
+  EntityIndexes find_entities_of_type(EntityType type) const;
+  EntityIndex find_default_destination_index() const;
   QString get_entity_name(const EntityIndex& index) const;
   bool set_entity_name(const EntityIndex& index, const QString& name);
   bool entity_name_exists(const QString& name) const;

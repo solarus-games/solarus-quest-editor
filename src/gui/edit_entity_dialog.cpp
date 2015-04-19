@@ -212,7 +212,7 @@ void EditEntityDialog::initialize_simple_booleans() {
 
   // TODO when setting a destination as the default one, unset the previous one.
   simple_boolean_fields <<
-    SimpleBooleanField("enabled_at_start", tr("Visiblity"), tr("Enabled at start")) <<
+    SimpleBooleanField("enabled_at_start", tr("Initial state"), tr("Enabled at start")) <<
     SimpleBooleanField("default", tr("Default"), tr("Set as the default destination")) <<
     SimpleBooleanField("can_be_cut", tr("Cutting the object"), tr("Can be cut")) <<
     SimpleBooleanField("can_explode", tr("Exploding"), tr("Can explode")) <<

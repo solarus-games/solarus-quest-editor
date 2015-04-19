@@ -442,6 +442,40 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
 }
 
 /**
+ * @brief Returns all entities of a given type.
+ * @param type The type to get.
+ * @return All entities of this type on the map.
+ */
+EntityIndexes MapModel::find_entities_of_type(EntityType type) const {
+
+  EntityIndexes result;
+  for (const EntityModels& layer_entities : entities) {
+    for (const EntityModelPtr& entity : layer_entities) {
+      if (entity->get_type() == type) {
+        result << entity->get_index();
+      }
+    }
+  }
+  return result;
+}
+
+/**
+ * @brief Returns the index of the default destination.
+ * @return The default destination or an invalid index.
+ */
+EntityIndex MapModel::find_default_destination_index() const {
+
+  EntityIndexes destination_indexes = find_entities_of_type(EntityType::DESTINATION);
+  for (const EntityIndex& index : destination_indexes) {
+    if (get_entity_field(index, "default").toBool()) {
+      return index;
+    }
+  }
+
+  return EntityIndex();
+}
+
+/**
  * @brief Returns the name of an entity.
  * @param index Index of a map entity.
  * @return The name or an empty string if the entity has no name.
