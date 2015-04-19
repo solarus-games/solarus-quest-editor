@@ -43,6 +43,8 @@ private:
   void apply_simple_booleans();
   void initialize_simple_integers();
   void apply_simple_integers();
+  void initialize_simple_strings();
+  void apply_simple_strings();
 
   void initialize_damage_on_enemies();
   void apply_damage_on_enemies();
@@ -140,8 +142,34 @@ private:
     const QSpinBox* spinbox;
   };
 
-  QList<SimpleBooleanField> simple_boolean_fields;  
+  /**
+   * @brief Info about basic string fields represented by a lineedit.
+   *
+   * This is used for string fields that do not need special code.
+   */
+  struct SimpleStringField {
+
+    SimpleStringField(
+        const QString& field_name,
+        const QString& label_text,
+        QWidget* before_widget = nullptr) :
+      field_name(field_name),
+      label_text(label_text),
+      checkbox(nullptr),
+      line_edit(nullptr),
+      before_widget(before_widget) {
+    }
+
+    QString field_name;
+    QString label_text;
+    QCheckBox* checkbox;
+    const QLineEdit* line_edit;
+    QWidget* before_widget;
+  };
+
+  QList<SimpleBooleanField> simple_boolean_fields;
   QList<SimpleIntegerField> simple_integer_fields;
+  QList<SimpleStringField> simple_string_fields;
 };
 
 #endif

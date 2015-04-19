@@ -103,6 +103,7 @@ void EditEntityDialog::initialize() {
 
   initialize_simple_booleans();
   initialize_simple_integers();
+  initialize_simple_strings();
 
   initialize_damage_on_enemies();
   initialize_destination();
@@ -131,6 +132,7 @@ void EditEntityDialog::apply() {
 
   apply_simple_booleans();
   apply_simple_integers();
+  apply_simple_strings();
 
   apply_damage_on_enemies();
   apply_destination();
@@ -315,6 +317,72 @@ void EditEntityDialog::apply_simple_integers() {
   for (const SimpleIntegerField& field : simple_integer_fields) {
     if (entity_before.has_field(field.field_name) && field.spinbox != nullptr) {
       entity_after->set_field(field.field_name, field.spinbox->value());
+    }
+  }
+}
+
+/**
+ * @brief Initializes the simple string fields.
+ */
+void EditEntityDialog::initialize_simple_strings() {
+
+  simple_string_fields <<
+    SimpleStringField("cannot_open_dialog", tr("Show a dialog if fails to open")) <<
+    SimpleStringField("dialog", tr("Description dialog id"));
+
+  for (SimpleStringField& field : simple_string_fields) {
+    if (!entity_before.has_field(field.field_name)) {
+      continue;
+    }
+
+    QWidget* left_widget = nullptr;
+    QLineEdit* line_edit = new QLineEdit(this);
+    line_edit->setText(entity_before.get_field(field.field_name).toString());
+    field.line_edit = line_edit;
+    if (!entity_before.is_field_optional(field.field_name)) {
+      left_widget = new QLabel(field.label_text, this);
+    }
+    else {
+      field.checkbox = new QCheckBox(field.label_text, this);
+      initialize_possibly_optional_field(
+            field.field_name,
+            nullptr,
+            nullptr,
+            field.checkbox,
+            line_edit);
+      left_widget = field.checkbox;
+    }
+
+    if (field.before_widget != nullptr) {
+      int row = 0;
+      QFormLayout::ItemRole role;
+      ui.form_layout->getWidgetPosition(field.before_widget, &row, &role);
+      if (row != -1) {
+        ui.form_layout->insertRow(row, left_widget, line_edit);
+      }
+      else {
+        // Widget not found.
+        ui.form_layout->addRow(left_widget, line_edit);
+      }
+    }
+    else {
+      ui.form_layout->addRow(left_widget, line_edit);
+    }
+  }
+}
+
+/**
+ * @brief Updates the entity from the simple string fields.
+ */
+void EditEntityDialog::apply_simple_strings() {
+
+  for (const SimpleStringField& field : simple_string_fields) {
+    if (entity_before.has_field(field.field_name) && field.line_edit != nullptr) {
+      QString value;
+      if (field.checkbox == nullptr || field.checkbox->isChecked()) {
+        value = field.line_edit->text();
+      }
+      entity_after->set_field(field.field_name, value);
     }
   }
 }

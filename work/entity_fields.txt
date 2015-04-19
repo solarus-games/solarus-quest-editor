@@ -37,11 +37,11 @@ jump_length
 speed
 weight
 damage_on_enemies
+ground
 
 
 To do:
 
-ground
 opening_method
 opening_condition
 opening_condition_consumed
