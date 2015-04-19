@@ -95,17 +95,23 @@ private:
    */
   struct SimpleBooleanField {
 
-    SimpleBooleanField(const QString& field_name, const QString& label_text, const QString& checkbox_text) :
+    SimpleBooleanField(
+        const QString& field_name,
+        const QString& label_text,
+        const QString& checkbox_text,
+        QWidget* before_widget = nullptr) :
       field_name(field_name),
       label_text(label_text),
       checkbox_text(checkbox_text),
-      checkbox(nullptr) {
+      checkbox(nullptr),
+      before_widget(before_widget) {
     }
 
     QString field_name;
     QString label_text;
     QString checkbox_text;
     const QCheckBox* checkbox;
+    QWidget* before_widget;
   };
 
   /**

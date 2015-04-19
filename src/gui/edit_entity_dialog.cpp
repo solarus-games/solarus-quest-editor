@@ -224,9 +224,9 @@ void EditEntityDialog::initialize_simple_booleans() {
   simple_boolean_fields <<
     SimpleBooleanField("enabled_at_start", tr("Initial state"), tr("Enabled at start")) <<
     SimpleBooleanField("default", tr("Default"), tr("Set as the default destination")) <<
-    SimpleBooleanField("can_be_cut", tr("Cutting the object"), tr("Can be cut")) <<
-    SimpleBooleanField("can_explode", tr("Exploding"), tr("Can explode")) <<
-    SimpleBooleanField("can_regenerate", tr("Regeneration"), tr("Can regenerate")) <<
+    SimpleBooleanField("can_be_cut", tr("Cutting the object"), tr("Can be cut"), ui.damage_on_enemies_layout) <<
+    SimpleBooleanField("can_explode", tr("Exploding"), tr("Can explode"), ui.damage_on_enemies_layout) <<
+    SimpleBooleanField("can_regenerate", tr("Regeneration"), tr("Can regenerate"), ui.damage_on_enemies_layout) <<
     SimpleBooleanField("pushable", tr("Interactions"), tr("Can be pushed")) <<
     SimpleBooleanField("pullable", "", tr("Can be pulled")) <<
     SimpleBooleanField("needs_block", tr("Activation"), tr("Requires a block to be activated")) <<
@@ -246,7 +246,21 @@ void EditEntityDialog::initialize_simple_booleans() {
       QCheckBox* checkbox = new QCheckBox(field.checkbox_text, this);
       checkbox->setChecked(entity_before.get_field(field.field_name).toBool());
       field.checkbox = checkbox;
-      ui.form_layout->addRow(label, checkbox);
+      if (field.before_widget != nullptr) {
+        int row = 0;
+        QFormLayout::ItemRole role;
+        ui.form_layout->getWidgetPosition(field.before_widget, &row, &role);
+        if (row != -1) {
+          ui.form_layout->insertRow(row, label, checkbox);
+        }
+        else {
+          // Widget not found.
+          ui.form_layout->addRow(label, checkbox);
+        }
+      }
+      else {
+        ui.form_layout->addRow(label, checkbox);
+      }
     }
   }
 }
