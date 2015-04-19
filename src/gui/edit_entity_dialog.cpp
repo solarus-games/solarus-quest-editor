@@ -269,10 +269,17 @@ void EditEntityDialog::initialize_simple_integers() {
       QLabel* label = new QLabel(field.label_text, this);
       QSpinBox* spinbox = new QSpinBox(this);
       spinbox->setMinimum(field.minimum);
+      spinbox->setMaximum(999999);
       spinbox->setValue(entity_before.get_field(field.field_name).toInt());
       spinbox->setSingleStep(field.step);
       field.spinbox = spinbox;
-      ui.form_layout->addRow(label, spinbox);
+      QSpacerItem* spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+      QHBoxLayout* layout = new QHBoxLayout(this);
+      layout->setContentsMargins(0, 0, 0, 0);
+      layout->addWidget(spinbox);
+      layout->addItem(spacer);
+
+      ui.form_layout->addRow(label, layout);
     }
   }
 }
