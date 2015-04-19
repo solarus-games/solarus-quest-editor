@@ -35,6 +35,8 @@ destruction_sound
 price
 jump_length
 speed
+weight
+damage_on_enemies
 
 
 To do:
@@ -47,8 +49,6 @@ rank
 savegame_variable
 behavior
 maximum_moves
-weight
-damage_on_enemies
 
 Simple strings:
 

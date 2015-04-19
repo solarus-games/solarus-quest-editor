@@ -21,6 +21,7 @@ namespace {
 
 // Put field names in constants to avoid repeated identical literals.
 
+const QString damage_on_enemies_field_name = "damage_on_enemies";
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
 const QString sound_field_name = "sound";
@@ -30,6 +31,7 @@ const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
 const QString treasure_variant_field_name = "treasure_variant";
 const QString treasure_savegame_variable_field_name = "treasure_savegame_variable";
+const QString weight_field_name = "weight";
 
 }  // Anonymous namespace.
 
@@ -101,6 +103,7 @@ void EditEntityDialog::initialize() {
   initialize_simple_booleans();
   initialize_simple_integers();
 
+  initialize_damage_on_enemies();
   initialize_destination();
   initialize_destination_map();
   initialize_direction();
@@ -113,6 +116,7 @@ void EditEntityDialog::initialize() {
   initialize_transition();
   initialize_treasure();
   initialize_type();
+  initialize_weight();
   initialize_xy();
 
   adjustSize();
@@ -126,6 +130,7 @@ void EditEntityDialog::apply() {
   apply_simple_booleans();
   apply_simple_integers();
 
+  apply_damage_on_enemies();
   apply_destination();
   apply_destination_map();
   apply_direction();
@@ -138,6 +143,7 @@ void EditEntityDialog::apply() {
   apply_transition();
   apply_treasure();
   apply_type();
+  apply_weight();
   apply_xy();
 }
 
@@ -293,6 +299,40 @@ void EditEntityDialog::apply_simple_integers() {
     if (entity_before.has_field(field.field_name) && field.spinbox != nullptr) {
       entity_after->set_field(field.field_name, field.spinbox->value());
     }
+  }
+}
+
+/**
+ * @brief Initializes the damage on enemies field.
+ */
+void EditEntityDialog::initialize_damage_on_enemies() {
+
+  if (!entity_before.has_field(damage_on_enemies_field_name)) {
+    remove_field(ui.damage_on_enemies_checkbox, ui.damage_on_enemies_layout);
+    return;
+  }
+
+  int damage_on_enemies = entity_before.get_field(damage_on_enemies_field_name).toInt();
+  ui.damage_on_enemies_field->setValue(damage_on_enemies);
+
+  if (damage_on_enemies == 0) {
+    ui.damage_on_enemies_field->setEnabled(false);
+  }
+  else {
+    ui.damage_on_enemies_checkbox->setChecked(true);
+  }
+  connect(ui.damage_on_enemies_checkbox, SIGNAL(toggled(bool)),
+          ui.damage_on_enemies_field, SLOT(setEnabled(bool)));
+}
+
+/**
+ * @brief Updates the entity from the damage on enemies field.
+ */
+void EditEntityDialog::apply_damage_on_enemies() {
+
+  if (entity_after->has_field(damage_on_enemies_field_name)) {
+    entity_after->set_field(damage_on_enemies_field_name, ui.damage_on_enemies_checkbox->isChecked() ?
+                              ui.damage_on_enemies_field->value() : 0);
   }
 }
 
@@ -695,6 +735,36 @@ void EditEntityDialog::apply_type() {
 
   // Nothing to do: the type is a read-only field.
   Q_ASSERT(EntityTraits::get_friendly_name(entity_after->get_type()) == ui.type_field->text());
+}
+
+/**
+ * @brief Initializes the weight field.
+ */
+void EditEntityDialog::initialize_weight() {
+
+  if (!entity_before.has_field(weight_field_name)) {
+    remove_field(ui.weight_checkbox, ui.weight_layout);
+    return;
+  }
+
+  initialize_possibly_optional_field(
+        weight_field_name,
+        nullptr,
+        nullptr,
+        ui.weight_checkbox,
+        ui.weight_field);
+  ui.weight_field->setValue(entity_before.get_field(weight_field_name).toInt());
+}
+
+/**
+ * @brief Updates the entity from the wight field.
+ */
+void EditEntityDialog::apply_weight() {
+
+  if (entity_after->has_field(weight_field_name)) {
+    entity_after->set_field(weight_field_name, ui.weight_checkbox->isChecked() ?
+                              ui.weight_field->value() : 0);
+  }
 }
 
 /**

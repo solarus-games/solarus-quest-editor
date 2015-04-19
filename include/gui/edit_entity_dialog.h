@@ -43,6 +43,9 @@ private:
   void apply_simple_booleans();
   void initialize_simple_integers();
   void apply_simple_integers();
+
+  void initialize_damage_on_enemies();
+  void apply_damage_on_enemies();
   void initialize_destination();
   void apply_destination();
   void initialize_destination_map();
@@ -67,6 +70,8 @@ private:
   void apply_treasure();
   void initialize_type();
   void apply_type();
+  void initialize_weight();
+  void apply_weight();
   void initialize_xy();
   void apply_xy();
 
