@@ -24,8 +24,9 @@ namespace {
 const QString damage_on_enemies_field_name = "damage_on_enemies";
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
-const QString sound_field_name = "sound";
 const QString destruction_sound_field_name = "destruction_sound";
+const QString ground_field_name = "ground";
+const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
 const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
@@ -107,6 +108,7 @@ void EditEntityDialog::initialize() {
   initialize_destination();
   initialize_destination_map();
   initialize_direction();
+  initialize_ground();
   initialize_layer();
   initialize_name();
   initialize_size();
@@ -134,6 +136,7 @@ void EditEntityDialog::apply() {
   apply_destination();
   apply_destination_map();
   apply_direction();
+  apply_ground();
   apply_layer();
   apply_name();
   apply_size();
@@ -457,6 +460,38 @@ void EditEntityDialog::apply_direction() {
 
   if (entity_after->has_direction_field()) {
     entity_after->set_direction(ui.direction_field->currentData().toInt());
+  }
+}
+
+/**
+ * @brief Initializes the ground field.
+ */
+void EditEntityDialog::initialize_ground() {
+
+  if (!entity_before.has_field(ground_field_name)) {
+    remove_field(ui.ground_checkbox, ui.ground_field);
+    return;
+  }
+
+  initialize_possibly_optional_field(
+        ground_field_name,
+        nullptr,
+        nullptr,
+        ui.ground_checkbox,
+        ui.ground_field);
+
+  QString ground_name = entity_before.get_field(ground_field_name).toString();
+  ui.ground_field->set_selected_value(GroundTraits::get_by_lua_name(ground_name));
+}
+
+/**
+ * @brief Updates the entity from the ground field.
+ */
+void EditEntityDialog::apply_ground() {
+
+  if (entity_after->has_field(ground_field_name)) {
+    Ground ground = ui.ground_checkbox->isChecked() ? ui.ground_field->get_selected_value() : Ground::WALL;
+    entity_after->set_field(ground_field_name, GroundTraits::get_lua_name(ground));
   }
 }
 

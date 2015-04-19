@@ -52,6 +52,8 @@ private:
   void apply_destination_map();
   void initialize_direction();
   void apply_direction();
+  void initialize_ground();
+  void apply_ground();
   void initialize_layer();
   void apply_layer();
   void initialize_name();

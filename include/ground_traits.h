@@ -36,6 +36,7 @@ public:
   static QIcon get_icon(Ground value);
 
   static QString get_lua_name(Ground value);
+  static Ground get_by_lua_name(const QString& name);
 
 };
 

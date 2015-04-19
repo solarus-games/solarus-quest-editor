@@ -118,10 +118,20 @@ QIcon EnumTraits<Ground>::get_icon(Ground value) {
 }
 
 /**
- * @brief Returns the Lua name of a ground value.
+ * @brief Returns the Lua name of a value.
  * @param value A ground value.
  * @return The corresponding Lua name.
  */
 QString EnumTraits<Ground>::get_lua_name(Ground value) {
   return QString::fromStdString(Solarus::GroundInfo::get_ground_name(value));
+}
+
+/**
+ * @brief Returns a value given its Lua name.
+ * @param name A name.
+ * @return The corresponding value.
+ */
+Ground EnumTraits<Ground>::get_by_lua_name(
+    const QString& name) {
+  return Solarus::GroundInfo::get_ground_by_name(name.toStdString());
 }

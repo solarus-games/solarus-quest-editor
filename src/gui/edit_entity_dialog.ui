@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>436</width>
-    <height>630</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -566,6 +566,16 @@
        </layout>
       </widget>
      </item>
+     <item row="15" column="0">
+      <widget class="QCheckBox" name="ground_checkbox">
+       <property name="text">
+        <string>Set a special ground</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="1">
+      <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -603,6 +613,11 @@
    <class>EntitySelector</class>
    <extends>QComboBox</extends>
    <header>gui/entity_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;Ground&gt;</class>
+   <extends>QComboBox</extends>
+   <header>ground_traits.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
