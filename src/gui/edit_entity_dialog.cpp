@@ -21,11 +21,15 @@ namespace {
 
 // Put field names in constants to avoid repeated identical literals.
 
+const QString breed_field_name = "breed";
 const QString damage_on_enemies_field_name = "damage_on_enemies";
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
 const QString destruction_sound_field_name = "destruction_sound";
 const QString ground_field_name = "ground";
+const QString maximum_moves_field_name = "maximum_moves";
+const QString model_field_name = "model";
+const QString rank_field_name = "rank";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
 const QString transition_field_name = "transition";
@@ -105,13 +109,17 @@ void EditEntityDialog::initialize() {
   initialize_simple_integers();
   initialize_simple_strings();
 
+  initialize_breed();
   initialize_damage_on_enemies();
   initialize_destination();
   initialize_destination_map();
   initialize_direction();
   initialize_ground();
   initialize_layer();
+  initialize_maximum_moves();
+  initialize_model();
   initialize_name();
+  initialize_rank();
   initialize_size();
   initialize_sound();
   initialize_sprite();
@@ -134,13 +142,17 @@ void EditEntityDialog::apply() {
   apply_simple_integers();
   apply_simple_strings();
 
+  apply_breed();
   apply_damage_on_enemies();
   apply_destination();
   apply_destination_map();
   apply_direction();
   apply_ground();
   apply_layer();
+  apply_maximum_moves();
+  apply_model();
   apply_name();
+  apply_rank();
   apply_size();
   apply_sound();
   apply_sprite();
@@ -388,6 +400,32 @@ void EditEntityDialog::apply_simple_strings() {
 }
 
 /**
+ * @brief Initializes the breed field.
+ */
+void EditEntityDialog::initialize_breed() {
+
+  if (!entity_before.has_field(breed_field_name)) {
+    remove_field(ui.breed_label, ui.breed_field);
+    return;
+  }
+
+  ui.breed_field->set_quest(get_quest());
+  ui.breed_field->set_resource_type(ResourceType::ENEMY);
+  QString breed = entity_before.get_field(breed_field_name).toString();
+  ui.breed_field->set_selected_id(breed);
+}
+
+/**
+ * @brief Updates the entity from the breed field.
+ */
+void EditEntityDialog::apply_breed() {
+
+  if (entity_after->has_field(breed_field_name)) {
+    entity_after->set_field(breed_field_name, ui.breed_field->get_selected_id());
+  }
+}
+
+/**
  * @brief Initializes the damage on enemies field.
  */
 void EditEntityDialog::initialize_damage_on_enemies() {
@@ -594,6 +632,71 @@ void EditEntityDialog::apply_layer() {
 }
 
 /**
+ * @brief Initializes the maximum moves field.
+ */
+void EditEntityDialog::initialize_maximum_moves() {
+
+  if (!entity_before.has_field(maximum_moves_field_name)) {
+    remove_field(ui.maximum_moves_label, ui.maximum_moves_field);
+    return;
+  }
+
+  ui.maximum_moves_field->addItem(tr("Cannot move"), 0);
+  ui.maximum_moves_field->addItem(tr("One move only"), 1);
+  ui.maximum_moves_field->addItem(tr("Infinite moves"), 2);
+
+  int value = entity_before.get_field(maximum_moves_field_name).toInt();
+  int index = ui.maximum_moves_field->findData(value);
+  if (index != -1) {
+    ui.maximum_moves_field->setCurrentIndex(index);
+  }
+}
+
+/**
+ * @brief Updates the entity from the maximum moves field.
+ */
+void EditEntityDialog::apply_maximum_moves() {
+
+  if (entity_after->has_field(maximum_moves_field_name)) {
+    int value = ui.maximum_moves_field->currentData().toInt();
+    entity_after->set_field(maximum_moves_field_name, value);
+  }
+}
+
+/**
+ * @brief Initializes the model field.
+ */
+void EditEntityDialog::initialize_model() {
+
+  if (!entity_before.has_field(model_field_name)) {
+    remove_field(ui.model_checkbox, ui.model_field);
+    return;
+  }
+
+  initialize_possibly_optional_field(
+        model_field_name,
+        nullptr,
+        nullptr,
+        ui.model_checkbox,
+        ui.model_field);
+  ui.model_field->set_quest(get_quest());
+  ui.model_field->set_resource_type(ResourceType::ENTITY);
+  QString model = entity_before.get_field(model_field_name).toString();
+  ui.model_field->set_selected_id(model);
+}
+
+/**
+ * @brief Updates the entity from the model field.
+ */
+void EditEntityDialog::apply_model() {
+
+  if (entity_after->has_field(model_field_name)) {
+    entity_after->set_field(model_field_name, ui.model_checkbox->isChecked() ?
+                              ui.model_field->get_selected_id() : "");
+  }
+}
+
+/**
  * @brief Initializes the name field.
  */
 void EditEntityDialog::initialize_name() {
@@ -612,6 +715,38 @@ void EditEntityDialog::initialize_name() {
 void EditEntityDialog::apply_name() {
 
   entity_after->set_name(ui.name_field->text());
+}
+
+/**
+ * @brief Initializes the rank field.
+ */
+void EditEntityDialog::initialize_rank() {
+
+  if (!entity_before.has_field(rank_field_name)) {
+    remove_field(ui.rank_label, ui.rank_field);
+    return;
+  }
+
+  ui.rank_field->addItem(tr("Normal"), 0);
+  ui.rank_field->addItem(tr("Miniboss"), 1);
+  ui.rank_field->addItem(tr("Boss"), 2);
+
+  int value = entity_before.get_field(rank_field_name).toInt();
+  int index = ui.rank_field->findData(value);
+  if (index != -1) {
+    ui.rank_field->setCurrentIndex(index);
+  }
+}
+
+/**
+ * @brief Updates the entity from the rank field.
+ */
+void EditEntityDialog::apply_rank() {
+
+  if (entity_after->has_field(rank_field_name)) {
+    int value = ui.rank_field->currentData().toInt();
+    entity_after->set_field(rank_field_name, value);
+  }
 }
 
 /**

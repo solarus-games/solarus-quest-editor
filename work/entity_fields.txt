@@ -38,22 +38,18 @@ speed
 weight
 damage_on_enemies
 ground
-
-
-To do:
-
-opening_method
-opening_condition
-opening_condition_consumed
-rank
-savegame_variable
-behavior
-maximum_moves
-
-Simple strings:
-
 cannot_open_dialog
 dialog
 breed
 model
+rank
+maximum_moves
+
+To do:
+
+savegame_variable
+opening_method
+opening_condition
+opening_condition_consumed
+behavior
 

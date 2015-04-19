@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>436</width>
-    <height>663</height>
+    <height>795</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -335,14 +335,14 @@
      <item row="7" column="1">
       <widget class="QComboBox" name="subtype_field"/>
      </item>
-     <item row="8" column="0">
+     <item row="11" column="0">
       <widget class="QLabel" name="treasure_label">
        <property name="text">
         <string>Treasure</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
+     <item row="11" column="1">
       <widget class="QWidget" name="treasure_layout" native="true">
        <layout class="QVBoxLayout" name="layout_3">
         <property name="leftMargin">
@@ -418,61 +418,61 @@
        </layout>
       </widget>
      </item>
-     <item row="9" column="0">
+     <item row="12" column="0">
       <widget class="QCheckBox" name="sound_checkbox">
        <property name="text">
         <string>Play a sound</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
+     <item row="12" column="1">
       <widget class="ResourceSelector" name="sound_field"/>
      </item>
-     <item row="10" column="0">
+     <item row="13" column="0">
       <widget class="QLabel" name="transition_label">
        <property name="text">
         <string>Transition</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="1">
+     <item row="13" column="1">
       <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
      </item>
-     <item row="11" column="0">
+     <item row="14" column="0">
       <widget class="QLabel" name="destination_map_label">
        <property name="text">
         <string>Destination map</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item row="14" column="1">
       <widget class="ResourceSelector" name="destination_map_field"/>
      </item>
-     <item row="12" column="0">
+     <item row="15" column="0">
       <widget class="QLabel" name="destination_label">
        <property name="text">
         <string>Destination</string>
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
+     <item row="15" column="1">
       <widget class="EntitySelector" name="destination_field"/>
      </item>
-     <item row="13" column="0">
+     <item row="16" column="0">
       <widget class="QCheckBox" name="weight_checkbox">
        <property name="text">
         <string>Weight</string>
        </property>
       </widget>
      </item>
-     <item row="14" column="0">
+     <item row="17" column="0">
       <widget class="QCheckBox" name="damage_on_enemies_checkbox">
        <property name="text">
         <string>Damage on enemies</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="1">
+     <item row="16" column="1">
       <widget class="QWidget" name="weight_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="leftMargin">
@@ -519,7 +519,7 @@
        </layout>
       </widget>
      </item>
-     <item row="14" column="1">
+     <item row="17" column="1">
       <widget class="QWidget" name="damage_on_enemies_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="leftMargin">
@@ -566,15 +566,55 @@
        </layout>
       </widget>
      </item>
-     <item row="15" column="0">
+     <item row="18" column="0">
       <widget class="QCheckBox" name="ground_checkbox">
        <property name="text">
         <string>Set a special ground</string>
        </property>
       </widget>
      </item>
-     <item row="15" column="1">
+     <item row="18" column="1">
       <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="breed_label">
+       <property name="text">
+        <string>Breed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="ResourceSelector" name="breed_field"/>
+     </item>
+     <item row="9" column="1">
+      <widget class="ResourceSelector" name="model_field"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="rank_label">
+       <property name="text">
+        <string>Rank</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QComboBox" name="rank_field"/>
+     </item>
+     <item row="19" column="0">
+      <widget class="QLabel" name="maximum_moves_label">
+       <property name="text">
+        <string>Maximum moves</string>
+       </property>
+      </widget>
+     </item>
+     <item row="19" column="1">
+      <widget class="QComboBox" name="maximum_moves_field"/>
+     </item>
+     <item row="9" column="0">
+      <widget class="QCheckBox" name="model_checkbox">
+       <property name="text">
+        <string>Call a custom entity script</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

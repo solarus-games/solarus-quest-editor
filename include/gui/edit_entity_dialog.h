@@ -46,6 +46,8 @@ private:
   void initialize_simple_strings();
   void apply_simple_strings();
 
+  void initialize_breed();
+  void apply_breed();
   void initialize_damage_on_enemies();
   void apply_damage_on_enemies();
   void initialize_destination();
@@ -58,8 +60,14 @@ private:
   void apply_ground();
   void initialize_layer();
   void apply_layer();
+  void initialize_maximum_moves();
+  void apply_maximum_moves();
+  void initialize_model();
+  void apply_model();
   void initialize_name();
   void apply_name();
+  void initialize_rank();
+  void apply_rank();
   void initialize_size();
   void apply_size();
   void initialize_sound();
