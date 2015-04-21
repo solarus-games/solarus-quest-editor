@@ -762,6 +762,7 @@ void EditEntityDialog::initialize_savegame_variable() {
     return;
   }
 
+  // Specific checkbox text for some types of entities.
   const QMap<EntityType, QString> checkbox_texts = {
     { EntityType::ENEMY, tr("Save the enemy state") },
     { EntityType::DOOR, tr("Save the door state") }
@@ -771,6 +772,7 @@ void EditEntityDialog::initialize_savegame_variable() {
     ui.savegame_variable_checkbox->setText(checkbox_text);
   }
 
+  // Connect the checkbox to the field.
   initialize_possibly_optional_field(
         savegame_variable_field_name,
         nullptr,
@@ -778,6 +780,12 @@ void EditEntityDialog::initialize_savegame_variable() {
         ui.savegame_variable_checkbox,
         ui.savegame_variable_layout);
 
+  // Only accept valid identifiers as savegame variable names.
+  QRegularExpression regexp("^[a-zA-Z_][a-zA-Z0-9_]*$");
+  QValidator* validator = new QRegularExpressionValidator(regexp);
+  ui.savegame_variable_field->setValidator(validator);
+
+  // Show the initial value.
   QString value = entity_before.get_field(savegame_variable_field_name).toString();
   ui.savegame_variable_field->setText(value);
 }
@@ -788,7 +796,8 @@ void EditEntityDialog::initialize_savegame_variable() {
 void EditEntityDialog::apply_savegame_variable() {
 
   if (entity_before.has_field(savegame_variable_field_name)) {
-    QString value = ui.savegame_variable_checkbox->isChecked() ? ui.savegame_variable_field->text() : "";
+    QString value = ui.savegame_variable_checkbox->isChecked() ?
+          ui.savegame_variable_field->text() : "";
     entity_after->set_field(savegame_variable_field_name, value);
   }
 }
