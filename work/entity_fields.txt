@@ -44,10 +44,10 @@ breed
 model
 rank
 maximum_moves
+savegame_variable
 
 To do:
 
-savegame_variable
 opening_method
 opening_condition
 opening_condition_consumed

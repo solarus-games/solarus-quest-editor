@@ -68,6 +68,8 @@ private:
   void apply_name();
   void initialize_rank();
   void apply_rank();
+  void initialize_savegame_variable();
+  void apply_savegame_variable();
   void initialize_size();
   void apply_size();
   void initialize_sound();

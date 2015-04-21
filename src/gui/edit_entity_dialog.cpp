@@ -30,6 +30,7 @@ const QString ground_field_name = "ground";
 const QString maximum_moves_field_name = "maximum_moves";
 const QString model_field_name = "model";
 const QString rank_field_name = "rank";
+const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
 const QString transition_field_name = "transition";
@@ -120,6 +121,7 @@ void EditEntityDialog::initialize() {
   initialize_model();
   initialize_name();
   initialize_rank();
+  initialize_savegame_variable();
   initialize_size();
   initialize_sound();
   initialize_sprite();
@@ -153,6 +155,7 @@ void EditEntityDialog::apply() {
   apply_model();
   apply_name();
   apply_rank();
+  apply_savegame_variable();
   apply_size();
   apply_sound();
   apply_sprite();
@@ -746,6 +749,47 @@ void EditEntityDialog::apply_rank() {
   if (entity_after->has_field(rank_field_name)) {
     int value = ui.rank_field->currentData().toInt();
     entity_after->set_field(rank_field_name, value);
+  }
+}
+
+/**
+ * @brief Initializes the savegame variable field.
+ */
+void EditEntityDialog::initialize_savegame_variable() {
+
+  if (!entity_before.has_field(savegame_variable_field_name)) {
+    remove_field(ui.savegame_variable_checkbox, ui.savegame_variable_layout);
+    return;
+  }
+
+  const QMap<EntityType, QString> checkbox_texts = {
+    { EntityType::ENEMY, tr("Save the enemy state") },
+    { EntityType::DOOR, tr("Save the door state") }
+  };
+  QString checkbox_text = checkbox_texts.value(entity_before.get_type());
+  if (!checkbox_text.isEmpty()) {
+    ui.savegame_variable_checkbox->setText(checkbox_text);
+  }
+
+  initialize_possibly_optional_field(
+        savegame_variable_field_name,
+        nullptr,
+        nullptr,
+        ui.savegame_variable_checkbox,
+        ui.savegame_variable_layout);
+
+  QString value = entity_before.get_field(savegame_variable_field_name).toString();
+  ui.savegame_variable_field->setText(value);
+}
+
+/**
+ * @brief Updates the entity from the savegame variable field.
+ */
+void EditEntityDialog::apply_savegame_variable() {
+
+  if (entity_before.has_field(savegame_variable_field_name)) {
+    QString value = ui.savegame_variable_checkbox->isChecked() ? ui.savegame_variable_field->text() : "";
+    entity_after->set_field(savegame_variable_field_name, value);
   }
 }
 
