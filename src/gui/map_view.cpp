@@ -416,7 +416,7 @@ void MapView::build_context_menu_actions() {
 
   edit_action = new QAction(
         tr("Edit"), this);
-  edit_action->setShortcut(tr("Return"));
+  edit_action->setShortcut(Qt::Key_Return);
   edit_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(edit_action, SIGNAL(triggered()),
           this, SLOT(edit_selected_entity()));

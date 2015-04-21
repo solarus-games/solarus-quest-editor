@@ -40,7 +40,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   setAutoScroll(false);
 
   open_action = new QAction(tr("Open"), this);
-  open_action->setShortcut(tr("Return"));
+  open_action->setShortcut(Qt::Key_Return);
   open_action->setShortcutContext(Qt::WidgetShortcut);
   connect(open_action, SIGNAL(triggered()),
           this, SLOT(open_action_triggered()));
