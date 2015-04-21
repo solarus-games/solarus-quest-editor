@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>474</width>
-    <height>828</height>
+    <width>605</width>
+    <height>1042</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>Edit an entity</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QFormLayout" name="form_layout">
      <property name="fieldGrowthPolicy">
@@ -365,6 +365,41 @@
      <item row="10" column="1">
       <widget class="QComboBox" name="rank_field"/>
      </item>
+     <item row="11" column="0">
+      <widget class="QCheckBox" name="savegame_variable_checkbox">
+       <property name="text">
+        <string>Save the state</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QWidget" name="savegame_variable_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="savegame_variable_label">
+          <property name="text">
+           <string>in variable</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="savegame_variable_field"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item row="12" column="0">
       <widget class="QLabel" name="treasure_label">
        <property name="text">
@@ -616,16 +651,16 @@
      <item row="20" column="1">
       <widget class="QComboBox" name="maximum_moves_field"/>
      </item>
-     <item row="11" column="0">
-      <widget class="QCheckBox" name="savegame_variable_checkbox">
+     <item row="21" column="0">
+      <widget class="QLabel" name="opening_method_label">
        <property name="text">
-        <string>Save the state</string>
+        <string>Opening method</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
-      <widget class="QWidget" name="savegame_variable_layout" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout">
+     <item row="21" column="1">
+      <widget class="QWidget" name="opening_method_layout" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -639,14 +674,107 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="savegame_variable_label">
+         <widget class="QRadioButton" name="opening_method_none_radio">
           <property name="text">
-           <string>in variable</string>
+           <string>Cannot open</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="savegame_variable_field"/>
+         <widget class="QRadioButton" name="opening_method_interaction_radio">
+          <property name="text">
+           <string>Hero can open</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_method_savegame_variable_layout">
+          <item>
+           <widget class="QRadioButton" name="opening_method_savegame_variable_radio">
+            <property name="text">
+             <string>Requires savegame variable</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opening_method_savegame_variable_field"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_method_savegame_variable_consumed_layout">
+          <item>
+           <spacer name="opening_method_savegame_variable_consumed_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="opening_method_savegame_variable_consumed_checkbox">
+            <property name="text">
+             <string>Reset/decrement when opening</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_method_item_layout">
+          <item>
+           <widget class="QRadioButton" name="opening_method_item_radio">
+            <property name="text">
+             <string>Requires equipment item</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ResourceSelector" name="opening_method_item_field"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_method_item_consumed_layout">
+          <item>
+           <spacer name="opening_method_item_consumed_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="opening_method_item_consumed_checkbox">
+            <property name="text">
+             <string>Remove/decrement when opening</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="opening_method_explosion_radio">
+          <property name="text">
+           <string>Explosion</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

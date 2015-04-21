@@ -29,6 +29,9 @@ const QString destruction_sound_field_name = "destruction_sound";
 const QString ground_field_name = "ground";
 const QString maximum_moves_field_name = "maximum_moves";
 const QString model_field_name = "model";
+const QString opening_method_field_name = "opening_method";
+const QString opening_condition_field_name = "opening_condition";
+const QString opening_condition_consumed_field_name = "opening_condition_consumed";
 const QString rank_field_name = "rank";
 const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
@@ -120,6 +123,7 @@ void EditEntityDialog::initialize() {
   initialize_maximum_moves();
   initialize_model();
   initialize_name();
+  initialize_opening_method();
   initialize_rank();
   initialize_savegame_variable();
   initialize_size();
@@ -154,6 +158,7 @@ void EditEntityDialog::apply() {
   apply_maximum_moves();
   apply_model();
   apply_name();
+  apply_opening_method();
   apply_rank();
   apply_savegame_variable();
   apply_size();
@@ -718,6 +723,68 @@ void EditEntityDialog::initialize_name() {
 void EditEntityDialog::apply_name() {
 
   entity_after->set_name(ui.name_field->text());
+}
+
+/**
+ * @brief Initializes the opening method fields.
+ */
+void EditEntityDialog::initialize_opening_method() {
+
+  if (!entity_before.has_field(opening_method_field_name) ||
+      !entity_before.has_field(opening_condition_field_name) ||
+      !entity_before.has_field(opening_condition_consumed_field_name)) {
+    remove_field(ui.opening_method_label, ui.opening_method_layout);
+    return;
+  }
+
+  // All opening methods are not available for all types entities.
+  QMap<EntityType, QSet<QString>> opening_methods_by_type = {
+    { EntityType::DOOR, { "none", "interaction", "interaction_if_savegame_variable", "interaction_if_item", "explosion" } },
+    { EntityType::CHEST, { "interaction", "interaction_if_savegame_variable", "interaction_if_item" } }
+  };
+
+  const QSet<QString>& opening_methods = opening_methods_by_type.value(entity_before.get_type());
+  if (!opening_methods.contains("none")) {
+    ui.opening_method_layout->layout()->removeWidget(ui.opening_method_none_radio);
+    ui.opening_method_none_radio->hide();
+  }
+  if (!opening_methods.contains("interaction")) {
+    ui.opening_method_layout->layout()->removeWidget(ui.opening_method_interaction_radio);
+    ui.opening_method_interaction_radio->hide();
+  }
+  if (!opening_methods.contains("interaction_if_savegame_variable")) {
+    ui.opening_method_layout->layout()->removeItem(ui.opening_method_savegame_variable_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_method_savegame_variable_consumed_layout);
+  }
+  if (!opening_methods.contains("interaction_if_item")) {
+    ui.opening_method_layout->layout()->removeItem(ui.opening_method_item_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_method_item_consumed_layout);
+  }
+  if (!opening_methods.contains("explosion")) {
+    ui.opening_method_layout->layout()->removeWidget(ui.opening_method_explosion_radio);
+    ui.opening_method_explosion_radio->hide();
+  }
+
+  // opening_method is how to open the chest or door,
+  // opening_condition is the required savegame variable or item id depending on the method.
+  /* TOOD
+  QString opening_method = entity_before.get_field(opening_method_field_name).toString();
+  QString opening_condition = entity_before.get_field(opening_condition_field_name).toString();
+  bool opening_condition_consumed = entity_before.get_field(opening_condition_consumed_field_name).toBool();
+  */
+
+}
+
+/**
+ * @brief Updates the entity from the opening method fields.
+ */
+void EditEntityDialog::apply_opening_method() {
+
+  if (!entity_before.has_field("opening_method")) {
+    return;
+  }
+
+  // TODO
 }
 
 /**

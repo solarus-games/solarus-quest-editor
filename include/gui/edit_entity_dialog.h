@@ -66,6 +66,8 @@ private:
   void apply_model();
   void initialize_name();
   void apply_name();
+  void initialize_opening_method();
+  void apply_opening_method();
   void initialize_rank();
   void apply_rank();
   void initialize_savegame_variable();
