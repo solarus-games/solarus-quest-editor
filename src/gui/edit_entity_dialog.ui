@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>605</width>
+    <width>663</width>
     <height>1042</height>
    </rect>
   </property>
@@ -651,13 +651,6 @@
      <item row="20" column="1">
       <widget class="QComboBox" name="maximum_moves_field"/>
      </item>
-     <item row="21" column="0">
-      <widget class="QLabel" name="opening_method_label">
-       <property name="text">
-        <string>Opening method</string>
-       </property>
-      </widget>
-     </item>
      <item row="21" column="1">
       <widget class="QWidget" name="opening_method_layout" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -676,35 +669,35 @@
         <item>
          <widget class="QRadioButton" name="opening_method_none_radio">
           <property name="text">
-           <string>Cannot open</string>
+           <string>By script</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QRadioButton" name="opening_method_interaction_radio">
           <property name="text">
-           <string>Hero can open</string>
+           <string>By hero</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="opening_method_savegame_variable_layout">
+         <layout class="QHBoxLayout" name="opening_condition_savegame_variable_layout">
           <item>
            <widget class="QRadioButton" name="opening_method_savegame_variable_radio">
             <property name="text">
-             <string>Requires savegame variable</string>
+             <string>By hero, savegame variable required</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="opening_method_savegame_variable_field"/>
+           <widget class="QLineEdit" name="opening_condition_savegame_variable_field"/>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="opening_method_savegame_variable_consumed_layout">
+         <layout class="QHBoxLayout" name="opening_condition_savegame_variable_consumed_layout">
           <item>
-           <spacer name="opening_method_savegame_variable_consumed_spacer">
+           <spacer name="opening_condition_savegame_variable_consumed_spacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -720,7 +713,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCheckBox" name="opening_method_savegame_variable_consumed_checkbox">
+           <widget class="QCheckBox" name="opening_condition_savegame_variable_consumed_checkbox">
             <property name="text">
              <string>Reset/decrement when opening</string>
             </property>
@@ -729,23 +722,30 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="opening_method_item_layout">
+         <layout class="QHBoxLayout" name="opening_condition_item_layout">
           <item>
            <widget class="QRadioButton" name="opening_method_item_radio">
             <property name="text">
-             <string>Requires equipment item</string>
+             <string>By hero, item required</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="ResourceSelector" name="opening_method_item_field"/>
+           <widget class="ResourceSelector" name="opening_condition_item_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="opening_method_item_consumed_layout">
+         <layout class="QHBoxLayout" name="opening_condition_item_consumed_layout">
           <item>
-           <spacer name="opening_method_item_consumed_spacer">
+           <spacer name="opening_condition_item_consumed_spacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -761,7 +761,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCheckBox" name="opening_method_item_consumed_checkbox">
+           <widget class="QCheckBox" name="opening_condition_item_consumed_checkbox">
             <property name="text">
              <string>Remove/decrement when opening</string>
             </property>
@@ -772,11 +772,18 @@
         <item>
          <widget class="QRadioButton" name="opening_method_explosion_radio">
           <property name="text">
-           <string>Explosion</string>
+           <string>By explosion</string>
           </property>
          </widget>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item row="21" column="0">
+      <widget class="QLabel" name="opening_method_label">
+       <property name="text">
+        <string>Opening mode</string>
+       </property>
       </widget>
      </item>
     </layout>

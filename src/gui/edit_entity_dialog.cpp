@@ -726,18 +726,11 @@ void EditEntityDialog::apply_name() {
 }
 
 /**
- * @brief Initializes the opening method fields.
+ * @brief Removes the widgets of opening methods that do not exist for this entity type.
  */
-void EditEntityDialog::initialize_opening_method() {
+void EditEntityDialog::hide_unexisting_opening_methods() {
 
-  if (!entity_before.has_field(opening_method_field_name) ||
-      !entity_before.has_field(opening_condition_field_name) ||
-      !entity_before.has_field(opening_condition_consumed_field_name)) {
-    remove_field(ui.opening_method_label, ui.opening_method_layout);
-    return;
-  }
-
-  // All opening methods are not available for all types entities.
+  // All opening methods are not available for all types of entities.
   QMap<EntityType, QSet<QString>> opening_methods_by_type = {
     { EntityType::DOOR, { "none", "interaction", "interaction_if_savegame_variable", "interaction_if_item", "explosion" } },
     { EntityType::CHEST, { "interaction", "interaction_if_savegame_variable", "interaction_if_item" } }
@@ -753,26 +746,125 @@ void EditEntityDialog::initialize_opening_method() {
     ui.opening_method_interaction_radio->hide();
   }
   if (!opening_methods.contains("interaction_if_savegame_variable")) {
-    ui.opening_method_layout->layout()->removeItem(ui.opening_method_savegame_variable_layout);
-    ui.opening_method_layout->layout()->removeItem(ui.opening_method_savegame_variable_consumed_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_condition_savegame_variable_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_condition_savegame_variable_consumed_layout);
   }
   if (!opening_methods.contains("interaction_if_item")) {
-    ui.opening_method_layout->layout()->removeItem(ui.opening_method_item_layout);
-    ui.opening_method_layout->layout()->removeItem(ui.opening_method_item_consumed_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_condition_item_layout);
+    ui.opening_method_layout->layout()->removeItem(ui.opening_condition_item_consumed_layout);
   }
   if (!opening_methods.contains("explosion")) {
     ui.opening_method_layout->layout()->removeWidget(ui.opening_method_explosion_radio);
     ui.opening_method_explosion_radio->hide();
   }
+}
 
+/**
+ * @brief Returns the radio button associated to each opening method value.
+ * @return The opening method radio buttons.
+ */
+QMap<QString, QRadioButton*> EditEntityDialog::get_opening_method_radio_buttons() {
+
+  const QMap<QString, QRadioButton*> buttons = {
+    { "none", ui.opening_method_none_radio },
+    { "interaction", ui.opening_method_interaction_radio },
+    { "interaction_if_savegame_variable", ui.opening_method_savegame_variable_radio },
+    { "interaction_if_item", ui.opening_method_item_radio },
+    { "explosion", ui.opening_method_explosion_radio }
+  };
+  return buttons;
+}
+
+/**
+ * @brief Returns the radio button associated to an opening method value.
+ * @param opening_method An opening method.
+ * @return The corresponding radio button or nullptr if the opening method is invalid.
+ */
+QRadioButton* EditEntityDialog::get_opening_method_radio_button(const QString& opening_method) {
+
+  return get_opening_method_radio_buttons().value(opening_method);
+}
+
+/**
+ * @brief Returns the opening method corresponding to the selected radio button.
+ * @return The current opening method or an empty string if no radio button
+ * is checked.
+ */
+QString EditEntityDialog::get_selected_opening_method() {
+
+  const QMap<QString, QRadioButton*>& buttons = get_opening_method_radio_buttons();
+  for (auto it = buttons.begin(); it != buttons.end(); ++it) {
+    if (it.value()->isChecked()) {
+      return it.key();
+    }
+  }
+  return QString();
+}
+
+/**
+ * @brief Initializes the opening method fields.
+ */
+void EditEntityDialog::initialize_opening_method() {
+
+  if (!entity_before.has_field(opening_method_field_name) ||
+      !entity_before.has_field(opening_condition_field_name) ||
+      !entity_before.has_field(opening_condition_consumed_field_name)) {
+    remove_field(ui.opening_method_label, ui.opening_method_layout);
+    return;
+  }
+
+  // Some entity types don't have all values: remove such fields.
+  hide_unexisting_opening_methods();
+
+  // Initialize the item selector.
+  ui.opening_condition_item_field->set_resource_type(ResourceType::ITEM);
+  ui.opening_condition_item_field->set_quest(get_quest());
+
+  // Put the current values into the widgets.
   // opening_method is how to open the chest or door,
   // opening_condition is the required savegame variable or item id depending on the method.
-  /* TOOD
   QString opening_method = entity_before.get_field(opening_method_field_name).toString();
   QString opening_condition = entity_before.get_field(opening_condition_field_name).toString();
   bool opening_condition_consumed = entity_before.get_field(opening_condition_consumed_field_name).toBool();
-  */
 
+  // Check the correct radio button.
+  const QMap<QString, QRadioButton*>& radios = get_opening_method_radio_buttons();
+  QRadioButton* radio = radios.value(opening_method);
+  if (radio != nullptr) {
+    radio->setChecked(true);
+  }
+  else {
+    // Check a default radio button if the current value is invalid.
+    ui.opening_method_interaction_radio->setChecked(true);
+  }
+
+  // Prepare the savegame variable fields.
+  if (radio == ui.opening_method_savegame_variable_radio) {
+    ui.opening_condition_savegame_variable_field->setText(opening_condition);
+    ui.opening_condition_savegame_variable_consumed_checkbox->setChecked(opening_condition_consumed);
+  }
+  else {
+    ui.opening_condition_savegame_variable_field->setEnabled(false);
+    ui.opening_condition_savegame_variable_consumed_checkbox->setEnabled(false);
+  }
+  connect(ui.opening_method_savegame_variable_radio, SIGNAL(toggled(bool)),
+          ui.opening_condition_savegame_variable_field, SLOT(setEnabled(bool)));
+  connect(ui.opening_method_savegame_variable_radio, SIGNAL(toggled(bool)),
+          ui.opening_condition_savegame_variable_consumed_checkbox, SLOT(setEnabled(bool)));
+
+  // Prepare the item fields.
+  if (radio == ui.opening_method_item_radio) {
+    ui.opening_condition_item_field->set_selected_id(opening_condition);
+    ui.opening_condition_item_consumed_checkbox->setChecked(opening_condition_consumed);
+  }
+  else {
+    ui.opening_condition_item_field->setEnabled(false);
+    ui.opening_condition_item_consumed_checkbox->setEnabled(false);
+  }
+  connect(ui.opening_method_item_radio, SIGNAL(toggled(bool)),
+          ui.opening_condition_item_field, SLOT(setEnabled(bool)));
+  connect(ui.opening_method_item_radio, SIGNAL(toggled(bool)),
+          ui.opening_condition_item_consumed_checkbox, SLOT(setEnabled(bool)));
 }
 
 /**
@@ -780,11 +872,23 @@ void EditEntityDialog::initialize_opening_method() {
  */
 void EditEntityDialog::apply_opening_method() {
 
-  if (!entity_before.has_field("opening_method")) {
+  if (!entity_before.has_field(opening_method_field_name) ||
+      !entity_before.has_field(opening_condition_field_name) ||
+      !entity_before.has_field(opening_condition_consumed_field_name)) {
+    remove_field(ui.opening_method_label, ui.opening_method_layout);
     return;
   }
 
-  // TODO
+  entity_after->set_field(opening_method_field_name, get_selected_opening_method());
+
+  if (ui.opening_method_savegame_variable_radio->isChecked()) {
+    entity_after->set_field(opening_condition_field_name, ui.opening_condition_savegame_variable_field->text());
+    entity_after->set_field(opening_condition_consumed_field_name, ui.opening_condition_savegame_variable_consumed_checkbox->isChecked());
+  }
+  else if (ui.opening_method_item_radio->isChecked()) {
+    entity_after->set_field(opening_condition_field_name, ui.opening_condition_item_field->get_selected_id());
+    entity_after->set_field(opening_condition_consumed_field_name, ui.opening_condition_item_consumed_checkbox->isChecked());
+  }
 }
 
 /**

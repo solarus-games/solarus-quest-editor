@@ -98,6 +98,11 @@ private:
                                           QWidget* field);
   void remove_field(QWidget* label, QWidget* field);
 
+  void hide_unexisting_opening_methods();
+  QRadioButton* get_opening_method_radio_button(const QString& opening_method);
+  QMap<QString, QRadioButton*> get_opening_method_radio_buttons();
+  QString get_selected_opening_method();
+
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
   EntityModelPtr entity_after;         /**< A copy of the entity with the modified data. */
