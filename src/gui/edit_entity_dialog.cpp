@@ -340,14 +340,9 @@ void EditEntityDialog::initialize_simple_integers() {
       spinbox->setMaximum(999999);
       spinbox->setValue(entity_before.get_field(field.field_name).toInt());
       spinbox->setSingleStep(field.step);
+      spinbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
       field.spinbox = spinbox;
-      QSpacerItem* spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-      QHBoxLayout* layout = new QHBoxLayout(this);
-      layout->setContentsMargins(0, 0, 0, 0);
-      layout->addWidget(spinbox);
-      layout->addItem(spacer);
-
-      ui.form_layout->addRow(label, layout);
+      ui.form_layout->addRow(label, spinbox);
     }
   }
 }
