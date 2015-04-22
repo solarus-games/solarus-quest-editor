@@ -91,36 +91,6 @@ bool Jumper::is_jump_diagonal() const {
 
 /**
  * @copydoc EntityModel::get_valid_size
- *
- * The allowed size depends on the jumper's direction.
- */
-bool Jumper::is_size_valid() const {
-
-  if (!EntityModel::is_size_valid()) {
-    return false;
-  }
-
-  const QSize& size = get_size();
-  int width = size.width();
-  int height = size.height();
-  if (is_jump_diagonal()) {
-    return width == height;
-  }
-
-  if (is_jump_horizontal()) {
-    return width == 8;
-  }
-
-  if (is_jump_vertical()) {
-    return height == 8;
-  }
-
-  // The direction is unset.
-  return false;
-}
-
-/**
- * @copydoc EntityModel::get_valid_size
  */
 QSize Jumper::get_valid_size() const {
 

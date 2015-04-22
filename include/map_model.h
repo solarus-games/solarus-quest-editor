@@ -102,6 +102,7 @@ public:
   QSize get_entity_size(const EntityIndex& index) const;
   void set_entity_size(const EntityIndex& index, const QSize& size);
   bool is_entity_size_valid(const EntityIndex& index) const;
+  bool is_entity_size_valid(const EntityIndex& index, const QSize& size) const;
   QSize get_entity_valid_size(const EntityIndex& index) const;
   QRect get_entity_bounding_box(const EntityIndex& index) const;
   void set_entity_bounding_box(const EntityIndex& index, const QRect& bounding_box);

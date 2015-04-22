@@ -969,11 +969,23 @@ void MapModel::set_entity_size(const EntityIndex& index, const QSize& size) {
  */
 bool MapModel::is_entity_size_valid(const EntityIndex& index) const {
 
+  return is_entity_size_valid(index, get_entity_size(index));
+}
+
+/**
+ * @brief Returns whether the given size is valid for an entity.
+ * @param index Index of the entity to check.
+ * @param size The size to check.
+ * @return @c true if its size is valid.
+ * Returns @c false if there is no entity with this index.
+ */
+bool MapModel::is_entity_size_valid(const EntityIndex& index, const QSize& size) const {
+
   if (!entity_exists(index)) {
     return false;
   }
 
-  return get_entity(index).is_size_valid();
+  return get_entity(index).is_size_valid(size);
 }
 
 /**

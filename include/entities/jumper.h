@@ -32,7 +32,6 @@ public:
   bool is_jump_vertical() const;
   bool is_jump_diagonal() const;
 
-  bool is_size_valid() const override;
   QSize get_valid_size() const override;
 
 

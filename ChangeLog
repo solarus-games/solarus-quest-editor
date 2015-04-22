@@ -36,15 +36,6 @@ New features
 * Add a menu item to open the official Solarus website.
 * Add a menu item to open Solarus documentation.
 
-Missing features
-----------------
-
-The rewriting is currently in progress.
-At this moment, some important features of the old editor are still in progress
-in the new one.
-
-* Edit maps.
-
 Bug fixes
 ---------
 

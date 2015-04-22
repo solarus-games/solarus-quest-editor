@@ -1107,7 +1107,11 @@ void EditEntityDialog::initialize_size() {
 void EditEntityDialog::apply_size() {
 
   if (entity_after->has_size_fields()) {
-    entity_after->set_size(QSize(ui.width_field->value(), ui.height_field->value()));
+    QSize size(ui.width_field->value(), ui.height_field->value());
+    // If the size is invalid, refuse the change.
+    if (entity_after->is_size_valid(size)) {
+      entity_after->set_size(size);
+    }
   }
 }
 

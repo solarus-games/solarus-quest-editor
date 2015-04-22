@@ -1142,7 +1142,20 @@ void EntityModel::set_base_size(const QSize& base_size) {
  */
 bool EntityModel::is_size_valid() const {
 
-  const QSize& size = get_size();
+  return is_size_valid(get_size());
+}
+
+/**
+ * @brief Returns whether the given size is legal for this entity.
+ *
+ * By default, the size should be non-null and a multiple of 8.
+ * Subclasses may reimplement this function to add constraints.
+ *
+ * @param size The size to check.
+ * @return @c true if this is a valid size.
+ */
+bool EntityModel::is_size_valid(const QSize& size) const {
+
   int width = size.width();
   int height = size.height();
   if (width < 8 || height < 8) {
@@ -1153,7 +1166,30 @@ bool EntityModel::is_size_valid() const {
     return false;
   }
 
-  return true;
+  const QSize& base_size = get_base_size();
+  switch (get_resize_mode()) {
+
+  case ResizeMode::NONE:
+    return size == base_size;
+
+  case ResizeMode::HORIZONTAL_ONLY:
+    return size.height() == base_size.height();
+
+  case ResizeMode::VERTICAL_ONLY:
+    return size.width() == base_size.width();
+
+  case ResizeMode::SQUARE:
+    return size.width() == size.height();
+
+  case ResizeMode::SINGLE_DIMENSION:
+    return size.width() == base_size.width() ||
+        size.height() == base_size.height();
+
+  case ResizeMode::MULTI_DIMENSION_ONE:
+  case ResizeMode::MULTI_DIMENSION_ALL:
+    return true;
+
+  }
 }
 
 /**

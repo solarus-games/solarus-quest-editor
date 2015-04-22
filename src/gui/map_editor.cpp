@@ -351,11 +351,17 @@ public:
     EntityIndexes indexes;
     for (auto it = boxes_after.begin(); it != boxes_after.end(); ++it) {
       const EntityIndex& index = it.key();
+      QRect box_after = it.value();
+      QSize size = box_after.size();
+      if (!get_map().is_entity_size_valid(index, size)) {
+        // Invalid size: refuse the change.
+        box_after.setSize(boxes_before.value(index).size());
+      }
       get_map().set_entity_bounding_box(index, it.value());
       indexes.append(index);
     }
 
-    // Selecteimpacted entities.
+    // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
   }
 
