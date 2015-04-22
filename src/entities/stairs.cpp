@@ -32,7 +32,7 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
     { "1", MapModel::tr("Spiral staircase (going downstairs)") },
     { "2", MapModel::tr("Straight staircase (going upstairs)") },
     { "3", MapModel::tr("Straight staircase (going downstairs)") },
-    { "4", MapModel::tr("Inside a single floor") }
+    { "4", MapModel::tr("Platform stairs (same map)") }
   };
   set_existing_subtypes(subtypes);
 }

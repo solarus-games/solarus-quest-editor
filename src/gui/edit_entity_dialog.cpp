@@ -275,7 +275,7 @@ void EditEntityDialog::initialize_simple_booleans() {
     SimpleBooleanField("pushable", tr("Interactions"), tr("Can be pushed")) <<
     SimpleBooleanField("pullable", "", tr("Can be pulled")) <<
     SimpleBooleanField("needs_block", tr("Activation"), tr("Requires a block to be activated")) <<
-    SimpleBooleanField("inactivate_when_leaving", tr("Stay on switch"), tr("Inactivate the switch when leaving")) <<
+    SimpleBooleanField("inactivate_when_leaving", tr("Leaving the switch"), tr("Deactivate when leaving")) <<
     SimpleBooleanField("stops_hero", tr("Hero"), tr("Obstacle for the hero")) <<
     SimpleBooleanField("stops_enemies", tr("Enemies"), tr("Obstacle for enemies")) <<
     SimpleBooleanField("stops_npcs", tr("NPCs"), tr("Obstacle for NPCs")) <<
@@ -757,8 +757,8 @@ void EditEntityDialog::initialize_maximum_moves() {
   }
 
   ui.maximum_moves_field->addItem(tr("Cannot move"), 0);
-  ui.maximum_moves_field->addItem(tr("One move only"), 1);
-  ui.maximum_moves_field->addItem(tr("Infinite moves"), 2);
+  ui.maximum_moves_field->addItem(tr("1 move only"), 1);
+  ui.maximum_moves_field->addItem(tr("Unlimited"), 2);
 
   int value = entity_before.get_field(maximum_moves_field_name).toInt();
   int index = ui.maximum_moves_field->findData(value);
