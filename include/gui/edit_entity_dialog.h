@@ -105,6 +105,7 @@ private:
   QMap<QString, QRadioButton*> get_opening_method_radio_buttons();
   QString get_selected_opening_method();
 
+  QValidator* create_dialog_id_validator();
   QValidator* create_savegame_variable_validator();
 
   Ui::EditEntityDialog ui;             /**< The widgets. */
@@ -173,11 +174,13 @@ private:
     SimpleStringField(
         const QString& field_name,
         const QString& label_text,
+        QValidator* validator,
         QWidget* before_widget = nullptr) :
       field_name(field_name),
       label_text(label_text),
       checkbox(nullptr),
       line_edit(nullptr),
+      validator(validator),
       before_widget(before_widget) {
     }
 
@@ -185,6 +188,7 @@ private:
     QString label_text;
     QCheckBox* checkbox;
     const QLineEdit* line_edit;
+    QValidator* validator;
     QWidget* before_widget;
   };
 

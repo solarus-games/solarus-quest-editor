@@ -106,12 +106,22 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 }
 
 /**
+ * @brief Creates a validator for dialog id fields.
+ * @return A validator that checks dialog id inputs.
+ */
+QValidator* EditEntityDialog::create_dialog_id_validator() {
+
+  QRegularExpression regexp("^$|^[a-zA-Z_][a-zA-Z0-9_\\.]*$");
+  return new QRegularExpressionValidator(regexp);
+}
+
+/**
  * @brief Creates a validator for savegame variable fields.
  * @return A validator that checks savegame variable inputs.
  */
 QValidator* EditEntityDialog::create_savegame_variable_validator() {
 
-  QRegularExpression regexp("^[a-zA-Z_][a-zA-Z0-9_]*$");
+  QRegularExpression regexp("^$|^[a-zA-Z_][a-zA-Z0-9_]*$");
   return new QRegularExpressionValidator(regexp);
 }
 
@@ -360,8 +370,8 @@ void EditEntityDialog::apply_simple_integers() {
 void EditEntityDialog::initialize_simple_strings() {
 
   simple_string_fields <<
-    SimpleStringField("cannot_open_dialog", tr("Show a dialog if fails to open")) <<
-    SimpleStringField("dialog", tr("Description dialog id"));
+    SimpleStringField("cannot_open_dialog", tr("Show a dialog if fails to open"), create_dialog_id_validator()) <<
+    SimpleStringField("dialog", tr("Description dialog id"), create_dialog_id_validator());
 
   for (SimpleStringField& field : simple_string_fields) {
     if (!entity_before.has_field(field.field_name)) {
@@ -371,6 +381,9 @@ void EditEntityDialog::initialize_simple_strings() {
     QWidget* left_widget = nullptr;
     QLineEdit* line_edit = new QLineEdit(this);
     line_edit->setText(entity_before.get_field(field.field_name).toString());
+    if (field.validator != nullptr) {
+      line_edit->setValidator(field.validator);
+    }
     field.line_edit = line_edit;
     if (!entity_before.is_field_optional(field.field_name)) {
       left_widget = new QLabel(field.label_text, this);
