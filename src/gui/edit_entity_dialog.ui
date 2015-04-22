@@ -348,7 +348,7 @@
      <item row="9" column="0">
       <widget class="QCheckBox" name="model_checkbox">
        <property name="text">
-        <string>Call a custom entity script</string>
+        <string>Custom entity script</string>
        </property>
       </widget>
      </item>

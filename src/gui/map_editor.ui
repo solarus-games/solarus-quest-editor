@@ -106,8 +106,17 @@
             <layout class="QHBoxLayout" name="horizontal_layout_2">
              <item>
               <widget class="QSpinBox" name="width_field">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>Width of the map in pixels</string>
+               </property>
+               <property name="suffix">
+                <string/>
                </property>
                <property name="maximum">
                 <number>99999</number>
@@ -126,6 +135,12 @@
              </item>
              <item>
               <widget class="QSpinBox" name="height_field">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>Height of the map in pixels</string>
                </property>
@@ -177,6 +192,12 @@
             <layout class="QHBoxLayout" name="horizontal_layout_4">
              <item>
               <widget class="QSpinBox" name="floor_field">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>Floor number of the map</string>
                </property>
@@ -214,6 +235,12 @@
             <layout class="QHBoxLayout" name="horizontal_layout_3">
              <item>
               <widget class="QSpinBox" name="x_field">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
                </property>
@@ -234,6 +261,12 @@
              </item>
              <item>
               <widget class="QSpinBox" name="y_field">
+               <property name="maximumSize">
+                <size>
+                 <width>70</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="toolTip">
                 <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
                </property>
@@ -352,14 +385,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TilesetView</class>
-   <extends>QGraphicsView</extends>
-   <header>gui/tileset_view.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>gui/resource_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TilesetView</class>
+   <extends>QGraphicsView</extends>
+   <header>gui/tileset_view.h</header>
   </customwidget>
   <customwidget>
    <class>MapView</class>

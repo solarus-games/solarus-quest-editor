@@ -566,6 +566,12 @@
         <translation>Sous-type</translation>
     </message>
     <message>
+        <location filename="../src/gui/edit_entity_dialog.ui" line="351"/>
+        <location filename="../build/ui_edit_entity_dialog.h" line="739"/>
+        <source>Custom entity script</source>
+        <translation>Script d&apos;entité custom</translation>
+    </message>
+    <message>
         <location filename="../src/gui/edit_entity_dialog.ui" line="371"/>
         <location filename="../build/ui_edit_entity_dialog.h" line="741"/>
         <source>Save the state</source>
@@ -605,7 +611,7 @@
         <location filename="../src/gui/edit_entity_dialog.ui" line="688"/>
         <location filename="../build/ui_edit_entity_dialog.h" line="757"/>
         <source>By hero, savegame variable required</source>
-        <translation>Par le héros, variable sauvegardée requise</translation>
+        <translation>Par le héros, variable sauvegardée nécessaire</translation>
     </message>
     <message>
         <location filename="../src/gui/edit_entity_dialog.ui" line="718"/>
@@ -617,7 +623,7 @@
         <location filename="../src/gui/edit_entity_dialog.ui" line="729"/>
         <location filename="../build/ui_edit_entity_dialog.h" line="759"/>
         <source>By hero, item required</source>
-        <translation>Par le héros, item requis</translation>
+        <translation>Par le héros, item nécessaire</translation>
     </message>
     <message>
         <location filename="../src/gui/edit_entity_dialog.ui" line="766"/>
@@ -730,10 +736,8 @@
         <translation>Maximum de déplacements</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.ui" line="351"/>
-        <location filename="../build/ui_edit_entity_dialog.h" line="739"/>
         <source>Call a custom entity script</source>
-        <translation>Appeler un script d&apos;entité custom</translation>
+        <translation type="vanished">Appeler un script d&apos;entité custom</translation>
     </message>
     <message>
         <source>Savegame variable</source>
@@ -1036,7 +1040,7 @@
     <message>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="1124"/>
         <source>Play a sound when destroyed</source>
-        <translation>Jouer un son lors de la destruction</translation>
+        <translation>Son à la destruction</translation>
     </message>
     <message>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="1268"/>
@@ -1442,145 +1446,145 @@ Votre quête a été conservée inchangée au format %1.</translation>
     <name>MapEditor</name>
     <message>
         <location filename="../src/gui/map_editor.ui" line="14"/>
-        <location filename="../build/ui_map_editor.h" line="302"/>
+        <location filename="../build/ui_map_editor.h" line="307"/>
         <source>Map editor</source>
         <translation>Éditeur de map</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="61"/>
-        <location filename="../build/ui_map_editor.h" line="306"/>
+        <location filename="../build/ui_map_editor.h" line="311"/>
         <source>Map id</source>
         <translation>Id de la map</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="68"/>
-        <location filename="../build/ui_map_editor.h" line="308"/>
+        <location filename="../build/ui_map_editor.h" line="313"/>
         <source>Filename of the map (without extension)</source>
         <translation>Nom de fichier de la map (sans extension)</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="81"/>
-        <location filename="../build/ui_map_editor.h" line="314"/>
+        <location filename="../build/ui_map_editor.h" line="319"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="94"/>
-        <location filename="../build/ui_map_editor.h" line="316"/>
+        <location filename="../build/ui_map_editor.h" line="321"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="101"/>
-        <location filename="../build/ui_map_editor.h" line="318"/>
+        <location filename="../build/ui_map_editor.h" line="323"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="110"/>
-        <location filename="../build/ui_map_editor.h" line="320"/>
+        <location filename="../src/gui/map_editor.ui" line="116"/>
+        <location filename="../build/ui_map_editor.h" line="325"/>
         <source>Width of the map in pixels</source>
         <translation>Largeur de la map en pixels</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="123"/>
-        <location filename="../build/ui_map_editor.h" line="322"/>
+        <location filename="../src/gui/map_editor.ui" line="132"/>
+        <location filename="../build/ui_map_editor.h" line="328"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="130"/>
-        <location filename="../build/ui_map_editor.h" line="324"/>
+        <location filename="../src/gui/map_editor.ui" line="145"/>
+        <location filename="../build/ui_map_editor.h" line="330"/>
         <source>Height of the map in pixels</source>
         <translation>Hauteur de la map en pixels</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="158"/>
-        <location filename="../build/ui_map_editor.h" line="326"/>
+        <location filename="../src/gui/map_editor.ui" line="173"/>
+        <location filename="../build/ui_map_editor.h" line="332"/>
         <source>Set a world</source>
         <translation>Monde</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="165"/>
-        <location filename="../build/ui_map_editor.h" line="328"/>
+        <location filename="../src/gui/map_editor.ui" line="180"/>
+        <location filename="../build/ui_map_editor.h" line="334"/>
         <source>A name to group maps together</source>
         <translation>Nom permettant de regrouper des maps</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="172"/>
-        <location filename="../build/ui_map_editor.h" line="330"/>
+        <location filename="../src/gui/map_editor.ui" line="187"/>
+        <location filename="../build/ui_map_editor.h" line="336"/>
         <source>Set a floor</source>
         <translation>Étage</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="181"/>
-        <location filename="../build/ui_map_editor.h" line="332"/>
+        <location filename="../src/gui/map_editor.ui" line="202"/>
+        <location filename="../build/ui_map_editor.h" line="338"/>
         <source>Floor number of the map</source>
         <translation>Numéro d&apos;étage de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="209"/>
-        <location filename="../build/ui_map_editor.h" line="334"/>
+        <location filename="../src/gui/map_editor.ui" line="230"/>
+        <location filename="../build/ui_map_editor.h" line="340"/>
         <source>Location in its world</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="218"/>
-        <location filename="../src/gui/map_editor.ui" line="238"/>
-        <location filename="../build/ui_map_editor.h" line="336"/>
-        <location filename="../build/ui_map_editor.h" line="340"/>
+        <location filename="../src/gui/map_editor.ui" line="245"/>
+        <location filename="../src/gui/map_editor.ui" line="271"/>
+        <location filename="../build/ui_map_editor.h" line="342"/>
+        <location filename="../build/ui_map_editor.h" line="346"/>
         <source>Coordinates of the map in its world (useful to make adjacent scrolling maps)</source>
         <translation>Coordonnées de la map dans son monde (utile pour faire des maps adjacentes avec scrolling)</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="231"/>
-        <location filename="../build/ui_map_editor.h" line="338"/>
+        <location filename="../src/gui/map_editor.ui" line="258"/>
+        <location filename="../build/ui_map_editor.h" line="344"/>
         <source>,</source>
         <translation>,</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="266"/>
-        <location filename="../build/ui_map_editor.h" line="342"/>
+        <location filename="../src/gui/map_editor.ui" line="299"/>
+        <location filename="../build/ui_map_editor.h" line="348"/>
         <location filename="../src/gui/map_editor.cpp" line="152"/>
         <source>Tileset</source>
         <translation>Tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="275"/>
-        <location filename="../build/ui_map_editor.h" line="344"/>
+        <location filename="../src/gui/map_editor.ui" line="308"/>
+        <location filename="../build/ui_map_editor.h" line="350"/>
         <source>Tileset of the map</source>
         <translation>Tileset de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="282"/>
-        <location filename="../build/ui_map_editor.h" line="347"/>
+        <location filename="../src/gui/map_editor.ui" line="315"/>
+        <location filename="../build/ui_map_editor.h" line="353"/>
         <source>Refresh tileset</source>
         <translation>Recharger le tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="285"/>
-        <location filename="../src/gui/map_editor.ui" line="305"/>
-        <location filename="../build/ui_map_editor.h" line="349"/>
-        <location filename="../build/ui_map_editor.h" line="353"/>
+        <location filename="../src/gui/map_editor.ui" line="318"/>
+        <location filename="../src/gui/map_editor.ui" line="338"/>
+        <location filename="../build/ui_map_editor.h" line="355"/>
+        <location filename="../build/ui_map_editor.h" line="359"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="302"/>
-        <location filename="../build/ui_map_editor.h" line="351"/>
+        <location filename="../src/gui/map_editor.ui" line="335"/>
+        <location filename="../build/ui_map_editor.h" line="357"/>
         <source>Edit tileset</source>
         <translation>Modifier le tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="324"/>
-        <location filename="../build/ui_map_editor.h" line="354"/>
+        <location filename="../src/gui/map_editor.ui" line="357"/>
+        <location filename="../build/ui_map_editor.h" line="360"/>
         <location filename="../src/gui/map_editor.cpp" line="170"/>
         <source>Music</source>
         <translation>Musique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.ui" line="331"/>
-        <location filename="../build/ui_map_editor.h" line="356"/>
+        <location filename="../src/gui/map_editor.ui" line="364"/>
+        <location filename="../build/ui_map_editor.h" line="362"/>
         <source>Background music of the map</source>
         <translation>Musique de fond de la map</translation>
     </message>
