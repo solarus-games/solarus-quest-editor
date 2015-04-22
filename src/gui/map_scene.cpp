@@ -21,8 +21,6 @@
 #include "view_settings.h"
 #include <QPainter>
 
-#include <QDebug>  // TODO
-
 /**
  * @brief Creates a map scene.
  * @param map The map data to represent in the scene.
