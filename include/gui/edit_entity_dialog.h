@@ -105,6 +105,8 @@ private:
   QMap<QString, QRadioButton*> get_opening_method_radio_buttons();
   QString get_selected_opening_method();
 
+  QValidator* create_savegame_variable_validator();
+
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
   EntityModelPtr entity_after;         /**< A copy of the entity with the modified data. */

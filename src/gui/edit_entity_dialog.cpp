@@ -106,6 +106,16 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 }
 
 /**
+ * @brief Creates a validator for savegame variable fields.
+ * @return A validator that checks savegame variable inputs.
+ */
+QValidator* EditEntityDialog::create_savegame_variable_validator() {
+
+  QRegularExpression regexp("^[a-zA-Z_][a-zA-Z0-9_]*$");
+  return new QRegularExpressionValidator(regexp);
+}
+
+/**
  * @brief Fills the fields from the existing entity.
  */
 void EditEntityDialog::initialize() {
@@ -1036,9 +1046,7 @@ void EditEntityDialog::initialize_savegame_variable() {
         ui.savegame_variable_layout);
 
   // Only accept valid identifiers as savegame variable names.
-  QRegularExpression regexp("^[a-zA-Z_][a-zA-Z0-9_]*$");
-  QValidator* validator = new QRegularExpressionValidator(regexp);
-  ui.savegame_variable_field->setValidator(validator);
+  ui.savegame_variable_field->setValidator(create_savegame_variable_validator());
 
   // Show the initial value.
   QString value = entity_before.get_field(savegame_variable_field_name).toString();
@@ -1245,6 +1253,10 @@ void EditEntityDialog::initialize_treasure() {
   ui.treasure_name_field->set_quest(get_quest());
   ui.treasure_name_field->set_resource_type(ResourceType::ITEM);
   ui.treasure_name_field->add_special_value("", tr("(None)"), 0);  // Add the special value "None".
+
+  // Only accept valid identifiers as savegame variable names.
+  ui.treasure_savegame_variable_field->setValidator(create_savegame_variable_validator());
+
   QString treasure_name = entity_before.get_field(treasure_name_field_name).toString();
   ui.treasure_name_field->set_selected_id(treasure_name);
   ui.treasure_variant_field->setValue(entity_before.get_field(treasure_variant_field_name).toInt());
