@@ -48,8 +48,5 @@ savegame_variable
 opening_method
 opening_condition
 opening_condition_consumed
-
-To do:
-
 behavior
 

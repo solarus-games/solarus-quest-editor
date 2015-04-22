@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>1042</height>
+    <height>1142</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>Edit an entity</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QFormLayout" name="form_layout">
      <property name="fieldGrowthPolicy">
@@ -784,6 +784,73 @@
        <property name="text">
         <string>Opening mode</string>
        </property>
+      </widget>
+     </item>
+     <item row="22" column="0">
+      <widget class="QLabel" name="behavior_label">
+       <property name="text">
+        <string>Action</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="1">
+      <widget class="QWidget" name="behavior_layout" native="true">
+       <layout class="QVBoxLayout" name="layout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="behavior_dialog_layout">
+          <item>
+           <widget class="QRadioButton" name="behavior_dialog_radio">
+            <property name="text">
+             <string>Show a dialog</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="behavior_dialog_field"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="behavior_map_radio">
+          <property name="text">
+           <string>Call the map script</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="behavior_item_layout">
+          <item>
+           <widget class="QRadioButton" name="behavior_item_radio">
+            <property name="text">
+             <string>Call an item script</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ResourceSelector" name="behavior_item_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

@@ -46,6 +46,8 @@ private:
   void initialize_simple_strings();
   void apply_simple_strings();
 
+  void initialize_behavior();
+  void apply_behavior();
   void initialize_breed();
   void apply_breed();
   void initialize_damage_on_enemies();

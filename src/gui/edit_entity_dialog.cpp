@@ -21,6 +21,7 @@ namespace {
 
 // Put field names in constants to avoid repeated identical literals.
 
+const QString behavior_field_name = "behavior";
 const QString breed_field_name = "breed";
 const QString damage_on_enemies_field_name = "damage_on_enemies";
 const QString destination_field_name = "destination";
@@ -113,6 +114,7 @@ void EditEntityDialog::initialize() {
   initialize_simple_integers();
   initialize_simple_strings();
 
+  initialize_behavior();
   initialize_breed();
   initialize_damage_on_enemies();
   initialize_destination();
@@ -148,6 +150,7 @@ void EditEntityDialog::apply() {
   apply_simple_integers();
   apply_simple_strings();
 
+  apply_behavior();
   apply_breed();
   apply_damage_on_enemies();
   apply_destination();
@@ -405,6 +408,87 @@ void EditEntityDialog::apply_simple_strings() {
       entity_after->set_field(field.field_name, value);
     }
   }
+}
+
+/**
+ * @brief Initializes the behavior fields.
+ */
+void EditEntityDialog::initialize_behavior() {
+
+  if (!entity_before.has_field(behavior_field_name)) {
+    remove_field(ui.behavior_label, ui.behavior_layout);
+    return;
+  }
+
+  ui.behavior_item_field->set_quest(get_quest());
+  ui.behavior_item_field->set_resource_type(ResourceType::ITEM);
+
+  ui.behavior_dialog_field->setEnabled(false);
+  connect(ui.behavior_dialog_radio, SIGNAL(toggled(bool)),
+          ui.behavior_dialog_field, SLOT(setEnabled(bool)));
+  ui.behavior_item_field->setEnabled(false);
+  connect(ui.behavior_item_radio, SIGNAL(toggled(bool)),
+          ui.behavior_item_field, SLOT(setEnabled(bool)));
+
+  QString behavior = entity_before.get_field(behavior_field_name).toString();
+  // behavior can be one of:
+  // - "map",
+  // - "dialog#xxx" where xxx is a dialog id,
+  // - "item#xxx" where xxx is an item id.
+
+  QStringList parts = behavior.split('#');
+  if (parts.size() == 2) {
+    QString first = parts.at(0);
+    if (first == "dialog") {
+      // Show a dialog.
+      QString dialog_id = parts.at(1);
+      ui.behavior_dialog_radio->setChecked(true);
+      ui.behavior_dialog_field->setText(dialog_id);
+      ui.behavior_dialog_field->setEnabled(true);
+    }
+    else if (first == "item") {
+      // Call an item script.
+      QString item_id = parts.at(1);
+      ui.behavior_item_radio->setChecked(true);
+      ui.behavior_item_field->set_selected_id(item_id);
+      ui.behavior_item_field->setEnabled(true);
+    }
+    else {
+      // The field is invalid: initialize the dialog with "map".
+      behavior = "map";
+    }
+  }
+  else if (behavior != "map") {
+    // The field is invalid: initialize the dialog with "map".
+    behavior = "map";
+  }
+
+  if (behavior == "map") {
+    // Call the map script.
+    ui.behavior_map_radio->setChecked(true);
+  }
+}
+
+/**
+ * @brief Updates the entity from the behavior fields.
+ */
+void EditEntityDialog::apply_behavior() {
+
+  if (!entity_before.has_field(behavior_field_name)) {
+    return;
+  }
+
+  QString behavior = "map";
+  if (ui.behavior_dialog_radio->isChecked()) {
+    QString dialog_id = ui.behavior_dialog_field->text();
+    // TODO check that dialog_id is valid
+    behavior = QString("dialog#") + dialog_id;
+  }
+  else if (ui.behavior_item_radio->isChecked()) {
+    QString item_id = ui.behavior_item_field->get_selected_id();
+    behavior = QString("item#") + item_id;
+  }
+  entity_after->set_field(behavior_field_name, behavior);
 }
 
 /**
