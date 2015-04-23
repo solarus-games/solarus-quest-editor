@@ -89,9 +89,10 @@ QString SpriteModel::get_sprite_id() const {
 /**
  * @brief Returns the default animation name of the sprite.
  * @return The default animation name.
+ * Returns an empty string if there is no animation at all.
  */
 QString SpriteModel::get_default_animation_name() const {
-  return sprite.get_default_animation_name().c_str();
+  return QString::fromStdString(sprite.get_default_animation_name());
 }
 
 /**
@@ -1446,6 +1447,32 @@ QPixmap SpriteModel::get_direction_icon(const Index& index) const {
 
   direction.icon = QPixmap::fromImage(image);
   return direction.icon;
+}
+
+/**
+ * @brief Returns a 32x32 icon representing this sprite.
+ */
+QPixmap SpriteModel::get_icon() const {
+
+  QString animation = get_default_animation_name();
+  if (animation.isEmpty()) {
+    // No animation in the sprite.
+    return QPixmap();
+  }
+
+  Index index(animation, 0);
+  int num_directions = get_animation_num_directions(index);
+  if (num_directions == 0) {
+    // Nothing in the animation.
+    return QPixmap();
+  }
+
+  if (num_directions == 4) {
+    // If the sprite has a four-direction system, pick the south direction.
+    index.direction_nb = 3;
+  }
+
+  return get_direction_icon(index);
 }
 
 /**

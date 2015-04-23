@@ -17,6 +17,7 @@
 #include "gui/resource_model.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "sprite_model.h"
 #include <QDebug>
 
 /**
@@ -28,7 +29,8 @@
 ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QObject* parent) :
   QStandardItemModel(parent),
   quest(quest),
-  resource_type(resource_type) {
+  resource_type(resource_type),
+  tileset_id() {
 
   QStringList ids = get_resources().get_elements(this->resource_type);
   for (const QString& id : ids) {
@@ -60,6 +62,38 @@ const Quest& ResourceModel::get_quest() const {
  */
 const QuestResources& ResourceModel::get_resources() const {
   return quest.get_resources();
+}
+
+/**
+ * @brief Returns the id of the current tileset.
+ *
+ * This tileset is used for icons of tileset-dependent sprites.
+ *
+ * @return The current tileset id or an empty string.
+ */
+QString ResourceModel::get_tileset_id() const {
+  return tileset_id;
+}
+
+/**
+ * @brief Sets the id of the current tileset.
+ *
+ * This tileset is used for icons of tileset-dependent sprites.
+ *
+ * @param tileset_id The current tileset id or an empty string to unset it.
+ */
+void ResourceModel::set_tileset_id(const QString& tileset_id) {
+
+  this->tileset_id = tileset_id;
+
+  if (resource_type == ResourceType::SPRITE) {
+    // Rebuild icons.
+    for (const auto& it : items) {
+      const QString& element_id = it.first;
+      QStandardItem* item = it.second;
+      item->setData(create_icon(element_id), Qt::DecorationRole);
+    }
+  }
 }
 
 /**
@@ -150,11 +184,8 @@ QStandardItem* ResourceModel::create_element_item(const QString& element_id) {
   QString description = get_resources().get_description(resource_type, element_id);
 
   QStandardItem* item = new QStandardItem(description);
-  QString resource_type_name = QString::fromStdString(
-        Solarus::QuestResources::get_resource_type_name(resource_type));
-  item->setData(
-        QIcon(":/images/icon_resource_" + resource_type_name + ".png"),
-        Qt::DecorationRole);
+
+  item->setData(create_icon(element_id), Qt::DecorationRole);
   item->setData(element_id, Qt::UserRole);
   items.insert(std::make_pair(element_id, item));
   return item;
@@ -232,6 +263,29 @@ QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
   item->setSelectable(false);
   item->setData(QIcon(":/images/icon_folder_open.png"), Qt::DecorationRole);
   return item;
+}
+
+/**
+ * @brief Returns an icon for the given element.
+ * @param element_id Id of a resource element.
+ * @return An appropriate icon.
+ */
+QIcon ResourceModel::create_icon(const QString& element_id) {
+
+  if (resource_type == ResourceType::SPRITE) {
+    // Special case of sprites: show the sprite icon.
+    SpriteModel sprite(get_quest(), element_id);
+    sprite.set_tileset_id(tileset_id);
+    const QPixmap& pixmap = sprite.get_icon();
+    if (!pixmap.isNull()) {
+      return QIcon(pixmap);
+    }
+  }
+
+  // Return an icon rpeprenting the resource type.
+  QString resource_type_name = QString::fromStdString(
+        Solarus::QuestResources::get_resource_type_name(resource_type));
+  return QIcon(":/images/icon_resource_" + resource_type_name + ".png");
 }
 
 /**

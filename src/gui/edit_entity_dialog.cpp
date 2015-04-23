@@ -1178,6 +1178,7 @@ void EditEntityDialog::initialize_sprite() {
         ui.sprite_field);
   ui.sprite_field->set_quest(get_quest());
   ui.sprite_field->set_resource_type(ResourceType::SPRITE);
+  ui.sprite_field->set_tileset_id(get_map().get_tileset_id());
   QString sprite = entity_before.get_field(sprite_field_name).toString();
   ui.sprite_field->set_selected_id(sprite);
 }

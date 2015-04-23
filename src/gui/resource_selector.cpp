@@ -143,3 +143,35 @@ void ResourceSelector::set_selected_id(const QString& element_id) {
 
   view->expand(index.parent());
 }
+
+/**
+ * @brief Returns the id of the current tileset.
+ *
+ * This tileset is used for sprite resources.
+ *
+ * @return The current tileset id or an empty string.
+ */
+QString ResourceSelector::get_tileset_id() const {
+
+  if (model == nullptr) {
+    return QString();
+  }
+
+  return model->get_tileset_id();
+}
+
+/**
+ * @brief Sets the id of the current tileset.
+ *
+ * This tileset is used for sprite resources.
+ *
+ * @param tileset_id The current tileset id or an empty string to unset it.
+ */
+void ResourceSelector::set_tileset_id(const QString& tileset_id) {
+
+  if (model == nullptr) {
+    return;
+  }
+
+  model->set_tileset_id(tileset_id);
+}

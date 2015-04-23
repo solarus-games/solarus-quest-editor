@@ -161,6 +161,7 @@ public:
   QPixmap get_direction_first_frame(const Index& index) const;
   QPixmap get_direction_frame(const Index& index, int frame) const;
   QPixmap get_direction_icon(const Index& index) const;
+  QPixmap get_icon() const;
 
   // Selection.
   QItemSelectionModel& get_selection_model();

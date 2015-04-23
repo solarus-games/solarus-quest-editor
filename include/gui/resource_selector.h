@@ -49,6 +49,9 @@ public:
   QString get_selected_id() const;
   void set_selected_id(const QString& element_id);
 
+  QString get_tileset_id() const;
+  void set_tileset_id(const QString& tileset_id);
+
 private:
 
   void rebuild();

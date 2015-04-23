@@ -37,6 +37,8 @@ public:
 
   const Quest& get_quest() const;
   const QuestResources& get_resources() const;
+  QString get_tileset_id() const;
+  void set_tileset_id(const QString& tileset_id);
 
   void add_special_value(
       const QString& id, const QString& text, int index);
@@ -65,11 +67,13 @@ private:
   QStandardItem* create_element_item(const QString& element_id);
   const QStandardItem* get_element_item(const QString& element_id) const;
   QStandardItem* get_element_item(const QString& element_id);
+  QIcon create_icon(const QString& element_id);
 
   const Quest& quest;             /**< The quest. */
   ResourceType resource_type;     /**< The resource type represented in the model. */
   std::map<QString, QStandardItem*>
       items;                      /**< Mapping of items from element ids. */
+  QString tileset_id;             /**< Id of a tileset to use when showing sprite icon. */
 
 };
 
