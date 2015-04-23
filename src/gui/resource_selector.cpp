@@ -27,6 +27,7 @@
 ResourceSelector::ResourceSelector(QWidget* parent) :
   QComboBox(parent),
   resource_type(),
+  view(nullptr),
   model(nullptr) {
 
 }
@@ -66,15 +67,14 @@ void ResourceSelector::set_quest(const Quest& quest) {
   model = new ResourceModel(quest, resource_type);
   setModel(model);
 
-  QTreeView* tree_view = new QTreeView(this);
-  tree_view->setModel(model);
-  tree_view->setEditTriggers(QTreeView::NoEditTriggers);
-  tree_view->setAlternatingRowColors(true);
-  tree_view->expandAll();
-  tree_view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-  tree_view->setHeaderHidden(true);
+  view = new QTreeView(this);
+  view->setModel(model);
+  view->setEditTriggers(QTreeView::NoEditTriggers);
+  view->setAlternatingRowColors(true);
+  view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+  view->setHeaderHidden(true);
 
-  setView(tree_view);
+  setView(view);
 }
 
 /**
@@ -89,6 +89,10 @@ void ResourceSelector::set_quest(const Quest& quest) {
 void ResourceSelector::add_special_value(
     const QString& id, const QString& text, int index) {
 
+  if (model == nullptr) {
+    return;
+  }
+
   model->add_special_value(id, text, index);
 }
 
@@ -97,6 +101,11 @@ void ResourceSelector::add_special_value(
  * @param id Id of the resource to remove.
  */
 void ResourceSelector::remove_id(const QString& id) {
+
+  if (model == nullptr) {
+    return;
+  }
+
   model->remove_id(id);
 }
 
@@ -131,4 +140,6 @@ void ResourceSelector::set_selected_id(const QString& element_id) {
   setRootModelIndex(index.parent());
   setCurrentIndex(index.row());  // Relative to the new root.
   setRootModelIndex(model->invisibleRootItem()->index());
+
+  view->expand(index.parent());
 }

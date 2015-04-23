@@ -24,6 +24,7 @@ using ResourceType = Solarus::ResourceType;
 
 class Quest;
 class ResourceModel;
+class QTreeView;
 
 /**
  * @brief A combo box that allows to choose a resource element.
@@ -53,6 +54,7 @@ private:
   void rebuild();
 
   ResourceType resource_type;     /**< The type of resource to choose. */
+  QTreeView* view;                /**< The tree view shown in the combobox. */
   ResourceModel* model;           /**< The underlying model. */
 
 };
