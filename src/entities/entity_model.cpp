@@ -1190,6 +1190,8 @@ bool EntityModel::is_size_valid(const QSize& size) const {
     return true;
 
   }
+
+  return true;
 }
 
 /**
