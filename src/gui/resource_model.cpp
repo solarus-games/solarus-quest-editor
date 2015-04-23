@@ -87,11 +87,16 @@ void ResourceModel::set_tileset_id(const QString& tileset_id) {
   this->tileset_id = tileset_id;
 
   if (resource_type == ResourceType::SPRITE) {
-    // Rebuild icons.
-    for (const auto& it : items) {
-      const QString& element_id = it.first;
-      QStandardItem* item = it.second;
-      item->setData(create_icon(element_id), Qt::DecorationRole);
+    // Icons have changed.
+    QVector<int> roles;
+    roles << Qt::DecorationRole;
+    dataChanged(QModelIndex(), QModelIndex(), roles);
+
+    for (const auto& kvp: items) {
+      QStandardItem* item = kvp.second;
+      if (item != nullptr) {
+        item->setData(QVariant(), Qt::DecorationRole);
+      }
     }
   }
 }
@@ -185,7 +190,6 @@ QStandardItem* ResourceModel::create_element_item(const QString& element_id) {
 
   QStandardItem* item = new QStandardItem(description);
 
-  item->setData(create_icon(element_id), Qt::DecorationRole);
   item->setData(element_id, Qt::UserRole);
   items.insert(std::make_pair(element_id, item));
   return item;
@@ -270,7 +274,7 @@ QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
  * @param element_id Id of a resource element.
  * @return An appropriate icon.
  */
-QIcon ResourceModel::create_icon(const QString& element_id) {
+QIcon ResourceModel::create_icon(const QString& element_id) const {
 
   if (resource_type == ResourceType::SPRITE) {
     // Special case of sprites: show the sprite icon.
@@ -282,9 +286,8 @@ QIcon ResourceModel::create_icon(const QString& element_id) {
     }
   }
 
-  // Return an icon rpeprenting the resource type.
-  QString resource_type_name = QString::fromStdString(
-        Solarus::QuestResources::get_resource_type_name(resource_type));
+  // Return an icon representing the resource type.
+  QString resource_type_name = get_quest().get_resources().get_lua_name(resource_type);
   return QIcon(":/images/icon_resource_" + resource_type_name + ".png");
 }
 
@@ -363,10 +366,36 @@ void ResourceModel::element_description_changed(
 
   QStandardItem* item = get_element_item(id);
   if (item == nullptr) {
-    // Item not found, maybe it has been removed dynamicaly
+    // Item not found, maybe it has been removed dynamically
     // (e.g. in StringsEditor).
     return;
   }
 
   item->setData(new_description, Qt::DisplayRole);
 }
+
+/**
+ * @brief Returns the data of an item.
+ *
+ * Reimplemented from QStandardItemModel to create sprite icons lazily.
+ *
+ * @param index Index of the item to get.
+ * @param role The wanted role.
+ * @return The corresponding data.
+ */
+QVariant ResourceModel::data(const QModelIndex& index, int role) const {
+
+  if (role == Qt::DecorationRole) {
+    QStandardItem* item = this->item(index.row(), index.column());
+    if (item != nullptr) {
+      if (!item->data(Qt::DecorationRole).isValid()) {
+        // Icon not loaded yet.
+        const QString& element_id = item->data(Qt::UserRole).toString();
+        item->setData(create_icon(element_id), Qt::DecorationRole);
+      }
+    }
+  }
+
+  return QStandardItemModel::data(index, role);
+}
+

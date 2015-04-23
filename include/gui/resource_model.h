@@ -46,6 +46,8 @@ public:
 
   QModelIndex get_element_index(const QString& element_id) const;
 
+  QVariant data(const QModelIndex& index, int role) const override;
+
 private slots:
 
   void element_added(
@@ -67,7 +69,7 @@ private:
   QStandardItem* create_element_item(const QString& element_id);
   const QStandardItem* get_element_item(const QString& element_id) const;
   QStandardItem* get_element_item(const QString& element_id);
-  QIcon create_icon(const QString& element_id);
+  QIcon create_icon(const QString& element_id) const;
 
   const Quest& quest;             /**< The quest. */
   ResourceType resource_type;     /**< The resource type represented in the model. */
