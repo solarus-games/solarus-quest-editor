@@ -1159,13 +1159,6 @@ MapView::State::State(MapView& view) :
 }
 
 /**
- * @brief Destructor.
- */
-MapView::State::~State() {
-
-}
-
-/**
  * @brief Returns the map view managed by this state.
  * @return The map view.
  */

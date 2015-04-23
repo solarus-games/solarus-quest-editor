@@ -83,12 +83,6 @@ EntityModel::EntityModel(
 }
 
 /**
- * @brief Destructor.
- */
-EntityModel::~EntityModel() {
-}
-
-/**
  * @brief Creates an entity model for a new entity of the given type.
  * @param map The map that will contain the entity.
  * @param type Type of entity to create.

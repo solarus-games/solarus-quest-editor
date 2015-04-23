@@ -28,7 +28,7 @@ class EditorException : public std::exception {
 public:
 
   EditorException(const QString& message);
-  virtual ~EditorException() { }
+  virtual ~EditorException() = default;
 
   QString get_message() const noexcept;
   const char* what() const noexcept override;

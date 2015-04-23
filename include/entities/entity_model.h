@@ -69,7 +69,7 @@ public:
   static EntityModelPtr clone(
       MapModel& map, const EntityIndex& index);
 
-  virtual ~EntityModel();
+  virtual ~EntityModel() = default;
 
   const MapModel& get_map() const;
   MapModel& get_map();
