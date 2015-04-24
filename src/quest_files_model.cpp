@@ -520,9 +520,7 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
   // Resource element (possibly a directory for languages).
   else if (quest.is_resource_element(file_path, resource_type, element_id)) {
 
-    QString resource_type_name = QString::fromStdString(
-          Solarus::QuestResources::get_resource_type_name(resource_type));
-
+    QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
     if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
       // Resource declared and present on the filesystem.
       icon_file_name = "icon_resource_" + resource_type_name + ".png";
@@ -537,10 +535,7 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
   else if (quest.is_dir(file_path)) {
 
     if (quest.is_resource_path(file_path, resource_type)) {
-
-      QString resource_type_name = QString::fromStdString(
-            Solarus::QuestResources::get_resource_type_name(resource_type));
-
+      QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
       icon_file_name = "icon_folder_open_" + resource_type_name + ".png";
     }
     else {
