@@ -28,7 +28,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
 
   // The following awful regexp beginning can be used to match things that are
   // not in a string.
-  // To do that, we check that the number of quotes and double-quotes
+  // To do that, we check that the number of quotes and double-quotes is even.
   // (Keeping state information would probably be more readable.)
   QString not_in_a_single_line_string = "^[^\"']*(?:\"[^\"]*\"[^\"'']*|\'[^\']*\'[^\"']*)*";
 
