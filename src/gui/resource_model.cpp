@@ -18,7 +18,6 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include "sprite_model.h"
-#include <QDebug>
 
 /**
  * @brief Creates a resource model.
@@ -30,6 +29,9 @@ ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QOb
   QStandardItemModel(parent),
   quest(quest),
   resource_type(resource_type),
+  items(),
+  icons(),
+  directory_icon(":/images/icon_folder_open.png"),
   tileset_id() {
 
   QStringList ids = get_resources().get_elements(this->resource_type);
@@ -87,17 +89,12 @@ void ResourceModel::set_tileset_id(const QString& tileset_id) {
   this->tileset_id = tileset_id;
 
   if (resource_type == ResourceType::SPRITE) {
-    // Icons have changed.
+
+    // Icons may change.
+    icons.clear();  // Clear the icon cache.
     QVector<int> roles;
     roles << Qt::DecorationRole;
     dataChanged(QModelIndex(), QModelIndex(), roles);
-
-    for (const auto& kvp: items) {
-      QStandardItem* item = kvp.second;
-      if (item != nullptr) {
-        item->setData(QVariant(), Qt::DecorationRole);
-      }
-    }
   }
 }
 
@@ -130,7 +127,7 @@ void ResourceModel::add_special_value(
 
   QStandardItem* item = new QStandardItem(text);
   item->setData(id, Qt::UserRole);
-  items.insert(std::make_pair(id, item));
+  items.insert(id, item);
   insertRow(index, item);
 }
 
@@ -176,7 +173,7 @@ void ResourceModel::remove_element(const QString& element_id) {
   }
 
   removeRow(index.row(), index.parent());
-  items.erase(element_id);
+  items.remove(element_id);
 }
 
 /**
@@ -191,7 +188,7 @@ QStandardItem* ResourceModel::create_element_item(const QString& element_id) {
   QStandardItem* item = new QStandardItem(description);
 
   item->setData(element_id, Qt::UserRole);
-  items.insert(std::make_pair(element_id, item));
+  items.insert(element_id, item);
   return item;
 }
 
@@ -207,7 +204,7 @@ const QStandardItem* ResourceModel::get_element_item(const QString& element_id) 
     return nullptr;
   }
 
-  return it->second;
+  return it.value();
 }
 
 /**
@@ -225,7 +222,7 @@ QStandardItem* ResourceModel::get_element_item(const QString& element_id) {
     return nullptr;
   }
 
-  return it->second;
+  return it.value();
 }
 
 /**
@@ -265,7 +262,6 @@ QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
 
   QStandardItem* item = new QStandardItem(dir_name);
   item->setSelectable(false);
-  item->setData(QIcon(":/images/icon_folder_open.png"), Qt::DecorationRole);
   return item;
 }
 
@@ -276,18 +272,23 @@ QStandardItem* ResourceModel::create_dir_item(const QString& dir_name) {
  */
 QIcon ResourceModel::create_icon(const QString& element_id) const {
 
+  const Quest& quest = get_quest();
+  Q_ASSERT(!element_id.isEmpty());
+  Q_ASSERT(quest.get_resources().exists(resource_type, element_id));
   if (resource_type == ResourceType::SPRITE) {
     // Special case of sprites: show the sprite icon.
-    SpriteModel sprite(get_quest(), element_id);
-    sprite.set_tileset_id(tileset_id);
-    const QPixmap& pixmap = sprite.get_icon();
-    if (!pixmap.isNull()) {
-      return QIcon(pixmap);
+    if (quest.exists(quest.get_sprite_path(element_id))) {
+      SpriteModel sprite(quest, element_id);
+      sprite.set_tileset_id(tileset_id);
+      const QPixmap& pixmap = sprite.get_icon();
+      if (!pixmap.isNull()) {
+        return QIcon(pixmap);
+      }
     }
   }
 
   // Return an icon representing the resource type.
-  QString resource_type_name = get_quest().get_resources().get_lua_name(resource_type);
+  QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
   return QIcon(":/images/icon_resource_" + resource_type_name + ".png");
 }
 
@@ -346,8 +347,8 @@ void ResourceModel::element_renamed(
 
   item->setData(new_id, Qt::UserRole);
 
-  items.erase(old_id);
-  items.insert(std::make_pair(new_id, item));
+  items.remove(old_id);
+  items.insert(new_id, item);
   // TODO update the order
 }
 
@@ -385,14 +386,42 @@ void ResourceModel::element_description_changed(
  */
 QVariant ResourceModel::data(const QModelIndex& index, int role) const {
 
+  // Don't use QStandardItemModel storage features for icons.
+  // Load them on-demand instead.
   if (role == Qt::DecorationRole) {
-    QStandardItem* item = this->item(index.row(), index.column());
-    if (item != nullptr) {
-      if (!item->data(Qt::DecorationRole).isValid()) {
-        // Icon not loaded yet.
-        const QString& element_id = item->data(Qt::UserRole).toString();
-        item->setData(create_icon(element_id), Qt::DecorationRole);
+
+    const QStandardItem* item = itemFromIndex(index);
+    if (item == nullptr) {
+      // Invalid index;
+      return QVariant();
+    }
+
+    const QString& element_id = item->data(Qt::UserRole).toString();
+    if (element_id.isEmpty()) {
+      // Not a resource element: maybe a directory.
+      if (rowCount(index) > 0) {
+        return directory_icon;  // Directory item.
       }
+      return QIcon();
+    }
+
+    if (!get_quest().get_resources().exists(resource_type, element_id)) {
+      // Special item.
+      return QIcon();
+    }
+
+    // Resource elemnt item.
+    Q_ASSERT(!element_id.isEmpty());
+    auto it = icons.find(element_id);
+    if (it != icons.end()) {
+      // Icon already loaded.
+      return it.value();
+    }
+    else {
+      // Icon not loaded yet.
+      QIcon icon = create_icon(element_id);
+      icons.insert(element_id, icon);
+      return icon;
     }
   }
 

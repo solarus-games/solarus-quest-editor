@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_RESOURCE_MODEL_H
 
 #include <solarus/ResourceType.h>
+#include <QMap>
 #include <QStandardItemModel>
 
 using ResourceType = Solarus::ResourceType;
@@ -73,8 +74,11 @@ private:
 
   const Quest& quest;             /**< The quest. */
   ResourceType resource_type;     /**< The resource type represented in the model. */
-  std::map<QString, QStandardItem*>
+  QMap<QString, QStandardItem*>
       items;                      /**< Mapping of items from element ids. */
+  mutable QMap<QString, QIcon>
+      icons;                      /**< Mapping of item icons from element ids. */
+  QIcon directory_icon;              /**< Icon for directory items. */
   QString tileset_id;             /**< Id of a tileset to use when showing sprite icon. */
 
 };
