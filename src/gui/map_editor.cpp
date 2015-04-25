@@ -886,6 +886,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(tileset_selector_activated()));
   connect(map, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(tileset_id_changed(QString)));
+  connect(ui.tileset_refresh_button, SIGNAL(clicked()),
+          map, SLOT(tileset_modified()));
   connect(ui.tileset_edit_button, SIGNAL(clicked()),
           this, SLOT(open_tileset_requested()));
 

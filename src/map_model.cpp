@@ -262,6 +262,15 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
 }
 
 /**
+ * @brief Slot called when the tileset file is modified.
+ */
+void MapModel::tileset_modified() {
+  QString tileset_id = get_tileset_id();
+  set_tileset_id("");
+  set_tileset_id(tileset_id);
+}
+
+/**
  * @brief Returns the tileset of this map.
  * @return The tileset. Returns nullptr if no tileset is set.
  */

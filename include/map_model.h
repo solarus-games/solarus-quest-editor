@@ -150,6 +150,7 @@ signals:
 public slots:
 
   void save() const;
+  void tileset_modified();
 
 private:
 
