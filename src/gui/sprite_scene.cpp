@@ -160,7 +160,7 @@ void SpriteScene::rebuild() {
     removeItem(item);
   }
   direction_items.clear();
-  blocker.unblock();
+  blockSignals(was_blocked);
 
   // Update image
   update_image();
@@ -181,7 +181,6 @@ void SpriteScene::rebuild() {
     }
     direction_items.append(direction_item);
   }
-  blockSignals(was_blocked);
 }
 
 /**
