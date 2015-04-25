@@ -651,7 +651,7 @@ void TilesetEditor::set_description_from_gui() {
     return;
   }
 
-  QSignalBlocker(this);
+  const bool was_blocked = blockSignals(true);
   try {
     get_resources().set_description(ResourceType::TILESET, tileset_id, description);
     get_resources().save();
@@ -659,6 +659,7 @@ void TilesetEditor::set_description_from_gui() {
   catch (const EditorException& ex) {
     ex.print_message();
   }
+  blockSignals(was_blocked);
 }
 
 /**

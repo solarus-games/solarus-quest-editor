@@ -52,8 +52,8 @@ public:
 protected:
 
   void paint(QPainter* painter,
-                     const QStyleOptionGraphicsItem* option,
-                     QWidget* widget = nullptr) override;
+             const QStyleOptionGraphicsItem* option,
+             QWidget* widget = nullptr) override;
 
 private:
 
@@ -155,7 +155,7 @@ void SpriteScene::rebuild() {
   animation_name = index.animation_name;
 
   // Remove existing direction items
-  QSignalBlocker blocker(this);
+  const bool was_blocked = blockSignals(true);
   for (auto& item: direction_items) {
     removeItem(item);
   }
@@ -181,6 +181,7 @@ void SpriteScene::rebuild() {
     }
     direction_items.append(direction_item);
   }
+  blockSignals(was_blocked);
 }
 
 /**
@@ -217,7 +218,7 @@ void SpriteScene::update_selection_to_scene(
     rebuild();
   } else if (index.is_valid()) {
 
-    QSignalBlocker blocker(this);
+    const bool was_blocked = blockSignals(true);
 
     // Update the scene with the change.
     for (int nb = 0; nb < direction_items.size(); ++nb) {
@@ -229,7 +230,7 @@ void SpriteScene::update_selection_to_scene(
       }
     }
 
-    blocker.unblock();
+    blockSignals(was_blocked);
   }
 }
 
