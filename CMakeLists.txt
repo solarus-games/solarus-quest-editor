@@ -163,6 +163,7 @@ set(solarus_quest_editor_SOURCES
   include/strings_model.h
   include/dialogs_model.h
   include/indexed_string_tree.h
+  include/quest_runner.h
   src/entities/block.cpp
   src/entities/chest.cpp
   src/entities/crystal.cpp
@@ -256,6 +257,7 @@ set(solarus_quest_editor_SOURCES
   src/strings_model.cpp
   src/dialogs_model.cpp
   src/indexed_string_tree.cpp
+  src/quest_runner.cpp
 )
 
 # UI files.

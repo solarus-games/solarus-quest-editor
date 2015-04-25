@@ -25,6 +25,7 @@
 
 class Editor;
 class QToolButton;
+class QuestRunner;
 
 using EntityType = Solarus::EntityType;
 using Layer = Solarus::Layer;
@@ -38,6 +39,7 @@ class MainWindow : public QMainWindow {
 public:
 
   MainWindow(QWidget* parent);
+  ~MainWindow();
 
   void initialize_geometry_on_screen();
   Quest& get_quest();
@@ -73,6 +75,9 @@ private slots:
   void update_entity_type_visibility(EntityType entity_type);
   void update_entity_types_visibility();
 
+  void update_run_quest();
+  void solarus_fatal(const QString& what);
+
 protected:
 
   void closeEvent(QCloseEvent* event) override;
@@ -87,6 +92,7 @@ private:
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */
+  QuestRunner* quest_runner;      /**< The dedicated thread to run quest. */
 
   QMenu* zoom_menu;               /**< The zoom menu. */
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
@@ -105,6 +111,7 @@ private:
 
   QMap<QString, QAction*>
       common_actions;             /**< Actions available to all editors. */
+
 };
 
 #endif

@@ -26,10 +26,7 @@
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
-#include <solarus/Arguments.h>
-#include <solarus/MainLoop.h>
-#include <solarus/SolarusFatal.h>
-#include <solarus/lowlevel/Debug.h>
+#include "quest_runner.h"
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDebug>
@@ -49,6 +46,7 @@ using EntityType = Solarus::EntityType;
  */
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
+  quest_runner(new QuestRunner(this)),
   zoom_menu(nullptr),
   zoom_button(nullptr),
   zoom_actions(),
@@ -138,8 +136,22 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
           ui.action_paste, SLOT(setEnabled(bool)));
 
+  connect(quest_runner, SIGNAL(started()), this, SLOT(update_run_quest()));
+  connect(quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
+  connect(quest_runner, SIGNAL(solarus_fatal(QString)),
+          this, SLOT(solarus_fatal(QString)));
+
   // No editor initially.
   current_editor_changed(-1);
+}
+
+/**
+ * @brief Destructor of main window.
+ */
+MainWindow::~MainWindow() {
+
+  quest_runner->stop();
+  quest_runner->wait();
 }
 
 /**
@@ -527,22 +539,10 @@ void MainWindow::on_action_paste_triggered() {
  */
 void MainWindow::on_action_run_quest_triggered() {
 
-  QString quest_path = quest.get_root_path();
-  if (quest_path.isEmpty()) {
-    return;
-  }
-
-  // TODO run quest in a separate thread
-  try {
-    Solarus::Arguments arguments;
-    arguments.add_argument(quest_path.toStdString());
-    Solarus::MainLoop main_loop(arguments);
-    main_loop.run();
-  }
-  catch (const Solarus::SolarusFatal& ex) {
-    // The run did not end well.
-    std::cout << tr("Quest terminated unexpectedly: %1").arg(ex.what()).toStdString()
-              << std::endl;
+  if (quest_runner->isRunning()) {
+    quest_runner->stop();
+  } else {
+    quest_runner->start(quest.get_root_path());
   }
 }
 
@@ -807,6 +807,29 @@ void MainWindow::update_entity_types_visibility() {
       action->setChecked(view_settings.is_entity_type_visible(entity_type));
     }
   }
+}
+
+/**
+ * @brief Slot called when the quest has just started or stopped.
+ */
+void MainWindow::update_run_quest() {
+
+  if (quest_runner->isRunning()) {
+    ui.action_run_quest->setIcon(QIcon(":/images/icon_stop.png"));
+    ui.action_run_quest->setToolTip(tr("Stop quest"));
+  } else {
+    ui.action_run_quest->setIcon(QIcon(":/images/icon_start.png"));
+    ui.action_run_quest->setToolTip(tr("Run quest"));
+  }
+}
+
+/**
+ * @brief Slot called when the quest throws a fatal error.
+ * @param what The message of the error.
+ */
+void MainWindow::solarus_fatal(const QString& what) {
+
+  GuiTools::error_dialog(tr("Quest terminated unexpectedly: %1").arg(what));
 }
 
 /**
