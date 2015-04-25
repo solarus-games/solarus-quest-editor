@@ -24,7 +24,6 @@
 #include <QMainWindow>
 
 class Editor;
-class QuestManager;
 class QToolButton;
 
 using EntityType = Solarus::EntityType;

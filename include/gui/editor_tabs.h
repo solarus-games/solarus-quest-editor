@@ -24,7 +24,6 @@
 
 class Editor;
 class Quest;
-class QuestManager;
 class QUndoGroup;
 
 /**
