@@ -339,7 +339,6 @@ QVariant SpriteModel::data(const QModelIndex& model_index, int role) const {
   // direction
   else switch (role) {
     case Qt::DisplayRole: {
-      QString direction_nb = std::to_string(index->direction_nb).c_str();
       QString direction_name = "";
       if (animations[model_index.parent().row()].directions.size() == 4) {
         switch (index->direction_nb) {
@@ -349,7 +348,7 @@ QVariant SpriteModel::data(const QModelIndex& model_index, int role) const {
         case 3: direction_name = tr("(down)"); break;
         }
       }
-      return tr("Direction %1 %2").arg(direction_nb, direction_name);
+      return tr("Direction %1 %2").arg(index->direction_nb).arg(direction_name);
     } break;
 
     case Qt::DecorationRole:
@@ -937,10 +936,9 @@ void SpriteModel::delete_direction(const Index &index) {
 
   // Make some checks first.
   if (!direction_exists(index)) {
-      QString nb = std::to_string(index.direction_nb).c_str();
       throw EditorException(
-            tr("Direction %1 don't exists in animation '%2'").arg(
-              nb, index.animation_name));
+          tr("Direction %1 don't exists in animation '%2'").
+              arg(index.direction_nb).arg(index.animation_name));
   }
 
   // Save and clear the selection.
@@ -992,10 +990,9 @@ void SpriteModel::move_direction(const Index& index, int new_direction_nb) {
 
   // Make some checks first.
   if (!direction_exists(index)) {
-      QString nb = std::to_string(index.direction_nb).c_str();
       throw EditorException(
-            tr("Direction %1 don't exists in animation '%2'").arg(
-              nb, index.animation_name));
+          tr("Direction %1 don't exists in animation '%2'").
+            arg(index.direction_nb).arg(index.animation_name));
   }
 
   // Save and clear the selection.
