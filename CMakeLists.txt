@@ -316,7 +316,6 @@ add_executable(solarus-quest-editor
 target_link_libraries(solarus-quest-editor
   Qt5::Widgets
   "${SOLARUS_LIBRARIES}"
-  "${SOL2MAIN_LIBRARY}"
   "${SDL2_LIBRARY}"
   "${SDL2_IMAGE_LIBRARY}"
   "${SDL2_TTF_LIBRARY}"
