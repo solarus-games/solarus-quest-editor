@@ -542,7 +542,7 @@ void SpriteModel::delete_animation(const Index &index) {
   // Make some checks first.
   if (!animation_exists(index)) {
       throw EditorException(
-            tr("Animation '%1' don't exists").arg(index.animation_name));
+            tr("Animation '%1' does not exist").arg(index.animation_name));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -600,7 +600,7 @@ void SpriteModel::set_animation_name(const Index& index, const QString& new_name
   // Make some checks first.
   if (!animation_exists(index)) {
     throw EditorException(
-            tr("Animation '%1' don't exists").arg(index.animation_name));
+            tr("Animation '%1' does not exist").arg(index.animation_name));
   }
 
   if (new_name.length() <= 0) {
@@ -833,7 +833,7 @@ int SpriteModel::add_direction(const Index& index, const QRect& frame) {
   // Make some checks first.
   if (!animation_exists(index)) {
     throw EditorException(
-            tr("Animation '%1' don't exists").arg(index.animation_name));
+            tr("Animation '%1' does not exist").arg(index.animation_name));
   }
 
   // Save and clear the selection.
@@ -884,7 +884,7 @@ int SpriteModel::insert_direction(
   // Make some checks first.
   if (!animation_exists(index)) {
     throw EditorException(
-            tr("Animation '%1' don't exists").arg(index.animation_name));
+            tr("Animation '%1' does not exist").arg(index.animation_name));
   }
 
   // Save and clear the selection.
@@ -937,7 +937,7 @@ void SpriteModel::delete_direction(const Index &index) {
   // Make some checks first.
   if (!direction_exists(index)) {
       throw EditorException(
-          tr("Direction %1 don't exists in animation '%2'").
+          tr("Direction %1 does not exist in animation '%2'").
               arg(index.direction_nb).arg(index.animation_name));
   }
 
@@ -991,7 +991,7 @@ void SpriteModel::move_direction(const Index& index, int new_direction_nb) {
   // Make some checks first.
   if (!direction_exists(index)) {
       throw EditorException(
-          tr("Direction %1 don't exists in animation '%2'").
+          tr("Direction %1 does not exist in animation '%2'").
             arg(index.direction_nb).arg(index.animation_name));
   }
 
