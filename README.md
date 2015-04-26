@@ -2,11 +2,10 @@
 
 [![Build Status](https://travis-ci.org/christopho/solarus-quest-editor.svg?branch=master)](https://travis-ci.org/christopho/solarus-quest-editor)
 
-Solarus Quest Editor is a GUI to create and modify quests for the
+Solarus Quest Editor is a graphical user interface to create and modify quests for the
 [Solarus engine](https://github.com/christopho/solarus).
 
-This project is a full rewriting in C++/Qt of the official quest editor
-(written in Java).
+This software is written in C++ with Qt.
 
 ## License
 
@@ -22,7 +21,7 @@ See the license.txt file for more details.
 ## Compilation instructions
 
 To build Solarus Quest Editor, you need:
-- A C++ compiler with support of C++11.
+- A C++ compiler with support of C++11 (gcc 4.8 and clang 3.4 are okay).
 - CMake 2.8.11 or greater.
 - Qt 5.2 or greater.
 - Solarus and its dependencies:
