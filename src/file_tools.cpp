@@ -16,9 +16,9 @@
  */
 #include "editor_exception.h"
 #include "file_tools.h"
+#include <QApplication>
 #include <QDir>
 #include <QFileInfo>
-#include <QApplication>
 
 namespace FileTools {
 
