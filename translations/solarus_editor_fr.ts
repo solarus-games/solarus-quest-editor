@@ -3715,57 +3715,65 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation> (défaut)</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="346"/>
+        <location filename="../src/sprite_model.cpp" line="345"/>
         <source>(right)</source>
         <translation>(droite)</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="347"/>
+        <location filename="../src/sprite_model.cpp" line="346"/>
         <source>(up)</source>
         <translation>(haut)</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="348"/>
+        <location filename="../src/sprite_model.cpp" line="347"/>
         <source>(left)</source>
         <translation>(gauche)</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="349"/>
+        <location filename="../src/sprite_model.cpp" line="348"/>
         <source>(down)</source>
         <translation>(bas)</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="352"/>
+        <location filename="../src/sprite_model.cpp" line="351"/>
         <source>Direction %1 %2</source>
         <translation>Direction %1 %2</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="425"/>
-        <location filename="../src/sprite_model.cpp" line="484"/>
-        <location filename="../src/sprite_model.cpp" line="608"/>
+        <location filename="../src/sprite_model.cpp" line="424"/>
+        <location filename="../src/sprite_model.cpp" line="483"/>
+        <location filename="../src/sprite_model.cpp" line="607"/>
         <source>Animation name cannot be empty</source>
         <translation>Le nom d&apos;animation ne peut pas être vide</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="430"/>
-        <location filename="../src/sprite_model.cpp" line="489"/>
-        <location filename="../src/sprite_model.cpp" line="612"/>
+        <location filename="../src/sprite_model.cpp" line="429"/>
+        <location filename="../src/sprite_model.cpp" line="488"/>
+        <location filename="../src/sprite_model.cpp" line="611"/>
         <source>Animation &apos;%1&apos; already exists</source>
         <translation>L&apos;animation &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="546"/>
-        <location filename="../src/sprite_model.cpp" line="604"/>
-        <location filename="../src/sprite_model.cpp" line="837"/>
-        <location filename="../src/sprite_model.cpp" line="888"/>
-        <source>Animation &apos;%1&apos; don&apos;t exists</source>
+        <location filename="../src/sprite_model.cpp" line="545"/>
+        <location filename="../src/sprite_model.cpp" line="603"/>
+        <location filename="../src/sprite_model.cpp" line="836"/>
+        <location filename="../src/sprite_model.cpp" line="887"/>
+        <source>Animation &apos;%1&apos; does not exist</source>
         <translation>L&apos;animation &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/sprite_model.cpp" line="942"/>
-        <location filename="../src/sprite_model.cpp" line="997"/>
-        <source>Direction %1 don&apos;t exists in animation &apos;%2&apos;</source>
+        <location filename="../src/sprite_model.cpp" line="940"/>
+        <location filename="../src/sprite_model.cpp" line="994"/>
+        <source>Direction %1 does not exist in animation &apos;%2&apos;</source>
         <translation>La direction %1 n&apos;existe pas dans l&apos;animation &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <source>Animation &apos;%1&apos; don&apos;t exists</source>
+        <translation type="vanished">L&apos;animation &apos;%1&apos; n&apos;existe pas</translation>
+    </message>
+    <message>
+        <source>Direction %1 don&apos;t exists in animation &apos;%2&apos;</source>
+        <translation type="vanished">La direction %1 n&apos;existe pas dans l&apos;animation &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
