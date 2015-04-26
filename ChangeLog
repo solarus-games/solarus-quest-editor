@@ -3,26 +3,27 @@ ________________________________________
 Solarus Quest Editor 1.4.0 (in progress)
 ________________________________________
 
-The quest editor is being rewritten from scratch in C++/Qt.
+The quest editor was rewritten from scratch in C++/Qt.
 
 New features
 ------------
 
-* French translation available.
-* The quest can now be run from the editor.
-* Add a quest properties editor (quest.dat has to be edited by hand before).
-* Add a strings editor (by Maxs).
-* Add a dialogs editor (by Maxs).
+* Dialogs editor (by Maxs).
+* Strings editor (by Maxs).
+* Quest properties (quest.dat) editor (by Maxs).
+* French translation.
 * Add a toolbar.
-* Add new keyboard shortcuts.
+* The quest can now be run from the editor.
+* New keyboard shortcuts.
 * Map editor: multiple tiles from the tileset can now be added at once.
 * Map editor: improved the resizing of multiple entities.
 * Map editor: show information about the entity under the cursor.
 * Map editor: multiple tiles can be converted to/from dynamic tiles at once.
-* Tileset editor: undo/redo is now supported.
-* Tileset editor: multi-selection is now supported.
+* Map editor: tiles whose pattern is missing are no longer removed.
+* Tileset editor: undo/redo support.
+* Tileset editor: multi-selection support.
 * Tileset editor: showing the grid is now supported.
-* Sprite editor: undo/redo is now supported.
+* Sprite editor: undo/redo support.
 * Sprite editor: showing the grid is now supported.
 * Sprite lists now show icons representing each sprite.
 * Quest tree: organize the view in columns (file name, description, type).
