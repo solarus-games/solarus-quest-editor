@@ -87,7 +87,7 @@ private:
 };
 
 /**
- * @brief Change dialog id.
+ * @brief Change a dialog id.
  */
 class SetDialogIdCommand : public DialogsEditorCommand {
 
@@ -119,7 +119,7 @@ private:
 };
 
 /**
- * @brief Change dialog id.
+ * @brief Change the prefix of a dialog id.
  */
 class SetIdPrefixCommand : public DialogsEditorCommand {
 
@@ -191,7 +191,7 @@ private:
 };
 
 /**
- * @brief Delete several strings.
+ * @brief Delete several dialogs.
  */
 class DeleteDialogsCommand : public DialogsEditorCommand {
 
@@ -224,7 +224,7 @@ private:
 };
 
 /**
- * @brief Change dialog text.
+ * @brief Change a dialog text.
  */
 class SetDialogTextCommand : public DialogsEditorCommand {
 
