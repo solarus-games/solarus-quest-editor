@@ -529,7 +529,7 @@ DialogsModel& DialogsEditor::get_model() {
 }
 
 /**
- * @brief Changes the current selected property.
+ * @brief Changes the currently selected property.
  * @param key The key of the property to select.
  */
 void DialogsEditor::set_selected_property(const QString& key) {
