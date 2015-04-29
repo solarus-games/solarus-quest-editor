@@ -160,7 +160,7 @@
     <string>Run quest</string>
    </property>
    <property name="shortcut">
-    <string>F9</string>
+    <string>F5</string>
    </property>
   </action>
   <action name="action_cut">
