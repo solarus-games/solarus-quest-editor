@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="find_label">
        <property name="text">
-        <string>Find text</string>
+        <string>Find</string>
        </property>
       </widget>
      </item>
