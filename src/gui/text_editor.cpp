@@ -24,6 +24,7 @@
 #include <QLayout>
 #include <QList>
 #include <QPlainTextEdit>
+#include <QScrollBar>
 #include <QTextStream>
 
 /**
@@ -214,5 +215,17 @@ void TextEditor::find() {
  */
 void TextEditor::find_text_requested(const QString& text) {
 
-  text_widget->find(text);
+  if (!text_widget->find(text)) {
+    // Text not found: search back from the beginning.
+    QTextCursor cursor = text_widget->textCursor();
+    int scroll_x = text_widget->horizontalScrollBar()->value();
+    int scroll_y = text_widget->verticalScrollBar()->value();
+    text_widget->moveCursor(QTextCursor::Start);
+    if (!text_widget->find(text)) {
+      // Still not found: restore the cursor position and scrollbars.
+      text_widget->setTextCursor(cursor);
+      text_widget->horizontalScrollBar()->setValue(scroll_x);
+      text_widget->verticalScrollBar()->setValue(scroll_y);
+    }
+  }
 }
