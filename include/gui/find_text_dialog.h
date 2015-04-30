@@ -14,42 +14,29 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_TEXT_EDITOR_H
-#define SOLARUSEDITOR_TEXT_EDITOR_H
+#ifndef SOLARUSEDITOR_FIND_TEXT_DIALOG_H
+#define SOLARUSEDITOR_FIND_TEXT_DIALOG_H
 
-#include "gui/editor.h"
-
-class TextEditorWidget;
+#include "ui_find_text_dialog.h"
+#include <QDialog>
 
 /**
- * \brief A plain text edition widget.
+ * @brief A dialog to find text in a text editor.
  */
-class TextEditor : public Editor {
+class FindTextDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  TextEditor(Quest& quest, const QString& file_path, QWidget* parent = nullptr);
+  explicit FindTextDialog(QWidget* parent = nullptr);
 
-  QString create_title() const;
-  QIcon create_icon() const;
-
-  void save() override;
-  bool can_cut() const override;
-  void cut() override;
-  bool can_copy() const override;
-  void copy() override;
-  bool can_paste() const override;
-  void paste() override;
-  void find() override;
-
-private slots:
+signals:
 
   void find_text_requested(const QString& text);
 
 private:
 
-  TextEditorWidget* text_widget;    /**< The text editing area contained. */
+  Ui::FindTextDialog ui;
 
 };
 

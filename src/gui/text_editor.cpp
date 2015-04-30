@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gui/find_text_dialog.h"
 #include "gui/lua_syntax_highlighter.h"
 #include "gui/text_editor.h"
 #include "gui/text_editor_widget.h"
@@ -37,6 +38,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   set_title(create_title());
   set_icon(create_icon());
+  set_find_supported(true);
 
   QVBoxLayout* layout = new QVBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
@@ -189,4 +191,28 @@ bool TextEditor::can_paste() const {
 void TextEditor::paste() {
 
   text_widget->paste();
+}
+
+/**
+ * @copydoc Editor::find
+ */
+void TextEditor::find() {
+
+  FindTextDialog* dialog = new FindTextDialog(this);
+
+  connect(dialog, SIGNAL(find_text_requested(QString)),
+          this, SLOT(find_text_requested(QString)));
+
+  dialog->show();
+  dialog->raise();  // Put the dialog on top.
+  dialog->activateWindow();
+}
+
+/**
+ * @brief Slot called when the user searches an occurence of some text.
+ * @param text The text to find.
+ */
+void TextEditor::find_text_requested(const QString& text) {
+
+  text_widget->find(text);
 }

@@ -122,6 +122,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_cut->setShortcut(QKeySequence::Cut);
   ui.action_copy->setShortcut(QKeySequence::Copy);
   ui.action_paste->setShortcut(QKeySequence::Paste);
+  ui.action_find->setShortcut(QKeySequence::Find);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
@@ -535,6 +536,17 @@ void MainWindow::on_action_paste_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Find" action.
+ */
+void MainWindow::on_action_find_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    editor->find();
+  }
+}
+
+/**
  * @brief Slot called when the user triggers the "Run quest" action.
  */
 void MainWindow::on_action_run_quest_triggered() {
@@ -630,6 +642,9 @@ void MainWindow::current_editor_changed(int /* index */) {
   ui.action_paste->setEnabled(has_editor);
   ui.action_close->setEnabled(has_editor);
   ui.action_save->setEnabled(has_editor);
+
+  const bool find_supported = has_editor && editor->is_find_supported();
+  ui.action_find->setEnabled(find_supported);
 
   const bool zoom_supported = has_editor && editor->is_zoom_supported();
   zoom_menu->setEnabled(zoom_supported);

@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef EXTERNAL_SCRIPT_DIALOG_H
-#define EXTERNAL_SCRIPT_DIALOG_H
+#ifndef SOLARUSEDITOR_EXTERNAL_SCRIPT_DIALOG_H
+#define SOLARUSEDITOR_EXTERNAL_SCRIPT_DIALOG_H
 
 #include "ui_external_script_dialog.h"
 #include <QDialog>

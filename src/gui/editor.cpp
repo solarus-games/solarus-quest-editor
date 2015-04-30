@@ -148,6 +148,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   title(get_file_name()),
   undo_stack(new QUndoStack(this)),
   common_actions(),
+  find_supported(false),
   zoom_supported(false),
   grid_supported(false),
   layer_visibility_supported(false),
@@ -469,6 +470,35 @@ bool Editor::can_paste() const {
  * are not supported.
  */
 void Editor::paste() {
+}
+
+/**
+ * @brief Returns whether this editor supports find operations.
+ * @return @c true if find operations are supported.
+ */
+bool Editor::is_find_supported() const {
+  return find_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports finding things.
+ *
+ * If your editor supports find operations, you are responsible to apply the
+ * reimplement find().
+ *
+ * @param find_supported @c true if find operations are supported.
+ */
+void Editor::set_find_supported(bool find_supported) {
+  this->find_supported = find_supported;
+}
+
+/**
+ * @brief Performs a find operation.
+ *
+ * The default implementation does nothing, meaning that finding is not
+ * supported.
+ */
+void Editor::find() {
 }
 
 /**

@@ -26,6 +26,7 @@ New features
 * Sprite editor: undo/redo support.
 * Sprite editor: showing the grid is now supported.
 * Sprite lists now show icons representing each sprite.
+* Code editor: add a find text feature.
 * Quest tree: organize the view in columns (file name, description, type).
 * Quest tree: show resources whose file is missing on the filesystem.
 * Quest tree: show files that look like resources but are not declared yet.

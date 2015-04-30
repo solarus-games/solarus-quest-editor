@@ -80,6 +80,8 @@
     <addaction name="action_cut"/>
     <addaction name="action_copy"/>
     <addaction name="action_paste"/>
+    <addaction name="separator"/>
+    <addaction name="action_find"/>
    </widget>
    <widget class="QMenu" name="menu_run">
     <property name="title">
@@ -237,7 +239,7 @@
     <string>Show low layer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+1</string>
+    <string>1</string>
    </property>
   </action>
   <action name="action_show_layer_1">
@@ -258,7 +260,7 @@
     <string>Show intermediate layer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+2</string>
+    <string>2</string>
    </property>
   </action>
   <action name="action_show_layer_2">
@@ -279,7 +281,7 @@
     <string>Show high layer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+3</string>
+    <string>3</string>
    </property>
   </action>
   <action name="action_doc">
@@ -301,6 +303,11 @@
    </property>
    <property name="text">
     <string>Website</string>
+   </property>
+  </action>
+  <action name="action_find">
+   <property name="text">
+    <string>Find...</string>
    </property>
   </action>
  </widget>

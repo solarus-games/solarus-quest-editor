@@ -53,6 +53,7 @@ public:
   void set_common_actions(const QMap<QString, QAction*>& common_actions);
   bool confirm_close();
 
+  bool is_find_supported() const;
   bool is_zoom_supported() const;
   bool is_grid_supported() const;
   bool is_layer_visibility_supported() const;
@@ -66,6 +67,7 @@ public:
   virtual void copy();
   virtual bool can_paste() const;
   virtual void paste();
+  virtual void find();
 
 signals:
 
@@ -78,6 +80,7 @@ protected:
 
   void set_title(const QString& title);
   void set_icon(const QIcon& icon);
+  void set_find_supported(bool find_supported);
   void set_zoom_supported(bool zoom_supported);
   void set_grid_supported(bool grid_supported);
   void set_layer_visibility_supported(bool supported);
@@ -97,6 +100,7 @@ private:
   QString close_confirm_message;            /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;                   /**< The undo/redo history of editing this file. */
   QMap<QString, QAction*> common_actions;   /**< Actions available to all editors. */
+  bool find_supported;                      /**< Whether the editor supports finding. */
   bool zoom_supported;                      /**< Whether the editor supports zooming. */
   bool grid_supported;                      /**< Whether the editor supports showing/hiding a grid. */
   bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */
