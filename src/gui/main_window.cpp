@@ -36,7 +36,6 @@
 #include <QToolButton>
 #include <QUndoGroup>
 #include <QDesktopServices>
-#include <iostream>
 
 using EntityType = Solarus::EntityType;
 
