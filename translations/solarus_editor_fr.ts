@@ -1597,7 +1597,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
     <message>
         <location filename="../src/gui/map_editor.ui" line="299"/>
         <location filename="../build/ui_map_editor.h" line="348"/>
-        <location filename="../src/gui/map_editor.cpp" line="152"/>
+        <location filename="../src/gui/map_editor.cpp" line="153"/>
         <source>Tileset</source>
         <translation>Tileset</translation>
     </message>
@@ -1630,7 +1630,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
     <message>
         <location filename="../src/gui/map_editor.ui" line="357"/>
         <location filename="../build/ui_map_editor.h" line="360"/>
-        <location filename="../src/gui/map_editor.cpp" line="170"/>
+        <location filename="../src/gui/map_editor.cpp" line="171"/>
         <source>Music</source>
         <translation>Musique</translation>
     </message>
@@ -1641,213 +1641,213 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation>Musique de fond de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="80"/>
+        <location filename="../src/gui/map_editor.cpp" line="81"/>
         <source>Map size</source>
         <translation>Taille de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="98"/>
+        <location filename="../src/gui/map_editor.cpp" line="99"/>
         <source>Map world</source>
         <translation>Monde de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="116"/>
+        <location filename="../src/gui/map_editor.cpp" line="117"/>
         <source>Map floor</source>
         <translation>Étage de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="134"/>
+        <location filename="../src/gui/map_editor.cpp" line="135"/>
         <source>Map location</source>
         <translation>Coordonnées de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="188"/>
+        <location filename="../src/gui/map_editor.cpp" line="189"/>
         <source>Edit entity</source>
         <translation>Modifier entité</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="270"/>
+        <location filename="../src/gui/map_editor.cpp" line="271"/>
         <source>Move entities</source>
         <translation>Déplacer entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="322"/>
+        <location filename="../src/gui/map_editor.cpp" line="323"/>
         <source>Resize entities</source>
         <translation>Redimensionner entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="404"/>
-        <location filename="../src/gui/map_editor.cpp" line="462"/>
+        <location filename="../src/gui/map_editor.cpp" line="405"/>
+        <location filename="../src/gui/map_editor.cpp" line="463"/>
         <source>Convert tiles</source>
         <translation>Convertir tiles</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="522"/>
+        <location filename="../src/gui/map_editor.cpp" line="523"/>
         <source>Set direction</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="579"/>
+        <location filename="../src/gui/map_editor.cpp" line="580"/>
         <source>Set layer</source>
         <translation>Couche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="612"/>
+        <location filename="../src/gui/map_editor.cpp" line="613"/>
         <source>Bring to front</source>
         <translation>Mettre au premier plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="670"/>
+        <location filename="../src/gui/map_editor.cpp" line="671"/>
         <source>Bring to back</source>
         <translation>Mettre en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="730"/>
+        <location filename="../src/gui/map_editor.cpp" line="731"/>
         <source>Add entities</source>
         <translation>Ajouter entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="765"/>
+        <location filename="../src/gui/map_editor.cpp" line="766"/>
         <source>Delete entities</source>
         <translation>Supprimer entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="815"/>
+        <location filename="../src/gui/map_editor.cpp" line="816"/>
         <source>File &apos;%1&apos; is not a map</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas une map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="820"/>
+        <location filename="../src/gui/map_editor.cpp" line="821"/>
         <source>Map %1</source>
         <translation>Map %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="823"/>
+        <location filename="../src/gui/map_editor.cpp" line="824"/>
         <source>Map &apos;%1&apos; has been modified. Save changes?</source>
         <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="843"/>
+        <location filename="../src/gui/map_editor.cpp" line="844"/>
         <source>&lt;No music&gt;</source>
         <translation>&lt;Pas de musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="844"/>
+        <location filename="../src/gui/map_editor.cpp" line="845"/>
         <source>&lt;Same as before&gt;</source>
         <translation>&lt;Garder la même musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="955"/>
+        <location filename="../src/gui/map_editor.cpp" line="958"/>
         <source>Add destination</source>
         <translation>Ajouter une destination</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="956"/>
+        <location filename="../src/gui/map_editor.cpp" line="959"/>
         <source>Add teletransporter</source>
         <translation>Ajouter un téléporteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="957"/>
+        <location filename="../src/gui/map_editor.cpp" line="960"/>
         <source>Add pickable</source>
         <translation>Ajouter un trésor ramassable</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="958"/>
+        <location filename="../src/gui/map_editor.cpp" line="961"/>
         <source>Add destructible</source>
         <translation>Ajouter un destructible</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="959"/>
+        <location filename="../src/gui/map_editor.cpp" line="962"/>
         <source>Add chest</source>
         <translation>Ajouter un coffre</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="960"/>
+        <location filename="../src/gui/map_editor.cpp" line="963"/>
         <source>Add jumper</source>
         <translation>Ajouter un sauteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="961"/>
+        <location filename="../src/gui/map_editor.cpp" line="964"/>
         <source>Add enemy</source>
         <translation>Ajouter un ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="962"/>
+        <location filename="../src/gui/map_editor.cpp" line="965"/>
         <source>Add non-playing character</source>
         <translation>Ajouter un personnage non-joueur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="963"/>
+        <location filename="../src/gui/map_editor.cpp" line="966"/>
         <source>Add block</source>
         <translation>Ajouter un bloc</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="964"/>
+        <location filename="../src/gui/map_editor.cpp" line="967"/>
         <source>Add switch</source>
         <translation>Ajouter un bouton</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="965"/>
+        <location filename="../src/gui/map_editor.cpp" line="968"/>
         <source>Add wall</source>
         <translation>Ajouter un mur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="966"/>
+        <location filename="../src/gui/map_editor.cpp" line="969"/>
         <source>Add sensor</source>
         <translation>Ajouter un capteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="967"/>
+        <location filename="../src/gui/map_editor.cpp" line="970"/>
         <source>Add crystal</source>
         <translation>Ajouter un cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="968"/>
+        <location filename="../src/gui/map_editor.cpp" line="971"/>
         <source>Add crystal block</source>
         <translation>Ajouter un plot de cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="969"/>
+        <location filename="../src/gui/map_editor.cpp" line="972"/>
         <source>Add shop treasure</source>
         <translation>Ajouter un article de magasin</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="970"/>
+        <location filename="../src/gui/map_editor.cpp" line="973"/>
         <source>Add stream</source>
         <translation>Ajouter un flux</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="971"/>
+        <location filename="../src/gui/map_editor.cpp" line="974"/>
         <source>Add door</source>
         <translation>Ajouter une porte</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="972"/>
+        <location filename="../src/gui/map_editor.cpp" line="975"/>
         <source>Add stairs</source>
         <translation>Ajouter un escalier</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="973"/>
+        <location filename="../src/gui/map_editor.cpp" line="976"/>
         <source>Add separator</source>
         <translation>Ajouter un séparateur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="974"/>
+        <location filename="../src/gui/map_editor.cpp" line="977"/>
         <source>Add custom entity</source>
         <translation>Ajouter une entité custom</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1407"/>
+        <location filename="../src/gui/map_editor.cpp" line="1426"/>
         <source>%1,%2 </source>
         <translation>%1,%2 </translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1416"/>
+        <location filename="../src/gui/map_editor.cpp" line="1435"/>
         <source> - %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1418"/>
+        <location filename="../src/gui/map_editor.cpp" line="1437"/>
         <source>: %1</source>
         <translation> : %1</translation>
     </message>
@@ -1856,7 +1856,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation type="vanished">%1,%2</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1115"/>
+        <location filename="../src/gui/map_editor.cpp" line="1134"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -2033,7 +2033,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="418"/>
+        <location filename="../src/gui/map_view.cpp" line="439"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
@@ -2042,107 +2042,107 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation type="vanished">Entrée</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="426"/>
+        <location filename="../src/gui/map_view.cpp" line="447"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="427"/>
+        <location filename="../src/gui/map_view.cpp" line="448"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="435"/>
-        <location filename="../src/gui/map_view.cpp" line="516"/>
+        <location filename="../src/gui/map_view.cpp" line="456"/>
+        <location filename="../src/gui/map_view.cpp" line="537"/>
         <source>Convert to dynamic tile</source>
         <translation>Convertir en tile dynamique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="449"/>
+        <location filename="../src/gui/map_view.cpp" line="470"/>
         <source>Bring to front</source>
         <translation>Mettre au premier plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="450"/>
+        <location filename="../src/gui/map_view.cpp" line="471"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="458"/>
+        <location filename="../src/gui/map_view.cpp" line="479"/>
         <source>Bring to back</source>
         <translation>Mettre en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="459"/>
+        <location filename="../src/gui/map_view.cpp" line="480"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="467"/>
+        <location filename="../src/gui/map_view.cpp" line="488"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="516"/>
+        <location filename="../src/gui/map_view.cpp" line="537"/>
         <source>Convert to dynamic tiles</source>
         <translation>Convertir en tiles dynamiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="519"/>
+        <location filename="../src/gui/map_view.cpp" line="540"/>
         <source>Convert to static tile</source>
         <translation>Convertir en tile statique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="519"/>
+        <location filename="../src/gui/map_view.cpp" line="540"/>
         <source>Convert to static tiles</source>
         <translation>Convertir en tiles statiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="572"/>
+        <location filename="../src/gui/map_view.cpp" line="593"/>
         <source>Direction</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="591"/>
-        <location filename="../src/gui/map_view.cpp" line="599"/>
+        <location filename="../src/gui/map_view.cpp" line="612"/>
+        <location filename="../src/gui/map_view.cpp" line="620"/>
         <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="592"/>
-        <location filename="../src/gui/map_view.cpp" line="601"/>
+        <location filename="../src/gui/map_view.cpp" line="613"/>
+        <location filename="../src/gui/map_view.cpp" line="622"/>
         <source>Up</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="593"/>
-        <location filename="../src/gui/map_view.cpp" line="603"/>
+        <location filename="../src/gui/map_view.cpp" line="614"/>
+        <location filename="../src/gui/map_view.cpp" line="624"/>
         <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="594"/>
-        <location filename="../src/gui/map_view.cpp" line="605"/>
+        <location filename="../src/gui/map_view.cpp" line="615"/>
+        <location filename="../src/gui/map_view.cpp" line="626"/>
         <source>Down</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="600"/>
+        <location filename="../src/gui/map_view.cpp" line="621"/>
         <source>Right-up</source>
         <translation>Haut-droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="602"/>
+        <location filename="../src/gui/map_view.cpp" line="623"/>
         <source>Left-up</source>
         <translation>Haut-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="604"/>
+        <location filename="../src/gui/map_view.cpp" line="625"/>
         <source>Left-down</source>
         <translation>Bas-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="606"/>
+        <location filename="../src/gui/map_view.cpp" line="627"/>
         <source>Right-down</source>
         <translation>Bas-droite</translation>
     </message>
@@ -3401,108 +3401,139 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>SettingsDialog</name>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="14"/>
-        <location filename="../build/ui_settings_dialog.h" line="251"/>
+        <location filename="../build/ui_settings_dialog.h" line="338"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="24"/>
-        <location filename="../build/ui_settings_dialog.h" line="261"/>
+        <location filename="../build/ui_settings_dialog.h" line="348"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="30"/>
-        <location filename="../build/ui_settings_dialog.h" line="252"/>
+        <location filename="../build/ui_settings_dialog.h" line="339"/>
         <source>Directory</source>
         <translation>Répertoire</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="36"/>
-        <location filename="../build/ui_settings_dialog.h" line="253"/>
+        <location filename="../build/ui_settings_dialog.h" line="340"/>
         <source>Working directory:</source>
         <translation>Répertoire de travail :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="48"/>
-        <location filename="../build/ui_settings_dialog.h" line="254"/>
+        <location filename="../build/ui_settings_dialog.h" line="341"/>
         <source>Browse...</source>
         <translation>Parcourir...</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="60"/>
-        <location filename="../build/ui_settings_dialog.h" line="255"/>
+        <location filename="../build/ui_settings_dialog.h" line="342"/>
         <source>Running</source>
         <translation>Éxécution</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="66"/>
-        <location filename="../build/ui_settings_dialog.h" line="256"/>
+        <location filename="../build/ui_settings_dialog.h" line="343"/>
         <source>No audio</source>
         <translation>Désactiver l&apos;audio</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="73"/>
-        <location filename="../build/ui_settings_dialog.h" line="257"/>
+        <location filename="../build/ui_settings_dialog.h" line="344"/>
         <source>Video acceleration</source>
         <translation>Accélération vidéo</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="80"/>
-        <location filename="../build/ui_settings_dialog.h" line="258"/>
+        <location filename="../build/ui_settings_dialog.h" line="345"/>
         <source>Show console (only needed on Windows)</source>
         <translation>Afficher une console (nécéssaire uniquement sous Windows)</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="89"/>
-        <location filename="../build/ui_settings_dialog.h" line="259"/>
+        <location filename="../build/ui_settings_dialog.h" line="346"/>
         <source>Quest size:</source>
         <translation>Taille de la quête :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="118"/>
-        <location filename="../build/ui_settings_dialog.h" line="260"/>
+        <location filename="../src/gui/settings_dialog.ui" line="301"/>
+        <location filename="../build/ui_settings_dialog.h" line="347"/>
+        <location filename="../build/ui_settings_dialog.h" line="356"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="179"/>
-        <location filename="../build/ui_settings_dialog.h" line="265"/>
+        <location filename="../build/ui_settings_dialog.h" line="352"/>
         <source>Text editor</source>
         <translation>Éditeur de texte</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="185"/>
-        <location filename="../build/ui_settings_dialog.h" line="262"/>
+        <location filename="../build/ui_settings_dialog.h" line="349"/>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="191"/>
-        <location filename="../build/ui_settings_dialog.h" line="263"/>
+        <location filename="../build/ui_settings_dialog.h" line="350"/>
         <source>Family:</source>
         <translation>Famille :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="225"/>
-        <location filename="../build/ui_settings_dialog.h" line="264"/>
+        <location filename="../build/ui_settings_dialog.h" line="351"/>
         <source>Size:</source>
         <translation>Taille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="95"/>
+        <location filename="../src/gui/settings_dialog.ui" line="251"/>
+        <location filename="../build/ui_settings_dialog.h" line="358"/>
+        <source>Map editor</source>
+        <translation>Éditeur de map</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="257"/>
+        <location filename="../build/ui_settings_dialog.h" line="353"/>
+        <source>Graphics view</source>
+        <translation>Vue graphique</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="263"/>
+        <location filename="../build/ui_settings_dialog.h" line="354"/>
+        <source>Background color:</source>
+        <translation>Couleur de fond :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="270"/>
+        <location filename="../build/ui_settings_dialog.h" line="355"/>
+        <source>Grid:</source>
+        <translation>Grille :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.cpp" line="106"/>
         <source>Restore default settings</source>
         <translation>Restaurer les paramètres par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="96"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="107"/>
         <source>Do you really want to restore default settings?</source>
         <translation>Voulez-vous vraiment restaurer les paramètres par défaut ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="191"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="206"/>
         <source>Working directory</source>
         <translation>Répertoire de travail</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.cpp" line="362"/>
+        <source>Select background color</source>
+        <translation>Sélectionnez une couleur de fond</translation>
     </message>
 </context>
 <context>
@@ -4038,24 +4069,24 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Dupliquer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_view.cpp" line="410"/>
-        <location filename="../src/gui/sprite_view.cpp" line="459"/>
-        <location filename="../src/gui/sprite_view.cpp" line="517"/>
+        <location filename="../src/gui/sprite_view.cpp" line="412"/>
+        <location filename="../src/gui/sprite_view.cpp" line="461"/>
+        <location filename="../src/gui/sprite_view.cpp" line="519"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_view.cpp" line="453"/>
+        <location filename="../src/gui/sprite_view.cpp" line="455"/>
         <source>New direction</source>
         <translation>Nouvelle direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_view.cpp" line="505"/>
+        <location filename="../src/gui/sprite_view.cpp" line="507"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_view.cpp" line="511"/>
+        <location filename="../src/gui/sprite_view.cpp" line="513"/>
         <source>Duplicate here</source>
         <translation>Dupliquer ici</translation>
     </message>
@@ -4606,33 +4637,33 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Supprimer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="447"/>
+        <location filename="../src/gui/tileset_view.cpp" line="449"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="453"/>
+        <location filename="../src/gui/tileset_view.cpp" line="455"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="642"/>
+        <location filename="../src/gui/tileset_view.cpp" line="644"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="648"/>
+        <location filename="../src/gui/tileset_view.cpp" line="650"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="659"/>
-        <location filename="../src/gui/tileset_view.cpp" line="710"/>
+        <location filename="../src/gui/tileset_view.cpp" line="661"/>
+        <location filename="../src/gui/tileset_view.cpp" line="712"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_view.cpp" line="704"/>
+        <location filename="../src/gui/tileset_view.cpp" line="706"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>
