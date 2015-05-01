@@ -1,7 +1,7 @@
 -- This script updates all data files of a solarus 1.2 quest
 -- into the format of solarus 1.3.
 --   local converter = require("converter_1_2_to_1_3")
---   converter.upgrade(quest_path)
+--   converter.convert(quest_path)
 
 local converter = {}
 

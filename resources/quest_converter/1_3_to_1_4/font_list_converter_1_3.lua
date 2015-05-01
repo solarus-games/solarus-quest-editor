@@ -13,6 +13,7 @@ function converter.convert(quest_path)
 
   local font_file_names = {}  -- File names with extension.
   local font_ids = {}         -- File names without extension.
+  local default_font_id
 
   -- Read the 1.3 file.
   function font(properties)
@@ -32,6 +33,11 @@ function converter.convert(quest_path)
     -- extensions.
     if font_ids[font_id] ~= nil then
       error("Duplicate font '" .. font_id .. "'")
+    end
+
+    -- Detect the default font.
+    if properties.default then
+      default_font_id = font_id
     end
 
     font_ids[font_id] = true
@@ -72,7 +78,7 @@ function converter.convert(quest_path)
     font_ids_array[#font_ids_array + 1] = font_id
   end
   table.sort(font_ids_array)
-  return font_ids_array
+  return font_ids_array, default_font_id
 end
 
 return converter

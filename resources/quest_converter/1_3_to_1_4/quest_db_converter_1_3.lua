@@ -77,6 +77,8 @@ function converter.convert(quest_path, fonts)
   end
 
   output_file:close()
+
+  return resources
 end
 
 return converter

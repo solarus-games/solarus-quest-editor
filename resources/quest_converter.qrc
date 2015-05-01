@@ -21,5 +21,6 @@
         <file>quest_converter/converter_1_2_to_1_3.lua</file>
         <file>quest_converter/converter_1_3_to_1_4.lua</file>
         <file>quest_converter/update_quest.lua</file>
+        <file>quest_converter/1_3_to_1_4/map_converter_1_3.lua</file>
     </qresource>
 </RCC>

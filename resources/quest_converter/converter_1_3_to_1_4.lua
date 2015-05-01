@@ -2,7 +2,7 @@
 -- into the format of solarus 1.4.
 -- Usage: lua update_quest.lua path/to/your_quest
 --   local converter = require("converter_1_3_to_1_4")
---   converter.upgrade(quest_path)
+--   converter.convert(quest_path)
 
 
 local converter = {}
@@ -28,12 +28,21 @@ function converter.convert(quest_path)
   -- Remove the font list file text/fonts.dat.
   write_info("  Removing the obsolete font list file...")
   local font_list_converter = require("1_3_to_1_4/font_list_converter_1_3")
-  local fonts = font_list_converter.convert(quest_path)
+  local fonts, default_font = font_list_converter.convert(quest_path)
 
   -- Convert the resource list file project_db.dat.
   write_info("  Converting the resource list file...")
   local quest_db_converter = require("1_3_to_1_4/quest_db_converter_1_3")
-  quest_db_converter.convert(quest_path, fonts)
+  local resources = quest_db_converter.convert(quest_path, fonts)
+
+  -- Convert maps.
+  write_info("  Converting maps...")
+  local map_converter = require("1_3_to_1_4/map_converter_1_3")
+  for _, resource in pairs(resources["map"]) do
+    write_info("    Map " .. resource.id .. " (" .. resource.description .. ")")
+    map_converter.convert(quest_path, resource.id, default_font)
+  end
+  write_info("  All maps were converted.")
 
   write_info("Update successful!")
 
