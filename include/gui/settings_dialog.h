@@ -47,6 +47,14 @@ public slots:
   void update_working_directory();
   void change_working_directory();
   void browse_working_directory();
+  void update_no_audio();
+  void change_no_audio();
+  void update_video_acceleration();
+  void change_video_acceleration();
+  void update_win_console();
+  void change_win_console();
+  void update_quest_size();
+  void change_quest_size();
 
   // Text editor.
   void update_font_family();

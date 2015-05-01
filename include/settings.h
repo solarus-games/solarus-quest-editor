@@ -28,6 +28,10 @@ public:
 
   // General keys.
   static const QString working_directory;
+  static const QString no_audio;
+  static const QString video_acceleration;
+  static const QString win_console;
+  static const QString quest_size;
 
   // Text editor keys.
   static const QString font_family;
@@ -36,12 +40,16 @@ public:
   Settings();
 
   QVariant get_value(const QString& key);
+  bool get_value_bool(const QString& key);
   int get_value_int(const QString& key);
   QString get_value_string(const QString& key);
+  QSize get_value_size(const QString& key);
 
   QVariant get_default(const QString& key);
+  bool get_default_bool(const QString& key);
   int get_default_int(const QString& key);
   QString get_default_string(const QString& key);
+  QSize get_default_size(const QString& key);
 
   void set_value(const QString& key, const QVariant& value);
 

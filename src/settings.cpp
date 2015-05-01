@@ -15,9 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "include/settings.h"
+#include <QSize>
 
 // General keys.
 const QString Settings::working_directory = "working_directory";
+const QString Settings::no_audio = "no_audio";
+const QString Settings::video_acceleration = "video_acceleration";
+const QString Settings::win_console = "win_console";
+const QString Settings::quest_size = "quest_size";
 
 // Text editor keys.
 const QString Settings::font_family = "text_editor/font_family";
@@ -27,6 +32,10 @@ const QMap<QString, QVariant> Settings::default_values = {
 
   // General.
   { Settings::working_directory, "" },
+  { Settings::no_audio, false },
+  { Settings::video_acceleration, true },
+  { Settings::win_console, false },
+  { Settings::quest_size, QSize() },
 
   // Text editor.
   { Settings::font_family, "DejaVu Sans Mono" },
@@ -54,6 +63,16 @@ QVariant Settings::get_value(const QString& key) {
 }
 
 /**
+ * @brief Returns a settings boolean value.
+ * @param key The key of the setting.
+ * @return The boolean value of the setting.
+ */
+bool Settings::get_value_bool(const QString& key) {
+
+  return get_value(key).toBool();
+}
+
+/**
  * @brief Returns a settings integer value.
  * @param key The key of the setting.
  * @return The integer value of the setting.
@@ -74,6 +93,16 @@ QString Settings::get_value_string(const QString& key) {
 }
 
 /**
+ * @brief Returns a settings size value.
+ * @param key The key of the setting.
+ * @return The size value of the setting.
+ */
+QSize Settings::get_value_size(const QString& key) {
+
+  return get_value(key).toSize();
+}
+
+/**
  * @brief Returns a settings default value.
  * @param key The key of the setting.
  * @return The default value of the setting.
@@ -84,6 +113,16 @@ QVariant Settings::get_default(const QString& key) {
     return QVariant();
   }
   return default_values[key];
+}
+
+/**
+ * @brief Returns a settings default boolean value.
+ * @param key The key of the setting.
+ * @return The default boolean value of the setting.
+ */
+bool Settings::get_default_bool(const QString& key) {
+
+  return get_default(key).toBool();
 }
 
 /**
@@ -104,6 +143,16 @@ int Settings::get_default_int(const QString& key) {
 QString Settings::get_default_string(const QString& key) {
 
   return get_default(key).toString();
+}
+
+/**
+ * @brief Returns a settings default size value.
+ * @param key The key of the setting.
+ * @return The default size value of the setting.
+ */
+QSize Settings::get_default_size(const QString& key) {
+
+  return get_default(key).toSize();
 }
 
 /**

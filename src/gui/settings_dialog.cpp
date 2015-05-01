@@ -43,6 +43,18 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_working_directory()));
   connect(ui.working_directory_button, SIGNAL(clicked()),
           this, SLOT(browse_working_directory()));
+  connect(ui.no_audio_field, SIGNAL(toggled(bool)),
+          this, SLOT(change_no_audio()));
+  connect(ui.video_acceleration_field, SIGNAL(toggled(bool)),
+          this, SLOT(change_video_acceleration()));
+  connect(ui.win_console_field, SIGNAL(toggled(bool)),
+          this, SLOT(change_win_console()));
+  connect(ui.quest_size_field, SIGNAL(toggled(bool)),
+          this, SLOT(change_quest_size()));
+  connect(ui.quest_size_width_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_quest_size()));
+  connect(ui.quest_size_height_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_quest_size()));
 
   // Text editor.
   connect(ui.font_family_field, SIGNAL(currentTextChanged(QString)),
@@ -110,6 +122,10 @@ void SettingsDialog::update() {
 
   // General.
   update_working_directory();
+  update_no_audio();
+  update_video_acceleration();
+  update_win_console();
+  update_quest_size();
 
   // Text editor.
   update_font_family();
@@ -181,6 +197,100 @@ void SettingsDialog::browse_working_directory() {
 
   ui.working_directory_field->setText(new_working_directory);
   edited_settings[Settings::working_directory] = new_working_directory;
+  update_buttons();
+}
+
+/**
+ * @brief Updates the no audio field.
+ */
+void SettingsDialog::update_no_audio() {
+
+  ui.no_audio_field->setChecked(settings.get_value_bool(Settings::no_audio));
+}
+
+/**
+ * @brief Slot called when the user changes the no audio.
+ */
+void SettingsDialog::change_no_audio() {
+
+  edited_settings[Settings::no_audio] = ui.no_audio_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the video acceleration field.
+ */
+void SettingsDialog::update_video_acceleration() {
+
+  ui.video_acceleration_field->setChecked(
+    settings.get_value_bool(Settings::video_acceleration));
+}
+
+/**
+ * @brief Slot called when the user changes the video acceleration.
+ */
+void SettingsDialog::change_video_acceleration() {
+
+  edited_settings[Settings::video_acceleration] =
+    ui.video_acceleration_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the win console field.
+ */
+void SettingsDialog::update_win_console() {
+
+  ui.win_console_field->setChecked(
+    settings.get_value_bool(Settings::win_console));
+}
+
+/**
+ * @brief Slot called when the user changes the win console.
+ */
+void SettingsDialog::change_win_console() {
+
+  edited_settings[Settings::win_console] = ui.win_console_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the quest size field.
+ */
+void SettingsDialog::update_quest_size() {
+
+  QSize size = settings.get_value_size(Settings::quest_size);
+  bool enable = size.isValid();
+
+  ui.quest_size_field->setChecked(enable);
+  ui.quest_size_width_field->setEnabled(enable);
+  ui.quest_size_height_field->setEnabled(enable);
+
+  if (!enable) {
+    size = QSize(320, 240);
+  }
+
+  ui.quest_size_width_field->setValue(size.width());
+  ui.quest_size_height_field->setValue(size.height());
+}
+
+/**
+ * @brief Slot called when the user changes the quest size.
+ */
+void SettingsDialog::change_quest_size() {
+
+  bool enable = ui.quest_size_field->isChecked();
+
+  QSize new_size;
+  if (enable) {
+    new_size.setWidth(ui.quest_size_width_field->value());
+    new_size.setHeight(ui.quest_size_height_field->value());
+  }
+
+  ui.quest_size_width_field->setEnabled(enable);
+  ui.quest_size_height_field->setEnabled(enable);
+
+  edited_settings[Settings::quest_size] = new_size;
   update_buttons();
 }
 

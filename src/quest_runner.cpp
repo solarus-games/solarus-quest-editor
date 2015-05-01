@@ -15,12 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "quest_runner.h"
+#include "settings.h"
 #include <solarus/Arguments.h>
 #include <solarus/MainLoop.h>
 #include <solarus/SolarusFatal.h>
 #include <solarus/lowlevel/Debug.h>
 #include <solarus/lua/LuaContext.h>
 #include <iostream>
+#include <QSize>
 
 /**
  * @brief Creates a quest runner.
@@ -82,9 +84,37 @@ void QuestRunner::run() {
     return;
   }
 
+  Settings settings;
+
   try {
 
     Solarus::Arguments arguments;
+
+    // no-audio.
+    if (settings.get_value_bool(Settings::no_audio)) {
+      arguments.add_argument("-no-audio");
+    }
+
+    // video-acceleration.
+    bool video_acceleration =
+      settings.get_value_bool(Settings::video_acceleration);
+    arguments.add_argument(
+      "-video-acceleration", video_acceleration ? "yes" : "no");
+
+    // win-console.
+    if (settings.get_value_bool(Settings::win_console)) {
+      arguments.add_argument("-win-console", "yes");
+    }
+
+    // quest-size.
+    QSize size = settings.get_value_size(Settings::quest_size);
+    if (size.isValid()) {
+      QString size_str = QString::number(size.width()) + "x" +
+                         QString::number(size.height());
+      arguments.add_argument("-quest-size", size_str.toStdString());
+    }
+
+    // Path of the quest.
     arguments.add_argument(quest_path.toStdString());
 
     main_loop = new MainLoop(arguments);
