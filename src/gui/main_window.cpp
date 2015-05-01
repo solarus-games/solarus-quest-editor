@@ -358,6 +358,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
         quest.set_root_path("");
         quest.set_root_path(quest_path);
         quest.check_version();
+        ui.action_run_quest->setEnabled(true);
         success = true;
       }
       catch (const EditorException& ex) {
