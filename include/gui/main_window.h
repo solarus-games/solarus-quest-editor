@@ -19,6 +19,7 @@
 
 #include "quest.h"
 #include "ui_main_window.h"
+#include "gui/settings_dialog.h"
 #include <solarus/entities/EntityType.h>
 #include <solarus/entities/Layer.h>
 #include <QMainWindow>
@@ -115,6 +116,8 @@ private:
 
   QMap<QString, QAction*>
       common_actions;             /**< Actions available to all editors. */
+
+  SettingsDialog settings_dialog; /**< The settings dialog. */
 
 };
 

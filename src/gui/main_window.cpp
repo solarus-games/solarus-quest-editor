@@ -20,7 +20,6 @@
 #include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
-#include "gui/settings_dialog.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"
@@ -53,7 +52,8 @@ MainWindow::MainWindow(QWidget* parent) :
   show_entities_menu(nullptr),
   show_entities_button(nullptr),
   show_entities_actions(),
-  common_actions() {
+  common_actions(),
+  settings_dialog(this) {
 
   // Set up widgets.
   ui.setupUi(this);
@@ -141,6 +141,9 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
   connect(quest_runner, SIGNAL(solarus_fatal(QString)),
           this, SLOT(solarus_fatal(QString)));
+
+  connect(&settings_dialog, SIGNAL(settings_changed()),
+          this, SLOT(reload_settings()));
 
   // No editor initially.
   current_editor_changed(-1);
@@ -619,9 +622,7 @@ void MainWindow::on_action_show_layer_2_triggered() {
  */
 void MainWindow::on_action_settings_triggered() {
 
-  SettingsDialog dialog(this);
-  connect(&dialog, SIGNAL(settings_changed()), this, SLOT(reload_settings()));
-  dialog.exec();
+  settings_dialog.exec();
 }
 
 /**
