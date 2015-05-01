@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>617</width>
-    <height>417</height>
+    <width>610</width>
+    <height>407</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -61,7 +61,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Where to write savegames., relative to &quot;$HOME/.solarus/&quot;.
+        <string>Folder where to write savegames, relative to &quot;$HOME/.solarus/&quot;.
 Should identify your quest to avoid confusion with other quests.</string>
        </property>
        <property name="wordWrap">

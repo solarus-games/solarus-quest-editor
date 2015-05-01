@@ -2871,96 +2871,111 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>QuestPropertiesEditor</name>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="22"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="228"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="29"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="293"/>
         <source>Solarus version</source>
         <translation>Version de Solarus</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="29"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="230"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="36"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="295"/>
         <source>Version of the engine your data files are compatible with</source>
         <translation>Version du moteur avec lequel vos fichiers de quête sont compatible</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="39"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="233"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="52"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="298"/>
         <source>Write directory</source>
         <translation>Dossier d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="46"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="235"/>
-        <source>Directory where your quest will write its savegames and setting files</source>
-        <translation>Dossier dans lequel votre quête va enregistrer ses sauvegardes de jeu et fichiers de configuration</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="53"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="237"/>
-        <source>Title bar</source>
-        <translation>Barre de titre</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="60"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="239"/>
-        <source>Title of the window</source>
+        <location filename="../src/gui/quest_properties_editor.ui" line="83"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="301"/>
+        <source>Window title</source>
         <translation>Titre de la fenêtre</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="67"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="241"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="95"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="302"/>
+        <source>Usually the title of your game.</source>
+        <translation>En général le titre de votre jeu.</translation>
+    </message>
+    <message>
+        <source>Directory where your quest will write its savegames and setting files</source>
+        <translation type="vanished">Dossier dans lequel votre quête va enregistrer ses sauvegardes de jeu et fichiers de configuration</translation>
+    </message>
+    <message>
+        <source>Title bar</source>
+        <translation type="vanished">Barre de titre</translation>
+    </message>
+    <message>
+        <source>Title of the window</source>
+        <translation type="vanished">Titre de la fenêtre</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/quest_properties_editor.ui" line="64"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="299"/>
+        <source>Folder where to write savegames, relative to &quot;$HOME/.solarus/&quot;.
+Should identify your quest to avoid confusion with other quests.</source>
+        <translation>Dossier où écrire les sauvegardes, par rapport à &quot;$HOME/.solarus/&quot;.
+Permet d&apos;identifier votre quête pour éviter toute confusion avec d&apos;autres quêtes.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/quest_properties_editor.ui" line="110"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="303"/>
         <source>Normal quest size</source>
         <translation>Taille normale de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="74"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="242"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="181"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="305"/>
+        <source>Size of the logical game area (before any scaling).
+This is the visible space of the current map.</source>
+        <translation>Taille de l&apos;espace logique de jeu (avant tout agrandissement).</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/quest_properties_editor.ui" line="200"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="307"/>
         <source>Minimum quest size</source>
         <translation>Taille minimum de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="81"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="243"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="271"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="357"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="309"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="312"/>
+        <source>Only useful to support a range of logical sizes.</source>
+        <translation>Utile uniquement pour supporter plusieurs tailles.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/quest_properties_editor.ui" line="286"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="310"/>
         <source>Maximum quest size</source>
         <translation>Taille maximum de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="96"/>
-        <location filename="../src/gui/quest_properties_editor.ui" line="125"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="245"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="249"/>
         <source>Usual size of the game screen in pixels</source>
-        <translation>Taille courante de l&apos;écran de jeu en pixels</translation>
+        <translation type="vanished">Taille courante de l&apos;écran de jeu en pixels</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="112"/>
-        <location filename="../src/gui/quest_properties_editor.ui" line="180"/>
-        <location filename="../src/gui/quest_properties_editor.ui" line="248"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="247"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="254"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="261"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="140"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="230"/>
+        <location filename="../src/gui/quest_properties_editor.ui" line="316"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="304"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="308"/>
+        <location filename="../build/ui_quest_properties_editor.h" line="311"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="164"/>
-        <location filename="../src/gui/quest_properties_editor.ui" line="193"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="252"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="256"/>
         <source>Minimum size of the game screen in pixels</source>
-        <translation>Taille minimum de l&apos;écran de jeu en pixels</translation>
+        <translation type="vanished">Taille minimum de l&apos;écran de jeu en pixels</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="232"/>
-        <location filename="../src/gui/quest_properties_editor.ui" line="261"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="259"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="263"/>
         <source>Maximum size of the game screen in pixels</source>
-        <translation>Taille maximum de l&apos;écran de jeu en pixels</translation>
+        <translation type="vanished">Taille maximum de l&apos;écran de jeu en pixels</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_properties_editor.ui" line="300"/>
-        <location filename="../build/ui_quest_properties_editor.h" line="265"/>
         <source># Write directory #
 Directory where your quest will write its savegames and setting files.
 It will be a subdirectory of &apos;$HOME/.solarus/&apos;, automatically created by the engine. 
@@ -2970,7 +2985,7 @@ You must define it before you can use savegames or setting files.
 # Title bar #
 Title of the window. You should probably put the title of your game here.
 </source>
-        <translation># Dossier d&apos;écriture #
+        <translation type="vanished"># Dossier d&apos;écriture #
 Dossier dans lequel votre quête va enregistrer ses sauvegardes de jeu et fichiers de configuration.
 Il sera un sous-dossier de &apos;$HOME/.solarus/&apos;, crée automatiquement par le moteur.
 Son nom devrait identifier votre quête, pour éviter la confusion avec d&apos;autres quête de Solarus qui pourrait aussi être installé sur la machine de l&apos;utilisateur.
