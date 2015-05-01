@@ -483,14 +483,12 @@
 <context>
     <name>DocWidget</name>
     <message>
-        <location filename="../build/ui_doc_widget.h" line="62"/>
         <source>MainWindow</source>
-        <translation>MainWindow</translation>
+        <translation type="vanished">MainWindow</translation>
     </message>
     <message>
-        <location filename="../build/ui_doc_widget.h" line="63"/>
         <source>toolBar</source>
-        <translation>toolBar</translation>
+        <translation type="vanished">toolBar</translation>
     </message>
 </context>
 <context>
@@ -1159,154 +1157,154 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
-        <location filename="../build/ui_main_window.h" line="233"/>
-        <location filename="../build/ui_mainwindow.h" line="113"/>
+        <location filename="../build/ui_main_window.h" line="241"/>
         <source>Solarus Quest Editor</source>
         <translation>Solarus Quest Editor</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="65"/>
-        <location filename="../build/ui_main_window.h" line="265"/>
+        <location filename="../build/ui_main_window.h" line="274"/>
         <source>File</source>
         <translation>Fichier</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="77"/>
-        <location filename="../build/ui_main_window.h" line="266"/>
-        <location filename="../build/ui_mainwindow.h" line="123"/>
+        <location filename="../build/ui_main_window.h" line="275"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="88"/>
-        <location filename="../build/ui_main_window.h" line="267"/>
-        <location filename="../build/ui_mainwindow.h" line="124"/>
+        <location filename="../build/ui_main_window.h" line="276"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="94"/>
-        <location filename="../build/ui_main_window.h" line="268"/>
+        <location filename="../build/ui_main_window.h" line="277"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="105"/>
-        <location filename="../build/ui_main_window.h" line="269"/>
+        <location filename="../build/ui_main_window.h" line="278"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="143"/>
-        <location filename="../build/ui_main_window.h" line="234"/>
-        <location filename="../build/ui_mainwindow.h" line="114"/>
+        <location filename="../src/gui/main_window.ui" line="112"/>
+        <location filename="../build/ui_main_window.h" line="279"/>
+        <source>Tools</source>
+        <translation>Outils</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="150"/>
+        <location filename="../build/ui_main_window.h" line="242"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="148"/>
-        <location filename="../build/ui_main_window.h" line="235"/>
-        <location filename="../build/ui_mainwindow.h" line="116"/>
+        <location filename="../src/gui/main_window.ui" line="155"/>
+        <location filename="../build/ui_main_window.h" line="243"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="153"/>
-        <location filename="../build/ui_main_window.h" line="236"/>
-        <location filename="../build/ui_mainwindow.h" line="118"/>
+        <location filename="../src/gui/main_window.ui" line="160"/>
+        <location filename="../build/ui_main_window.h" line="244"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="162"/>
-        <location filename="../build/ui_main_window.h" line="237"/>
-        <location filename="../build/ui_mainwindow.h" line="120"/>
-        <location filename="../src/gui/main_window.cpp" line="837"/>
+        <location filename="../src/gui/main_window.ui" line="169"/>
+        <location filename="../build/ui_main_window.h" line="245"/>
+        <location filename="../src/gui/main_window.cpp" line="851"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="165"/>
-        <location filename="../build/ui_main_window.h" line="238"/>
+        <location filename="../src/gui/main_window.ui" line="172"/>
+        <location filename="../build/ui_main_window.h" line="246"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="242"/>
-        <location filename="../build/ui_main_window.h" line="250"/>
+        <location filename="../src/gui/main_window.ui" line="249"/>
+        <location filename="../build/ui_main_window.h" line="258"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="263"/>
-        <location filename="../build/ui_main_window.h" line="255"/>
+        <location filename="../src/gui/main_window.ui" line="270"/>
+        <location filename="../build/ui_main_window.h" line="263"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="284"/>
-        <location filename="../build/ui_main_window.h" line="260"/>
+        <location filename="../src/gui/main_window.ui" line="291"/>
+        <location filename="../build/ui_main_window.h" line="268"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="310"/>
-        <location filename="../build/ui_main_window.h" line="264"/>
+        <location filename="../src/gui/main_window.ui" line="317"/>
+        <location filename="../build/ui_main_window.h" line="272"/>
         <source>Find...</source>
         <translation>Rechercher...</translation>
     </message>
     <message>
-        <location filename="../build/ui_mainwindow.h" line="121"/>
-        <source>F9</source>
-        <translation></translation>
+        <location filename="../src/gui/main_window.ui" line="322"/>
+        <location filename="../build/ui_main_window.h" line="273"/>
+        <source>Settings</source>
+        <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="174"/>
-        <location filename="../build/ui_main_window.h" line="239"/>
+        <location filename="../src/gui/main_window.ui" line="181"/>
+        <location filename="../build/ui_main_window.h" line="247"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="183"/>
-        <location filename="../build/ui_main_window.h" line="240"/>
+        <location filename="../src/gui/main_window.ui" line="190"/>
+        <location filename="../build/ui_main_window.h" line="248"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="192"/>
-        <location filename="../build/ui_main_window.h" line="241"/>
+        <location filename="../src/gui/main_window.ui" line="199"/>
+        <location filename="../build/ui_main_window.h" line="249"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="197"/>
-        <location filename="../build/ui_main_window.h" line="242"/>
+        <location filename="../src/gui/main_window.ui" line="204"/>
+        <location filename="../build/ui_main_window.h" line="250"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="206"/>
-        <location filename="../build/ui_main_window.h" line="243"/>
+        <location filename="../src/gui/main_window.ui" line="213"/>
+        <location filename="../build/ui_main_window.h" line="251"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="218"/>
-        <location filename="../build/ui_main_window.h" line="244"/>
+        <location filename="../src/gui/main_window.ui" line="225"/>
+        <location filename="../build/ui_main_window.h" line="252"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="221"/>
-        <location filename="../build/ui_main_window.h" line="245"/>
+        <location filename="../src/gui/main_window.ui" line="228"/>
+        <location filename="../build/ui_main_window.h" line="253"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="236"/>
-        <location filename="../src/gui/main_window.ui" line="239"/>
-        <location filename="../build/ui_main_window.h" line="246"/>
-        <location filename="../build/ui_main_window.h" line="248"/>
+        <location filename="../src/gui/main_window.ui" line="243"/>
+        <location filename="../src/gui/main_window.ui" line="246"/>
+        <location filename="../build/ui_main_window.h" line="254"/>
+        <location filename="../build/ui_main_window.h" line="256"/>
         <source>Show low layer</source>
         <translation>Afficher la couche basse</translation>
     </message>
@@ -1315,10 +1313,10 @@
         <translation type="vanished">Ctrl+1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="257"/>
-        <location filename="../src/gui/main_window.ui" line="260"/>
-        <location filename="../build/ui_main_window.h" line="251"/>
-        <location filename="../build/ui_main_window.h" line="253"/>
+        <location filename="../src/gui/main_window.ui" line="264"/>
+        <location filename="../src/gui/main_window.ui" line="267"/>
+        <location filename="../build/ui_main_window.h" line="259"/>
+        <location filename="../build/ui_main_window.h" line="261"/>
         <source>Show intermediate layer</source>
         <translation>Afficher la couche intermédiaire</translation>
     </message>
@@ -1327,10 +1325,10 @@
         <translation type="vanished">Ctrl+2</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="278"/>
-        <location filename="../src/gui/main_window.ui" line="281"/>
-        <location filename="../build/ui_main_window.h" line="256"/>
-        <location filename="../build/ui_main_window.h" line="258"/>
+        <location filename="../src/gui/main_window.ui" line="285"/>
+        <location filename="../src/gui/main_window.ui" line="288"/>
+        <location filename="../build/ui_main_window.h" line="264"/>
+        <location filename="../build/ui_main_window.h" line="266"/>
         <source>Show high layer</source>
         <translation>Afficher la couche haute</translation>
     </message>
@@ -1339,36 +1337,36 @@
         <translation type="vanished">Ctrl+3</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="293"/>
-        <location filename="../build/ui_main_window.h" line="261"/>
+        <location filename="../src/gui/main_window.ui" line="300"/>
+        <location filename="../build/ui_main_window.h" line="269"/>
         <source>Documentation</source>
         <translation>Documentation</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="296"/>
-        <location filename="../build/ui_main_window.h" line="262"/>
+        <location filename="../src/gui/main_window.ui" line="303"/>
+        <location filename="../build/ui_main_window.h" line="270"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="305"/>
-        <location filename="../build/ui_main_window.h" line="263"/>
+        <location filename="../src/gui/main_window.ui" line="312"/>
+        <location filename="../build/ui_main_window.h" line="271"/>
         <source>Website</source>
         <translation>Site web</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="430"/>
-        <location filename="../src/gui/main_window.cpp" line="460"/>
+        <location filename="../src/gui/main_window.cpp" line="432"/>
+        <location filename="../src/gui/main_window.cpp" line="464"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="441"/>
+        <location filename="../src/gui/main_window.cpp" line="443"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="441"/>
+        <location filename="../src/gui/main_window.cpp" line="443"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -1455,49 +1453,45 @@ Your quest was kept unchanged in format %1.</source>
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="834"/>
+        <location filename="../src/gui/main_window.cpp" line="848"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="847"/>
+        <location filename="../src/gui/main_window.cpp" line="861"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="758"/>
+        <location filename="../src/gui/main_window.cpp" line="772"/>
         <source>Invalid layer: %1</source>
         <translation>Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="817"/>
+        <location filename="../src/gui/main_window.cpp" line="831"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="856"/>
+        <location filename="../src/gui/main_window.cpp" line="878"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
     <message>
-        <location filename="../build/ui_mainwindow.h" line="115"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../build/ui_mainwindow.h" line="117"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../build/ui_mainwindow.h" line="119"/>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+Q</translation>
+        <translation type="vanished">Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../build/ui_mainwindow.h" line="122"/>
         <source>Quest</source>
-        <translation>Quête</translation>
+        <translation type="vanished">Quête</translation>
     </message>
 </context>
 <context>
@@ -3404,6 +3398,78 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="14"/>
+        <location filename="../build/ui_settings_dialog.h" line="171"/>
+        <source>Settings</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="24"/>
+        <location filename="../build/ui_settings_dialog.h" line="175"/>
+        <source>General</source>
+        <translation>Général</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="30"/>
+        <location filename="../build/ui_settings_dialog.h" line="172"/>
+        <source>Directory</source>
+        <translation>Répertoire</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="36"/>
+        <location filename="../build/ui_settings_dialog.h" line="173"/>
+        <source>Working directory:</source>
+        <translation>Répertoire de travail :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="48"/>
+        <location filename="../build/ui_settings_dialog.h" line="174"/>
+        <source>Browse...</source>
+        <translation>Parcourir...</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="61"/>
+        <location filename="../build/ui_settings_dialog.h" line="179"/>
+        <source>Text editor</source>
+        <translation>Éditeur de texte</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="67"/>
+        <location filename="../build/ui_settings_dialog.h" line="176"/>
+        <source>Font</source>
+        <translation>Police</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="73"/>
+        <location filename="../build/ui_settings_dialog.h" line="177"/>
+        <source>Family:</source>
+        <translation>Famille :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="100"/>
+        <location filename="../build/ui_settings_dialog.h" line="178"/>
+        <source>Size:</source>
+        <translation>Taille :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.cpp" line="83"/>
+        <source>Restore default settings</source>
+        <translation>Restaurer les paramètres par défaut</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.cpp" line="84"/>
+        <source>Do you really want to restore default settings?</source>
+        <translation>Voulez-vous vraiment restaurer les paramètres par défaut ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.cpp" line="175"/>
+        <source>Working directory</source>
+        <translation>Répertoire de travail</translation>
+    </message>
+</context>
+<context>
     <name>SpriteEditor</name>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="14"/>
@@ -4176,12 +4242,12 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="76"/>
+        <location filename="../src/gui/text_editor.cpp" line="73"/>
         <source>Cannot open file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/text_editor.cpp" line="143"/>
+        <location filename="../src/gui/text_editor.cpp" line="140"/>
         <source>Cannot open file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier &apos;%1&apos; en écriture</translation>
     </message>
