@@ -107,10 +107,17 @@
     <addaction name="action_website"/>
     <addaction name="action_doc"/>
    </widget>
+   <widget class="QMenu" name="menu_tools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="action_settings"/>
+   </widget>
    <addaction name="menu_quest"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menu_run"/>
+   <addaction name="menu_tools"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="QToolBar" name="tool_bar">
@@ -308,6 +315,11 @@
   <action name="action_find">
    <property name="text">
     <string>Find...</string>
+   </property>
+  </action>
+  <action name="action_settings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

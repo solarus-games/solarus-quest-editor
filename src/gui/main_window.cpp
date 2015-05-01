@@ -20,6 +20,7 @@
 #include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "gui/settings_dialog.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"
@@ -424,10 +425,12 @@ void MainWindow::upgrade_quest() {
  */
 void MainWindow::on_action_new_quest_triggered() {
 
+  Settings settings;
+
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        "",  // Initial value: current directory.
+        settings.get_value_string(Settings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -454,10 +457,12 @@ void MainWindow::on_action_new_quest_triggered() {
  */
 void MainWindow::on_action_load_quest_triggered() {
 
+  Settings settings;
+
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        "",  // Initial value: current directory.
+        settings.get_value_string(Settings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -607,6 +612,16 @@ void MainWindow::on_action_show_layer_2_triggered() {
   }
 
   editor->get_view_settings().set_layer_visible(Layer::LAYER_HIGH, ui.action_show_layer_2->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Settings" action.
+ */
+void MainWindow::on_action_settings_triggered() {
+
+  SettingsDialog dialog(this);
+  connect(&dialog, SIGNAL(settings_changed()), this, SLOT(reload_settings()));
+  dialog.exec();
 }
 
 /**
@@ -844,6 +859,14 @@ void MainWindow::update_run_quest() {
 void MainWindow::solarus_fatal(const QString& what) {
 
   GuiTools::error_dialog(tr("Quest terminated unexpectedly: %1").arg(what));
+}
+
+/**
+ * @brief Reloads settings.
+ */
+void MainWindow::reload_settings() {
+
+  ui.tab_widget->reload_settings();
 }
 
 /**

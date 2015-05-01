@@ -68,6 +68,7 @@ public:
   virtual bool can_paste() const;
   virtual void paste();
   virtual void find();
+  virtual void reload_settings();
 
 signals:
 

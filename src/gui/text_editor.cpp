@@ -20,6 +20,7 @@
 #include "gui/text_editor_widget.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include "settings.h"
 #include <QIcon>
 #include <QLayout>
 #include <QList>
@@ -53,11 +54,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   connect(text_widget, SIGNAL(copyAvailable(bool)),
           this, SIGNAL(can_copy_changed(bool)));
 
-  // Use a monospace font.
-  QFont font("DejaVu Sans Mono");
-  font.setStyleHint(QFont::TypeWriter);
-  font.setPointSize(10);
-  setFont(font);
+  reload_settings();
 
   // Activate syntax coloring for Lua scripts.
   if (quest.is_script(file_path)) {
@@ -207,6 +204,20 @@ void TextEditor::find() {
   dialog->show();
   dialog->raise();  // Put the dialog on top.
   dialog->activateWindow();
+}
+
+/**
+ * @copydoc Editor::reload_settings
+ */
+void TextEditor::reload_settings() {
+
+  Settings settings;
+
+  // Font.
+  QFont font(settings.get_value_string(Settings::font_family));
+  font.setPointSize(settings.get_value_int(Settings::font_size));
+  font.setStyleHint(QFont::TypeWriter);
+  setFont(font);
 }
 
 /**

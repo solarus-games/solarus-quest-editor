@@ -502,6 +502,15 @@ void Editor::find() {
 }
 
 /**
+ * @brief Reloads the editor settings.
+ *
+ * The default implementation does nothing, meaning that settings are not
+ * supported.
+ */
+void Editor::reload_settings() {
+}
+
+/**
  * @brief Returns whether this editor supports zooming.
  * @return @c true if zoom operations are supported.
  */

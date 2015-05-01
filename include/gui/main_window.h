@@ -65,6 +65,7 @@ private slots:
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();
+  void on_action_settings_triggered();
   void on_action_website_triggered();
   void on_action_doc_triggered();
 
@@ -78,6 +79,8 @@ private slots:
 
   void update_run_quest();
   void solarus_fatal(const QString& what);
+
+  void reload_settings();
 
 protected:
 

@@ -42,6 +42,7 @@ public:
   bool can_paste() const override;
   void paste() override;
   void find() override;
+  void reload_settings() override;
 
 private slots:
 
