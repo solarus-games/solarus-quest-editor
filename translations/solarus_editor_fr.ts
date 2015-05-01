@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="169"/>
         <location filename="../build/ui_main_window.h" line="245"/>
-        <location filename="../src/gui/main_window.cpp" line="851"/>
+        <location filename="../src/gui/main_window.cpp" line="852"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
@@ -1355,18 +1355,18 @@
         <translation>Site web</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="432"/>
-        <location filename="../src/gui/main_window.cpp" line="464"/>
+        <location filename="../src/gui/main_window.cpp" line="435"/>
+        <location filename="../src/gui/main_window.cpp" line="467"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="443"/>
+        <location filename="../src/gui/main_window.cpp" line="446"/>
         <source>Quest created</source>
         <translation>Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="443"/>
+        <location filename="../src/gui/main_window.cpp" line="446"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
@@ -1376,104 +1376,104 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="330"/>
+        <location filename="../src/gui/main_window.cpp" line="333"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.cpp" line="92"/>
-        <location filename="../src/gui/main_window.cpp" line="173"/>
+        <location filename="../src/gui/main_window.cpp" line="176"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.cpp" line="101"/>
-        <location filename="../src/gui/main_window.cpp" line="204"/>
+        <location filename="../src/gui/main_window.cpp" line="207"/>
         <source>Show entity types</source>
         <translation>Afficher les types d&apos;entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="175"/>
+        <location filename="../src/gui/main_window.cpp" line="178"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="176"/>
+        <location filename="../src/gui/main_window.cpp" line="179"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="177"/>
+        <location filename="../src/gui/main_window.cpp" line="180"/>
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="178"/>
+        <location filename="../src/gui/main_window.cpp" line="181"/>
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="179"/>
+        <location filename="../src/gui/main_window.cpp" line="182"/>
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="231"/>
+        <location filename="../src/gui/main_window.cpp" line="234"/>
         <source>Show all</source>
         <translation>Afficher tout</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="241"/>
+        <location filename="../src/gui/main_window.cpp" line="244"/>
         <source>Hide all</source>
         <translation>Cacher tout</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="349"/>
+        <location filename="../src/gui/main_window.cpp" line="352"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="350"/>
+        <location filename="../src/gui/main_window.cpp" line="353"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="401"/>
+        <location filename="../src/gui/main_window.cpp" line="404"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="418"/>
+        <location filename="../src/gui/main_window.cpp" line="421"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="848"/>
+        <location filename="../src/gui/main_window.cpp" line="849"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="861"/>
+        <location filename="../src/gui/main_window.cpp" line="862"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="772"/>
+        <location filename="../src/gui/main_window.cpp" line="773"/>
         <source>Invalid layer: %1</source>
         <translation>Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="831"/>
+        <location filename="../src/gui/main_window.cpp" line="832"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="878"/>
+        <location filename="../src/gui/main_window.cpp" line="879"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -3401,70 +3401,106 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>SettingsDialog</name>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="14"/>
-        <location filename="../build/ui_settings_dialog.h" line="171"/>
+        <location filename="../build/ui_settings_dialog.h" line="251"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="24"/>
-        <location filename="../build/ui_settings_dialog.h" line="175"/>
+        <location filename="../build/ui_settings_dialog.h" line="261"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="30"/>
-        <location filename="../build/ui_settings_dialog.h" line="172"/>
+        <location filename="../build/ui_settings_dialog.h" line="252"/>
         <source>Directory</source>
         <translation>Répertoire</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="36"/>
-        <location filename="../build/ui_settings_dialog.h" line="173"/>
+        <location filename="../build/ui_settings_dialog.h" line="253"/>
         <source>Working directory:</source>
         <translation>Répertoire de travail :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="48"/>
-        <location filename="../build/ui_settings_dialog.h" line="174"/>
+        <location filename="../build/ui_settings_dialog.h" line="254"/>
         <source>Browse...</source>
         <translation>Parcourir...</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="61"/>
-        <location filename="../build/ui_settings_dialog.h" line="179"/>
+        <location filename="../src/gui/settings_dialog.ui" line="60"/>
+        <location filename="../build/ui_settings_dialog.h" line="255"/>
+        <source>Running</source>
+        <translation>Éxécution</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="66"/>
+        <location filename="../build/ui_settings_dialog.h" line="256"/>
+        <source>No audio</source>
+        <translation>Désactiver l&apos;audio</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="73"/>
+        <location filename="../build/ui_settings_dialog.h" line="257"/>
+        <source>Video acceleration</source>
+        <translation>Accélération vidéo</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="80"/>
+        <location filename="../build/ui_settings_dialog.h" line="258"/>
+        <source>Show console (only needed on Windows)</source>
+        <translation>Afficher une console (nécéssaire uniquement sous Windows)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="89"/>
+        <location filename="../build/ui_settings_dialog.h" line="259"/>
+        <source>Quest size:</source>
+        <translation>Taille de la quête :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="118"/>
+        <location filename="../build/ui_settings_dialog.h" line="260"/>
+        <source>x</source>
+        <translation>x</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="179"/>
+        <location filename="../build/ui_settings_dialog.h" line="265"/>
         <source>Text editor</source>
         <translation>Éditeur de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="67"/>
-        <location filename="../build/ui_settings_dialog.h" line="176"/>
+        <location filename="../src/gui/settings_dialog.ui" line="185"/>
+        <location filename="../build/ui_settings_dialog.h" line="262"/>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="73"/>
-        <location filename="../build/ui_settings_dialog.h" line="177"/>
+        <location filename="../src/gui/settings_dialog.ui" line="191"/>
+        <location filename="../build/ui_settings_dialog.h" line="263"/>
         <source>Family:</source>
         <translation>Famille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="100"/>
-        <location filename="../build/ui_settings_dialog.h" line="178"/>
+        <location filename="../src/gui/settings_dialog.ui" line="225"/>
+        <location filename="../build/ui_settings_dialog.h" line="264"/>
         <source>Size:</source>
         <translation>Taille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="83"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="95"/>
         <source>Restore default settings</source>
         <translation>Restaurer les paramètres par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="84"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="96"/>
         <source>Do you really want to restore default settings?</source>
         <translation>Voulez-vous vraiment restaurer les paramètres par défaut ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="175"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="191"/>
         <source>Working directory</source>
         <translation>Répertoire de travail</translation>
     </message>
