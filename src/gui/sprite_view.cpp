@@ -223,7 +223,9 @@ void SpriteView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
-  GuiTools::draw_grid(*painter, rectangle.toRect(), 16);
+  QRect rect = rectangle.toRect();
+  rect.setTopLeft({0, 0});
+  GuiTools::draw_grid(*painter, rect, QSize(16, 16));
 
   QGraphicsView::drawForeground(painter, rectangle);
 }

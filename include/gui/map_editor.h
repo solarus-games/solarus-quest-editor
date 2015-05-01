@@ -44,6 +44,7 @@ public:
   void copy() override;
   bool can_paste() const override;
   void paste() override;
+  void reload_settings() override;
 
 private slots:
 

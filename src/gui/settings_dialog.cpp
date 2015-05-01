@@ -16,6 +16,7 @@
  */
 #include "include/gui/settings_dialog.h"
 #include "include/settings.h"
+#include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
@@ -61,6 +62,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_font_family()));
   connect(ui.font_size_field, SIGNAL(valueChanged(int)),
           this, SLOT(change_font_size()));
+
+  // Map editor.
+  connect(ui.map_background_button, SIGNAL(clicked()),
+          this, SLOT(change_map_background()));
+  connect(ui.map_grid_width_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_map_grid()));
+  connect(ui.map_grid_height_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_map_grid()));
 }
 
 /**
@@ -71,6 +80,8 @@ void SettingsDialog::done(int result) {
 
   if (result == QDialog::Accepted) {
     apply();
+  } else {
+    reset();
   }
 
   QDialog::done(result);
@@ -130,6 +141,10 @@ void SettingsDialog::update() {
   // Text editor.
   update_font_family();
   update_font_size();
+
+  // Map editor.
+  update_map_background();
+  update_map_grid();
 }
 
 /**
@@ -327,4 +342,70 @@ void SettingsDialog::change_font_size() {
 
   edited_settings[Settings::font_size] = ui.font_size_field->value();
   update_buttons();
+}
+
+/**
+ * @brief Updates the map background field.
+ */
+void SettingsDialog::update_map_background() {
+
+  map_background = settings.get_value_color(Settings::map_background);
+  refresh_map_background();
+}
+
+/**
+ * @brief Slot called when the user changes the map background.
+ */
+void SettingsDialog::change_map_background() {
+
+  QColor color = QColorDialog::getColor(
+    map_background, this, tr("Select background color"));
+
+  if (color.isValid()) {
+    edited_settings[Settings::map_background] = color;
+    map_background = color;
+    refresh_map_background();
+    update_buttons();
+  }
+}
+
+/**
+ * @brief Updates the map grid field.
+ */
+void SettingsDialog::update_map_grid() {
+
+  QSize size  = settings.get_value_size(Settings::map_grid);
+  ui.map_grid_width_field->setValue(size.width());
+  ui.map_grid_height_field->setValue(size.height());
+}
+
+/**
+ * @brief Slot called when the user changes the map grid.
+ */
+void SettingsDialog::change_map_grid() {
+
+  QSize size;
+  size.setWidth(ui.map_grid_width_field->value());
+  size.setHeight(ui.map_grid_height_field->value());
+
+  edited_settings[Settings::map_grid] = size;
+  update_buttons();
+}
+
+/**
+ * @brief Refreshs the map background button color.
+ */
+void SettingsDialog::refresh_map_background() {
+
+  QString style_sheet =
+    "QPushButton {\n"
+    "    background-color: %1;\n"
+    "    border-style: inset;\n"
+    "    border-width: 2px;\n"
+    "    border-color: gray;\n"
+    "    min-width: 1em;\n"
+    "    padding: 1px;\n"
+    "}";
+  ui.map_background_button->setStyleSheet(
+    style_sheet.arg(map_background.name()));
 }

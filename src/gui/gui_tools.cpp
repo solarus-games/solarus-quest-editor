@@ -121,18 +121,15 @@ void draw_rectangle_border_double(QPainter& painter,
  * @param where Rectangle where drawing the grid should be limited to.
  * @param spacing Square size.
  */
-void draw_grid(QPainter& painter, const QRect& where, int square_size) {
-
-  int left = where.left() - where.left() % square_size;
-  int top = where.top() - where.top() % square_size;
+void draw_grid(QPainter& painter, const QRect& where, const QSize &size) {
 
   QVarLengthArray<QLineF, 100> lines;
 
-  for (int x = left; x < where.right(); x += square_size) {
+  for (int x = where.left(); x < where.right(); x += size.width()) {
     lines.append(QLineF(x, where.top(), x, where.bottom()));
   }
 
-  for (int y = top; y < where.bottom(); y += square_size) {
+  for (int y = where.top(); y < where.bottom(); y += size.height()) {
     lines.append(QLineF(where.left(), y, where.right(), y));
   }
 

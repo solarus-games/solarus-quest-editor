@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "gui/main_window.h"
+#include "settings.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLibraryInfo>
@@ -44,6 +45,7 @@ int main(int argc, char* argv[]) {
   }
 
   QApplication application(argc, argv);
+  Settings::load_default_application_settings();
 
   // Set up the translations.
   QTranslator qt_translator;

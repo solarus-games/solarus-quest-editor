@@ -37,21 +37,30 @@ public:
   static const QString font_family;
   static const QString font_size;
 
+  // Map editor keys.
+  static const QString map_background;
+  static const QString map_grid;
+
   Settings();
+
+  static void load_default_application_settings();
 
   QVariant get_value(const QString& key);
   bool get_value_bool(const QString& key);
   int get_value_int(const QString& key);
   QString get_value_string(const QString& key);
   QSize get_value_size(const QString& key);
+  QColor get_value_color(const QString& key);
 
   QVariant get_default(const QString& key);
   bool get_default_bool(const QString& key);
   int get_default_int(const QString& key);
   QString get_default_string(const QString& key);
   QSize get_default_size(const QString& key);
+  QColor get_default_color(const QString& key);
 
   void set_value(const QString& key, const QVariant& value);
+  void set_value_color(const QString& key, const QColor& value);
 
   void restore_default();
 
@@ -59,7 +68,7 @@ private:
 
   QSettings settings;  /**< The settings. */
 
-  static const QMap<QString, QVariant>
+  static QMap<QString, QVariant>
     default_values;    /**< The default values. */
 
 };

@@ -160,7 +160,8 @@ MapView::MapView(QWidget* parent) :
   set_layer_actions(),
   bring_to_front_action(nullptr),
   bring_to_back_action(nullptr),
-  remove_action(nullptr) {
+  remove_action(nullptr),
+  grid_size(16, 16) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -407,6 +408,26 @@ bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
     }
   }
   return false;
+}
+
+/**
+ * @brief Returns the grid size.
+ * @return The grid size.
+ */
+QSize MapView::get_grid_size() const {
+
+  return grid_size;
+}
+
+/**
+ * @brief Changes the grid size.
+ * @param size The new grid size.
+ */
+void MapView::set_grid_size(QSize size) {
+
+  if (size.isValid()) {
+    grid_size = size;
+  }
 }
 
 /**
@@ -877,8 +898,15 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
-  const int square_size = 16;
-  GuiTools::draw_grid(*painter, rectangle.toRect(), square_size);
+  QSize margin = scene != nullptr ? scene->get_margin_size() : QSize(0, 0);
+  int shift_x = grid_size.width() - (margin.width() % grid_size.width());
+  int shift_y = grid_size.height() - (margin.height() % grid_size.height());
+
+  QRect rect = rectangle.toRect();
+  rect.setTopLeft({-shift_x, -shift_y});
+  rect.setRight(rect.right() + grid_size.width() - shift_x);
+  rect.setBottom(rect.bottom() + grid_size.height() - shift_y);
+  GuiTools::draw_grid(*painter, rect, grid_size);
 
   QGraphicsView::drawForeground(painter, rectangle);
 }

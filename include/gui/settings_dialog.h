@@ -62,16 +62,26 @@ public slots:
   void update_font_size();
   void change_font_size();
 
+  // Map editor.
+  void update_map_background();
+  void change_map_background();
+  void update_map_grid();
+  void change_map_grid();
+
 signals:
 
   void settings_changed();
 
 private:
 
+  void refresh_map_background();
+
   Ui::SettingsDialog ui;                    /**< The settings dialog widgets. */
 
   Settings settings;                        /**< The settings. */
   QMap<QString, QVariant> edited_settings;  /**< The edited settings. */
+
+  QColor map_background;                    /**< Map background color. */
 
 };
 

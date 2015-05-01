@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "include/settings.h"
+#include <QPalette>
 #include <QSize>
 
 // General keys.
@@ -28,7 +29,11 @@ const QString Settings::quest_size = "quest_size";
 const QString Settings::font_family = "text_editor/font_family";
 const QString Settings::font_size = "text_editor/font_size";
 
-const QMap<QString, QVariant> Settings::default_values = {
+// Map editor keys.
+const QString Settings::map_background = "map_editor/background";
+const QString Settings::map_grid = "map_editor/grid";
+
+QMap<QString, QVariant> Settings::default_values = {
 
   // General.
   { Settings::working_directory, "" },
@@ -40,6 +45,10 @@ const QMap<QString, QVariant> Settings::default_values = {
   // Text editor.
   { Settings::font_family, "DejaVu Sans Mono" },
   { Settings::font_size, 10 },
+
+  // Map editor.
+  { Settings::map_background, "#888888" },
+  { Settings::map_grid, QSize(16, 16) }
 };
 
 /**
@@ -47,6 +56,17 @@ const QMap<QString, QVariant> Settings::default_values = {
  */
 Settings::Settings() :
   settings("solarus", "solarus-quest-editor") {
+}
+
+/**
+ * @brief Loads the default application settings.
+ */
+void Settings::load_default_application_settings() {
+
+  QPalette palette;
+
+  // Map editor.
+  default_values[map_background] = palette.dark().color().name();
 }
 
 /**
@@ -103,6 +123,16 @@ QSize Settings::get_value_size(const QString& key) {
 }
 
 /**
+ * @brief Returns a settings color value.
+ * @param key The key of the setting.
+ * @return The color value of the setting.
+ */
+QColor Settings::get_value_color(const QString& key) {
+
+  return QColor(get_value(key).toString());
+}
+
+/**
  * @brief Returns a settings default value.
  * @param key The key of the setting.
  * @return The default value of the setting.
@@ -156,6 +186,16 @@ QSize Settings::get_default_size(const QString& key) {
 }
 
 /**
+ * @brief Returns a settings default color value.
+ * @param key The key of the setting.
+ * @return The default color value of the setting.
+ */
+QColor Settings::get_default_color(const QString& key) {
+
+  return QColor(get_default(key).toString());
+}
+
+/**
  * @brief Changes a settings value.
  * @param key The key of the setting.
  * @param value The new value of the setting.
@@ -163,6 +203,16 @@ QSize Settings::get_default_size(const QString& key) {
 void Settings::set_value(const QString& key, const QVariant& value) {
 
   settings.setValue(key, value);
+}
+
+/**
+ * @brief Changes a settings color value.
+ * @param key The key of the setting.
+ * @param value The new color value of the setting.
+ */
+void Settings::set_value_color(const QString& key, const QColor& value) {
+
+  settings.setValue(key, value.name());
 }
 
 /**

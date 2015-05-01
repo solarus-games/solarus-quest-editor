@@ -20,6 +20,7 @@
 class QColor;
 class QPainter;
 class QRect;
+class QSize;
 class QString;
 
 namespace GuiTools {
@@ -37,7 +38,7 @@ void draw_rectangle_border_double(QPainter& painter,
                                   const QRect& where,
                                   const QColor& color_between);
 
-void draw_grid(QPainter& painter, const QRect& where, int square_size);
+void draw_grid(QPainter& painter, const QRect& where, const QSize& size);
 
 }
 
