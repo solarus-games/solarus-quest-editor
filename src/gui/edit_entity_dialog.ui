@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>663</width>
-    <height>1142</height>
+    <width>625</width>
+    <height>1179</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -484,53 +484,63 @@
       </widget>
      </item>
      <item row="13" column="0">
+      <widget class="QLabel" name="font_label">
+       <property name="text">
+        <string>Price font</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="ResourceSelector" name="font_field"/>
+     </item>
+     <item row="14" column="0">
       <widget class="QCheckBox" name="sound_checkbox">
        <property name="text">
         <string>Play a sound</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="1">
+     <item row="14" column="1">
       <widget class="ResourceSelector" name="sound_field"/>
      </item>
-     <item row="14" column="0">
+     <item row="15" column="0">
       <widget class="QLabel" name="transition_label">
        <property name="text">
         <string>Transition</string>
        </property>
       </widget>
      </item>
-     <item row="14" column="1">
+     <item row="15" column="1">
       <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
      </item>
-     <item row="15" column="0">
+     <item row="16" column="0">
       <widget class="QLabel" name="destination_map_label">
        <property name="text">
         <string>Destination map</string>
        </property>
       </widget>
      </item>
-     <item row="15" column="1">
+     <item row="16" column="1">
       <widget class="ResourceSelector" name="destination_map_field"/>
      </item>
-     <item row="16" column="0">
+     <item row="17" column="0">
       <widget class="QLabel" name="destination_label">
        <property name="text">
         <string>Destination</string>
        </property>
       </widget>
      </item>
-     <item row="16" column="1">
+     <item row="17" column="1">
       <widget class="EntitySelector" name="destination_field"/>
      </item>
-     <item row="17" column="0">
+     <item row="18" column="0">
       <widget class="QCheckBox" name="weight_checkbox">
        <property name="text">
         <string>Weight</string>
        </property>
       </widget>
      </item>
-     <item row="17" column="1">
+     <item row="18" column="1">
       <widget class="QWidget" name="weight_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="leftMargin">
@@ -577,14 +587,14 @@
        </layout>
       </widget>
      </item>
-     <item row="18" column="0">
+     <item row="19" column="0">
       <widget class="QCheckBox" name="damage_on_enemies_checkbox">
        <property name="text">
         <string>Damage on enemies</string>
        </property>
       </widget>
      </item>
-     <item row="18" column="1">
+     <item row="19" column="1">
       <widget class="QWidget" name="damage_on_enemies_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="leftMargin">
@@ -631,27 +641,34 @@
        </layout>
       </widget>
      </item>
-     <item row="19" column="0">
+     <item row="20" column="0">
       <widget class="QCheckBox" name="ground_checkbox">
        <property name="text">
         <string>Set a special ground</string>
        </property>
       </widget>
      </item>
-     <item row="19" column="1">
+     <item row="20" column="1">
       <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
      </item>
-     <item row="20" column="0">
+     <item row="21" column="0">
       <widget class="QLabel" name="maximum_moves_label">
        <property name="text">
         <string>Maximum moves</string>
        </property>
       </widget>
      </item>
-     <item row="20" column="1">
+     <item row="21" column="1">
       <widget class="QComboBox" name="maximum_moves_field"/>
      </item>
-     <item row="21" column="1">
+     <item row="22" column="0">
+      <widget class="QLabel" name="opening_method_label">
+       <property name="text">
+        <string>Opening mode</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="1">
       <widget class="QWidget" name="opening_method_layout" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="leftMargin">
@@ -779,21 +796,14 @@
        </layout>
       </widget>
      </item>
-     <item row="21" column="0">
-      <widget class="QLabel" name="opening_method_label">
-       <property name="text">
-        <string>Opening mode</string>
-       </property>
-      </widget>
-     </item>
-     <item row="22" column="0">
+     <item row="23" column="0">
       <widget class="QLabel" name="behavior_label">
        <property name="text">
         <string>Action</string>
        </property>
       </widget>
      </item>
-     <item row="22" column="1">
+     <item row="23" column="1">
       <widget class="QWidget" name="behavior_layout" native="true">
        <layout class="QVBoxLayout" name="layout_5">
         <property name="leftMargin">

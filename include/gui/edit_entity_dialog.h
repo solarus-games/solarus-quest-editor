@@ -58,6 +58,8 @@ private:
   void apply_destination_map();
   void initialize_direction();
   void apply_direction();
+  void initialize_font();
+  void apply_font();
   void initialize_ground();
   void apply_ground();
   void initialize_layer();
@@ -149,12 +151,14 @@ private:
         const QString& field_name,
         const QString& label_text,
         int minimum,
-        int step) :
+        int step,
+        QWidget* before_widget = nullptr) :
       field_name(field_name),
       label_text(label_text),
       minimum(minimum),
       step(step),
-      spinbox(nullptr) {
+      spinbox(nullptr),
+      before_widget(before_widget) {
     }
 
     QString field_name;
@@ -162,6 +166,7 @@ private:
     int minimum;
     int step;
     const QSpinBox* spinbox;
+    QWidget* before_widget;
   };
 
   /**

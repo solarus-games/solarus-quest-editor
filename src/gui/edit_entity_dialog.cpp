@@ -27,6 +27,7 @@ const QString damage_on_enemies_field_name = "damage_on_enemies";
 const QString destination_field_name = "destination";
 const QString destination_map_field_name = "destination_map";
 const QString destruction_sound_field_name = "destruction_sound";
+const QString font_field_name = "font";
 const QString ground_field_name = "ground";
 const QString maximum_moves_field_name = "maximum_moves";
 const QString model_field_name = "model";
@@ -140,6 +141,7 @@ void EditEntityDialog::initialize() {
   initialize_destination();
   initialize_destination_map();
   initialize_direction();
+  initialize_font();
   initialize_ground();
   initialize_layer();
   initialize_maximum_moves();
@@ -176,6 +178,7 @@ void EditEntityDialog::apply() {
   apply_destination();
   apply_destination_map();
   apply_direction();
+  apply_font();
   apply_ground();
   apply_layer();
   apply_maximum_moves();
@@ -328,7 +331,7 @@ void EditEntityDialog::apply_simple_booleans() {
 void EditEntityDialog::initialize_simple_integers() {
 
   simple_integer_fields <<
-    SimpleIntegerField("price", tr("Price"), 0, 10) <<
+    SimpleIntegerField("price", tr("Price"), 0, 10, ui.font_field) <<
     SimpleIntegerField("jump_length", tr("Jump length"), 16, 8) <<
     SimpleIntegerField("speed", tr("Speed"), 1, 8);
 
@@ -342,7 +345,21 @@ void EditEntityDialog::initialize_simple_integers() {
       spinbox->setSingleStep(field.step);
       spinbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
       field.spinbox = spinbox;
-      ui.form_layout->addRow(label, spinbox);
+      if (field.before_widget != nullptr) {
+        int row = 0;
+        QFormLayout::ItemRole role;
+        ui.form_layout->getWidgetPosition(field.before_widget, &row, &role);
+        if (row != -1) {
+          ui.form_layout->insertRow(row, label, spinbox);
+        }
+        else {
+          // Widget not found.
+          ui.form_layout->addRow(label, spinbox);
+        }
+      }
+      else {
+        ui.form_layout->addRow(label, spinbox);
+      }
     }
   }
 }
@@ -690,6 +707,33 @@ void EditEntityDialog::apply_direction() {
 
   if (entity_after->has_direction_field()) {
     entity_after->set_direction(ui.direction_field->currentData().toInt());
+  }
+}
+
+/**
+ * @brief Initializes the font field.
+ */
+void EditEntityDialog::initialize_font() {
+
+  if (!entity_before.has_field(font_field_name)) {
+    remove_field(ui.font_label, ui.font_field);
+    return;
+  }
+
+  ui.font_field->set_quest(get_quest());
+  ui.font_field->set_resource_type(ResourceType::FONT);
+  ui.font_field->add_special_value("", tr("(Default)"), 0);
+  QString font = entity_before.get_field(font_field_name).toString();
+  ui.font_field->set_selected_id(font);
+}
+
+/**
+ * @brief Updates the entity from the font field.
+ */
+void EditEntityDialog::apply_font() {
+
+  if (entity_after->has_field(font_field_name)) {
+    entity_after->set_field(font_field_name, ui.font_field->get_selected_id());
   }
 }
 
