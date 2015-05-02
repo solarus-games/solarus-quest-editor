@@ -1,9 +1,10 @@
 ________________________________________
 
-Solarus Quest Editor 1.4.0 (in progress)
+Solarus Quest Editor 1.4.0 (2015-05-02)
 ________________________________________
 
-The quest editor was rewritten from scratch in C++/Qt.
+The quest editor was rewritten from scratch in C++/Qt with a lot of
+improvements and new features.
 
 New features
 ------------
