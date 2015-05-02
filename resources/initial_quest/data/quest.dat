@@ -12,6 +12,6 @@ quest{
   -- write_dir = "",
 
   -- Title of the window. You should probably put the title of your game here.
-  title_bar = "A game made with Solarus. Edit quest.dat to change this title!",
+  title_bar = "A game made with Solarus.",
 }
 

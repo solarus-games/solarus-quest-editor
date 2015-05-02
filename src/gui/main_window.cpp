@@ -378,7 +378,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
   update_title();
   ui.quest_tree_view->set_quest(quest);
 
-  return false;
+  return success;
 }
 
 /**
@@ -438,10 +438,8 @@ void MainWindow::on_action_new_quest_triggered() {
   try {
     NewQuestBuilder::create_initial_quest_files(quest_path);
     if (open_quest(quest_path)) {
-      QMessageBox::information(this, tr("Quest created"), tr(
-                                 "Quest successfully created!\n"
-                                 "The next step is to manually edit your quest properties in quest.dat\n"
-                                 "(sorry, this is not fully supported by the editor yet).\n"));
+      // Open the quest properties editor initially.
+      open_file(quest, quest.get_data_path());
     }
   }
   catch (const EditorException& ex) {
