@@ -20,6 +20,7 @@
 #include "gui/external_script_dialog.h"
 #include "gui/gui_tools.h"
 #include "gui/main_window.h"
+#include "gui/pair_spin_box.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"
@@ -97,28 +98,11 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertWidget(ui.action_show_grid, zoom_button);
   ui.menu_view->insertMenu(ui.action_show_grid, zoom_menu);
 
-  grid_size_widget = new QWidget();
-  grid_size_widget->setEnabled(false);
+  grid_size = new PairSpinBox();
+  grid_size->config("x", 8, 99999, 8);
+  grid_size->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-  grid_width_spin_box = new QSpinBox();
-  grid_width_spin_box->setMinimum(8);
-  grid_width_spin_box->setMaximum(9999);
-  grid_width_spin_box->setValue(8);
-  grid_width_spin_box->setSingleStep(8);
-
-  grid_height_spin_box = new QSpinBox();
-  grid_height_spin_box->setMinimum(8);
-  grid_height_spin_box->setMaximum(9999);
-  grid_height_spin_box->setValue(8);
-  grid_height_spin_box->setSingleStep(8);
-
-  QHBoxLayout* grid_size_layout = new QHBoxLayout(grid_size_widget);
-  grid_size_layout->setMargin(0);
-  grid_size_layout->addWidget(grid_width_spin_box);
-  grid_size_layout->addWidget(new QLabel("x"));
-  grid_size_layout->addWidget(grid_height_spin_box);
-
-  ui.tool_bar->insertWidget(ui.action_show_layer_0, grid_size_widget);
+  ui.tool_bar->insertWidget(ui.action_show_layer_0, grid_size);
   ui.tool_bar->insertSeparator(ui.action_show_layer_0);
 
   show_entities_button = new QToolButton();
@@ -164,9 +148,7 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
           ui.action_paste, SLOT(setEnabled(bool)));
 
-  connect(grid_width_spin_box, SIGNAL(valueChanged(int)),
-          this, SLOT(change_grid_size()));
-  connect(grid_height_spin_box, SIGNAL(valueChanged(int)),
+  connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
 
   connect(quest_runner, SIGNAL(started()), this, SLOT(update_run_quest()));
@@ -619,8 +601,7 @@ void MainWindow::change_grid_size() {
     return;
   }
 
-  QSize size(grid_width_spin_box->value(), grid_height_spin_box->value());
-  editor->get_view_settings().set_grid_size(size);
+  editor->get_view_settings().set_grid_size(grid_size->get_size());
 }
 
 /**
@@ -715,7 +696,7 @@ void MainWindow::current_editor_changed(int /* index */) {
   if (!grid_supported) {
     ui.action_show_grid->setChecked(false);
   }
-  grid_size_widget->setEnabled(ui.action_show_grid->isChecked());
+  grid_size->setEnabled(ui.action_show_grid->isChecked());
 
   bool layer_visibility_supported =
       has_editor && editor->is_layer_visibility_supported();
@@ -790,7 +771,7 @@ void MainWindow::update_grid_visibility() {
   bool visible = editor->get_view_settings().is_grid_visible();
 
   ui.action_show_grid->setChecked(visible);
-  grid_size_widget->setEnabled(visible);
+  grid_size->setEnabled(visible);
 }
 
 /**
@@ -803,9 +784,7 @@ void MainWindow::update_grid_size() {
     return;
   }
 
-  QSize size = editor->get_view_settings().get_grid_size();
-  grid_width_spin_box->setValue(size.width());
-  grid_height_spin_box->setValue(size.height());
+  grid_size->set_size(editor->get_view_settings().get_grid_size());
 }
 
 /**

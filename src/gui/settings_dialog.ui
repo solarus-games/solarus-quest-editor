@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="general_tab">
       <attribute name="title">
@@ -84,75 +84,14 @@
           <item>
            <layout class="QHBoxLayout" name="quest_size_layout">
             <item>
-             <widget class="QCheckBox" name="quest_size_field">
+             <widget class="QCheckBox" name="quest_size_check_box">
               <property name="text">
                <string>Quest size:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="quest_size_width_field">
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>8</number>
-              </property>
-              <property name="maximum">
-               <number>99999</number>
-              </property>
-              <property name="singleStep">
-               <number>80</number>
-              </property>
-              <property name="value">
-               <number>320</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="quest_size_separator_label">
-              <property name="text">
-               <string>x</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="quest_size_height_field">
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>8</number>
-              </property>
-              <property name="maximum">
-               <number>99999</number>
-              </property>
-              <property name="singleStep">
-               <number>80</number>
-              </property>
-              <property name="value">
-               <number>240</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="quest_size_spacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
+             <widget class="PairSpinBox" name="quest_size_field" native="true"/>
             </item>
            </layout>
           </item>
@@ -271,74 +210,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="map_grid_layout">
-            <item>
-             <widget class="QSpinBox" name="map_grid_width_field">
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>8</number>
-              </property>
-              <property name="maximum">
-               <number>99999</number>
-              </property>
-              <property name="singleStep">
-               <number>8</number>
-              </property>
-              <property name="value">
-               <number>16</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="map_grid_separator_label">
-              <property name="text">
-               <string>x</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="map_grid_height_field">
-              <property name="maximumSize">
-               <size>
-                <width>70</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="minimum">
-               <number>8</number>
-              </property>
-              <property name="maximum">
-               <number>99999</number>
-              </property>
-              <property name="singleStep">
-               <number>8</number>
-              </property>
-              <property name="value">
-               <number>16</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="map_grid_spacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
           <item row="0" column="1">
            <widget class="ColorPicker" name="map_background_field">
             <property name="sizePolicy">
@@ -348,6 +219,9 @@
              </sizepolicy>
             </property>
            </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="PairSpinBox" name="map_grid_field" native="true"/>
           </item>
          </layout>
         </widget>
@@ -373,6 +247,12 @@
    <class>ColorPicker</class>
    <extends>QPushButton</extends>
    <header>gui/color_picker.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PairSpinBox</class>
+   <extends>QWidget</extends>
+   <header>gui/pair_spin_box.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
