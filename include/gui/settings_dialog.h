@@ -74,14 +74,10 @@ signals:
 
 private:
 
-  void refresh_map_background();
-
   Ui::SettingsDialog ui;                    /**< The settings dialog widgets. */
 
   Settings settings;                        /**< The settings. */
   QMap<QString, QVariant> edited_settings;  /**< The edited settings. */
-
-  QColor map_background;                    /**< Map background color. */
 
 };
 

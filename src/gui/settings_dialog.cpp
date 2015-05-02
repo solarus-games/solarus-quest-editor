@@ -64,7 +64,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_font_size()));
 
   // Map editor.
-  connect(ui.map_background_button, SIGNAL(clicked()),
+  connect(ui.map_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_background()));
   connect(ui.map_grid_width_field, SIGNAL(valueChanged(int)),
           this, SLOT(change_map_grid()));
@@ -349,8 +349,8 @@ void SettingsDialog::change_font_size() {
  */
 void SettingsDialog::update_map_background() {
 
-  map_background = settings.get_value_color(Settings::map_background);
-  refresh_map_background();
+  ui.map_background_field->set_color(
+    settings.get_value_color(Settings::map_background));
 }
 
 /**
@@ -358,15 +358,9 @@ void SettingsDialog::update_map_background() {
  */
 void SettingsDialog::change_map_background() {
 
-  QColor color = QColorDialog::getColor(
-    map_background, this, tr("Select background color"));
-
-  if (color.isValid()) {
-    edited_settings[Settings::map_background] = color;
-    map_background = color;
-    refresh_map_background();
-    update_buttons();
-  }
+  edited_settings[Settings::map_background] =
+    ui.map_background_field->get_color();
+  update_buttons();
 }
 
 /**
@@ -390,22 +384,4 @@ void SettingsDialog::change_map_grid() {
 
   edited_settings[Settings::map_grid] = size;
   update_buttons();
-}
-
-/**
- * @brief Refreshs the map background button color.
- */
-void SettingsDialog::refresh_map_background() {
-
-  QString style_sheet =
-    "QPushButton {\n"
-    "    background-color: %1;\n"
-    "    border-style: inset;\n"
-    "    border-width: 2px;\n"
-    "    border-color: gray;\n"
-    "    min-width: 1em;\n"
-    "    padding: 1px;\n"
-    "}";
-  ui.map_background_button->setStyleSheet(
-    style_sheet.arg(map_background.name()));
 }

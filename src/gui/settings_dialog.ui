@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="general_tab">
       <attribute name="title">
@@ -340,26 +340,12 @@
            </layout>
           </item>
           <item row="0" column="1">
-           <widget class="QPushButton" name="map_background_button">
+           <widget class="ColorPicker" name="map_background_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QPushButton {
-     background-color: white;
-     border-style: inset;
-     border-width: 2px;
-/*     border-radius: 5px; */
-     border-color: gray;
-     min-width: 1em;
-     padding: 1px;
- }</string>
-            </property>
-            <property name="text">
-             <string/>
             </property>
            </widget>
           </item>
@@ -382,6 +368,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColorPicker</class>
+   <extends>QPushButton</extends>
+   <header>gui/color_picker.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

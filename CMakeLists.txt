@@ -136,6 +136,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/plain_text_edit.h
   include/gui/change_dialog_id_dialog.h
   include/gui/settings_dialog.h
+  include/gui/color_picker.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -236,6 +237,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/dialog_properties_table.cpp
   src/gui/change_dialog_id_dialog.cpp
   src/gui/settings_dialog.cpp
+  src/gui/color_picker.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp

@@ -481,8 +481,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
 
-  connect(ui.background_button, SIGNAL(clicked()),
-          this, SLOT(background_button_clicked()));
+  connect(ui.background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_background_color()));
   connect(model, SIGNAL(background_color_changed(const QColor&)),
           this, SLOT(update_background_color()));
 
@@ -593,18 +593,7 @@ void TilesetEditor::update_num_patterns_field() {
  */
 void TilesetEditor::update_background_color() {
 
-  QString style_sheet =
-      "QPushButton {\n"
-      "    background-color: %1;\n"
-      "    border-style: inset;\n"
-      "    border-width: 2px;\n"
-      "    border-color: gray;\n"
-      "    min-width: 1em;\n"
-      "    padding: 1px;\n"
-      "}";
-  QColor background_color = model->get_background_color();
-  ui.background_button->setStyleSheet(
-        style_sheet.arg(background_color.name()));
+  ui.background_field->set_color(model->get_background_color());
 }
 
 /**
@@ -619,17 +608,19 @@ void TilesetEditor::update_description_to_gui() {
 }
 
 /**
- * @brief Slot called when the user clicks the background color button.
+ * @brief Slot called when the user change the background color.
  */
-void TilesetEditor::background_button_clicked() {
+void TilesetEditor::change_background_color() {
 
-  QColor color = QColorDialog::getColor(
-        model->get_background_color(), this, "Select tileset background color");
-  if (!color.isValid()) {
+  QColor old_color = model->get_background_color();
+  QColor new_color = ui.background_field->get_color();
+
+  if (new_color == old_color) {
+    // No change.
     return;
   }
 
-  try_command(new SetBackgroundCommand(*this, color));
+  try_command(new SetBackgroundCommand(*this, new_color));
 }
 
 /**
