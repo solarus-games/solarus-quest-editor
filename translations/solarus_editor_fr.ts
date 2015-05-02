@@ -138,6 +138,14 @@
     </message>
 </context>
 <context>
+    <name>ColorPicker</name>
+    <message>
+        <location filename="../src/gui/color_picker.cpp" line="75"/>
+        <source>Select color</source>
+        <translation>Choix d&apos;une couleur</translation>
+    </message>
+</context>
+<context>
     <name>DialogPropertiesTable</name>
     <message>
         <location filename="../src/gui/dialog_properties_table.cpp" line="32"/>
@@ -1229,7 +1237,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="168"/>
         <location filename="../build/ui_main_window.h" line="244"/>
-        <location filename="../src/gui/main_window.cpp" line="916"/>
+        <location filename="../src/gui/main_window.cpp" line="915"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
@@ -1266,8 +1274,12 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="321"/>
         <location filename="../build/ui_main_window.h" line="272"/>
+        <source>Options</source>
+        <translation>Options</translation>
+    </message>
+    <message>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation type="vanished">Paramètres</translation>
     </message>
     <message>
         <location filename="../src/gui/main_window.ui" line="180"/>
@@ -1366,23 +1378,21 @@
         <translation>Site web</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="464"/>
-        <location filename="../src/gui/main_window.cpp" line="496"/>
+        <location filename="../src/gui/main_window.cpp" line="465"/>
+        <location filename="../src/gui/main_window.cpp" line="495"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="475"/>
         <source>Quest created</source>
-        <translation>Quête créée</translation>
+        <translation type="vanished">Quête créée</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="475"/>
         <source>Quest successfully created!
 The next step is to manually edit your quest properties in quest.dat
 (sorry, this is not fully supported by the editor yet).
 </source>
-        <translation>Quête créée avec succès !
+        <translation type="vanished">Quête créée avec succès !
 La prochaine étape est de modifier manuellement les propriétés de votre quête dans quest.dat
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
@@ -1452,39 +1462,39 @@ Your data files will be automatically updated to Solarus %2.</source>
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="433"/>
+        <location filename="../src/gui/main_window.cpp" line="434"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="450"/>
+        <location filename="../src/gui/main_window.cpp" line="451"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="913"/>
+        <location filename="../src/gui/main_window.cpp" line="912"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="926"/>
+        <location filename="../src/gui/main_window.cpp" line="925"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="837"/>
+        <location filename="../src/gui/main_window.cpp" line="836"/>
         <source>Invalid layer: %1</source>
         <translation>Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="896"/>
+        <location filename="../src/gui/main_window.cpp" line="895"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="943"/>
+        <location filename="../src/gui/main_window.cpp" line="942"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -3426,118 +3436,122 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="14"/>
-        <location filename="../build/ui_settings_dialog.h" line="338"/>
         <source>Settings</source>
-        <translation>Paramètres</translation>
+        <translation type="vanished">Paramètres</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="14"/>
+        <location filename="../build/ui_settings_dialog.h" line="330"/>
+        <source>Options</source>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="24"/>
-        <location filename="../build/ui_settings_dialog.h" line="348"/>
+        <location filename="../build/ui_settings_dialog.h" line="340"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="30"/>
-        <location filename="../build/ui_settings_dialog.h" line="339"/>
+        <location filename="../build/ui_settings_dialog.h" line="331"/>
         <source>Directory</source>
         <translation>Répertoire</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="36"/>
-        <location filename="../build/ui_settings_dialog.h" line="340"/>
+        <location filename="../build/ui_settings_dialog.h" line="332"/>
         <source>Working directory:</source>
         <translation>Répertoire de travail :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="48"/>
-        <location filename="../build/ui_settings_dialog.h" line="341"/>
+        <location filename="../build/ui_settings_dialog.h" line="333"/>
         <source>Browse...</source>
         <translation>Parcourir...</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="60"/>
-        <location filename="../build/ui_settings_dialog.h" line="342"/>
+        <location filename="../build/ui_settings_dialog.h" line="334"/>
         <source>Running</source>
         <translation>Éxécution</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="66"/>
-        <location filename="../build/ui_settings_dialog.h" line="343"/>
+        <location filename="../build/ui_settings_dialog.h" line="335"/>
         <source>No audio</source>
         <translation>Désactiver l&apos;audio</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="73"/>
-        <location filename="../build/ui_settings_dialog.h" line="344"/>
+        <location filename="../build/ui_settings_dialog.h" line="336"/>
         <source>Video acceleration</source>
         <translation>Accélération vidéo</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="80"/>
-        <location filename="../build/ui_settings_dialog.h" line="345"/>
+        <location filename="../build/ui_settings_dialog.h" line="337"/>
         <source>Show console (only needed on Windows)</source>
         <translation>Afficher une console (nécéssaire uniquement sous Windows)</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="89"/>
-        <location filename="../build/ui_settings_dialog.h" line="346"/>
+        <location filename="../build/ui_settings_dialog.h" line="338"/>
         <source>Quest size:</source>
         <translation>Taille de la quête :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="118"/>
         <location filename="../src/gui/settings_dialog.ui" line="301"/>
-        <location filename="../build/ui_settings_dialog.h" line="347"/>
-        <location filename="../build/ui_settings_dialog.h" line="356"/>
+        <location filename="../build/ui_settings_dialog.h" line="339"/>
+        <location filename="../build/ui_settings_dialog.h" line="348"/>
         <source>x</source>
         <translation>x</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="179"/>
-        <location filename="../build/ui_settings_dialog.h" line="352"/>
+        <location filename="../build/ui_settings_dialog.h" line="344"/>
         <source>Text editor</source>
         <translation>Éditeur de texte</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="185"/>
-        <location filename="../build/ui_settings_dialog.h" line="349"/>
+        <location filename="../build/ui_settings_dialog.h" line="341"/>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="191"/>
-        <location filename="../build/ui_settings_dialog.h" line="350"/>
+        <location filename="../build/ui_settings_dialog.h" line="342"/>
         <source>Family:</source>
         <translation>Famille :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="225"/>
-        <location filename="../build/ui_settings_dialog.h" line="351"/>
+        <location filename="../build/ui_settings_dialog.h" line="343"/>
         <source>Size:</source>
         <translation>Taille :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="251"/>
-        <location filename="../build/ui_settings_dialog.h" line="358"/>
+        <location filename="../build/ui_settings_dialog.h" line="349"/>
         <source>Map editor</source>
         <translation>Éditeur de map</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="257"/>
-        <location filename="../build/ui_settings_dialog.h" line="353"/>
+        <location filename="../build/ui_settings_dialog.h" line="345"/>
         <source>Graphics view</source>
         <translation>Vue graphique</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="263"/>
-        <location filename="../build/ui_settings_dialog.h" line="354"/>
+        <location filename="../build/ui_settings_dialog.h" line="346"/>
         <source>Background color:</source>
         <translation>Couleur de fond :</translation>
     </message>
     <message>
         <location filename="../src/gui/settings_dialog.ui" line="270"/>
-        <location filename="../build/ui_settings_dialog.h" line="355"/>
+        <location filename="../build/ui_settings_dialog.h" line="347"/>
         <source>Default grid size:</source>
         <translation>Taille de grille par défaut :</translation>
     </message>
@@ -3557,9 +3571,8 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Répertoire de travail</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="362"/>
         <source>Select background color</source>
-        <translation>Sélectionnez une couleur de fond</translation>
+        <translation type="vanished">Sélectionnez une couleur de fond</translation>
     </message>
 </context>
 <context>
@@ -4390,130 +4403,130 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <name>TilesetEditor</name>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="14"/>
-        <location filename="../build/ui_tileset_editor.h" line="294"/>
+        <location filename="../build/ui_tileset_editor.h" line="285"/>
         <source>Tileset editor</source>
         <translation>Éditeur de tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="51"/>
-        <location filename="../build/ui_tileset_editor.h" line="295"/>
+        <location filename="../build/ui_tileset_editor.h" line="286"/>
         <source>Tileset properties</source>
         <translation>Propriétés du tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="63"/>
-        <location filename="../build/ui_tileset_editor.h" line="299"/>
+        <location filename="../build/ui_tileset_editor.h" line="290"/>
         <source>Tileset id</source>
         <translation>Id du tileset</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="70"/>
-        <location filename="../build/ui_tileset_editor.h" line="301"/>
+        <location filename="../build/ui_tileset_editor.h" line="292"/>
         <source>Filename of the tileset (without extension)</source>
         <translation>Nom de fichier du tileset (sans extension)</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="83"/>
-        <location filename="../build/ui_tileset_editor.h" line="307"/>
+        <location filename="../build/ui_tileset_editor.h" line="298"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="96"/>
-        <location filename="../build/ui_tileset_editor.h" line="309"/>
+        <location filename="../build/ui_tileset_editor.h" line="300"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="119"/>
-        <location filename="../build/ui_tileset_editor.h" line="316"/>
+        <location filename="../build/ui_tileset_editor.h" line="307"/>
         <source>Background color applied to maps using this tileset</source>
         <translation>Couleur de fond pour les maps utilisant ce tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="208"/>
-        <location filename="../build/ui_tileset_editor.h" line="333"/>
+        <location filename="../src/gui/tileset_editor.ui" line="194"/>
+        <location filename="../build/ui_tileset_editor.h" line="323"/>
         <source>Name identifying the pattern</source>
         <translation>Nom pour identifier le motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="353"/>
-        <location filename="../build/ui_tileset_editor.h" line="362"/>
+        <location filename="../src/gui/tileset_editor.ui" line="339"/>
+        <location filename="../build/ui_tileset_editor.h" line="352"/>
         <source>Layer to initially apply to tiles using this pattern on maps</source>
         <translation>Couche initialement appliquée aux tiles créés avec ce motif</translation>
     </message>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="106"/>
-        <location filename="../build/ui_tileset_editor.h" line="314"/>
+        <location filename="../build/ui_tileset_editor.h" line="305"/>
         <source>Background</source>
         <translation>Couleur de fond</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="143"/>
-        <location filename="../build/ui_tileset_editor.h" line="322"/>
+        <location filename="../src/gui/tileset_editor.ui" line="129"/>
+        <location filename="../build/ui_tileset_editor.h" line="312"/>
         <source>Patterns</source>
         <translation>Motifs</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="150"/>
-        <location filename="../build/ui_tileset_editor.h" line="324"/>
+        <location filename="../src/gui/tileset_editor.ui" line="136"/>
+        <location filename="../build/ui_tileset_editor.h" line="314"/>
         <source>Number of existing tile patterns in the tileset</source>
         <translation>Nombre total de motifs dans le tileset</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="172"/>
-        <location filename="../build/ui_tileset_editor.h" line="327"/>
+        <location filename="../src/gui/tileset_editor.ui" line="158"/>
+        <location filename="../build/ui_tileset_editor.h" line="317"/>
         <source>Selection properties</source>
         <translation>Propriétés de la sélection</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="184"/>
-        <location filename="../build/ui_tileset_editor.h" line="331"/>
+        <location filename="../src/gui/tileset_editor.ui" line="170"/>
+        <location filename="../build/ui_tileset_editor.h" line="321"/>
         <location filename="../src/gui/tileset_editor.cpp" line="405"/>
         <source>Pattern id</source>
         <translation>Id du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="218"/>
-        <location filename="../build/ui_tileset_editor.h" line="337"/>
+        <location filename="../src/gui/tileset_editor.ui" line="204"/>
+        <location filename="../build/ui_tileset_editor.h" line="327"/>
         <source>Rename (F2)</source>
         <translation>Renommer (F2)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="253"/>
-        <location filename="../build/ui_tileset_editor.h" line="343"/>
+        <location filename="../src/gui/tileset_editor.ui" line="239"/>
+        <location filename="../build/ui_tileset_editor.h" line="333"/>
         <location filename="../src/gui/tileset_editor.cpp" line="132"/>
         <source>Ground</source>
         <translation>Terrain</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="266"/>
-        <location filename="../build/ui_tileset_editor.h" line="345"/>
+        <location filename="../src/gui/tileset_editor.ui" line="252"/>
+        <location filename="../build/ui_tileset_editor.h" line="335"/>
         <source>Terrain of the pattern</source>
         <translation>Type de terrain du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="276"/>
-        <location filename="../build/ui_tileset_editor.h" line="350"/>
+        <location filename="../src/gui/tileset_editor.ui" line="262"/>
+        <location filename="../build/ui_tileset_editor.h" line="340"/>
         <location filename="../src/gui/tileset_editor.cpp" line="219"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="312"/>
-        <location filename="../build/ui_tileset_editor.h" line="352"/>
+        <location filename="../src/gui/tileset_editor.ui" line="298"/>
+        <location filename="../build/ui_tileset_editor.h" line="342"/>
         <source>Kind of animation of the pattern</source>
         <translation>Type d&apos;animation du motif</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="325"/>
-        <location filename="../build/ui_tileset_editor.h" line="355"/>
+        <location filename="../src/gui/tileset_editor.ui" line="311"/>
+        <location filename="../build/ui_tileset_editor.h" line="345"/>
         <source>Horizontal or vertical separation (only for multi-frame patterns)</source>
         <translation>Séparation horizontale ou verticale (motifs multi-images uniquement)</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.ui" line="340"/>
-        <location filename="../build/ui_tileset_editor.h" line="360"/>
+        <location filename="../src/gui/tileset_editor.ui" line="326"/>
+        <location filename="../build/ui_tileset_editor.h" line="350"/>
         <location filename="../src/gui/tileset_editor.cpp" line="175"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
@@ -4559,37 +4572,37 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Le tileset &apos;%1&apos; a été modifié. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="649"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="640"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="752"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="743"/>
         <source>Please close all maps before updating tile pattern references.</source>
         <translation>Veuillez fermer toutes les maps avant de mettre à jour les références des motifs.</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="803"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="794"/>
         <source>Cannot open map file &apos;%1&apos;</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="821"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="812"/>
         <source>Cannot open map file &apos;%1&apos; for writing</source>
         <translation>Impossible d&apos;ouvrir le fichier de map &apos;%1&apos; en écriture</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1074"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1065"/>
         <source>Do you really want to delete pattern &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le motif &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1078"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1069"/>
         <source>Do you really want to delete these %1 patterns?</source>
         <translation>Voulez-vous vraiment supprimer ces %1 motifs ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/tileset_editor.cpp" line="1084"/>
+        <location filename="../src/gui/tileset_editor.cpp" line="1075"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
