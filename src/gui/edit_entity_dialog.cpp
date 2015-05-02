@@ -1123,21 +1123,22 @@ void EditEntityDialog::apply_savegame_variable() {
 void EditEntityDialog::initialize_size() {
 
   if (!entity_before.has_size_fields()) {
-    remove_field(ui.size_label, ui.size_layout);
+    remove_field(ui.size_label, ui.size_field);
     return;
   }
 
+  // Initialize spinboxes.
+  ui.size_field->config("x", 8, 999999);
+
   // Show the current size in the spinboxes.
-  const QSize& size = entity_before.get_size();
-  ui.width_field->setValue(size.width());
-  ui.height_field->setValue(size.height());
+  ui.size_field->set_size(entity_before.get_size());
 
   // Tell spinboxes to only make multiples of the base size.
   const QSize& base_size = entity_before.get_base_size();
-  ui.width_field->setMinimum(base_size.width());
-  ui.width_field->setSingleStep(base_size.width());
-  ui.height_field->setMinimum(base_size.height());
-  ui.height_field->setSingleStep(base_size.height());
+  ui.size_field->set_first_step(base_size.width());
+  ui.size_field->set_first_min(base_size.width());
+  ui.size_field->set_second_step(base_size.height());
+  ui.size_field->set_second_min(base_size.height());
 }
 
 /**
@@ -1146,7 +1147,7 @@ void EditEntityDialog::initialize_size() {
 void EditEntityDialog::apply_size() {
 
   if (entity_after->has_size_fields()) {
-    QSize size(ui.width_field->value(), ui.height_field->value());
+    QSize size = ui.size_field->get_size();
     // If the size is invalid, refuse the change.
     if (entity_after->is_size_valid(size)) {
       entity_after->set_size(size);
@@ -1401,9 +1402,8 @@ void EditEntityDialog::apply_weight() {
  */
 void EditEntityDialog::initialize_xy() {
 
-  QPoint xy = entity_before.get_xy();
-  ui.x_field->setValue(xy.x());
-  ui.y_field->setValue(xy.y());
+  ui.xy_field->config(",", -99999, 999999, 8);
+  ui.xy_field->set_point(entity_before.get_xy());
 }
 
 /**
@@ -1411,6 +1411,6 @@ void EditEntityDialog::initialize_xy() {
  */
 void EditEntityDialog::apply_xy() {
 
-  entity_after->set_xy(QPoint(ui.x_field->value(), ui.y_field->value()));
+  entity_after->set_xy(ui.xy_field->get_point());
 }
 

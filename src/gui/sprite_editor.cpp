@@ -647,6 +647,21 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.tileset_field->set_quest(quest);
   ui.tileset_field->set_selected_id(model->get_sprite_id());
 
+  ui.size_field->config("x", 1, 99999, 8);
+  ui.size_field->set_tooltips(
+    tr("Width of each frame in the image"),
+    tr("Height of each frame in the image"));
+
+  ui.position_field->config(",", 0, 99999, 8);
+  ui.position_field->set_tooltips(
+    tr("X coordinate of the top-left corner of area containing the frames in the image"),
+    tr("Y coordinate of the top-left corner of area containing the frames in the image"));
+
+  ui.origin_field->config("x", -9999, 99999, 4);
+  ui.origin_field->set_tooltips(
+    tr("X coordinate of the origin point of the sprite"),
+    tr("Y coordinate of the origin point of the sprite"));
+
   // Select the default animation and his first direction if exists
   SpriteModel::Index index(model->get_default_animation_name());
   int num_directions = model->get_animation_num_directions(index);
@@ -692,25 +707,19 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(model, SIGNAL(direction_size_changed(Index,QSize)),
           this, SLOT(update_direction_size_field()));
-  connect(ui.width_field, SIGNAL(editingFinished()),
-          this, SLOT(change_direction_size_requested()));
-  connect(ui.height_field, SIGNAL(editingFinished()),
+  connect(ui.size_field, SIGNAL(editing_finished()),
           this, SLOT(change_direction_size_requested()));
 
   connect(model, SIGNAL(direction_position_changed(Index,QPoint)),
           this, SLOT(update_direction_position_field()));
-  connect(ui.position_x_field, SIGNAL(editingFinished()),
-          this, SLOT(change_direction_position_requested_from_field()));
-  connect(ui.position_y_field, SIGNAL(editingFinished()),
+  connect(ui.position_field, SIGNAL(editing_finished()),
           this, SLOT(change_direction_position_requested_from_field()));
   connect(ui.sprite_view, SIGNAL(change_selected_direction_position_requested(QPoint)),
           this, SLOT(change_direction_position_requested(QPoint)));
 
   connect(model, SIGNAL(direction_origin_changed(Index,QPoint)),
           this, SLOT(update_direction_origin_field()));
-  connect(ui.origin_x_field, SIGNAL(editingFinished()),
-          this, SLOT(change_direction_origin_requested()));
-  connect(ui.origin_y_field, SIGNAL(editingFinished()),
+  connect(ui.origin_field, SIGNAL(editing_finished()),
           this, SLOT(change_direction_origin_requested()));
 
   connect(model, SIGNAL(direction_num_frames_changed(Index,int)),
@@ -1175,9 +1184,8 @@ void SpriteEditor::update_direction_view() {
  */
 void SpriteEditor::update_direction_size_field() {
 
-  QSize size = model->get_direction_size(model->get_selected_index());
-  ui.width_field->setValue(size.width());
-  ui.height_field->setValue(size.height());
+  ui.size_field->set_size(
+    model->get_direction_size(model->get_selected_index()));
 }
 
 /**
@@ -1192,7 +1200,7 @@ void SpriteEditor::change_direction_size_requested() {
   }
 
   QSize old_size = model->get_direction_size(index);
-  QSize size = QSize(ui.width_field->value(), ui.height_field->value());
+  QSize size = ui.size_field->get_size();
 
   if (size == old_size) {
     // No change.
@@ -1207,9 +1215,8 @@ void SpriteEditor::change_direction_size_requested() {
  */
 void SpriteEditor::update_direction_position_field() {
 
-  QPoint position = model->get_direction_position(model->get_selected_index());
-  ui.position_x_field->setValue(position.x());
-  ui.position_y_field->setValue(position.y());
+  ui.position_field->set_point(
+    model->get_direction_position(model->get_selected_index()));
 }
 
 /**
@@ -1219,9 +1226,7 @@ void SpriteEditor::update_direction_position_field() {
  */
 void SpriteEditor::change_direction_position_requested_from_field() {
 
-  QPoint position =
-      QPoint(ui.position_x_field->value(), ui.position_y_field->value());
-  change_direction_position_requested(position);
+  change_direction_position_requested(ui.position_field->get_point());
 }
 
 /**
@@ -1251,9 +1256,8 @@ void SpriteEditor::change_direction_position_requested(
  */
 void SpriteEditor::update_direction_origin_field() {
 
-  QPoint origin = model->get_direction_origin(model->get_selected_index());
-  ui.origin_x_field->setValue(origin.x());
-  ui.origin_y_field->setValue(origin.y());
+  ui.origin_field->set_point(
+    model->get_direction_origin(model->get_selected_index()));
 }
 
 /**
@@ -1268,7 +1272,7 @@ void SpriteEditor::change_direction_origin_requested() {
   }
 
   QPoint old_origin = model->get_direction_origin(index);
-  QPoint origin = QPoint(ui.origin_x_field->value(), ui.origin_y_field->value());
+  QPoint origin = ui.origin_field->get_point();
 
   if (origin == old_origin) {
     // No change.

@@ -72,7 +72,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="description_label">
              <property name="toolTip">
               <string/>
@@ -82,7 +82,7 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
+           <item row="3" column="1">
             <widget class="QLineEdit" name="description_field">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -95,100 +95,38 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="size_label">
              <property name="text">
               <string>Size</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <layout class="QHBoxLayout" name="horizontal_layout_2">
-             <item>
-              <widget class="QSpinBox" name="width_field">
-               <property name="maximumSize">
-                <size>
-                 <width>70</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Width of the map in pixels</string>
-               </property>
-               <property name="suffix">
-                <string/>
-               </property>
-               <property name="maximum">
-                <number>99999</number>
-               </property>
-               <property name="singleStep">
-                <number>8</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="size_separator_label">
-               <property name="text">
-                <string>x</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="height_field">
-               <property name="maximumSize">
-                <size>
-                 <width>70</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Height of the map in pixels</string>
-               </property>
-               <property name="maximum">
-                <number>99999</number>
-               </property>
-               <property name="singleStep">
-                <number>8</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontal_spacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+           <item row="4" column="1">
+            <widget class="PairSpinBox" name="size_field" native="true"/>
            </item>
-           <item row="3" column="0">
+           <item row="6" column="0">
             <widget class="QCheckBox" name="world_check_box">
              <property name="text">
               <string>Set a world</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="6" column="1">
             <widget class="QLineEdit" name="world_field">
              <property name="toolTip">
               <string>A name to group maps together</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="7" column="0">
             <widget class="QCheckBox" name="floor_check_box">
              <property name="text">
               <string>Set a floor</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="7" column="1">
             <layout class="QHBoxLayout" name="horizontal_layout_4">
              <item>
               <widget class="QSpinBox" name="floor_field">
@@ -224,83 +162,21 @@
              </item>
             </layout>
            </item>
-           <item row="5" column="0">
+           <item row="9" column="0">
             <widget class="QLabel" name="location_label">
              <property name="text">
               <string>Location in its world</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
-            <layout class="QHBoxLayout" name="horizontal_layout_3">
-             <item>
-              <widget class="QSpinBox" name="x_field">
-               <property name="maximumSize">
-                <size>
-                 <width>70</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
-               </property>
-               <property name="maximum">
-                <number>99999</number>
-               </property>
-               <property name="singleStep">
-                <number>8</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="location_separator_label">
-               <property name="text">
-                <string>,</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="y_field">
-               <property name="maximumSize">
-                <size>
-                 <width>70</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="toolTip">
-                <string>Coordinates of the map in its world (useful to make adjacent scrolling maps)</string>
-               </property>
-               <property name="maximum">
-                <number>99999</number>
-               </property>
-               <property name="singleStep">
-                <number>8</number>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontal_spacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item row="6" column="0">
+           <item row="10" column="0">
             <widget class="QLabel" name="tileset_label">
              <property name="text">
               <string>Tileset</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
+           <item row="10" column="1">
             <layout class="QHBoxLayout" name="horizontal_layout_5">
              <item>
               <widget class="ResourceSelector" name="tileset_field">
@@ -351,19 +227,22 @@
              </item>
             </layout>
            </item>
-           <item row="7" column="0">
+           <item row="11" column="0">
             <widget class="QLabel" name="music_label">
              <property name="text">
               <string>Music</string>
              </property>
             </widget>
            </item>
-           <item row="7" column="1">
+           <item row="11" column="1">
             <widget class="ResourceSelector" name="music_field">
              <property name="toolTip">
               <string>Background music of the map</string>
              </property>
             </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="PairSpinBox" name="location_field" native="true"/>
            </item>
           </layout>
          </widget>
@@ -388,6 +267,12 @@
    <class>ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>gui/resource_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PairSpinBox</class>
+   <extends>QWidget</extends>
+   <header>gui/pair_spin_box.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>TilesetView</class>

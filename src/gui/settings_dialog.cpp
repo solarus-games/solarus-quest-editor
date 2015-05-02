@@ -30,6 +30,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   ui.setupUi(this);
 
+  ui.quest_size_field->config("x", 0, 99999, 80);
+  ui.map_grid_field->config("x", 8, 99999, 8);
+
   reset();
 
   connect(ui.button_box->button(QDialogButtonBox::Reset), SIGNAL(clicked()),
@@ -50,11 +53,9 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_video_acceleration()));
   connect(ui.win_console_field, SIGNAL(toggled(bool)),
           this, SLOT(change_win_console()));
-  connect(ui.quest_size_field, SIGNAL(toggled(bool)),
+  connect(ui.quest_size_check_box, SIGNAL(toggled(bool)),
           this, SLOT(change_quest_size()));
-  connect(ui.quest_size_width_field, SIGNAL(valueChanged(int)),
-          this, SLOT(change_quest_size()));
-  connect(ui.quest_size_height_field, SIGNAL(valueChanged(int)),
+  connect(ui.quest_size_field, SIGNAL(value_changed(int,int)),
           this, SLOT(change_quest_size()));
 
   // Text editor.
@@ -66,9 +67,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   // Map editor.
   connect(ui.map_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_background()));
-  connect(ui.map_grid_width_field, SIGNAL(valueChanged(int)),
-          this, SLOT(change_map_grid()));
-  connect(ui.map_grid_height_field, SIGNAL(valueChanged(int)),
+  connect(ui.map_grid_field, SIGNAL(value_changed(int,int)),
           this, SLOT(change_map_grid()));
 }
 
@@ -277,16 +276,14 @@ void SettingsDialog::update_quest_size() {
   QSize size = settings.get_value_size(Settings::quest_size);
   bool enable = size.isValid();
 
-  ui.quest_size_field->setChecked(enable);
-  ui.quest_size_width_field->setEnabled(enable);
-  ui.quest_size_height_field->setEnabled(enable);
+  ui.quest_size_check_box->setChecked(enable);
+  ui.quest_size_field->setEnabled(enable);
 
   if (!enable) {
     size = QSize(320, 240);
   }
 
-  ui.quest_size_width_field->setValue(size.width());
-  ui.quest_size_height_field->setValue(size.height());
+  ui.quest_size_field->set_size(size);
 }
 
 /**
@@ -294,16 +291,14 @@ void SettingsDialog::update_quest_size() {
  */
 void SettingsDialog::change_quest_size() {
 
-  bool enable = ui.quest_size_field->isChecked();
+  bool enable = ui.quest_size_check_box->isChecked();
 
   QSize new_size;
   if (enable) {
-    new_size.setWidth(ui.quest_size_width_field->value());
-    new_size.setHeight(ui.quest_size_height_field->value());
+    new_size = ui.quest_size_field->get_size();
   }
 
-  ui.quest_size_width_field->setEnabled(enable);
-  ui.quest_size_height_field->setEnabled(enable);
+  ui.quest_size_field->setEnabled(enable);
 
   edited_settings[Settings::quest_size] = new_size;
   update_buttons();
@@ -368,9 +363,7 @@ void SettingsDialog::change_map_background() {
  */
 void SettingsDialog::update_map_grid() {
 
-  QSize size  = settings.get_value_size(Settings::map_grid);
-  ui.map_grid_width_field->setValue(size.width());
-  ui.map_grid_height_field->setValue(size.height());
+  ui.map_grid_field->set_size(settings.get_value_size(Settings::map_grid));
 }
 
 /**
@@ -378,10 +371,6 @@ void SettingsDialog::update_map_grid() {
  */
 void SettingsDialog::change_map_grid() {
 
-  QSize size;
-  size.setWidth(ui.map_grid_width_field->value());
-  size.setHeight(ui.map_grid_height_field->value());
-
-  edited_settings[Settings::map_grid] = size;
+  edited_settings[Settings::map_grid] = ui.map_grid_field->get_size();
   update_buttons();
 }

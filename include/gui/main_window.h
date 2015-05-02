@@ -27,6 +27,7 @@
 class Editor;
 class QToolButton;
 class QuestRunner;
+class PairSpinBox;
 
 using EntityType = Solarus::EntityType;
 using Layer = Solarus::Layer;
@@ -105,9 +106,7 @@ private:
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>
       zoom_actions;               /**< Action of each zoom value. */
-  QWidget* grid_size_widget;      /**< The grid size widget. */
-  QSpinBox* grid_width_spin_box;  /**< The grid width spin box. */
-  QSpinBox* grid_height_spin_box; /**< The grid height spin box. */
+  PairSpinBox* grid_size;         /**< The grid size. */
 
   QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
   QToolButton*

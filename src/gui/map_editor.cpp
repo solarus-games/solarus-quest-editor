@@ -849,6 +849,16 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
 
+  ui.size_field->config("x", 0, 99999, 8);
+  ui.size_field->set_tooltips(
+    tr("Width of the map in pixels"),
+    tr("Height of the map in pixels"));
+
+  ui.location_field->config(",", 0, 99999, 8);
+  ui.location_field->set_tooltips(
+    tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"),
+    tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"));
+
   load_settings();
   update();
 
@@ -858,9 +868,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
 
-  connect(ui.width_field, SIGNAL(editingFinished()),
-          this, SLOT(change_size_requested()));
-  connect(ui.height_field, SIGNAL(editingFinished()),
+  connect(ui.size_field, SIGNAL(editing_finished()),
           this, SLOT(change_size_requested()));
   connect(map, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
@@ -879,9 +887,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(floor_changed(int)),
           this, SLOT(update_floor_field()));
 
-  connect(ui.x_field, SIGNAL(editingFinished()),
-          this, SLOT(change_location_requested()));
-  connect(ui.y_field, SIGNAL(editingFinished()),
+  connect(ui.location_field, SIGNAL(editing_finished()),
           this, SLOT(change_location_requested()));
   connect(map, SIGNAL(location_changed(QPoint)),
           this, SLOT(update_location_field()));
@@ -1151,9 +1157,7 @@ void MapEditor::set_description_from_gui() {
  */
 void MapEditor::update_size_field() {
 
-  const QSize& size = map->get_size();
-  ui.width_field->setValue(size.width());
-  ui.height_field->setValue(size.height());
+  ui.size_field->set_size(map->get_size());
 }
 
 /**
@@ -1161,7 +1165,7 @@ void MapEditor::update_size_field() {
  */
 void MapEditor::change_size_requested() {
 
-  QSize size(ui.width_field->value(), ui.height_field->value());
+  QSize size = ui.size_field->get_size();
   if (size == map->get_size()) {
     return;
   }
@@ -1276,9 +1280,7 @@ void MapEditor::change_floor_requested() {
  */
 void MapEditor::update_location_field() {
 
-  const QPoint& location = map->get_location();
-  ui.x_field->setValue(location.x());
-  ui.y_field->setValue(location.y());
+  ui.location_field->set_point(map->get_location());
 }
 
 /**
@@ -1286,7 +1288,7 @@ void MapEditor::update_location_field() {
  */
 void MapEditor::change_location_requested() {
 
-  QPoint location(ui.x_field->value(), ui.y_field->value());
+  QPoint location = ui.location_field->get_point();
   if (location == map->get_location()) {
     return;
   }
