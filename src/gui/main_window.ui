@@ -318,7 +318,7 @@
   </action>
   <action name="action_settings">
    <property name="text">
-    <string>Settings</string>
+    <string>Options</string>
    </property>
   </action>
  </widget>
