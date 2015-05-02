@@ -268,6 +268,14 @@ set(solarus_quest_editor_SOURCES
   src/settings.cpp
 )
 
+# Add an icon for the executable in Windows.
+if(WIN32)
+  set(solarus_quest_editor_SOURCES
+    ${solarus_quest_editor_SOURCES}
+    cmake/win32/resources.rc
+  )
+endif()
+
 # UI files.
 set(solarus_quest_editor_FORMS
   src/gui/change_pattern_id_dialog.ui
