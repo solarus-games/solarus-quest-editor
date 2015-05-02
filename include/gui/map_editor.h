@@ -44,6 +44,7 @@ public:
   void copy() override;
   bool can_paste() const override;
   void paste() override;
+  void reload_settings() override;
 
 private slots:
 
@@ -96,6 +97,8 @@ private:
   void build_status_bar();
   void entity_creation_button_triggered(EntityType type, bool checked);
   void uncheck_entity_creation_buttons();
+
+  void load_settings();
 
   Ui::MapEditor ui;                         /**< The map editor widgets. */
   QString map_id;                           /**< Id of the map being edited. */

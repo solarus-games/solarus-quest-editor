@@ -25,6 +25,8 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
+#include "settings.h"
+#include "view_settings.h"
 #include <QItemSelectionModel>
 #include <QStatusBar>
 #include <QToolBar>
@@ -846,6 +848,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.map_view->set_map(map);
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
+
+  load_settings();
   update();
 
   // Make connections.
@@ -1061,6 +1065,20 @@ bool MapEditor::can_paste() const {
 void MapEditor::paste() {
 
   ui.map_view->paste();
+}
+
+/**
+ * @copydoc Editor::reload_settings
+ */
+void MapEditor::reload_settings() {
+
+  Settings settings;
+
+  MapScene* scene = ui.map_view->get_scene();
+  if (scene != nullptr) {
+    QBrush brush(settings.get_value_color(Settings::map_background));
+    scene->setBackgroundBrush(brush);
+  }
 }
 
 /**
@@ -1645,4 +1663,15 @@ void MapEditor::uncheck_entity_creation_buttons() {
   for (QAction* action : entity_creation_toolbar->actions()) {
     action->setChecked(false);
   }
+}
+
+/**
+ * @brief Loads settings.
+ */
+void MapEditor::load_settings() {
+
+  Settings settings;
+  get_view_settings().set_grid_size(
+    settings.get_value_size(Settings::map_grid));
+  reload_settings();
 }

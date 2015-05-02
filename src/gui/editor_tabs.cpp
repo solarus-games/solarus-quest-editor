@@ -567,6 +567,16 @@ bool EditorTabs::confirm_close() {
 }
 
 /**
+ * @brief Reloads settings of all editors.
+ */
+void EditorTabs::reload_settings() {
+
+  for (int i = 0; i < count(); ++i) {
+    get_editor(i)->reload_settings();
+  }
+}
+
+/**
  * @brief Slot called when the current tab changes.
  * @param index Index of the new current tab.
  */

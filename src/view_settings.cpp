@@ -23,7 +23,8 @@
 ViewSettings::ViewSettings(QObject* parent) :
   QObject(parent),
   zoom(1.0),
-  grid_visible(false) {
+  grid_visible(false),
+  grid_size(16, 16) {
 
   // Default settings.
   for (int layer = 0; layer < Layer::LAYER_NB; ++layer) {
@@ -85,6 +86,35 @@ void ViewSettings::set_grid_visible(bool grid_visible) {
 
   this->grid_visible = grid_visible;
   emit grid_visibility_changed(grid_visible);
+}
+
+/**
+ * @brief Returns the current grid size setting.
+ * @return the current grid size.
+ */
+QSize ViewSettings::get_grid_size() const {
+
+  return grid_size;
+}
+
+/**
+ * @brief Changes the current grid size.
+ *
+ * Emits grid_size_changed() if there is a change and if the grid is visible.
+ *
+ * @param size the new grid size.
+ */
+void ViewSettings::set_grid_size(const QSize& size) {
+
+  if (size == grid_size) {
+    return;
+  }
+
+  grid_size = size;
+
+  if (grid_visible) {
+    emit grid_size_changed(grid_size);
+  }
 }
 
 /**

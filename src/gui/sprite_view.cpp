@@ -111,6 +111,8 @@ void SpriteView::set_view_settings(ViewSettings& view_settings) {
 
   connect(this->view_settings, SIGNAL(grid_visibility_changed(bool)),
           this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_size_changed(QSize)),
+          this, SLOT(update_grid_visibility()));
   update_grid_visibility();
 
   horizontalScrollBar()->setValue(0);
@@ -223,7 +225,9 @@ void SpriteView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
-  GuiTools::draw_grid(*painter, rectangle.toRect(), 16);
+  QRect rect = rectangle.toRect();
+  rect.setTopLeft({0, 0});
+  GuiTools::draw_grid(*painter, rect, view_settings->get_grid_size());
 
   QGraphicsView::drawForeground(painter, rectangle);
 }

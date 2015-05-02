@@ -135,6 +135,8 @@ set(solarus_quest_editor_SOURCES
   include/gui/dialog_properties_table.h
   include/gui/plain_text_edit.h
   include/gui/change_dialog_id_dialog.h
+  include/gui/settings_dialog.h
+  include/gui/color_picker.h
   include/color.h
   include/editor_exception.h
   include/enum_traits.h
@@ -165,6 +167,7 @@ set(solarus_quest_editor_SOURCES
   include/dialogs_model.h
   include/indexed_string_tree.h
   include/quest_runner.h
+  include/settings.h
   src/entities/block.cpp
   src/entities/chest.cpp
   src/entities/crystal.cpp
@@ -233,6 +236,8 @@ set(solarus_quest_editor_SOURCES
   src/gui/dialogs_tree_view.cpp
   src/gui/dialog_properties_table.cpp
   src/gui/change_dialog_id_dialog.cpp
+  src/gui/settings_dialog.cpp
+  src/gui/color_picker.cpp
   src/color.cpp
   src/editor_exception.cpp
   src/file_tools.cpp
@@ -260,6 +265,7 @@ set(solarus_quest_editor_SOURCES
   src/dialogs_model.cpp
   src/indexed_string_tree.cpp
   src/quest_runner.cpp
+  src/settings.cpp
 )
 
 # UI files.
@@ -281,6 +287,7 @@ set(solarus_quest_editor_FORMS
   src/gui/change_string_key_dialog.ui
   src/gui/dialogs_editor.ui
   src/gui/change_dialog_id_dialog.ui
+  src/gui/settings_dialog.ui
 )
 
 # Generate .h from .ui.

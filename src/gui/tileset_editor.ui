@@ -108,7 +108,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QPushButton" name="background_button">
+           <widget class="ColorPicker" name="background_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -117,20 +117,6 @@
             </property>
             <property name="toolTip">
              <string>Background color applied to maps using this tileset</string>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QPushButton {
-     background-color: white;
-     border-style: inset;
-     border-width: 2px;
-/*     border-radius: 5px; */
-     border-color: gray;
-     min-width: 1em;
-     padding: 1px;
- }</string>
-            </property>
-            <property name="text">
-             <string/>
             </property>
            </widget>
           </item>
@@ -394,6 +380,11 @@
    <class>EnumSelector&lt;Layer&gt;</class>
    <extends>QComboBox</extends>
    <header>layer_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorPicker</class>
+   <extends>QPushButton</extends>
+   <header>gui/color_picker.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -19,6 +19,7 @@
 
 #include "quest.h"
 #include "ui_main_window.h"
+#include "gui/settings_dialog.h"
 #include <solarus/entities/EntityType.h>
 #include <solarus/entities/Layer.h>
 #include <QMainWindow>
@@ -62,15 +63,18 @@ private slots:
   void on_action_find_triggered();
   void on_action_run_quest_triggered();
   void on_action_show_grid_triggered();
+  void change_grid_size();
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();
+  void on_action_settings_triggered();
   void on_action_website_triggered();
   void on_action_doc_triggered();
 
   void current_editor_changed(int index);
   void update_zoom();
   void update_grid_visibility();
+  void update_grid_size();
   void update_layer_visibility(Layer layer);
   void update_layers_visibility();
   void update_entity_type_visibility(EntityType entity_type);
@@ -78,6 +82,8 @@ private slots:
 
   void update_run_quest();
   void solarus_fatal(const QString& what);
+
+  void reload_settings();
 
 protected:
 
@@ -99,6 +105,9 @@ private:
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>
       zoom_actions;               /**< Action of each zoom value. */
+  QWidget* grid_size_widget;      /**< The grid size widget. */
+  QSpinBox* grid_width_spin_box;  /**< The grid width spin box. */
+  QSpinBox* grid_height_spin_box; /**< The grid height spin box. */
 
   QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
   QToolButton*
@@ -112,6 +121,8 @@ private:
 
   QMap<QString, QAction*>
       common_actions;             /**< Actions available to all editors. */
+
+  SettingsDialog settings_dialog; /**< The settings dialog. */
 
 };
 

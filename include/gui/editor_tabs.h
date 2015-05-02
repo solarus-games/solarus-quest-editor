@@ -62,6 +62,8 @@ public:
 
   bool confirm_close();
 
+  void reload_settings();
+
 signals:
 
   void can_cut_changed(bool can_cut);

@@ -185,6 +185,7 @@ private:
   QAction* bring_to_front_action;  /**< Action of bringing the selected entities to front. */
   QAction* bring_to_back_action;   /**< Action of bringing the selected entities to back. */
   QAction* remove_action;          /**< Action of deleting the selected entities. */
+
 };
 
 #endif

@@ -14,32 +14,40 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_GUI_TOOLS_H
-#define SOLARUSEDITOR_GUI_TOOLS_H
+#ifndef SOLARUSEDITOR_COLOR_PICKER_H
+#define SOLARUSEDITOR_COLOR_PICKER_H
 
-class QColor;
-class QPainter;
-class QRect;
-class QSize;
-class QString;
+#include <QPushButton>
 
-namespace GuiTools {
+/**
+ * @brief Widget to pick color.
+ */
+class ColorPicker : public QPushButton {
+  Q_OBJECT
 
-void information_dialog(const QString& message);
-void warning_dialog(const QString& message);
-void error_dialog(const QString& message);
+public:
 
-void draw_rectangle_border(QPainter& painter,
-                           const QRect& where,
-                           const QColor& color,
-                           int thickness);
+  static const QString style_sheet;
 
-void draw_rectangle_border_double(QPainter& painter,
-                                  const QRect& where,
-                                  const QColor& color_between);
+  ColorPicker(QWidget* parent = nullptr);
 
-void draw_grid(QPainter& painter, const QRect& where, const QSize& size);
+  QColor get_color() const;
 
-}
+public slots:
+
+  void set_color(const QColor& color);
+  void change_color();
+
+signals:
+
+  void color_changed(const QColor& color);
+
+private:
+
+  void update_style_sheet();
+
+  QColor color;
+
+};
 
 #endif

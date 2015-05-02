@@ -52,7 +52,8 @@ MainWindow::MainWindow(QWidget* parent) :
   show_entities_menu(nullptr),
   show_entities_button(nullptr),
   show_entities_actions(),
-  common_actions() {
+  common_actions(),
+  settings_dialog(this) {
 
   // Set up widgets.
   ui.setupUi(this);
@@ -95,6 +96,30 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertWidget(ui.action_show_grid, zoom_button);
   ui.menu_view->insertMenu(ui.action_show_grid, zoom_menu);
 
+  grid_size_widget = new QWidget();
+  grid_size_widget->setEnabled(false);
+
+  grid_width_spin_box = new QSpinBox();
+  grid_width_spin_box->setMinimum(8);
+  grid_width_spin_box->setMaximum(9999);
+  grid_width_spin_box->setValue(8);
+  grid_width_spin_box->setSingleStep(8);
+
+  grid_height_spin_box = new QSpinBox();
+  grid_height_spin_box->setMinimum(8);
+  grid_height_spin_box->setMaximum(9999);
+  grid_height_spin_box->setValue(8);
+  grid_height_spin_box->setSingleStep(8);
+
+  QHBoxLayout* grid_size_layout = new QHBoxLayout(grid_size_widget);
+  grid_size_layout->setMargin(0);
+  grid_size_layout->addWidget(grid_width_spin_box);
+  grid_size_layout->addWidget(new QLabel("x"));
+  grid_size_layout->addWidget(grid_height_spin_box);
+
+  ui.tool_bar->insertWidget(ui.action_show_layer_0, grid_size_widget);
+  ui.tool_bar->insertSeparator(ui.action_show_layer_0);
+
   show_entities_button = new QToolButton();
   show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
   show_entities_button->setToolTip(tr("Show entity types"));
@@ -136,10 +161,18 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
           ui.action_paste, SLOT(setEnabled(bool)));
 
+  connect(grid_width_spin_box, SIGNAL(valueChanged(int)),
+          this, SLOT(change_grid_size()));
+  connect(grid_height_spin_box, SIGNAL(valueChanged(int)),
+          this, SLOT(change_grid_size()));
+
   connect(quest_runner, SIGNAL(started()), this, SLOT(update_run_quest()));
   connect(quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
   connect(quest_runner, SIGNAL(solarus_fatal(QString)),
           this, SLOT(solarus_fatal(QString)));
+
+  connect(&settings_dialog, SIGNAL(settings_changed()),
+          this, SLOT(reload_settings()));
 
   // No editor initially.
   current_editor_changed(-1);
@@ -425,10 +458,12 @@ void MainWindow::upgrade_quest() {
  */
 void MainWindow::on_action_new_quest_triggered() {
 
+  Settings settings;
+
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        "",  // Initial value: current directory.
+        settings.get_value_string(Settings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -453,10 +488,12 @@ void MainWindow::on_action_new_quest_triggered() {
  */
 void MainWindow::on_action_load_quest_triggered() {
 
+  Settings settings;
+
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        "",  // Initial value: current directory.
+        settings.get_value_string(Settings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -570,6 +607,20 @@ void MainWindow::on_action_show_grid_triggered() {
 }
 
 /**
+ * @brief Slot called when the user changes the grid size.
+ */
+void MainWindow::change_grid_size() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  QSize size(grid_width_spin_box->value(), grid_height_spin_box->value());
+  editor->get_view_settings().set_grid_size(size);
+}
+
+/**
  * @brief Slot called when the user triggers the "Show low layer" action.
  */
 void MainWindow::on_action_show_layer_0_triggered() {
@@ -606,6 +657,14 @@ void MainWindow::on_action_show_layer_2_triggered() {
   }
 
   editor->get_view_settings().set_layer_visible(Layer::LAYER_HIGH, ui.action_show_layer_2->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Settings" action.
+ */
+void MainWindow::on_action_settings_triggered() {
+
+  settings_dialog.exec();
 }
 
 /**
@@ -653,6 +712,7 @@ void MainWindow::current_editor_changed(int /* index */) {
   if (!grid_supported) {
     ui.action_show_grid->setChecked(false);
   }
+  grid_size_widget->setEnabled(ui.action_show_grid->isChecked());
 
   bool layer_visibility_supported =
       has_editor && editor->is_layer_visibility_supported();
@@ -680,6 +740,10 @@ void MainWindow::current_editor_changed(int /* index */) {
     connect(&view_settings, SIGNAL(grid_visibility_changed(bool)),
             this, SLOT(update_grid_visibility()));
     update_grid_visibility();
+    connect(&view_settings, SIGNAL(grid_size_changed(QSize)),
+            this, SLOT(update_grid_size()));
+    update_grid_visibility();
+    update_grid_size();
 
     connect(&view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
             this, SLOT(update_layer_visibility(Layer)));
@@ -723,6 +787,22 @@ void MainWindow::update_grid_visibility() {
   bool visible = editor->get_view_settings().is_grid_visible();
 
   ui.action_show_grid->setChecked(visible);
+  grid_size_widget->setEnabled(visible);
+}
+
+/**
+ * @brief Slot called when the grid size of the current editor has just changed.
+ */
+void MainWindow::update_grid_size() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  QSize size = editor->get_view_settings().get_grid_size();
+  grid_width_spin_box->setValue(size.width());
+  grid_height_spin_box->setValue(size.height());
 }
 
 /**
@@ -843,6 +923,14 @@ void MainWindow::update_run_quest() {
 void MainWindow::solarus_fatal(const QString& what) {
 
   GuiTools::error_dialog(tr("Quest terminated unexpectedly: %1").arg(what));
+}
+
+/**
+ * @brief Reloads settings.
+ */
+void MainWindow::reload_settings() {
+
+  ui.tab_widget->reload_settings();
 }
 
 /**
