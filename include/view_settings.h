@@ -41,6 +41,9 @@ public:
   bool is_grid_visible() const;
   void set_grid_visible(bool grid_visible);
 
+  QSize get_grid_size() const;
+  void set_grid_size(const QSize& size);
+
   void set_layer_visible(Layer layer, bool visible);
   bool is_layer_visible(Layer layer) const;
 
@@ -53,6 +56,7 @@ signals:
 
   void zoom_changed(double zoom);
   void grid_visibility_changed(bool grid_visible);
+  void grid_size_changed(const QSize& size);
   void layer_visibility_changed(Layer layer, bool visible);
   void entity_type_visibility_changed(EntityType entity_type, bool visible);
 
@@ -60,6 +64,7 @@ private:
 
   double zoom;                              /**< If supported, the current zoom factor. */
   bool grid_visible;                        /**< If supported, whether the grid is currently shown.*/
+  QSize grid_size;                          /**< If supported, the current grid size. */
   bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */
   std::set<Layer> visible_layers;           /**< Layers currently shown, if supported. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */

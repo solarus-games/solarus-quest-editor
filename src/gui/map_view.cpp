@@ -160,8 +160,7 @@ MapView::MapView(QWidget* parent) :
   set_layer_actions(),
   bring_to_front_action(nullptr),
   bring_to_back_action(nullptr),
-  remove_action(nullptr),
-  grid_size(16, 16) {
+  remove_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -252,6 +251,8 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
   update_zoom();
 
   connect(this->view_settings, SIGNAL(grid_visibility_changed(bool)),
+          this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_size_changed(QSize)),
           this, SLOT(update_grid_visibility()));
   update_grid_visibility();
 
@@ -408,26 +409,6 @@ bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
     }
   }
   return false;
-}
-
-/**
- * @brief Returns the grid size.
- * @return The grid size.
- */
-QSize MapView::get_grid_size() const {
-
-  return grid_size;
-}
-
-/**
- * @brief Changes the grid size.
- * @param size The new grid size.
- */
-void MapView::set_grid_size(QSize size) {
-
-  if (size.isValid()) {
-    grid_size = size;
-  }
 }
 
 /**
@@ -898,15 +879,16 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
     return;
   }
 
+  QSize grid = view_settings->get_grid_size();
   QSize margin = scene != nullptr ? scene->get_margin_size() : QSize(0, 0);
-  int shift_x = grid_size.width() - (margin.width() % grid_size.width());
-  int shift_y = grid_size.height() - (margin.height() % grid_size.height());
+  int shift_x = grid.width() - (margin.width() % grid.width());
+  int shift_y = grid.height() - (margin.height() % grid.height());
 
   QRect rect = rectangle.toRect();
   rect.setTopLeft({-shift_x, -shift_y});
-  rect.setRight(rect.right() + grid_size.width() - shift_x);
-  rect.setBottom(rect.bottom() + grid_size.height() - shift_y);
-  GuiTools::draw_grid(*painter, rect, grid_size);
+  rect.setRight(rect.right() + grid.width() - shift_x);
+  rect.setBottom(rect.bottom() + grid.height() - shift_y);
+  GuiTools::draw_grid(*painter, rect, grid);
 
   QGraphicsView::drawForeground(painter, rectangle);
 }

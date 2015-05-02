@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="general_tab">
       <attribute name="title">
@@ -267,7 +267,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="map_grid_label">
             <property name="text">
-             <string>Grid:</string>
+             <string>Default grid size:</string>
             </property>
            </widget>
           </item>

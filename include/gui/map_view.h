@@ -97,9 +97,6 @@ public:
 
   bool are_entities_resizable(const EntityIndexes& indexes) const;
 
-  QSize get_grid_size() const;
-  void set_grid_size(QSize size);
-
   // Actions.
   QMenu* create_context_menu();
 
@@ -189,7 +186,6 @@ private:
   QAction* bring_to_back_action;   /**< Action of bringing the selected entities to back. */
   QAction* remove_action;          /**< Action of deleting the selected entities. */
 
-  QSize grid_size;                 /**< Grid size. */
 };
 
 #endif

@@ -63,6 +63,7 @@ private slots:
   void on_action_find_triggered();
   void on_action_run_quest_triggered();
   void on_action_show_grid_triggered();
+  void change_grid_size();
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();
@@ -73,6 +74,7 @@ private slots:
   void current_editor_changed(int index);
   void update_zoom();
   void update_grid_visibility();
+  void update_grid_size();
   void update_layer_visibility(Layer layer);
   void update_layers_visibility();
   void update_entity_type_visibility(EntityType entity_type);
@@ -103,6 +105,9 @@ private:
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>
       zoom_actions;               /**< Action of each zoom value. */
+  QWidget* grid_size_widget;      /**< The grid size widget. */
+  QSpinBox* grid_width_spin_box;  /**< The grid width spin box. */
+  QSpinBox* grid_height_spin_box; /**< The grid height spin box. */
 
   QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
   QToolButton*

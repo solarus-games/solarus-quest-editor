@@ -98,6 +98,8 @@ private:
   void entity_creation_button_triggered(EntityType type, bool checked);
   void uncheck_entity_creation_buttons();
 
+  void load_settings();
+
   Ui::MapEditor ui;                         /**< The map editor widgets. */
   QString map_id;                           /**< Id of the map being edited. */
   MapModel* map;                            /**< Map model being edited. */
