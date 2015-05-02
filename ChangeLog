@@ -12,6 +12,7 @@ New features
 * Strings editor (by Maxs).
 * Quest properties (quest.dat) editor (by Maxs).
 * French translation.
+* Add an options dialogs to configure various settings (by Maxs).
 * Add a toolbar.
 * The quest can now be run from the editor (experimental).
 * New keyboard shortcuts.
