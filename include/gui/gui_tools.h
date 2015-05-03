@@ -17,7 +17,9 @@
 #ifndef SOLARUSEDITOR_GUI_TOOLS_H
 #define SOLARUSEDITOR_GUI_TOOLS_H
 
-class QColor;
+#include "grid_style.h"
+#include <QColor>
+
 class QPainter;
 class QRect;
 class QSize;
@@ -38,7 +40,16 @@ void draw_rectangle_border_double(QPainter& painter,
                                   const QRect& where,
                                   const QColor& color_between);
 
-void draw_grid(QPainter& painter, const QRect& where, const QSize& size);
+void draw_grid(QPainter& painter,
+               const QRect& where,
+               const QSize& size,
+               const QColor& color = Qt::black,
+               GridStyle style = GridStyle::DASHED);
+
+void draw_grid_point(QPainter& painter,
+               const QRect& where,
+               const QSize& size,
+               const QColor& color = Qt::black);
 
 }
 

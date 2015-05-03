@@ -169,6 +169,7 @@ set(solarus_quest_editor_SOURCES
   include/indexed_string_tree.h
   include/quest_runner.h
   include/settings.h
+  include/grid_style.h
   src/entities/block.cpp
   src/entities/chest.cpp
   src/entities/crystal.cpp
@@ -268,6 +269,7 @@ set(solarus_quest_editor_SOURCES
   src/indexed_string_tree.cpp
   src/quest_runner.cpp
   src/settings.cpp
+  src/grid_style.cpp
 )
 
 # Add an icon for the executable in Windows.

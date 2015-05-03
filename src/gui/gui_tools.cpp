@@ -119,23 +119,70 @@ void draw_rectangle_border_double(QPainter& painter,
  *
  * @param painter The painter to draw.
  * @param where Rectangle where drawing the grid should be limited to.
- * @param spacing Square size.
+ * @param size Grid size.
+ * @param color Grid color.
+ * @param style Grid style.
  */
-void draw_grid(QPainter& painter, const QRect& where, const QSize &size) {
+void draw_grid(QPainter& painter, const QRect& where,
+  const QSize &size, const QColor& color, GridStyle style) {
+
+  if (style == GridStyle::INTERSECT_POINT) {
+    draw_grid_point(painter, where, size, color);
+    return;
+  }
 
   QVarLengthArray<QLineF, 100> lines;
 
-  for (int x = where.left(); x < where.right(); x += size.width()) {
-    lines.append(QLineF(x, where.top(), x, where.bottom()));
+  if (style == GridStyle::INTERSECT_CROSS) {
+
+    for (int x = where.left(); x < where.right(); x += size.width()) {
+      for (int y = where.top(); y < where.bottom(); y += size.height()) {
+        lines.append(QLineF(x - 2, y, x + 2, y));
+        lines.append(QLineF(x, y - 2, x, y + 2));
+      }
+    }
+
+  } else {
+
+    for (int x = where.left(); x < where.right(); x += size.width()) {
+      lines.append(QLineF(x, where.top(), x, where.bottom()));
+    }
+    for (int y = where.top(); y < where.bottom(); y += size.height()) {
+      lines.append(QLineF(where.left(), y, where.right(), y));
+    }
   }
 
-  for (int y = where.top(); y < where.bottom(); y += size.height()) {
-    lines.append(QLineF(where.left(), y, where.right(), y));
+  QPen pen(color, 0);
+  if (style == GridStyle::DASHED) {
+    pen.setStyle(Qt::DashLine);
   }
 
-  painter.setPen(QPen(Qt::black, 0, Qt::DashLine));
+  painter.setPen(pen);
   painter.drawLines(lines.data(), lines.size());
 
+}
+
+/**
+ * @brief Draws a grid with points.
+ * @param painter The painter to draw.
+ * @param where Rectangle where drawing the grid should be limited to.
+ * @param size Grid size.
+ * @param color Grid color.
+ */
+void draw_grid_point(
+  QPainter& painter, const QRect& where,
+  const QSize &size, const QColor& color) {
+
+  QVarLengthArray<QPointF, 100> points;
+
+  for (int x = where.left(); x < where.right(); x += size.width()) {
+    for (int y = where.top(); y < where.bottom(); y += size.height()) {
+      points.append(QPointF(x, y));
+    }
+  }
+
+  painter.setPen(QPen(color, 1));
+  painter.drawPoints(points.data(), points.size());
 }
 
 }

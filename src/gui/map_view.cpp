@@ -254,6 +254,10 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
           this, SLOT(update_grid_visibility()));
   connect(this->view_settings, SIGNAL(grid_size_changed(QSize)),
           this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_style_changed(GridStyle)),
+          this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_color_changed(QColor)),
+          this, SLOT(update_grid_visibility()));
   update_grid_visibility();
 
   connect(this->view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
@@ -888,7 +892,9 @@ void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
   rect.setTopLeft({-shift_x, -shift_y});
   rect.setRight(rect.right() + grid.width() - shift_x);
   rect.setBottom(rect.bottom() + grid.height() - shift_y);
-  GuiTools::draw_grid(*painter, rect, grid);
+  GuiTools::draw_grid(
+    *painter, rect, grid, view_settings->get_grid_color(),
+    view_settings->get_grid_style());
 
   QGraphicsView::drawForeground(painter, rectangle);
 }

@@ -31,7 +31,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui.setupUi(this);
 
   ui.quest_size_field->config("x", 0, 99999, 80);
-  ui.map_grid_field->config("x", 8, 99999, 8);
+  ui.map_grid_size_field->config("x", 8, 99999, 8);
 
   reset();
 
@@ -67,8 +67,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   // Map editor.
   connect(ui.map_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_background()));
-  connect(ui.map_grid_field, SIGNAL(value_changed(int,int)),
-          this, SLOT(change_map_grid()));
+  connect(ui.map_grid_show_at_opening_field, SIGNAL(clicked()),
+          this, SLOT(change_map_grid_show_at_opening()));
+  connect(ui.map_grid_size_field, SIGNAL(value_changed(int,int)),
+          this, SLOT(change_map_grid_size()));
+  connect(ui.map_grid_style_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_map_grid_style()));
+  connect(ui.map_grid_color_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_map_grid_color()));
 }
 
 /**
@@ -143,7 +149,10 @@ void SettingsDialog::update() {
 
   // Map editor.
   update_map_background();
-  update_map_grid();
+  update_map_grid_show_at_opening();
+  update_map_grid_size();
+  update_map_grid_style();
+  update_map_grid_color();
 }
 
 /**
@@ -354,23 +363,81 @@ void SettingsDialog::update_map_background() {
 void SettingsDialog::change_map_background() {
 
   edited_settings[Settings::map_background] =
-    ui.map_background_field->get_color();
+    ui.map_background_field->get_color().name();
   update_buttons();
 }
 
 /**
- * @brief Updates the map grid field.
+ * @brief Updates the map grid show at opening field.
  */
-void SettingsDialog::update_map_grid() {
+void SettingsDialog::update_map_grid_show_at_opening() {
 
-  ui.map_grid_field->set_size(settings.get_value_size(Settings::map_grid));
+  ui.map_grid_show_at_opening_field->setChecked(
+    settings.get_value_bool(Settings::map_grid_show_at_opening));
 }
 
 /**
- * @brief Slot called when the user changes the map grid.
+ * @brief Slot called when the user changes the map grid show at opening.
  */
-void SettingsDialog::change_map_grid() {
+void SettingsDialog::change_map_grid_show_at_opening() {
 
-  edited_settings[Settings::map_grid] = ui.map_grid_field->get_size();
+  edited_settings[Settings::map_grid_show_at_opening] =
+    ui.map_grid_show_at_opening_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the map grid size field.
+ */
+void SettingsDialog::update_map_grid_size() {
+
+  ui.map_grid_size_field->set_size(
+    settings.get_value_size(Settings::map_grid_size));
+}
+
+/**
+ * @brief Slot called when the user changes the map grid size.
+ */
+void SettingsDialog::change_map_grid_size() {
+
+  edited_settings[Settings::map_grid_size] = ui.map_grid_size_field->get_size();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the map grid style field.
+ */
+void SettingsDialog::update_map_grid_style() {
+
+  ui.map_grid_style_field->set_selected_value(static_cast<GridStyle>(
+    settings.get_value_int(Settings::map_grid_style)));
+}
+
+/**
+ * @brief Slot called when the user changes the map grid style.
+ */
+void SettingsDialog::change_map_grid_style() {
+
+  edited_settings[Settings::map_grid_style] =
+    static_cast<int>(ui.map_grid_style_field->get_selected_value());
+  update_buttons();
+}
+
+/**
+ * @brief Updates the map grid color field.
+ */
+void SettingsDialog::update_map_grid_color() {
+
+  ui.map_grid_color_field->set_color(
+    settings.get_value_color(Settings::map_grid_color));
+}
+
+/**
+ * @brief Slot called when the user changes the map grid color.
+ */
+void SettingsDialog::change_map_grid_color() {
+
+  edited_settings[Settings::map_grid_color] =
+    ui.map_grid_color_field->get_color().name();
   update_buttons();
 }

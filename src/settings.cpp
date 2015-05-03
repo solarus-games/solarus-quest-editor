@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "include/settings.h"
+#include "settings.h"
+#include "grid_style.h"
 #include <QPalette>
 #include <QSize>
 
@@ -31,7 +32,11 @@ const QString Settings::font_size = "text_editor/font_size";
 
 // Map editor keys.
 const QString Settings::map_background = "map_editor/background";
-const QString Settings::map_grid = "map_editor/grid";
+const QString Settings::map_grid_show_at_opening =
+  "map_editor/grid_show_at_opening";
+const QString Settings::map_grid_size = "map_editor/grid_size";
+const QString Settings::map_grid_style = "map_editor/grid_style";
+const QString Settings::map_grid_color = "map_editor/grid_color";
 
 QMap<QString, QVariant> Settings::default_values = {
 
@@ -48,7 +53,10 @@ QMap<QString, QVariant> Settings::default_values = {
 
   // Map editor.
   { Settings::map_background, "#888888" },
-  { Settings::map_grid, QSize(16, 16) }
+  { Settings::map_grid_show_at_opening, false },
+  { Settings::map_grid_size, QSize(16, 16) },
+  { Settings::map_grid_style, static_cast<int>(GridStyle::DASHED) },
+  { Settings::map_grid_color, "#000000" }
 };
 
 /**

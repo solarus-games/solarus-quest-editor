@@ -1085,6 +1085,11 @@ void MapEditor::reload_settings() {
     QBrush brush(settings.get_value_color(Settings::map_background));
     scene->setBackgroundBrush(brush);
   }
+
+  get_view_settings().set_grid_style(static_cast<GridStyle>(
+    settings.get_value_int(Settings::map_grid_style)));
+  get_view_settings().set_grid_color(
+    settings.get_value_color(Settings::map_grid_color));
 }
 
 /**
@@ -1116,7 +1121,8 @@ void MapEditor::update_map_id_field() {
  */
 void MapEditor::update_description_to_gui() {
 
-  QString description = get_resources().get_description(ResourceType::MAP, map_id);
+  QString description = get_resources().get_description(
+    ResourceType::MAP, map_id);
   if (ui.description_field->text() != description) {
     ui.description_field->setText(description);
   }
@@ -1672,8 +1678,12 @@ void MapEditor::uncheck_entity_creation_buttons() {
  */
 void MapEditor::load_settings() {
 
+  ViewSettings& view = get_view_settings();
   Settings settings;
-  get_view_settings().set_grid_size(
-    settings.get_value_size(Settings::map_grid));
+
+  view.set_grid_visible(
+    settings.get_value_bool(Settings::map_grid_show_at_opening));
+  view.set_grid_size(settings.get_value_size(Settings::map_grid_size));
+
   reload_settings();
 }

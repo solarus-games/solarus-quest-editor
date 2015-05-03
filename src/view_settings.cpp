@@ -24,7 +24,9 @@ ViewSettings::ViewSettings(QObject* parent) :
   QObject(parent),
   zoom(1.0),
   grid_visible(false),
-  grid_size(16, 16) {
+  grid_size(16, 16),
+  grid_style(GridStyle::DASHED),
+  grid_color(Qt::black) {
 
   // Default settings.
   for (int layer = 0; layer < Layer::LAYER_NB; ++layer) {
@@ -114,6 +116,64 @@ void ViewSettings::set_grid_size(const QSize& size) {
 
   if (grid_visible) {
     emit grid_size_changed(grid_size);
+  }
+}
+
+/**
+ * @brief Returns the current grid style setting.
+ * @return the current grid style.
+ */
+GridStyle ViewSettings::get_grid_style() const {
+
+  return grid_style;
+}
+
+/**
+ * @brief Changes the current grid style.
+ *
+ * Emits grid_style_changed() if there is a change and if the grid is visible.
+ *
+ * @param style the new grid style.
+ */
+void ViewSettings::set_grid_style(GridStyle style) {
+
+  if (style == grid_style) {
+    return;
+  }
+
+  grid_style = style;
+
+  if (grid_visible) {
+    emit grid_style_changed(grid_style);
+  }
+}
+
+/**
+ * @brief Returns the current grid color setting.
+ * @return the current grid color.
+ */
+QColor ViewSettings::get_grid_color() const {
+
+  return grid_color;
+}
+
+/**
+ * @brief Changes the current grid color.
+ *
+ * Emits grid_color_changed() if there is a change and if the grid is visible.
+ *
+ * @param color the new grid color.
+ */
+void ViewSettings::set_grid_color(const QColor& color) {
+
+  if (color == grid_color || !color.isValid()) {
+    return;
+  }
+
+  grid_color = color;
+
+  if (grid_visible) {
+    emit grid_color_changed(grid_color);
   }
 }
 

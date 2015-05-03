@@ -65,8 +65,14 @@ public slots:
   // Map editor.
   void update_map_background();
   void change_map_background();
-  void update_map_grid();
-  void change_map_grid();
+  void update_map_grid_show_at_opening();
+  void change_map_grid_show_at_opening();
+  void update_map_grid_size();
+  void change_map_grid_size();
+  void update_map_grid_style();
+  void change_map_grid_style();
+  void update_map_grid_color();
+  void change_map_grid_color();
 
 signals:
 

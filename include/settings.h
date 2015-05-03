@@ -39,7 +39,10 @@ public:
 
   // Map editor keys.
   static const QString map_background;
-  static const QString map_grid;
+  static const QString map_grid_show_at_opening;
+  static const QString map_grid_size;
+  static const QString map_grid_style;
+  static const QString map_grid_color;
 
   Settings();
 

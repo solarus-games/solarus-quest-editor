@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="general_tab">
       <attribute name="title">
@@ -183,6 +183,19 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="text_editor_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="map_editor_tab">
@@ -195,36 +208,157 @@
          <property name="title">
           <string>Graphics view</string>
          </property>
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="map_background_label">
-            <property name="text">
-             <string>Background color:</string>
-            </property>
-           </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="map_background_layout">
+            <item>
+             <widget class="QLabel" name="map_background_label">
+              <property name="text">
+               <string>Background color:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ColorPicker" name="map_background_field">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="map_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
-          <item row="1" column="0">
+          <item>
            <widget class="QLabel" name="map_grid_label">
             <property name="text">
-             <string>Default grid size:</string>
+             <string>Grid:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="ColorPicker" name="map_background_field">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="PairSpinBox" name="map_grid_field" native="true"/>
+          <item>
+           <layout class="QHBoxLayout" name="map_grid_layout">
+            <item>
+             <spacer name="map_grid_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>15</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="map_grid_layout_2">
+              <item row="0" column="4">
+               <widget class="EnumSelector&lt;GridStyle&gt;" name="map_grid_style_field"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="PairSpinBox" name="map_grid_size_field" native="true"/>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="QCheckBox" name="map_grid_show_at_opening_field">
+                <property name="text">
+                 <string>Show at opening</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="ColorPicker" name="map_grid_color_field">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="map_grid_size_label">
+                <property name="text">
+                 <string>Default size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="map_grid_style_label">
+                <property name="text">
+                 <string>Style:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="map_grid_color_label">
+                <property name="text">
+                 <string>Color:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="map_grid_spacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>15</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="map_grid_spacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <spacer name="map_editor_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -253,6 +387,11 @@
    <extends>QWidget</extends>
    <header>gui/pair_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;GridStyle&gt;</class>
+   <extends>QComboBox</extends>
+   <header>grid_style.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
