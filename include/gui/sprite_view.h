@@ -59,7 +59,7 @@ private slots:
 
 protected:
 
-  void drawForeground(QPainter* painter, const QRectF& rectangle) override;
+  void paintEvent(QPaintEvent* event) override;
 
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;

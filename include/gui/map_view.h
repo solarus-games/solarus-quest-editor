@@ -153,7 +153,7 @@ public slots:
 
 protected:
 
-  void drawForeground(QPainter* painter, const QRectF& rectangle) override;
+  void paintEvent(QPaintEvent* event) override;
 
   void mousePressEvent(QMouseEvent* event) override;
   void mouseReleaseEvent(QMouseEvent* event) override;

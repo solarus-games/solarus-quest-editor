@@ -233,21 +233,26 @@ void TilesetView::update_grid_visibility() {
 }
 
 /**
- * @brief Draws the foreground of the map.
- * @param painter The painter to draw.
- * @param rect The exposed rectangle.
+ * @brief Draws the tileset view.
+ * @param event The paint event.
  */
-void TilesetView::drawForeground(QPainter* painter, const QRectF& rectangle) {
+void TilesetView::paintEvent(QPaintEvent* event) {
+
+  QGraphicsView::paintEvent(event);
 
   if (view_settings == nullptr || !view_settings->is_grid_visible()) {
     return;
   }
 
-  QRect rect = rectangle.toRect();
-  rect.setTopLeft({0, 0});
-  GuiTools::draw_grid(*painter, rect, view_settings->get_grid_size());
+  QSize grid = view_settings->get_grid_size();
+  QRect rect = event->rect();
+  rect.setTopLeft(mapFromScene(0, 0));
 
-  QGraphicsView::drawForeground(painter, rectangle);
+  // Draw the grid.
+  QPainter painter(viewport());
+  GuiTools::draw_grid(
+    painter, rect, grid * zoom, view_settings->get_grid_color(),
+    view_settings->get_grid_style());
 }
 
 /**

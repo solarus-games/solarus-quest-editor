@@ -873,30 +873,38 @@ void MapView::tileset_id_changed(const QString& tileset_id) {
 }
 
 /**
- * @brief Draws the foreground of the map.
- * @param painter The painter to draw.
- * @param rect The exposed rectangle.
+ * @brief Draws the map view.
+ * @param event The paint event.
  */
-void MapView::drawForeground(QPainter* painter, const QRectF& rectangle) {
+void MapView::paintEvent(QPaintEvent* event) {
+
+  QGraphicsView::paintEvent(event);
 
   if (view_settings == nullptr || !view_settings->is_grid_visible()) {
     return;
   }
 
+  // Get the rect and convert to the scene.
+  QRect rect = mapToScene(event->rect()).boundingRect().toRect();
+
+  // Get grid and margin.
   QSize grid = view_settings->get_grid_size();
   QSize margin = scene != nullptr ? scene->get_margin_size() : QSize(0, 0);
-  int shift_x = grid.width() - (margin.width() % grid.width());
-  int shift_y = grid.height() - (margin.height() % grid.height());
 
-  QRect rect = rectangle.toRect();
-  rect.setTopLeft({-shift_x, -shift_y});
-  rect.setRight(rect.right() + grid.width() - shift_x);
-  rect.setBottom(rect.bottom() + grid.height() - shift_y);
+  // Adjust the rect.
+  rect.setTopLeft(QPoint(
+    (margin.width() % grid.width()) - grid.width(),
+    (margin.height() % grid.height()) - grid.height()));
+
+  // Convert the rect from the scene.
+  rect = mapFromScene(rect).boundingRect();
+  grid *= zoom;
+
+  // Draw the grid.
+  QPainter painter(viewport());
   GuiTools::draw_grid(
-    *painter, rect, grid, view_settings->get_grid_color(),
+    painter, rect, grid, view_settings->get_grid_color(),
     view_settings->get_grid_style());
-
-  QGraphicsView::drawForeground(painter, rectangle);
 }
 
 /**
