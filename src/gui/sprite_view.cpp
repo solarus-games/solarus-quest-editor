@@ -113,6 +113,10 @@ void SpriteView::set_view_settings(ViewSettings& view_settings) {
           this, SLOT(update_grid_visibility()));
   connect(this->view_settings, SIGNAL(grid_size_changed(QSize)),
           this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_style_changed(GridStyle)),
+          this, SLOT(update_grid_visibility()));
+  connect(this->view_settings, SIGNAL(grid_color_changed(QColor)),
+          this, SLOT(update_grid_visibility()));
   update_grid_visibility();
 
   horizontalScrollBar()->setValue(0);
