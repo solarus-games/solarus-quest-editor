@@ -133,6 +133,7 @@ public:
 
 private:
   QPoint get_entities_center() const;
+  void sort_entities();
   Layer find_best_layer(const EntityModel& entity) const;
 
   EntityModels entities;                    /**< Entities to be added. */
@@ -670,10 +671,13 @@ void MapView::copy() {
     return;
   }
 
-  const EntityIndexes& indexes = get_selected_entities();
+  EntityIndexes indexes = get_selected_entities();
   if (indexes.isEmpty()) {
     return;
   }
+
+  // Sort entities to respect their relative order on the map when pasting.
+  std::sort(indexes.begin(), indexes.end());
 
   QStringList entity_strings;
   for (const EntityIndex& index : indexes) {
@@ -1830,6 +1834,36 @@ QPoint AddingEntitiesState::get_entities_center() const {
 }
 
 /**
+ * @brief Ensures that the entities to be added are correctly sorted.
+ *
+ * The ones on lower layers come first, and on the same layer,
+ * the non-dynamic ones come first.
+ */
+void AddingEntitiesState::sort_entities() {
+
+  std::map<Layer, EntityModels> entities_by_layer;
+  for (EntityModelPtr& entity : entities) {
+    if (!entity->is_dynamic()) {  // Non-dynamic ones first.
+      Layer layer = entity->get_layer();
+      entities_by_layer[layer].emplace_back(std::move(entity));
+    }
+  }
+  for (EntityModelPtr& entity : entities) {
+    if (entity != nullptr && entity->is_dynamic()) {  // Non-dynamic ones first.
+      Layer layer = entity->get_layer();
+      entities_by_layer[layer].emplace_back(std::move(entity));
+    }
+  }
+  entities.clear();
+  for (int i = 0; i < Layer::LAYER_NB; ++i) {
+    Layer layer = static_cast<Layer>(i);
+    for (EntityModelPtr& entity : entities_by_layer[layer]) {
+      entities.emplace_back(std::move(entity));
+    }
+  }
+}
+
+/**
  * @copydoc MapView::State::mouse_pressed
  */
 void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
@@ -1838,32 +1872,50 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   MapModel& map = get_map();
   MapView& view = get_view();
 
+  // Store the number of tiles and dynamic entities of each layer,
+  // because every entity added will increment one of them.
+  QMap<Layer, int> num_tiles_by_layer;     // Index where to append a tile.
+  QMap<Layer, int> num_dynamic_entities_by_layer;  // Index where to append a dynamic entity.
+  for (int i = 0; i < Layer::LAYER_NB; ++i) {
+    Layer layer = static_cast<Layer>(i);
+    num_tiles_by_layer[layer] = map.get_num_tiles(layer);
+    num_dynamic_entities_by_layer[layer] = map.get_num_dynamic_entities(layer);
+  }
+
+  // Determine the best layer of each entity.
+  for (EntityModelPtr& entity : entities) {
+    Layer layer = find_best_layer(*entity);
+    entity->set_layer(layer);
+  }
+  // Now that their layer is known, sort them
+  // to compute correct indexes below.
+  sort_entities();
+
   // Make entities ready to be added at their specific index.
   AddableEntities addable_entities;
-  QMap<Layer, int> num_tiles_by_layer;     // Index where to append a tile.
-  QMap<Layer, int> num_entities_by_layer;  // Index where to append a dynamic entity.
+  EntityIndex previous_index;
   for (EntityModelPtr& entity : entities) {
-    // Determine the best layer.
     Q_ASSERT(entity != nullptr);
-    Layer layer = find_best_layer(*entity);
+    Layer layer = entity->get_layer();
 
     int i = 0;
     if (entity->is_dynamic()) {
-      if (!num_entities_by_layer.contains(layer)) {
-        num_entities_by_layer[layer] = map.get_num_entities(layer);
-      }
-      i = num_entities_by_layer[layer];
-      ++num_entities_by_layer[layer];
+      i = num_tiles_by_layer[layer] + num_dynamic_entities_by_layer[layer];
+      ++num_dynamic_entities_by_layer[layer];
     }
     else {
-      if (!num_tiles_by_layer.contains(layer)) {
-        num_tiles_by_layer[layer] = map.get_num_tiles(layer);
-      }
       i = num_tiles_by_layer[layer];
       ++num_tiles_by_layer[layer];
     }
 
     EntityIndex index = { layer, i };
+    if (previous_index.is_valid()) {
+      // Double-check that we are traversing entities in ascending order.
+      // (If not, then sort_entities() above did not make its job and we risk
+      // invalid indexes).
+      Q_ASSERT(index > previous_index);
+    }
+    previous_index = index;
     addable_entities.emplace_back(std::move(entity), index);
   }
 

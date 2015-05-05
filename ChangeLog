@@ -5,6 +5,7 @@ ________________________________________
 
 Bugfix release for the 1.4 branch.
 
+* Fix crash when copy-pasting both tiles and dynamic entities sometimes (#24).
 * Fix the view not updated when resizing a map (#25).
 * Fix maps having having an initial size of zero.
 
