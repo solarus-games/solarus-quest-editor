@@ -1,5 +1,15 @@
 ________________________________________
 
+Solarus Quest Editor 1.4.1 (in progress)
+________________________________________
+
+Bugfix release for the 1.4 branch.
+
+* Fix the view not updated when resizing a map (#25).
+* Fix maps having having an initial size of zero.
+
+________________________________________
+
 Solarus Quest Editor 1.4.0 (2015-05-02)
 ________________________________________
 

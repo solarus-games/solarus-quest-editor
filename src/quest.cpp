@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "map_model.h"
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
@@ -1104,6 +1105,45 @@ bool Quest::create_script_if_not_exists(const QString& path) {
 }
 
 /**
+ * @brief Attempts to create a map data file in this quest.
+ * @param map_id Id of the map to create. The map data file must not exist.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_map_data_file(const QString& map_id) {
+
+  QString path = get_map_data_file_path(map_id);
+  check_is_in_root_path(path);
+  check_not_exists(path);
+  create_file(path);
+
+  // Set initial values.
+  MapModel map(*this, map_id);
+  QString tileset_id = get_resources().get_elements(ResourceType::TILESET).first();
+  map.set_tileset_id(tileset_id);
+  map.set_size(get_properties().get_normal_quest_size());
+  map.save();
+}
+
+/**
+ * @brief Attempts to create a map data file in this quest if it does not
+ * exist yet.
+ * @param map_id Id of the map to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_map_data_file_if_not_exists(const QString& map_id) {
+
+  QString path = get_map_data_file_path(map_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_map_data_file(map_id);
+  return true;
+}
+
+/**
  * @brief Attempts to create a directory in this quest.
  * @param path Path of the directory to create. It must not exist.
  * @throws EditorException In case of error.
@@ -1217,6 +1257,11 @@ void Quest::create_resource_element(ResourceType resource_type,
   switch (resource_type) {
 
   case ResourceType::MAP:
+    // Create the map data file and the map script.
+    create_map_data_file_if_not_exists(element_id);
+    create_script_if_not_exists(get_map_script_path(element_id));
+    break;
+
   case ResourceType::ITEM:
   case ResourceType::SPRITE:
   case ResourceType::ENEMY:

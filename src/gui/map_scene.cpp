@@ -34,6 +34,8 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
 
   build();
 
+  connect(&map, SIGNAL(size_changed(QSize)),
+          this, SLOT(size_changed(QSize)));
   connect(&map, SIGNAL(entities_added(EntityIndexes)),
           this, SLOT(entities_added(EntityIndexes)));
   connect(&map, SIGNAL(entities_about_to_be_removed(EntityIndexes)),
@@ -92,7 +94,7 @@ QSize MapScene::get_margin_size() {
  */
 void MapScene::build() {
 
-  setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + map.get_size()));
+  update_scene_size();
   setBackgroundBrush(Qt::gray);
 
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
@@ -114,6 +116,14 @@ void MapScene::build() {
       create_entity_item(entity);
     }
   }
+}
+
+/**
+ * @brief Updates the size of the scene to reflect the size of the map.
+ */
+void MapScene::update_scene_size() {
+  setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + map.get_size()));
+  update();
 }
 
 /**
@@ -251,6 +261,16 @@ EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
   }
 
   return &entity_item->get_entity();
+}
+
+/**
+ * @brief Slot called when the size of the map has changed.
+ * @param The size of the scene is updated accordingly.
+ */
+void MapScene::size_changed(const QSize& size) {
+
+  Q_UNUSED(size);
+  update_scene_size();
 }
 
 /**

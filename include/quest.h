@@ -111,6 +111,9 @@ public:
   bool create_file_if_not_exists(const QString& path);
   void create_script(const QString& path);
   bool create_script_if_not_exists(const QString& path);
+  void create_map_data_file(const QString& map_id);
+  bool create_map_data_file_if_not_exists(const QString& map_id);
+
   void create_dir(const QString& path);
   bool create_dir_if_not_exists(const QString& path);
   void create_dir(const QString& parent_path, const QString& dir_name);
