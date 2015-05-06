@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/gui_tools.h"
-#include "gui/sprite_editor.h"
-#include "gui/get_animation_name_dialog.h"
 #include "gui/change_source_image_dialog.h"
+#include "gui/gui_tools.h"
+#include "gui/get_animation_name_dialog.h"
+#include "gui/sprite_editor.h"
 #include "editor_exception.h"
+#include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "sprite_model.h"
 #include <QUndoStack>
-#include "point.h"
 
 namespace {
 
@@ -655,6 +655,9 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   }
   model->set_selected_index(index);
 
+  create_animation = create_context_menu.addAction(tr("Create animation"));
+  create_direction = create_context_menu.addAction(tr("Create direction"));
+
   update();
 
   // Make connections.
@@ -724,9 +727,14 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(change_direction_num_columns_requested()));
 
   connect(ui.create_button, SIGNAL(clicked()),
+          this, SLOT(create_requested()));
+  connect(create_animation, SIGNAL(triggered()),
           this, SLOT(create_animation_requested()));
+  connect(create_direction, SIGNAL(triggered()),
+          this, SLOT(create_direction_requested()));
+
   connect(ui.sprite_view, SIGNAL(add_direction_requested(QRect)),
-          this, SLOT(create_direction_requested(QRect)));
+          this, SLOT(add_direction_requested(QRect)));
   connect(ui.sprite_view, SIGNAL(duplicate_selected_direction_requested(QPoint)),
           this, SLOT(duplicate_selected_direction_requested(QPoint)));
   connect(ui.rename_button, SIGNAL(clicked()),
@@ -844,6 +852,20 @@ void SpriteEditor::update_selection() {
 }
 
 /**
+ * @brief Slot called when the user wants to create an animation or a direction.
+ */
+void SpriteEditor::create_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  create_direction->setEnabled(index.is_valid());
+
+  QPoint pos = mapToGlobal(ui.create_button->pos());
+  pos.setX(pos.x() + ui.create_button->width());
+
+  create_context_menu.popup(pos);
+}
+
+/**
  * @brief Slot called when the user wants to create an animation.
  */
 void SpriteEditor::create_animation_requested() {
@@ -888,9 +910,17 @@ void SpriteEditor::rename_animation_requested() {
 }
 
 /**
+ * @brief Slot called when the user wants to create a new direction.
+ */
+void SpriteEditor::create_direction_requested() {
+
+  add_direction_requested(QRect(0, 0, 16, 16));
+}
+
+/**
  * @brief Slot called when the user wants to add a new direction.
  */
-void SpriteEditor::create_direction_requested(const QRect& frame) {
+void SpriteEditor::add_direction_requested(const QRect& frame) {
 
   SpriteModel::Index index = model->get_selected_index();
   if (!index.is_valid()) {
