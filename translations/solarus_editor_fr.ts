@@ -956,6 +956,21 @@
         <translation>Dialogue de description</translation>
     </message>
     <message>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="603"/>
+        <source>(Default destination)</source>
+        <translation type="unfinished">(Destination par défaut)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="604"/>
+        <source>(Same point)</source>
+        <translation>(Même point)</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="605"/>
+        <source>(Side of the map)</source>
+        <translation>(Bord de la map)</translation>
+    </message>
+    <message>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="669"/>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="677"/>
         <source>Right</source>
@@ -2054,7 +2069,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="420"/>
+        <location filename="../src/gui/map_view.cpp" line="425"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
@@ -2063,107 +2078,107 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation type="vanished">Entrée</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="428"/>
+        <location filename="../src/gui/map_view.cpp" line="433"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="429"/>
+        <location filename="../src/gui/map_view.cpp" line="434"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="437"/>
-        <location filename="../src/gui/map_view.cpp" line="518"/>
+        <location filename="../src/gui/map_view.cpp" line="442"/>
+        <location filename="../src/gui/map_view.cpp" line="523"/>
         <source>Convert to dynamic tile</source>
         <translation>Convertir en tile dynamique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="451"/>
+        <location filename="../src/gui/map_view.cpp" line="456"/>
         <source>Bring to front</source>
         <translation>Mettre au premier plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="452"/>
+        <location filename="../src/gui/map_view.cpp" line="457"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="460"/>
+        <location filename="../src/gui/map_view.cpp" line="465"/>
         <source>Bring to back</source>
         <translation>Mettre en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="461"/>
+        <location filename="../src/gui/map_view.cpp" line="466"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="469"/>
+        <location filename="../src/gui/map_view.cpp" line="474"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="518"/>
+        <location filename="../src/gui/map_view.cpp" line="523"/>
         <source>Convert to dynamic tiles</source>
         <translation>Convertir en tiles dynamiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="521"/>
+        <location filename="../src/gui/map_view.cpp" line="526"/>
         <source>Convert to static tile</source>
         <translation>Convertir en tile statique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="521"/>
+        <location filename="../src/gui/map_view.cpp" line="526"/>
         <source>Convert to static tiles</source>
         <translation>Convertir en tiles statiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="574"/>
+        <location filename="../src/gui/map_view.cpp" line="579"/>
         <source>Direction</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="593"/>
-        <location filename="../src/gui/map_view.cpp" line="601"/>
+        <location filename="../src/gui/map_view.cpp" line="598"/>
+        <location filename="../src/gui/map_view.cpp" line="606"/>
         <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="594"/>
-        <location filename="../src/gui/map_view.cpp" line="603"/>
+        <location filename="../src/gui/map_view.cpp" line="599"/>
+        <location filename="../src/gui/map_view.cpp" line="608"/>
         <source>Up</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="595"/>
-        <location filename="../src/gui/map_view.cpp" line="605"/>
+        <location filename="../src/gui/map_view.cpp" line="600"/>
+        <location filename="../src/gui/map_view.cpp" line="610"/>
         <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="596"/>
-        <location filename="../src/gui/map_view.cpp" line="607"/>
+        <location filename="../src/gui/map_view.cpp" line="601"/>
+        <location filename="../src/gui/map_view.cpp" line="612"/>
         <source>Down</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="602"/>
+        <location filename="../src/gui/map_view.cpp" line="607"/>
         <source>Right-up</source>
         <translation>Haut-droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="604"/>
+        <location filename="../src/gui/map_view.cpp" line="609"/>
         <source>Left-up</source>
         <translation>Haut-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="606"/>
+        <location filename="../src/gui/map_view.cpp" line="611"/>
         <source>Left-down</source>
         <translation>Bas-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="608"/>
+        <location filename="../src/gui/map_view.cpp" line="613"/>
         <source>Right-down</source>
         <translation>Bas-droite</translation>
     </message>
@@ -2725,106 +2740,106 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
 <context>
     <name>Quest</name>
     <message>
-        <location filename="../src/quest.cpp" line="262"/>
+        <location filename="../src/quest.cpp" line="263"/>
         <source>Unknown resource type</source>
         <translation>Type de ressource inconnu</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="905"/>
+        <location filename="../src/quest.cpp" line="906"/>
         <source>Invalid file name: &apos;%1&apos;</source>
         <translation>Nom de fichier invalide : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="963"/>
+        <location filename="../src/quest.cpp" line="964"/>
         <source>File &apos;%1&apos; does not exist</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="976"/>
+        <location filename="../src/quest.cpp" line="977"/>
         <source>File &apos;%1&apos; already exists</source>
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1037"/>
+        <location filename="../src/quest.cpp" line="1038"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1052"/>
+        <location filename="../src/quest.cpp" line="1053"/>
         <source>Cannot create file &apos;%1&apos;</source>
         <translation>Impossible de créer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="902"/>
+        <location filename="../src/quest.cpp" line="903"/>
         <source>Empty file name</source>
         <translation>Nom de fichier vide</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="129"/>
+        <location filename="../src/quest.cpp" line="130"/>
         <source>No quest</source>
         <translation>Pas de quête</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="999"/>
+        <location filename="../src/quest.cpp" line="1000"/>
         <source>File &apos;%1&apos; is not a folder</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1012"/>
+        <location filename="../src/quest.cpp" line="1013"/>
         <source>File &apos;%1&apos; is a folder</source>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1118"/>
+        <location filename="../src/quest.cpp" line="1158"/>
         <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
         <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1124"/>
-        <location filename="../src/quest.cpp" line="1161"/>
+        <location filename="../src/quest.cpp" line="1164"/>
+        <location filename="../src/quest.cpp" line="1201"/>
         <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1263"/>
+        <location filename="../src/quest.cpp" line="1308"/>
         <source>Resource &apos;%1&apos; already exists</source>
         <translation>La ressource &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1279"/>
+        <location filename="../src/quest.cpp" line="1324"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1390"/>
+        <location filename="../src/quest.cpp" line="1435"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1424"/>
-        <location filename="../src/quest.cpp" line="1455"/>
+        <location filename="../src/quest.cpp" line="1469"/>
+        <location filename="../src/quest.cpp" line="1500"/>
         <source>Cannot delete folder &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1325"/>
+        <location filename="../src/quest.cpp" line="1370"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1332"/>
+        <location filename="../src/quest.cpp" line="1377"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1337"/>
-        <location filename="../src/quest.cpp" line="1376"/>
-        <location filename="../src/quest.cpp" line="1518"/>
+        <location filename="../src/quest.cpp" line="1382"/>
+        <location filename="../src/quest.cpp" line="1421"/>
+        <location filename="../src/quest.cpp" line="1563"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="940"/>
+        <location filename="../src/quest.cpp" line="941"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
