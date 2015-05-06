@@ -19,6 +19,7 @@
 
 #include "gui/editor.h"
 #include "ui_sprite_editor.h"
+#include <QMenu>
 
 class SpriteModel;
 
@@ -47,9 +48,11 @@ public slots:
   void set_description_from_gui();
 
   void update_selection();
+  void create_requested();
   void create_animation_requested();
   void rename_animation_requested();
-  void create_direction_requested(const QRect& frame);
+  void create_direction_requested();
+  void add_direction_requested(const QRect& frame);
   void duplicate_requested();
   void duplicate_selected_direction_requested(const QPoint &position);
   void delete_requested();
@@ -85,6 +88,9 @@ private:
   QString sprite_id;            /**< Id of the sprite being edited. */
   SpriteModel* model;           /**< Sprite model being edited. */
   Quest& quest;                 /**< The quest. */
+  QMenu create_context_menu;    /**< The create context menu. */
+  QAction* create_animation;    /**< The create animation action. */
+  QAction* create_direction;    /**< The create direction action. */
 
 };
 
