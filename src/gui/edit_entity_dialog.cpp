@@ -600,9 +600,9 @@ void EditEntityDialog::initialize_destination() {
   ui.destination_field->set_map_id(get_quest(), destination_map_id);
   ui.destination_field->set_filtered_by_entity_type(true);
   ui.destination_field->set_entity_type_filter(EntityType::DESTINATION);
-  ui.destination_field->add_special_value("", "(Default destination)");
-  ui.destination_field->add_special_value("_same", "(Same point)");
-  ui.destination_field->add_special_value("_side", "(Side of the map)");
+  ui.destination_field->add_special_value("", tr("(Default destination)"));
+  ui.destination_field->add_special_value("_same", tr("(Same point)"));
+  ui.destination_field->add_special_value("_side", tr("(Side of the map)"));
   ui.destination_field->build();
   ui.destination_field->set_selected_name(entity_before.get_field(destination_field_name).toString());
 }
