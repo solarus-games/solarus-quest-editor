@@ -954,7 +954,7 @@
     <message>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="603"/>
         <source>(Default destination)</source>
-        <translation type="unfinished">(Destination par défaut)</translation>
+        <translation>(Destination par défaut)</translation>
     </message>
     <message>
         <location filename="../src/gui/edit_entity_dialog.cpp" line="604"/>
@@ -3856,6 +3856,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
     <message>
         <location filename="../src/gui/sprite_editor.cpp" line="65"/>
+        <location filename="../src/gui/sprite_editor.cpp" line="673"/>
         <source>Create animation</source>
         <translation>Créer animation</translation>
     </message>
@@ -3951,7 +3952,12 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Le sprite &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/sprite_editor.cpp" line="819"/>
+        <location filename="../src/gui/sprite_editor.cpp" line="674"/>
+        <source>Create direction</source>
+        <translation>Créer direction</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/sprite_editor.cpp" line="827"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
