@@ -9,6 +9,7 @@ Bugfix release for the 1.4 branch.
 * Fix the view not updated when resizing a map (#25).
 * Fix maps having having an initial size of zero.
 * Fix the choice of the layer when copy-pasting entities.
+* Fix a precision issue when moving entities.
 * Fix missing translation of special destination names.
 * Fix the entity dialog allowing special characters in the entity name.
 * Sprite editor: fix adding a new direction with the plus button (#27).

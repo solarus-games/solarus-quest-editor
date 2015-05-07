@@ -60,4 +60,23 @@ QPoint round_8(const QPointF& point) {
   return round_8(point.toPoint());
 }
 
+/**
+ * @brief Floors the coordinates of a point to the lower multiples of 8.
+ * @param point A point.
+ * @return The resulting point.
+ */
+QPoint floor_8(const QPoint& point) {
+
+  return QPoint(point.x() - point.x() % 8,
+                point.y() - point.y() % 8);
+}
+
+/**
+ * @overload
+ */
+QPoint floor_8(const QPointF& point) {
+
+  return floor_8(point.toPoint());
+}
+
 }
