@@ -124,7 +124,7 @@ private:
 class AddingEntitiesState : public MapView::State {
 
 public:
-  AddingEntitiesState(MapView& view, EntityModels&& entities);
+  AddingEntitiesState(MapView& view, EntityModels&& entities, bool guess_layer);
   void start() override;
   void stop() override;
   void mouse_pressed(const QMouseEvent& event) override;
@@ -139,6 +139,7 @@ private:
   EntityModels entities;                    /**< Entities to be added. */
   std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
   QPoint last_point;                        /**< Point where the mouse was last time it moved, in scene coordinates. */
+  bool guess_layer;                         /**< Whether the layer should be guessed or kept unchanged. */
 };
 
 }  // Anonymous namespace.
@@ -355,10 +356,15 @@ void MapView::start_state_resizing_entities() {
  * @brief Moves to the state of adding new entities.
  * @param entities The entities to be added.
  * They must not belong to the map yet.
+ * @param guess_layer Whether a layer should be guessed from the preferred
+ * layer of entities and the mouse position.
  */
-void MapView::start_state_adding_entities(EntityModels&& entities) {
+void MapView::start_state_adding_entities(EntityModels&& entities, bool guess_layer) {
 
-  set_state(std::unique_ptr<State>(new AddingEntitiesState(*this, std::move(entities))));
+  set_state(std::unique_ptr<State>(new AddingEntitiesState(
+       *this,
+       std::move(entities),
+       guess_layer)));
 }
 
 /**
@@ -381,20 +387,38 @@ void MapView::start_adding_entities_from_tileset_selection() {
   // Arrange the relative position of tiles as in the tileset.
   EntityModels tiles;
   const QList<int>& pattern_indexes = tileset->get_selected_indexes();
+  if (pattern_indexes.isEmpty()) {
+    return;
+  }
+
+  bool has_common_preferred_layer = true;
+  Layer common_preferred_layer = tileset->get_pattern_default_layer(pattern_indexes.first());
   for (int pattern_index : pattern_indexes) {
     QString pattern_id = tileset->index_to_id(pattern_index);
     if (pattern_id.isEmpty()) {
       continue;
     }
+
+    // Create a tile from the pattern.
     QRect pattern_frame = tileset->get_pattern_frame(pattern_index);
     EntityModelPtr tile = EntityModel::create(*map, EntityType::TILE);
     tile->set_field("pattern", pattern_id);
     tile->set_size(pattern_frame.size());
     tile->set_xy(pattern_frame.topLeft());
+    Layer preferred_layer = tileset->get_pattern_default_layer(pattern_index);
+    tile->set_layer(preferred_layer);
     tiles.emplace_back(std::move(tile));
+
+    // Also check if they all have the same preferred layer.
+    if (preferred_layer != common_preferred_layer) {
+      has_common_preferred_layer = false;
+    }
   }
 
-  start_state_adding_entities(std::move(tiles));
+  // Don't try to choose other layers if they are different at start.
+  bool guess_layer = has_common_preferred_layer;
+
+  start_state_adding_entities(std::move(tiles), guess_layer);
 }
 
 /**
@@ -734,7 +758,8 @@ void MapView::paste() {
     return;
   }
 
-  start_state_adding_entities(std::move(entities));
+  const bool guess_layer = false;  // Paste entities on the same layer.
+  start_state_adding_entities(std::move(entities), guess_layer);
 }
 
 /**
@@ -1641,7 +1666,8 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
       const EntityModelPtr& clone = *clones.begin();
       clone->set_size(clone->get_base_size());
     }
-    view.start_state_adding_entities(std::move(clones));
+    const bool guess_layer = false;
+    view.start_state_adding_entities(std::move(clones), guess_layer);
   }
   else {
     get_view().start_state_doing_nothing();
@@ -1767,11 +1793,16 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
  * @brief Constructor.
  * @param view The map view to manage.
  * @param entities The entities to be added to the map.
+ * @param guess_layer Whether a layer should be guessed from the preferred
+ * layer of entities and the mouse position.
+ * If @c false, they will be added on their layer indicated by
+ * EntityModel::get_layer().
  */
-AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities) :
+AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities, bool guess_layer) :
   MapView::State(view),
   entities(std::move(entities)),
-  entity_items() {
+  entity_items(),
+  guess_layer(guess_layer) {
 
   for (const EntityModelPtr& entity : this->entities) {
     EntityItem* item = new EntityItem(*entity);
@@ -1977,6 +2008,10 @@ void AddingEntitiesState::tileset_selection_changed() {
  * @return The layer.
  */
 Layer AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
+
+  if (!guess_layer) {
+    return entity.get_layer();
+  }
 
   Layer layer_under = get_scene().get_layer_in_rectangle(
         entity.get_bounding_box()

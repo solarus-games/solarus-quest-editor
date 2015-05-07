@@ -1627,7 +1627,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     // Create a new entity of this type.
     EntityModels entities;
     entities.emplace_back(EntityModel::create(*map, type));
-    ui.map_view->start_state_adding_entities(std::move(entities));
+    const bool guess_layer = true;
+    ui.map_view->start_state_adding_entities(std::move(entities), guess_layer);
 
     // Unselect patterns in the tileset.
     TilesetModel* tileset = map->get_tileset_model();
