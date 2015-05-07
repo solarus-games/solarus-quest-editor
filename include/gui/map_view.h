@@ -92,7 +92,7 @@ public:
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void start_state_moving_entities(const QPoint& initial_point);
   void start_state_resizing_entities();
-  void start_state_adding_entities(EntityModels&& entities);
+  void start_state_adding_entities(EntityModels&& entities, bool use_layer_under_mouse);
   void start_adding_entities_from_tileset_selection();
 
   bool are_entities_resizable(const EntityIndexes& indexes) const;
