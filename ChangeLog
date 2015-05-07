@@ -9,6 +9,7 @@ Bugfix release for the 1.4 branch.
 * Fix the view not updated when resizing a map (#25).
 * Fix maps having having an initial size of zero.
 * Fix missing translation of special destination names.
+* Sprite editor: fix adding a new direction with the plus button (#27).
 
 ________________________________________
 
