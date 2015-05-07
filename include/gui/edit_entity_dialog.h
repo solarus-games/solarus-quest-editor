@@ -107,6 +107,7 @@ private:
   QMap<QString, QRadioButton*> get_opening_method_radio_buttons();
   QString get_selected_opening_method();
 
+  QValidator* create_name_validator();
   QValidator* create_dialog_id_validator();
   QValidator* create_savegame_variable_validator();
 
