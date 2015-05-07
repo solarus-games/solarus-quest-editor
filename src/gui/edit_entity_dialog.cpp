@@ -107,11 +107,24 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 }
 
 /**
+ * @brief Creates a validator for entity name fields.
+ * @return A validator that checks entity name inputs.
+ */
+QValidator* EditEntityDialog::create_name_validator() {
+
+  // Accept everthing except quotes, double quotes, backslashes and whitespaces.
+  QRegularExpression regexp("^[^\"'\\\\ \t]*$");
+  return new QRegularExpressionValidator(regexp);
+}
+
+/**
  * @brief Creates a validator for dialog id fields.
  * @return A validator that checks dialog id inputs.
  */
 QValidator* EditEntityDialog::create_dialog_id_validator() {
 
+  // Empty string or only ascii letters, digits, underscores and dots.
+  // The first character must be a letter.
   QRegularExpression regexp("^$|^[a-zA-Z_][a-zA-Z0-9_\\.]*$");
   return new QRegularExpressionValidator(regexp);
 }
@@ -122,6 +135,8 @@ QValidator* EditEntityDialog::create_dialog_id_validator() {
  */
 QValidator* EditEntityDialog::create_savegame_variable_validator() {
 
+  // Empty string or only ascii letters, digits and underscores.
+  // The first character must be a letter.
   QRegularExpression regexp("^$|^[a-zA-Z_][a-zA-Z0-9_]*$");
   return new QRegularExpressionValidator(regexp);
 }
@@ -861,6 +876,7 @@ void EditEntityDialog::initialize_name() {
   }
 
   ui.name_field->setText(entity_before.get_name());
+  ui.name_field->setValidator(create_name_validator());
 }
 
 /**
