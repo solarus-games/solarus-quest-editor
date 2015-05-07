@@ -28,6 +28,9 @@ Solarus::Point to_solarus_point(const QPoint& qt_point);
 QPoint round_8(const QPoint& point);
 QPoint round_8(const QPointF& point);
 
+QPoint floor_8(const QPoint& point);
+QPoint floor_8(const QPointF& point);
+
 }
 
 #endif

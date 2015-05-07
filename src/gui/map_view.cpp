@@ -1535,7 +1535,7 @@ void DrawingRectangleState::mouse_released(const QMouseEvent& event) {
  */
 MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_point) :
   MapView::State(view),
-  initial_point(Point::round_8(view.mapToScene(initial_point))),
+  initial_point(Point::floor_8(view.mapToScene(initial_point))),
   last_point(this->initial_point),
   first_move_done(false) {
 
@@ -1548,7 +1548,7 @@ void MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
-  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
+  QPoint current_point = Point::floor_8(view.mapToScene(event.pos()));
   if (current_point == last_point) {
     // No change after rounding.
     return;
