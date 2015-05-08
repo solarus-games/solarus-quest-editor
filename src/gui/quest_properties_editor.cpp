@@ -244,7 +244,7 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
   set_title(tr("Quest properties"));
   set_icon(QIcon(":/images/icon_solarus.png"));
   set_close_confirm_message(
-        tr("Quest properties has been modified. Save changes?"));
+        tr("Quest properties have been modified. Save changes?"));
 
   get_undo_stack().setClean();
 
