@@ -1118,8 +1118,10 @@ void Quest::create_map_data_file(const QString& map_id) {
 
   // Set initial values.
   MapModel map(*this, map_id);
-  QString tileset_id = get_resources().get_elements(ResourceType::TILESET).first();
-  map.set_tileset_id(tileset_id);
+  const QStringList& tileset_ids = get_resources().get_elements(ResourceType::TILESET);
+  if (!tileset_ids.isEmpty()) {
+    map.set_tileset_id(tileset_ids.first());
+  }
   map.set_size(get_properties().get_normal_quest_size());
   map.save();
 }
