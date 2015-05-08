@@ -30,7 +30,8 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
   QGraphicsScene(parent),
   map(map),
   entity_items(),
-  layer_parent_items() {
+  layer_parent_items(),
+  view_settings(nullptr) {
 
   build();
 
@@ -149,6 +150,10 @@ void MapScene::create_entity_item(EntityModel& entity) {
   Q_ASSERT(layer == entity.get_layer());
 
   entity_items[layer].insert(i, item);
+
+  if (view_settings != nullptr) {
+    item->update_visibility(*view_settings);
+  }
 }
 
 /**
@@ -187,6 +192,7 @@ const MapScene::EntityItems& MapScene::get_entity_items(Layer layer) {
  */
 void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_settings) {
 
+  this->view_settings = &view_settings;
   for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
   }
@@ -199,6 +205,7 @@ void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_set
  */
 void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings& view_settings) {
 
+  this->view_settings = &view_settings;
   for (int i = 0; i < Layer::LAYER_NB; ++i) {
     Layer layer = static_cast<Layer>(i);
     for (EntityItem* item : get_entity_items(layer)) {

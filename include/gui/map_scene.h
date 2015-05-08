@@ -19,6 +19,7 @@
 
 #include "layer_traits.h"
 #include "map_model.h"
+#include "view_settings.h"
 #include <QGraphicsScene>
 
 class EntityItem;
@@ -78,13 +79,14 @@ private:
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityItems& get_entity_items(Layer layer);
 
-  MapModel& map;              /**< The map represented. */
+  MapModel& map;                            /**< The map represented. */
   std::array<EntityItems, Layer::LAYER_NB>
-      entity_items;           /**< Entities items on each layer,
-                               * ordered as in the map. */
+      entity_items;                         /**< Entities items on each layer,
+                                             * ordered as in the map. */
   std::array<QGraphicsItem*, Layer::LAYER_NB>
-      layer_parent_items;     /**< Artificial parent item of everything on a layer. */
+      layer_parent_items;                   /**< Artificial parent item of everything on a layer. */
 
+  QPointer<const ViewSettings> view_settings;     /**< Last view settings applied. */
 };
 
 #endif

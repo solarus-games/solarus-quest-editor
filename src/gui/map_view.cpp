@@ -347,6 +347,7 @@ void MapView::start_state_resizing_entities() {
   if (!are_entities_resizable(selection)) {
     // The selection is empty or not resizable.
     start_state_doing_nothing();
+    return;
   }
 
   set_state(std::unique_ptr<State>(new ResizingEntitiesState(*this, selection)));

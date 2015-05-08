@@ -30,9 +30,9 @@ Bugfix release for the 1.4 branch.
 * Fix the choice of the layer when copy-pasting entities.
 * Fix a precision issue when adding or moving entities.
 * Fix the entity dialog allowing special characters in the entity name.
-* Fix missing translation of special destination names.
 * Fix closing a file even if unsaved when renaming it.
 * Fix typos.
+* Fix entities remaining visible when adding them on a hidden layer.
 * Sprite editor: fix adding a new direction with the plus button (#27).
 
 ________________________________________
