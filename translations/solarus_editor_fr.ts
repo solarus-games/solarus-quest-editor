@@ -758,77 +758,77 @@
         <translation type="vanished">Variable de sauvegarde</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="273"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="288"/>
         <source>Initial state</source>
         <translation>État initial</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="273"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="288"/>
         <source>Enabled at start</source>
         <translation>Actif au démarrage</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="274"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="289"/>
         <source>Default</source>
         <translation>Défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="274"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="289"/>
         <source>Set as the default destination</source>
         <translation>Destination par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="275"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="290"/>
         <source>Cutting the object</source>
         <translation>Couper l&apos;objet</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="275"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="290"/>
         <source>Can be cut</source>
         <translation>Peut être coupé</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="276"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="291"/>
         <source>Exploding</source>
         <translation>Explosion</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="276"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="291"/>
         <source>Can explode</source>
         <translation>Peut exploser</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="277"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="292"/>
         <source>Regeneration</source>
         <translation>Régénération</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="277"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="292"/>
         <source>Can regenerate</source>
         <translation>Peut se régénérer</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="278"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="293"/>
         <source>Interactions</source>
         <translation>Interactions</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="278"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="293"/>
         <source>Can be pushed</source>
         <translation>Peut être poussé</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="279"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="294"/>
         <source>Can be pulled</source>
         <translation>Peut être tiré</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="280"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="295"/>
         <source>Activation</source>
         <translation>Activation</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="280"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="295"/>
         <source>Requires a block to be activated</source>
         <translation>Nécessite un bloc pour être activé</translation>
     </message>
@@ -841,196 +841,196 @@
         <translation type="vanished">Désactiver si le héros s&apos;éloigne</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="281"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="296"/>
         <source>Leaving the switch</source>
         <translation>Quitter l&apos;interrupteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="281"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="296"/>
         <source>Deactivate when leaving</source>
         <translation>Désactiver si le héros s&apos;éloigne</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="282"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="297"/>
         <source>Hero</source>
         <translation>Héros</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="282"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="297"/>
         <source>Obstacle for the hero</source>
         <translation>Obstacle pour le héros</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="283"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="298"/>
         <source>Enemies</source>
         <translation>Ennemis</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="283"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="298"/>
         <source>Obstacle for enemies</source>
         <translation>Obstacle pour les ennemis</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="284"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="299"/>
         <source>NPCs</source>
         <translation>PNJ</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="284"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="299"/>
         <source>Obstacle for NPCs</source>
         <translation>Obstacle pour les PNJ</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="285"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="300"/>
         <source>Blocks</source>
         <translation>Blocs</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="285"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="300"/>
         <source>Obstacle for blocks</source>
         <translation>Obstacle pour les blocs</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="286"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="301"/>
         <source>Projectiles</source>
         <translation>Projectiles</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="286"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="301"/>
         <source>Obstacle for projectiles</source>
         <translation>Obstacle pour les projectiles</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="287"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="302"/>
         <source>Movements</source>
         <translation>Mouvements</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="287"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="302"/>
         <source>Allow to move</source>
         <translation>Autoriser les mouvements</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="288"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="303"/>
         <source>Sword</source>
         <translation>Épée</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="288"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="303"/>
         <source>Allow to use the sword</source>
         <translation>Autoriser l&apos;épée</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="289"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="304"/>
         <source>Items</source>
         <translation>Items</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="289"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="304"/>
         <source>Allow to use equipment items</source>
         <translation>Autoriser les items d&apos;équipement</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="334"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="349"/>
         <source>Price</source>
         <translation>Prix</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="335"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="350"/>
         <source>Jump length</source>
         <translation>Distance de saut</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="336"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="351"/>
         <source>Speed</source>
         <translation>Vitesse</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="385"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="400"/>
         <source>Show a dialog if fails to open</source>
         <translation>Dialogue si l&apos;ouverture échoue</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="386"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="401"/>
         <source>Description dialog id</source>
         <translation>Dialogue de description</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="603"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="618"/>
         <source>(Default destination)</source>
         <translation>(Destination par défaut)</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="604"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="619"/>
         <source>(Same point)</source>
         <translation>(Même point)</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="605"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="620"/>
         <source>(Side of the map)</source>
         <translation>(Bord de la map)</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="669"/>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="677"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="684"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="692"/>
         <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="670"/>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="679"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="685"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="694"/>
         <source>Up</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="671"/>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="681"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="686"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="696"/>
         <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="672"/>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="683"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="687"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="698"/>
         <source>Down</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="678"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="693"/>
         <source>Right-up</source>
         <translation>Haut-droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="680"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="695"/>
         <source>Left-up</source>
         <translation>Haut-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="682"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="697"/>
         <source>Left-down</source>
         <translation>Bas-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="684"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="699"/>
         <source>Right-down</source>
         <translation>Bas-droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="725"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="740"/>
         <source>(Default)</source>
         <translation>(Défaut)</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="798"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="813"/>
         <source>Cannot move</source>
         <translation>Aucun déplacement</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="799"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="814"/>
         <source>1 move only</source>
         <translation>1 déplacement uniquement</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="800"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="815"/>
         <source>Unlimited</source>
         <translation>Illimité</translation>
     </message>
@@ -1047,32 +1047,32 @@
         <translation type="vanished">Déplacement illimités</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1050"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1066"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1051"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1067"/>
         <source>Miniboss</source>
         <translation>Mini-boss</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1052"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1068"/>
         <source>Boss</source>
         <translation>Boss</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1084"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1100"/>
         <source>Save the enemy state</source>
         <translation>Sauver l&apos;état de l&apos;ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1085"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1101"/>
         <source>Save the door state</source>
         <translation>Sauver l&apos;état de la porte</translation>
     </message>
     <message>
-        <location filename="../src/gui/edit_entity_dialog.cpp" line="1167"/>
+        <location filename="../src/gui/edit_entity_dialog.cpp" line="1184"/>
         <source>Play a sound when destroyed</source>
         <translation>Son à la destruction</translation>
     </message>
@@ -2069,7 +2069,7 @@ Votre quête a été conservée inchangée au format %1.</translation>
 <context>
     <name>MapView</name>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="425"/>
+        <location filename="../src/gui/map_view.cpp" line="450"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
@@ -2078,107 +2078,107 @@ Votre quête a été conservée inchangée au format %1.</translation>
         <translation type="vanished">Entrée</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="433"/>
+        <location filename="../src/gui/map_view.cpp" line="458"/>
         <source>Resize</source>
         <translation>Redimensionner</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="434"/>
+        <location filename="../src/gui/map_view.cpp" line="459"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="442"/>
-        <location filename="../src/gui/map_view.cpp" line="523"/>
+        <location filename="../src/gui/map_view.cpp" line="467"/>
+        <location filename="../src/gui/map_view.cpp" line="548"/>
         <source>Convert to dynamic tile</source>
         <translation>Convertir en tile dynamique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="456"/>
+        <location filename="../src/gui/map_view.cpp" line="481"/>
         <source>Bring to front</source>
         <translation>Mettre au premier plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="457"/>
+        <location filename="../src/gui/map_view.cpp" line="482"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="465"/>
+        <location filename="../src/gui/map_view.cpp" line="490"/>
         <source>Bring to back</source>
         <translation>Mettre en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="466"/>
+        <location filename="../src/gui/map_view.cpp" line="491"/>
         <source>B</source>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="474"/>
+        <location filename="../src/gui/map_view.cpp" line="499"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="523"/>
+        <location filename="../src/gui/map_view.cpp" line="548"/>
         <source>Convert to dynamic tiles</source>
         <translation>Convertir en tiles dynamiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="526"/>
+        <location filename="../src/gui/map_view.cpp" line="551"/>
         <source>Convert to static tile</source>
         <translation>Convertir en tile statique</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="526"/>
+        <location filename="../src/gui/map_view.cpp" line="551"/>
         <source>Convert to static tiles</source>
         <translation>Convertir en tiles statiques</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="579"/>
+        <location filename="../src/gui/map_view.cpp" line="604"/>
         <source>Direction</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="598"/>
-        <location filename="../src/gui/map_view.cpp" line="606"/>
+        <location filename="../src/gui/map_view.cpp" line="623"/>
+        <location filename="../src/gui/map_view.cpp" line="631"/>
         <source>Right</source>
         <translation>Droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="599"/>
-        <location filename="../src/gui/map_view.cpp" line="608"/>
+        <location filename="../src/gui/map_view.cpp" line="624"/>
+        <location filename="../src/gui/map_view.cpp" line="633"/>
         <source>Up</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="600"/>
-        <location filename="../src/gui/map_view.cpp" line="610"/>
+        <location filename="../src/gui/map_view.cpp" line="625"/>
+        <location filename="../src/gui/map_view.cpp" line="635"/>
         <source>Left</source>
         <translation>Gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="601"/>
-        <location filename="../src/gui/map_view.cpp" line="612"/>
+        <location filename="../src/gui/map_view.cpp" line="626"/>
+        <location filename="../src/gui/map_view.cpp" line="637"/>
         <source>Down</source>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="607"/>
+        <location filename="../src/gui/map_view.cpp" line="632"/>
         <source>Right-up</source>
         <translation>Haut-droite</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="609"/>
+        <location filename="../src/gui/map_view.cpp" line="634"/>
         <source>Left-up</source>
         <translation>Haut-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="611"/>
+        <location filename="../src/gui/map_view.cpp" line="636"/>
         <source>Left-down</source>
         <translation>Bas-gauche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_view.cpp" line="613"/>
+        <location filename="../src/gui/map_view.cpp" line="638"/>
         <source>Right-down</source>
         <translation>Bas-droite</translation>
     </message>
@@ -3064,8 +3064,12 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
     <message>
         <location filename="../src/gui/quest_properties_editor.cpp" line="247"/>
+        <source>Quest properties have been modified. Save changes?</source>
+        <translation>Les propriétés de la quête ont été modifiées. Enregistrer les changements ?</translation>
+    </message>
+    <message>
         <source>Quest properties has been modified. Save changes?</source>
-        <translation>Les propriétés de la quête ont été modifié. Enregistrer les changements ?</translation>
+        <translation type="vanished">Les propriétés de la quête ont été modifié. Enregistrer les changements ?</translation>
     </message>
 </context>
 <context>
