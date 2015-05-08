@@ -446,7 +446,7 @@ void EditorTabs::save_file_requested(int index) {
 /**
  * @brief Slot called when the user attempts to open a file.
  * @param quest The quest that holds this file.
- * @param file_path Path of the file to open.
+ * @param path Path of the file to open.
  */
 void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
 
@@ -504,7 +504,9 @@ void EditorTabs::close_file_requested(int index) {
  * @param old_path Old path of the file.
  * @param new_path New path after renaming.
  */
-void EditorTabs::file_renamed(const QString& old_path, const QString& /* new_path */) {
+void EditorTabs::file_renamed(const QString& old_path, const QString& new_path) {
+
+  Q_UNUSED(new_path);
 
   if (get_editor() == nullptr) {
     return;

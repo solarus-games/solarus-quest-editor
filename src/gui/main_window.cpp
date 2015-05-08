@@ -31,12 +31,13 @@
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QToolButton>
 #include <QUndoGroup>
-#include <QDesktopServices>
 
 using EntityType = Solarus::EntityType;
 
@@ -133,8 +134,10 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_find->setShortcut(QKeySequence::Find);
 
   // Connect children.
-  connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, const QString&)),
-          ui.tab_widget, SLOT(open_file_requested(Quest&, const QString&)));
+  connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, QString)),
+          ui.tab_widget, SLOT(open_file_requested(Quest&, QString)));
+  connect(ui.quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
+          this, SLOT(rename_file_requested(Quest&, QString)));
 
   connect(ui.tab_widget, SIGNAL(currentChanged(int)),
           this, SLOT(current_editor_changed(int)));
@@ -961,4 +964,90 @@ void MainWindow::closeEvent(QCloseEvent* event) {
 bool MainWindow::confirm_close() {
 
   return ui.tab_widget->confirm_close();
+}
+
+/**
+ * @brief Slot called when the user wants to rename a file.
+ *
+ * The new file name will be prompted to the user.
+ * It may or may not be a resource element file.
+ *
+ * @param quest The quest that holds this file.
+ * @param path Path of the file to rename.
+ */
+void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
+
+  if (path.isEmpty()) {
+    return;
+  }
+
+  if (path == quest.get_data_path()) {
+    // We don't want to rename the data directory.
+    return;
+  }
+
+  int editor_index = ui.tab_widget->find_editor(path);
+  if (editor_index != -1) {
+    // Don't rename a file that has unsaved changes.
+    const Editor* editor = ui.tab_widget->get_editor(editor_index);
+    if (editor != nullptr && editor->has_unsaved_changes()) {
+      QMessageBox::warning(this,
+                           tr("File modified"),
+                           tr("This file is open and has unsaved changes.\nPlease save it or close it before renaming."));
+      ui.tab_widget->show_editor(path);
+      return;
+    }
+  }
+
+  ResourceType resource_type;
+  if (quest.is_resource_path(path, resource_type)) {
+    // Don't rename built-in resource directories.
+    return;
+  }
+
+  try {
+    QuestResources& resources = quest.get_resources();
+    QString element_id;
+    if (quest.is_resource_element(path, resource_type, element_id)) {
+      // Change the filename (and thereforce the id) of a resource element.
+
+      QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
+      bool ok = false;
+      QString new_id = QInputDialog::getText(
+            this,
+            tr("Rename resource"),
+            tr("New id for %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
+            QLineEdit::Normal,
+            element_id,
+            &ok);
+
+      if (ok && new_id != element_id) {
+        Quest::check_valid_file_name(new_id);
+        quest.rename_resource_element(resource_type, element_id, new_id);
+      }
+    }
+    else {
+      // Rename a regular file or directory.
+      bool ok = false;
+      QString file_name = QFileInfo(path).fileName();
+      QString new_file_name = QInputDialog::getText(
+            this,
+            tr("Rename file"),
+            tr("New name for file '%1':").arg(file_name),
+            QLineEdit::Normal,
+            file_name,
+            &ok);
+
+      if (ok && new_file_name != file_name) {
+
+        Quest::check_valid_file_name(file_name);
+        QString new_path = QFileInfo(path).path() + '/' + new_file_name;
+        quest.rename_file(path, new_path);
+      }
+    }
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
+
 }

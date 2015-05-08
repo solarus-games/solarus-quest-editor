@@ -48,9 +48,11 @@ public:
   QString get_file_name_without_extension() const;
   QString get_title() const;
   QIcon get_icon() const;
+  const QUndoStack& get_undo_stack() const;
   QUndoStack& get_undo_stack();
   const QMap<QString, QAction*>& get_common_actions() const;
   void set_common_actions(const QMap<QString, QAction*>& common_actions);
+  bool has_unsaved_changes() const;
   bool confirm_close();
 
   bool is_find_supported() const;
