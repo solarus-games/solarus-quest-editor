@@ -1818,12 +1818,12 @@ void AddingEntitiesState::start() {
 
   MapView& view = get_view();
   QPoint mouse_position = view.mapFromGlobal(QCursor::pos());
-  last_point = Point::round_8(view.mapToScene(mouse_position));
+  last_point = Point::floor_8(view.mapToScene(mouse_position));
 
   // Determine the center of all entities in their current position.
   QPoint center = get_entities_center();
 
-  // Adds the graphic item of each entity.
+  // Add the graphic item of each entity.
   for (EntityItem* item : entity_items) {
     get_scene().addItem(item);
     EntityModel& entity = item->get_entity();
@@ -1965,7 +1965,7 @@ void AddingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
-  QPoint current_point = Point::round_8(view.mapToScene(event.pos()));
+  QPoint current_point = Point::floor_8(view.mapToScene(event.pos()));
   if (current_point == last_point) {
     // No change after rounding.
     return;
