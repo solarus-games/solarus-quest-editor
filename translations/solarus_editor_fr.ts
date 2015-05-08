@@ -1393,13 +1393,8 @@
         <translation>Site web</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="465"/>
-        <location filename="../src/gui/main_window.cpp" line="495"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="450"/>
         <location filename="../src/gui/main_window.cpp" line="480"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
@@ -1417,162 +1412,93 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="362"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="347"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="92"/>
-        <location filename="../src/gui/main_window.cpp" line="205"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="94"/>
         <location filename="../src/gui/main_window.cpp" line="190"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="125"/>
-        <location filename="../src/gui/main_window.cpp" line="236"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="110"/>
         <location filename="../src/gui/main_window.cpp" line="221"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Show entity types</source>
         <translation>Afficher les types d&apos;entités</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="207"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="192"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="208"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="193"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="209"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="194"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="210"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="195"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="211"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="196"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="263"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="248"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Show all</source>
         <translation>Afficher tout</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="273"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="258"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Hide all</source>
         <translation>Cacher tout</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="381"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="366"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="382"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="367"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="434"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="419"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="451"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="436"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="912"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="894"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="925"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="907"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="836"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="995"/>
         <source>File modified</source>
         <translation>Fichier en cours de modification</translation>
@@ -1605,25 +1531,16 @@ Please save it or close it before renaming.</source>
     </message>
     <message>
         <location filename="../src/gui/main_window.cpp" line="818"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Invalid layer: %1</source>
         <translation>Couche invalide : %1</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="895"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="877"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <location filename="../src/gui/main_window.cpp" line="942"/>
-=======
         <location filename="../src/gui/main_window.cpp" line="924"/>
->>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
