@@ -1090,7 +1090,7 @@
         <translation>Le fichier &apos;%1&apos; a été modifé. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/editor.cpp" line="384"/>
+        <location filename="../src/gui/editor.cpp" line="402"/>
         <source>Save changes</source>
         <translation>Enregistrer les changements</translation>
     </message>
@@ -1252,7 +1252,7 @@
     <message>
         <location filename="../src/gui/main_window.ui" line="168"/>
         <location filename="../build/ui_main_window.h" line="244"/>
-        <location filename="../src/gui/main_window.cpp" line="915"/>
+        <location filename="../src/gui/main_window.cpp" line="897"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
@@ -1393,8 +1393,13 @@
         <translation>Site web</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="465"/>
         <location filename="../src/gui/main_window.cpp" line="495"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="450"/>
+        <location filename="../src/gui/main_window.cpp" line="480"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
@@ -1412,104 +1417,213 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="362"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="347"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="92"/>
         <location filename="../src/gui/main_window.cpp" line="205"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="94"/>
+        <location filename="../src/gui/main_window.cpp" line="190"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="125"/>
         <location filename="../src/gui/main_window.cpp" line="236"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="110"/>
+        <location filename="../src/gui/main_window.cpp" line="221"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Show entity types</source>
         <translation>Afficher les types d&apos;entités</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="207"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="192"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="208"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="193"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="209"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="194"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="210"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="195"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="211"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="196"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="263"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="248"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Show all</source>
         <translation>Afficher tout</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="273"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="258"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Hide all</source>
         <translation>Cacher tout</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="381"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="366"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="382"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="367"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="434"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="419"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="451"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="436"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="912"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="894"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="925"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="907"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="836"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="995"/>
+        <source>File modified</source>
+        <translation>Fichier en cours de modification</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="996"/>
+        <source>This file is open and has unsaved changes.
+Please save it or close it before renaming.</source>
+        <translation type="unfinished">Ce fichier est ouvert et a été modifié. Veuillez le sauvegarder ou le fermer avant de le renommer.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="1018"/>
+        <source>Rename resource</source>
+        <translation>Renommer la ressource</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="1019"/>
+        <source>New id for %1 &apos;%2&apos;:</source>
+        <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="1035"/>
+        <source>Rename file</source>
+        <translation>Renommer le fichier</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="1036"/>
+        <source>New name for file &apos;%1&apos;:</source>
+        <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="818"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Invalid layer: %1</source>
         <translation>Couche invalide : %1</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="895"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="877"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
+<<<<<<< HEAD
         <location filename="../src/gui/main_window.cpp" line="942"/>
+=======
+        <location filename="../src/gui/main_window.cpp" line="924"/>
+>>>>>>> ffe3cf0... Fix closing a file even if unsaved when renaming it
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -2790,51 +2904,51 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1158"/>
+        <location filename="../src/quest.cpp" line="1160"/>
         <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
         <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1164"/>
-        <location filename="../src/quest.cpp" line="1201"/>
+        <location filename="../src/quest.cpp" line="1166"/>
+        <location filename="../src/quest.cpp" line="1203"/>
         <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1308"/>
+        <location filename="../src/quest.cpp" line="1310"/>
         <source>Resource &apos;%1&apos; already exists</source>
         <translation>La ressource &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1324"/>
+        <location filename="../src/quest.cpp" line="1326"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1435"/>
+        <location filename="../src/quest.cpp" line="1437"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1469"/>
-        <location filename="../src/quest.cpp" line="1500"/>
+        <location filename="../src/quest.cpp" line="1471"/>
+        <location filename="../src/quest.cpp" line="1502"/>
         <source>Cannot delete folder &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1370"/>
+        <location filename="../src/quest.cpp" line="1372"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1377"/>
+        <location filename="../src/quest.cpp" line="1379"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1382"/>
-        <location filename="../src/quest.cpp" line="1421"/>
-        <location filename="../src/quest.cpp" line="1563"/>
+        <location filename="../src/quest.cpp" line="1384"/>
+        <location filename="../src/quest.cpp" line="1423"/>
+        <location filename="../src/quest.cpp" line="1565"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
@@ -3310,33 +3424,33 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>QuestTreeView</name>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="252"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="255"/>
         <source>New folder...</source>
         <translation>Nouveau dossier...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="260"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="263"/>
         <source>New script...</source>
         <translation>Nouveau script...</translation>
     </message>
     <message>
         <location filename="../src/gui/quest_tree_view.cpp" line="42"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="282"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="285"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="303"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="306"/>
         <source>Open Script</source>
         <translation>Ouvrir le Script</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="313"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="316"/>
         <source>Open Dialogs</source>
         <translation>Ouvrir les Dialogues</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="316"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="319"/>
         <source>Open Strings</source>
         <translation>Ouvrir les Textes</translation>
     </message>
@@ -3346,7 +3460,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Renommer...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="380"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="383"/>
         <source>Change description...</source>
         <translation>Changer la description...</translation>
     </message>
@@ -3365,89 +3479,85 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="223"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="226"/>
         <source>Add to quest as %1...</source>
         <translation>Ajouter à la quête en tant que %1...</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="346"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="349"/>
         <source>Open Properties</source>
         <translation>Ouvrir les propriétés</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="506"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="509"/>
         <source>New folder</source>
         <translation>Nouveau dossier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="507"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="510"/>
         <source>Folder name:</source>
         <translation>Nom du dossier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="545"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="548"/>
         <source>New Lua script</source>
         <translation>Nouveau script Lua</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="546"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="549"/>
         <source>File name:</source>
         <translation>Nom de fichier :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="660"/>
         <source>Rename resource</source>
-        <translation>Renommer la ressource</translation>
+        <translation type="vanished">Renommer la ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="661"/>
         <source>New id for %1 &apos;%2&apos;:</source>
-        <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
+        <translation type="vanished">Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="680"/>
         <source>Rename file</source>
-        <translation>Renommer le fichier</translation>
+        <translation type="vanished">Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="681"/>
         <source>New name for file &apos;%1&apos;:</source>
-        <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
+        <translation type="vanished">Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="730"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="679"/>
         <source>Change description</source>
         <translation>Changer la description</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="731"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="680"/>
         <source>New description for %1 &apos;%2&apos;:</source>
         <translation>Nouvelle description pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="786"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="812"/>
-        <location filename="../src/gui/quest_tree_view.cpp" line="826"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="735"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="761"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="775"/>
         <source>Delete confirmation</source>
         <translation>Confirmer la suppression</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="787"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="736"/>
         <source>Do you really want to delete %1 &apos;%2&apos;?</source>
         <translation>Voulez-vous vraiment supprimer %1 &apos;%2&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="806"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="755"/>
         <source>Folder is not empty</source>
         <translation>Le dossier n&apos;est pas vide</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="813"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="762"/>
         <source>Do you really want to delete folder &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le dossier &apos;%1&apos; ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/quest_tree_view.cpp" line="827"/>
+        <location filename="../src/gui/quest_tree_view.cpp" line="776"/>
         <source>Do you really want to delete file &apos;%1&apos;?</source>
         <translation>Voulez-vous vraiment supprimer le fichier &apos;%1&apos; ?</translation>
     </message>

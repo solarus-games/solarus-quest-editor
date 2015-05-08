@@ -72,6 +72,7 @@ private slots:
   void on_action_doc_triggered();
 
   void current_editor_changed(int index);
+  void rename_file_requested(Quest& quest, const QString& path);
   void update_zoom();
   void update_grid_visibility();
   void update_grid_size();

@@ -41,6 +41,7 @@ public:
 signals:
 
   void open_file_requested(Quest& quest, const QString& path);
+  void rename_file_requested(Quest& quest, const QString& path);
 
 public slots:
 
@@ -51,6 +52,7 @@ public slots:
   void open_map_script_action_triggered();
   void open_language_strings_action_triggered();
   void rename_action_triggered();
+  void file_renamed(const QString& old_path, const QString& new_path);
   void change_description_action_triggered();
   void delete_action_triggered();
 

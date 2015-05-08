@@ -293,6 +293,15 @@ void Editor::set_close_confirm_message(const QString& message) {
  * @brief Returns the undo/redo history of editing this file.
  * @return The undo/redo history.
  */
+const QUndoStack& Editor::get_undo_stack() const {
+  return *undo_stack;
+}
+
+/**
+ * @overload
+ *
+ * Non-const version.
+ */
 QUndoStack& Editor::get_undo_stack() {
   return *undo_stack;
 }
@@ -366,6 +375,15 @@ bool Editor::try_command(QUndoCommand* command) {
  */
 
 /**
+ * @brief Returns whether the user made changes that are not saved yet.
+ * @return @c true if there are unsaved changes.
+ */
+bool Editor::has_unsaved_changes() const {
+
+  return !get_undo_stack().isClean();
+}
+
+/**
  * @brief Function called when the user wants to close the editor.
  *
  * If the file is not saved, a dialog proposes to save it.
@@ -374,7 +392,7 @@ bool Editor::try_command(QUndoCommand* command) {
  */
 bool Editor::confirm_close() {
 
-  if (get_undo_stack().isClean()) {
+  if (!has_unsaved_changes()) {
     // The file is saved.
     return true;
   }
