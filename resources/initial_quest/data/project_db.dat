@@ -47,6 +47,7 @@ sound{ id = "message_end", description = "message_end" }
 sound{ id = "monster_hurt", description = "monster_hurt" }
 sound{ id = "picked_item", description = "picked_item" }
 sound{ id = "running", description = "running" }
+sound{ id = "running_obstacle", description = "running_obstacle" }
 sound{ id = "shield", description = "shield" }
 sound{ id = "splash", description = "splash" }
 sound{ id = "stairs_down_end", description = "stairs_down_end" }
@@ -71,6 +72,6 @@ sound{ id = "wrong", description = "wrong" }
 
 language{ id = "en", description = "English" }
 
-sound{ id = "running_obstacle", description = "running_obstacle" }
 font{ id = "8_bit", description = "8_bit" }
 font{ id = "minecraftia", description = "minecraftia" }
+
