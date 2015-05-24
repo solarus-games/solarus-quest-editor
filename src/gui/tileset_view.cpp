@@ -261,9 +261,6 @@ void TilesetView::paintEvent(QPaintEvent* event) {
 
 /**
  * @brief Receives a mouse press event.
- *
- * Reimplemented to handle the selection.
- *
  * @param event The event to handle.
  */
 void TilesetView::mousePressEvent(QMouseEvent* event) {
@@ -272,13 +269,12 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     return;
   }
 
-  if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+  if (state == State::NORMAL) {
 
-    // Left or right button: possibly change the selection.
     QList<QGraphicsItem*> items_under_mouse = items(
           QRect(event->pos(), QSize(1, 1)),
           Qt::IntersectsItemBoundingRect  // Pick transparent items too.
-          );
+    );
     QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
 
     const bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
@@ -292,44 +288,27 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       // When clicking an already selected item, keep the existing selection too.
       keep_selected = true;
     }
-
     if (!keep_selected) {
       scene->clearSelection();
     }
 
     if (event->button() == Qt::LeftButton) {
-
-      if (item != nullptr) {
-
-        if (control_or_shift) {
-          // Left-clicking an item while pressing control or shift: toggle it.
-          item->setSelected(!item->isSelected());
-        }
-        else {
-          if (!item->isSelected()) {
-            // Select the item.
-            item->setSelected(true);
-          }
-          // Allow to move it.
-          if (model->get_selection_count() == 1 &&
-              !is_read_only()) {
-            start_state_moving_pattern(event->pos());
-          }
-        }
+      if (item != nullptr &&
+          item->isSelected() &&
+          model->get_selection_count() == 1 &&
+          !is_read_only()) {
+        // Clicking on an already selected item: allow to move it.
+        start_state_moving_pattern(event->pos());
       }
       else {
         // Left click outside items: trace a selection rectangle.
         start_state_drawing_rectangle(event->pos());
       }
     }
-
-    else if (event->button() == Qt::RightButton) {
-
-      if (item != nullptr) {
-        if (!item->isSelected()) {
-          // Select the right-clicked item.
-          item->setSelected(true);
-        }
+    else {
+      if (item != nullptr && !item->isSelected()) {
+        // Select the right-clicked item.
+        item->setSelected(true);
       }
     }
   }
@@ -337,9 +316,6 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
 
 /**
  * @brief Receives a mouse release event.
- *
- * Reimplemented to scroll the view when the middle mouse button is pressed.
- *
  * @param event The event to handle.
  */
 void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
@@ -348,14 +324,73 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
     return;
   }
 
+  bool do_selection = false;
   if (state == State::DRAWING_RECTANGLE) {
+    do_selection = current_area_item->rect().isEmpty();
     end_state_drawing_rectangle();
   }
   else if (state == State::MOVING_PATTERN) {
     end_state_moving_pattern();
   }
+  else if (state == State::NORMAL) {
+    do_selection = true;
+  }
 
+  if (do_selection) {
+    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+
+      // Left or right button: possibly change the selection.
+      QList<QGraphicsItem*> items_under_mouse = items(
+            QRect(event->pos(), QSize(1, 1)),
+            Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+            );
+      QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
+
+      const bool control_or_shift = (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+
+      bool keep_selected = false;
+      if (control_or_shift) {
+        // If ctrl or shift is pressed, keep the existing selection.
+        keep_selected = true;
+      }
+      else if (item != nullptr && item->isSelected()) {
+        // When clicking an already selected item, keep the existing selection too.
+        keep_selected = true;
+      }
+
+      if (!keep_selected) {
+        scene->clearSelection();
+      }
+
+      if (event->button() == Qt::LeftButton) {
+
+        if (item != nullptr) {
+
+          if (control_or_shift) {
+            // Left-clicking an item while pressing control or shift: toggle it.
+            item->setSelected(!item->isSelected());
+          }
+          else {
+            if (!item->isSelected()) {
+              // Select the item.
+              item->setSelected(true);
+            }
+          }
+        }
+      }
+    }
+  }
   QGraphicsView::mouseReleaseEvent(event);
+}
+
+/**
+ * @brief Receives a mouse double click event.
+ * @param event The event to handle.
+ */
+void TilesetView::mouseDoubleClickEvent(QMouseEvent* event) {
+
+  // Nothing special but we don't want the behavior from the parent class.
+  Q_UNUSED(event);
 }
 
 /**
