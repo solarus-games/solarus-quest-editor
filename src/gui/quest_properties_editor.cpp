@@ -255,7 +255,7 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
 
   connect(&model, SIGNAL(title_bar_changed(QString)),
           this, SLOT(update_title_bar_field()));
-  connect(ui.title_bar_field, SIGNAL(editingFinished()),
+  connect(ui.title_bar_field, SIGNAL(editing_finished()),
           this, SLOT(change_title_bar_requested()));
 
   connect(&model, SIGNAL(normal_size_changed(QSize)),
