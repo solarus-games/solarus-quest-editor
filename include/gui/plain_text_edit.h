@@ -51,6 +51,19 @@ public:
     connect(&timer, SIGNAL(timeout()), this, SLOT(on_timeout()));
   }
 
+  /**
+   * @brief Like setPlainText() method but keep the cursor position.
+   * @param text The new text.
+   */
+  inline void set_plain_text(const QString& text) {
+
+    int cursor_position = textCursor().position();
+    setPlainText(text);
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(cursor_position);
+    setTextCursor(cursor);
+  }
+
   inline void set_show_margin(bool show_margin, int margin = 0) {
 
     this->show_margin = show_margin && margin > 0;

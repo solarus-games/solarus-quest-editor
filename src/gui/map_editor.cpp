@@ -1181,7 +1181,7 @@ void MapEditor::update_world_field() {
   else {
     ui.world_check_box->setChecked(true);
     ui.world_field->setEnabled(true);
-    ui.world_field->setText(world);
+    ui.world_field->set_text(world);
   }
 }
 
