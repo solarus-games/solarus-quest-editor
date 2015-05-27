@@ -250,7 +250,7 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
 
   connect(&model, SIGNAL(write_dir_changed(QString)),
           this, SLOT(update_write_dir_field()));
-  connect(ui.write_dir_field, SIGNAL(editingFinished()),
+  connect(ui.write_dir_field, SIGNAL(editing_finished()),
           this, SLOT(change_write_dir_requested()));
 
   connect(&model, SIGNAL(title_bar_changed(QString)),
