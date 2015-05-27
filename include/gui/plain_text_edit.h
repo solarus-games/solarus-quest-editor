@@ -19,6 +19,7 @@
 
 #include <QPlainTextEdit>
 #include <QPainter>
+#include <QTimer>
 
 /**
  * @brief A plain text editor that sends editing_finished() signal when the text
@@ -33,8 +34,8 @@ public:
 
   inline PlainTextEdit(QWidget* parent = nullptr) :
     QPlainTextEdit(parent),
-    changed(false),
-    show_margin(false) {
+    show_margin(false),
+    timer(this) {
 
     setTabChangesFocus(true);
     setLineWrapMode(LineWrapMode::NoWrap);
@@ -43,7 +44,11 @@ public:
     char_format.setFontFixedPitch(true);
     setCurrentCharFormat(char_format);
 
+    timer.setInterval(750);
+    timer.setSingleShot(true);
+
     connect(this, SIGNAL(textChanged()), this, SLOT(handle_text_changed()));
+    connect(&timer, SIGNAL(timeout()), this, SLOT(on_timeout()));
   }
 
   inline void set_show_margin(bool show_margin, int margin = 0) {
@@ -59,42 +64,65 @@ signals:
 
 protected:
 
-    inline virtual void focusOutEvent(QFocusEvent* event) override {
-      if (changed) {
-        emit editing_finished();
-        changed = false;
-      }
-      QPlainTextEdit::focusOutEvent(event);
+  inline void focusInEvent(QFocusEvent* event) override {
+
+    before = toPlainText();
+    QPlainTextEdit::focusOutEvent(event);
+  }
+
+  inline void focusOutEvent(QFocusEvent* event) override {
+
+    if (timer.isActive()) {
+      timer.stop();
+    }
+    on_timeout();
+    QPlainTextEdit::focusOutEvent(event);
+  }
+
+  inline void paintEvent(QPaintEvent* event) override {
+
+    if (show_margin) {
+      const QRect rect = event->rect();
+      const QFont font = currentCharFormat().font();
+      int x = round(QFontMetrics(font).maxWidth() * margin)
+            + contentOffset().x()
+            + document()->documentMargin();
+
+      QPainter p(viewport());
+      p.setPen(QPen(isEnabled() ? "blue" : "gray"));
+      p.drawLine(x, rect.top(), x, rect.bottom());
     }
 
-    inline virtual void paintEvent(QPaintEvent* event) override {
-
-      if (show_margin) {
-        const QRect rect = event->rect();
-        const QFont font = currentCharFormat().font();
-        int x = round(QFontMetrics(font).maxWidth() * margin)
-              + contentOffset().x()
-              + document()->documentMargin();
-
-        QPainter p(viewport());
-        p.setPen(QPen(isEnabled() ? "blue" : "gray"));
-        p.drawLine(x, rect.top(), x, rect.bottom());
-      }
-
-      QPlainTextEdit::paintEvent(event);
-    }
+    QPlainTextEdit::paintEvent(event);
+  }
 
 private slots:
 
   inline void handle_text_changed() {
-    changed = true;
+
+    if (timer.isActive()) {
+      timer.stop();
+    }
+    if (toPlainText() != before) {
+      timer.start();
+    }
+  }
+
+  inline void on_timeout() {
+
+    QString text = toPlainText();
+    if (text != before) {
+      before = text;
+      emit editing_finished();
+    }
   }
 
 private:
 
-  bool changed;
-  bool show_margin;
-  int margin;
+  QString before;     /**< The value before the current editing. */
+  bool show_margin;   /**< To show a margin. */
+  int margin;         /**< The margin value. */
+  QTimer timer;       /**< The timer. */
 
 };
 
