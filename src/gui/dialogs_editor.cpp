@@ -772,9 +772,9 @@ void DialogsEditor::update_dialog_text_field() {
   QString id = model->get_selected_id();
 
   if (model->dialog_exists(id)) {
-    ui.dialog_text_field->setPlainText(model->get_dialog_text(id));
+    ui.dialog_text_field->set_plain_text(model->get_dialog_text(id));
   } else {
-    ui.dialog_text_field->setPlainText("");
+    ui.dialog_text_field->set_plain_text("");
   }
 }
 

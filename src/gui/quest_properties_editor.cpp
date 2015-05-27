@@ -324,7 +324,7 @@ void QuestPropertiesEditor::update() {
  */
 void QuestPropertiesEditor::update_write_dir_field() {
 
-  ui.write_dir_field->setText(model.get_write_dir());
+  ui.write_dir_field->set_text(model.get_write_dir());
 }
 
 /**
@@ -347,7 +347,7 @@ void QuestPropertiesEditor::change_write_dir_requested() {
  */
 void QuestPropertiesEditor::update_title_bar_field() {
 
-  ui.title_bar_field->setText(model.get_title_bar());
+  ui.title_bar_field->set_text(model.get_title_bar());
 }
 
 /**

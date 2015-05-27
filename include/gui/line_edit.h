@@ -44,6 +44,17 @@ public:
     connect(&timer, SIGNAL(timeout()), this, SLOT(on_timeout()));
   }
 
+  /**
+   * @brief Like the setText() method but keep the cursor position.
+   * @param text The new text.
+   */
+  inline void set_text(const QString& text) {
+
+    int cursor_position = cursorPosition();
+    setText(text);
+    setCursorPosition(cursor_position);
+  }
+
 signals:
 
   void editing_finished();
