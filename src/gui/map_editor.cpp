@@ -867,7 +867,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
-  connect(ui.world_field, SIGNAL(editingFinished()),
+  connect(ui.world_field, SIGNAL(editing_finished()),
           this, SLOT(change_world_requested()));
   connect(map, SIGNAL(world_changed(QString)),
           this, SLOT(update_world_field()));
