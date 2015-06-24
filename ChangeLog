@@ -6,6 +6,7 @@ ________________________________________
 Bugfix release for the 1.4 branch.
 
 * Fix crash when resizing with no entities selected (#51).
+* Fix entities remaining visible when adding them on a hidden layer.
 * Tileset editor: fix usability issues to create and select patterns (#31).
 
 ________________________________________
