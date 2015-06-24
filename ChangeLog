@@ -12,6 +12,7 @@ ________________________________________
 Bugfix release for the 1.4 branch.
 
 * Fix crash when resizing with no entities selected (#51).
+* Fix entities remaining visible when adding them on a hidden layer.
 * Tileset editor: fix usability issues to create and select patterns (#31).
 
 ________________________________________
@@ -36,7 +37,6 @@ Bugfix release for the 1.4 branch.
 * Fix maps having having an initial size of zero.
 * Fix the choice of the layer when copy-pasting entities.
 * Fix a precision issue when adding or moving entities.
-* Fix entities remaining visible when adding them on a hidden layer.
 * Fix the entity dialog allowing special characters in the entity name.
 * Fix missing translation of special destination names.
 * Fix closing a file even if unsaved when renaming it.
