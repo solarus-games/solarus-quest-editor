@@ -58,8 +58,9 @@ public slots:
 
 protected:
 
-  virtual void contextMenuEvent(QContextMenuEvent* event) override;
-  virtual void mouseDoubleClickEvent(QMouseEvent* event) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void contextMenuEvent(QContextMenuEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
 

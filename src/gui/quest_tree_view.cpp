@@ -132,6 +132,20 @@ void QuestTreeView::set_selected_path(const QString& path) {
 }
 
 /**
+ * @brief Receives a key press event.
+ * @param event The event to handle.
+ */
+void QuestTreeView::keyPressEvent(QKeyEvent* event) {
+
+  if (event->key() == Qt::Key_Enter) {
+    // Numpad enter key.
+    // For some reason, this particular key does not work as a QAction shortcut
+    // on all systems.
+    open_action_triggered();
+  }
+}
+
+/**
  * @brief Receives a double-click event.
  * @param event The event to handle.
  */
