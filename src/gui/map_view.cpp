@@ -938,6 +938,20 @@ void MapView::paintEvent(QPaintEvent* event) {
 }
 
 /**
+ * @brief Receives a key press event.
+ * @param event The event to handle.
+ */
+void MapView::keyPressEvent(QKeyEvent* event) {
+
+  if (event->key() == Qt::Key_Enter) {
+    // Numpad enter key.
+    // For some reason, this particular key does not work as a QAction shortcut
+    // on all systems.
+    edit_selected_entity();
+  }
+}
+
+/**
  * @brief Receives a mouse press event.
  * @param event The event to handle.
  */
