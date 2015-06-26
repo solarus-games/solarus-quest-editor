@@ -1968,9 +1968,24 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // Add them.
   view.add_entities_requested(addable_entities);
 
-  // Start resizing the newly added entities
-  // (until the mouse button is released).
-  view.start_state_resizing_entities();
+  // Decide what to do next: resize them, add new ones or do nothing.
+  if (view.are_entities_resizable(view.get_selected_entities())) {
+    // Start resizing the newly added entities
+    // (until the mouse button is released).
+    view.start_state_resizing_entities();
+  }
+  else {
+    if (event.button() == Qt::RightButton) {
+      // Entities were added with the right mouse button: add new ones again.
+      EntityModels clones = view.clone_selected_entities();
+      const bool guess_layer = false;
+      view.start_state_adding_entities(std::move(clones), guess_layer);
+    }
+    else {
+      // Get back to normal state.
+      view.start_state_doing_nothing();
+    }
+  }
 }
 
 /**
