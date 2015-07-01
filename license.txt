@@ -48,6 +48,10 @@ resources/images/icon_resource_music.png
 resources/images/icon_resource_sound.png
 resources/images/icon_resource_sprite.png
 resources/images/icon_resource_tileset.png
+resources/images/icon_resize_all.png
+resources/images/icon_resize_horizontal.png
+resources/images/icon_resize_none.png
+resources/images/icon_resize_vertical.png
 resources/images/icon_save.png
 resources/images/icon_script.png
 resources/images/icon_start.png
