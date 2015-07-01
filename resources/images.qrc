@@ -133,5 +133,9 @@
         <file>images/icon_dialogs_missing.png</file>
         <file>images/icon_property.png</file>
         <file>images/icon_property_missing.png</file>
+        <file>images/icon_resize_all.png</file>
+        <file>images/icon_resize_horizontal.png</file>
+        <file>images/icon_resize_none.png</file>
+        <file>images/icon_resize_vertical.png</file>
     </qresource>
 </RCC>

@@ -208,6 +208,49 @@ private:
 };
 
 /**
+ * @brief Changing the repeat mode of tile patterns.
+ */
+class SetPatternsRepeatModeCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternsRepeatModeCommand(TilesetEditor& editor, const QList<int>& indexes, TilePatternRepeatMode repeat_mode) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Repeat mode")),
+    indexes(indexes),
+    repeat_mode_after(repeat_mode) {
+
+    for (int index : indexes) {
+      repeat_modes_before << get_model().get_pattern_repeat_mode(index);
+    }
+  }
+
+  virtual void undo() override {
+
+    int i = 0;
+    for (int index : indexes) {
+      get_model().set_pattern_repeat_mode(index, repeat_modes_before[i]);
+      ++i;
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+  virtual void redo() override {
+
+    for (int index : indexes) {
+      get_model().set_pattern_repeat_mode(index, repeat_mode_after);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+private:
+
+  QList<int> indexes;
+  QList<TilePatternRepeatMode> repeat_modes_before;
+  TilePatternRepeatMode repeat_mode_after;
+
+};
+
+/**
  * @brief Changing the animation property of tile patterns.
  */
 class SetPatternsAnimationCommand : public TilesetEditorCommand {
@@ -350,6 +393,7 @@ public:
       pattern.default_layer = get_model().get_pattern_default_layer(index);
       pattern.animation = get_model().get_pattern_animation(index);
       pattern.separation = get_model().get_pattern_separation(index);
+      pattern.repeat_mode = get_model().get_pattern_repeat_mode(index);
       patterns << pattern;
     }
   }
@@ -362,6 +406,7 @@ public:
       get_model().set_pattern_default_layer(index, pattern.default_layer);
       get_model().set_pattern_animation(index, pattern.animation);
       get_model().set_pattern_separation(index, pattern.separation);
+      get_model().set_pattern_repeat_mode(index, pattern.repeat_mode);
     }
 
     QList<int> indexes;
@@ -388,6 +433,7 @@ private:
     Layer default_layer;
     PatternAnimation animation;
     PatternSeparation separation;
+    TilePatternRepeatMode repeat_mode;
   };
 
   QList<Pattern> patterns;
@@ -511,6 +557,13 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(change_selected_patterns_default_layer_requested(Layer)));
   connect(model, SIGNAL(pattern_default_layer_changed(int, Layer)),
           this, SLOT(update_default_layer_field()));
+
+  connect(ui.repeat_mode_field, SIGNAL(activated(QString)),
+          this, SLOT(repeat_mode_selector_activated()));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode)),
+          this, SLOT(change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode)));
+  connect(model, SIGNAL(pattern_repeat_mode_changed(int, TilePatternRepeatMode)),
+          this, SLOT(update_repeat_mode_field()));
 
   connect(ui.animation_type_field, SIGNAL(activated(QString)),
           this, SLOT(animation_type_selector_activated()));
@@ -1033,6 +1086,57 @@ void TilesetEditor::change_selected_patterns_default_layer_requested(Layer defau
   }
 
   try_command(new SetPatternsDefaultLayerCommand(*this, model->get_selected_indexes(), default_layer));
+}
+
+/**
+ * @brief Updates the repeat mode selector from the model.
+ */
+void TilesetEditor::update_repeat_mode_field() {
+
+  TilePatternRepeatMode repeat_mode = TilePatternRepeatMode::ALL;
+  bool enable = model->is_common_pattern_repeat_mode(
+        model->get_selected_indexes(), repeat_mode);
+
+  ui.repeat_mode_label->setEnabled(enable);
+  ui.repeat_mode_field->setEnabled(enable);
+
+  if (enable) {
+    ui.repeat_mode_field->set_selected_value(repeat_mode);
+  }
+}
+
+/**
+ * @brief Slot called when the user changes the repeat mode in the selector.
+ */
+void TilesetEditor::repeat_mode_selector_activated() {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  QList<int> indexes = model->get_selected_indexes();
+  TilePatternRepeatMode new_repeat_mode = ui.repeat_mode_field->get_selected_value();
+  TilePatternRepeatMode old_common_repeat_mode;
+  if (model->is_common_pattern_repeat_mode(indexes, old_common_repeat_mode) &&
+      new_repeat_mode == old_common_repeat_mode) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetPatternsRepeatModeCommand(*this, indexes, new_repeat_mode));
+}
+
+/**
+ * @brief Slot called when the user changes the repeat mode of selected patterns.
+ * @param repeat_mode The new repeat mode.
+ */
+void TilesetEditor::change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode) {
+
+  if (model->is_selection_empty()) {
+    return;
+  }
+
+  try_command(new SetPatternsRepeatModeCommand(*this, model->get_selected_indexes(), repeat_mode));
 }
 
 /**

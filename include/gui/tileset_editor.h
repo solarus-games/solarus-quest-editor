@@ -62,7 +62,10 @@ public slots:
   void change_selected_patterns_separation_requested(PatternSeparation separation);
   void update_default_layer_field();
   void default_layer_selector_activated();
-  void change_selected_patterns_default_layer_requested(Layer layer);
+  void change_selected_patterns_default_layer_requested(Layer default_layer);
+  void update_repeat_mode_field();
+  void repeat_mode_selector_activated();
+  void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
 
   void create_pattern_requested(
       const QString& pattern_id, const QRect& frame, Ground ground);

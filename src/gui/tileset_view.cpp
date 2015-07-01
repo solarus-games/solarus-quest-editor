@@ -497,6 +497,12 @@ void TilesetView::show_context_menu(const QPoint& where) {
   menu->addSeparator();
   menu->addMenu(layer_menu);
 
+  // Repeat mode.
+  QMenu* repeat_mode_menu = new QMenu(tr("Repeatable"), this);
+  build_context_menu_repeat_mode(*repeat_mode_menu, selected_indexes);
+  menu->addSeparator();
+  menu->addMenu(repeat_mode_menu);
+
   // Animation.
   QMenu* animation_menu = new QMenu(tr("Animation"), this);
   build_context_menu_animation(*animation_menu, selected_indexes);
@@ -562,7 +568,7 @@ void TilesetView::build_context_menu_layer(
   }
 
   // See if the default layer is common.
-  Layer layer;
+  Layer layer = Solarus::LAYER_LOW;
   bool common = model->is_common_pattern_default_layer(indexes, layer);
 
   // Add layer actions to the menu.
@@ -581,7 +587,38 @@ void TilesetView::build_context_menu_layer(
 }
 
 /**
- * @brief Builds the animation layer part of a context menu for patterns.
+ * @brief Builds the repeat mode part of a context menu for patterns.
+ * @param menu The menu to fill.
+ * @param indexes Patterns to build a context menu for.
+ */
+void TilesetView::build_context_menu_repeat_mode(
+    QMenu& menu, const QList<int>& indexes) {
+
+  if (indexes.empty()) {
+    return;
+  }
+
+  // See if the repeat mode is common.
+  TilePatternRepeatMode repeat_mode = TilePatternRepeatMode::ALL;
+  bool common = model->is_common_pattern_repeat_mode(indexes, repeat_mode);
+
+  // Add repeat mode actions to the menu.
+  QList<QAction*> repeat_mode_actions = EnumMenus<TilePatternRepeatMode>::create_actions(
+        menu,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](TilePatternRepeatMode repeat_mode) {
+    emit change_selected_patterns_repeat_mode_requested(repeat_mode);
+  });
+
+  if (common) {
+    int repeat_mode_index = static_cast<int>(repeat_mode);
+    QAction* checked_action = repeat_mode_actions[repeat_mode_index];
+    checked_action->setChecked(true);
+  }
+}
+
+/**
+ * @brief Builds the animation part of a context menu for patterns.
  * @param menu The menu to fill.
  * @param indexes Patterns to build a context menu for.
  */

@@ -139,10 +139,13 @@ set(solarus_quest_editor_SOURCES
   include/gui/color_picker.h
   include/gui/pair_spin_box.h
   include/color.h
+  include/dialogs_model.h
   include/editor_exception.h
   include/enum_traits.h
   include/file_tools.h
+  include/grid_style.h
   include/ground_traits.h
+  include/indexed_string_tree.h
   include/layer_traits.h
   include/map_model.h
   include/natural_comparator.h
@@ -151,6 +154,7 @@ set(solarus_quest_editor_SOURCES
   include/obsolete_quest_exception.h
   include/pattern_animation.h
   include/pattern_animation_traits.h
+  include/pattern_repeat_mode_traits.h
   include/pattern_separation.h
   include/pattern_separation_traits.h
   include/point.h
@@ -158,19 +162,16 @@ set(solarus_quest_editor_SOURCES
   include/quest_files_model.h
   include/quest_properties.h
   include/quest_resources.h
+  include/quest_runner.h
   include/rectangle.h
   include/resize_mode.h
+  include/settings.h
   include/size.h
   include/sprite_model.h
+  include/strings_model.h
   include/tileset_model.h
   include/transition_traits.h
   include/view_settings.h
-  include/strings_model.h
-  include/dialogs_model.h
-  include/indexed_string_tree.h
-  include/quest_runner.h
-  include/settings.h
-  include/grid_style.h
   src/entities/block.cpp
   src/entities/chest.cpp
   src/entities/crystal.cpp
@@ -243,9 +244,12 @@ set(solarus_quest_editor_SOURCES
   src/gui/color_picker.cpp
   src/gui/pair_spin_box.cpp
   src/color.cpp
+  src/dialogs_model.cpp
   src/editor_exception.cpp
   src/file_tools.cpp
+  src/grid_style.cpp
   src/ground_traits.cpp
+  src/indexed_string_tree.cpp
   src/layer_traits.cpp
   src/main.cpp
   src/map_model.cpp
@@ -253,24 +257,22 @@ set(solarus_quest_editor_SOURCES
   src/obsolete_editor_exception.cpp
   src/obsolete_quest_exception.cpp
   src/pattern_animation_traits.cpp
+  src/pattern_repeat_mode_traits.cpp
   src/pattern_separation_traits.cpp
   src/point.cpp
   src/quest.cpp
   src/quest_files_model.cpp
   src/quest_properties.cpp
   src/quest_resources.cpp
+  src/quest_runner.cpp
   src/rectangle.cpp
+  src/settings.cpp
   src/size.cpp
   src/sprite_model.cpp
+  src/strings_model.cpp
   src/tileset_model.cpp
   src/transition_traits.cpp
   src/view_settings.cpp
-  src/strings_model.cpp
-  src/dialogs_model.cpp
-  src/indexed_string_tree.cpp
-  src/quest_runner.cpp
-  src/settings.cpp
-  src/grid_style.cpp
 )
 
 # Add an icon for the executable in Windows.

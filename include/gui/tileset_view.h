@@ -20,6 +20,7 @@
 #include "ground_traits.h"
 #include "layer_traits.h"
 #include "pattern_animation.h"
+#include "pattern_repeat_mode_traits.h"
 #include "pattern_separation.h"
 #include <QGraphicsView>
 #include <QPointer>
@@ -52,6 +53,7 @@ signals:
   void change_selected_pattern_position_requested(const QPoint& position);
   void change_selected_patterns_ground_requested(Ground ground);
   void change_selected_patterns_default_layer_requested(Layer layer);
+  void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
 
@@ -89,6 +91,7 @@ private:
   void show_context_menu(const QPoint& where);
   void build_context_menu_ground(QMenu& menu, const QList<int>& indexes);
   void build_context_menu_layer(QMenu& menu, const QList<int>& indexes);
+  void build_context_menu_repeat_mode(QMenu& menu, const QList<int>& indexes);
   void build_context_menu_animation(QMenu& menu, const QList<int>& indexes);
 
   void start_state_normal();
