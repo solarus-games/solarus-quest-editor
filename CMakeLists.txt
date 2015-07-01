@@ -159,6 +159,7 @@ set(solarus_quest_editor_SOURCES
   include/quest_properties.h
   include/quest_resources.h
   include/rectangle.h
+  include/resize_mode.h
   include/size.h
   include/sprite_model.h
   include/tileset_model.h

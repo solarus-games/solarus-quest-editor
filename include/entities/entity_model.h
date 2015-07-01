@@ -19,6 +19,7 @@
 
 #include "entity_traits.h"
 #include "layer_traits.h"
+#include "resize_mode.h"
 #include "sprite_model.h"
 #include <QPointer>
 
@@ -28,22 +29,6 @@ class QuestResources;
 class TilesetModel;
 
 using SubtypeList = QList<QPair<QString, QString>>;
-
-/**
- * @brief How an entity can be resized.
- */
-enum class ResizeMode {
-  NONE,                      /**< Cannot be resized. */
-  HORIZONTAL_ONLY,           /**< Can only be resized horizontally. */
-  VERTICAL_ONLY,             /**< Can only be resized vertically. */
-  SQUARE,                    /**< Can only stay square. */
-  SINGLE_DIMENSION,          /**< Can be resized horizontally or vertically
-                              * but not both. */
-  MULTI_DIMENSION_ONE,       /**< Can be resized horizontally, vertically
-                              * or both but not at the same time. */
-  MULTI_DIMENSION_ALL        /**< Can be resized horizontally, vertically
-                              * or both even at the same time. */
-};
 
 /**
  * @brief Model of a map entity.

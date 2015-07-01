@@ -707,6 +707,62 @@ void TilesetModel::set_pattern_default_layer(int index, Layer default_layer) {
 }
 
 /**
+ * @brief Returns the repeat mode of a pattern.
+ * @param index A pattern index.
+ * @return The pattern's repeat mode.
+ */
+TilePatternRepeatMode TilesetModel::get_pattern_repeat_mode(int index) const {
+
+  const std::string& pattern_id = index_to_id(index).toStdString();
+  return tileset.get_pattern(pattern_id).get_repeat_mode();
+}
+
+/**
+ * @brief Gets the repeat mode of the specified patterns if it is the same.
+ * @param[in] indexes A list of pattern indexes.
+ * @param[out] repeat_mode The common repeat mode if any.
+ * The value is left unchanged if the repeat mode is not common.
+ * @return @c true if all specified patterns have the same repeat mode.
+ * If the list is empty, @c false is returned.
+ */
+bool TilesetModel::is_common_pattern_repeat_mode(
+    const QList<int>& indexes,
+    TilePatternRepeatMode& repeat_mode) const {
+
+  if (indexes.empty()) {
+    return false;
+  }
+
+  TilePatternRepeatMode candidate = get_pattern_repeat_mode(indexes.first());
+  for (int index : indexes) {
+    if (get_pattern_repeat_mode(index) != candidate) {
+      return false;
+    }
+  }
+
+  repeat_mode = candidate;
+  return true;
+}
+
+/**
+ * @brief Sets the repeat_mode of a tile pattern.
+ *
+ * Emits pattern_repeat_mode_changed() if there is a change.
+ *
+ * @param index A pattern index.
+ * @param repeat_mode The repeat mode to set.
+ */
+void TilesetModel::set_pattern_repeat_mode(int index, TilePatternRepeatMode repeat_mode) {
+
+  Solarus::TilePatternData& pattern = tileset.get_pattern(index_to_id(index).toStdString());
+  if (repeat_mode == pattern.get_repeat_mode()) {
+    return;
+  }
+  pattern.set_repeat_mode(repeat_mode);
+  emit pattern_repeat_mode_changed(index, repeat_mode);
+}
+
+/**
  * @brief Returns the animation property of a pattern.
  * @param index A pattern index.
  * @return The pattern's animation.
