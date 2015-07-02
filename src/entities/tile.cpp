@@ -99,8 +99,9 @@ void Tile::update_pattern() {
   if (tileset != nullptr) {
     int pattern_index = tileset->id_to_index(get_pattern_id());
     if (pattern_index != -1) {
-      // Update the base size.
+      // Update the resizing rules.
       set_base_size(tileset->get_pattern_frame(pattern_index).size());
+      set_resize_mode(get_pattern_resize_mode());
 
       // Update the preferred initial layer.
       set_preferred_layer(tileset->get_pattern_default_layer(pattern_index));
@@ -109,6 +110,41 @@ void Tile::update_pattern() {
 
   // Invalidate the cached image.
   pattern_image = QPixmap();
+}
+
+/**
+ * @brief Computes the resize mode for this tile from its pattern.
+ * @return The appropriate resize mode.
+ */
+ResizeMode Tile::get_pattern_resize_mode() const {
+
+  const TilesetModel* tileset = get_tileset();
+  if (tileset == nullptr) {
+    return ResizeMode::MULTI_DIMENSION_ALL;
+  }
+
+  int pattern_index = tileset->id_to_index(get_pattern_id());
+  if (pattern_index == -1) {
+    return ResizeMode::MULTI_DIMENSION_ALL;
+  }
+
+  switch (tileset->get_pattern_repeat_mode(pattern_index)) {
+
+  case TilePatternRepeatMode::ALL:
+    return ResizeMode::MULTI_DIMENSION_ALL;
+
+  case TilePatternRepeatMode::HORIZONTAL:
+    return ResizeMode::HORIZONTAL_ONLY;
+
+  case TilePatternRepeatMode::VERTICAL:
+    return ResizeMode::VERTICAL_ONLY;
+
+  case TilePatternRepeatMode::NONE:
+    return ResizeMode::NONE;
+
+  }
+
+  return ResizeMode::MULTI_DIMENSION_ALL;
 }
 
 /**
