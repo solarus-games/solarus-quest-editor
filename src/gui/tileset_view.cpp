@@ -52,7 +52,7 @@ TilesetView::TilesetView(QWidget* parent) :
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
   change_pattern_id_action = new QAction(
-        QIcon(":/images/icon_edit.png"), tr("Change id..."), this);
+      QIcon(":/images/icon_edit.png"), tr("Change id..."), this);
   change_pattern_id_action->setShortcut(tr("F2"));
   change_pattern_id_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(change_pattern_id_action, SIGNAL(triggered()),
@@ -60,12 +60,24 @@ TilesetView::TilesetView(QWidget* parent) :
   addAction(change_pattern_id_action);
 
   delete_patterns_action = new QAction(
-        QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
+      QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
   delete_patterns_action->setShortcut(QKeySequence::Delete);
   delete_patterns_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(delete_patterns_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_patterns_requested()));
   addAction(delete_patterns_action);
+
+  set_repeat_mode_actions = EnumMenus<TilePatternRepeatMode>::create_actions(
+        *this,
+        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
+        [=](TilePatternRepeatMode repeat_mode) {
+    emit change_selected_patterns_repeat_mode_requested(repeat_mode);
+  });
+  // TODO add shortcut support to EnumMenus
+  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::ALL)]->setShortcut(tr("R"));
+  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::HORIZONTAL)]->setShortcut(tr("H"));
+  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::VERTICAL)]->setShortcut(tr("V"));
+  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::NONE)]->setShortcut(tr("N"));
 
   ViewSettings* view_settings = new ViewSettings(this);
   set_view_settings(*view_settings);
@@ -602,17 +614,11 @@ void TilesetView::build_context_menu_repeat_mode(
   TilePatternRepeatMode repeat_mode = TilePatternRepeatMode::ALL;
   bool common = model->is_common_pattern_repeat_mode(indexes, repeat_mode);
 
-  // Add repeat mode actions to the menu.
-  QList<QAction*> repeat_mode_actions = EnumMenus<TilePatternRepeatMode>::create_actions(
-        menu,
-        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](TilePatternRepeatMode repeat_mode) {
-    emit change_selected_patterns_repeat_mode_requested(repeat_mode);
-  });
+  menu.addActions(set_repeat_mode_actions);
 
   if (common) {
     int repeat_mode_index = static_cast<int>(repeat_mode);
-    QAction* checked_action = repeat_mode_actions[repeat_mode_index];
+    QAction* checked_action = set_repeat_mode_actions[repeat_mode_index];
     checked_action->setChecked(true);
   }
 }
