@@ -720,6 +720,7 @@ void TilesetEditor::update_pattern_view() {
   update_animation_type_field();
   update_animation_separation_field();
   update_default_layer_field();
+  update_repeat_mode_field();
 
   // If no pattern is selected, disable the tile pattern view.
   ui.pattern_properties_group_box->setEnabled(!model->is_selection_empty());
