@@ -284,16 +284,15 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     }
 
     if (event->button() == Qt::LeftButton) {
-      if (item != nullptr &&
-          item->isSelected() &&
-          model->get_selection_count() == 1 &&
-          !is_read_only()) {
-        // Clicking on an already selected item: allow to move it.
-        start_state_moving_pattern(event->pos());
-      }
-      else {
+      if (item == nullptr) {
         // Left click outside items: trace a selection rectangle.
         start_state_drawing_rectangle(event->pos());
+      }
+      else if (item->isSelected() &&
+               model->get_selection_count() == 1 &&
+               !is_read_only()) {
+        // Clicking on an already selected item: allow to move it.
+        start_state_moving_pattern(event->pos());
       }
     }
     else {
@@ -371,7 +370,6 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
       }
     }
   }
-  QGraphicsView::mouseReleaseEvent(event);
 }
 
 /**
@@ -429,8 +427,6 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
       set_current_area(new_pattern_area);
     }
   }
-
-  QGraphicsView::mouseMoveEvent(event);
 }
 
 /**
