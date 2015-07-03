@@ -106,16 +106,19 @@ private:
                                         * patterns. */
   int last_integer_pattern_id;         /**< Last auto-generated pattern id. */
   State state;                         /**< Current operation done by user. */
-  QPoint dragging_start_point;         /**< In states DRAWING_NEW_PATTERN and
+  QPoint dragging_start_point;         /**< In states DRAWING_RECTANGLE and
                                         * MOVING_PATTERN: point where the
                                         * dragging started, in scene coordinates.*/
-  QPoint dragging_current_point;       /**< In states DRAWING_NEW_PATTERN and
+  QPoint dragging_current_point;       /**< In states DRAWING_RECTANGLE and
                                         * MOVING_PATTERN: point where the
                                         * dragging is currently, in scene coordinates. */
   QGraphicsRectItem*
-      current_area_item;               /**< In states DRAWING_NEW_PATTERN and
+      current_area_item;               /**< In states DRAWING_RECTANGLE and
                                         * MOVING_PATTERN: graphic item of the
                                         * rectangle the user is drawing. */
+  QList<QGraphicsItem*>
+      initially_selected_items;        /**< In state DRAWING_RECTANGLE: items
+                                        * to keep selected if Ctrl or Shift was pressed. */
   QPointer<ViewSettings>
       view_settings;                   /**< How the view is displayed. */
   double zoom;                         /**< Zoom factor currently applied. */
