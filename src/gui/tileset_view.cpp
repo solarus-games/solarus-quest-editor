@@ -307,6 +307,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
       if (item == nullptr) {
         // Left click outside items: trace a selection rectangle.
+        initially_selected_items = scene->selectedItems();
         start_state_drawing_rectangle(event->pos());
       }
       else if (item->isSelected() &&
@@ -750,6 +751,7 @@ void TilesetView::end_state_drawing_rectangle() {
   scene->removeItem(current_area_item);
   delete current_area_item;
   current_area_item = nullptr;
+  initially_selected_items.clear();
 
   start_state_normal();
 }
@@ -806,11 +808,11 @@ void TilesetView::end_state_moving_pattern() {
 }
 
 /**
- * @brief Changes the position of the pattern the user is creating or moving.
+ * @brief Changes the position of the rectangle the user is drawing or moving.
  *
  * If the specified area is the same as before, nothing is done.
  *
- * @param new_area new position of the pattern.
+ * @param new_area new position of the rectangle.
  */
 void TilesetView::set_current_area(const QRect& area) {
 
@@ -828,6 +830,11 @@ void TilesetView::set_current_area(const QRect& area) {
     path.addRect(QRect(area.topLeft() - QPoint(1, 1),
                        area.size() + QSize(2, 2)));
     scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
+  }
+
+  // Re-select items that were already selected if Ctrl or Shift was pressed.
+  for (QGraphicsItem* item : initially_selected_items) {
+    item->setSelected(true);
   }
 }
 
