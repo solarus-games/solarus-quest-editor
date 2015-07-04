@@ -37,8 +37,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-#include <QDebug> // TODO
-
 namespace {
 
 /**
