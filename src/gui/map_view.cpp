@@ -37,6 +37,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+#include <QDebug> // TODO
+
 namespace {
 
 /**
@@ -106,9 +108,13 @@ public:
   void mouse_released(const QMouseEvent& event) override;
 
 private:
-  QRect update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred);
+  QRect update_box(
+      const EntityIndex& index,
+      const QPoint& second_xy,
+      bool horizontal_preferred,
+      const QPoint& center);
 
-  EntityIndexes entities;    /**< Entities to resize. */
+  EntityIndexes entities;         /**< Entities to resize. */
   QMap<EntityIndex, QRect>
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
@@ -1659,6 +1665,14 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   );
   bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
 
+  // Compute the total bounding box to determine its center.
+  MapModel& map = get_map();
+  QRect total_box = map.get_entity_bounding_box(entities.first());
+  for (const EntityIndex& index : entities) {
+    total_box |= map.get_entity_bounding_box(index);
+  }
+  QPoint center = total_box.center();
+
   // Compute the new size and position of each entity.
   bool changed = false;
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
@@ -1666,7 +1680,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     const QRect& old_box = it.value();
 
     QPoint leader_offset(old_box.bottomRight() - old_leader_box.bottomRight());
-    QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred);
+    QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred, center);
     new_boxes.insert(index, new_box);
     changed |= new_box != old_box;
   }
@@ -1710,10 +1724,15 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  * in map coordinates.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
  * this should be the horizontal or vertical dimension.
+ * @param center Center point of all entities being resized.
  * @return A new bounding box for the entity.
  * Returns a null rectangle in case of error.
  */
-QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& second_xy, bool horizontal_preferred) {
+QRect ResizingEntitiesState::update_box(
+    const EntityIndex& index,
+    const QPoint& second_xy,
+    bool horizontal_preferred,
+    const QPoint& center) {
 
   MapModel& map = get_map();
   Q_ASSERT(map.entity_exists(index));
@@ -1730,9 +1749,6 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
   }
 
   const QRect& old_box = old_boxes.value(index);
-  if (resize_mode == ResizeMode::NONE) {
-    return old_box;
-  }
 
   QPoint point_a = old_box.topLeft();
   QPoint point_b = second_xy;
@@ -1769,7 +1785,23 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
     }
 
-    if (resize_mode == ResizeMode::VERTICAL_ONLY) {
+    // Horizontally.
+    if (resize_mode == ResizeMode::NONE ||
+        resize_mode == ResizeMode::VERTICAL_ONLY ||
+        (resize_mode == ResizeMode::MULTI_DIMENSION_ONE && !horizontal_preferred)) {
+      // Not resizable horizontally.
+
+      // TODO
+      // Resizing to the left an non horizontally resizable entity located
+      // on the left: move it instead.
+
+      // Resizing to the right an non horizontally resizable entity located
+      // on the right: move it instead.
+      Q_UNUSED(center);
+      point_a.setX(old_box.x());
+      point_b.setX(point_a.x() + old_box.width());
+    }
+    else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible only vertically with the x coordinate of B fixed to the base width.
       point_b.setX(point_a.x() + base_width);
     }
@@ -1778,7 +1810,8 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       // Extensible only vertically with the x coordinate of B fixed to the current width.
       point_b.setX(point_a.x() + old_box.width());
     }
-    else {
+    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+             resize_mode == ResizeMode::HORIZONTAL_ONLY) {
       // Extensible horizontally.
       if (point_b.x() <= point_a.x()) {
         // B is actually before A: in this case, set A to its right coordinate.
@@ -1786,7 +1819,19 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       }
     }
 
-    if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
+    // Vertically.
+    // Horizontally.
+    if (resize_mode == ResizeMode::NONE ||
+        resize_mode == ResizeMode::HORIZONTAL_ONLY ||
+        (resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred)) {
+      // Not resizable vertically.
+
+      // TODO
+      Q_UNUSED(center);
+      point_a.setY(old_box.y());
+      point_b.setY(point_a.y() + old_box.height());
+    }
+    else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
       // Extensible only horizontally with the y coordinate of B fixed to the base height.
       point_b.setY(point_a.y() + base_height);
     }
@@ -1795,7 +1840,8 @@ QRect ResizingEntitiesState::update_box(const EntityIndex& index, const QPoint& 
       // Extensible only horizontally with the y coordinate of B fixed to the current height.
       point_b.setY(point_a.y() + old_box.height());
     }
-    else {
+    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+             resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible vertically.
       if (point_b.y() <= point_a.y()) {
         // B is actually before A: in this case, set A to its bottom coordinate.
