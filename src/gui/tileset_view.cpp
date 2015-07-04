@@ -78,6 +78,9 @@ TilesetView::TilesetView(QWidget* parent) :
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::HORIZONTAL)]->setShortcut(tr("H"));
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::VERTICAL)]->setShortcut(tr("V"));
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::NONE)]->setShortcut(tr("N"));
+  for (QAction* action : set_repeat_mode_actions) {
+    action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  }
 
   ViewSettings* view_settings = new ViewSettings(this);
   set_view_settings(*view_settings);
