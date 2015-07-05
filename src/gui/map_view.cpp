@@ -37,6 +37,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+#include <QDebug>
+
 namespace {
 
 /**
@@ -117,6 +119,7 @@ private:
       old_boxes;                  /**< Bounding rectangle of each entity before resizing. */
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
+  QPoint center;                  /**< Center of the bounding box of entities to resize. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
   int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
@@ -1605,6 +1608,7 @@ ResizingEntitiesState::ResizingEntitiesState(
   entities(entities),
   old_boxes(),
   leader_index(),
+  center(),
   first_resize_done(false),
   num_free_entities(0) {
 }
@@ -1619,8 +1623,16 @@ void ResizingEntitiesState::start() {
   const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
   QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
 
+  // Compute the total bounding box to determine its center.
+  QRect total_box = map.get_entity_bounding_box(entities.first());
+  for (const EntityIndex& index : entities) {
+    total_box |= map.get_entity_bounding_box(index);
+  }
+  center = total_box.center();
+
   // Choose the leader: it will be the entity whose bottom-right corner
   // is the nearest to the mouse.
+  // TODO the most resizable one should be prioritary.
   int min_distance = std::numeric_limits<int>::max();
   for (const EntityIndex& index : entities) {
     const EntityModel& entity = map.get_entity(index);
@@ -1663,21 +1675,13 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   );
   bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
 
-  // Compute the total bounding box to determine its center.
-  MapModel& map = get_map();
-  QRect total_box = map.get_entity_bounding_box(entities.first());
-  for (const EntityIndex& index : entities) {
-    total_box |= map.get_entity_bounding_box(index);
-  }
-  QPoint center = total_box.center();
-
   // Compute the new size and position of each entity.
   bool changed = false;
   for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
-    QPoint leader_offset(old_box.bottomRight() - old_leader_box.bottomRight());
+    QPoint leader_offset = old_box.bottomRight() - old_leader_box.bottomRight();
     QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred, center);
     new_boxes.insert(index, new_box);
     changed |= new_box != old_box;
@@ -1747,6 +1751,11 @@ QRect ResizingEntitiesState::update_box(
   }
 
   const QRect& old_box = old_boxes.value(index);
+  const QRect& old_leader_box = old_boxes.value(leader_index);
+  const QRect& leader_box = map.get_entity_bounding_box(leader_index);
+  const QPoint& leader_change =
+      leader_box.topLeft() - old_leader_box.topLeft() +
+      leader_box.bottomRight() - old_leader_box.bottomRight();
 
   QPoint point_a = old_box.topLeft();
   QPoint point_b = second_xy;
@@ -1755,7 +1764,6 @@ QRect ResizingEntitiesState::update_box(
 
   // We want to extend the entity's rectangle with units of base_size() from A to B.
   QPoint diff = point_b - point_a;
-  QPoint diff_rounded = Point::round_8(diff);
   int sign_x = diff.x() >= 0 ? 1 : -1;
   int sign_y = diff.y() >= 0 ? 1 : -1;
 
@@ -1791,9 +1799,12 @@ QRect ResizingEntitiesState::update_box(
         !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && !horizontal_preferred);
     if (!horizontally_resizable) {
       // Resizing a non horizontally resizable entity located
-      // on the left of the group: move it instead.
+      // on the right of the group: move it instead.
       if (old_box.center().x() > center.x()) {
-        point_a.setX(old_box.x() + diff_rounded.x() - old_box.width());
+        point_a.setX(old_box.x() + leader_change.x());
+      }
+      else {
+        point_a.setX(old_box.x());
       }
       point_b.setX(point_a.x() + old_box.width());
     }
@@ -1821,10 +1832,13 @@ QRect ResizingEntitiesState::update_box(
         resize_mode != ResizeMode::HORIZONTAL_ONLY &&
         !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred);
     if (!vertically_resizable) {
-      // Resizing a non horizontally resizable entity located
+      // Resizing a non vertically resizable entity located
       // on the left of the group: move it instead.
       if (old_box.center().y() > center.y()) {
-        point_a.setY(old_box.y() + diff_rounded.y() - old_box.height());
+        point_a.setY(old_box.y() + leader_change.y());
+      }
+      else {
+        point_a.setY(old_box.y());
       }
       point_b.setY(point_a.y() + old_box.height());
     }
