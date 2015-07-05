@@ -1755,6 +1755,7 @@ QRect ResizingEntitiesState::update_box(
 
   // We want to extend the entity's rectangle with units of base_size() from A to B.
   QPoint diff = point_b - point_a;
+  QPoint diff_rounded = Point::round_8(diff);
   int sign_x = diff.x() >= 0 ? 1 : -1;
   int sign_y = diff.y() >= 0 ? 1 : -1;
 
@@ -1784,19 +1785,16 @@ QRect ResizingEntitiesState::update_box(
     }
 
     // Horizontally.
-    if (resize_mode == ResizeMode::NONE ||
-        resize_mode == ResizeMode::VERTICAL_ONLY ||
-        (resize_mode == ResizeMode::MULTI_DIMENSION_ONE && !horizontal_preferred)) {
-      // Not resizable horizontally.
-
-      // TODO
-      // Resizing to the left an non horizontally resizable entity located
-      // on the left: move it instead.
-
-      // Resizing to the right an non horizontally resizable entity located
-      // on the right: move it instead.
-      Q_UNUSED(center);
-      point_a.setX(old_box.x());
+    const bool horizontally_resizable =
+        resize_mode != ResizeMode::NONE &&
+        resize_mode != ResizeMode::VERTICAL_ONLY &&
+        !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && !horizontal_preferred);
+    if (!horizontally_resizable) {
+      // Resizing a non horizontally resizable entity located
+      // on the left of the group: move it instead.
+      if (old_box.center().x() > center.x()) {
+        point_a.setX(old_box.x() + diff_rounded.x() - old_box.width());
+      }
       point_b.setX(point_a.x() + old_box.width());
     }
     else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
@@ -1818,15 +1816,16 @@ QRect ResizingEntitiesState::update_box(
     }
 
     // Vertically.
-    // Horizontally.
-    if (resize_mode == ResizeMode::NONE ||
-        resize_mode == ResizeMode::HORIZONTAL_ONLY ||
-        (resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred)) {
-      // Not resizable vertically.
-
-      // TODO
-      Q_UNUSED(center);
-      point_a.setY(old_box.y());
+    const bool vertically_resizable =
+        resize_mode != ResizeMode::NONE &&
+        resize_mode != ResizeMode::HORIZONTAL_ONLY &&
+        !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred);
+    if (!vertically_resizable) {
+      // Resizing a non horizontally resizable entity located
+      // on the left of the group: move it instead.
+      if (old_box.center().y() > center.y()) {
+        point_a.setY(old_box.y() + diff_rounded.y() - old_box.height());
+      }
       point_b.setY(point_a.y() + old_box.height());
     }
     else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
