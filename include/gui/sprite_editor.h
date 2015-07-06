@@ -63,6 +63,7 @@ public slots:
   void change_default_animation_requested();
   void update_animation_source_image_field();
   void change_animation_source_image_requested();
+  void refresh_animation_source_image();
   void tileset_selector_activated();
   void update_animation_frame_delay_field();
   void change_animation_frame_delay_requested();

@@ -687,6 +687,8 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.src_image_button, SIGNAL(clicked()),
           this, SLOT(change_animation_source_image_requested()));
+  connect(ui.src_image_refresh_button, SIGNAL(clicked(bool)),
+          this, SLOT(refresh_animation_source_image()));
 
   connect(ui.tileset_field, SIGNAL(activated(QString)),
           this, SLOT(tileset_selector_activated()));
@@ -1098,6 +1100,18 @@ void SpriteEditor::change_animation_source_image_requested() {
   }
 
   try_command(new SetAnimationSourceImageCommand(*this, index, source_image));
+}
+
+/**
+ * @brief Slot called when the user wants to refresh the animation source image.
+ */
+void SpriteEditor::refresh_animation_source_image() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  QString source_image = model->get_animation_source_image(index);
+
+  model->set_animation_source_image(index, "");
+  model->set_animation_source_image(index, source_image);
 }
 
 /**
