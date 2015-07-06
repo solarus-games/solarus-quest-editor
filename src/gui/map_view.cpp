@@ -1630,25 +1630,47 @@ void ResizingEntitiesState::start() {
   }
   center = total_box.center();
 
-  // Choose the leader: it will be the entity whose bottom-right corner
+  // Choose the leader: among the most freely resizable entities,
+  // it will be the one whose bottom-right corner
   // is the nearest to the mouse.
-  // TODO the most resizable one should be prioritary.
-  int min_distance = std::numeric_limits<int>::max();
-  for (const EntityIndex& index : entities) {
-    const EntityModel& entity = map.get_entity(index);
-    const QPoint& bottom_right = entity.get_bottom_right();
-    int distance = (bottom_right - mouse_position).manhattanLength();
-    if (distance < min_distance) {
-      leader_index = index;
-      min_distance = distance;
+  const std::vector<ResizeMode> resize_modes_by_priority = {
+    ResizeMode::MULTI_DIMENSION_ALL,
+    ResizeMode::MULTI_DIMENSION_ONE,
+    ResizeMode::SINGLE_DIMENSION,
+    ResizeMode::SQUARE,
+    ResizeMode::HORIZONTAL_ONLY,
+    ResizeMode::VERTICAL_ONLY
+  };
+
+  bool found_leader = false;
+  for (ResizeMode wanted_resize_mode : resize_modes_by_priority) {
+    int min_distance = std::numeric_limits<int>::max();
+    if (found_leader) {
+      min_distance = 0;  // Don't search a leader with this resize mode.
     }
+    for (const EntityIndex& index : entities) {
+      const EntityModel& entity = map.get_entity(index);
 
-    // Also save the initial position of entities.
-    old_boxes.insert(index, entity.get_bounding_box());
+      if (entity.get_resize_mode() != wanted_resize_mode) {
+        continue;
+      }
 
-    // Count entities freely resizable.
-    if (entity.get_resize_mode() == ResizeMode::MULTI_DIMENSION_ALL) {
-      ++num_free_entities;
+      // Save the initial position of entities.
+      old_boxes.insert(index, entity.get_bounding_box());
+
+      // Count entities whose resize mode is MULTI_DIMENSION_ALL.
+      if (entity.get_resize_mode() == ResizeMode::MULTI_DIMENSION_ALL) {
+        ++num_free_entities;
+      }
+
+      // Determine a leader if none was found with previous resize modes.
+      found_leader = true;
+      const QPoint& bottom_right = entity.get_bottom_right();
+      int distance = (bottom_right - mouse_position).manhattanLength();
+      if (distance < min_distance) {
+        leader_index = index;
+        min_distance = distance;
+      }
     }
   }
 
