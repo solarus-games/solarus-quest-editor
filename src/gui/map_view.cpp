@@ -37,8 +37,6 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
-#include <QDebug>
-
 namespace {
 
 /**
@@ -1639,7 +1637,8 @@ void ResizingEntitiesState::start() {
     ResizeMode::SINGLE_DIMENSION,
     ResizeMode::SQUARE,
     ResizeMode::HORIZONTAL_ONLY,
-    ResizeMode::VERTICAL_ONLY
+    ResizeMode::VERTICAL_ONLY,
+    ResizeMode::NONE
   };
 
   bool found_leader = false;
@@ -1855,7 +1854,7 @@ QRect ResizingEntitiesState::update_box(
         !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred);
     if (!vertically_resizable) {
       // Resizing a non vertically resizable entity located
-      // on the left of the group: move it instead.
+      // on the bottom of the group: move it instead.
       if (old_box.center().y() > center.y()) {
         point_a.setY(old_box.y() + leader_change.y());
       }
