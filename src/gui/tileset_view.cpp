@@ -642,6 +642,7 @@ void TilesetView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   this->state = State::DRAWING_RECTANGLE;
   this->dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
+  this->dragging_current_point = this->dragging_start_point;
 
   current_area_item = new QGraphicsRectItem();
   current_area_item->setPen(QPen(Qt::yellow));
@@ -716,6 +717,7 @@ void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
 
   state = State::MOVING_PATTERN;
   dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
+  dragging_current_point = dragging_start_point;
   const QRect& box = model->get_pattern_frames_bounding_box(index);
   current_area_item = new QGraphicsRectItem(box);
   current_area_item->setPen(QPen(Qt::yellow));
@@ -732,7 +734,8 @@ void TilesetView::end_state_moving_pattern() {
       sceneRect().contains(box) &&
       get_items_intersecting_current_area().isEmpty() &&
       model->get_selection_count() == 1 &&
-      !is_read_only()) {
+      !is_read_only() &&
+      dragging_current_point != dragging_start_point) {
 
     // Context menu to move the pattern.
     QMenu menu;
@@ -795,7 +798,8 @@ QList<QGraphicsItem*> TilesetView::get_items_in_current_area() const {
 }
 
 /**
- * @brief Returns all items that intersect the rectangle drawn by the user.
+ * @brief Returns all items that intersect the rectangle drawn by the user
+ * except selected items.
  * @return The items thet intersect the drawn rectangle.
  */
 QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
@@ -806,5 +810,11 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
       area.size() - QSize(2, 2));
   QList<QGraphicsItem*> items = scene->items(area, Qt::IntersectsItemBoundingRect);
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
+
+  // Ignore selected items.
+  for (auto *item : scene->selectedItems()) {
+    items.removeAll(item);
+  }
+
   return items;
 }
