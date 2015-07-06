@@ -14,6 +14,8 @@ FindTextDialog::FindTextDialog(QWidget* parent) :
   QPushButton* find_button = new QPushButton(tr("Find"), this);
   ui.button_box->addButton(find_button, QDialogButtonBox::ApplyRole);
 
+  find_button->setDefault(true);
+
   connect(find_button, &QPushButton::pressed, [&]() {
     emit find_text_requested(ui.find_field->text());
   });
