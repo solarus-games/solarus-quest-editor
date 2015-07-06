@@ -974,8 +974,15 @@ void DialogsEditor::translation_selector_activated() {
   }
   else {
     // Set the translation.
-    model->set_translation_id(new_language_id);
-    ui.translation_refresh_button->setEnabled(true);
+    try {
+      model->set_translation_id(new_language_id);
+      ui.translation_refresh_button->setEnabled(true);
+    }
+    catch (const EditorException& ex) {
+      ui.translation_field->set_selected_id("");
+      ui.translation_refresh_button->setEnabled(false);
+      ex.show_dialog();
+    }
   }
 
   update_translation_text_field();
