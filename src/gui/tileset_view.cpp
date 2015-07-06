@@ -838,6 +838,19 @@ void TilesetView::set_current_area(const QRect& area) {
     scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
   }
 
+  if (state == State::MOVING_PATTERN) {
+    // Check overlapping existing patterns.
+    if (!area.isEmpty() &&
+        sceneRect().contains(area) &&
+        get_items_intersecting_current_area().isEmpty() &&
+        model->get_selection_count() == 1 &&
+        !is_read_only()) {
+      current_area_item->setPen(QPen(Qt::yellow));
+    } else {
+      current_area_item->setPen(QPen(Qt::red));
+    }
+  }
+
   // Re-select items that were already selected if Ctrl or Shift was pressed.
   for (QGraphicsItem* item : initially_selected_items) {
     item->setSelected(true);
