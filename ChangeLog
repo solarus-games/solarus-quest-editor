@@ -11,6 +11,7 @@ Bugfix release for the 1.4 branch.
 * Tileset editor: fix usability issues to create and select patterns (#31).
 * Tileset editor: fix moving a pattern to a partially overlapping place (#29).
 * Tileset editor: fix color when moving a pattern to an occuped place (#34).
+* Tileset editor: fix existing selection lost if selecting with ctrl or shift.
 * Text editor: the find button is now the default one in the find dialog (#30).
 * Dialogs editor: fix crash when comparing empty dialogs (#48).
 * Make the numpad enter key work like the return key (#49).
