@@ -812,7 +812,7 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
 
   // Ignore selected items.
-  for (auto *item : scene->selectedItems()) {
+  for (QGraphicsItem* item : scene->selectedItems()) {
     items.removeAll(item);
   }
 
