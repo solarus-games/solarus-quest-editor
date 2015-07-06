@@ -14,6 +14,7 @@ Bugfix release for the 1.4 branch.
 * Sprite editor: add a button to refresh the source image (#50).
 * Fix crash when resizing with no entities selected (#51).
 * Fix entities remaining visible when adding them on a hidden layer.
+* Fix text fields not validated until they lose focus.
 * Tileset editor: fix usability issues to create and select patterns (#31).
 * Tileset editor: fix moving a pattern to a partially overlapping place (#29).
 * Tileset editor: fix color when moving a pattern to an occuped place (#34).
