@@ -845,21 +845,6 @@ void TilesetView::set_current_area(const QRect& area) {
 }
 
 /**
- * @brief Returns all items fully contained in the rectangle drawn by the user.
- * @return The items in the drawn rectangle.
- */
-QList<QGraphicsItem*> TilesetView::get_items_in_current_area() const {
-
-  const QRect& area = current_area_item->rect().toRect();
-  QRect outline(
-      area.topLeft() - QPoint(1, 1),
-      area.size() + QSize(2, 2));
-  QList<QGraphicsItem*> items = scene->items(outline, Qt::ContainsItemBoundingRect);
-  items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
-  return items;
-}
-
-/**
  * @brief Returns all items that intersect the rectangle drawn by the user
  * except selected items.
  * @return The items thet intersect the drawn rectangle.

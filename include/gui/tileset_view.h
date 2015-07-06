@@ -100,7 +100,6 @@ private:
   void start_state_moving_pattern(const QPoint& initial_point);
   void end_state_moving_pattern();
   void set_current_area(const QRect& area);
-  QList<QGraphicsItem*> get_items_in_current_area() const;
   QList<QGraphicsItem*> get_items_intersecting_current_area() const;
 
   QPointer<TilesetModel> model;        /**< The tileset model. */
