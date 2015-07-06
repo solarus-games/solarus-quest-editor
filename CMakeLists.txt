@@ -137,7 +137,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/change_dialog_id_dialog.h
   include/gui/settings_dialog.h
   include/gui/color_picker.h
-  include/gui/pair_spin_box.h
   include/gui/line_edit.h
   include/color.h
   include/editor_exception.h
