@@ -111,6 +111,10 @@ private:
       const QPoint& reference_change,
       bool horizontal_preferred,
       const QPoint& center);
+  static bool is_horizontally_resizable(
+      ResizeMode resize_mode, bool horizontal_preferred);
+  static bool is_vertically_resizable(
+      ResizeMode resize_mode, bool horizontal_preferred);
 
   EntityIndexes entities;         /**< Entities to resize. */
   QMap<EntityIndex, QRect>
@@ -1691,7 +1695,49 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   // in case resizing is constrained.
   QPoint leader_distance_to_mouse = current_point - old_leader_box.bottomRight();
   bool horizontal_preferred = qAbs(leader_distance_to_mouse.x()) > qAbs(leader_distance_to_mouse.y());
-  QPoint reference_change = Point::floor_8(leader_distance_to_mouse);
+
+  // Determine the change to apply to all selected entities.
+  const MapModel& map = *view.get_map();
+  const EntityModel& leader = map.get_entity(leader_index);
+  const QSize& leader_base_size = leader.get_base_size();
+  int floor_x = 8;
+  int floor_y = 8;
+  ResizeMode leader_resize_mode = leader.get_resize_mode();
+  if (is_horizontally_resizable(leader_resize_mode, horizontal_preferred)) {
+    // If the leader has a base size of 16x16, it is better to make all
+    // entities resize this way as well.
+    floor_x = leader_base_size.width();
+  }
+  if (is_vertically_resizable(leader_resize_mode, horizontal_preferred)) {
+    floor_y = leader_base_size.height();
+  }
+  QPoint reference_change = Point::floor(leader_distance_to_mouse, floor_x, floor_y);
+
+  // Determine if at least one entity is resizable horizontally and
+  // if at least one entity is resizable vertically.
+  bool is_resizing_horizontally = false;
+  bool is_resizing_vertically = false;
+  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
+    const EntityIndex& index = it.key();
+    const EntityModel& entity = map.get_entity(index);
+    is_resizing_horizontally |= is_horizontally_resizable(entity.get_resize_mode(), horizontal_preferred);
+    is_resizing_vertically |= is_vertically_resizable(entity.get_resize_mode(), horizontal_preferred);
+
+    if (is_resizing_horizontally && is_resizing_vertically) {
+      break;
+    }
+  }
+  if (!is_resizing_horizontally) {
+    // Don't move anything horizontally if nothing can change horizontally.
+    // We need to take care of this because with smart resizing,
+    // non horizontally resizable entities could still be moved
+    // to follow the ones that are.
+    reference_change.setX(0);
+  }
+  if (!is_resizing_vertically) {
+    // Same thing vertically.
+    reference_change.setY(0);
+  }
 
   // Compute the new size and position of each entity.
   bool changed = false;
@@ -1699,7 +1745,12 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
-    QRect new_box = update_box(index, reference_change, horizontal_preferred, center);
+    QRect new_box = update_box(
+          index,
+          reference_change,
+          horizontal_preferred,
+          center
+          );
     new_boxes.insert(index, new_box);
     changed |= new_box != old_box;
   }
@@ -1807,13 +1858,19 @@ QRect ResizingEntitiesState::update_box(
     }
 
     // Horizontally.
-    const bool horizontally_resizable =
-        resize_mode != ResizeMode::NONE &&
-        resize_mode != ResizeMode::VERTICAL_ONLY &&
-        !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && !horizontal_preferred);
-    if (!horizontally_resizable) {
-      // Resizing a non horizontally resizable entity located
-      // on the right of the group: move it instead.
+    if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
+      // Smart resizing:
+      // When trying to resize a non horizontally resizable entity located
+      // on the right of horizontally resizable things, we move it instead.
+      // This allows to resize a full room in only one operation:
+      // ______          ________________
+      // |....|          |..............|
+      // |....|   ===>   |..............|
+      // |____|          |______________|
+      //
+      // Here, the right wall is not horizontally resizable, but it moves
+      // on the right instead when resizing the full room, following the
+      // reference change.
       if (old_box.center().x() > center.x()) {
         point_a.setX(old_box.x() + reference_change.x());
       }
@@ -1841,13 +1898,10 @@ QRect ResizingEntitiesState::update_box(
     }
 
     // Vertically.
-    const bool vertically_resizable =
-        resize_mode != ResizeMode::NONE &&
-        resize_mode != ResizeMode::HORIZONTAL_ONLY &&
-        !(resize_mode == ResizeMode::MULTI_DIMENSION_ONE && horizontal_preferred);
-    if (!vertically_resizable) {
-      // Resizing a non vertically resizable entity located
-      // on the bottom of the group: move it instead.
+    if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
+      // Smart resizing:
+      // When trying to resize a non vertically resizable entity located
+      // on the right of vertically resizable things, we move it instead.
       if (old_box.center().y() > center.y()) {
         point_a.setY(old_box.y() + reference_change.y());
       }
@@ -1887,6 +1941,36 @@ QRect ResizingEntitiesState::update_box(
   );
 
   return QRect(top_left, size);
+}
+
+/**
+ * @brief Returns whether the given settings allow to resize horizontally.
+ * @param resize_mode The resize mode to test.
+ * @param horizontal_preferred When only one of both dimensions can be resized, whether
+ * this should be the horizontal or vertical dimension.
+ */
+bool ResizingEntitiesState::is_horizontally_resizable(
+    ResizeMode resize_mode, bool horizontal_preferred) {
+
+  return resize_mode == ResizeMode::HORIZONTAL_ONLY ||
+        resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+        resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
+        (resize_mode == ResizeMode::SINGLE_DIMENSION && horizontal_preferred);
+}
+
+/**
+ * @brief Returns whether the given settings allow to resize vertically.
+ * @param resize_mode The resize mode to test.
+ * @param horizontal_preferred When only one of both dimensions can be resized, whether
+ * this should be the horizontal or vertical dimension.
+ */
+bool ResizingEntitiesState::is_vertically_resizable(
+    ResizeMode resize_mode, bool horizontal_preferred) {
+
+  return resize_mode == ResizeMode::VERTICAL_ONLY ||
+        resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+        resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
+        (resize_mode == ResizeMode::SINGLE_DIMENSION && !horizontal_preferred);
 }
 
 /**

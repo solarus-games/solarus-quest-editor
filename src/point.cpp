@@ -67,8 +67,7 @@ QPoint round_8(const QPointF& point) {
  */
 QPoint floor_8(const QPoint& point) {
 
-  return QPoint(point.x() - point.x() % 8,
-                point.y() - point.y() % 8);
+  return floor(point, 8, 8);
 }
 
 /**
@@ -77,6 +76,28 @@ QPoint floor_8(const QPoint& point) {
 QPoint floor_8(const QPointF& point) {
 
   return floor_8(point.toPoint());
+}
+
+/**
+ * @brief Floors the coordinates of a point to the lower multiples of given
+ * values.
+ * @param point A point.
+ * @param floor_x Value to floor the x coordinate to.
+ * @param floor_y Value to floor the y coordinate to.
+ * @return The resulting point.
+ */
+QPoint floor(const QPoint& point, int floor_x, int floor_y) {
+
+  return QPoint(point.x() - point.x() % floor_x,
+                point.y() - point.y() % floor_y);
+}
+
+/**
+ * @overload
+ */
+QPoint floor(const QPointF& point, int floor_x, int floor_y) {
+
+  return floor(point.toPoint(), floor_x, floor_y);
 }
 
 }

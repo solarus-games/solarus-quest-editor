@@ -31,6 +31,9 @@ QPoint round_8(const QPointF& point);
 QPoint floor_8(const QPoint& point);
 QPoint floor_8(const QPointF& point);
 
+QPoint floor(const QPoint& point, int floor_x, int floor_y);
+QPoint floor(const QPointF& point, int floor_x, int floor_y);
+
 }
 
 #endif
