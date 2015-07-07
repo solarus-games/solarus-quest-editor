@@ -98,10 +98,10 @@ QPoint round_down(const QPoint& point, int step_x, int step_y) {
   QPoint result(point.x() - mod_x,
                 point.y() - mod_y);
   if (mod_x > 0) {
-    result.setX(result.x() + mod_x);
+    result.setX(result.x() + step_x);
   }
   if (mod_y > 0) {
-    result.setY(result.y() + mod_y);
+    result.setY(result.y() + step_y);
   }
   return result;
 }
