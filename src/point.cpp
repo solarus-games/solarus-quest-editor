@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "point.h"
+#include <QtMath>
 
 namespace Point {
 
@@ -67,7 +68,8 @@ QPoint round_8(const QPointF& point) {
  */
 QPoint floor_8(const QPoint& point) {
 
-  return floor(point, 8, 8);
+  return QPoint(point.x() - point.x() % 8,
+                point.y() - point.y() % 8);
 }
 
 /**
@@ -79,25 +81,37 @@ QPoint floor_8(const QPointF& point) {
 }
 
 /**
- * @brief Floors the coordinates of a point to the lower multiples of given
- * values.
+ * @brief Rounds the coordinates of a point down to the nearest multiple
+ * of given coordinates.
+ *
+ * round_down(QPoint(15, -2), 8, 8) is QPoint(8, -8).
+ *
  * @param point A point.
- * @param floor_x Value to floor the x coordinate to.
- * @param floor_y Value to floor the y coordinate to.
+ * @param step_x Value where to round the x coordinate.
+ * @param step_y Value where to round the y coordinate.
  * @return The resulting point.
  */
-QPoint floor(const QPoint& point, int floor_x, int floor_y) {
+QPoint round_down(const QPoint& point, int step_x, int step_y) {
 
-  return QPoint(point.x() - point.x() % floor_x,
-                point.y() - point.y() % floor_y);
+  int mod_x = point.x() % step_x;
+  int mod_y = point.y() % step_y;
+  QPoint result(point.x() - mod_x,
+                point.y() - mod_y);
+  if (mod_x > 0) {
+    result.setX(result.x() + mod_x);
+  }
+  if (mod_y > 0) {
+    result.setY(result.y() + mod_y);
+  }
+  return result;
 }
 
 /**
  * @overload
  */
-QPoint floor(const QPointF& point, int floor_x, int floor_y) {
+QPoint round_down(const QPointF& point, int step_x, int step_y) {
 
-  return floor(point.toPoint(), floor_x, floor_y);
+  return round_down(point.toPoint(), step_x, step_y);
 }
 
 }

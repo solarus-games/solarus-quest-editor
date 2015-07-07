@@ -1705,13 +1705,13 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   ResizeMode leader_resize_mode = leader.get_resize_mode();
   if (is_horizontally_resizable(leader_resize_mode, horizontal_preferred)) {
     // If the leader has a base size of 16x16, it is better to make all
-    // entities resize this way as well.
+    // entities resize this way as well (if they can).
     floor_x = leader_base_size.width();
   }
   if (is_vertically_resizable(leader_resize_mode, horizontal_preferred)) {
     floor_y = leader_base_size.height();
   }
-  QPoint reference_change = Point::floor(leader_distance_to_mouse, floor_x, floor_y);
+  QPoint reference_change = Point::round_down(leader_distance_to_mouse, floor_x, floor_y);
 
   // Determine if at least one entity is resizable horizontally and
   // if at least one entity is resizable vertically.
