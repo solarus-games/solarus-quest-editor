@@ -609,7 +609,8 @@ private:
 SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
   model(nullptr),
-  quest(quest) {
+  quest(quest),
+  auto_detect_grid(false) {
 
   ui.setupUi(this);
 
@@ -809,7 +810,7 @@ void SpriteEditor::reload_settings() {
   ui.sprite_previewer->set_origin_color(
     settings.get_value_color(Settings::sprite_origin_color));
 
-  // TODO: auto detect grid size ...
+  auto_detect_grid = settings.get_value_bool(Settings::sprite_auto_detect_grid);
 }
 
 /**
@@ -878,6 +879,7 @@ void SpriteEditor::update_selection() {
 
   update_animation_view();
   update_direction_view();
+  auto_detect_grid_size();
 
   // Ensures that the selected item is visible in the tree view
   SpriteModel::Index index = model->get_selected_index();
@@ -1433,4 +1435,26 @@ void SpriteEditor::load_settings() {
     settings.get_value_bool(Settings::sprite_origin_show_at_opening));
 
   reload_settings();
+}
+
+/**
+ * @brief Auto detect the grid size.
+ */
+void SpriteEditor::auto_detect_grid_size() {
+
+  if (auto_detect_grid) {
+
+    SpriteModel::Index index = model->get_selected_index();
+
+    // Try to get the first direction if no direction is selected.
+    if (!index.is_direction_index()) {
+      index.direction_nb = 0;
+      if (!model->direction_exists(index)) {
+        return;
+      }
+    }
+
+    get_view_settings().set_grid_size(
+      model->get_direction_first_frame_rect(index).size());
+  }
 }

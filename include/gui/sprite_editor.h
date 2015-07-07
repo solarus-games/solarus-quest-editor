@@ -88,6 +88,8 @@ private:
 
   void load_settings();
 
+  void auto_detect_grid_size();
+
   Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
   QString sprite_id;            /**< Id of the sprite being edited. */
   SpriteModel* model;           /**< Sprite model being edited. */
@@ -95,6 +97,7 @@ private:
   QMenu create_context_menu;    /**< The create context menu. */
   QAction* create_animation;    /**< The create animation action. */
   QAction* create_direction;    /**< The create direction action. */
+  bool auto_detect_grid;        /**< The grid auto detection option. */
 
 };
 

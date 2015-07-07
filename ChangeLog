@@ -3,6 +3,11 @@ ________________________________________
 Solarus Quest Editor 1.5.0 (in progress)
 ________________________________________
 
+New features
+------------
+
+* Sprite editor: auto-detect the grid size (#13).
+* Settings: add sprite editor configurations.
 
 ________________________________________
 
@@ -11,7 +16,6 @@ ________________________________________
 
 Bugfix release for the 1.4 branch.
 
-* Settings: add sprite editor configurations.
 * Sprite editor: add a button to refresh the source image (#50).
 * Fix crash when resizing with no entities selected (#51).
 * Fix entities remaining visible when adding them on a hidden layer.
