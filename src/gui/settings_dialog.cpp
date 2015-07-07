@@ -32,6 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   ui.quest_size_field->config("x", 0, 99999, 80);
   ui.map_grid_size_field->config("x", 8, 99999, 8);
+  ui.sprite_grid_size_field->config("x", 8, 99999, 8);
 
   reset();
 
@@ -75,6 +76,26 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_map_grid_style()));
   connect(ui.map_grid_color_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_grid_color()));
+
+  // Sprite editor.
+  connect(ui.sprite_main_background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_sprite_main_background()));
+  connect(ui.sprite_grid_show_at_opening_field, SIGNAL(clicked()),
+          this, SLOT(change_sprite_grid_show_at_opening()));
+  connect(ui.sprite_grid_size_field, SIGNAL(value_changed(int,int)),
+          this, SLOT(change_sprite_grid_size()));
+  connect(ui.sprite_grid_style_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_sprite_grid_style()));
+  connect(ui.sprite_grid_color_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_sprite_grid_color()));
+  connect(ui.sprite_auto_detect_grid_field, SIGNAL(clicked()),
+          this, SLOT(change_sprite_auto_detect_grid()));
+  connect(ui.sprite_previewer_background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_sprite_previewer_background()));
+  connect(ui.sprite_origin_show_at_opening_field, SIGNAL(clicked()),
+          this, SLOT(change_sprite_origin_show_at_opening()));
+  connect(ui.sprite_origin_color_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_sprite_origin_color()));
 }
 
 /**
@@ -153,6 +174,17 @@ void SettingsDialog::update() {
   update_map_grid_size();
   update_map_grid_style();
   update_map_grid_color();
+
+  // Sprite editor.
+  update_sprite_main_background();
+  update_sprite_grid_show_at_opening();
+  update_sprite_grid_size();
+  update_sprite_grid_style();
+  update_sprite_grid_color();
+  update_sprite_auto_detect_grid();
+  update_sprite_previewer_background();
+  update_sprite_origin_show_at_opening();
+  update_sprite_origin_color();
 }
 
 /**
@@ -439,5 +471,176 @@ void SettingsDialog::change_map_grid_color() {
 
   edited_settings[Settings::map_grid_color] =
     ui.map_grid_color_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite main background field.
+ */
+void SettingsDialog::update_sprite_main_background() {
+
+  ui.sprite_main_background_field->set_color(
+    settings.get_value_color(Settings::sprite_main_background));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite main background.
+ */
+void SettingsDialog::change_sprite_main_background() {
+
+  edited_settings[Settings::sprite_main_background] =
+    ui.sprite_main_background_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite grid show at opening field.
+ */
+void SettingsDialog::update_sprite_grid_show_at_opening() {
+
+  ui.sprite_grid_show_at_opening_field->setChecked(
+    settings.get_value_bool(Settings::sprite_grid_show_at_opening));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite grid show at opening.
+ */
+void SettingsDialog::change_sprite_grid_show_at_opening() {
+
+  edited_settings[Settings::sprite_grid_show_at_opening] =
+    ui.sprite_grid_show_at_opening_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite grid size field.
+ */
+void SettingsDialog::update_sprite_grid_size() {
+
+  ui.sprite_grid_size_field->set_size(
+    settings.get_value_size(Settings::sprite_grid_size));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite grid size.
+ */
+void SettingsDialog::change_sprite_grid_size() {
+
+  edited_settings[Settings::sprite_grid_size] =
+    ui.sprite_grid_size_field->get_size();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite grid style field.
+ */
+void SettingsDialog::update_sprite_grid_style() {
+
+  ui.sprite_grid_style_field->set_selected_value(static_cast<GridStyle>(
+    settings.get_value_int(Settings::sprite_grid_style)));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite grid style.
+ */
+void SettingsDialog::change_sprite_grid_style() {
+
+  edited_settings[Settings::sprite_grid_style] =
+    static_cast<int>(ui.sprite_grid_style_field->get_selected_value());
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite grid color field.
+ */
+void SettingsDialog::update_sprite_grid_color() {
+
+  ui.sprite_grid_color_field->set_color(
+    settings.get_value_color(Settings::sprite_grid_color));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite grid color.
+ */
+void SettingsDialog::change_sprite_grid_color() {
+
+  edited_settings[Settings::sprite_grid_color] =
+    ui.sprite_grid_color_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite auto detect grid field.
+ */
+void SettingsDialog::update_sprite_auto_detect_grid() {
+
+  ui.sprite_auto_detect_grid_field->setChecked(
+    settings.get_value_bool(Settings::sprite_auto_detect_grid));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite auto detect grid.
+ */
+void SettingsDialog::change_sprite_auto_detect_grid() {
+
+  edited_settings[Settings::sprite_auto_detect_grid] =
+    ui.sprite_auto_detect_grid_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite previewer background field.
+ */
+void SettingsDialog::update_sprite_previewer_background() {
+
+  ui.sprite_previewer_background_field->set_color(
+    settings.get_value_color(Settings::sprite_previewer_background));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite previewer background.
+ */
+void SettingsDialog::change_sprite_previewer_background() {
+
+  edited_settings[Settings::sprite_previewer_background] =
+    ui.sprite_previewer_background_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite origin show at opening field.
+ */
+void SettingsDialog::update_sprite_origin_show_at_opening() {
+
+  ui.sprite_origin_show_at_opening_field->setChecked(
+    settings.get_value_bool(Settings::sprite_origin_show_at_opening));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite origin show at opening.
+ */
+void SettingsDialog::change_sprite_origin_show_at_opening() {
+
+  edited_settings[Settings::sprite_origin_show_at_opening] =
+    ui.sprite_origin_show_at_opening_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite origin color field.
+ */
+void SettingsDialog::update_sprite_origin_color() {
+
+  ui.sprite_origin_color_field->set_color(
+    settings.get_value_color(Settings::sprite_origin_color));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite origin color.
+ */
+void SettingsDialog::change_sprite_origin_color() {
+
+  edited_settings[Settings::sprite_origin_color] =
+    ui.sprite_origin_color_field->get_color().name();
   update_buttons();
 }

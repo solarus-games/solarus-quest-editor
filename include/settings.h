@@ -44,6 +44,17 @@ public:
   static const QString map_grid_style;
   static const QString map_grid_color;
 
+  // Sprite editor keys.
+  static const QString sprite_main_background;
+  static const QString sprite_grid_show_at_opening;
+  static const QString sprite_grid_size;
+  static const QString sprite_grid_style;
+  static const QString sprite_grid_color;
+  static const QString sprite_auto_detect_grid;
+  static const QString sprite_previewer_background;
+  static const QString sprite_origin_show_at_opening;
+  static const QString sprite_origin_color;
+
   Settings();
 
   static void load_default_application_settings();

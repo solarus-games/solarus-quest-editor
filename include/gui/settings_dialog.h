@@ -74,6 +74,26 @@ public slots:
   void update_map_grid_color();
   void change_map_grid_color();
 
+  // Sprite editor.
+  void update_sprite_main_background();
+  void change_sprite_main_background();
+  void update_sprite_grid_show_at_opening();
+  void change_sprite_grid_show_at_opening();
+  void update_sprite_grid_size();
+  void change_sprite_grid_size();
+  void update_sprite_grid_style();
+  void change_sprite_grid_style();
+  void update_sprite_grid_color();
+  void change_sprite_grid_color();
+  void update_sprite_auto_detect_grid();
+  void change_sprite_auto_detect_grid();
+  void update_sprite_previewer_background();
+  void change_sprite_previewer_background();
+  void update_sprite_origin_show_at_opening();
+  void change_sprite_origin_show_at_opening();
+  void update_sprite_origin_color();
+  void change_sprite_origin_color();
+
 signals:
 
   void settings_changed();

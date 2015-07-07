@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="general_tab">
       <attribute name="title">
@@ -319,6 +319,9 @@
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>15</width>
@@ -349,6 +352,307 @@
        </item>
        <item>
         <spacer name="map_editor_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="sprite_editor_tab">
+      <attribute name="title">
+       <string>Sprite editor</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QGroupBox" name="sprite_main_graphics_group_box">
+         <property name="title">
+          <string>Main graphics view</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <layout class="QHBoxLayout" name="sprite_main_background_layout">
+            <item>
+             <widget class="QLabel" name="sprite_main_background_label">
+              <property name="text">
+               <string>Background color:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="ColorPicker" name="sprite_main_background_field">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="sprite_main_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="sprite_grid_label">
+            <property name="text">
+             <string>Grid:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="sprite_grid_layout">
+            <item>
+             <spacer name="sprite_grid_spacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>15</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="sprite_grid_layout_2">
+              <item row="0" column="4">
+               <widget class="EnumSelector&lt;GridStyle&gt;" name="sprite_grid_style_field"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="PairSpinBox" name="sprite_grid_size_field" native="true"/>
+              </item>
+              <item row="1" column="4">
+               <widget class="ColorPicker" name="sprite_grid_color_field">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0" colspan="2">
+               <widget class="QCheckBox" name="sprite_grid_show_at_opening_field">
+                <property name="text">
+                 <string>Show at opening</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="sprite_grid_spacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>15</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="sprite_grid_size_label">
+                <property name="text">
+                 <string>Default size:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="sprite_grid_style_label">
+                <property name="text">
+                 <string>Style:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="sprite_grid_color_label">
+                <property name="text">
+                 <string>Color:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QCheckBox" name="sprite_auto_detect_grid_field">
+                <property name="text">
+                 <string>Auto detect size</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="sprite_grid_spacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="sprite_previewer_graphics_group_box">
+         <property name="title">
+          <string>Previewer graphics view</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="2" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="sprite_origin_layout">
+            <item>
+             <spacer name="sprite_origin_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>15</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="sprite_origin_show_at_opening_field">
+                <property name="text">
+                 <string>Show at opening</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="sprite_origin_color_label">
+                <property name="text">
+                 <string>Color:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="ColorPicker" name="sprite_origin_color_field">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <spacer name="sprite_origin_spacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Minimum</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>15</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="sprite_origin_spacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="sprite_previewer_background_label">
+            <property name="text">
+             <string>Background color:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="sprite_previewer_background_layout">
+            <item>
+             <widget class="ColorPicker" name="sprite_previewer_background_field">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="sprite_previewer_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="sprite_origin_label">
+            <property name="text">
+             <string>Origin:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="sprite_editor_spacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>

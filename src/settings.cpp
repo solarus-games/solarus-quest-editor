@@ -38,6 +38,22 @@ const QString Settings::map_grid_size = "map_editor/grid_size";
 const QString Settings::map_grid_style = "map_editor/grid_style";
 const QString Settings::map_grid_color = "map_editor/grid_color";
 
+// Sprite editor keys.
+const QString Settings::sprite_main_background =
+  "sprite_editor/main_background";
+const QString Settings::sprite_grid_show_at_opening =
+  "sprite_editor/grid_show_at_opening";
+const QString Settings::sprite_grid_size = "sprite_editor/grid_size";
+const QString Settings::sprite_grid_style = "sprite_editor/grid_style";
+const QString Settings::sprite_grid_color = "sprite_editor/grid_color";
+const QString Settings::sprite_auto_detect_grid =
+  "sprite_editor/auto_detect_grid";
+const QString Settings::sprite_previewer_background =
+  "sprite_editor/previewer_background";
+const QString Settings::sprite_origin_show_at_opening =
+  "sprite_editor/origin_show_at_opening";
+const QString Settings::sprite_origin_color = "sprite_editor/origin_color";
+
 QMap<QString, QVariant> Settings::default_values = {
 
   // General.
@@ -56,7 +72,18 @@ QMap<QString, QVariant> Settings::default_values = {
   { Settings::map_grid_show_at_opening, false },
   { Settings::map_grid_size, QSize(16, 16) },
   { Settings::map_grid_style, static_cast<int>(GridStyle::DASHED) },
-  { Settings::map_grid_color, "#000000" }
+  { Settings::map_grid_color, "#000000" },
+
+  // Sprite editor.
+  { Settings::sprite_main_background, "#888888" },
+  { Settings::sprite_grid_show_at_opening, false },
+  { Settings::sprite_grid_size, QSize(16, 16) },
+  { Settings::sprite_grid_style, static_cast<int>(GridStyle::DASHED) },
+  { Settings::sprite_grid_color, "#000000" },
+  { Settings::sprite_auto_detect_grid, false },
+  { Settings::sprite_previewer_background, "#888888" },
+  { Settings::sprite_origin_show_at_opening, false },
+  { Settings::sprite_origin_color, "#0000ff" }
 };
 
 /**
@@ -72,9 +99,15 @@ Settings::Settings() :
 void Settings::load_default_application_settings() {
 
   QPalette palette;
+  QString alternate_color = palette.alternateBase().color().name();
+  QString base_color = palette.base().color().name();
 
   // Map editor.
-  default_values[map_background] = palette.dark().color().name();
+  default_values[map_background] = alternate_color;
+
+  // Sprite editor.
+  default_values[sprite_main_background] = base_color;
+  default_values[sprite_previewer_background] = base_color;
 }
 
 /**
