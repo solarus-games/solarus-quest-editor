@@ -135,7 +135,7 @@ SpriteModel::Index SpriteScene::get_direction_index(
 void SpriteScene::drawBackground(QPainter* painter, const QRectF& rect) {
 
   // Draw the background color.
-  painter->fillRect(rect, palette().window());
+  painter->fillRect(rect, backgroundBrush());
 
   // Draw the full PNG image of the sprite animation.
   const QImage& src_image = model.get_animation_image(animation_name);
@@ -343,7 +343,11 @@ void DirectionItem::paint(QPainter* painter,
 
   // Start with an opaque background, to erase anything below
   // if the direction has transparency.
-  painter->fillRect(box, widget->palette().window());
+  if (scene() != nullptr) {
+    painter->fillRect(box, scene()->backgroundBrush());
+  } else {
+    painter->fillRect(box, widget->palette().base());
+  }
 
   const bool selected = option->state & QStyle::State_Selected;
 

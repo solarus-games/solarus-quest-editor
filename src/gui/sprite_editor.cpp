@@ -18,10 +18,12 @@
 #include "gui/gui_tools.h"
 #include "gui/get_animation_name_dialog.h"
 #include "gui/sprite_editor.h"
+#include "gui/sprite_scene.h"
 #include "editor_exception.h"
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "settings.h"
 #include "sprite_model.h"
 #include <QUndoStack>
 
@@ -673,6 +675,7 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   create_animation = create_context_menu.addAction(tr("Create animation"));
   create_direction = create_context_menu.addAction(tr("Create direction"));
 
+  load_settings();
   update();
 
   // Make connections.
@@ -781,6 +784,32 @@ SpriteModel& SpriteEditor::get_model() {
 void SpriteEditor::save() {
 
   model->save();
+}
+
+/**
+ * @copydoc Editor::reload_settings
+ */
+void SpriteEditor::reload_settings() {
+
+  Settings settings;
+
+  SpriteScene* scene = ui.sprite_view->get_scene();
+  if (scene != nullptr) {
+    QBrush brush(settings.get_value_color(Settings::sprite_main_background));
+    scene->setBackgroundBrush(brush);
+  }
+
+  get_view_settings().set_grid_style(static_cast<GridStyle>(
+    settings.get_value_int(Settings::sprite_grid_style)));
+  get_view_settings().set_grid_color(
+    settings.get_value_color(Settings::sprite_grid_color));
+
+  ui.sprite_previewer->set_background_color(
+    settings.get_value_color(Settings::sprite_previewer_background));
+  ui.sprite_previewer->set_origin_color(
+    settings.get_value_color(Settings::sprite_origin_color));
+
+  // TODO: auto detect grid size ...
 }
 
 /**
@@ -1386,4 +1415,22 @@ void SpriteEditor::change_direction_num_columns_requested() {
   }
 
   try_command(new SetDirectionNumColumnsCommand(*this, index, num_columns));
+}
+
+/**
+ * @brief Loads settings.
+ */
+void SpriteEditor::load_settings() {
+
+  ViewSettings& view = get_view_settings();
+  Settings settings;
+
+  view.set_grid_visible(
+    settings.get_value_bool(Settings::sprite_grid_show_at_opening));
+  view.set_grid_size(settings.get_value_size(Settings::sprite_grid_size));
+
+  ui.sprite_previewer->set_show_origin(
+    settings.get_value_bool(Settings::sprite_origin_show_at_opening));
+
+  reload_settings();
 }

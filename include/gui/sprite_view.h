@@ -36,6 +36,8 @@ public:
 
   SpriteView(QWidget* parent = nullptr);
 
+  SpriteScene* get_scene();
+
   void set_model(SpriteModel* sprite);
   void set_view_settings(ViewSettings& view_settings);
 

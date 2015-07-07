@@ -102,6 +102,34 @@ void SpritePreviewer::set_model(SpriteModel* model) {
 }
 
 /**
+ * @brief Changes the background color.
+ * @param color The color to set.
+ */
+void SpritePreviewer::set_background_color(const QColor& color) {
+  ui.frame_view->scene()->setBackgroundBrush(QBrush(color));
+}
+
+/**
+ * @brief Changes whether the origin is displayed.
+ * @param show_origin true to display the origin, false otherwise.
+ */
+void SpritePreviewer::set_show_origin(bool show_origin) {
+
+  ui.origin_check_box->setChecked(show_origin);
+  update_origin();
+}
+
+/**
+ * @brief Changes the origin color.
+ * @param color The color to set.
+ */
+void SpritePreviewer::set_origin_color(const QColor& color) {
+
+  origin_h->setPen(QPen(color));
+  origin_v->setPen(QPen(color));
+}
+
+/**
  * @brief Update the selection.
  */
 void SpritePreviewer::update_selection() {

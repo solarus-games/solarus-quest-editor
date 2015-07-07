@@ -60,6 +60,14 @@ SpriteView::SpriteView(QWidget* parent) :
 }
 
 /**
+ * @brief Returns the sprite scene represented in this view.
+ * @return The scene or nullptr if no sprite was set.
+ */
+SpriteScene* SpriteView::get_scene() {
+  return scene;
+}
+
+/**
  * @brief Sets the sprite to represent in this view.
  * @param model The sprite model, or nullptr to remove any model.
  * This class does not take ownership on the model.

@@ -37,6 +37,7 @@ public:
   SpriteModel& get_model();
 
   void save() override;
+  void reload_settings() override;
 
 public slots:
 
@@ -84,6 +85,8 @@ public slots:
   void change_direction_num_columns_requested();
 
 private:
+
+  void load_settings();
 
   Ui::SpriteEditor ui;          /**< The sprite editor widgets. */
   QString sprite_id;            /**< Id of the sprite being edited. */
