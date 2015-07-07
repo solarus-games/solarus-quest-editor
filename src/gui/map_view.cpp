@@ -1693,7 +1693,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   // Choose once for all entitites the preferred dimension to use
   // in case resizing is constrained.
-  QPoint leader_distance_to_mouse = current_point - old_leader_box.bottomRight();
+  QPoint leader_distance_to_mouse = current_point - (old_leader_box.bottomRight() + QPoint(1, 1));
   bool horizontal_preferred = qAbs(leader_distance_to_mouse.x()) > qAbs(leader_distance_to_mouse.y());
 
   // Determine the change to apply to all selected entities.
