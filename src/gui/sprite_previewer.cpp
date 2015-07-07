@@ -42,7 +42,7 @@ SpritePreviewer::SpritePreviewer(QWidget *parent) :
   ui.frame_view->scene()->addItem(origin_h);
   ui.frame_view->scene()->addItem(origin_v);
   ui.frame_view->scene()->setBackgroundBrush(
-        ui.frame_view->scene()->palette().window());
+        ui.frame_view->scene()->palette().base());
 
   // Zoom.
   ui.zoom_button->setMenu(create_zoom_menu());

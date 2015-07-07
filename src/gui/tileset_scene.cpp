@@ -134,7 +134,7 @@ int TilesetScene::get_pattern_index(const QGraphicsItem* item) {
 void TilesetScene::drawBackground(QPainter* painter, const QRectF& rect) {
 
   // Draw the background color.
-  painter->fillRect(rect, palette().window());
+  painter->fillRect(rect, backgroundBrush());
 
   // Draw the full PNG image of the tileset.
   const QImage& patterns_image = model.get_patterns_image();
@@ -367,7 +367,11 @@ void PatternItem::paint(QPainter* painter,
 
   // Start with an opaque background, to erase anything below
   // if the pattern has transparency.
-  painter->fillRect(box, widget->palette().window());
+  if (scene() != nullptr) {
+    painter->fillRect(box, scene()->backgroundBrush());
+  } else {
+    painter->fillRect(box, widget->palette().base());
+  }
 
   const bool selected = option->state & QStyle::State_Selected;
 
