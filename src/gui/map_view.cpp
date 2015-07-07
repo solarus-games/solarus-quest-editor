@@ -108,7 +108,7 @@ public:
 private:
   QRect update_box(
       const EntityIndex& index,
-      const QPoint& second_xy,
+      const QPoint& reference_change,
       bool horizontal_preferred,
       const QPoint& center);
 
@@ -1690,20 +1690,16 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
   // Choose once for all entitites the preferred dimension to use
   // in case resizing is constrained.
   QPoint leader_distance_to_mouse = current_point - old_leader_box.bottomRight();
-  leader_distance_to_mouse = QPoint(
-        qAbs(leader_distance_to_mouse.x()),
-        qAbs(leader_distance_to_mouse.y())
-  );
-  bool horizontal_preferred = leader_distance_to_mouse.x() > leader_distance_to_mouse.y();
+  bool horizontal_preferred = qAbs(leader_distance_to_mouse.x()) > qAbs(leader_distance_to_mouse.y());
+  QPoint reference_change = Point::floor_8(leader_distance_to_mouse);
 
   // Compute the new size and position of each entity.
   bool changed = false;
-  for (auto it = old_boxes.constBegin(); it != old_boxes.end(); ++it) {
+  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
     const EntityIndex& index = it.key();
     const QRect& old_box = it.value();
 
-    QPoint leader_offset = old_box.bottomRight() - old_leader_box.bottomRight();
-    QRect new_box = update_box(index, leader_offset + current_point, horizontal_preferred, center);
+    QRect new_box = update_box(index, reference_change, horizontal_preferred, center);
     new_boxes.insert(index, new_box);
     changed |= new_box != old_box;
   }
@@ -1743,8 +1739,10 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 /**
  * @brief Updates with new coordinates the rectangle of one entity.
  * @param index Index of the entity to resize.
- * @param second_xy Coordinate of the second point of the rectangle to set for this entity,
- * in map coordinates.
+ * @param reference_change Translation representing how the user wants to
+ * resize. This translation will be applied at best, preserving constrains on
+ * the specific entity: its size will remain a multiple of its base size,
+ * and its resizing mode will be respected.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
  * this should be the horizontal or vertical dimension.
  * @param center Center point of all entities being resized.
@@ -1753,7 +1751,7 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  */
 QRect ResizingEntitiesState::update_box(
     const EntityIndex& index,
-    const QPoint& second_xy,
+    const QPoint& reference_change,
     bool horizontal_preferred,
     const QPoint& center) {
 
@@ -1772,14 +1770,9 @@ QRect ResizingEntitiesState::update_box(
   }
 
   const QRect& old_box = old_boxes.value(index);
-  const QRect& old_leader_box = old_boxes.value(leader_index);
-  const QRect& leader_box = map.get_entity_bounding_box(leader_index);
-  const QPoint& leader_change =
-      leader_box.topLeft() - old_leader_box.topLeft() +
-      leader_box.bottomRight() - old_leader_box.bottomRight();
 
   QPoint point_a = old_box.topLeft();
-  QPoint point_b = second_xy;
+  QPoint point_b = old_box.bottomRight() + reference_change;
   // A is the original point of the rectangle we are drawing.
   // B is the second point of the rectangle, determined by the mouse position.
 
@@ -1822,7 +1815,7 @@ QRect ResizingEntitiesState::update_box(
       // Resizing a non horizontally resizable entity located
       // on the right of the group: move it instead.
       if (old_box.center().x() > center.x()) {
-        point_a.setX(old_box.x() + leader_change.x());
+        point_a.setX(old_box.x() + reference_change.x());
       }
       else {
         point_a.setX(old_box.x());
@@ -1856,7 +1849,7 @@ QRect ResizingEntitiesState::update_box(
       // Resizing a non vertically resizable entity located
       // on the bottom of the group: move it instead.
       if (old_box.center().y() > center.y()) {
-        point_a.setY(old_box.y() + leader_change.y());
+        point_a.setY(old_box.y() + reference_change.y());
       }
       else {
         point_a.setY(old_box.y());
