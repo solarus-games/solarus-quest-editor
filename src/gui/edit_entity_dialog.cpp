@@ -107,6 +107,46 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 }
 
 /**
+ * @brief Slot called when the user change the width value.
+ * @param width The new width value.
+ */
+void EditEntityDialog::on_width_changed(int width) {
+
+  ResizeMode mode = entity_before.get_resize_mode();
+
+  ui.size_field->blockSignals(true);
+
+  if (mode == ResizeMode::SQUARE) {
+    ui.size_field->set_second_value(width);
+  }
+  else if (mode == ResizeMode::SINGLE_DIMENSION) {
+    ui.size_field->set_second_value(entity_before.get_base_size().height());
+  }
+
+  ui.size_field->blockSignals(false);
+}
+
+/**
+ * @brief Slot called when the user change the height value.
+ * @param width The new height value.
+ */
+void EditEntityDialog::on_height_changed(int height) {
+
+  ResizeMode mode = entity_before.get_resize_mode();
+
+  ui.size_field->blockSignals(true);
+
+  if (mode == ResizeMode::SQUARE) {
+    ui.size_field->set_first_value(height);
+  }
+  else if (mode == ResizeMode::SINGLE_DIMENSION) {
+    ui.size_field->set_first_value(entity_before.get_base_size().width());
+  }
+
+  ui.size_field->blockSignals(false);
+}
+
+/**
  * @brief Creates a validator for entity name fields.
  * @return A validator that checks entity name inputs.
  */
@@ -1170,6 +1210,14 @@ void EditEntityDialog::initialize_size() {
 
   case ResizeMode::HORIZONTAL_ONLY:
     ui.size_field->set_second_enabled(false);
+    break;
+
+  case ResizeMode::SQUARE:
+  case ResizeMode::SINGLE_DIMENSION:
+    connect(ui.size_field, SIGNAL(first_value_changed(int)),
+            this, SLOT(on_width_changed(int)));
+    connect(ui.size_field, SIGNAL(second_value_changed(int)),
+            this, SLOT(on_height_changed(int)));
     break;
 
   default: break;

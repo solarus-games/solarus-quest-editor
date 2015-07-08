@@ -88,12 +88,15 @@ public slots:
 
 signals:
 
+  void first_value_changed(int first_value);
+  void second_value_changed(int second_value);
   void value_changed(int first_value, int second_value);
   void editing_finished();
 
 private slots:
 
-  void on_value_changed();
+  void on_first_value_changed();
+  void on_second_value_changed();
 
 private:
 

@@ -35,6 +35,11 @@ public:
   EntityModel& get_entity_before() const;
   EntityModelPtr get_entity_after();
 
+private slots:
+
+  void on_width_changed(int width);
+  void on_height_changed(int height);
+
 private:
 
   void initialize();
