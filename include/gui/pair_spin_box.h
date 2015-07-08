@@ -49,6 +49,9 @@ public:
 
   QString get_separator_text() const;
 
+  bool get_first_enabled() const;
+  bool get_second_enabled() const;
+
 public slots:
 
   void set_first_value(int value);
@@ -79,6 +82,9 @@ public slots:
 
   void config(
     const QString& separator_text, int min = 0, int max = 99999, int step = 1);
+
+  void set_first_enabled(bool enabled);
+  void set_second_enabled(bool enabled);
 
 signals:
 

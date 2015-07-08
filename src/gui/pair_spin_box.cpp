@@ -152,6 +152,24 @@ QString PairSpinBox::get_separator_text() const {
 }
 
 /**
+ * @brief Returns whether the first spin box is enabled.
+ * @return @c true if the first spin box is enabled.
+ */
+bool PairSpinBox::get_first_enabled() const {
+
+  return first_spin_box.isEnabled();
+}
+
+/**
+ * @brief Returns whether the second spin box is enabled.
+ * @return @c true if the second spin box is enabled.
+ */
+bool PairSpinBox::get_second_enabled() const {
+
+  return second_spin_box.isEnabled();
+}
+
+/**
  * @brief Changes the first value.
  * @param value The new value.
  */
@@ -337,6 +355,24 @@ void PairSpinBox::config(
   set_min(min);
   set_max(max);
   set_step(step);
+}
+
+/**
+ * @brief Changes the enable state of the first spin box.
+ * @param enabled @c true to enable the spin box.
+ */
+void PairSpinBox::set_first_enabled(bool enabled) {
+
+  first_spin_box.setEnabled(enabled);
+}
+
+/**
+ * @brief Changes the enable state of the second spin box.
+ * @param enabled @c true to enable the spin box.
+ */
+void PairSpinBox::set_second_enabled(bool enabled) {
+
+  second_spin_box.setEnabled(enabled);
 }
 
 /**
