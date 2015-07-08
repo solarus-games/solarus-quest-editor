@@ -1155,6 +1155,26 @@ void EditEntityDialog::initialize_size() {
   ui.size_field->set_first_min(base_size.width());
   ui.size_field->set_second_step(base_size.height());
   ui.size_field->set_second_min(base_size.height());
+
+  // Apply the resize mode contraints.
+  switch (entity_before.get_resize_mode()) {
+
+  case ResizeMode::NONE:
+    ui.size_field->set_first_enabled(false);
+    ui.size_field->set_second_enabled(false);
+    break;
+
+  case ResizeMode::VERTICAL_ONLY:
+    ui.size_field->set_first_enabled(false);
+    break;
+
+  case ResizeMode::HORIZONTAL_ONLY:
+    ui.size_field->set_second_enabled(false);
+    break;
+
+  default: break;
+
+  }
 }
 
 /**
