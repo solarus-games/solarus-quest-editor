@@ -33,9 +33,9 @@ PairSpinBox::PairSpinBox(QWidget *parent) :
   layout->addSpacerItem(new QSpacerItem(0, 22, QSizePolicy::Expanding));
 
   connect(&first_spin_box, SIGNAL(valueChanged(int)),
-          this, SLOT(on_value_changed()));
+          this, SLOT(on_first_value_changed()));
   connect(&second_spin_box, SIGNAL(valueChanged(int)),
-          this, SLOT(on_value_changed()));
+          this, SLOT(on_second_value_changed()));
 
   connect(&first_spin_box, SIGNAL(editingFinished()),
           this, SIGNAL(editing_finished()));
@@ -376,9 +376,19 @@ void PairSpinBox::set_second_enabled(bool enabled) {
 }
 
 /**
- * @brief Slot called when the user has just change a value.
+ * @brief Slot called when the user has just change the first value.
  */
-void PairSpinBox::on_value_changed() {
+void PairSpinBox::on_first_value_changed() {
 
+  emit first_value_changed(get_first_value());
+  emit value_changed(get_first_value(), get_second_value());
+}
+
+/**
+ * @brief Slot called when the user has just change the second value.
+ */
+void PairSpinBox::on_second_value_changed() {
+
+  emit second_value_changed(get_second_value());
   emit value_changed(get_first_value(), get_second_value());
 }
