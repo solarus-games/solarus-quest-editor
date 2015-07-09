@@ -1156,11 +1156,11 @@ bool EntityModel::is_size_valid(const QSize& size) const {
     return false;
   }
 
-  if (width % 8 != 0 || height % 8 != 0) {
+  const QSize& base_size = get_base_size();
+  if (width % base_size.width() != 0 || height % base_size.height() != 0) {
     return false;
   }
 
-  const QSize& base_size = get_base_size();
   switch (get_resize_mode()) {
 
   case ResizeMode::NONE:
