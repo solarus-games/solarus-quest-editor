@@ -542,6 +542,9 @@ void TextEditorWidget::remove_tab () {
         int length = space_count;
         if (space_count > tab_length) {
           length = space_count % tab_length;
+          if (length == 0) {
+            length = tab_length;
+          }
         }
         cursor.setPosition(pos);
         cursor.movePosition(
