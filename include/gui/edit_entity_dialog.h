@@ -21,6 +21,7 @@
 #include "entities/entity_traits.h"
 
 class MapModel;
+enum class ResizeMode;
 
 class EditEntityDialog : public QDialog {
   Q_OBJECT
@@ -37,8 +38,9 @@ public:
 
 private slots:
 
-  void on_width_changed(int width);
-  void on_height_changed(int height);
+  void width_changed(int width);
+  void height_changed(int height);
+  void direction_changed();
 
 private:
 
@@ -116,9 +118,12 @@ private:
   QValidator* create_dialog_id_validator();
   QValidator* create_savegame_variable_validator();
 
+  void update_size_constraints();
+
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
   EntityModelPtr entity_after;         /**< A copy of the entity with the modified data. */
+  ResizeMode resize_mode;              /**< The current resize mode. */
 
   /**
    * @brief Info about basic boolean fields represented by a checkbox.
@@ -206,6 +211,7 @@ private:
   QList<SimpleBooleanField> simple_boolean_fields;
   QList<SimpleIntegerField> simple_integer_fields;
   QList<SimpleStringField> simple_string_fields;
+
 };
 
 #endif
