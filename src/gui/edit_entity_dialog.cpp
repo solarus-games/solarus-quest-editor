@@ -53,7 +53,8 @@ const QString weight_field_name = "weight";
  */
 EditEntityDialog::EditEntityDialog(EntityModel& entity_before, QWidget* parent) :
   QDialog(parent),
-  entity_before(entity_before) {
+  entity_before(entity_before),
+  resize_mode(entity_before.get_resize_mode()) {
 
   ui.setupUi(this);
 
@@ -110,16 +111,14 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
  * @brief Slot called when the user change the width value.
  * @param width The new width value.
  */
-void EditEntityDialog::on_width_changed(int width) {
-
-  ResizeMode mode = entity_before.get_resize_mode();
+void EditEntityDialog::width_changed(int width) {
 
   ui.size_field->blockSignals(true);
 
-  if (mode == ResizeMode::SQUARE) {
+  if (resize_mode == ResizeMode::SQUARE) {
     ui.size_field->set_second_value(width);
   }
-  else if (mode == ResizeMode::SINGLE_DIMENSION) {
+  else if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
     ui.size_field->set_second_value(entity_before.get_base_size().height());
   }
 
@@ -130,20 +129,36 @@ void EditEntityDialog::on_width_changed(int width) {
  * @brief Slot called when the user change the height value.
  * @param width The new height value.
  */
-void EditEntityDialog::on_height_changed(int height) {
-
-  ResizeMode mode = entity_before.get_resize_mode();
+void EditEntityDialog::height_changed(int height) {
 
   ui.size_field->blockSignals(true);
 
-  if (mode == ResizeMode::SQUARE) {
+  if (resize_mode == ResizeMode::SQUARE) {
     ui.size_field->set_first_value(height);
   }
-  else if (mode == ResizeMode::SINGLE_DIMENSION) {
+  else if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
     ui.size_field->set_first_value(entity_before.get_base_size().width());
   }
 
   ui.size_field->blockSignals(false);
+}
+
+/**
+ * @brief Slot called when the user change the direction value.
+ */
+void EditEntityDialog::direction_changed() {
+
+  entity_after = std::move(EntityModel::clone(get_map(), entity_before.get_index()));
+  apply_direction();
+
+  resize_mode = entity_after->get_resize_mode();
+  update_size_constraints();
+
+  if (!entity_after->is_size_valid(ui.size_field->get_size())) {
+    ui.size_field->set_size(entity_after->get_valid_size());
+  }
+
+  entity_after.reset();
 }
 
 /**
@@ -753,6 +768,9 @@ void EditEntityDialog::initialize_direction() {
     ++index;
   }
   ui.direction_field->setCurrentIndex(index);
+
+  connect(ui.direction_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(direction_changed()));
 }
 
 /**
@@ -1197,32 +1215,12 @@ void EditEntityDialog::initialize_size() {
   ui.size_field->set_second_min(base_size.height());
 
   // Apply the resize mode contraints.
-  switch (entity_before.get_resize_mode()) {
+  update_size_constraints();
 
-  case ResizeMode::NONE:
-    ui.size_field->set_first_enabled(false);
-    ui.size_field->set_second_enabled(false);
-    break;
-
-  case ResizeMode::VERTICAL_ONLY:
-    ui.size_field->set_first_enabled(false);
-    break;
-
-  case ResizeMode::HORIZONTAL_ONLY:
-    ui.size_field->set_second_enabled(false);
-    break;
-
-  case ResizeMode::SQUARE:
-  case ResizeMode::SINGLE_DIMENSION:
-    connect(ui.size_field, SIGNAL(first_value_changed(int)),
-            this, SLOT(on_width_changed(int)));
-    connect(ui.size_field, SIGNAL(second_value_changed(int)),
-            this, SLOT(on_height_changed(int)));
-    break;
-
-  default: break;
-
-  }
+  connect(ui.size_field, SIGNAL(first_value_changed(int)),
+          this, SLOT(width_changed(int)));
+  connect(ui.size_field, SIGNAL(second_value_changed(int)),
+          this, SLOT(height_changed(int)));
 }
 
 /**
@@ -1506,3 +1504,16 @@ void EditEntityDialog::apply_xy() {
   entity_after->set_xy(ui.xy_field->get_point());
 }
 
+/**
+ * @brief Updates the size constraints with the current resize mode.
+ */
+void EditEntityDialog::update_size_constraints() {
+
+  ui.size_field->set_first_enabled(
+    resize_mode != ResizeMode::NONE &&
+    resize_mode != ResizeMode::VERTICAL_ONLY);
+
+  ui.size_field->set_second_enabled(
+    resize_mode != ResizeMode::NONE &&
+    resize_mode != ResizeMode::HORIZONTAL_ONLY);
+}
