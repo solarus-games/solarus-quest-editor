@@ -61,6 +61,10 @@ public slots:
   void change_font_family();
   void update_font_size();
   void change_font_size();
+  void update_tab_length();
+  void change_tab_length();
+  void update_replace_tab_by_spaces();
+  void change_replace_tab_by_spaces();
 
   // Map editor.
   void update_map_background();

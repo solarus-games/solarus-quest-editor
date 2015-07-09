@@ -49,6 +49,12 @@ public:
   virtual void keyPressEvent(QKeyEvent* event) override;
   virtual void resizeEvent(QResizeEvent* event) override;
 
+  int get_tab_length() const;
+  void set_tab_length(int length);
+
+  bool get_replace_tab_by_spaces() const;
+  void set_replace_tab_by_spaces(bool replace);
+
 private slots:
 
   void undo_command_added();
@@ -58,7 +64,12 @@ private slots:
 
 private:
 
+  void insert_tab();
+  void remove_tab();
+
   QWidget* line_number_area;
-  QUndoStack& undo_stack;    /**< The undo/redo history to use. */
+  QUndoStack& undo_stack;       /**< The undo/redo history to use. */
+  int tab_length;               /**< The tabulation length. */
+  bool replace_tab_by_spaces;   /**< To replace tabulation by spaces. */
 
 };

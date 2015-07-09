@@ -29,6 +29,9 @@ const QString Settings::quest_size = "quest_size";
 // Text editor keys.
 const QString Settings::font_family = "text_editor/font_family";
 const QString Settings::font_size = "text_editor/font_size";
+const QString Settings::tab_length = "text_editor/tab_length";
+const QString Settings::replace_tab_by_spaces =
+  "text_editor/replace_tab_by_spaces";
 
 // Map editor keys.
 const QString Settings::map_background = "map_editor/background";
@@ -66,6 +69,8 @@ QMap<QString, QVariant> Settings::default_values = {
   // Text editor.
   { Settings::font_family, "DejaVu Sans Mono" },
   { Settings::font_size, 10 },
+  { Settings::tab_length, 2 },
+  { Settings::replace_tab_by_spaces, true },
 
   // Map editor.
   { Settings::map_background, "#888888" },

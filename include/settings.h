@@ -36,6 +36,8 @@ public:
   // Text editor keys.
   static const QString font_family;
   static const QString font_size;
+  static const QString tab_length;
+  static const QString replace_tab_by_spaces;
 
   // Map editor keys.
   static const QString map_background;

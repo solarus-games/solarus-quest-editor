@@ -218,6 +218,9 @@ void TextEditor::reload_settings() {
   font.setPointSize(settings.get_value_int(Settings::font_size));
   font.setStyleHint(QFont::TypeWriter);
   setFont(font);
+  text_widget->set_tab_length(settings.get_value_int(Settings::tab_length));
+  text_widget->set_replace_tab_by_spaces(
+    settings.get_value_bool(Settings::replace_tab_by_spaces));
 }
 
 /**

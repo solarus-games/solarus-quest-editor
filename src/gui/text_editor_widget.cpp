@@ -21,6 +21,8 @@
 #include <QTextBlock>
 #include <QUndoStack>
 
+#include <QDebug>
+
 namespace {
 
 /**
@@ -127,7 +129,9 @@ private:
 TextEditorWidget::TextEditorWidget(const QString& file_path, TextEditor& editor):
   QPlainTextEdit(file_path, &editor),
   line_number_area(new LineNumberArea(*this)),
-  undo_stack(editor.get_undo_stack()) {
+  undo_stack(editor.get_undo_stack()),
+  tab_length(2),
+  replace_tab_by_spaces(false) {
 
   // Undo/redo system.
   connect(document(), SIGNAL(undoCommandAdded()),
@@ -225,6 +229,43 @@ void TextEditorWidget::resizeEvent(QResizeEvent* event) {
               get_line_number_area_width(), contents_rect.height()
               )
         );
+}
+
+/**
+ * @brief Returns the tabulation length.
+ * @return The length.
+ */
+int TextEditorWidget::get_tab_length() const {
+
+  return tab_length;
+}
+
+/**
+ * @brief Change the tabulation length.
+ * @param length The new length.
+ */
+void TextEditorWidget::set_tab_length(int length) {
+
+  tab_length = length;
+  setTabStopWidth(fontMetrics().width(" ") * tab_length);
+}
+
+/**
+ * @brief Returns whether the widget replace tabulation by spaces.
+ * @return @c true if the widget replace tabulation by spaces.
+ */
+bool TextEditorWidget::get_replace_tab_by_spaces() const {
+
+  return replace_tab_by_spaces;
+}
+
+/**
+ * @brief Changes whether the widget should replace tabulation by spaces.
+ * @param replace @c true to replace tabulation by spaces.
+ */
+void TextEditorWidget::set_replace_tab_by_spaces(bool replace) {
+
+  replace_tab_by_spaces = replace;
 }
 
 /**
@@ -368,5 +409,155 @@ void TextEditorWidget::keyPressEvent(QKeyEvent* event) {
     return;
   }
 
+  if (event->key() == Qt::Key_Tab) {
+    insert_tab();
+    event->accept();
+    return;
+  }
+
+  if (event->key() == Qt::Key_Backtab) {
+    remove_tab();
+    event->accept();
+    return;
+  }
+
   QPlainTextEdit::keyPressEvent(event);
+}
+
+/**
+ * @brief Inserts tabulation(s) at the cursor position.
+ */
+void TextEditorWidget::insert_tab () {
+
+  QTextCursor cursor = textCursor();
+
+  // Get tabulation character(s).
+  QString tab = "\t";
+  if (replace_tab_by_spaces) {
+
+    int length = tab_length;
+    if (!cursor.hasSelection()) {
+      length -= (cursor.columnNumber() % tab_length);
+    }
+    tab = QString(" ").repeated(length);
+  }
+
+  cursor.beginEditBlock();
+
+  // Insert tab for all selected lines.
+  if (cursor.hasSelection()) {
+
+    // Get the end block number dans set position to start.
+    int start_pos = cursor.selectionStart();
+    cursor.setPosition(cursor.selectionEnd());
+    int block_number = cursor.blockNumber();
+    cursor.setPosition(start_pos);
+
+    // Loop on each blocks.
+    while (cursor.blockNumber() <= block_number) {
+      cursor.movePosition(QTextCursor::StartOfLine);
+      cursor.insertText(tab);
+      cursor.movePosition(QTextCursor::NextBlock);
+    }
+  }
+  // Insert tab before the cursor.
+  else {
+    cursor.insertText(tab);
+  }
+
+  cursor.endEditBlock();
+}
+
+/**
+ * @brief Removes tabulation(s) at the cursor position.
+ */
+void TextEditorWidget::remove_tab () {
+
+  QTextCursor cursor = textCursor();
+
+  cursor.beginEditBlock();
+
+  // Check all selected lines.
+  if (cursor.hasSelection()) {
+
+    // Get the end block number dans set position to start.
+    int start_pos = cursor.selectionStart();
+    cursor.setPosition(cursor.selectionEnd());
+    int block_number = cursor.blockNumber();
+    cursor.setPosition(start_pos);
+
+    // Loop on each blocks.
+    while (cursor.blockNumber() <= block_number) {
+
+      cursor.movePosition(QTextCursor::StartOfLine);
+      int last_pos = cursor.position();
+
+      // Remove first space(s) character(s) of this line.
+      if (replace_tab_by_spaces) {
+
+        // get the number of spaces to remove.
+        do {
+          cursor.movePosition(
+            QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        } while (cursor.selectedText().endsWith(" ") && !cursor.atBlockEnd() &&
+                 cursor.selectedText().length() <= tab_length);
+        int length = cursor.selectedText().length() - 1;
+
+        // select and remove the space(s).
+        if (length > 0) {
+          cursor.movePosition(QTextCursor::StartOfLine);
+          cursor.movePosition(
+            QTextCursor::NextCharacter, QTextCursor::KeepAnchor, length);
+          cursor.removeSelectedText();
+        }
+      }
+      // Remove the first tab character of this line.
+      else {
+        cursor.movePosition(
+          QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        if (cursor.selectedText() == "\t") {
+          cursor.removeSelectedText();
+        }
+      }
+
+      cursor.setPosition(last_pos);
+      cursor.movePosition(QTextCursor::NextBlock);
+    }
+  }
+  else {
+    // Remove previous space(s) character(s).
+    if (replace_tab_by_spaces) {
+
+      int pos = cursor.position();
+
+      // get space count before the cursor.
+      do {
+        cursor.movePosition(
+          QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+      } while (cursor.selectedText().startsWith(" "));
+      int space_count = cursor.selectedText().length() - 1;
+
+      // select and remove previous space(s).
+      if (space_count > 0) {
+        int length = space_count;
+        if (space_count > tab_length) {
+          length = space_count % tab_length;
+        }
+        cursor.setPosition(pos);
+        cursor.movePosition(
+          QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, length);
+        cursor.removeSelectedText();
+      }
+    }
+    // Remove previous tab character.
+    else {
+      cursor.movePosition(
+        QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+      if (cursor.selectedText() == "\t") {
+        cursor.removeSelectedText();
+      }
+    }
+  }
+
+  cursor.endEditBlock();
 }

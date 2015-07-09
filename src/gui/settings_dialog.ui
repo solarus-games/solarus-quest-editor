@@ -184,6 +184,68 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="tab_group_box">
+         <property name="title">
+          <string>Tabulation</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="tab_length_label">
+            <property name="text">
+             <string>Length:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="tab_length_field">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="tab_space_bar">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>15</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="replace_tab_by_spaces">
+            <property name="text">
+             <string>Replace by space</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="tab_space_bar_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="text_editor_spacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -682,15 +744,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ColorPicker</class>
-   <extends>QPushButton</extends>
-   <header>gui/color_picker.h</header>
-  </customwidget>
-  <customwidget>
    <class>PairSpinBox</class>
    <extends>QWidget</extends>
    <header>gui/pair_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColorPicker</class>
+   <extends>QPushButton</extends>
+   <header>gui/color_picker.h</header>
   </customwidget>
   <customwidget>
    <class>EnumSelector&lt;GridStyle&gt;</class>

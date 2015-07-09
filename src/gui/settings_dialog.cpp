@@ -64,6 +64,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_font_family()));
   connect(ui.font_size_field, SIGNAL(valueChanged(int)),
           this, SLOT(change_font_size()));
+  connect(ui.tab_length_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_tab_length()));
+  connect(ui.replace_tab_by_spaces, SIGNAL(toggled(bool)),
+          this, SLOT(change_replace_tab_by_spaces()));
 
   // Map editor.
   connect(ui.map_background_field, SIGNAL(color_changed(QColor)),
@@ -167,6 +171,8 @@ void SettingsDialog::update() {
   // Text editor.
   update_font_family();
   update_font_size();
+  update_tab_length();
+  update_replace_tab_by_spaces();
 
   // Map editor.
   update_map_background();
@@ -378,6 +384,41 @@ void SettingsDialog::change_font_size() {
 
   edited_settings[Settings::font_size] = ui.font_size_field->value();
   update_buttons();
+}
+
+/**
+ * @brief Updates the tab length field.
+ */
+void SettingsDialog::update_tab_length() {
+
+  ui.tab_length_field->setValue(settings.get_value_int(Settings::tab_length));
+}
+
+/**
+ * @brief Slot called when the user changes the tab length.
+ */
+void SettingsDialog::change_tab_length() {
+
+  edited_settings[Settings::tab_length] = ui.tab_length_field->value();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the replace tab by spaces field.
+ */
+void SettingsDialog::update_replace_tab_by_spaces() {
+
+  ui.replace_tab_by_spaces->setChecked(
+    settings.get_value_bool(Settings::replace_tab_by_spaces));
+}
+
+/**
+ * @brief Slot called when the user changes the replace tab by spaces.
+ */
+void SettingsDialog::change_replace_tab_by_spaces() {
+
+  edited_settings[Settings::replace_tab_by_spaces] =
+    ui.replace_tab_by_spaces->isChecked();
 }
 
 /**
