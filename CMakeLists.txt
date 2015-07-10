@@ -354,6 +354,9 @@ target_link_libraries(solarus-quest-editor
   "${MODPLUG_LIBRARY}"
 )
 
+# Set files to install
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/solarus-quest-editor DESTINATION bin)
+
 # Platform specific.
 
 # Windows: disable the console.
