@@ -517,38 +517,41 @@ QMenu* MapView::create_context_menu() {
   QMenu* menu = new QMenu(this);
   const EntityIndexes& indexes = get_selected_entities();
 
-  // Edit.
-  const bool single_selection = indexes.size() <= 1;
-  Q_ASSERT(edit_action != nullptr);
-  edit_action->setEnabled(single_selection);
-  menu->addAction(edit_action);
+  if (!is_selection_empty()) {
 
-  // Resize.
-  const bool resizable = are_entities_resizable(indexes);
-  resize_action->setEnabled(resizable);
-  menu->addAction(resize_action);
+    // Edit.
+    const bool single_selection = indexes.size() <= 1;
+    Q_ASSERT(edit_action != nullptr);
+    edit_action->setEnabled(single_selection);
+    menu->addAction(edit_action);
 
-  // Direction.
-  QMenu* direction_menu = create_direction_context_menu(indexes);
-  Q_ASSERT(direction_menu != nullptr);
-  menu->addMenu(direction_menu);
-  menu->addSeparator();
+    // Resize.
+    const bool resizable = are_entities_resizable(indexes);
+    resize_action->setEnabled(resizable);
+    menu->addAction(resize_action);
 
-  // Convert to dynamic/static tile(s).
-  EntityType type;
-  const bool show_convert_tiles_action = map->is_common_type(indexes, type) &&
-      (type == EntityType::TILE || type == EntityType::DYNAMIC_TILE);
-  if (show_convert_tiles_action) {
-    QString text;
-    if (type == EntityType::TILE) {
-      text = single_selection ? tr("Convert to dynamic tile") : tr("Convert to dynamic tiles");
-    }
-    else {
-      text = single_selection ? tr("Convert to static tile") : tr("Convert to static tiles");
-    }
-    convert_tiles_action->setText(text);
-    menu->addAction(convert_tiles_action);
+    // Direction.
+    QMenu* direction_menu = create_direction_context_menu(indexes);
+    Q_ASSERT(direction_menu != nullptr);
+    menu->addMenu(direction_menu);
     menu->addSeparator();
+
+    // Convert to dynamic/static tile(s).
+    EntityType type;
+    const bool show_convert_tiles_action = map->is_common_type(indexes, type) &&
+        (type == EntityType::TILE || type == EntityType::DYNAMIC_TILE);
+    if (show_convert_tiles_action) {
+      QString text;
+      if (type == EntityType::TILE) {
+        text = single_selection ? tr("Convert to dynamic tile") : tr("Convert to dynamic tiles");
+      }
+      else {
+        text = single_selection ? tr("Convert to static tile") : tr("Convert to static tiles");
+      }
+      convert_tiles_action->setText(text);
+      menu->addAction(convert_tiles_action);
+      menu->addSeparator();
+    }
   }
 
   // Cut, copy, paste.
@@ -560,29 +563,32 @@ QMenu* MapView::create_context_menu() {
     menu->addSeparator();
   }
 
-  // Layer.
-  Layer common_layer = Layer::LAYER_LOW;
-  bool has_common_layer = map->is_common_layer(indexes, common_layer);
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer current_layer = static_cast<Layer>(i);
-    QAction* action = set_layer_actions[i];
-    action->setChecked(false);
-    action->setText(LayerTraits::get_friendly_name(current_layer));
-    if (has_common_layer && current_layer == common_layer) {
-      action->setChecked(true);
-      // Add a checkmark (there is none when there is already an icon).
-      action->setText("\u2714 " + action->text());
+  if (!is_selection_empty()) {
+
+    // Layer.
+    Layer common_layer = Layer::LAYER_LOW;
+    bool has_common_layer = map->is_common_layer(indexes, common_layer);
+    for (int i = 0; i < Layer::LAYER_NB; ++i) {
+      Layer current_layer = static_cast<Layer>(i);
+      QAction* action = set_layer_actions[i];
+      action->setChecked(false);
+      action->setText(LayerTraits::get_friendly_name(current_layer));
+      if (has_common_layer && current_layer == common_layer) {
+        action->setChecked(true);
+        // Add a checkmark (there is none when there is already an icon).
+        action->setText("\u2714 " + action->text());
+      }
+      menu->addAction(action);
     }
-    menu->addAction(action);
+
+    // Bring to front/back.
+    menu->addAction(bring_to_front_action);
+    menu->addAction(bring_to_back_action);
+    menu->addSeparator();
+
+    // Remove.
+    menu->addAction(remove_action);
   }
-
-  // Bring to front/back.
-  menu->addAction(bring_to_front_action);
-  menu->addAction(bring_to_back_action);
-  menu->addSeparator();
-
-  // Remove.
-  menu->addAction(remove_action);
 
   return menu;
 }
@@ -1423,10 +1429,6 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 void DoingNothingState::context_menu_requested(const QPoint& where) {
 
   MapView& view = get_view();
-  if (view.is_selection_empty()) {
-    return;
-  }
-
   QMenu* menu = view.create_context_menu();
   menu->popup(where);
 }
