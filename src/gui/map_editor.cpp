@@ -558,6 +558,8 @@ public:
         map.set_entity_size(index, map.get_entity_valid_size(index));
       }
 
+      map.get_entity(index).reload_sprite();
+
     }
 
     // Select impacted entities.

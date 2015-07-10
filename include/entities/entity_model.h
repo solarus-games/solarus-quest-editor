@@ -133,6 +133,8 @@ public:
   virtual void draw(QPainter& painter) const;
   virtual void notify_tileset_changed(const QString& tileset_id);
 
+  void reload_sprite();
+
 protected:
 
   /**

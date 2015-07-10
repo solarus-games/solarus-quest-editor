@@ -1569,3 +1569,11 @@ void EntityModel::notify_tileset_changed(const QString& tileset_id) {
     sprite_image = QPixmap();  // Clear the cached image.
   }
 }
+
+/**
+ * @brief Reloads the sprite.
+ */
+void EntityModel::reload_sprite() {
+
+  sprite_image = QPixmap();
+}
