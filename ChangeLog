@@ -18,9 +18,12 @@ ________________________________________
 Bugfix release for the 1.4 branch.
 
 * Sprite editor: add a button to refresh the source image (#50).
-* Fix crash when resizing with no entities selected (#51).
-* Fix entities remaining visible when adding them on a hidden layer.
-* Fix text fields not validated until they lose focus.
+* Map editor: fix crash when resizing with no entities selected (#51).
+* Map editor: fix entities still visible when adding them on a hidden layer.
+* Map editor: fix entity dialog allowing to set illegal sizes (#23).
+* Map editor: fix changing the direction of a jumper from the dialog (#60).
+* Map editor: fix sprites not always updated when changing direction (#32).
+* Map editor: show a context menu when right-clicking an empty space (#26).
 * Tileset editor: fix usability issues to create and select patterns (#31).
 * Tileset editor: fix moving a pattern to a partially overlapping place (#29).
 * Tileset editor: fix color when moving a pattern to an occuped place (#34).
@@ -28,6 +31,7 @@ Bugfix release for the 1.4 branch.
 * Text editor: the find button is now the default one in the find dialog (#30).
 * Dialogs editor: fix crash when comparing empty dialogs (#48).
 * Make the numpad enter key work like the return key (#49).
+* Fix text fields not validated until they lose focus.
 
 ________________________________________
 
