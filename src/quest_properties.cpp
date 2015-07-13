@@ -107,11 +107,6 @@ QString QuestProperties::get_write_dir() const {
  */
 void QuestProperties::set_write_dir(const QString& write_dir) {
 
-  if (write_dir.isEmpty()) {
-    // Cannot be empty
-    return;
-  }
-
   QString old_write_dir = get_write_dir();
   if (write_dir == old_write_dir) {
     return;

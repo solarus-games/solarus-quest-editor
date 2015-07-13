@@ -17,6 +17,7 @@ ________________________________________
 
 Bugfix release for the 1.4 branch.
 
+* Quest properties editor: fix setting the write directory field empty (#36).
 * Sprite editor: add a button to refresh the source image (#50).
 * Map editor: fix crash when resizing with no entities selected (#51).
 * Map editor: fix entities still visible when adding them on a hidden layer.
