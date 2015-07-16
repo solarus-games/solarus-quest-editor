@@ -31,6 +31,7 @@ Bugfix release for the 1.4 branch.
 * Tileset editor: fix existing selection lost if selecting with ctrl or shift.
 * Text editor: the find button is now the default one in the find dialog (#30).
 * Dialogs editor: fix crash when comparing empty dialogs (#48).
+* Dialogs editor: ensure that the text ends with a newline (#45).
 * Make the numpad enter key work like the return key (#49).
 * Fix text fields not validated until they lose focus.
 
