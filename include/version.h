@@ -28,7 +28,7 @@
  *
  * Must match the Solarus library minor version.
  */
-#define SOLARUSEDITOR_MINOR_VERSION 5
+#define SOLARUSEDITOR_MINOR_VERSION 4
 
 /**
  * @brief Solarus Quest Editor patch version.
@@ -36,7 +36,7 @@
  * Patch versions are only bug fixes.
  * No need to match the Solarus library patch version.
  */
-#define SOLARUSEDITOR_PATCH_VERSION 0
+#define SOLARUSEDITOR_PATCH_VERSION 3
 
 /**
  * @brief The Solarus Quest Editor version as a string.
