@@ -172,6 +172,7 @@ set(solarus_quest_editor_SOURCES
   include/strings_model.h
   include/tileset_model.h
   include/transition_traits.h
+  include/version.h
   include/view_settings.h
   src/entities/block.cpp
   src/entities/chest.cpp

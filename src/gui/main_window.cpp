@@ -28,6 +28,7 @@
 #include "obsolete_quest_exception.h"
 #include "quest.h"
 #include "quest_runner.h"
+#include "version.h"
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDebug>
@@ -920,7 +921,7 @@ void MainWindow::reload_settings() {
  */
 void MainWindow::update_title() {
 
-  QString version = SOLARUS_VERSION;
+  QString version = SOLARUSEDITOR_VERSION;
   QString title = tr("Solarus Quest Editor %1").arg(version);
   QString quest_name = quest.get_name();
   if (!quest_name.isEmpty()) {
