@@ -355,7 +355,9 @@ target_link_libraries(solarus-quest-editor
 )
 
 # Set files to install
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/solarus-quest-editor DESTINATION bin)
+install(TARGETS solarus-quest-editor
+  RUNTIME DESTINATION bin
+)
 
 # Platform specific.
 
