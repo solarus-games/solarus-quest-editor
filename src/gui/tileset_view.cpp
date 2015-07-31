@@ -284,16 +284,17 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     }
 
     if (event->button() == Qt::LeftButton) {
-      if (item == nullptr) {
-        // Left click outside items: trace a selection rectangle.
-        initially_selected_items = scene->selectedItems();
-        start_state_drawing_rectangle(event->pos());
-      }
-      else if (item->isSelected() &&
-               model->get_selection_count() == 1 &&
-               !is_read_only()) {
+      if (item != nullptr &&
+          item->isSelected() &&
+          model->get_selection_count() == 1 &&
+          !is_read_only()) {
         // Clicking on an already selected item: allow to move it.
         start_state_moving_pattern(event->pos());
+      }
+      else {
+        // Otherwise initialize a selection rectangle.
+        initially_selected_items = scene->selectedItems();
+        start_state_drawing_rectangle(event->pos());
       }
     }
     else {
@@ -317,14 +318,13 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
 
   bool do_selection = false;
   if (state == State::DRAWING_RECTANGLE) {
+    // If the rectangle is empty, consider it was a click and not a drag.
+    // In this case we simply select the clicked item.
     do_selection = current_area_item->rect().isEmpty();
     end_state_drawing_rectangle();
   }
   else if (state == State::MOVING_PATTERN) {
     end_state_moving_pattern();
-  }
-  else if (state == State::NORMAL) {
-    do_selection = true;
   }
 
   if (do_selection) {
