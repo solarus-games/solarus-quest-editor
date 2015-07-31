@@ -22,6 +22,7 @@ Bugfix release for the 1.4 branch.
 * Dialogs editor: ensure that the text ends with a newline (#45).
 * Make the numpad enter key work like the return key (#49).
 * Fix text fields not validated until they lose focus.
+* Check the Solarus library version at compilation time (#41).
 
 ________________________________________
 

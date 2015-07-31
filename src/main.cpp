@@ -16,6 +16,7 @@
  */
 #include "gui/main_window.h"
 #include "settings.h"
+#include "version.h"
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLibraryInfo>
