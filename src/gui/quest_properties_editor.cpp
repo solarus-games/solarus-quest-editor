@@ -250,12 +250,12 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
 
   connect(&model, SIGNAL(write_dir_changed(QString)),
           this, SLOT(update_write_dir_field()));
-  connect(ui.write_dir_field, SIGNAL(editing_finished()),
+  connect(ui.write_dir_field, SIGNAL(editingFinished()),
           this, SLOT(change_write_dir_requested()));
 
   connect(&model, SIGNAL(title_bar_changed(QString)),
           this, SLOT(update_title_bar_field()));
-  connect(ui.title_bar_field, SIGNAL(editing_finished()),
+  connect(ui.title_bar_field, SIGNAL(editingFinished()),
           this, SLOT(change_title_bar_requested()));
 
   connect(&model, SIGNAL(normal_size_changed(QSize)),
@@ -324,7 +324,7 @@ void QuestPropertiesEditor::update() {
  */
 void QuestPropertiesEditor::update_write_dir_field() {
 
-  ui.write_dir_field->set_text(model.get_write_dir());
+  ui.write_dir_field->setText(model.get_write_dir());
 }
 
 /**
@@ -347,7 +347,7 @@ void QuestPropertiesEditor::change_write_dir_requested() {
  */
 void QuestPropertiesEditor::update_title_bar_field() {
 
-  ui.title_bar_field->set_text(model.get_title_bar());
+  ui.title_bar_field->setText(model.get_title_bar());
 }
 
 /**
