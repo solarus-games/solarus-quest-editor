@@ -877,7 +877,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
-  connect(ui.world_field, SIGNAL(editing_finished()),
+  connect(ui.world_field, SIGNAL(editingFinished()),
           this, SLOT(change_world_requested()));
   connect(map, SIGNAL(world_changed(QString)),
           this, SLOT(update_world_field()));
@@ -1193,7 +1193,7 @@ void MapEditor::update_world_field() {
   else {
     ui.world_check_box->setChecked(true);
     ui.world_field->setEnabled(true);
-    ui.world_field->set_text(world);
+    ui.world_field->setText(world);
   }
 }
 
