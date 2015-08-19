@@ -108,6 +108,7 @@ void SpritePreviewer::update_selection() {
 
   index = model->get_selected_index();
   update_frames();
+  update_frame_delay();
   update_buttons();
   update_origin();
 
