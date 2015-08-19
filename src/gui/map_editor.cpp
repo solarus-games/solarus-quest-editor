@@ -908,6 +908,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
+  connect(ui.open_script_button, SIGNAL(clicked()),
+          this, SLOT(open_script_requested()));
+
   connect(ui.map_view, SIGNAL(edit_entity_requested(EntityIndex, EntityModelPtr&)),
           this, SLOT(edit_entity_requested(EntityIndex, EntityModelPtr&)));
   connect(ui.map_view, SIGNAL(move_entities_requested(EntityIndexes, QPoint, bool)),
@@ -1116,6 +1119,15 @@ void MapEditor::update() {
 void MapEditor::update_map_id_field() {
 
   ui.map_id_field->setText(map_id);
+}
+
+/**
+ * @brief Slot called when the user wants to open the map script.
+ */
+void MapEditor::open_script_requested() {
+
+  emit open_file_requested(
+    get_quest(), get_quest().get_map_script_path(map->get_map_id()));
 }
 
 /**

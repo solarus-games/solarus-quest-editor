@@ -51,6 +51,7 @@ private slots:
   void update();
 
   void update_map_id_field();
+  void open_script_requested();
   void update_description_to_gui();
   void set_description_from_gui();
   void update_size_field();
