@@ -45,6 +45,8 @@ ChangeStringKeyDialog::ChangeStringKeyDialog (
 
   set_string_key(initial_key);
   set_prefix(is_prefix);
+
+  ui.string_key_field->selectAll();
 }
 
 /**
