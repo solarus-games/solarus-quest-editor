@@ -53,7 +53,7 @@ SpriteTreeView::SpriteTreeView(QWidget* parent) :
   addAction(rename_animation_action);
 
   duplicate_action = new QAction(
-        QIcon(":/images/icon_duplicate.png"), tr("Duplicate..."), this);
+        QIcon(":/images/icon_copy.png"), tr("Duplicate..."), this);
   duplicate_action->setShortcutContext(Qt::WidgetShortcut);
   connect(duplicate_action, SIGNAL(triggered()),
           this, SIGNAL(duplicate_requested()));
