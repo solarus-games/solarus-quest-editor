@@ -48,6 +48,7 @@ SpriteView::SpriteView(QWidget* parent) :
   delete_direction_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(delete_direction_action, SIGNAL(triggered()),
           this, SIGNAL(delete_selected_direction_requested()));
+  addAction(delete_direction_action);
   duplicate_direction_action = new QAction(
         QIcon(":/images/icon_copy.png"), tr("Duplicate..."), this);
   // TODO: set a shortcut to duplicate a direction

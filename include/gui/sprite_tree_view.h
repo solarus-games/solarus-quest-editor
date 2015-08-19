@@ -33,9 +33,28 @@ public:
 
   SpriteTreeView(QWidget* parent = nullptr);
 
-  void set_model(SpriteModel& sprite);
+  void set_model(SpriteModel* sprite);
 
 signals:
+
+  void create_animation_requested();
+  void create_direction_requested();
+  void rename_animation_requested();
+  void duplicate_requested();
+  void delete_requested();
+
+protected:
+
+  void contextMenuEvent(QContextMenuEvent* event) override;
+
+private:
+
+  SpriteModel* model;                 /**< The sprite model. */
+  QAction* create_animation_action;   /**< Action of adding new animation. */
+  QAction* create_direction_action;   /**< Action of adding new direction. */
+  QAction* rename_animation_action;   /**< Action of renaming animation. */
+  QAction* duplicate_action;          /**< Action of duplicating. */
+  QAction* delete_action;             /**< Action of deleting. */
 
 };
 

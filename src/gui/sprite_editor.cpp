@@ -639,7 +639,7 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   const int side_height = 550;
   ui.horizontal_splitter->setSizes({ side_width, width() - side_width });
   ui.vertical_splitter->setSizes({ side_height, height() - side_height });
-  ui.sprite_tree_view->set_model(*model);
+  ui.sprite_tree_view->set_model(model);
   ui.sprite_view->set_model(model);
   ui.sprite_view->set_view_settings(get_view_settings());
   ui.sprite_previewer->set_model(model);
@@ -755,6 +755,17 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
   connect(ui.sprite_view, SIGNAL(delete_selected_direction_requested()),
           this, SLOT(delete_direction_requested()));
+
+  connect(ui.sprite_tree_view, SIGNAL(create_animation_requested()),
+          this, SLOT(create_animation_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(create_direction_requested()),
+          this, SLOT(create_direction_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(rename_animation_requested()),
+          this, SLOT(rename_animation_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(duplicate_requested()),
+          this, SLOT(duplicate_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(delete_requested()),
+          this, SLOT(delete_requested()));
 
   connect(&model->get_selection_model(),
           SIGNAL(selectionChanged(QItemSelection, QItemSelection)),

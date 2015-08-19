@@ -17,27 +17,92 @@
 #include "gui/sprite_tree_view.h"
 #include "sprite_model.h"
 #include <QAction>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 /**
  * @brief Creates an empty sprite tree view.
  * @param parent The parent object or nullptr.
  */
 SpriteTreeView::SpriteTreeView(QWidget* parent) :
-  QTreeView(parent) {
+  QTreeView(parent),
+  model(nullptr) {
 
   setIconSize(QSize(32, 32));
   setSelectionMode(QAbstractItemView::SingleSelection);
   setHeaderHidden(true);
+
+  create_animation_action = new QAction(
+        QIcon(":/images/icon_add.png"), tr("Create animation"), this);
+  connect(create_animation_action, SIGNAL(triggered()),
+          this, SIGNAL(create_animation_requested()));
+  addAction(create_animation_action);
+
+  create_direction_action = new QAction(
+        QIcon(":/images/icon_add.png"), tr("Create direction"), this);
+  connect(create_direction_action, SIGNAL(triggered()),
+          this, SIGNAL(create_direction_requested()));
+  addAction(create_direction_action);
+
+  rename_animation_action = new QAction(
+        QIcon(":/images/icon_rename.png"), tr("Rename animation"), this);
+  rename_animation_action->setShortcut(tr("F2"));
+  rename_animation_action->setShortcutContext(Qt::WidgetShortcut);
+  connect(rename_animation_action, SIGNAL(triggered()),
+          this, SIGNAL(rename_animation_requested()));
+  addAction(rename_animation_action);
+
+  duplicate_action = new QAction(
+        QIcon(":/images/icon_duplicate.png"), tr("Duplicate..."), this);
+  duplicate_action->setShortcutContext(Qt::WidgetShortcut);
+  connect(duplicate_action, SIGNAL(triggered()),
+          this, SIGNAL(duplicate_requested()));
+  addAction(duplicate_action);
+
+  delete_action = new QAction(
+        QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
+  delete_action->setShortcut(QKeySequence::Delete);
+  delete_action->setShortcutContext(Qt::WidgetShortcut);
+  connect(delete_action, SIGNAL(triggered()),
+          this, SIGNAL(delete_requested()));
+  addAction(delete_action);
+}
+
+/**
+ * @brief Shows a popup menu with actions related to the selected item.
+ * @param event The event to handle.
+ */
+void SpriteTreeView::contextMenuEvent(QContextMenuEvent *event) {
+
+  if (model == nullptr) {
+    return;
+  }
+
+  QMenu* menu = new QMenu(this);
+  menu->addAction(create_animation_action);
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (index.is_valid()) {
+    menu->addAction(create_direction_action);
+    menu->addSeparator();
+    menu->addAction(rename_animation_action);
+    menu->addAction(duplicate_action);
+    menu->addSeparator();
+    menu->addAction(delete_action);
+  }
+
+  menu->popup(viewport()->mapToGlobal(event->pos()) + QPoint(1, 1));
 }
 
 /**
  * @brief Sets the sprite to represent in this view.
  * @param model The sprite model.
  */
-void SpriteTreeView::set_model(SpriteModel& model) {
+void SpriteTreeView::set_model(SpriteModel* model) {
 
-  SpriteTreeView::setModel(&model);
+  this->model = model;
+  SpriteTreeView::setModel(model);
   selectionModel()->deleteLater();
-  setSelectionModel(&model.get_selection_model());
+  setSelectionModel(&model->get_selection_model());
 }
 
