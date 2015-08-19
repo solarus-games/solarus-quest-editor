@@ -45,6 +45,8 @@ ChangeDialogIdDialog::ChangeDialogIdDialog (
 
   set_dialog_id(initial_id);
   set_prefix(is_prefix);
+
+  ui.dialog_id_field->selectAll();
 }
 
 /**
