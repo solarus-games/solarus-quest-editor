@@ -8,6 +8,7 @@ New features
 
 * Map editor: add a button to open the script (#39).
 * Text editor: improve tabulation behavior (#43).
+* Sprite editor: guess the source image; set `sprite_id.png` if exists (#71).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor configurations.
 

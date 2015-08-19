@@ -25,6 +25,7 @@
 #include "quest_resources.h"
 #include "settings.h"
 #include "sprite_model.h"
+#include <QFileInfo>
 #include <QUndoStack>
 
 namespace {
@@ -63,9 +64,10 @@ class CreateAnimationCommand : public SpriteEditorCommand {
 public:
 
   CreateAnimationCommand(
-      SpriteEditor& editor, const QString& name) :
+      SpriteEditor& editor, const QString& name, const QString& src_img = "") :
     SpriteEditorCommand(editor, SpriteEditor::tr("Create animation")),
-    name(name) {
+    name(name),
+    src_img(src_img) {
   }
 
   virtual void undo() override {
@@ -76,12 +78,19 @@ public:
   virtual void redo() override {
 
     get_model().create_animation(name);
+
+    if (!src_img.isEmpty()) {
+      SpriteModel::Index index(name,-1);
+      get_model().set_animation_source_image(index, src_img);
+    }
+
     get_model().set_selected_animation(name);
   }
 
 private:
 
   QString name;
+  QString src_img;
 };
 
 /**
@@ -930,8 +939,15 @@ void SpriteEditor::create_animation_requested() {
     return;
   }
 
+  // Try to guess to source image
+  QString src_img = model->get_sprite_id() + ".png";
+  QFileInfo file_info(get_quest().get_sprite_image_path(src_img));
+  if (!file_info.exists()) {
+    src_img = "";
+  }
+
   QString name = dialog.get_animation_name();
-  try_command(new CreateAnimationCommand(*this, name));
+  try_command(new CreateAnimationCommand(*this, name, src_img));
 }
 
 /**
