@@ -6,9 +6,7 @@ ________________________________________
 New features
 ------------
 
-* Map editor: add a button to open the script (#39).
 * Text editor: improve tabulation behavior (#43).
-* Sprite editor: guess the source image; set `sprite_id.png` if exists (#71).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor configurations.
 
@@ -19,7 +17,9 @@ _______________________________________
 
 Bugfix release for the 1.4 branch.
 
+* Map editor: add a button to open the script (#39).
 * Dialogs/strings editor: the name is now selected when renaming (#73).
+* Sprite editor: guess the source image; set `sprite_id.png` if exists (#71).
 * Sprite editor: select the sibling item when removing a direction (#70).
 * Sprite editor: add a context menu in tree view and missing shortcuts (#69).
 * Sprite editor: fix change selection no update frame delay of previewer (#67).
