@@ -97,6 +97,7 @@ resources/images/icon_strings_missing.png
 resources/images/icon_dialog_missing.png
 resources/images/icon_dialogs_missing.png
 resources/images/icon_property_missing.png
+resources/images/icon_folder_open_missing.png
 
 - By Andrew Tyler:
 http://www.andrewtyler.net

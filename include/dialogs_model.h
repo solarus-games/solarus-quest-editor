@@ -109,6 +109,9 @@ public:
   QString get_translated_dialog_property(
       const QString& id, const QString& key) const;
 
+  QStringList get_translated_ids(const QString& prefix) const;
+  bool has_missing_translation(const QString& id) const;
+
 signals:
 
   void dialog_created(const QString& id);

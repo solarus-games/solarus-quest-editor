@@ -99,6 +99,9 @@ public:
   bool translated_string_exists(const QString& key) const;
   QString get_translated_string(const QString& key) const;
 
+  QStringList get_translated_keys(const QString& prefix) const;
+  bool has_missing_translation(const QString& key) const;
+
 signals:
 
   void string_created(const QString& key);

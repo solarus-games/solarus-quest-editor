@@ -184,24 +184,23 @@ QVariant DialogsModel::data(const QModelIndex& model_index, int role) const {
       case Qt::DisplayRole: return id.split(".").back(); break;
 
       case Qt::DecorationRole:
-        if (!dialog_exists(id)) {
-
-          if (translated_dialog_exists(id)) {
-            if (dialog_tree.get_row_count(id) == 0) {
-              return QIcon(":/images/icon_dialog_missing.png");
-            } else {
-              return QIcon(":/images/icon_dialogs_missing.png");
-            }
-          }
-          return QIcon(":/images/icon_folder_open.png");
-
-        } else {
-          if (dialog_tree.get_row_count(id) == 0) {
+        if (dialog_exists(id)) {
+          if (has_missing_translation(id)) {
+            return QIcon(":/images/icon_dialogs_missing.png");
+          } else if (dialog_tree.get_row_count(id) == 0) {
             return QIcon(":/images/icon_dialog.png");
-          } else {
-            return QIcon(":/images/icon_dialogs.png");
           }
+          return QIcon(":/images/icon_dialogs.png");
         }
+        else if (has_missing_translation(id)) {
+          if (dialog_tree.get_row_count(id) == 0) {
+            return QIcon(":/images/icon_dialog_missing.png");
+          } if (translated_dialog_exists(id)) {
+            return QIcon(":/images/icon_dialogs_missing.png");
+          }
+          return QIcon(":/images/icon_folder_open_missing.png");
+        }
+        return QIcon(":/images/icon_folder_open.png");
     }
   }
 
@@ -943,6 +942,43 @@ QString DialogsModel::get_translated_dialog_property(
   }
   const DialogData& data = translation_resources.get_dialog(id.toStdString());
   return QString::fromStdString(data.get_property(key.toStdString()));
+}
+
+/**
+ * @brief Returns all the translated ids that start with the specified prefix.
+ * @param prefix The prefix to test.
+ * @return The list of all translated ids that starts with the prefix.
+ */
+QStringList DialogsModel::get_translated_ids(const QString& prefix) const {
+
+  QStringList list;
+  for (const auto& kvp : translation_resources.get_dialogs()) {
+    QString id = QString::fromStdString(kvp.first);
+    if (id.startsWith(prefix)) {
+      list.push_back(id);
+    }
+  }
+  return list;
+}
+
+/**
+ * @brief Returns whether dialog or sub dialog has translation and don't exists.
+ * @param id The id of the dialog.
+ * @return @c true if the dialog or sub dialog has tanslation and don't exists.
+ */
+bool DialogsModel::has_missing_translation(const QString& id) const {
+
+  if (!dialog_exists(id) && translated_dialog_exists(id)) {
+    return true;
+  }
+
+  for (QString sub_id : get_translated_ids(id + ".")) {
+    if (!dialog_exists(sub_id)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**
