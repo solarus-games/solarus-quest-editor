@@ -185,24 +185,23 @@ QVariant StringsModel::data(const QModelIndex& model_index, int role) const {
         case Qt::DisplayRole: return key.split(".").back(); break;
 
         case Qt::DecorationRole:
-          if (!string_exists(key)) {
-
-            if (translated_string_exists(key)) {
-              if (string_tree.get_row_count(key) == 0) {
-                return QIcon(":/images/icon_string_missing.png");
-              } else {
-                return QIcon(":/images/icon_strings_missing.png");
-              }
-            }
-            return QIcon(":/images/icon_folder_open.png");
-
-          } else {
-            if (string_tree.get_row_count(key) == 0) {
+          if (string_exists(key)) {
+            if (has_missing_translation(key)) {
+              return QIcon(":/images/icon_strings_missing.png");
+            } else if (string_tree.get_row_count(key) == 0) {
               return QIcon(":/images/icon_string.png");
-            } else {
-              return QIcon(":/images/icon_strings.png");
             }
+            return QIcon(":/images/icon_strings.png");
           }
+          else if (has_missing_translation(key)) {
+            if (string_tree.get_row_count(key) == 0) {
+              return QIcon(":/images/icon_string_missing.png");
+            } else if (translated_string_exists(key)) {
+              return QIcon(":/images/icon_strings_missing.png");
+            }
+            return QIcon(":/images/icon_folder_open_missing.png");
+          }
+          return QIcon(":/images/icon_folder_open.png");
       }
     }
   } else if (column == 1 && string_exists(key) &&
@@ -809,6 +808,43 @@ void StringsModel::reload_translation() {
 bool StringsModel::translated_string_exists(const QString& key) const {
 
   return translation_resources.has_string(key.toStdString());
+}
+
+/**
+ * @brief Returns all the translated keys that start with the specified prefix.
+ * @param prefix The prefix to test.
+ * @return The list of all translated keys that starts with the prefix.
+ */
+QStringList StringsModel::get_translated_keys(const QString& prefix) const {
+
+  QStringList list;
+  for (const auto& kvp : translation_resources.get_strings()) {
+    QString key = QString::fromStdString(kvp.first);
+    if (key.startsWith(prefix)) {
+      list.push_back(key);
+    }
+  }
+  return list;
+}
+
+/**
+ * @brief Returns whether string or sub string has translation and don't exists.
+ * @param key The key of the string.
+ * @return @c true if the string or sub string has tanslation and don't exists.
+ */
+bool StringsModel::has_missing_translation(const QString& key) const {
+
+  if (!string_exists(key) && translated_string_exists(key)) {
+    return true;
+  }
+
+  for (QString sub_key : get_translated_keys(key + ".")) {
+    if (!string_exists(sub_key)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**

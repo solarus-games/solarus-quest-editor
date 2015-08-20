@@ -133,5 +133,6 @@
         <file>images/icon_dialogs_missing.png</file>
         <file>images/icon_property.png</file>
         <file>images/icon_property_missing.png</file>
+        <file>images/icon_folder_open_missing.png</file>
     </qresource>
 </RCC>
