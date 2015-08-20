@@ -49,6 +49,18 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
   text_widget = new TextEditorWidget(file_path, *this);
   layout->addWidget(text_widget);
 
+  // Open map shorcut.
+  if (quest.is_map_script(file_path, map_id)) {
+    QAction* open_map_action = new QAction(this);
+    open_map_action->setShortcut(tr("F4"));
+    open_map_action->setShortcutContext(Qt::WindowShortcut);
+    connect(open_map_action, SIGNAL(triggered(bool)),
+            this, SLOT(open_map_requested()));
+    addAction(open_map_action);
+  } else {
+    map_id.clear();
+  }
+
   connect(text_widget, SIGNAL(copyAvailable(bool)),
           this, SIGNAL(can_cut_changed(bool)));
   connect(text_widget, SIGNAL(copyAvailable(bool)),
@@ -238,5 +250,16 @@ void TextEditor::find_text_requested(const QString& text) {
       text_widget->horizontalScrollBar()->setValue(scroll_x);
       text_widget->verticalScrollBar()->setValue(scroll_y);
     }
+  }
+}
+
+/**
+ * @brief Slot called when the user wants to open the map view of this script.
+ */
+void TextEditor::open_map_requested() {
+
+  if (!map_id.isEmpty()) {
+    emit open_file_requested(
+      get_quest(), get_quest().get_map_data_file_path(map_id));
   }
 }
