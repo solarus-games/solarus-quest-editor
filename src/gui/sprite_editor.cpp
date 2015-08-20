@@ -859,6 +859,7 @@ void SpriteEditor::set_description_from_gui() {
   catch (const EditorException& ex) {
     ex.print_message();
   }
+  update_description_to_gui();
   blockSignals(was_blocked);
 }
 

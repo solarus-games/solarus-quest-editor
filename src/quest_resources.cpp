@@ -244,10 +244,20 @@ QString QuestResources::get_description(
  * @param id Id of the element to change.
  * @param description The new description to set.
  * @return @c true in case of success, @c false if such an element does not
- * exist.
+ * exist or if the description is invalid.
  */
 bool QuestResources::set_description(
     ResourceType type, const QString& id, const QString& description) {
+
+  if (description.isEmpty() ||
+      description.contains("\"") ||
+      description.contains("\'") ||
+      description.contains("\n") ||
+      description.contains("\r") ||
+      description.contains("\\")
+  ) {
+    return false;
+  }
 
   if (!resources.set_description(type, id.toStdString(), description.toStdString())) {
     return false;
