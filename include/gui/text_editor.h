@@ -47,10 +47,13 @@ public:
 private slots:
 
   void find_text_requested(const QString& text);
+  void open_map_requested();
 
 private:
 
-  TextEditorWidget* text_widget;    /**< The text editing area contained. */
+  TextEditorWidget*
+    text_widget;    /**< The text editing area contained. */
+  QString map_id;   /**< The map id of this script (if it is a map script). */
 
 };
 

@@ -831,6 +831,14 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_layer_visibility_supported(true);
   set_entity_type_visibility_supported(true);
 
+  // Shortcuts.
+  QAction* open_script_action = new QAction(this);
+  open_script_action->setShortcut(tr("F4"));
+  open_script_action->setShortcutContext(Qt::WindowShortcut);
+  connect(open_script_action, SIGNAL(triggered(bool)),
+          this, SLOT(open_script_requested()));
+  addAction(open_script_action);
+
   // Open the file.
   map = new MapModel(quest, map_id, this);
   get_undo_stack().setClean();
