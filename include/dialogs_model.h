@@ -73,6 +73,9 @@ public:
   void create_dialog(
       const QString& id, const QString& text,
       const QMap<QString, QString> &properties);
+  bool can_duplicate_dialogs(
+      const QString& prefix, const QString& new_prefix, QString& id);
+  void duplicate_dialogs(const QString& prefix, const QString& new_prefix);
   QString set_dialog_id(const QString& id, const QString& new_id);
   bool can_set_dialog_id_prefix(
       const QString& old_prefix, const QString& new_prefix, QString& id);

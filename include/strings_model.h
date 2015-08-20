@@ -71,6 +71,9 @@ public:
   QStringList get_keys(const QString& prefix) const;
   QString get_string(const QString& key) const;
   void create_string(const QString& key, const QString& value);
+  bool can_duplicate_strings(
+      const QString& prefix, const QString& new_prefix, QString& key);
+  void duplicate_strings(const QString& prefix, const QString& new_prefix);
   void set_string(const QString& key, const QString& value);
   QString set_string_key(const QString& key, const QString& new_key);
   bool can_set_string_key_prefix(

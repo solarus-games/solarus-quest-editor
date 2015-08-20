@@ -38,6 +38,7 @@ public:
 signals:
 
   void create_string_requested();
+  void duplicate_string_requested();
   void set_string_key_requested();
   void delete_string_requested();
 
@@ -48,13 +49,15 @@ protected:
 private:
 
   StringsModel*
-    model;          /**< The strings model. */
+    model;            /**< The strings model. */
   QAction*
-    create_action;  /**< Action of create a new string(s). */
+    create_action;    /**< Action of create a new string(s). */
   QAction*
-    set_key_action; /**< Action of change the key of the selected string(s). */
+    duplicate_action; /**< Action of duplicate string(s). */
   QAction*
-    delete_action;  /**< Action of deleting the selected string(s). */
+    set_key_action;   /**< Action of change the key of the selected string(s).*/
+  QAction*
+    delete_action;    /**< Action of deleting the selected string(s). */
 
 };
 

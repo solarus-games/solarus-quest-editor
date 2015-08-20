@@ -19,6 +19,7 @@ Bugfix release for the 1.4 branch.
 
 * Add a keyboard shortcut (F4) to switch between map view and map script (#75).
 * Sprite editor: improve auto-selection after removing a direction (#70).
+* Dialogs/strings editor: add a duplicate button (#72).
 
 _______________________________________
 

@@ -49,6 +49,7 @@ public slots:
 
   void update_selection();
   void create_string_requested();
+  void duplicate_string_requested();
   void change_string_key_requested();
   void delete_string_requested();
 
