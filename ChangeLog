@@ -23,6 +23,7 @@ Bugfix release for the 1.4 branch.
 * Sprite editor: select the sibling item when removing a direction (#70).
 * Sprite editor: add a context menu in tree view and missing shortcuts (#69).
 * Sprite editor: fix change selection no update frame delay of previewer (#67).
+* Protect resource description fields from wrong characters (#74).
 
 _______________________________________
 
