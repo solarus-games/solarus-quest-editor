@@ -458,6 +458,50 @@ void DialogsModel::create_dialog(
 }
 
 /**
+ * @brief Returns whether dialogs with an id prefix can be duplicated.
+ * @param prefix[in] The prefix id of dialogs to duplicate.
+ * @param new_prefix[in] The new prefix id to use.
+ * @param id[out] The id that already exists in case of error.
+ * @return @c true if dialogs can be duplicated.
+ */
+bool DialogsModel::can_duplicate_dialogs(
+  const QString& prefix, const QString& new_prefix, QString& id) {
+
+  for (QString prefixed_id : get_ids(prefix)) {
+
+    prefixed_id.replace(QRegExp(QString("^") + prefix), new_prefix);
+    if (dialog_exists(prefixed_id)) {
+      id = prefixed_id;
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Duplicates dialog(s).
+ * @param id Id of the dialog to duplicate.
+ * @param new_id Id of the duplicate dialog.
+ * @throws EditorException in case of error.
+ */
+void DialogsModel::duplicate_dialogs(
+  const QString& prefix, const QString& new_prefix) {
+
+  // Check if dialogs can be duplicated.
+  QString id;
+  if (!can_duplicate_dialogs(prefix, new_prefix, id)) {
+    throw EditorException(tr("Dialog '%1' already exists").arg(id));
+  }
+
+  // Duplicate dialogs.
+  for (QString id : get_ids(prefix)) {
+    const auto& data = get_dialog_data(id);
+    id.replace(QRegExp(QString("^") + prefix), new_prefix);
+    create_dialog(id, data);
+  }
+}
+
+/**
  * @brief Changes the text of the specified dialog.
  *
  * Emit dialog_text_changed() if there is a change.

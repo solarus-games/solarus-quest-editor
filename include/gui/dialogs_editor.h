@@ -52,6 +52,7 @@ public slots:
   void update_selection();
 
   void create_dialog_requested();
+  void duplicate_requested();
   void change_dialog_id_requested();
   void delete_dialog_requested();
 

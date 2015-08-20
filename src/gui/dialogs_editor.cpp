@@ -87,6 +87,37 @@ private:
 };
 
 /**
+ * @brief Duplicate a dialog.
+ */
+class DuplicateDialogsCommand : public DialogsEditorCommand {
+
+public:
+
+  DuplicateDialogsCommand(
+      DialogsEditor& editor, const QString& prefix, const QString& new_prefix) :
+    DialogsEditorCommand(editor, DialogsEditor::tr("Duplicate dialogs")),
+    prefix(prefix),
+    new_prefix(new_prefix) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_prefix(new_prefix);
+  }
+
+  virtual void redo() override {
+
+    get_model().duplicate_dialogs(prefix, new_prefix);
+    get_model().set_selected_id(new_prefix);
+  }
+
+private:
+
+  QString prefix;
+  QString new_prefix;
+};
+
+/**
  * @brief Change a dialog id.
  */
 class SetDialogIdCommand : public DialogsEditorCommand {
@@ -454,6 +485,11 @@ DialogsEditor::DialogsEditor(
   connect(ui.dialogs_tree_view, SIGNAL(create_dialog_requested()),
           this, SLOT(create_dialog_requested()));
 
+  connect(ui.duplicate_button, SIGNAL(clicked()),
+          this, SLOT(duplicate_requested()));
+  connect(ui.dialogs_tree_view, SIGNAL(duplicate_dialog_requested()),
+          this, SLOT(duplicate_requested()));
+
   connect(ui.set_id_button, SIGNAL(clicked()),
           this, SLOT(change_dialog_id_requested()));
   connect(ui.dialogs_tree_view, SIGNAL(set_dialog_id_requested()),
@@ -625,6 +661,7 @@ void DialogsEditor::update_selection() {
   // Update buttons
   bool enable = !id.isEmpty() && model->prefix_exists(id);
   ui.set_id_button->setEnabled(enable);
+  ui.duplicate_button->setEnabled(enable);
   ui.delete_button->setEnabled(enable);
 }
 
@@ -653,6 +690,23 @@ void DialogsEditor::create_dialog_requested() {
   }
 
   try_command(new CreateDialogCommand(*this, id, ""));
+}
+
+/**
+ * @brief Slot called when the user wants to duplicate a dialog(s).
+ */
+void DialogsEditor::duplicate_requested() {
+
+  QString prefix = model->get_selected_id();
+  QString new_prefix = prefix + tr("_copy");
+  QString id;
+
+  if (!model->can_duplicate_dialogs(prefix, new_prefix, id)) {
+    GuiTools::error_dialog(tr("Dialog '%1' already exists").arg(id));
+    return;
+  }
+
+  try_command(new DuplicateDialogsCommand(*this, prefix, new_prefix));
 }
 
 /**

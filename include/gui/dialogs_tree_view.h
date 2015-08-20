@@ -38,6 +38,7 @@ public:
 signals:
 
   void create_dialog_requested();
+  void duplicate_dialog_requested();
   void set_dialog_id_requested();
   void delete_dialog_requested();
 
@@ -48,13 +49,15 @@ protected:
 private:
 
   DialogsModel*
-    model;          /**< The dialogs model. */
+    model;            /**< The dialogs model. */
   QAction*
-    create_action;  /**< Action of create a new dialog. */
+    create_action;    /**< Action of create a new dialog. */
   QAction*
-    set_id_action;  /**< Action of change the id of the selected dialog(s). */
+    duplicate_action; /**< Action of duplicate dialog(s). */
   QAction*
-    delete_action;  /**< Action of deleting the selected dialog(s). */
+    set_id_action;    /**< Action of change the id of the selected dialog(s). */
+  QAction*
+    delete_action;    /**< Action of deleting the selected dialog(s). */
 
 };
 

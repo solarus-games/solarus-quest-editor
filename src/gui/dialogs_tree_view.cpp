@@ -37,6 +37,12 @@ DialogsTreeView::DialogsTreeView(QWidget* parent) :
           this, SIGNAL(create_dialog_requested()));
   addAction(create_action);
 
+  duplicate_action = new QAction(
+        QIcon(":/images/icon_copy.png"), tr("Duplicate dialog(s)..."), this);
+  connect(duplicate_action, SIGNAL(triggered()),
+          this, SIGNAL(duplicate_dialog_requested()));
+  addAction(duplicate_action);
+
   set_id_action = new QAction(
         QIcon(":/images/icon_rename.png"), tr("Change id..."), this);
   set_id_action->setShortcut(tr("F2"));
@@ -71,6 +77,7 @@ void DialogsTreeView::contextMenuEvent(QContextMenuEvent *event) {
   if (model->prefix_exists(id)) {
     menu->addSeparator();
     menu->addAction(set_id_action);
+    menu->addAction(duplicate_action);
     menu->addSeparator();
     menu->addAction(delete_action);
   }

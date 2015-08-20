@@ -84,6 +84,37 @@ private:
 };
 
 /**
+ * @brief Duplicate string(s).
+ */
+class DuplicateStringsCommand : public StringsEditorCommand {
+
+public:
+
+  DuplicateStringsCommand(
+      StringsEditor& editor, const QString& prefix, const QString& new_prefix) :
+    StringsEditorCommand(editor, StringsEditor::tr("Duplicate strings")),
+    prefix(prefix),
+    new_prefix(new_prefix) {
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_prefix(new_prefix);
+  }
+
+  virtual void redo() override {
+
+    get_model().duplicate_strings(prefix, new_prefix);
+    get_model().set_selected_key(new_prefix);
+  }
+
+private:
+
+  QString prefix;
+  QString new_prefix;
+};
+
+/**
  * @brief Change string key.
  */
 class SetStringKeyCommand : public StringsEditorCommand {
@@ -305,6 +336,11 @@ StringsEditor::StringsEditor(
   connect(ui.strings_tree_view, SIGNAL(create_string_requested()),
           this, SLOT(create_string_requested()));
 
+  connect(ui.duplicate_button, SIGNAL(clicked()),
+          this, SLOT(duplicate_string_requested()));
+  connect(ui.strings_tree_view, SIGNAL(duplicate_string_requested()),
+          this, SLOT(duplicate_string_requested()));
+
   connect(ui.set_key_button, SIGNAL(clicked()),
           this, SLOT(change_string_key_requested()));
   connect(ui.strings_tree_view, SIGNAL(set_string_key_requested()),
@@ -430,6 +466,7 @@ void StringsEditor::update_selection() {
   // Update buttons
   bool enable = !key.isEmpty() && model->prefix_exists(key);
   ui.set_key_button->setEnabled(enable);
+  ui.duplicate_button->setEnabled(enable);
   ui.delete_button->setEnabled(enable);
 }
 
@@ -448,6 +485,22 @@ void StringsEditor::create_string_requested() {
   QString key = dialog.get_string_key();
   QString value = dialog.get_string_value();
   try_command(new CreateStringCommand(*this, key, value));
+}
+
+/**
+ * @brief Slot called when the user wants to duplicate string(s).
+ */
+void StringsEditor::duplicate_string_requested() {
+
+  QString prefix = model->get_selected_key();
+  QString new_prefix = prefix + tr("_copy");
+  QString key;
+  if (!model->can_duplicate_strings(prefix, new_prefix, key)) {
+    GuiTools::error_dialog(tr("String '%1' already exists").arg(key));
+    return;
+  }
+
+  try_command(new DuplicateStringsCommand(*this, prefix, new_prefix));
 }
 
 /**

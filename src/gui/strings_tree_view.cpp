@@ -37,6 +37,12 @@ StringsTreeView::StringsTreeView(QWidget* parent) :
           this, SIGNAL(create_string_requested()));
   addAction(create_action);
 
+  duplicate_action = new QAction(
+        QIcon(":/images/icon_copy.png"), tr("Duplicate string(s)..."), this);
+  connect(duplicate_action, SIGNAL(triggered()),
+          this, SIGNAL(duplicate_string_requested()));
+  addAction(duplicate_action);
+
   set_key_action = new QAction(
         QIcon(":/images/icon_rename.png"), tr("Change key..."), this);
   set_key_action->setShortcut(tr("F2"));
@@ -71,6 +77,7 @@ void StringsTreeView::contextMenuEvent(QContextMenuEvent *event) {
   if (model->prefix_exists(key)) {
     menu->addSeparator();
     menu->addAction(set_key_action);
+    menu->addAction(duplicate_action);
     menu->addSeparator();
     menu->addAction(delete_action);
   }

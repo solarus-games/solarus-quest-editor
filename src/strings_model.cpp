@@ -422,6 +422,50 @@ void StringsModel::create_string(const QString& key, const QString& value) {
 }
 
 /**
+ * @brief Returns whether strings with a key prefix can be duplicated.
+ * @param prefix[in] The prefix key of strings to duplicate.
+ * @param new_prefix[in] The new prefix key to use.
+ * @param key[out] The key that already exists in case of error.
+ * @return @c true if strings can be duplicated.
+ */
+bool StringsModel::can_duplicate_strings(
+  const QString& prefix, const QString& new_prefix, QString& key) {
+
+  for (QString prefixed_key : get_keys(prefix)) {
+
+    prefixed_key.replace(QRegExp(QString("^") + prefix), new_prefix);
+    if (string_exists(prefixed_key)) {
+      key = prefixed_key;
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @brief Duplicates string(s).
+ * @param id Id of the dialog to duplicate.
+ * @param new_id Id of the duplicate dialog.
+ * @throws EditorException in case of error.
+ */
+void StringsModel::duplicate_strings(
+  const QString& prefix, const QString& new_prefix) {
+
+  // Check if strings can be duplicated.
+  QString key;
+  if (!can_duplicate_strings(prefix, new_prefix, key)) {
+    throw EditorException(tr("String '%1' already exists").arg(key));
+  }
+
+  // Duplicate strings.
+  for (QString key : get_keys(prefix)) {
+    QString value = get_string(key);
+    key.replace(QRegExp(QString("^") + prefix), new_prefix);
+    create_string(key, value);
+  }
+}
+
+/**
  * @brief Changes the value of the specified string.
  *
  * Emits dataChanged() and string_value_changed() if there is a change.
