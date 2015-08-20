@@ -36,7 +36,7 @@
  * Patch versions are only bug fixes.
  * No need to match the Solarus library patch version.
  */
-#define SOLARUSEDITOR_PATCH_VERSION 3
+#define SOLARUSEDITOR_PATCH_VERSION 4
 
 /**
  * @brief The Solarus Quest Editor version as a string.
