@@ -944,9 +944,17 @@ void SpriteModel::delete_direction(const Index &index) {
   // Save and clear the selection.
   Index selection = get_selected_index();
   if (selection.animation_name == index.animation_name &&
-      selection.direction_nb == index.direction_nb &&
-      get_animation_num_directions(index) == 1) {
-    selection.direction_nb = -1;
+      selection.is_direction_index()) {
+    if (selection.direction_nb == index.direction_nb) {
+      int num_directions = get_animation_num_directions(index);
+      if (selection.direction_nb == num_directions - 1) {
+        selection.direction_nb--;
+      } else if (num_directions == 1) {
+        selection.direction_nb = -1;
+      }
+    } else if (selection.direction_nb > index.direction_nb) {
+      selection.direction_nb--;
+    }
   }
   clear_selection();
 
