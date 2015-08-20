@@ -5,6 +5,7 @@ _______________________________________
 
 Bugfix release for the 1.4 branch.
 
+* Map editor: add a button to open the script (#39).
 * Dialogs/strings editor: the name is now selected when renaming (#73).
 * Sprite editor: select the sibling item when removing a direction (#70).
 * Sprite editor: add a context menu in tree view and missing shortcuts (#69).
