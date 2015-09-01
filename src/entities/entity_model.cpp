@@ -269,6 +269,7 @@ EntityModelPtr EntityModel::create(
   case EntityType::ARROW:
   case EntityType::BOMB:
   case EntityType::BOOMERANG:
+  case EntityType::CAMERA:
   case EntityType::CARRIED_ITEM:
   case EntityType::EXPLOSION:
   case EntityType::FIRE:
