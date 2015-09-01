@@ -23,6 +23,7 @@
 #include "strings_model.h"
 #include <QUndoStack>
 #include <QMessageBox>
+#include <cmath>
 
 namespace {
 
