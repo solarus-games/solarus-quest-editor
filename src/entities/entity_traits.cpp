@@ -55,6 +55,9 @@ QString EnumTraits<EntityType>::get_friendly_name(EntityType value) {
   case EntityType::BOOMERANG:
     return QApplication::tr("Boomerang");
 
+  case EntityType::CAMERA:
+    return QApplication::tr("Camera");
+
   case EntityType::CARRIED_ITEM:
     return QApplication::tr("Carried object");
 
