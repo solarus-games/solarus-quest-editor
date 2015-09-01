@@ -19,6 +19,7 @@
 
 #include <QPlainTextEdit>
 #include <QPainter>
+#include <cmath>
 
 /**
  * @brief A plain text editor that sends editing_finished() signal when the text
@@ -72,7 +73,7 @@ protected:
       if (show_margin) {
         const QRect rect = event->rect();
         const QFont font = currentCharFormat().font();
-        int x = round(QFontMetrics(font).maxWidth() * margin)
+        int x = std::round(QFontMetrics(font).maxWidth() * margin)
               + contentOffset().x()
               + document()->documentMargin();
 
