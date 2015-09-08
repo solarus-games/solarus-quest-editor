@@ -46,6 +46,12 @@ else()
   find_package(Lua51 REQUIRED)
 endif()
 
+# Explicit link to libdl is needed for Lua on some systems.
+find_library(DL_LIBRARY dl)
+if("${DL_LIBRARY}" MATCHES DL_LIBRARY-NOTFOUND)
+  set(DL_LIBRARY "")
+endif()
+
 # Include directories.
 include_directories(
   "${CMAKE_SOURCE_DIR}/include"
