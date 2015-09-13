@@ -1003,6 +1003,7 @@ void MapView::mouseDoubleClickEvent(QMouseEvent* event) {
       QGraphicsItem* item = items_under_mouse.first();
       EntityModel* entity = scene->get_entity_from_item(*item);
       if (entity != nullptr) {
+        start_state_doing_nothing();
         edit_selected_entity();
       }
     }
