@@ -553,9 +553,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(ui.default_layer_field, SIGNAL(activated(QString)),
           this, SLOT(default_layer_selector_activated()));
-  connect(ui.tileset_view, SIGNAL(change_selected_patterns_default_layer_requested(Layer)),
-          this, SLOT(change_selected_patterns_default_layer_requested(Layer)));
-  connect(model, SIGNAL(pattern_default_layer_changed(int, Layer)),
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_default_layer_requested(int)),
+          this, SLOT(change_selected_patterns_default_layer_requested(int)));
+  connect(model, SIGNAL(pattern_default_layer_changed(int, int)),
           this, SLOT(update_default_layer_field()));
 
   connect(ui.repeat_mode_field, SIGNAL(activated(QString)),

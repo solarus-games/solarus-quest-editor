@@ -730,8 +730,8 @@ void MainWindow::current_editor_changed(int /* index */) {
     update_grid_visibility();
     update_grid_size();
 
-    connect(&view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
-            this, SLOT(update_layer_visibility(Layer)));
+    connect(&view_settings, SIGNAL(layer_visibility_changed(int, bool)),
+            this, SLOT(update_layer_visibility(int)));
     update_layers_visibility();
 
     connect(&view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
