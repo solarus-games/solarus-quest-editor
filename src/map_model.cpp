@@ -55,7 +55,7 @@ MapModel::MapModel(
   }
 
   const int num_layers = get_num_layers();
-  Q_ASSERT(num_layer < entities.size());
+  Q_ASSERT(num_layers <= entities.size());
   for (int layer = 0; layer < num_layers; ++layer) {
     for (int i = 0; i < get_num_entities(layer); ++i) {
       EntityIndex index = { layer, i };
