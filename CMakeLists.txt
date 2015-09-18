@@ -108,6 +108,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/find_text_dialog.h
   include/gui/get_animation_name_dialog.h
   include/gui/gui_tools.h
+  include/gui/layer_selector.h
   include/gui/lua_syntax_highlighter.h
   include/gui/map_editor.h
   include/gui/map_view.h
@@ -152,7 +153,6 @@ set(solarus_quest_editor_SOURCES
   include/grid_style.h
   include/ground_traits.h
   include/indexed_string_tree.h
-  include/layer_traits.h
   include/map_model.h
   include/natural_comparator.h
   include/new_quest_builder.h
@@ -215,6 +215,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/find_text_dialog.cpp
   src/gui/get_animation_name_dialog.cpp
   src/gui/gui_tools.cpp
+  src/gui/layer_selector.cpp
   src/gui/lua_syntax_highlighter.cpp
   src/gui/main_window.cpp
   src/gui/map_editor.cpp
@@ -257,7 +258,6 @@ set(solarus_quest_editor_SOURCES
   src/grid_style.cpp
   src/ground_traits.cpp
   src/indexed_string_tree.cpp
-  src/layer_traits.cpp
   src/main.cpp
   src/map_model.cpp
   src/new_quest_builder.cpp

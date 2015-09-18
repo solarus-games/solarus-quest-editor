@@ -615,7 +615,7 @@ void MainWindow::on_action_show_layer_0_triggered() {
     return;
   }
 
-  editor->get_view_settings().set_layer_visible(Layer::LAYER_LOW, ui.action_show_layer_0->isChecked());
+  editor->get_view_settings().set_layer_visible(0, ui.action_show_layer_0->isChecked());
 }
 
 /**
@@ -628,7 +628,7 @@ void MainWindow::on_action_show_layer_1_triggered() {
     return;
   }
 
-  editor->get_view_settings().set_layer_visible(Layer::LAYER_INTERMEDIATE, ui.action_show_layer_1->isChecked());
+  editor->get_view_settings().set_layer_visible(1, ui.action_show_layer_1->isChecked());
 }
 
 /**
@@ -641,7 +641,7 @@ void MainWindow::on_action_show_layer_2_triggered() {
     return;
   }
 
-  editor->get_view_settings().set_layer_visible(Layer::LAYER_HIGH, ui.action_show_layer_2->isChecked());
+  editor->get_view_settings().set_layer_visible(2, ui.action_show_layer_2->isChecked());
 }
 
 /**
@@ -792,7 +792,7 @@ void MainWindow::update_grid_size() {
  * @brief Slot called when a layer of the current editor was just shown or hidden.
  * @param layer The layer whose visibility has just changed.
  */
-void MainWindow::update_layer_visibility(Layer layer) {
+void MainWindow::update_layer_visibility(int layer) {
 
   Editor* editor = get_current_editor();
   if (editor == nullptr) {
@@ -801,22 +801,22 @@ void MainWindow::update_layer_visibility(Layer layer) {
   ViewSettings& view_settings = editor->get_view_settings();
   bool visible = view_settings.is_layer_visible(layer);
 
+  // TODO layer
   switch (layer) {
 
-  case Layer::LAYER_LOW:
+  case 0:
     ui.action_show_layer_0->setChecked(visible);
     break;
 
-  case Layer::LAYER_INTERMEDIATE:
+  case 1:
     ui.action_show_layer_1->setChecked(visible);
     break;
 
-  case Layer::LAYER_HIGH:
+  case 2:
     ui.action_show_layer_2->setChecked(visible);
     break;
 
-  case Layer::LAYER_NB:
-    qCritical() << tr("Invalid layer: %1").arg(layer);
+  default:
     break;
   }
 }
@@ -831,10 +831,11 @@ void MainWindow::update_layers_visibility() {
     return;
   }
 
+  // TODO layer
   ViewSettings& view_settings = editor->get_view_settings();
-  ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(Layer::LAYER_LOW));
-  ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(Layer::LAYER_INTERMEDIATE));
-  ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(Layer::LAYER_HIGH));
+  ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(0));
+  ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(1));
+  ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(2));
 }
 
 /**

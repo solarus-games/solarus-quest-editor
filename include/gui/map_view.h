@@ -18,7 +18,6 @@
 #define SOLARUSEDITOR_MAP_VIEW_H
 
 #include "entities/entity_traits.h"
-#include "layer_traits.h"
 #include <QGraphicsView>
 #include <QPointer>
 
@@ -121,7 +120,7 @@ signals:
       int direction);
   void set_entities_layer_requested(
       const EntityIndexes& indexes,
-      Layer layer);
+      int layer);
   void bring_entities_to_front_requested(
       const EntityIndexes& indexes);
   void bring_entities_to_back_requested(
@@ -140,7 +139,7 @@ public slots:
   void zoom_out();
   void mouse_coordinates_changed(const QPoint& xy);
   void update_grid_visibility();
-  void update_layer_visibility(Layer layer);
+  void update_layer_visibility(int layer);
   void update_entity_type_visibility(EntityType type);
   void tileset_selection_changed();
   void tileset_id_changed(const QString& tileset_id);

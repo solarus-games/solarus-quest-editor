@@ -18,7 +18,6 @@
 #define SOLARUSEDITOR_TILESET_VIEW_H
 
 #include "ground_traits.h"
-#include "layer_traits.h"
 #include "pattern_animation.h"
 #include "pattern_repeat_mode_traits.h"
 #include "pattern_separation.h"
@@ -52,7 +51,7 @@ signals:
   void change_selected_pattern_id_requested();
   void change_selected_pattern_position_requested(const QPoint& position);
   void change_selected_patterns_ground_requested(Ground ground);
-  void change_selected_patterns_default_layer_requested(Layer layer);
+  void change_selected_patterns_default_layer_requested(int layer);
   void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);

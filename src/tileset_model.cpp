@@ -657,7 +657,7 @@ void TilesetModel::set_pattern_ground(int index, Ground ground) {
  * @param index A pattern index.
  * @return The pattern's default layer.
  */
-Layer TilesetModel::get_pattern_default_layer(int index) const {
+int TilesetModel::get_pattern_default_layer(int index) const {
 
   const std::string& pattern_id = index_to_id(index).toStdString();
   return tileset.get_pattern(pattern_id).get_default_layer();
@@ -671,13 +671,13 @@ Layer TilesetModel::get_pattern_default_layer(int index) const {
  * @return @c true if all specified patterns have the same default layer.
  * If the list is empty, @c false is returned.
  */
-bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, Layer& default_layer) const {
+bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, int& default_layer) const {
 
   if (indexes.empty()) {
     return false;
   }
 
-  Layer candidate = get_pattern_default_layer(indexes.first());
+  int candidate = get_pattern_default_layer(indexes.first());
   for (int index : indexes) {
     if (get_pattern_default_layer(index) != candidate) {
       return false;
@@ -696,7 +696,7 @@ bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, La
  * @param index A pattern index.
  * @param default_layer The default layer to set.
  */
-void TilesetModel::set_pattern_default_layer(int index, Layer default_layer) {
+void TilesetModel::set_pattern_default_layer(int index, int default_layer) {
 
   Solarus::TilePatternData& pattern = tileset.get_pattern(index_to_id(index).toStdString());
   if (default_layer == pattern.get_default_layer()) {

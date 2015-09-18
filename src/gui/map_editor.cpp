@@ -422,7 +422,7 @@ public:
     // Create the dynamic tiles.
     for (const EntityIndex& index_before : indexes_before) {
       EntityModelPtr dynamic_tile = DynamicTile::create_from_normal_tile(map, index_before);
-      Layer layer = index_before.layer;
+      int layer = index_before.layer;
       EntityIndex index_after = { layer, -1 };
       dynamic_tiles.emplace_back(std::move(dynamic_tile), index_after);
     }
@@ -433,9 +433,8 @@ public:
     // Determine the indexes where to place the dynamic ones.
     indexes_after.clear();
     std::vector<int> order_after_by_layer;
-    for (int i = Layer::LAYER_LOW; i < Layer::LAYER_NB; ++i) {
-      Layer layer = static_cast<Layer>(i);
-      order_after_by_layer.push_back(map.get_num_entities(layer));
+    for (int i = 0; i < map.get_num_layers(); ++i) {
+      order_after_by_layer.push_back(map.get_num_entities(i));
     }
     for (AddableEntity& addable : dynamic_tiles) {
       addable.index.order = order_after_by_layer[addable.index.layer];
@@ -480,7 +479,7 @@ public:
     // Create the dynamic tiles.
     for (const EntityIndex& index_before : indexes_before) {
       EntityModelPtr tile = Tile::create_from_dynamic_tile(map, index_before);
-      Layer layer = index_before.layer;
+      int layer = index_before.layer;
       EntityIndex index_after = { layer, -1 };
       tiles.emplace_back(std::move(tile), index_after);
     }
@@ -491,8 +490,7 @@ public:
     // Determine the indexes where to place the dynamic ones.
     indexes_after.clear();
     std::vector<int> order_after_by_layer;
-    for (int i = Layer::LAYER_LOW; i < Layer::LAYER_NB; ++i) {
-      Layer layer = static_cast<Layer>(i);
+    for (int layer = 0; layer < map.get_num_layers(); ++layer) {
       order_after_by_layer.push_back(map.get_num_tiles(layer));
     }
     for (AddableEntity& addable : tiles) {
@@ -579,7 +577,7 @@ private:
 class SetEntitiesLayerCommand : public MapEditorCommand {
 
 public:
-  SetEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes, Layer layer) :
+  SetEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes, int layer) :
     MapEditorCommand(editor, MapEditor::tr("Set layer")),
     indexes_before(indexes),
     indexes_after(),
@@ -603,7 +601,7 @@ public:
 private:
   EntityIndexes indexes_before;  // Sorted indexes before the change.
   EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
-  Layer layer_after;
+  int layer_after;
 };
 
 /**
@@ -929,8 +927,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(convert_tiles_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(set_entities_direction_requested(EntityIndexes, int)),
           this, SLOT(set_entities_direction_requested(EntityIndexes, int)));
-  connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, Layer)),
-          this, SLOT(set_entities_layer_requested(EntityIndexes, Layer)));
+  connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, int)),
+          this, SLOT(set_entities_layer_requested(EntityIndexes, int)));
   connect(ui.map_view, SIGNAL(bring_entities_to_front_requested(EntityIndexes)),
           this, SLOT(bring_entities_to_front_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(bring_entities_to_back_requested(EntityIndexes)),
@@ -1578,13 +1576,13 @@ void MapEditor::set_entities_direction_requested(const EntityIndexes& indexes,
  * @param layer The layer to set.
  */
 void MapEditor::set_entities_layer_requested(const EntityIndexes& indexes,
-                                             Layer layer) {
+                                             int layer) {
 
   if (indexes.isEmpty()) {
     return;
   }
 
-  Layer common_layer = Layer::LAYER_LOW;
+  int common_layer = 0;
   if (map->is_common_layer(indexes, common_layer) &&
       layer == common_layer) {
     // Nothing to do.

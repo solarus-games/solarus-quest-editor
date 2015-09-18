@@ -21,7 +21,6 @@
 #include "ui_main_window.h"
 #include "gui/settings_dialog.h"
 #include <solarus/entities/EntityType.h>
-#include <solarus/entities/Layer.h>
 #include <QMainWindow>
 
 class Editor;
@@ -30,7 +29,6 @@ class QuestRunner;
 class PairSpinBox;
 
 using EntityType = Solarus::EntityType;
-using Layer = Solarus::Layer;
 
 /**
  * @brief Main window of the quest editor.
@@ -77,7 +75,7 @@ private slots:
   void update_zoom();
   void update_grid_visibility();
   void update_grid_size();
-  void update_layer_visibility(Layer layer);
+  void update_layer_visibility(int layer);
   void update_layers_visibility();
   void update_entity_type_visibility(EntityType entity_type);
   void update_entity_types_visibility();

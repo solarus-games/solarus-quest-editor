@@ -6,6 +6,7 @@ ________________________________________
 New features
 ------------
 
+* Map editor: allow more than 3 layers.
 * Text editor: improve tabulation behavior (#43).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor configurations.

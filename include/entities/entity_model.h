@@ -18,7 +18,6 @@
 #define SOLARUSEDITOR_ENTITY_MODEL_H
 
 #include "entity_traits.h"
-#include "layer_traits.h"
 #include "resize_mode.h"
 #include "sprite_model.h"
 #include <QPointer>
@@ -82,8 +81,8 @@ public:
   QString get_name() const;
   void set_name(const QString& name);
   void ensure_name_unique();
-  Layer get_layer() const;
-  void set_layer(Layer layer);
+  int get_layer() const;
+  void set_layer(int layer);
   QPoint get_xy() const;
   void set_xy(const QPoint& xy);
   QPoint get_top_left() const;
@@ -103,7 +102,7 @@ public:
   void set_size(const QSize& size);
   QRect get_bounding_box() const;
   bool get_has_preferred_layer() const;
-  Layer get_preferred_layer() const;
+  int get_preferred_layer() const;
   bool has_direction_field() const;
   bool is_no_direction_allowed() const;
   QString get_no_direction_text() const;
@@ -195,7 +194,7 @@ protected:
   void set_base_size(const QSize& base_size);
 
   void set_has_preferred_layer(bool has_preferred_layer);
-  void set_preferred_layer(Layer preferred_layer);
+  void set_preferred_layer(int preferred_layer);
 
   void set_num_directions(int num_directions);
   void set_no_direction_allowed(bool no_direction_allowed);
@@ -240,7 +239,7 @@ private:
   QSize base_size;                /**< Reference size when resizing. */
   ResizeMode resize_mode;         /**< How the entity can be resized. */
   bool has_preferred_layer;       /**< Whether the entity has a preferred layer when added to the map. */
-  Layer preferred_layer;          /**< The preferred layer if has_preferred_layer is true. */
+  int preferred_layer;            /**< The preferred layer if has_preferred_layer is true. */
   int num_directions;             /**< Number of possible directions (except the possible special one -1). */
   bool no_direction_allowed;      /**< Whether the special no-value -1 is an allowed direction. */
   QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed). */

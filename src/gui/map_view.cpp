@@ -143,7 +143,7 @@ public:
 private:
   QPoint get_entities_center() const;
   void sort_entities();
-  Layer find_best_layer(const EntityModel& entity) const;
+  int find_best_layer(const EntityModel& entity) const;
 
   EntityModels entities;                    /**< Entities to be added. */
   std::vector<EntityItem*> entity_items;    /**< Graphic items of entities to be added. */
@@ -271,7 +271,7 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
           this, SLOT(update_grid_visibility()));
   update_grid_visibility();
 
-  connect(this->view_settings, SIGNAL(layer_visibility_changed(Layer, bool)),
+  connect(this->view_settings, SIGNAL(layer_visibility_changed(int, bool)),
           this, SLOT(update_layer_visibility(Layer)));
 
   connect(this->view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
@@ -406,7 +406,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
   }
 
   bool has_common_preferred_layer = true;
-  Layer common_preferred_layer = tileset->get_pattern_default_layer(pattern_indexes.first());
+  int common_preferred_layer = tileset->get_pattern_default_layer(pattern_indexes.first());
   for (int pattern_index : pattern_indexes) {
     QString pattern_id = tileset->index_to_id(pattern_index);
     if (pattern_id.isEmpty()) {
@@ -419,7 +419,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
     tile->set_field("pattern", pattern_id);
     tile->set_size(pattern_frame.size());
     tile->set_xy(pattern_frame.topLeft());
-    Layer preferred_layer = tileset->get_pattern_default_layer(pattern_index);
+    int preferred_layer = tileset->get_pattern_default_layer(pattern_index);
     tile->set_layer(preferred_layer);
     tiles.emplace_back(std::move(tile));
 
@@ -478,6 +478,7 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
+  /* TODO layer
   set_layer_actions = EnumMenus<Layer>::create_actions(
       *this,
       EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
@@ -485,6 +486,7 @@ void MapView::build_context_menu_actions() {
         emit set_entities_layer_requested(get_selected_entities(), layer);
       }
   );
+  */
 
   bring_to_front_action = new QAction(
         tr("Bring to front"), this);
@@ -524,7 +526,8 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
-  // Low layer, Intermediate Layer, High Layer, Bring to front, Bring to back
+  // TODO layer
+  // Bring to front, Bring to back
   // Delete
 
   QMenu* menu = new QMenu(this);
@@ -579,6 +582,7 @@ QMenu* MapView::create_context_menu() {
   if (!is_selection_empty()) {
 
     // Layer.
+    /* TODO layer
     Layer common_layer = Layer::LAYER_LOW;
     bool has_common_layer = map->is_common_layer(indexes, common_layer);
     for (int i = 0; i < Layer::LAYER_NB; ++i) {
@@ -593,6 +597,7 @@ QMenu* MapView::create_context_menu() {
       }
       menu->addAction(action);
     }
+    */
 
     // Bring to front/back.
     menu->addAction(bring_to_front_action);
@@ -872,7 +877,7 @@ void MapView::update_grid_visibility() {
  * @brief Shows or hides entities on a layer according to the view settings.
  * @param layer The layer to update.
  */
-void MapView::update_layer_visibility(Layer layer) {
+void MapView::update_layer_visibility(int layer) {
 
   if (scene == nullptr) {
     return;
@@ -1993,7 +1998,7 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities,
 
   for (const EntityModelPtr& entity : this->entities) {
     EntityItem* item = new EntityItem(*entity);
-    item->setZValue(Layer::LAYER_NB);
+    item->setZValue(get_map().get_num_layers());
     entity_items.push_back(item);
   }
 }
@@ -2059,22 +2064,21 @@ QPoint AddingEntitiesState::get_entities_center() const {
  */
 void AddingEntitiesState::sort_entities() {
 
-  std::map<Layer, EntityModels> entities_by_layer;
+  std::map<int, EntityModels> entities_by_layer;
   for (EntityModelPtr& entity : entities) {
     if (!entity->is_dynamic()) {  // Non-dynamic ones first.
-      Layer layer = entity->get_layer();
+      int layer = entity->get_layer();
       entities_by_layer[layer].emplace_back(std::move(entity));
     }
   }
   for (EntityModelPtr& entity : entities) {
     if (entity != nullptr && entity->is_dynamic()) {  // Non-dynamic ones first.
-      Layer layer = entity->get_layer();
+      int layer = entity->get_layer();
       entities_by_layer[layer].emplace_back(std::move(entity));
     }
   }
   entities.clear();
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer layer = static_cast<Layer>(i);
+  for (int layer = 0; layer < get_map().get_num_layers(); ++layer) {
     for (EntityModelPtr& entity : entities_by_layer[layer]) {
       entities.emplace_back(std::move(entity));
     }
@@ -2092,17 +2096,16 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
 
   // Store the number of tiles and dynamic entities of each layer,
   // because every entity added will increment one of them.
-  QMap<Layer, int> num_tiles_by_layer;     // Index where to append a tile.
-  QMap<Layer, int> num_dynamic_entities_by_layer;  // Index where to append a dynamic entity.
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer layer = static_cast<Layer>(i);
+  QMap<int, int> num_tiles_by_layer;     // Index where to append a tile.
+  QMap<int, int> num_dynamic_entities_by_layer;  // Index where to append a dynamic entity.
+  for (int layer = 0; layer < map.get_num_layers(); ++layer) {
     num_tiles_by_layer[layer] = map.get_num_tiles(layer);
     num_dynamic_entities_by_layer[layer] = map.get_num_dynamic_entities(layer);
   }
 
   // Determine the best layer of each entity.
   for (EntityModelPtr& entity : entities) {
-    Layer layer = find_best_layer(*entity);
+    int layer = find_best_layer(*entity);
     entity->set_layer(layer);
   }
   // Now that their layer is known, sort them
@@ -2114,7 +2117,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   EntityIndex previous_index;
   for (EntityModelPtr& entity : entities) {
     Q_ASSERT(entity != nullptr);
-    Layer layer = entity->get_layer();
+    int layer = entity->get_layer();
 
     int i = 0;
     if (entity->is_dynamic()) {
@@ -2209,13 +2212,13 @@ void AddingEntitiesState::tileset_selection_changed() {
  * @param entity The entity to add.
  * @return The layer.
  */
-Layer AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
+int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
 
   if (!guess_layer) {
     return entity.get_layer();
   }
 
-  Layer layer_under = get_scene().get_layer_in_rectangle(
+  int layer_under = get_scene().get_layer_in_rectangle(
         entity.get_bounding_box()
   );
   if (!entity.get_has_preferred_layer()) {
@@ -2225,8 +2228,8 @@ Layer AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
 
   // The entity has a preferred layer:
   // see if there is something above its preferred layer.
-  Layer preferred_layer = entity.get_preferred_layer();
-  if (static_cast<int>(layer_under) > static_cast<int>(preferred_layer)) {
+  int preferred_layer = entity.get_preferred_layer();
+  if (static_cast<int>(layer_under) > preferred_layer) {
       // Don't use the preferred layer in this case.
       return layer_under;
   }

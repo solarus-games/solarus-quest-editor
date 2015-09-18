@@ -328,7 +328,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="EnumSelector&lt;Layer&gt;" name="default_layer_field">
+           <widget class="LayerSelector" name="default_layer_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -369,6 +369,16 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>LayerSelector</class>
+   <extends>QComboBox</extends>
+   <header>gui/layer_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;Ground&gt;</class>
+   <extends>QComboBox</extends>
+   <header>ground_traits.h</header>
+  </customwidget>
+  <customwidget>
    <class>TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>gui/tileset_view.h</header>
@@ -379,11 +389,6 @@
    <header>gui/tile_patterns_list_view.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;Ground&gt;</class>
-   <extends>QComboBox</extends>
-   <header>ground_traits.h</header>
-  </customwidget>
-  <customwidget>
    <class>EnumSelector&lt;PatternAnimation&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_animation_traits.h</header>
@@ -392,11 +397,6 @@
    <class>EnumSelector&lt;PatternSeparation&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_separation_traits.h</header>
-  </customwidget>
-  <customwidget>
-   <class>EnumSelector&lt;Layer&gt;</class>
-   <extends>QComboBox</extends>
-   <header>layer_traits.h</header>
   </customwidget>
   <customwidget>
    <class>ColorPicker</class>

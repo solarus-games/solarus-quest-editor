@@ -171,7 +171,7 @@ class SetPatternsDefaultLayerCommand : public TilesetEditorCommand {
 
 public:
 
-  SetPatternsDefaultLayerCommand(TilesetEditor& editor, const QList<int>& indexes, Layer layer) :
+  SetPatternsDefaultLayerCommand(TilesetEditor& editor, const QList<int>& indexes, int layer) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Default layer")),
     indexes(indexes),
     layer_after(layer) {
@@ -202,8 +202,8 @@ public:
 private:
 
   QList<int> indexes;
-  QList<Layer> layers_before;
-  Layer layer_after;
+  QList<int> layers_before;
+  int layer_after;
 
 };
 
@@ -430,7 +430,7 @@ private:
     QString id;
     QRect frames_bounding_box;
     Ground ground;
-    Layer default_layer;
+    int default_layer;
     PatternAnimation animation;
     PatternSeparation separation;
     TilePatternRepeatMode repeat_mode;
@@ -1044,15 +1044,15 @@ void TilesetEditor::change_selected_patterns_separation_requested(PatternSeparat
  */
 void TilesetEditor::update_default_layer_field() {
 
-  Layer default_layer = Solarus::LAYER_LOW;
+  int default_layer = 0;
   bool enable = model->is_common_pattern_default_layer(
-        model->get_selected_indexes(), default_layer);
+      model->get_selected_indexes(), default_layer);
 
   ui.default_layer_label->setEnabled(enable);
   ui.default_layer_field->setEnabled(enable);
 
   if (enable) {
-    ui.default_layer_field->set_selected_value(default_layer);
+    ui.default_layer_field->set_selected_layer(default_layer);
   }
 }
 
@@ -1066,8 +1066,8 @@ void TilesetEditor::default_layer_selector_activated() {
   }
 
   QList<int> indexes = model->get_selected_indexes();
-  Layer new_default_layer = ui.default_layer_field->get_selected_value();
-  Layer old_common_default_layer;
+  int new_default_layer = ui.default_layer_field->get_selected_layer();
+  int old_common_default_layer;
   if (model->is_common_pattern_default_layer(indexes, old_common_default_layer) &&
       new_default_layer == old_common_default_layer) {
     // No change.
@@ -1081,7 +1081,7 @@ void TilesetEditor::default_layer_selector_activated() {
  * @brief Slot called when the user changes the default layer of selected patterns.
  * @param default_layer The new default layer.
  */
-void TilesetEditor::change_selected_patterns_default_layer_requested(Layer default_layer) {
+void TilesetEditor::change_selected_patterns_default_layer_requested(int default_layer) {
 
   if (model->is_selection_empty()) {
     return;
@@ -1097,7 +1097,7 @@ void TilesetEditor::update_repeat_mode_field() {
 
   TilePatternRepeatMode repeat_mode = TilePatternRepeatMode::ALL;
   bool enable = model->is_common_pattern_repeat_mode(
-        model->get_selected_indexes(), repeat_mode);
+      model->get_selected_indexes(), repeat_mode);
 
   ui.repeat_mode_label->setEnabled(enable);
   ui.repeat_mode_field->setEnabled(enable);

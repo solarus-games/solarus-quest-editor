@@ -38,7 +38,8 @@ MapModel::MapModel(
   QObject(parent),
   quest(quest),
   map_id(map_id),
-  tileset_model(nullptr) {
+  tileset_model(nullptr),
+  entities(100) {
 
   // Load the map data file.
   QString path = quest.get_map_data_file_path(map_id);
@@ -53,11 +54,12 @@ MapModel::MapModel(
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer layer = static_cast<Layer>(i);
-    for (int j = 0; j < get_num_entities(layer); ++j) {
-      EntityIndex index = { layer, j };
-      entities[i].emplace_back(EntityModel::create(*this, index));
+  const int num_layers = get_num_layers();
+  Q_ASSERT(num_layer < entities.size());
+  for (int layer = 0; layer < num_layers; ++layer) {
+    for (int i = 0; i < get_num_entities(layer); ++i) {
+      EntityIndex index = { layer, i };
+      entities[layer].emplace_back(EntityModel::create(*this, index));
     }
   }
 }
@@ -124,6 +126,29 @@ void MapModel::set_size(const QSize& size) {
 
   map.set_size(solarus_size);
   emit size_changed(size);
+}
+
+/**
+ * @brief Returns the number of layers of the map.
+ * @return The number of layers.
+ */
+int MapModel::get_num_layers() const {
+
+  return map.get_num_layers();
+}
+
+/**
+ * @brief Sets the number of layers of the map.
+ * @param num_layers The new number of layers.
+ */
+void MapModel::set_num_layers(int num_layers) {
+
+  Q_UNUSED(num_layers);
+  /* TODO
+  map.set_num_layers(num_layers);
+  entities.resize(num_layers);
+  // Take care of entities removed.
+  */
 }
 
 /**
@@ -316,7 +341,7 @@ int MapModel::get_num_entities() const {
  * @param layer A layer.
  * @return The total number of entities on that layer (tiles and dynamic entities).
  */
-int MapModel::get_num_entities(Layer layer) const {
+int MapModel::get_num_entities(int layer) const {
   return map.get_num_entities(layer);
 }
 
@@ -325,7 +350,7 @@ int MapModel::get_num_entities(Layer layer) const {
  * @param layer A layer.
  * @return The number of tiles on that layer.
  */
-int MapModel::get_num_tiles(Layer layer) const {
+int MapModel::get_num_tiles(int layer) const {
   return map.get_num_tiles(layer);
 }
 
@@ -334,7 +359,7 @@ int MapModel::get_num_tiles(Layer layer) const {
  * @param layer A layer.
  * @return The number of dynamic entities on that layer.
  */
-int MapModel::get_num_dynamic_entities(Layer layer) const {
+int MapModel::get_num_dynamic_entities(int layer) const {
   return map.get_num_dynamic_entities(layer);
 }
 
@@ -567,13 +592,13 @@ QMap<QString, EntityIndex> MapModel::get_named_entities() const {
  * @brief Returns the layer where an entity is on the map.
  * @param index Index of a map entity.
  * @return The layer.
- * Returns a default-constructed layer if there is no entity at this index.
+ * Returns -1 if there is no entity at this index.
  */
-Layer MapModel::get_entity_layer(const EntityIndex& index) const {
+int MapModel::get_entity_layer(const EntityIndex& index) const {
 
   if (!entity_exists(index)) {
     // No such entity.
-    return Layer();
+    return -1;
   }
 
   return get_entity(index).get_layer();
@@ -590,13 +615,13 @@ Layer MapModel::get_entity_layer(const EntityIndex& index) const {
  * @return The new index of the entity.
  * Returns an invalid index in case of error.
  */
-EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer layer_after) {
+EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, int layer_after) {
 
   if (!entity_exists(index_before)) {
     return EntityIndex();
   }
 
-  Layer layer_before = index_before.layer;
+  int layer_before = index_before.layer;
   int order_before = index_before.order;
   if (layer_after == layer_before) {
     // No change.
@@ -637,7 +662,7 @@ EntityIndex MapModel::set_entity_layer(const EntityIndex& index_before, Layer la
  * @param[out] layer The common layer found if any.
  * @return @c true if they all have the same layer.
  */
-bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const {
+bool MapModel::is_common_layer(const EntityIndexes& indexes, int& layer) const {
 
   if (indexes.isEmpty()) {
     return false;
@@ -662,7 +687,7 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, Layer& layer) const
  * of that layer.
  * @return The new indexes of the entities.
  */
-EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after) {
+EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, int layer_after) {
 
   // TODO possible improvement: entities whose layer do not change should also
   // be moved to keep the relative order of the whole group.
@@ -744,7 +769,7 @@ void MapModel::set_entity_order(const EntityIndex& index_before, int order_after
     return;
   }
 
-  Layer layer = index_before.layer;
+  int layer = index_before.layer;
   auto it = entities[layer].begin() + order_before;
   EntityModelPtr entity = std::move(*it);
   EntityModel* entity_before = entity.get();
@@ -791,7 +816,7 @@ EntityIndex MapModel::bring_entity_to_front(const EntityIndex& index_before) {
     return EntityIndex();
   }
 
-  Layer layer = index_before.layer;
+  int layer = index_before.layer;
   bool dynamic = get_entity(index_before).is_dynamic();
   int order_after = dynamic ? (get_num_entities(layer) - 1) : (get_num_tiles(layer) - 1);
   set_entity_order(index_before, order_after);
@@ -815,7 +840,7 @@ EntityIndex MapModel::bring_entity_to_back(const EntityIndex& index_before) {
     return EntityIndex();
   }
 
-  Layer layer = index_before.layer;
+  int layer = index_before.layer;
   bool dynamic = get_entity(index_before).is_dynamic();
   int order_after = dynamic ? get_num_tiles(layer) : 0;
   set_entity_order(index_before, order_after);
@@ -1319,7 +1344,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
   emit entities_about_to_be_added(indexes);
 
   // Add each entity in ascending order.
-  QSet<Layer> layers_with_dirty_indexes;
+  QSet<int> layers_with_dirty_indexes;
   for (AddableEntity& addable_entity : entities) {
 
     EntityModelPtr& entity(addable_entity.entity);
@@ -1344,7 +1369,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
     Q_ASSERT(inserted);
 
     // Update the entity model and the entity list in the map editor.
-    Layer layer = index.layer;
+    int layer = index.layer;
     int i = index.order;
     auto it = this->entities[layer].begin() + i;
     this->entities[layer].emplace(it, std::move(entity));
@@ -1357,7 +1382,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
   }
 
   // Each entity stores its own index, so they might get shifted.
-  for (Layer layer : layers_with_dirty_indexes) {
+  for (int layer : layers_with_dirty_indexes) {
     rebuild_entity_indexes(layer);
   }
 
@@ -1385,7 +1410,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
 
   emit entities_about_to_be_removed(indexes);
 
-  QSet<Layer> layers_with_dirty_indexes;
+  QSet<int> layers_with_dirty_indexes;
 
   AddableEntities entities;
   // Remove entities in descending order so that indexes to remove don't shift.
@@ -1399,7 +1424,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
     Q_ASSERT(entity_exists(index));
 
     // Update the entity model and the entity list in the map editor.
-    Layer layer = index.layer;
+    int layer = index.layer;
     int i = index.order;
     auto it2 = this->entities[layer].begin() + i;
     EntityModelPtr entity = std::move(*it2);
@@ -1419,7 +1444,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
   }
 
   // Each entity stores its own index, so they might get shifted.
-  for (Layer layer : layers_with_dirty_indexes) {
+  for (int layer : layers_with_dirty_indexes) {
     rebuild_entity_indexes(layer);
   }
 
@@ -1440,7 +1465,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
  *
  * @param layer Layer to update.
  */
-void MapModel::rebuild_entity_indexes(Layer layer) {
+void MapModel::rebuild_entity_indexes(int layer) {
 
   int i = 0;
   for (auto it = entities[layer].begin(); it != entities[layer].end(); ++it) {

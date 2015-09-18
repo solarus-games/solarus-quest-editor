@@ -18,7 +18,6 @@
 #define SOLARUSEDITOR_MAP_MODEL_H
 
 #include "entities/entity_model.h"
-#include "layer_traits.h"
 #include "sprite_model.h"
 #include <array>
 #include <memory>
@@ -55,6 +54,8 @@ public:
   // Map properties.
   QSize get_size() const;
   void set_size(const QSize& size);
+  int get_num_layers() const;
+  void set_num_layers(int num_layers);
   bool has_world() const;
   QString get_world() const;
   void set_world(const QString& world);
@@ -71,9 +72,9 @@ public:
 
   // Entities.
   int get_num_entities() const;
-  int get_num_entities(Layer layer) const;
-  int get_num_tiles(Layer layer) const;
-  int get_num_dynamic_entities(Layer layer) const;
+  int get_num_entities(int layer) const;
+  int get_num_tiles(int layer) const;
+  int get_num_dynamic_entities(int layer) const;
   bool entity_exists(const EntityIndex& index) const;
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
@@ -85,10 +86,10 @@ public:
   bool entity_name_exists(const QString& name) const;
   EntityIndex find_entity_by_name(const QString& name) const;
   QMap<QString, EntityIndex> get_named_entities() const;
-  Layer get_entity_layer(const EntityIndex& index) const;
-  EntityIndex set_entity_layer(const EntityIndex& index_before, Layer layer_after);
-  bool is_common_layer(const EntityIndexes& indexes, Layer& layer) const;
-  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, Layer layer_after);
+  int get_entity_layer(const EntityIndex& index) const;
+  EntityIndex set_entity_layer(const EntityIndex& index_before, int layer_after);
+  bool is_common_layer(const EntityIndexes& indexes, int& layer) const;
+  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, int layer_after);
   void undo_set_entities_layer(const EntityIndexes& indexes_after, const EntityIndexes& indexes_before);
   void set_entity_order(const EntityIndex& index_before, int order_after);
   EntityIndex bring_entity_to_front(const EntityIndex& index_before);
@@ -154,13 +155,13 @@ public slots:
 
 private:
 
-  void rebuild_entity_indexes(Layer layer);
+  void rebuild_entity_indexes(int layer);
 
   Quest& quest;                   /**< The quest the tileset belongs to. */
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
-  std::array<EntityModels, Layer::LAYER_NB>
+  std::vector<EntityModels>
       entities;                   /**< All entities. */
 
 };

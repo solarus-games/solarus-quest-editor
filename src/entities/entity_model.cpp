@@ -69,7 +69,7 @@ EntityModel::EntityModel(
   base_size(16, 16),
   resize_mode(ResizeMode::NONE),
   has_preferred_layer(false),
-  preferred_layer(Layer::LAYER_LOW),
+  preferred_layer(0),
   num_directions(1),
   no_direction_allowed(false),
   no_direction_text(MapModel::tr("No direction")),
@@ -574,7 +574,7 @@ void EntityModel::ensure_name_unique() {
  * @brief Returns the layer where this entity is on the map.
  * @return The layer.
  */
-Layer EntityModel::get_layer() const {
+int EntityModel::get_layer() const {
   return get_entity().get_layer();
 }
 
@@ -583,7 +583,7 @@ Layer EntityModel::get_layer() const {
  * @param layer The layer.
  * @warning This does not update the index of the entity.
  */
-void EntityModel::set_layer(Layer layer) {
+void EntityModel::set_layer(int layer) {
   get_entity().set_layer(layer);
 }
 
@@ -769,7 +769,7 @@ void EntityModel::set_has_preferred_layer(bool has_preferred_layer) {
  * @brief Returns the preferred initial layer if there is one.
  * @return The preferred layer.
  */
-Layer EntityModel::get_preferred_layer() const {
+int EntityModel::get_preferred_layer() const {
   return preferred_layer;
 }
 
@@ -780,7 +780,7 @@ Layer EntityModel::get_preferred_layer() const {
  *
  * @param preferred_layer The new preferred layer.
  */
-void EntityModel::set_preferred_layer(Layer preferred_layer) {
+void EntityModel::set_preferred_layer(int preferred_layer) {
   this->preferred_layer = preferred_layer;
 }
 

@@ -29,8 +29,9 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_color(Qt::black) {
 
   // Default settings.
-  for (int layer = 0; layer < Layer::LAYER_NB; ++layer) {
-    visible_layers.insert(static_cast<Layer>(layer));
+  const int num_layers = 3;  // TODO layer
+  for (int layer = 0; layer < num_layers; ++layer) {
+    visible_layers.insert(layer);
   }
 
   for (EntityType entity_type : EntityTraits::get_values()) {
@@ -182,7 +183,7 @@ void ViewSettings::set_grid_color(const QColor& color) {
  * @param layer The layer to test.
  * @return @c true if this layer is visible, @c false if it is hidden.
  */
-bool ViewSettings::is_layer_visible(Layer layer) const {
+bool ViewSettings::is_layer_visible(int layer) const {
 
   return visible_layers.find(layer) != visible_layers.end();
 }
@@ -195,7 +196,7 @@ bool ViewSettings::is_layer_visible(Layer layer) const {
  * @param layer The layer to change.
  * @param visible @c true to show the layer, @c false to hide it.
  */
-void ViewSettings::set_layer_visible(Layer layer, bool visible) {
+void ViewSettings::set_layer_visible(int layer, bool visible) {
 
   if (visible == is_layer_visible(layer)) {
     return;

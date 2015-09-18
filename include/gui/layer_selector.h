@@ -14,26 +14,23 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_LAYER_TRAITS_H
-#define SOLARUSEDITOR_LAYER_TRAITS_H
+#ifndef SOLARUSEDITOR_LAYER_SELECTOR_H
+#define SOLARUSEDITOR_LAYER_SELECTOR_H
 
-#include "enum_traits.h"
-#include <solarus/entities/Layer.h>
-
-using Layer = Solarus::Layer;
-using LayerTraits = EnumTraits<Layer>;
+#include <QComboBox>
 
 /**
- * \brief Provides useful properties of layer enum values.
+ * @brief A combo box that allows to choose a layer.
  */
-template<>
-class EnumTraits<Layer> {
+class LayerSelector : public QComboBox {
+  Q_OBJECT
 
 public:
 
-  static QList<Layer> get_values();
-  static QString get_friendly_name(Layer value);
-  static QIcon get_icon(Layer value);
+  explicit LayerSelector(QWidget* parent = nullptr);
+
+  int get_selected_layer() const;
+  void set_selected_layer(int layer);
 
 };
 

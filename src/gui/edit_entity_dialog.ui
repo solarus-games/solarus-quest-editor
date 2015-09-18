@@ -63,7 +63,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="EnumSelector&lt;Layer&gt;" name="layer_field"/>
+      <widget class="LayerSelector" name="layer_field"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="size_label">
@@ -729,9 +729,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;Layer&gt;</class>
+   <class>LayerSelector</class>
    <extends>QComboBox</extends>
-   <header>layer_traits.h</header>
+   <header>gui/layer_selector.h</header>
   </customwidget>
   <customwidget>
    <class>EnumSelector&lt;TransitionStyle&gt;</class>

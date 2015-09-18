@@ -75,7 +75,7 @@ QRectF EntityItem::boundingRect() const {
  */
 void EntityItem::update_visibility(const ViewSettings& view_settings) {
 
-  Layer layer = entity.get_layer();
+  int layer = entity.get_layer();
   EntityType type = get_entity_type();
 
   const bool visible = view_settings.is_layer_visible(layer) &&

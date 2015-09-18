@@ -17,7 +17,6 @@
 #ifndef SOLARUSEDITOR_MAP_SCENE_H
 #define SOLARUSEDITOR_MAP_SCENE_H
 
-#include "layer_traits.h"
 #include "map_model.h"
 #include "view_settings.h"
 #include <QGraphicsScene>
@@ -44,13 +43,13 @@ public:
   static QPoint get_margin_top_left();
   static QSize get_margin_size();
 
-  void update_layer_visibility(Layer layer, const ViewSettings& view_settings);
+  void update_layer_visibility(int layer, const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
   EntityIndexes get_selected_entities();
   void set_selected_entities(const EntityIndexes& indexes);
 
-  Layer get_layer_in_rectangle(
+  int get_layer_in_rectangle(
       const QRect& rectangle
   ) const;
 
@@ -77,16 +76,16 @@ private:
   void update_scene_size();
   void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
-  const EntityItems& get_entity_items(Layer layer);
+  const EntityItems& get_entity_items(int layer);
 
   MapModel& map;                            /**< The map represented. */
-  std::array<EntityItems, Layer::LAYER_NB>
-      entity_items;                         /**< Entities items on each layer,
+  std::vector<EntityItems> entity_items;    /**< Entities items on each layer,
                                              * ordered as in the map. */
-  std::array<QGraphicsItem*, Layer::LAYER_NB>
+  std::vector<QGraphicsItem*>
       layer_parent_items;                   /**< Artificial parent item of everything on a layer. */
 
-  QPointer<const ViewSettings> view_settings;     /**< Last view settings applied. */
+  QPointer<const ViewSettings>
+      view_settings;                        /**< Last view settings applied. */
 };
 
 #endif

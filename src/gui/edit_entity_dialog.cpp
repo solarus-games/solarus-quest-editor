@@ -847,7 +847,7 @@ void EditEntityDialog::apply_ground() {
  */
 void EditEntityDialog::initialize_layer() {
 
-  ui.layer_field->set_selected_value(entity_before.get_layer());
+  ui.layer_field->set_selected_layer(entity_before.get_layer());
 }
 
 /**
@@ -855,7 +855,7 @@ void EditEntityDialog::initialize_layer() {
  */
 void EditEntityDialog::apply_layer() {
 
-  entity_after->set_layer(ui.layer_field->get_selected_value());
+  entity_after->set_layer(ui.layer_field->get_selected_layer());
 }
 
 /**

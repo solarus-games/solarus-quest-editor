@@ -31,7 +31,6 @@
 class Quest;
 
 using Ground = Solarus::Ground;
-using Layer = Solarus::Layer;
 using TilePatternRepeatMode = Solarus::TilePatternRepeatMode;
 
 /**
@@ -83,9 +82,9 @@ public:
   Ground get_pattern_ground(int index) const;
   bool is_common_pattern_ground(const QList<int>& indexes, Ground& ground) const;
   void set_pattern_ground(int index, Ground ground);
-  Layer get_pattern_default_layer(int index) const;
-  bool is_common_pattern_default_layer(const QList<int>& indexes, Layer& default_layer) const;
-  void set_pattern_default_layer(int index, Layer default_layer);
+  int get_pattern_default_layer(int index) const;
+  bool is_common_pattern_default_layer(const QList<int>& indexes, int& default_layer) const;
+  void set_pattern_default_layer(int index, int default_layer);
   TilePatternRepeatMode get_pattern_repeat_mode(int index) const;
   bool is_common_pattern_repeat_mode(const QList<int>& indexes, TilePatternRepeatMode& repeat_mode) const;
   void set_pattern_repeat_mode(int index, TilePatternRepeatMode repeat_mode);
@@ -124,7 +123,7 @@ signals:
                           int new_index, const QString& new_id);
   void pattern_position_changed(int index, const QPoint& position);
   void pattern_ground_changed(int index, Ground ground);
-  void pattern_default_layer_changed(int index, Layer default_layer);
+  void pattern_default_layer_changed(int index, int default_layer);
   void pattern_repeat_mode_changed(int index, TilePatternRepeatMode repeat_mode);
   void pattern_animation_changed(int index, PatternAnimation animation);
   void pattern_separation_changed(int index, PatternSeparation separation);

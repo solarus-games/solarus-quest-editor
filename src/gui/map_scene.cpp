@@ -98,20 +98,22 @@ void MapScene::build() {
   update_scene_size();
   setBackgroundBrush(Qt::gray);
 
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer layer = static_cast<Layer>(i);
+  const int num_layers = map.get_num_layers();
+  entity_items.resize(num_layers);
+  layer_parent_items.resize(num_layers);
+  for (int layer = 0; layer < num_layers; ++layer) {
 
     // Create the parent item of everything that will be on this layer.
-    if (layer_parent_items[i] != nullptr) {
-      removeItem(layer_parent_items[i]);
-      delete layer_parent_items[i];
+    if (layer_parent_items[layer] != nullptr) {
+      removeItem(layer_parent_items[layer]);
+      delete layer_parent_items[layer];
     }
-    layer_parent_items[i] = new QGraphicsPixmapItem(nullptr);
-    layer_parent_items[i]->setZValue(i);
-    addItem(layer_parent_items[i]);
+    layer_parent_items[layer] = new QGraphicsPixmapItem(nullptr);
+    layer_parent_items[layer]->setZValue(layer);
+    addItem(layer_parent_items[layer]);
 
     // Create the items on this layer.
-    entity_items[i].clear();
+    entity_items[layer].clear();
     for (int j = 0; j < map.get_num_entities(layer); ++j) {
       EntityModel& entity = map.get_entity(EntityIndex(layer, j));
       create_entity_item(entity);
@@ -136,10 +138,10 @@ void MapScene::create_entity_item(EntityModel& entity) {
   Q_ASSERT(entity.is_on_map());
 
   const EntityIndex& index = entity.get_index();
-  Layer layer = index.layer;
+  int layer = index.layer;
   int i = index.order;
 
-  QGraphicsItem* parent_item = layer_parent_items[static_cast<int>(layer)];
+  QGraphicsItem* parent_item = layer_parent_items[layer];
   Q_ASSERT(parent_item != nullptr);
   EntityItem* item = new EntityItem(entity, parent_item);
 
@@ -181,7 +183,7 @@ EntityItem* MapScene::get_entity_item(const EntityIndex& index) {
  * @param layer A layer.
  * @return Items of entities on that layer.
  */
-const MapScene::EntityItems& MapScene::get_entity_items(Layer layer) {
+const MapScene::EntityItems& MapScene::get_entity_items(int layer) {
   return entity_items[layer];
 }
 
@@ -190,7 +192,7 @@ const MapScene::EntityItems& MapScene::get_entity_items(Layer layer) {
  * @param layer The layer to update.
  * @param view_settings The new view settings to apply.
  */
-void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_settings) {
+void MapScene::update_layer_visibility(int layer, const ViewSettings& view_settings) {
 
   this->view_settings = &view_settings;
   for (EntityItem* item : get_entity_items(layer)) {
@@ -206,8 +208,7 @@ void MapScene::update_layer_visibility(Layer layer, const ViewSettings& view_set
 void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings& view_settings) {
 
   this->view_settings = &view_settings;
-  for (int i = 0; i < Layer::LAYER_NB; ++i) {
-    Layer layer = static_cast<Layer>(i);
+  for (int layer = 0; layer < map.get_num_layers(); ++layer) {
     for (EntityItem* item : get_entity_items(layer)) {
       if (item->get_entity_type() == type) {
         item->update_visibility(view_settings);
@@ -350,7 +351,7 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
 
   removeItem(item);
   addItem(item);
-  int layer_after = static_cast<int>(index_after.layer);
+  int layer_after = index_after.layer;
   int order_after = index_after.order;
   item->setParentItem(layer_parent_items[layer_after]);
   if (order_after < entity_items[layer_after].size()) {
@@ -374,7 +375,7 @@ void MapScene::entity_order_changed(const EntityIndex& index_before,
   EntityItem* item = get_entity_item(index_before);
   Q_ASSERT(item != nullptr);
 
-  Layer layer = index_before.layer;
+  int layer = index_before.layer;
   int order_before = index_before.order;
   EntityIndex index_after(layer, order_after);
   EntityModel& entity = map.get_entity(index_after);
@@ -475,9 +476,9 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
  * @param rectangle A rectangle in map coordinates.
  * If nullptr, all entities are considered visible.
  * @return The highest layer where an entity exists in this rectangle,
- * or Layer::LAYER_LOW if there is nothing here.
+ * or 0 (the lowest layer of the map) if there is nothing here.
  */
-Layer MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
+int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
 
   QRect scene_rectangle = rectangle;
   scene_rectangle.translate(get_margin_top_left());
@@ -485,10 +486,10 @@ Layer MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
         scene_rectangle, Qt::IntersectsItemBoundingRect
   );
 
-  int max_layer = Layer::LAYER_LOW;
+  int max_layer = map.get_num_layers();
   for (QGraphicsItem* item : items_in_rectangle) {
 
-    if (item->zValue() >= static_cast<int>(Layer::LAYER_NB)) {
+    if (item->zValue() >= map.get_num_layers()) {
       // This is the case of the selection rectangle and
       // of entities being added.
       continue;
@@ -504,8 +505,8 @@ Layer MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
       continue;
     }
 
-    max_layer = qMax(max_layer, static_cast<int>(entity->get_layer()));
+    max_layer = qMax(max_layer, entity->get_layer());
   }
-  return static_cast<Layer>(max_layer);
+  return max_layer;
 }
 

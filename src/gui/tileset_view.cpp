@@ -573,29 +573,30 @@ void TilesetView::build_context_menu_ground(
  * @param indexes Patterns to build a context menu for.
  */
 void TilesetView::build_context_menu_layer(
-    QMenu& menu, const QList<int>& indexes) {
+    QMenu& /* menu */, const QList<int>& indexes) {
 
   if (indexes.empty()) {
     return;
   }
 
+  /* TODO layer
   // See if the default layer is common.
-  Layer layer = Solarus::LAYER_LOW;
+  int layer = 0;
   bool common = model->is_common_pattern_default_layer(indexes, layer);
 
   // Add layer actions to the menu.
   QList<QAction*> layer_actions = EnumMenus<Layer>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](Layer layer) {
+        [=](int layer) {
     emit change_selected_patterns_default_layer_requested(layer);
   });
 
   if (common) {
-    int layer_index = static_cast<int>(layer);
-    QAction* checked_action = layer_actions[layer_index];
+    QAction* checked_action = layer_actions[layer];
     checked_action->setChecked(true);
   }
+  */
 }
 
 /**

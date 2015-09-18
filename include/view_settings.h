@@ -19,7 +19,6 @@
 
 #include "entities/entity_traits.h"
 #include "grid_style.h"
-#include "layer_traits.h"
 #include <QObject>
 #include <set>
 
@@ -51,8 +50,8 @@ public:
   QColor get_grid_color() const;
   void set_grid_color(const QColor& color);
 
-  void set_layer_visible(Layer layer, bool visible);
-  bool is_layer_visible(Layer layer) const;
+  void set_layer_visible(int layer, bool visible);
+  bool is_layer_visible(int layer) const;
 
   bool is_entity_type_visible(EntityType entity_type) const;
   void set_entity_type_visible(EntityType entity_type, bool visible);
@@ -66,7 +65,7 @@ signals:
   void grid_size_changed(const QSize& size);
   void grid_style_changed(GridStyle style);
   void grid_color_changed(const QColor& color);
-  void layer_visibility_changed(Layer layer, bool visible);
+  void layer_visibility_changed(int layer, bool visible);
   void entity_type_visibility_changed(EntityType entity_type, bool visible);
 
 private:
@@ -77,7 +76,7 @@ private:
   GridStyle grid_style;                     /**< If supported, the current grid style. */
   QColor grid_color;                        /**< If supported, the current grid color. */
   bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */
-  std::set<Layer> visible_layers;           /**< Layers currently shown, if supported. */
+  std::set<int> visible_layers;             /**< Layers currently shown, if supported. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
   std::set<EntityType>
       visible_entity_types;                 /**< Types of entities currently shown, if supported. */
