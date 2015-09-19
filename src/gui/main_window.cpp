@@ -132,6 +132,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_cut->setShortcut(QKeySequence::Cut);
   ui.action_copy->setShortcut(QKeySequence::Copy);
   ui.action_paste->setShortcut(QKeySequence::Paste);
+  ui.action_select_all->setShortcut(QKeySequence::SelectAll);
   ui.action_find->setShortcut(QKeySequence::Find);
 
   // Connect children.
@@ -557,6 +558,17 @@ void MainWindow::on_action_paste_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Select" action.
+ */
+void MainWindow::on_action_select_all_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    editor->select_all();
+  }
+}
+
+/**
  * @brief Slot called when the user triggers the "Find" action.
  */
 void MainWindow::on_action_find_triggered() {
@@ -684,6 +696,9 @@ void MainWindow::current_editor_changed(int /* index */) {
   ui.action_paste->setEnabled(has_editor);
   ui.action_close->setEnabled(has_editor);
   ui.action_save->setEnabled(has_editor);
+
+  const bool select_all_supported = has_editor && editor->is_select_all_supported();
+  ui.action_select_all->setEnabled(select_all_supported);
 
   const bool find_supported = has_editor && editor->is_find_supported();
   ui.action_find->setEnabled(find_supported);

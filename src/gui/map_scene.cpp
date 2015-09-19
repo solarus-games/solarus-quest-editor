@@ -451,7 +451,6 @@ EntityIndexes MapScene::get_selected_entities() {
   return result;
 }
 
-
 /**
  * @brief Selects the specified entities and unselect the rest.
  * @param indexes Indexes of the entities to make selecteded.
@@ -469,6 +468,23 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
   }
 }
 
+/**
+ * @brief Selects all entities of the map.
+ */
+void MapScene::select_all() {
+
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
+  for (const EntityItems& layer_items: entity_items) {
+    for (EntityItem* item : layer_items) {
+      if (item == nullptr) {
+        continue;
+      }
+      item->setSelected(true);
+    }
+  }
+  blockSignals(was_blocked);
+}
 
 /**
  * @brief Returns the highest layer where a specified rectangle overlaps an

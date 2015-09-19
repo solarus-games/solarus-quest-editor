@@ -107,11 +107,12 @@ public:
   int get_selected_index() const;
   QList<int> get_selected_indexes() const;
   void set_selected_index(int index);
-  void set_selected_indexes(const QList<int> indexes);
+  void set_selected_indexes(const QList<int>& indexes);
   void add_to_selected(int index);
-  void add_to_selected(const QList<int> index);
+  void add_to_selected(const QList<int>& index);
   bool is_selected(int index) const;
   void toggle_selected(int index);
+  void select_all();
   void clear_selection();
 
 signals:

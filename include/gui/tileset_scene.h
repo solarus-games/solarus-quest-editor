@@ -39,6 +39,8 @@ public:
 
   int get_pattern_index(const QGraphicsItem* item);
 
+  void select_all();
+
 protected:
 
   void drawBackground(QPainter* painter, const QRectF& rect) override;

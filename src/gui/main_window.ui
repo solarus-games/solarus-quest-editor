@@ -81,6 +81,8 @@
     <addaction name="action_copy"/>
     <addaction name="action_paste"/>
     <addaction name="separator"/>
+    <addaction name="action_select_all"/>
+    <addaction name="separator"/>
     <addaction name="action_find"/>
    </widget>
    <widget class="QMenu" name="menu_run">
@@ -319,6 +321,15 @@
   <action name="action_settings">
    <property name="text">
     <string>Options</string>
+   </property>
+  </action>
+  <action name="action_select_all">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_select.png</normaloff>:/images/icon_select.png</iconset>
+   </property>
+   <property name="text">
+    <string>Select all</string>
    </property>
   </action>
  </widget>

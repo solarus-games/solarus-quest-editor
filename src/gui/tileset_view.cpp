@@ -252,6 +252,18 @@ void TilesetView::update_grid_visibility() {
 }
 
 /**
+ * @brief Selects all patterns.
+ */
+void TilesetView::select_all() {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->select_all();
+}
+
+/**
  * @brief Draws the tileset view.
  * @param event The paint event.
  */

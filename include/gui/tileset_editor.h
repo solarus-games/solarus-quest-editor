@@ -34,7 +34,8 @@ public:
 
   TilesetModel& get_model();
 
-  virtual void save() override;
+  void save() override;
+  void select_all() override;
 
 public slots:
 

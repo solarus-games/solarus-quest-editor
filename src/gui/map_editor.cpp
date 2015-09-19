@@ -823,6 +823,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_icon(QIcon(":/images/icon_resource_map.png"));
   set_close_confirm_message(
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
+  set_select_all_supported(true);
   set_zoom_supported(true);
   get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
@@ -1082,6 +1083,17 @@ bool MapEditor::can_paste() const {
 void MapEditor::paste() {
 
   ui.map_view->paste();
+}
+
+/**
+ * @copydoc Editor::select_all
+ */
+void MapEditor::select_all() {
+
+  MapScene* scene = ui.map_view->get_scene();
+  if (scene != nullptr) {
+    scene->select_all();
+  }
 }
 
 /**

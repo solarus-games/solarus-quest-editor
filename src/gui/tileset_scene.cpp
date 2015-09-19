@@ -218,6 +218,25 @@ void TilesetScene::set_selection_from_scene() {
 }
 
 /**
+ * @brief Selects all patterns of the tileset.
+ */
+void TilesetScene::select_all() {
+
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
+  for (PatternItem* item : pattern_items) {
+    if (item == nullptr) {
+      continue;
+    }
+    item->setSelected(true);
+  }
+  blockSignals(was_blocked);
+
+  // Emit the signal only once.
+  emit selectionChanged();
+}
+
+/**
  * @brief Slot called when the position of a pattern changes.
  * @param index Index of the pattern changed.
  */

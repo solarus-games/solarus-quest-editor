@@ -55,6 +55,7 @@ public:
   bool has_unsaved_changes() const;
   bool confirm_close();
 
+  bool is_select_all_supported() const;
   bool is_find_supported() const;
   bool is_zoom_supported() const;
   bool is_grid_supported() const;
@@ -69,6 +70,7 @@ public:
   virtual void copy();
   virtual bool can_paste() const;
   virtual void paste();
+  virtual void select_all();
   virtual void find();
   virtual void reload_settings();
 
@@ -83,6 +85,7 @@ protected:
 
   void set_title(const QString& title);
   void set_icon(const QIcon& icon);
+  void set_select_all_supported(bool select_all_supported);
   void set_find_supported(bool find_supported);
   void set_zoom_supported(bool zoom_supported);
   void set_grid_supported(bool grid_supported);
@@ -103,6 +106,7 @@ private:
   QString close_confirm_message;            /**< Message proposing to save changes when closing. */
   QUndoStack* undo_stack;                   /**< The undo/redo history of editing this file. */
   QMap<QString, QAction*> common_actions;   /**< Actions available to all editors. */
+  bool select_all_supported;                /**< Whether the editor supports selecting all. */
   bool find_supported;                      /**< Whether the editor supports finding. */
   bool zoom_supported;                      /**< Whether the editor supports zooming. */
   bool grid_supported;                      /**< Whether the editor supports showing/hiding a grid. */

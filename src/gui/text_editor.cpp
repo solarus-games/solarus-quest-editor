@@ -40,6 +40,7 @@ TextEditor::TextEditor(Quest& quest, const QString& file_path, QWidget* parent) 
 
   set_title(create_title());
   set_icon(create_icon());
+  set_select_all_supported(true);
   set_find_supported(true);
 
   QVBoxLayout* layout = new QVBoxLayout();
@@ -201,6 +202,14 @@ bool TextEditor::can_paste() const {
 void TextEditor::paste() {
 
   text_widget->paste();
+}
+
+/**
+ * @copydoc Editor::select_all
+ */
+void TextEditor::select_all() {
+
+  text_widget->selectAll();
 }
 
 /**

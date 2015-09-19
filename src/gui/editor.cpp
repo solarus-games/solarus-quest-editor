@@ -148,6 +148,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   title(get_file_name()),
   undo_stack(new QUndoStack(this)),
   common_actions(),
+  select_all_supported(false),
   find_supported(false),
   zoom_supported(false),
   grid_supported(false),
@@ -491,6 +492,26 @@ void Editor::paste() {
 }
 
 /**
+ * @brief Returns whether this editor supports selecting all.
+ * @return @c true if selecting all is supported.
+ */
+bool Editor::is_select_all_supported() const {
+  return select_all_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports selecting all.
+ *
+ * If your editor supports find operations, you are responsible to
+ * reimplement select_all().
+ *
+ * @param select_all_supported @c true to support selecting all.
+ */
+void Editor::set_select_all_supported(bool select_all_supported) {
+  this->select_all_supported = select_all_supported;
+}
+
+/**
  * @brief Returns whether this editor supports find operations.
  * @return @c true if find operations are supported.
  */
@@ -501,20 +522,29 @@ bool Editor::is_find_supported() const {
 /**
  * @brief Sets whether this editor supports finding things.
  *
- * If your editor supports find operations, you are responsible to apply the
+ * If your editor supports find operations, you are responsible to
  * reimplement find().
  *
- * @param find_supported @c true if find operations are supported.
+ * @param find_supported @c true to support find operations.
  */
 void Editor::set_find_supported(bool find_supported) {
   this->find_supported = find_supported;
 }
 
 /**
+ * @brief Performs a select all operation.
+ *
+ * The default implementation does nothing.
+ * Subclasses that support select all should reimplement this function.
+ */
+void Editor::select_all() {
+}
+
+/**
  * @brief Performs a find operation.
  *
- * The default implementation does nothing, meaning that finding is not
- * supported.
+ * The default implementation does nothing.
+ * Subclasses that support finding should reimplement this function.
  */
 void Editor::find() {
 }

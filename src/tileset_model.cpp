@@ -1271,7 +1271,7 @@ void TilesetModel::set_selected_index(int index) {
  * @brief Selects the specified patterns and deselects others.
  * @param indexes The indexes to select.
  */
-void TilesetModel::set_selected_indexes(const QList<int> indexes) {
+void TilesetModel::set_selected_indexes(const QList<int>& indexes) {
 
   QItemSelection selection;
   for (int index : indexes) {
@@ -1296,7 +1296,7 @@ void TilesetModel::add_to_selected(int index) {
  * unchanged.
  * @param indexes The indexes to select.
  */
-void TilesetModel::add_to_selected(const QList<int> indexes) {
+void TilesetModel::add_to_selected(const QList<int>& indexes) {
 
   QItemSelection selection;
   for (int index : indexes) {
@@ -1324,6 +1324,18 @@ bool TilesetModel::is_selected(int index) const {
 void TilesetModel::toggle_selected(int index) {
 
   selection_model.select(this->index(index), QItemSelectionModel::Toggle);
+}
+
+/**
+ * @brief Selects all patterns of the tileset.
+ */
+void TilesetModel::select_all() {
+
+  QItemSelection selection;
+  QModelIndex first_index = this->index(0);
+  QModelIndex last_index = this->index(get_num_patterns() - 1);
+  selection.select(first_index, last_index);
+  selection_model.select(selection, QItemSelectionModel::Select);
 }
 
 /**

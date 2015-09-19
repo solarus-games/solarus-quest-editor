@@ -504,6 +504,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_icon(QIcon(":/images/icon_resource_tileset.png"));
   set_close_confirm_message(
         tr("Tileset '%1' has been modified. Save changes?").arg(tileset_id));
+  set_select_all_supported(true);
   set_zoom_supported(true);
   ViewSettings& view_settings = get_view_settings();
   view_settings.set_zoom(2.0);
@@ -610,7 +611,21 @@ TilesetModel& TilesetEditor::get_model() {
  */
 void TilesetEditor::save() {
 
+  if (model == nullptr) {
+    return;
+  }
   model->save();
+}
+
+/**
+ * @copydoc Editor::select_all
+ */
+void TilesetEditor::select_all() {
+
+  if (ui.tileset_view == nullptr) {
+    return;
+  }
+  ui.tileset_view->select_all();
 }
 
 /**
