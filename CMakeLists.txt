@@ -14,6 +14,10 @@ set(CMAKE_AUTOMOC ON)
 if(MINGW)
   # To avoid a compilation error in vorbisfile.h with fseeko64.
   set(CMAKE_CXX_FLAGS "-std=gnu++11 ${CMAKE_CXX_FLAGS}")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+  set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++ ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
 else()
   set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 endif()
@@ -360,3 +364,7 @@ if(WIN32)
   endif()
 endif()
 
+# Configuration for OSX build and deployment.
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  include(cmake/apple/OSXBuild.cmake)
+endif()
