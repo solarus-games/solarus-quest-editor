@@ -272,7 +272,7 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
   update_grid_visibility();
 
   connect(this->view_settings, SIGNAL(layer_visibility_changed(int, bool)),
-          this, SLOT(update_layer_visibility(Layer)));
+          this, SLOT(update_layer_visibility(int)));
 
   connect(this->view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
           this, SLOT(update_entity_type_visibility(EntityType)));
