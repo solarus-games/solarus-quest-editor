@@ -827,7 +827,6 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_zoom_supported(true);
   get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
-  set_layer_visibility_supported(true);
   set_entity_type_visibility_supported(true);
 
   // Shortcuts.
@@ -867,6 +866,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.location_field->set_tooltips(
     tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"),
     tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"));
+
+  set_num_layers_visibility_supported(map->get_num_layers());
 
   load_settings();
   update();

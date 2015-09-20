@@ -152,7 +152,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   find_supported(false),
   zoom_supported(false),
   grid_supported(false),
-  layer_visibility_supported(false),
+  num_layers_visibility_supported(0),
   entity_type_visibility_supported(false),
   view_settings() {
 
@@ -603,20 +603,29 @@ void Editor::set_grid_supported(bool grid_supported) {
  * @return @c true if layers can be shown or hidden.
  */
 bool Editor::is_layer_visibility_supported() const {
-  return layer_visibility_supported;
+  return get_num_layers_visibility_supported() > 0;
 }
 
 /**
- * @brief Sets whether this editor supports showing and hiding layers.
+ * @brief Returns how many layers can be shown or hidden.
+ * @return The number of layers, or 0 if showing and hiding layers is not
+ * supported.
+ */
+int Editor::get_num_layers_visibility_supported() const {
+  return num_layers_visibility_supported;
+}
+
+/**
+ * @brief Sets how many layers can be shown or hidden.
  *
  * If your editor supports this, you are responsible to apply the new
  * setting when the layer_visibility_changed() signal is emitted.
  *
- * @param layer_visibility_supported @c true if show layer operations are
- * supported.
+ * @param num_layers_visibility_supported The number of layers, or 0 if
+ * showing and hiding layers is not supported.
  */
-void Editor::set_layer_visibility_supported(bool supported) {
-  this->layer_visibility_supported = supported;
+void Editor::set_num_layers_visibility_supported(int num_layers_visibility_supported) {
+  this->num_layers_visibility_supported = num_layers_visibility_supported;
 }
 
 /**
