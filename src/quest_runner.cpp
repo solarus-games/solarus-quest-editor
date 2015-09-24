@@ -22,6 +22,7 @@
 #include <solarus/lowlevel/Debug.h>
 #include <solarus/lua/LuaContext.h>
 #include <iostream>
+#include <QApplication>
 #include <QSize>
 
 /**
@@ -88,7 +89,11 @@ void QuestRunner::run() {
 
   try {
 
-    Solarus::Arguments arguments;
+    QString argv0 = QApplication::arguments().at(0);
+    char *argv[1];
+    argv[0] = (char *) argv0.toStdString().c_str();
+
+    Solarus::Arguments arguments(1, argv);
 
     // no-audio.
     if (settings.get_value_bool(Settings::no_audio)) {
