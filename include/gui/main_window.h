@@ -96,6 +96,7 @@ private:
   void update_title();
   void upgrade_quest();
   QMenu* create_zoom_menu();
+  QMenu* create_show_layers_menu();
   QMenu* create_show_entities_menu();
 
   Ui::MainWindow ui;              /**< The main window widgets. */
@@ -108,7 +109,17 @@ private:
       zoom_actions;               /**< Action of each zoom value. */
   PairSpinBox* grid_size;         /**< The grid size. */
 
-  QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types . */
+  QMenu* show_layers_menu;        /**< The menu with the visibility of all layers. */
+  QToolButton*
+      show_layers_button;         /**< The layer visilibity toolbar button. */
+  QMap<QString, QAction*>
+      show_layers_actions;        /**< Actions in the show layer menu.
+                                   * There is one action for each layer,
+                                   * plus two special actions "Show all" and "Hide all".
+                                   * The key is the layer as a string or
+                                   * "action_show_all" or "action_hide_all". */
+
+  QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types. */
   QToolButton*
       show_entities_button;       /**< The entity type visilibity toolbar button. */
   QMap<QString, QAction*>

@@ -212,6 +212,26 @@ void ViewSettings::set_layer_visible(int layer, bool visible) {
 }
 
 /**
+ * @brief Shows all layers.
+ *
+ * Emits layers_visibility_changed() for each layers whose visibility changes.
+ */
+void ViewSettings::show_all_layers() {
+
+  // TODO layer
+}
+
+/**
+ * @brief Hides all layers.
+ *
+ * Emits layers_visibility_changed() for each layers whose visibility changes.
+ */
+void ViewSettings::hide_all_layers() {
+
+  // TODO layer
+}
+
+/**
  * @brief Returns whether a entity type is currently visible.
  * @param entity_type The entity type to test.
  * @return @c true if this entity type is visible, @c false if it is hidden.

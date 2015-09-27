@@ -144,7 +144,6 @@
    <addaction name="action_show_layer_0"/>
    <addaction name="action_show_layer_1"/>
    <addaction name="action_show_layer_2"/>
-   <addaction name="separator"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">
@@ -241,10 +240,10 @@
      <normaloff>:/images/icon_layer_0.png</normaloff>:/images/icon_layer_0.png</iconset>
    </property>
    <property name="text">
-    <string>Show low layer</string>
+    <string>Show layer 0</string>
    </property>
    <property name="toolTip">
-    <string>Show low layer</string>
+    <string>Show layer 0</string>
    </property>
    <property name="shortcut">
     <string>1</string>
@@ -262,10 +261,10 @@
      <normaloff>:/images/icon_layer_1.png</normaloff>:/images/icon_layer_1.png</iconset>
    </property>
    <property name="text">
-    <string>Show intermediate layer</string>
+    <string>Show layer 1</string>
    </property>
    <property name="toolTip">
-    <string>Show intermediate layer</string>
+    <string>Show layer 1</string>
    </property>
    <property name="shortcut">
     <string>2</string>
@@ -283,10 +282,10 @@
      <normaloff>:/images/icon_layer_2.png</normaloff>:/images/icon_layer_2.png</iconset>
    </property>
    <property name="text">
-    <string>Show high layer</string>
+    <string>Show layer 2</string>
    </property>
    <property name="toolTip">
-    <string>Show high layer</string>
+    <string>Show layer 2</string>
    </property>
    <property name="shortcut">
     <string>3</string>

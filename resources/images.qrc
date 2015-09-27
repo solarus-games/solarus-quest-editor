@@ -139,5 +139,6 @@
         <file>images/icon_resize_vertical.png</file>
         <file>images/icon_folder_open_missing.png</file>
         <file>images/icon_select.png</file>
+        <file>images/icon_layer_more.png</file>
     </qresource>
 </RCC>

@@ -52,6 +52,8 @@ public:
 
   void set_layer_visible(int layer, bool visible);
   bool is_layer_visible(int layer) const;
+  void show_all_layers();
+  void hide_all_layers();
 
   bool is_entity_type_visible(EntityType entity_type) const;
   void set_entity_type_visible(EntityType entity_type, bool visible);

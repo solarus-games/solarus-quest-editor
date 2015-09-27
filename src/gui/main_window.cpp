@@ -106,14 +106,25 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertWidget(ui.action_show_layer_0, grid_size);
   ui.tool_bar->insertSeparator(ui.action_show_layer_0);
 
+  show_layers_button = new QToolButton();
+  show_layers_button->setIcon(QIcon(":/images/icon_layer_more.png"));
+  show_layers_button->setToolTip(tr("Show/hide more layers"));
+  show_layers_menu = create_show_layers_menu();
+  show_layers_button->setMenu(show_layers_menu);
+  show_layers_button->setPopupMode(QToolButton::InstantPopup);
+  ui.tool_bar->addWidget(show_layers_button);
+  ui.menu_view->addMenu(show_layers_menu);
+
+  ui.tool_bar->addSeparator();
+
   show_entities_button = new QToolButton();
   show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
-  show_entities_button->setToolTip(tr("Show entity types"));
+  show_entities_button->setToolTip(tr("Show/hide entity types"));
   show_entities_menu = create_show_entities_menu();
   show_entities_button->setMenu(show_entities_menu);
   show_entities_button->setPopupMode(QToolButton::InstantPopup);
-  ui.tool_bar->insertWidget(nullptr, show_entities_button);
-  ui.menu_view->insertMenu(nullptr, show_entities_menu);
+  ui.tool_bar->addWidget(show_entities_button);
+  ui.menu_view->addMenu(show_entities_menu);
 
   common_actions["cut"] = ui.action_cut;
   common_actions["copy"] = ui.action_copy;
@@ -215,12 +226,46 @@ QMenu* MainWindow::create_zoom_menu() {
 }
 
 /**
- * @brief Creates a menu with actions to show each entity type.
+ * @brief Creates a menu with actions to show or hide each layer.
+ * @return The created menu. It has no parent initially.
+ */
+QMenu* MainWindow::create_show_layers_menu() {
+
+  QMenu* menu = new QMenu(tr("Show/hide layers"));
+
+  // Add special actions Show all and Hide all.
+  QAction* show_all_action = new QAction(tr("Show all"), this);
+  show_layers_actions["action_show_all"] = show_all_action;
+  menu->addAction(show_all_action);
+  connect(show_all_action, &QAction::triggered, [=]() {
+    Editor* editor = get_current_editor();
+    if (editor != nullptr) {
+      editor->get_view_settings().show_all_layers();
+    }
+  });
+
+  QAction* hide_all_action = new QAction(tr("Hide all"), this);
+  show_layers_actions["action_hide_all"] = hide_all_action;
+  menu->addAction(hide_all_action);
+  connect(hide_all_action, &QAction::triggered, [=]() {
+    Editor* editor = get_current_editor();
+    if (editor != nullptr) {
+      editor->get_view_settings().hide_all_layers();
+    }
+  });
+
+  menu->addSeparator();
+
+  return menu;
+}
+
+/**
+ * @brief Creates a menu with actions to show or hide each entity type.
  * @return The created menu. It has no parent initially.
  */
 QMenu* MainWindow::create_show_entities_menu() {
 
-  QMenu* menu = new QMenu(tr("Show entity types"));
+  QMenu* menu = new QMenu(tr("Show/hide entity types"));
 
   // Add show entity types actions to the menu.
   QList<QAction*> entity_actions = EnumMenus<EntityType>::create_actions(
@@ -689,6 +734,7 @@ void MainWindow::current_editor_changed(int /* index */) {
 
   Editor* editor = get_current_editor();
   const bool has_editor = editor != nullptr;
+  ViewSettings& view_settings = editor->get_view_settings();
 
   // Set up toolbar buttons for this editor.
   ui.action_cut->setEnabled(has_editor);
@@ -714,16 +760,16 @@ void MainWindow::current_editor_changed(int /* index */) {
   }
   grid_size->setEnabled(ui.action_show_grid->isChecked());
 
-  bool layer_visibility_supported =
-      has_editor && editor->is_layer_visibility_supported();
-  ui.action_show_layer_0->setEnabled(layer_visibility_supported);
-  ui.action_show_layer_1->setEnabled(layer_visibility_supported);
-  ui.action_show_layer_2->setEnabled(layer_visibility_supported);
-  if (!layer_visibility_supported) {
-    ui.action_show_layer_0->setChecked(false);
-    ui.action_show_layer_1->setChecked(false);
-    ui.action_show_layer_2->setChecked(false);
-  }
+  const int num_layers = has_editor ?
+        editor->get_num_layers_visibility_supported() : 0;
+  ui.action_show_layer_0->setEnabled(num_layers > 0);
+  ui.action_show_layer_1->setEnabled(num_layers > 1);
+  ui.action_show_layer_2->setEnabled(num_layers > 2);
+  show_layers_button->setEnabled(num_layers > 3);
+  ui.action_show_layer_0->setChecked(false);
+  ui.action_show_layer_1->setChecked(false);
+  ui.action_show_layer_2->setChecked(false);
+  // TODO layer view_settings.set_num_layers(num_layers);
 
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
@@ -732,7 +778,6 @@ void MainWindow::current_editor_changed(int /* index */) {
 
   if (has_editor) {
 
-    ViewSettings& view_settings = editor->get_view_settings();
     connect(&view_settings, SIGNAL(zoom_changed(double)),
             this, SLOT(update_zoom()));
     update_zoom();
