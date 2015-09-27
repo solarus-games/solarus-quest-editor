@@ -2064,6 +2064,8 @@ QPoint AddingEntitiesState::get_entities_center() const {
  */
 void AddingEntitiesState::sort_entities() {
 
+  const size_t num_before = entities.size();
+
   std::map<int, EntityModels> entities_by_layer;
   for (EntityModelPtr& entity : entities) {
     if (!entity->is_dynamic()) {  // Non-dynamic ones first.
@@ -2083,6 +2085,8 @@ void AddingEntitiesState::sort_entities() {
       entities.emplace_back(std::move(entity));
     }
   }
+
+  Q_ASSERT(entities.size() == num_before);
 }
 
 /**
@@ -2229,7 +2233,7 @@ int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
   // The entity has a preferred layer:
   // see if there is something above its preferred layer.
   int preferred_layer = entity.get_preferred_layer();
-  if (static_cast<int>(layer_under) > preferred_layer) {
+  if (layer_under > preferred_layer) {
       // Don't use the preferred layer in this case.
       return layer_under;
   }

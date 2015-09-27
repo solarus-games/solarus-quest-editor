@@ -502,7 +502,7 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
         scene_rectangle, Qt::IntersectsItemBoundingRect
   );
 
-  int max_layer = map.get_num_layers();
+  int max_layer = 0;
   for (QGraphicsItem* item : items_in_rectangle) {
 
     if (item->zValue() >= map.get_num_layers()) {
