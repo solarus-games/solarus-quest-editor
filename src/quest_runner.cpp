@@ -89,11 +89,10 @@ void QuestRunner::run() {
 
   try {
 
-    QString argv0 = QApplication::arguments().at(0);
-    char *argv[1];
-    argv[0] = (char *) argv0.toStdString().c_str();
+    Solarus::Arguments arguments;
 
-    Solarus::Arguments arguments(1, argv);
+    QString argv0 = QApplication::arguments().at(0);
+    arguments.add_argument(argv0.toStdString());
 
     // no-audio.
     if (settings.get_value_bool(Settings::no_audio)) {
