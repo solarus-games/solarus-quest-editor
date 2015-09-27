@@ -10,6 +10,7 @@ Bugfix release for the 1.4 branch.
 * Sprite editor: improve auto-selection after removing a direction (#70).
 * Dialogs/strings editor: add a duplicate button (#72).
 * Dialogs/strings editor: Shows also missing marks on parent nodes (#68).
+* Fix crash on FreeBSD when running the quest (#112).
 
 _______________________________________
 
