@@ -2086,6 +2086,7 @@ void AddingEntitiesState::sort_entities() {
     }
   }
 
+  Q_UNUSED(num_before);
   Q_ASSERT(entities.size() == num_before);
 }
 
