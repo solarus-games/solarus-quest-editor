@@ -111,9 +111,10 @@ private:
 
   QMenu* show_layers_menu;        /**< The menu with the visibility of all layers. */
   QToolButton*
-      show_layers_button;         /**< The layer visilibity toolbar button. */
+      show_layers_button;         /**< The "more layers" toolbar button. */
+  QAction* show_layers_action;    /**< Action of the "more layer" toolbar button. */
   QMap<QString, QAction*>
-      show_layers_actions;        /**< Actions in the show layer menu.
+      show_layers_subactions;     /**< Actions in the show layer menu.
                                    * There is one action for each layer,
                                    * plus two special actions "Show all" and "Hide all".
                                    * The key is the layer as a string or
@@ -123,7 +124,7 @@ private:
   QToolButton*
       show_entities_button;       /**< The entity type visilibity toolbar button. */
   QMap<QString, QAction*>
-      show_entities_actions;      /**< Actions in the show entity type menu.
+      show_entities_subactions;   /**< Actions in the show entity type menu.
                                    * There is one action for each entity type,
                                    * plus two special actions "Show all" and "Hide all".
                                    * The key is the entity type name or

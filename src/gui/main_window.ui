@@ -100,7 +100,6 @@
     <addaction name="action_show_layer_0"/>
     <addaction name="action_show_layer_1"/>
     <addaction name="action_show_layer_2"/>
-    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">

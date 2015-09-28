@@ -52,9 +52,13 @@ MainWindow::MainWindow(QWidget* parent) :
   zoom_menu(nullptr),
   zoom_button(nullptr),
   zoom_actions(),
+  show_layers_menu(nullptr),
+  show_layers_button(nullptr),
+  show_layers_action(nullptr),
+  show_layers_subactions(),
   show_entities_menu(nullptr),
   show_entities_button(nullptr),
-  show_entities_actions(),
+  show_entities_subactions(),
   common_actions(),
   settings_dialog(this) {
 
@@ -108,12 +112,14 @@ MainWindow::MainWindow(QWidget* parent) :
 
   show_layers_button = new QToolButton();
   show_layers_button->setIcon(QIcon(":/images/icon_layer_more.png"));
-  show_layers_button->setToolTip(tr("Show/hide more layers"));
+  show_layers_button->setText("Show/hide more layers");
+  show_layers_button->setToolTip(show_layers_button->text());
   show_layers_menu = create_show_layers_menu();
   show_layers_button->setMenu(show_layers_menu);
   show_layers_button->setPopupMode(QToolButton::InstantPopup);
-  ui.tool_bar->addWidget(show_layers_button);
+  show_layers_action = ui.tool_bar->addWidget(show_layers_button);
   ui.menu_view->addMenu(show_layers_menu);
+  ui.menu_view->addSeparator();
 
   ui.tool_bar->addSeparator();
 
@@ -231,11 +237,11 @@ QMenu* MainWindow::create_zoom_menu() {
  */
 QMenu* MainWindow::create_show_layers_menu() {
 
-  QMenu* menu = new QMenu(tr("Show/hide layers"));
+  QMenu* menu = new QMenu(tr("Show/hide more layers"));
 
   // Add special actions Show all and Hide all.
   QAction* show_all_action = new QAction(tr("Show all"), this);
-  show_layers_actions["action_show_all"] = show_all_action;
+  show_layers_subactions["action_show_all"] = show_all_action;
   menu->addAction(show_all_action);
   connect(show_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
@@ -245,7 +251,7 @@ QMenu* MainWindow::create_show_layers_menu() {
   });
 
   QAction* hide_all_action = new QAction(tr("Hide all"), this);
-  show_layers_actions["action_hide_all"] = hide_all_action;
+  show_layers_subactions["action_hide_all"] = hide_all_action;
   menu->addAction(hide_all_action);
   connect(hide_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
@@ -275,7 +281,7 @@ QMenu* MainWindow::create_show_entities_menu() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       QString type_name = EntityTraits::get_lua_name(type);
-      const bool visible = show_entities_actions[type_name]->isChecked();
+      const bool visible = show_entities_subactions[type_name]->isChecked();
       editor->get_view_settings().set_entity_type_visible(type, visible);
     }
   });
@@ -288,12 +294,12 @@ QMenu* MainWindow::create_show_entities_menu() {
       continue;
     }
     QString type_name = EntityTraits::get_lua_name(type);
-    show_entities_actions[type_name] = action;
+    show_entities_subactions[type_name] = action;
   }
 
   // Add special actions Show all and Hide all.
   QAction* show_all_action = new QAction(tr("Show all"), this);
-  show_entities_actions["action_show_all"] = show_all_action;
+  show_entities_subactions["action_show_all"] = show_all_action;
   menu->insertAction(entity_actions.first(), show_all_action);
   connect(show_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
@@ -303,7 +309,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   });
 
   QAction* hide_all_action = new QAction(tr("Hide all"), this);
-  show_entities_actions["action_hide_all"] = hide_all_action;
+  show_entities_subactions["action_hide_all"] = hide_all_action;
   menu->insertAction(entity_actions.first(), hide_all_action);
   connect(hide_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
@@ -762,14 +768,14 @@ void MainWindow::current_editor_changed(int /* index */) {
 
   const int num_layers = has_editor ?
         editor->get_num_layers_visibility_supported() : 0;
-  ui.action_show_layer_0->setEnabled(num_layers > 0);
-  ui.action_show_layer_1->setEnabled(num_layers > 1);
-  ui.action_show_layer_2->setEnabled(num_layers > 2);
-  show_layers_button->setEnabled(num_layers > 3);
+  ui.action_show_layer_0->setVisible(num_layers > 0);
+  ui.action_show_layer_1->setVisible(num_layers > 1);
+  ui.action_show_layer_2->setVisible(num_layers > 2);
+  show_layers_action->setVisible(num_layers > 3);
+  show_layers_menu->setEnabled(num_layers > 3);
   ui.action_show_layer_0->setChecked(false);
   ui.action_show_layer_1->setChecked(false);
   ui.action_show_layer_2->setChecked(false);
-  // TODO layer view_settings.set_num_layers(num_layers);
 
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
@@ -777,6 +783,8 @@ void MainWindow::current_editor_changed(int /* index */) {
   show_entities_button->setEnabled(entity_type_visibility_supported);
 
   if (has_editor) {
+
+    view_settings.set_num_layers(num_layers);
 
     connect(&view_settings, SIGNAL(zoom_changed(double)),
             this, SLOT(update_zoom()));
@@ -912,8 +920,8 @@ void MainWindow::update_entity_type_visibility(EntityType entity_type) {
   bool visible = view_settings.is_entity_type_visible(entity_type);
 
   QString type_name = EntityTraits::get_lua_name(entity_type);
-  const auto& it = show_entities_actions.find(type_name);
-  if (it == show_entities_actions.end() || it.value() == nullptr) {
+  const auto& it = show_entities_subactions.find(type_name);
+  if (it == show_entities_subactions.end() || it.value() == nullptr) {
     // This type of entity is not present in the menu.
     // This might be a type that cannot be used in the editor but only by the engine.
     return;
@@ -934,7 +942,7 @@ void MainWindow::update_entity_types_visibility() {
   }
 
   ViewSettings& view_settings = editor->get_view_settings();
-  for (QAction* action: show_entities_actions) {
+  for (QAction* action: show_entities_subactions) {
     if (action == nullptr) {
       qCritical() << tr("Missing show entity type action");
       return;

@@ -50,6 +50,8 @@ public:
   QColor get_grid_color() const;
   void set_grid_color(const QColor& color);
 
+  int get_num_layers() const;
+  void set_num_layers(int num_layers);
   void set_layer_visible(int layer, bool visible);
   bool is_layer_visible(int layer) const;
   void show_all_layers();
@@ -77,9 +79,9 @@ private:
   QSize grid_size;                          /**< If supported, the current grid size. */
   GridStyle grid_style;                     /**< If supported, the current grid style. */
   QColor grid_color;                        /**< If supported, the current grid color. */
-  bool layer_visibility_supported;          /**< Whether the editor supports showing/hiding layers. */
+  int num_layers;                           /**< Number of layers in the editor
+                                             * (0 if showing/hiding layers is not supported). */
   std::set<int> visible_layers;             /**< Layers currently shown, if supported. */
-  bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
   std::set<EntityType>
       visible_entity_types;                 /**< Types of entities currently shown, if supported. */
 

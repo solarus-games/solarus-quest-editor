@@ -26,7 +26,10 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_visible(false),
   grid_size(16, 16),
   grid_style(GridStyle::DASHED),
-  grid_color(Qt::black) {
+  grid_color(Qt::black),
+  num_layers(),
+  visible_layers(),
+  visible_entity_types() {
 
   // Default settings.
   const int num_layers = 3;  // TODO layer
@@ -179,6 +182,29 @@ void ViewSettings::set_grid_color(const QColor& color) {
 }
 
 /**
+ * @brief Returns the number of layers supported for visibility.
+ * @return The number of layers, or 0 if layer visibility is not supported.
+ */
+int ViewSettings::get_num_layers() const {
+
+  return num_layers;
+}
+
+/**
+ * @brief Sets the number of layers supported for visibility.
+ *
+ * Calling this function resets all layers to visible.
+ *
+ * @param num_layers The number of layers, or if layer visibility is not supported.
+ */
+void ViewSettings::set_num_layers(int num_layers) {
+
+  this->num_layers = num_layers;
+  visible_layers.clear();
+  show_all_layers();
+}
+
+/**
  * @brief Returns whether a layer is currently visible.
  * @param layer The layer to test.
  * @return @c true if this layer is visible, @c false if it is hidden.
@@ -218,7 +244,9 @@ void ViewSettings::set_layer_visible(int layer, bool visible) {
  */
 void ViewSettings::show_all_layers() {
 
-  // TODO layer
+  for (int i = 0; i < get_num_layers(); ++i) {
+    set_layer_visible(i, true);
+  }
 }
 
 /**
@@ -228,7 +256,9 @@ void ViewSettings::show_all_layers() {
  */
 void ViewSettings::hide_all_layers() {
 
-  // TODO layer
+  for (int i = 0; i < get_num_layers(); ++i) {
+    set_layer_visible(i, false);
+  }
 }
 
 /**
