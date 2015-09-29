@@ -253,6 +253,33 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="default_layer_label">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Default layer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="repeat_mode_label">
+            <property name="text">
+             <string>Repeatable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="EnumSelector&lt;TilePatternRepeatMode&gt;" name="repeat_mode_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="0">
            <widget class="QLabel" name="animation_label">
             <property name="toolTip">
@@ -317,45 +344,32 @@
             </layout>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="default_layer_label">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Default layer</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
-           <widget class="LayerSelector" name="default_layer_field">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>Layer to initially apply to tiles using this pattern on maps</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="repeat_mode_label">
-            <property name="text">
-             <string>Repeatable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="EnumSelector&lt;TilePatternRepeatMode&gt;" name="repeat_mode_field">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontal_layout">
+            <item>
+             <widget class="QSpinBox" name="default_layer_field">
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::UpDownArrows</enum>
+              </property>
+              <property name="maximum">
+               <number>9999</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -369,19 +383,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>LayerSelector</class>
-   <extends>QComboBox</extends>
-   <header>gui/layer_selector.h</header>
+   <class>TilesetView</class>
+   <extends>QGraphicsView</extends>
+   <header>gui/tileset_view.h</header>
   </customwidget>
   <customwidget>
    <class>EnumSelector&lt;Ground&gt;</class>
    <extends>QComboBox</extends>
    <header>ground_traits.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TilesetView</class>
-   <extends>QGraphicsView</extends>
-   <header>gui/tileset_view.h</header>
   </customwidget>
   <customwidget>
    <class>TilePatternsListView</class>

@@ -552,8 +552,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_ground_changed(int, Ground)),
           this, SLOT(update_ground_field()));
 
-  connect(ui.default_layer_field, SIGNAL(activated(QString)),
-          this, SLOT(default_layer_selector_activated()));
+  connect(ui.default_layer_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_selected_patterns_default_layer_requested(int)));
   connect(ui.tileset_view, SIGNAL(change_selected_patterns_default_layer_requested(int)),
           this, SLOT(change_selected_patterns_default_layer_requested(int)));
   connect(model, SIGNAL(pattern_default_layer_changed(int, int)),
@@ -1067,29 +1067,8 @@ void TilesetEditor::update_default_layer_field() {
   ui.default_layer_field->setEnabled(enable);
 
   if (enable) {
-    ui.default_layer_field->set_selected_layer(default_layer);
+    ui.default_layer_field->setValue(default_layer);
   }
-}
-
-/**
- * @brief Slot called when the user changes the layer in the selector.
- */
-void TilesetEditor::default_layer_selector_activated() {
-
-  if (model->is_selection_empty()) {
-    return;
-  }
-
-  QList<int> indexes = model->get_selected_indexes();
-  int new_default_layer = ui.default_layer_field->get_selected_layer();
-  int old_common_default_layer;
-  if (model->is_common_pattern_default_layer(indexes, old_common_default_layer) &&
-      new_default_layer == old_common_default_layer) {
-    // No change.
-    return;
-  }
-
-  try_command(new SetPatternsDefaultLayerCommand(*this, indexes, new_default_layer));
 }
 
 /**
