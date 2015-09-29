@@ -585,30 +585,32 @@ void TilesetView::build_context_menu_ground(
  * @param indexes Patterns to build a context menu for.
  */
 void TilesetView::build_context_menu_layer(
-    QMenu& /* menu */, const QList<int>& indexes) {
+    QMenu& menu, const QList<int>& indexes) {
 
   if (indexes.empty()) {
     return;
   }
 
-  /* TODO layer
   // See if the default layer is common.
-  int layer = 0;
-  bool common = model->is_common_pattern_default_layer(indexes, layer);
+  int common_layer = 0;
+  bool common = model->is_common_pattern_default_layer(indexes, common_layer);
 
-  // Add layer actions to the menu.
-  QList<QAction*> layer_actions = EnumMenus<Layer>::create_actions(
-        menu,
-        EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](int layer) {
-    emit change_selected_patterns_default_layer_requested(layer);
-  });
+  // Add 3 layer actions to the menu.
+  // (If more layers are necessary, the user can still use the spinbox
+  // in the patterns properties view.)
+  for (int i = 0; i < 3; ++i) {
+    QAction* action = new QAction(tr("Layer %1").arg(i), &menu);
+    action->setCheckable(true);
+    menu.addAction(action);
+    connect(action, &QAction::triggered, [=]() {
+      emit change_selected_patterns_default_layer_requested(i);
+    });
 
-  if (common) {
-    QAction* checked_action = layer_actions[layer];
-    checked_action->setChecked(true);
+    if (common && i == common_layer) {
+      action->setChecked(true);
+    }
   }
-  */
+
 }
 
 /**

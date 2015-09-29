@@ -1067,7 +1067,10 @@ void TilesetEditor::update_default_layer_field() {
   ui.default_layer_field->setEnabled(enable);
 
   if (enable) {
+    const bool was_blocked = ui.default_layer_field->signalsBlocked();
+    ui.default_layer_field->blockSignals(true);
     ui.default_layer_field->setValue(default_layer);
+    ui.default_layer_field->blockSignals(was_blocked);
   }
 }
 

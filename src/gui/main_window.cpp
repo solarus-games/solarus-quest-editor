@@ -279,7 +279,9 @@ void MainWindow::update_show_layers_menu() {
         QString file_name = QString(":/images/icon_layer_%1.png").arg(i);
         action->setIcon(QIcon(file_name));
       }
-      action->setShortcut(QString::number(i));
+      if (i <= 9) {
+        action->setShortcut(QString::number(i));
+      }
       action->setCheckable(true);
       action->setChecked(true);
       show_layers_menu->addAction(action);
