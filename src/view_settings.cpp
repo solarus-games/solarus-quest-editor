@@ -27,16 +27,11 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_size(16, 16),
   grid_style(GridStyle::DASHED),
   grid_color(Qt::black),
-  num_layers(),
+  num_layers(0),
   visible_layers(),
   visible_entity_types() {
 
   // Default settings.
-  const int num_layers = 3;  // TODO layer
-  for (int layer = 0; layer < num_layers; ++layer) {
-    visible_layers.insert(layer);
-  }
-
   for (EntityType entity_type : EntityTraits::get_values()) {
     visible_entity_types.insert(entity_type);
   }
