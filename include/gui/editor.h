@@ -62,6 +62,7 @@ public:
   bool is_layer_visibility_supported() const;
   int get_num_layers_visibility_supported() const;
   bool is_entity_type_visibility_supported() const;
+  const ViewSettings& get_view_settings() const;
   ViewSettings& get_view_settings();
 
   virtual void save() = 0;

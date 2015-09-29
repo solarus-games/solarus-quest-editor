@@ -96,7 +96,7 @@ private:
   void update_title();
   void upgrade_quest();
   QMenu* create_zoom_menu();
-  QMenu* create_show_layers_menu();
+  void update_show_layers_menu();
   QMenu* create_show_entities_menu();
 
   Ui::MainWindow ui;              /**< The main window widgets. */

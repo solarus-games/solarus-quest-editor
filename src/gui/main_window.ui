@@ -245,7 +245,7 @@
     <string>Show layer 0</string>
    </property>
    <property name="shortcut">
-    <string>1</string>
+    <string>0</string>
    </property>
   </action>
   <action name="action_show_layer_1">
@@ -266,7 +266,7 @@
     <string>Show layer 1</string>
    </property>
    <property name="shortcut">
-    <string>2</string>
+    <string>1</string>
    </property>
   </action>
   <action name="action_show_layer_2">
@@ -287,7 +287,7 @@
     <string>Show layer 2</string>
    </property>
    <property name="shortcut">
-    <string>3</string>
+    <string>2</string>
    </property>
   </action>
   <action name="action_doc">

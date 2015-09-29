@@ -653,6 +653,13 @@ void Editor::set_entity_type_visibility_supported(bool supported) {
  * @brief Returns the view settings of this editor.
  * @return The view settings.
  */
+const ViewSettings& Editor::get_view_settings() const {
+  return view_settings;
+}
+
+/**
+ * @overload Non-const version.
+ */
 ViewSettings& Editor::get_view_settings() {
   return view_settings;
 }

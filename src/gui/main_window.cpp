@@ -110,11 +110,13 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertWidget(ui.action_show_layer_0, grid_size);
   ui.tool_bar->insertSeparator(ui.action_show_layer_0);
 
+  ui.action_show_layer_0->setShortcutContext(Qt::WidgetShortcut);
+  ui.action_show_layer_1->setShortcutContext(Qt::WidgetShortcut);
+  ui.action_show_layer_2->setShortcutContext(Qt::WidgetShortcut);
   show_layers_button = new QToolButton();
   show_layers_button->setIcon(QIcon(":/images/icon_layer_more.png"));
-  show_layers_button->setText("Show/hide more layers");
   show_layers_button->setToolTip(show_layers_button->text());
-  show_layers_menu = create_show_layers_menu();
+  show_layers_menu = new QMenu(tr("Show/hide more layers"));
   show_layers_button->setMenu(show_layers_menu);
   show_layers_button->setPopupMode(QToolButton::InstantPopup);
   show_layers_action = ui.tool_bar->addWidget(show_layers_button);
@@ -230,17 +232,25 @@ QMenu* MainWindow::create_zoom_menu() {
 }
 
 /**
- * @brief Creates a menu with actions to show or hide each layer.
- * @return The created menu. It has no parent initially.
+ * @brief Updates the show layers menu to match the current number of layers.
  */
-QMenu* MainWindow::create_show_layers_menu() {
+void MainWindow::update_show_layers_menu() {
 
-  QMenu* menu = new QMenu(tr("Show/hide more layers"));
+  if (show_layers_menu == nullptr) {
+    return;
+  }
+
+  // Clear previous actions.
+  const QList<QAction*> actions = show_layers_menu->actions();
+  for (QAction* action : actions) {
+    delete action;
+  }
+  show_layers_menu->clear();
 
   // Add special actions Show all and Hide all.
   QAction* show_all_action = new QAction(tr("Show all layers"), this);
   show_layers_subactions["action_show_all"] = show_all_action;
-  menu->addAction(show_all_action);
+  show_layers_menu->addAction(show_all_action);
   connect(show_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
@@ -250,7 +260,7 @@ QMenu* MainWindow::create_show_layers_menu() {
 
   QAction* hide_all_action = new QAction(tr("Hide all layers"), this);
   show_layers_subactions["action_hide_all"] = hide_all_action;
-  menu->addAction(hide_all_action);
+  show_layers_menu->addAction(hide_all_action);
   connect(hide_all_action, &QAction::triggered, [=]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
@@ -258,9 +268,30 @@ QMenu* MainWindow::create_show_layers_menu() {
     }
   });
 
-  menu->addSeparator();
+  show_layers_menu->addSeparator();
 
-  return menu;
+  // Add an action for each layer.
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    for (int i = 0; i < editor->get_num_layers_visibility_supported(); ++i) {
+      QAction* action = new QAction(tr("Show layer %1").arg(i), this);
+      if (i < 3) {
+        QString file_name = QString(":/images/icon_layer_%1.png").arg(i);
+        action->setIcon(QIcon(file_name));
+      }
+      action->setShortcut(QString::number(i));
+      action->setCheckable(true);
+      action->setChecked(true);
+      show_layers_menu->addAction(action);
+      connect(action, &QAction::triggered, [=]() {
+        Editor* editor = get_current_editor();
+        if (editor != nullptr) {
+          const bool visible = action->isChecked();
+          editor->get_view_settings().set_layer_visible(i, visible);
+        }
+      });
+    }
+  }
 }
 
 /**
@@ -734,7 +765,9 @@ void MainWindow::on_action_doc_triggered() {
  * @brief Slot called when the current editor changes.
  * @param index Index of the new current editor, or -1 if no editor is active.
  */
-void MainWindow::current_editor_changed(int /* index */) {
+void MainWindow::current_editor_changed(int index) {
+
+  Q_UNUSED(index);
 
   Editor* editor = get_current_editor();
   const bool has_editor = editor != nullptr;
@@ -771,9 +804,7 @@ void MainWindow::current_editor_changed(int /* index */) {
   ui.action_show_layer_2->setVisible(num_layers > 2);
   show_layers_action->setVisible(num_layers > 3);
   show_layers_menu->setEnabled(num_layers > 3);
-  ui.action_show_layer_0->setChecked(false);
-  ui.action_show_layer_1->setChecked(false);
-  ui.action_show_layer_2->setChecked(false);
+  update_show_layers_menu();
 
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
@@ -860,14 +891,13 @@ void MainWindow::update_grid_size() {
  */
 void MainWindow::update_layer_visibility(int layer) {
 
-  Editor* editor = get_current_editor();
+  const Editor* editor = get_current_editor();
   if (editor == nullptr) {
     return;
   }
-  ViewSettings& view_settings = editor->get_view_settings();
-  bool visible = view_settings.is_layer_visible(layer);
+  const ViewSettings& view_settings = editor->get_view_settings();
+  const bool visible = view_settings.is_layer_visible(layer);
 
-  // TODO layer
   switch (layer) {
 
   case 0:
@@ -885,6 +915,15 @@ void MainWindow::update_layer_visibility(int layer) {
   default:
     break;
   }
+
+  // Update the show layer menu.
+  const int index = layer + 3;  // Skip "Show all", "Hide all" and the separator.
+  QAction* action = show_layers_menu->actions().value(index);
+  if (action == nullptr) {
+    qCritical() << "Missing show layer action " << index;
+    return;
+  }
+  action->setChecked(visible);
 }
 
 /**
@@ -897,11 +936,18 @@ void MainWindow::update_layers_visibility() {
     return;
   }
 
-  // TODO layer
   ViewSettings& view_settings = editor->get_view_settings();
   ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(0));
   ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(1));
   ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(2));
+
+  const QList<QAction*>& actions = show_layers_menu->actions();
+  for (int i = 0; i < editor->get_num_layers_visibility_supported(); ++i) {
+    QAction* action = actions.value(i);
+    if (action != nullptr) {
+      action->setVisible(view_settings.is_layer_visible(i));
+    }
+  }
 }
 
 /**
