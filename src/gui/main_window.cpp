@@ -121,8 +121,6 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.menu_view->addMenu(show_layers_menu);
   ui.menu_view->addSeparator();
 
-  ui.tool_bar->addSeparator();
-
   show_entities_button = new QToolButton();
   show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
   show_entities_button->setToolTip(tr("Show/hide entity types"));
@@ -240,7 +238,7 @@ QMenu* MainWindow::create_show_layers_menu() {
   QMenu* menu = new QMenu(tr("Show/hide more layers"));
 
   // Add special actions Show all and Hide all.
-  QAction* show_all_action = new QAction(tr("Show all"), this);
+  QAction* show_all_action = new QAction(tr("Show all layers"), this);
   show_layers_subactions["action_show_all"] = show_all_action;
   menu->addAction(show_all_action);
   connect(show_all_action, &QAction::triggered, [=]() {
@@ -250,7 +248,7 @@ QMenu* MainWindow::create_show_layers_menu() {
     }
   });
 
-  QAction* hide_all_action = new QAction(tr("Hide all"), this);
+  QAction* hide_all_action = new QAction(tr("Hide all layers"), this);
   show_layers_subactions["action_hide_all"] = hide_all_action;
   menu->addAction(hide_all_action);
   connect(hide_all_action, &QAction::triggered, [=]() {
@@ -298,7 +296,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   }
 
   // Add special actions Show all and Hide all.
-  QAction* show_all_action = new QAction(tr("Show all"), this);
+  QAction* show_all_action = new QAction(tr("Show all entities"), this);
   show_entities_subactions["action_show_all"] = show_all_action;
   menu->insertAction(entity_actions.first(), show_all_action);
   connect(show_all_action, &QAction::triggered, [=]() {
@@ -308,7 +306,7 @@ QMenu* MainWindow::create_show_entities_menu() {
     }
   });
 
-  QAction* hide_all_action = new QAction(tr("Hide all"), this);
+  QAction* hide_all_action = new QAction(tr("Hide all entities"), this);
   show_entities_subactions["action_hide_all"] = hide_all_action;
   menu->insertAction(entity_actions.first(), hide_all_action);
   connect(hide_all_action, &QAction::triggered, [=]() {
