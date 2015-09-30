@@ -144,11 +144,9 @@ int MapModel::get_num_layers() const {
 void MapModel::set_num_layers(int num_layers) {
 
   Q_UNUSED(num_layers);
-  /* TODO
   map.set_num_layers(num_layers);
-  entities.resize(num_layers);
-  // Take care of entities removed.
-  */
+  // entities.resize(num_layers);
+  // TODO layer: take care of entities removed.
 }
 
 /**
