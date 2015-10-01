@@ -883,6 +883,11 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
 
+  connect(ui.num_layers_field, SIGNAL(valueChanged(int)),
+          this, SLOT(change_num_layers_requested()));
+  connect(map, SIGNAL(num_layers_changed(int)),
+          this, SLOT(update_num_layers_field()));
+
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
   connect(ui.world_field, SIGNAL(editingFinished()),
@@ -1124,6 +1129,7 @@ void MapEditor::update() {
   update_map_id_field();
   update_description_to_gui();
   update_size_field();
+  update_num_layers_field();
   update_world_field();
   update_floor_field();
   update_location_field();
@@ -1210,6 +1216,32 @@ void MapEditor::change_size_requested() {
     return;
   }
   try_command(new SetSizeCommand(*this, size));
+}
+
+/**
+ * @brief Updates the number of layers field with the data from the model.
+ */
+void MapEditor::update_num_layers_field() {
+
+  ui.num_layers_field->setValue(map->get_num_layers());
+}
+
+/**
+ * @brief Modifies the number of layers with new values entered by the user.
+ */
+void MapEditor::change_num_layers_requested() {
+
+  int num_layers = ui.num_layers_field->value();
+
+  if (num_layers == map->get_num_layers()) {
+    return;
+  }
+
+  if (num_layers < map->get_num_layers()) {
+    // TODO Reducing the number of layers: ask the user what to do.
+  }
+
+  // TODO try_command(new SetNumLayersCommand(*this, size));
 }
 
 /**

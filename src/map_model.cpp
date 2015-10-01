@@ -139,14 +139,22 @@ int MapModel::get_num_layers() const {
 
 /**
  * @brief Sets the number of layers of the map.
+ *
+ * Emits num_layers_changed() if there is a change.
+ *
  * @param num_layers The new number of layers.
  */
 void MapModel::set_num_layers(int num_layers) {
 
-  Q_UNUSED(num_layers);
+  if (num_layers == map.get_num_layers()) {
+    return;
+  }
+
   map.set_num_layers(num_layers);
   // entities.resize(num_layers);
-  // TODO layer: take care of entities removed.
+  // TODO layer: delete entities on removed layers.
+
+  emit num_layers_changed(num_layers);
 }
 
 /**

@@ -130,6 +130,7 @@ public:
 signals:
 
   void size_changed(const QSize& size);
+  void num_layers_changed(int num_layers);
   void world_changed(const QString& world);
   void floor_changed(int floor);
   void location_changed(const QPoint& location);
