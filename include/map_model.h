@@ -55,7 +55,7 @@ public:
   QSize get_size() const;
   void set_size(const QSize& size);
   int get_num_layers() const;
-  void set_num_layers(int num_layers);
+  AddableEntities set_num_layers(int num_layers);
   bool has_world() const;
   QString get_world() const;
   void set_world(const QString& world);

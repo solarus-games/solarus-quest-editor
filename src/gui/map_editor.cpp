@@ -91,6 +91,34 @@ private:
 };
 
 /**
+ * @brief Changing the number of layers of the map.
+ */
+class SetNumLayersCommand : public MapEditorCommand {
+
+public:
+  SetNumLayersCommand(MapEditor& editor, int num_layers) :
+    MapEditorCommand(editor, MapEditor::tr("Number of layers")),
+    num_layers_before(get_map().get_num_layers()),
+    num_layers_after(num_layers),
+    entities_removed() { }
+
+  void undo() override {
+    get_map().set_num_layers(num_layers_before);
+    // Restore entities.
+    get_map().add_entities(std::move(entities_removed));
+  }
+
+  void redo() override {
+    entities_removed = get_map().set_num_layers(num_layers_after);
+  }
+
+private:
+  int num_layers_before;
+  int num_layers_after;
+  AddableEntities entities_removed;  // Entities that were on removed layers.
+};
+
+/**
  * @brief Changing the world of the map.
  */
 class SetWorldCommand : public MapEditorCommand {
@@ -784,7 +812,7 @@ public:
 
 private:
   AddableEntities entities;    // Entities to remove and their indexes before removal (sorted).
-  EntityIndexes indexes;  // Indexes before removal (redunant info).
+  EntityIndexes indexes;  // Indexes before removal (redundant info).
 };
 
 }  // Anonymous namespace.
@@ -1241,7 +1269,7 @@ void MapEditor::change_num_layers_requested() {
     // TODO Reducing the number of layers: ask the user what to do.
   }
 
-  // TODO try_command(new SetNumLayersCommand(*this, size));
+  try_command(new SetNumLayersCommand(*this, num_layers));
 }
 
 /**

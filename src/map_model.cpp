@@ -24,6 +24,10 @@
 #include <QIcon>
 #include <QSet>
 
+namespace {
+  constexpr int max_layers = 1000;  /**< Maximum number of layers for the editor. */
+}
+
 /**
  * @brief Creates a map model.
  * @param quest The quest.
@@ -39,7 +43,7 @@ MapModel::MapModel(
   quest(quest),
   map_id(map_id),
   tileset_model(nullptr),
-  entities(100) {
+  entities(max_layers) {
 
   // Load the map data file.
   QString path = quest.get_map_data_file_path(map_id);
@@ -140,21 +144,39 @@ int MapModel::get_num_layers() const {
 /**
  * @brief Sets the number of layers of the map.
  *
+ * Entities that are on removed layers are removed from the map.
+ *
  * Emits num_layers_changed() if there is a change.
  *
  * @param num_layers The new number of layers.
+ * @return The entities that were on removed layers.
  */
-void MapModel::set_num_layers(int num_layers) {
+AddableEntities MapModel::set_num_layers(int num_layers) {
 
-  if (num_layers == map.get_num_layers()) {
-    return;
+  Q_ASSERT(num_layers > 0);
+  Q_ASSERT(num_layers < max_layers);
+
+  if (num_layers == get_num_layers()) {
+    return AddableEntities();
+  }
+
+  // Delete entities on removed layers.
+  AddableEntities removed_entities;
+  if (num_layers < get_num_layers()) {
+    EntityIndexes indexes_to_remove;
+    for (int layer = num_layers; layer < get_num_layers(); ++layer) {
+      for (int i = 0; i < get_num_entities(layer); ++i) {
+        indexes_to_remove.append({ layer, i });
+      }
+    }
+    removed_entities = remove_entities(indexes_to_remove);
   }
 
   map.set_num_layers(num_layers);
-  // entities.resize(num_layers);
-  // TODO layer: delete entities on removed layers.
 
   emit num_layers_changed(num_layers);
+
+  return removed_entities;
 }
 
 /**
