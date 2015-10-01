@@ -169,6 +169,7 @@ MapView::MapView(QWidget* parent) :
   resize_action(nullptr),
   convert_tiles_action(nullptr),
   set_layer_actions(),
+  set_layer_actions_group(nullptr),
   bring_to_front_action(nullptr),
   bring_to_back_action(nullptr),
   remove_action(nullptr) {
@@ -212,6 +213,12 @@ void MapView::set_map(MapModel* map) {
     // Create the scene from the map.
     scene = new MapScene(*map, this);
     setScene(scene);
+
+    // Initialize layers.
+    connect(map, &MapModel::num_layers_changed, [&]() {
+      build_context_menu_layer_actions();
+    });
+    build_context_menu_layer_actions();
 
     // Enable useful features if there is an image.
     if (view_settings != nullptr) {
@@ -478,16 +485,6 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
-  /* TODO layer
-  set_layer_actions = EnumMenus<Layer>::create_actions(
-      *this,
-      EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-      [&](Layer layer) {
-        emit set_entities_layer_requested(get_selected_entities(), layer);
-      }
-  );
-  */
-
   bring_to_front_action = new QAction(
         tr("Bring to front"), this);
   bring_to_front_action->setShortcut(tr("T"));
@@ -513,6 +510,42 @@ void MapView::build_context_menu_actions() {
   connect(remove_action, SIGNAL(triggered()),
           this, SLOT(remove_selected_entities()));
   addAction(remove_action);
+
+  build_context_menu_layer_actions();
+}
+
+/**
+ * @brief Creates all layer actions to be used by context menus.
+ *
+ * This function should be called when the number of layers of the map changes.
+ */
+void MapView::build_context_menu_layer_actions() {
+
+  if (get_map() == nullptr) {
+    return;
+  }
+
+  int num_layers = get_map()->get_num_layers();
+  if (set_layer_actions.size() == num_layers) {
+    // Nothing to do.
+    return;
+  }
+
+  // Clean the old actions.
+  delete set_layer_actions_group;
+  set_layer_actions.clear();
+
+  // Create new ones.
+  set_layer_actions_group = new QActionGroup(this);
+  set_layer_actions_group->setExclusive(true);
+  for (int layer = 0; layer < num_layers; ++layer) {
+    QAction* action = new QAction(tr("Layer %1").arg(layer), set_layer_actions_group);
+    action->setCheckable(true);
+    connect(action, &QAction::triggered, [=]() {
+      emit set_entities_layer_requested(get_selected_entities(), layer);
+    });
+    set_layer_actions.push_back(action);
+  }
 }
 
 /**
@@ -526,7 +559,7 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
-  // TODO layer
+  // Layer
   // Bring to front, Bring to back
   // Delete
 
@@ -582,22 +615,16 @@ QMenu* MapView::create_context_menu() {
   if (!is_selection_empty()) {
 
     // Layer.
-    /* TODO layer
-    Layer common_layer = Layer::LAYER_LOW;
+    int common_layer = -1;
     bool has_common_layer = map->is_common_layer(indexes, common_layer);
-    for (int i = 0; i < Layer::LAYER_NB; ++i) {
-      Layer current_layer = static_cast<Layer>(i);
-      QAction* action = set_layer_actions[i];
+    for (int layer = 0; layer < set_layer_actions.size(); ++layer) {
+      QAction* action = set_layer_actions[layer];
       action->setChecked(false);
-      action->setText(LayerTraits::get_friendly_name(current_layer));
-      if (has_common_layer && current_layer == common_layer) {
+      if (has_common_layer && layer == common_layer) {
         action->setChecked(true);
-        // Add a checkmark (there is none when there is already an icon).
-        action->setText("\u2714 " + action->text());
       }
       menu->addAction(action);
     }
-    */
 
     // Bring to front/back.
     menu->addAction(bring_to_front_action);

@@ -164,6 +164,7 @@ protected:
 private:
 
   void build_context_menu_actions();
+  void build_context_menu_layer_actions();
   QMenu* create_direction_context_menu(const EntityIndexes& indexes);
   void set_state(std::unique_ptr<State> state);
 
@@ -182,6 +183,8 @@ private:
   QAction* convert_tiles_action;   /**< Action of converting tiles to/from dynamic ones. */
   QList<QAction*>
       set_layer_actions;           /**< Actions of changing the layer of the selected entities. */
+  QActionGroup*
+      set_layer_actions_group;     /**< Groups of exclusive actions to change the layer. */
   QAction* bring_to_front_action;  /**< Action of bringing the selected entities to front. */
   QAction* bring_to_back_action;   /**< Action of bringing the selected entities to back. */
   QAction* remove_action;          /**< Action of deleting the selected entities. */
