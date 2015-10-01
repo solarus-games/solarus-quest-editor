@@ -847,7 +847,8 @@ void EditEntityDialog::apply_ground() {
  */
 void EditEntityDialog::initialize_layer() {
 
-  ui.layer_field->set_selected_layer(entity_before.get_layer());
+  ui.layer_field->setMaximum(entity_before.get_map().get_num_layers() - 1);
+  ui.layer_field->setValue(entity_before.get_layer());
 }
 
 /**
@@ -855,7 +856,7 @@ void EditEntityDialog::initialize_layer() {
  */
 void EditEntityDialog::apply_layer() {
 
-  entity_after->set_layer(ui.layer_field->get_selected_layer());
+  entity_after->set_layer(ui.layer_field->value());
 }
 
 /**
