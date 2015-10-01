@@ -37,6 +37,8 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
 
   connect(&map, SIGNAL(size_changed(QSize)),
           this, SLOT(size_changed(QSize)));
+  connect(&map, SIGNAL(num_layers_changed(int)),
+          this, SLOT(num_layers_changed(int)));
   connect(&map, SIGNAL(entities_added(EntityIndexes)),
           this, SLOT(entities_added(EntityIndexes)));
   connect(&map, SIGNAL(entities_about_to_be_removed(EntityIndexes)),
@@ -104,13 +106,7 @@ void MapScene::build() {
   for (int layer = 0; layer < num_layers; ++layer) {
 
     // Create the parent item of everything that will be on this layer.
-    if (layer_parent_items[layer] != nullptr) {
-      removeItem(layer_parent_items[layer]);
-      delete layer_parent_items[layer];
-    }
-    layer_parent_items[layer] = new QGraphicsPixmapItem(nullptr);
-    layer_parent_items[layer]->setZValue(layer);
-    addItem(layer_parent_items[layer]);
+    create_layer_parent_item(layer);
 
     // Create the items on this layer.
     entity_items[layer].clear();
@@ -127,6 +123,24 @@ void MapScene::build() {
 void MapScene::update_scene_size() {
   setSceneRect(QRectF(QPoint(0, 0), (get_margin_size() * 2) + map.get_size()));
   update();
+}
+
+/**
+ * @brief Creates a parent graphic item for entities on the given layer.
+ * @param layer A layer.
+ */
+void MapScene::create_layer_parent_item(int layer) {
+
+  Q_ASSERT(layer >= 0 && layer < (int) layer_parent_items.size());
+
+  if (layer_parent_items[layer] != nullptr) {
+    removeItem(layer_parent_items[layer]);
+    delete layer_parent_items[layer];
+  }
+  layer_parent_items[layer] = new QGraphicsPixmapItem(nullptr);
+  layer_parent_items[layer]->setZValue(layer);
+  addItem(layer_parent_items[layer]);
+
 }
 
 /**
@@ -195,6 +209,14 @@ const MapScene::EntityItems& MapScene::get_entity_items(int layer) {
 void MapScene::update_layer_visibility(int layer, const ViewSettings& view_settings) {
 
   this->view_settings = &view_settings;
+
+  // Ensure the number of layers is up to date.
+  if (map.get_num_layers() != (int) entity_items.size()) {
+    // The number of layers must have changed and we are not notified yet.
+    // This is possible due to the order of slots.
+    num_layers_changed(map.get_num_layers());
+  }
+
   for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
   }
@@ -273,12 +295,49 @@ EntityModel* MapScene::get_entity_from_item(const QGraphicsItem& item) {
 
 /**
  * @brief Slot called when the size of the map has changed.
- * @param The size of the scene is updated accordingly.
+ *
+ * The size of the scene is updated accordingly.
+ *
+ * @param size The new map size.
  */
 void MapScene::size_changed(const QSize& size) {
 
   Q_UNUSED(size);
   update_scene_size();
+}
+
+/**
+ * @brief Slot called when the number of layers of the map has changed.
+ * @param num_layers The new number of layers.
+ */
+void MapScene::num_layers_changed(int num_layers) {
+
+  int old_num_layers = layer_parent_items.size();
+
+  if (num_layers == old_num_layers) {
+    return;
+  }
+
+  if (num_layers < old_num_layers) {
+    // Reducing the number of layers.
+    for (int layer = num_layers; layer < old_num_layers; ++layer) {
+      Q_ASSERT(entity_items[layer].isEmpty());
+      if (layer_parent_items[layer] != nullptr) {
+        removeItem(layer_parent_items[layer]);
+        delete layer_parent_items[layer];
+      }
+    }
+  }
+
+  entity_items.resize(num_layers);
+  layer_parent_items.resize(num_layers);
+
+  if (num_layers > old_num_layers) {
+    // Increasing the number of layers.
+    for (int layer = old_num_layers; layer < num_layers; ++layer) {
+      create_layer_parent_item(layer);
+    }
+  }
 }
 
 /**

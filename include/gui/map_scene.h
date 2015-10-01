@@ -61,6 +61,7 @@ protected:
 private slots:
 
   void size_changed(const QSize& size);
+  void num_layers_changed(int num_layers);
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entity_layer_changed(const EntityIndex& index_before,
@@ -75,6 +76,7 @@ private:
 
   void build();
   void update_scene_size();
+  void create_layer_parent_item(int layer);
   void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityItems& get_entity_items(int layer);

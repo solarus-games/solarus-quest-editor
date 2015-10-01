@@ -914,7 +914,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.num_layers_field, SIGNAL(valueChanged(int)),
           this, SLOT(change_num_layers_requested()));
   connect(map, SIGNAL(num_layers_changed(int)),
-          this, SLOT(update_num_layers_field()));
+          this, SLOT(num_layers_changed()));
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
@@ -1252,6 +1252,20 @@ void MapEditor::change_size_requested() {
 void MapEditor::update_num_layers_field() {
 
   ui.num_layers_field->setValue(map->get_num_layers());
+}
+
+/**
+ * @brief Updates the UI when the number of layers in the model has changed.
+ */
+void MapEditor::num_layers_changed() {
+
+  const int num_layers = get_map().get_num_layers();
+
+  // Update the spinbox.
+  update_num_layers_field();
+
+  // Notify the view settings.
+  get_view_settings().set_num_layers(num_layers);
 }
 
 /**
