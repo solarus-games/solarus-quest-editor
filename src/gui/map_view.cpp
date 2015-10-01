@@ -2242,11 +2242,14 @@ void AddingEntitiesState::tileset_selection_changed() {
 /**
  * @brief Determines the appropriate layer where to add an entity.
  * @param entity The entity to add.
- * @return The layer.
+ * @return The layer. It is always a valid layer of the map.
  */
 int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
 
-  if (!guess_layer) {
+  const int num_layers = get_map().get_num_layers();
+
+  if (!guess_layer && entity.get_layer() < num_layers) {
+    // The entity does not want us to guess a layer.
     return entity.get_layer();
   }
 
@@ -2261,7 +2264,14 @@ int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
   // The entity has a preferred layer:
   // see if there is something above its preferred layer.
   int preferred_layer = entity.get_preferred_layer();
+  if (preferred_layer >= num_layers) {
+      // The preferred layer does not exist on this map.
+      return layer_under;
+  }
+
   if (layer_under > preferred_layer) {
+      // The preferred layer is covered by other entities
+      // on a higher layer.
       // Don't use the preferred layer in this case.
       return layer_under;
   }
