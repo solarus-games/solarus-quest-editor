@@ -1264,6 +1264,9 @@ void MapEditor::num_layers_changed() {
   // Update the spinbox.
   update_num_layers_field();
 
+  // Notify the editor.
+  set_num_layers_visibility_supported(num_layers);
+
   // Notify the view settings.
   get_view_settings().set_num_layers(num_layers);
 }

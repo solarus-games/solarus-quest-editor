@@ -188,13 +188,21 @@ int ViewSettings::get_num_layers() const {
 /**
  * @brief Sets the number of layers supported for visibility.
  *
+ * Emits num_layers_changed() if there is a change.
  * Calling this function resets all layers to visible.
  *
  * @param num_layers The number of layers, or if layer visibility is not supported.
  */
 void ViewSettings::set_num_layers(int num_layers) {
 
+  if (num_layers == this->num_layers) {
+    return;
+  }
+
   this->num_layers = num_layers;
+
+  emit num_layers_changed(num_layers);
+
   visible_layers.clear();
   show_all_layers();
 }
@@ -218,6 +226,8 @@ bool ViewSettings::is_layer_visible(int layer) const {
  * @param visible @c true to show the layer, @c false to hide it.
  */
 void ViewSettings::set_layer_visible(int layer, bool visible) {
+
+  Q_ASSERT(layer >= 0 && layer < get_num_layers());
 
   if (visible == is_layer_visible(layer)) {
     return;

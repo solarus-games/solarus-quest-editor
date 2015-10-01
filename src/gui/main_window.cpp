@@ -799,14 +799,7 @@ void MainWindow::current_editor_changed(int index) {
   }
   grid_size->setEnabled(ui.action_show_grid->isChecked());
 
-  const int num_layers = has_editor ?
-        editor->get_num_layers_visibility_supported() : 0;
-  ui.action_show_layer_0->setVisible(num_layers > 0);
-  ui.action_show_layer_1->setVisible(num_layers > 1);
-  ui.action_show_layer_2->setVisible(num_layers > 2);
-  show_layers_action->setVisible(num_layers > 3);
-  show_layers_menu->setEnabled(num_layers > 3);
-  update_show_layers_menu();
+  update_num_layers();
 
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
@@ -814,8 +807,6 @@ void MainWindow::current_editor_changed(int index) {
   show_entities_button->setEnabled(entity_type_visibility_supported);
 
   if (has_editor) {
-
-    view_settings.set_num_layers(num_layers);
 
     connect(&view_settings, SIGNAL(zoom_changed(double)),
             this, SLOT(update_zoom()));
@@ -829,6 +820,8 @@ void MainWindow::current_editor_changed(int index) {
     update_grid_visibility();
     update_grid_size();
 
+    connect(&view_settings, SIGNAL(num_layers_changed(int)),
+            this, SLOT(update_num_layers()));
     connect(&view_settings, SIGNAL(layer_visibility_changed(int, bool)),
             this, SLOT(update_layer_visibility(int)));
     update_layers_visibility();
@@ -885,6 +878,32 @@ void MainWindow::update_grid_size() {
   }
 
   grid_size->set_size(editor->get_view_settings().get_grid_size());
+}
+
+/**
+ * @brief Updates the number of layer visibility buttons.
+ *
+ * This function is called when the number of layers of the current editor changes.
+ */
+void MainWindow::update_num_layers() {
+
+  Editor* editor = get_current_editor();
+  const bool has_editor = editor != nullptr;
+
+  const int num_layers = has_editor ?
+        editor->get_num_layers_visibility_supported() : 0;
+
+  if (has_editor) {
+    ViewSettings& view_settings = editor->get_view_settings();
+    view_settings.set_num_layers(num_layers);
+  }
+
+  ui.action_show_layer_0->setVisible(num_layers > 0);
+  ui.action_show_layer_1->setVisible(num_layers > 1);
+  ui.action_show_layer_2->setVisible(num_layers > 2);
+  show_layers_action->setVisible(num_layers > 3);
+  show_layers_menu->setEnabled(num_layers > 3);
+  update_show_layers_menu();
 }
 
 /**

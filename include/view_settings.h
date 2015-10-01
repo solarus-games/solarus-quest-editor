@@ -69,6 +69,7 @@ signals:
   void grid_size_changed(const QSize& size);
   void grid_style_changed(GridStyle style);
   void grid_color_changed(const QColor& color);
+  void num_layers_changed(int num_layers);
   void layer_visibility_changed(int layer, bool visible);
   void entity_type_visibility_changed(EntityType entity_type, bool visible);
 
