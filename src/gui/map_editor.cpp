@@ -911,7 +911,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
 
-  connect(ui.num_layers_field, SIGNAL(valueChanged(int)),
+  connect(ui.num_layers_field, SIGNAL(editingFinished()),
           this, SLOT(change_num_layers_requested()));
   connect(map, SIGNAL(num_layers_changed(int)),
           this, SLOT(num_layers_changed()));

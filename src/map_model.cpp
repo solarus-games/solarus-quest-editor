@@ -154,7 +154,7 @@ int MapModel::get_num_layers() const {
 AddableEntities MapModel::set_num_layers(int num_layers) {
 
   Q_ASSERT(num_layers > 0);
-  Q_ASSERT(num_layers < max_layers);
+  Q_ASSERT(num_layers <= max_layers);
 
   if (num_layers == get_num_layers()) {
     return AddableEntities();
