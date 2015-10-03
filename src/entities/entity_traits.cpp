@@ -24,12 +24,9 @@
  */
 QList<EntityType> EnumTraits<EntityType>::get_values() {
 
-  QList<EntityType> types;
-  for (const auto& kvp : Solarus::EntityTypeInfo::get_entity_type_names()) {
-    EntityType type = kvp.first;
-    types.append(type);
-  }
-  return types;
+  return QList<EntityType>::fromStdList(
+      Solarus::EnumInfo<EntityType>::enums()
+  );
 }
 
 /**
@@ -156,7 +153,7 @@ QIcon EnumTraits<EntityType>::get_icon(EntityType value) {
  * @return The corresponding Lua name.
  */
 QString EnumTraits<EntityType>::get_lua_name(EntityType value) {
-  return QString::fromStdString(Solarus::EntityTypeInfo::get_entity_type_name(value));
+  return QString::fromStdString(Solarus::enum_to_name(value));
 }
 
 /**

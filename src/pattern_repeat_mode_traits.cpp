@@ -76,7 +76,7 @@ QIcon EnumTraits<TilePatternRepeatMode>::get_icon(TilePatternRepeatMode value) {
  * @return The corresponding Lua name.
  */
 QString EnumTraits<TilePatternRepeatMode>::get_lua_name(TilePatternRepeatMode value) {
-  return QString::fromStdString(Solarus::TilePatternData::get_repeat_mode_name(value));
+  return QString::fromStdString(Solarus::enum_to_name(value));
 }
 
 /**
@@ -86,5 +86,5 @@ QString EnumTraits<TilePatternRepeatMode>::get_lua_name(TilePatternRepeatMode va
  */
 TilePatternRepeatMode EnumTraits<TilePatternRepeatMode>::get_by_lua_name(
     const QString& name) {
-  return Solarus::TilePatternData::get_repeat_mode_by_name(name.toStdString());
+  return Solarus::name_to_enum<TilePatternRepeatMode>(name.toStdString());
 }

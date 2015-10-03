@@ -24,12 +24,9 @@
  */
 QList<Ground> EnumTraits<Ground>::get_values() {
 
-  QList<Ground> grounds;
-  for (const auto& kvp : Solarus::GroundInfo::get_ground_names()) {
-    Ground ground = kvp.first;
-    grounds.append(ground);
-  }
-  return grounds;
+  return QList<Ground>::fromStdList(
+        Solarus::EnumInfo<Ground>::enums()
+  );
 }
 
 /**
@@ -123,7 +120,7 @@ QIcon EnumTraits<Ground>::get_icon(Ground value) {
  * @return The corresponding Lua name.
  */
 QString EnumTraits<Ground>::get_lua_name(Ground value) {
-  return QString::fromStdString(Solarus::GroundInfo::get_ground_name(value));
+  return QString::fromStdString(Solarus::enum_to_name(value));
 }
 
 /**
@@ -133,5 +130,5 @@ QString EnumTraits<Ground>::get_lua_name(Ground value) {
  */
 Ground EnumTraits<Ground>::get_by_lua_name(
     const QString& name) {
-  return Solarus::GroundInfo::get_ground_by_name(name.toStdString());
+  return Solarus::name_to_enum<Ground>(name.toStdString());
 }

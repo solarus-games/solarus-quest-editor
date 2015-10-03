@@ -272,8 +272,7 @@ bool QuestResources::set_description(
  * @return The Lua name of this resource type.
  */
 QString QuestResources::get_lua_name(ResourceType resource_type) const {
-  return QString::fromStdString(
-        Solarus::QuestResources::get_resource_type_name(resource_type));
+  return QString::fromStdString(Solarus::enum_to_name(resource_type));
 }
 
 /**

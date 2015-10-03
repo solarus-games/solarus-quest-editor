@@ -70,7 +70,7 @@ QIcon EnumTraits<TransitionStyle>::get_icon(TransitionStyle value) {
  * @return The corresponding Lua name.
  */
 QString EnumTraits<TransitionStyle>::get_lua_name(TransitionStyle value) {
-  return QString::fromStdString(Solarus::Transition::get_style_name(value));
+  return QString::fromStdString(Solarus::enum_to_name(value));
 }
 
 /**
@@ -80,5 +80,5 @@ QString EnumTraits<TransitionStyle>::get_lua_name(TransitionStyle value) {
  */
 TransitionStyle EnumTraits<TransitionStyle>::get_by_lua_name(
     const QString& name) {
-  return Solarus::Transition::get_style_by_name(name.toStdString());
+  return Solarus::name_to_enum<TransitionStyle>(name.toStdString());
 }
