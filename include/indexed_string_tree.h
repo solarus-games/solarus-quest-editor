@@ -57,9 +57,9 @@ public:
 
 private:
 
-  static const int CONTAINER = 0;
-  static const int REAL_KEY = 1;
-  static const int REF_KEY = 2;
+  static constexpr int CONTAINER = 0;
+  static constexpr int REAL_KEY = 1;
+  static constexpr int REF_KEY = 2;
 
   /**
    * @brief A node of the indexed string tree.
