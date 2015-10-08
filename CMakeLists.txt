@@ -123,7 +123,6 @@ set(solarus_quest_editor_SOURCES
   include/gui/pan_tool.h
   include/gui/quest_properties_editor.h
   include/gui/quest_tree_view.h
-  include/gui/remove_layer_dialog.h
   include/gui/resource_model.h
   include/gui/resource_selector.h
   include/gui/sprite_editor.h
@@ -231,7 +230,6 @@ set(solarus_quest_editor_SOURCES
   src/gui/pan_tool.cpp
   src/gui/quest_properties_editor.cpp
   src/gui/quest_tree_view.cpp
-  src/gui/remove_layer_dialog.cpp
   src/gui/resource_model.cpp
   src/gui/resource_selector.cpp
   src/gui/sprite_editor.cpp
@@ -298,25 +296,24 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
-  src/gui/change_dialog_id_dialog.ui
   src/gui/change_pattern_id_dialog.ui
-  src/gui/change_source_image_dialog.ui
-  src/gui/change_string_key_dialog.ui
-  src/gui/dialogs_editor.ui
   src/gui/edit_entity_dialog.ui
   src/gui/external_script_dialog.ui
   src/gui/find_text_dialog.ui
   src/gui/main_window.ui
   src/gui/map_editor.ui
-  src/gui/new_string_dialog.ui
   src/gui/new_resource_element_dialog.ui
-  src/gui/quest_properties_editor.ui
-  src/gui/remove_layer_dialog.ui
-  src/gui/settings_dialog.ui
+  src/gui/tileset_editor.ui
   src/gui/sprite_editor.ui
   src/gui/sprite_previewer.ui
+  src/gui/change_source_image_dialog.ui
+  src/gui/quest_properties_editor.ui
   src/gui/strings_editor.ui
-  src/gui/tileset_editor.ui
+  src/gui/new_string_dialog.ui
+  src/gui/change_string_key_dialog.ui
+  src/gui/dialogs_editor.ui
+  src/gui/change_dialog_id_dialog.ui
+  src/gui/settings_dialog.ui
 )
 
 # Generate .h from .ui.
