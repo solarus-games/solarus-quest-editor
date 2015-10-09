@@ -1008,6 +1008,13 @@ void MapView::mousePressEvent(QMouseEvent* event) {
     return;
   }
 
+  if (!(QApplication::mouseButtons() & event->button())) {
+    // The button that triggered this event is no longer pressed.
+    // This is possible if pressing the button already triggered something
+    // else like a modal dialog.
+    return;
+  }
+
   state->mouse_pressed(*event);
 
   // Don't forward the event to the parent because it would select the item

@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "view_settings.h"
 #include <QItemSelectionModel>
+#include <QMessageBox>
 #include <QStatusBar>
 #include <QToolBar>
 #include <QUndoStack>
@@ -1283,7 +1284,24 @@ void MapEditor::change_num_layers_requested() {
   }
 
   if (num_layers < map->get_num_layers()) {
-    // TODO Reducing the number of layers: ask the user what to do.
+    // Reducing the number of layers: ask the user confirmation if entities are removed.
+    int num_entities_removed = 0;
+    for (int layer = num_layers; layer < map->get_num_layers(); ++layer) {
+      num_entities_removed += map->get_num_entities(layer);
+    }
+    if (num_entities_removed > 0) {
+      QMessageBox::StandardButton answer = QMessageBox::warning(
+          this,
+          tr("Layer not empty"),
+          tr("This layer is not empty: %1 entities will be destroyed.").arg(num_entities_removed),
+          QMessageBox::Ok | QMessageBox::Cancel,
+          QMessageBox::Ok
+      );
+      if (answer == QMessageBox::Cancel) {
+        update_num_layers_field();
+        return;
+      }
+    }
   }
 
   try_command(new SetNumLayersCommand(*this, num_layers));
