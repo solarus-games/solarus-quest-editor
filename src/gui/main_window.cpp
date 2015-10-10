@@ -798,7 +798,9 @@ void MainWindow::current_editor_changed(int index) {
   ui.action_copy->setEnabled(has_editor);
   ui.action_paste->setEnabled(has_editor);
   ui.action_close->setEnabled(has_editor);
+  ui.action_close_all->setEnabled(has_editor);
   ui.action_save->setEnabled(has_editor);
+  ui.action_save_all->setEnabled(has_editor);
 
   const bool select_all_supported = has_editor && editor->is_select_all_supported();
   ui.action_select_all->setEnabled(select_all_supported);
