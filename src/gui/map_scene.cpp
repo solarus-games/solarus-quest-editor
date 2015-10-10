@@ -397,18 +397,22 @@ void MapScene::entities_about_to_be_removed(const EntityIndexes& indexes) {
 void MapScene::entity_layer_changed(const EntityIndex& index_before,
                                     const EntityIndex& index_after) {
 
+  // Get the graphic item.
   EntityItem* item = get_entity_item(index_before);
   Q_ASSERT(item != nullptr);
 
+  // Get the entity.
   EntityModel& entity = map.get_entity(index_after);
   Q_UNUSED(entity);
   Q_ASSERT(entity.get_index() == index_after);
   Q_ASSERT(&item->get_entity() == &entity);
   Q_ASSERT(get_entity_item(index_before) == item);
 
+  // Remove it from items of the old layer.
   entity_items[index_before.layer].removeAt(index_before.order);
-
   removeItem(item);
+
+  // Add it to items of the new layer.
   addItem(item);
   int layer_after = index_after.layer;
   int order_after = index_after.order;
@@ -418,6 +422,11 @@ void MapScene::entity_layer_changed(const EntityIndex& index_before,
   }
 
   entity_items[layer_after].insert(order_after, item);
+
+  // The visibility of the new layer may be different from the old one.
+  if (view_settings != nullptr) {
+    item->update_visibility(*view_settings);
+  }
 }
 
 /**

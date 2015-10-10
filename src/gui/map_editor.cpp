@@ -1295,6 +1295,7 @@ void MapEditor::change_num_layers_requested() {
       // its signal again).
       const bool was_blocked = ui.num_layers_field->signalsBlocked();
       ui.num_layers_field->blockSignals(true);
+
       QMessageBox::StandardButton answer = QMessageBox::warning(
           this,
           tr("Layer not empty"),
@@ -1302,7 +1303,9 @@ void MapEditor::change_num_layers_requested() {
           QMessageBox::Ok | QMessageBox::Cancel,
           QMessageBox::Ok
       );
+
       ui.num_layers_field->blockSignals(was_blocked);
+
       if (answer == QMessageBox::Cancel) {
         update_num_layers_field();
         return;
