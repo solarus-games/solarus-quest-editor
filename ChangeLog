@@ -10,6 +10,7 @@ New features
 * Allow to close all open files at once.
 * Allow to reorder tabs (#107).
 * Allow to switch tabs with keyboard shortcuts (#101).
+* Allow to automatically save files before running the quest (#90).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding are now 0, 1 and 2, etc.
 * Map editor: fix entities still shown when put on a hidden layer.

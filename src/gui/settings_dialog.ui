@@ -61,6 +61,49 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
+           <layout class="QHBoxLayout" name="save_files_layout">
+            <item>
+             <widget class="QLabel" name="save_files_label">
+              <property name="text">
+               <string>Save modified files before running:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="save_files_field">
+              <item>
+               <property name="text">
+                <string>Ask</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Yes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>No</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <spacer name="save_files_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QCheckBox" name="no_audio_field">
             <property name="text">
              <string>No audio</string>

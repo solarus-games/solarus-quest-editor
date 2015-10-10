@@ -14,13 +14,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "settings.h"
 #include "grid_style.h"
+#include "settings.h"
 #include <QPalette>
 #include <QSize>
 
 // General keys.
 const QString Settings::working_directory = "working_directory";
+const QString Settings::save_files_before_running = "save_files_before_running";
 const QString Settings::no_audio = "no_audio";
 const QString Settings::video_acceleration = "video_acceleration";
 const QString Settings::win_console = "win_console";
@@ -61,6 +62,7 @@ QMap<QString, QVariant> Settings::default_values = {
 
   // General.
   { Settings::working_directory, "" },
+  { Settings::save_files_before_running, "ask" },
   { Settings::no_audio, false },
   { Settings::video_acceleration, true },
   { Settings::win_console, false },

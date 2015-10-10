@@ -589,9 +589,7 @@ void MainWindow::on_action_save_triggered() {
  */
 void MainWindow::on_action_save_all_triggered() {
 
-  for (int i = 0; i < ui.tab_widget->count(); ++i) {
-    ui.tab_widget->save_file_requested(i);
-  }
+  ui.tab_widget->save_all_files_requested();
 }
 
 /**
@@ -684,10 +682,42 @@ void MainWindow::on_action_find_triggered() {
  */
 void MainWindow::on_action_run_quest_triggered() {
 
-  if (quest_runner->isRunning()) {
-    quest_runner->stop();
-  } else {
+  if (!quest_runner->isRunning()) {
+
+    if (ui.tab_widget->has_unsaved_files()) {
+
+      Settings settings;
+      const QString& save_files = settings.get_value_string(Settings::save_files_before_running);
+
+      QMessageBox::StandardButton answer = QMessageBox::Yes;
+      if (save_files == "yes") {
+        answer = QMessageBox::Yes;
+      }
+      else if (save_files == "no") {
+        answer = QMessageBox::No;
+      }
+      else {
+        answer = QMessageBox::warning(
+              this,
+              tr("Files are modified"),
+              tr("Do you want to save modifications before running the quest?"),
+              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+              QMessageBox::Yes
+              );
+      }
+      if (answer == QMessageBox::Cancel) {
+        return;
+      }
+
+      if (answer == QMessageBox::Yes) {
+        ui.tab_widget->save_all_files_requested();
+      }
+    }
+
     quest_runner->start(quest.get_root_path());
+  }
+  else {
+    quest_runner->stop();
   }
 }
 

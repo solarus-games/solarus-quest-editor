@@ -445,6 +445,16 @@ void EditorTabs::save_file_requested(int index) {
 }
 
 /**
+ * @brief Slot called when the user attempts to save all tabs.
+ */
+void EditorTabs::save_all_files_requested() {
+
+  for (int i = 0; i < count(); ++i) {
+    save_file_requested(i);
+  }
+}
+
+/**
  * @brief Slot called when the user attempts to open a file.
  * @param quest The quest that holds this file.
  * @param path Path of the file to open.
@@ -587,6 +597,21 @@ bool EditorTabs::confirm_close() {
   }
 
   return true;
+}
+
+/**
+ * @brief Returns whether at least one editor has unsaved modifications.
+ * @return @c true if there are unsaved tabs.
+ */
+bool EditorTabs::has_unsaved_files() {
+
+  for (int i = 0; i < count(); ++i) {
+    if (!get_editor(i)->get_undo_stack().isClean()) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**

@@ -61,6 +61,7 @@ public:
   Editor* get_editor();
 
   bool confirm_close();
+  bool has_unsaved_files();
 
   void reload_settings();
 
@@ -73,6 +74,7 @@ signals:
 public slots:
 
   void save_file_requested(int index);
+  void save_all_files_requested();
   void close_file_requested(int index);
   void close_all_files_requested();
   void open_file_requested(Quest& quest, const QString& path);

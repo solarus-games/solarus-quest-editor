@@ -48,6 +48,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_working_directory()));
   connect(ui.working_directory_button, SIGNAL(clicked()),
           this, SLOT(browse_working_directory()));
+  connect(ui.save_files_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_save_files()));
   connect(ui.no_audio_field, SIGNAL(toggled(bool)),
           this, SLOT(change_no_audio()));
   connect(ui.video_acceleration_field, SIGNAL(toggled(bool)),
@@ -163,6 +165,7 @@ void SettingsDialog::update() {
 
   // General.
   update_working_directory();
+  update_save_files();
   update_no_audio();
   update_video_acceleration();
   update_win_console();
@@ -258,6 +261,37 @@ void SettingsDialog::browse_working_directory() {
 
   ui.working_directory_field->setText(new_working_directory);
   edited_settings[Settings::working_directory] = new_working_directory;
+  update_buttons();
+}
+
+/**
+ * @brief Updates the save files before running field.
+ */
+void SettingsDialog::update_save_files() {
+
+  const QString& value = settings.get_value_string(Settings::save_files_before_running);
+  int index = 0;
+  if (value == "ask") {
+    index = 0;
+  }
+  else if (value == "yes") {
+    index = 1;
+  }
+  else if (value == "no") {
+    index = 2;
+  }
+  ui.save_files_field->setCurrentIndex(index);
+}
+
+/**
+ * @brief Slot called when the user changes the save files before running combobox.
+ */
+void SettingsDialog::change_save_files() {
+
+  int index = ui.save_files_field->currentIndex();
+  const QString values[] = { "ask", "yes", "no" };
+  Q_ASSERT(index >= 0 && index < 3);
+  edited_settings[Settings::save_files_before_running] = values[index];
   update_buttons();
 }
 

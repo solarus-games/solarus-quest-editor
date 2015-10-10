@@ -28,6 +28,7 @@ public:
 
   // General keys.
   static const QString working_directory;
+  static const QString save_files_before_running;
   static const QString no_audio;
   static const QString video_acceleration;
   static const QString win_console;
