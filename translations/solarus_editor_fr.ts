@@ -1551,7 +1551,7 @@ Please save it or close it before renaming.</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="890"/>
+        <location filename="../src/gui/map_editor.cpp" line="891"/>
         <source>Width of the map in pixels</source>
         <translation>Largeur de la map en pixels</translation>
     </message>
@@ -1560,7 +1560,7 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">x</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="891"/>
+        <location filename="../src/gui/map_editor.cpp" line="892"/>
         <source>Height of the map in pixels</source>
         <translation>Hauteur de la map en pixels</translation>
     </message>
@@ -1590,8 +1590,8 @@ Please save it or close it before renaming.</source>
         <translation>Coordonnées</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="895"/>
         <location filename="../src/gui/map_editor.cpp" line="896"/>
+        <location filename="../src/gui/map_editor.cpp" line="897"/>
         <source>Coordinates of the map in its world (useful to make adjacent scrolling maps)</source>
         <translation>Coordonnées de la map dans son monde (utile pour faire des maps adjacentes avec scrolling)</translation>
     </message>
@@ -1601,7 +1601,7 @@ Please save it or close it before renaming.</source>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="245"/>
-        <location filename="../src/gui/map_editor.cpp" line="182"/>
+        <location filename="../src/gui/map_editor.cpp" line="183"/>
         <source>Tileset</source>
         <translation>Tileset</translation>
     </message>
@@ -1634,7 +1634,7 @@ Please save it or close it before renaming.</source>
     </message>
     <message>
         <location filename="../src/gui/map_editor.ui" line="303"/>
-        <location filename="../src/gui/map_editor.cpp" line="200"/>
+        <location filename="../src/gui/map_editor.cpp" line="201"/>
         <source>Music</source>
         <translation>Musique</translation>
     </message>
@@ -1644,223 +1644,233 @@ Please save it or close it before renaming.</source>
         <translation>Musique de fond de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="82"/>
+        <location filename="../src/gui/map_editor.cpp" line="83"/>
         <source>Map size</source>
         <translation>Taille de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="100"/>
+        <location filename="../src/gui/map_editor.cpp" line="101"/>
         <source>Number of layers</source>
         <translation>Nombre de couches</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="128"/>
+        <location filename="../src/gui/map_editor.cpp" line="129"/>
         <source>Map world</source>
         <translation>Monde de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="146"/>
+        <location filename="../src/gui/map_editor.cpp" line="147"/>
         <source>Map floor</source>
         <translation>Étage de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="164"/>
+        <location filename="../src/gui/map_editor.cpp" line="165"/>
         <source>Map location</source>
         <translation>Coordonnées de la map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="218"/>
+        <location filename="../src/gui/map_editor.cpp" line="219"/>
         <source>Edit entity</source>
         <translation>Modifier entité</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="300"/>
+        <location filename="../src/gui/map_editor.cpp" line="301"/>
         <source>Move entities</source>
         <translation>Déplacer entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="352"/>
+        <location filename="../src/gui/map_editor.cpp" line="353"/>
         <source>Resize entities</source>
         <translation>Redimensionner entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="434"/>
-        <location filename="../src/gui/map_editor.cpp" line="491"/>
+        <location filename="../src/gui/map_editor.cpp" line="435"/>
+        <location filename="../src/gui/map_editor.cpp" line="492"/>
         <source>Convert tiles</source>
         <translation>Convertir tiles</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="550"/>
+        <location filename="../src/gui/map_editor.cpp" line="551"/>
         <source>Set direction</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="609"/>
+        <location filename="../src/gui/map_editor.cpp" line="610"/>
         <source>Set layer</source>
         <translation>Couche</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="642"/>
+        <location filename="../src/gui/map_editor.cpp" line="643"/>
         <source>Bring to front</source>
         <translation>Mettre au premier plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="700"/>
+        <location filename="../src/gui/map_editor.cpp" line="701"/>
         <source>Bring to back</source>
         <translation>Mettre en arrière-plan</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="760"/>
+        <location filename="../src/gui/map_editor.cpp" line="761"/>
         <source>Add entities</source>
         <translation>Ajouter entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="795"/>
+        <location filename="../src/gui/map_editor.cpp" line="796"/>
         <source>Delete entities</source>
         <translation>Supprimer entités</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="845"/>
+        <location filename="../src/gui/map_editor.cpp" line="846"/>
         <source>File &apos;%1&apos; is not a map</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas une map</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="850"/>
+        <location filename="../src/gui/map_editor.cpp" line="851"/>
         <source>Map %1</source>
         <translation>Map %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="853"/>
+        <location filename="../src/gui/map_editor.cpp" line="854"/>
         <source>Map &apos;%1&apos; has been modified. Save changes?</source>
         <translation>La map &apos;%1&apos; a été modifiée. Enregistrer les changements ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="862"/>
+        <location filename="../src/gui/map_editor.cpp" line="863"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="881"/>
+        <location filename="../src/gui/map_editor.cpp" line="882"/>
         <source>&lt;No music&gt;</source>
         <translation>&lt;Pas de musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="882"/>
+        <location filename="../src/gui/map_editor.cpp" line="883"/>
         <source>&lt;Same as before&gt;</source>
         <translation>&lt;Garder la même musique&gt;</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1011"/>
+        <location filename="../src/gui/map_editor.cpp" line="1012"/>
         <source>Add destination</source>
         <translation>Ajouter une destination</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1012"/>
+        <location filename="../src/gui/map_editor.cpp" line="1013"/>
         <source>Add teletransporter</source>
         <translation>Ajouter un téléporteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1013"/>
+        <location filename="../src/gui/map_editor.cpp" line="1014"/>
         <source>Add pickable</source>
         <translation>Ajouter un trésor ramassable</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1014"/>
+        <location filename="../src/gui/map_editor.cpp" line="1015"/>
         <source>Add destructible</source>
         <translation>Ajouter un destructible</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1015"/>
+        <location filename="../src/gui/map_editor.cpp" line="1016"/>
         <source>Add chest</source>
         <translation>Ajouter un coffre</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1016"/>
+        <location filename="../src/gui/map_editor.cpp" line="1017"/>
         <source>Add jumper</source>
         <translation>Ajouter un sauteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1017"/>
+        <location filename="../src/gui/map_editor.cpp" line="1018"/>
         <source>Add enemy</source>
         <translation>Ajouter un ennemi</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1018"/>
+        <location filename="../src/gui/map_editor.cpp" line="1019"/>
         <source>Add non-playing character</source>
         <translation>Ajouter un personnage non-joueur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1019"/>
+        <location filename="../src/gui/map_editor.cpp" line="1020"/>
         <source>Add block</source>
         <translation>Ajouter un bloc</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1020"/>
+        <location filename="../src/gui/map_editor.cpp" line="1021"/>
         <source>Add switch</source>
         <translation>Ajouter un bouton</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1021"/>
+        <location filename="../src/gui/map_editor.cpp" line="1022"/>
         <source>Add wall</source>
         <translation>Ajouter un mur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1022"/>
+        <location filename="../src/gui/map_editor.cpp" line="1023"/>
         <source>Add sensor</source>
         <translation>Ajouter un capteur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1023"/>
+        <location filename="../src/gui/map_editor.cpp" line="1024"/>
         <source>Add crystal</source>
         <translation>Ajouter un cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1024"/>
+        <location filename="../src/gui/map_editor.cpp" line="1025"/>
         <source>Add crystal block</source>
         <translation>Ajouter un plot de cristal</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1025"/>
+        <location filename="../src/gui/map_editor.cpp" line="1026"/>
         <source>Add shop treasure</source>
         <translation>Ajouter un article de magasin</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1026"/>
+        <location filename="../src/gui/map_editor.cpp" line="1027"/>
         <source>Add stream</source>
         <translation>Ajouter un flux</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1027"/>
+        <location filename="../src/gui/map_editor.cpp" line="1028"/>
         <source>Add door</source>
         <translation>Ajouter une porte</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1028"/>
+        <location filename="../src/gui/map_editor.cpp" line="1029"/>
         <source>Add stairs</source>
         <translation>Ajouter un escalier</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1029"/>
+        <location filename="../src/gui/map_editor.cpp" line="1030"/>
         <source>Add separator</source>
         <translation>Ajouter un séparateur</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1030"/>
+        <location filename="../src/gui/map_editor.cpp" line="1031"/>
         <source>Add custom entity</source>
         <translation>Ajouter une entité custom</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1544"/>
+        <location filename="../src/gui/map_editor.cpp" line="1301"/>
+        <source>Layer not empty</source>
+        <translation>Couche non vide</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="1302"/>
+        <source>This layer is not empty: %1 entities will be destroyed.</source>
+        <translation>Cette couche n&apos;est pas vide : %1 entités vont être détruites.</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/map_editor.cpp" line="1571"/>
         <source>%1,%2 </source>
         <translation>%1,%2 </translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1553"/>
+        <location filename="../src/gui/map_editor.cpp" line="1580"/>
         <source> - %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1555"/>
+        <location filename="../src/gui/map_editor.cpp" line="1582"/>
         <source>: %1</source>
         <translation> : %1</translation>
     </message>
@@ -1869,7 +1879,7 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">%1,%2</translation>
     </message>
     <message>
-        <location filename="../src/gui/map_editor.cpp" line="1212"/>
+        <location filename="../src/gui/map_editor.cpp" line="1213"/>
         <source>Invalid description</source>
         <translation>Description invalide</translation>
     </message>
@@ -2304,253 +2314,253 @@ Please save it or close it before renaming.</source>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../src/ground_traits.cpp" line="47"/>
+        <location filename="../src/ground_traits.cpp" line="44"/>
         <source>Empty</source>
         <translation>Vide</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="50"/>
+        <location filename="../src/ground_traits.cpp" line="47"/>
         <source>Traversable</source>
         <translation>Traversable</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="47"/>
+        <location filename="../src/entities/entity_traits.cpp" line="44"/>
         <source>Arrow</source>
         <translation>Flèche</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="50"/>
+        <location filename="../src/entities/entity_traits.cpp" line="47"/>
         <source>Block</source>
         <translation>Bloc</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="53"/>
+        <location filename="../src/entities/entity_traits.cpp" line="50"/>
         <source>Bomb</source>
         <translation>Bombe</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="56"/>
+        <location filename="../src/entities/entity_traits.cpp" line="53"/>
         <source>Boomerang</source>
         <translation>Boomerang</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="59"/>
+        <location filename="../src/entities/entity_traits.cpp" line="56"/>
         <source>Camera</source>
         <translation>Caméra</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="62"/>
+        <location filename="../src/entities/entity_traits.cpp" line="59"/>
         <source>Carried object</source>
         <translation>Objet porté</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="65"/>
+        <location filename="../src/entities/entity_traits.cpp" line="62"/>
         <source>Chest</source>
         <translation>Coffre</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="68"/>
+        <location filename="../src/entities/entity_traits.cpp" line="65"/>
         <source>Crystal</source>
         <translation>Cristal</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="71"/>
+        <location filename="../src/entities/entity_traits.cpp" line="68"/>
         <source>Crystal block</source>
         <translation>Plot de cristal</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="74"/>
+        <location filename="../src/entities/entity_traits.cpp" line="71"/>
         <source>Custom entity</source>
         <translation>Entité custom</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="77"/>
+        <location filename="../src/entities/entity_traits.cpp" line="74"/>
         <source>Destination</source>
         <translation>Destination</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="80"/>
+        <location filename="../src/entities/entity_traits.cpp" line="77"/>
         <source>Destructible object</source>
         <translation>Destructible</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="83"/>
+        <location filename="../src/entities/entity_traits.cpp" line="80"/>
         <source>Door</source>
         <translation>Porte</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="86"/>
+        <location filename="../src/entities/entity_traits.cpp" line="83"/>
         <source>Dynamic tile</source>
         <translation>Tile dynamique</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="89"/>
+        <location filename="../src/entities/entity_traits.cpp" line="86"/>
         <source>Enemy</source>
         <translation>Ennemi</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="92"/>
+        <location filename="../src/entities/entity_traits.cpp" line="89"/>
         <source>Explosion</source>
         <translation>Explosion</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="95"/>
+        <location filename="../src/entities/entity_traits.cpp" line="92"/>
         <source>Fire</source>
         <translation>Feu</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="98"/>
+        <location filename="../src/entities/entity_traits.cpp" line="95"/>
         <source>Hero</source>
         <translation>Héros</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="101"/>
+        <location filename="../src/entities/entity_traits.cpp" line="98"/>
         <source>Hookshot</source>
         <translation>Grappin</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="104"/>
+        <location filename="../src/entities/entity_traits.cpp" line="101"/>
         <source>Jumper</source>
         <translation>Sauteur</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="107"/>
+        <location filename="../src/entities/entity_traits.cpp" line="104"/>
         <source>NPC</source>
         <translation>PNJ</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="110"/>
+        <location filename="../src/entities/entity_traits.cpp" line="107"/>
         <source>Pickable treasure</source>
         <translation>Trésor ramassable</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="113"/>
+        <location filename="../src/entities/entity_traits.cpp" line="110"/>
         <source>Sensor</source>
         <translation>Capteur</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="116"/>
+        <location filename="../src/entities/entity_traits.cpp" line="113"/>
         <source>Separator</source>
         <translation>Séparateur</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="119"/>
+        <location filename="../src/entities/entity_traits.cpp" line="116"/>
         <source>Shop treasure</source>
         <translation>Article de magasin</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="122"/>
+        <location filename="../src/entities/entity_traits.cpp" line="119"/>
         <source>Stairs</source>
         <translation>Escaliers</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="125"/>
+        <location filename="../src/entities/entity_traits.cpp" line="122"/>
         <source>Stream</source>
         <translation>Flux</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="128"/>
+        <location filename="../src/entities/entity_traits.cpp" line="125"/>
         <source>Switch</source>
         <translation>Bouton</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="131"/>
+        <location filename="../src/entities/entity_traits.cpp" line="128"/>
         <source>Teletransporter</source>
         <translation>Téléporteur</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="134"/>
+        <location filename="../src/entities/entity_traits.cpp" line="131"/>
         <source>Tile</source>
         <translation>Tile</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="137"/>
-        <location filename="../src/ground_traits.cpp" line="53"/>
+        <location filename="../src/entities/entity_traits.cpp" line="134"/>
+        <location filename="../src/ground_traits.cpp" line="50"/>
         <source>Wall</source>
         <translation>Mur</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="56"/>
+        <location filename="../src/ground_traits.cpp" line="53"/>
         <source>Low wall</source>
         <translation>Muret</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="59"/>
+        <location filename="../src/ground_traits.cpp" line="56"/>
         <source>Top right</source>
         <translation>Haut droite</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="62"/>
+        <location filename="../src/ground_traits.cpp" line="59"/>
         <source>Top left</source>
         <translation>Haut gauche</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="65"/>
+        <location filename="../src/ground_traits.cpp" line="62"/>
         <source>Bottom left</source>
         <translation>Bas gauche</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="68"/>
+        <location filename="../src/ground_traits.cpp" line="65"/>
         <source>Bottom right</source>
         <translation>Bas droite</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="71"/>
+        <location filename="../src/ground_traits.cpp" line="68"/>
         <source>Top right (water)</source>
         <translation>Haut droite (eau)</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="74"/>
+        <location filename="../src/ground_traits.cpp" line="71"/>
         <source>Top left (water)</source>
         <translation>Haut gauche (eau)</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="77"/>
+        <location filename="../src/ground_traits.cpp" line="74"/>
         <source>Bottom left (water)</source>
         <translation>Bas gauche (eau)</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="80"/>
+        <location filename="../src/ground_traits.cpp" line="77"/>
         <source>Bottom right (water)</source>
         <translation>Bas droite (eau)</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="83"/>
+        <location filename="../src/ground_traits.cpp" line="80"/>
         <source>Deep water</source>
         <translation>Eau profonde</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="86"/>
+        <location filename="../src/ground_traits.cpp" line="83"/>
         <source>Shallow water</source>
         <translation>Eau peu profonde</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="89"/>
+        <location filename="../src/ground_traits.cpp" line="86"/>
         <source>Grass</source>
         <translation>Herbe</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="92"/>
+        <location filename="../src/ground_traits.cpp" line="89"/>
         <source>Hole</source>
         <translation>Trou</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="95"/>
+        <location filename="../src/ground_traits.cpp" line="92"/>
         <source>Ice</source>
         <translation>Glace</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="98"/>
+        <location filename="../src/ground_traits.cpp" line="95"/>
         <source>Ladder</source>
         <translation>Échelle</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="101"/>
+        <location filename="../src/ground_traits.cpp" line="98"/>
         <source>Prickles</source>
         <translation>Piquants</translation>
     </message>
     <message>
-        <location filename="../src/ground_traits.cpp" line="104"/>
+        <location filename="../src/ground_traits.cpp" line="101"/>
         <source>Lava</source>
         <translation>Lave</translation>
     </message>
