@@ -56,6 +56,7 @@ private slots:
   void on_action_save_triggered();
   void on_action_save_all_triggered();
   void on_action_close_triggered();
+  void on_action_close_all_triggered();
   void on_action_exit_triggered();
   void on_action_cut_triggered();
   void on_action_copy_triggered();

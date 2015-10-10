@@ -360,7 +360,6 @@ void EditorTabs::remove_editor(int index) {
 
   editors.remove(path);
   removeTab(index);
-
 }
 
 /**
@@ -494,6 +493,26 @@ void EditorTabs::close_file_requested(int index) {
   Editor* editor = get_editor(index);
   if (editor != nullptr && editor->confirm_close()) {
     remove_editor(index);
+  }
+}
+
+/**
+ * @brief Slot called when the user attempts to close all tabs.
+ */
+void EditorTabs::close_all_files_requested() {
+
+  for (int i = 0; i < count(); ++i) {
+    Editor* editor = get_editor(i);
+    if (editor == nullptr) {
+      return;
+    }
+    if (!editor->confirm_close()) {
+      return;
+    }
+  }
+
+  for (int i = count() - 1; i >= 0; --i) {
+    remove_editor(i);
   }
 }
 

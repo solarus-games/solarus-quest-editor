@@ -607,6 +607,14 @@ void MainWindow::on_action_close_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Close all" action.
+ */
+void MainWindow::on_action_close_all_triggered() {
+
+  ui.tab_widget->close_all_files_requested();
+}
+
+/**
  * @brief Slot called when the user triggers the "Exit" action.
  */
 void MainWindow::on_action_exit_triggered() {
