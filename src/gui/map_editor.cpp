@@ -1290,6 +1290,11 @@ void MapEditor::change_num_layers_requested() {
       num_entities_removed += map->get_num_entities(layer);
     }
     if (num_entities_removed > 0) {
+      // Block spinbox signals to avoid reentrant calls to this function
+      // (because the dialog box takes focus from the spinbox, trigerring
+      // its signal again).
+      const bool was_blocked = ui.num_layers_field->signalsBlocked();
+      ui.num_layers_field->blockSignals(true);
       QMessageBox::StandardButton answer = QMessageBox::warning(
           this,
           tr("Layer not empty"),
@@ -1297,6 +1302,7 @@ void MapEditor::change_num_layers_requested() {
           QMessageBox::Ok | QMessageBox::Cancel,
           QMessageBox::Ok
       );
+      ui.num_layers_field->blockSignals(was_blocked);
       if (answer == QMessageBox::Cancel) {
         update_num_layers_field();
         return;
