@@ -40,10 +40,10 @@ EditorTabs::EditorTabs(QWidget* parent):
   undo_group(new QUndoGroup(this)),
   quest(nullptr) {
 
-  setMovable(true);
-
   ClosableTabBar* tab_bar = new ClosableTabBar();
   setTabBar(tab_bar);
+
+  setMovable(true);
 
   connect(tab_bar, SIGNAL(tabCloseRequested(int)),
           this, SLOT(close_file_requested(int)));
