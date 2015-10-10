@@ -585,6 +585,16 @@ void MainWindow::on_action_save_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Save all" action.
+ */
+void MainWindow::on_action_save_all_triggered() {
+
+  for (int i = 0; i < ui.tab_widget->count(); ++i) {
+    ui.tab_widget->save_file_requested(i);
+  }
+}
+
+/**
  * @brief Slot called when the user triggers the "Close" action.
  */
 void MainWindow::on_action_close_triggered() {

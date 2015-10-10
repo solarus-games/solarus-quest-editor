@@ -338,7 +338,7 @@ void EditorTabs::add_editor(Editor* editor) {
 
   // Show an asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
-          this, SLOT(modification_state_changed(bool)));
+          this, SLOT(current_editor_modification_state_changed(bool)));
 
   connect(editor, SIGNAL(open_file_requested(Quest&, QString)),
           this, SLOT(open_file_requested(Quest&, QString)));
@@ -437,6 +437,7 @@ void EditorTabs::save_file_requested(int index) {
   try {
     editor->save();
     editor->get_undo_stack().setClean();
+    modification_state_changed(index, true);
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -619,17 +620,29 @@ void EditorTabs::current_editor_changed(int /* index */) {
  * @param clean @c true if the file is now clean, @c false if it is now
  * modified.
  */
-void EditorTabs::modification_state_changed(bool clean) {
+void EditorTabs::current_editor_modification_state_changed(bool clean) {
 
-  if (count() == 0) {
+  modification_state_changed(currentIndex(), clean);
+}
+
+/**
+ * @brief Slot called when the is-modified state of a tab has changed.
+ * @param index Index of a tab.
+ * @param clean @c true if the file is now clean, @c false if it is now
+ * modified.
+ */
+void EditorTabs::modification_state_changed(int index, bool clean) {
+
+  Editor* editor = get_editor(index);
+  if (editor == nullptr) {
     return;
   }
 
-  QString title = get_editor()->get_title();
+  QString title = editor->get_title();
   if (!clean) {
     title += '*';
   }
-  setTabText(currentIndex(), title);
+  setTabText(index, title);
 }
 
 /**

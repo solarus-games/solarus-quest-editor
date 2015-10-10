@@ -6,6 +6,7 @@ ________________________________________
 New features
 ------------
 
+* Allow to save all open files at once (#98).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding are now 0, 1 and 2, etc.
 * Map editor: fix entities still shown when put on a hidden layer.

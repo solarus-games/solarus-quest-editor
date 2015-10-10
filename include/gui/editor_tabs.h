@@ -85,7 +85,8 @@ protected:
 private slots:
 
   void current_editor_changed(int index);
-  void modification_state_changed(bool modified);
+  void current_editor_modification_state_changed(bool clean);
+  void modification_state_changed(int index, bool clean);
 
 private:
 
