@@ -409,15 +409,30 @@ void TextEditorWidget::keyPressEvent(QKeyEvent* event) {
     return;
   }
 
+  const bool control = event->modifiers() & Qt::ControlModifier;
   if (event->key() == Qt::Key_Tab) {
-    insert_tab();
-    event->accept();
+    if (!control) {
+      // Indent to the right.
+      insert_tab();
+      event->accept();
+    }
+    else {
+      // Don't eat the event, let it propagate to the tab widget.
+      event->ignore();
+    }
     return;
   }
 
   if (event->key() == Qt::Key_Backtab) {
-    remove_tab();
-    event->accept();
+    if (!control) {
+      // Indent to the left.
+      remove_tab();
+      event->accept();
+    }
+    else {
+      // Don't eat the event, let it propagate to the tab widget.
+      event->ignore();
+    }
     return;
   }
 

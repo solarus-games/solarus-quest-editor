@@ -44,6 +44,7 @@ EditorTabs::EditorTabs(QWidget* parent):
   setTabBar(tab_bar);
 
   setMovable(true);
+  setFocusPolicy(Qt::StrongFocus);
 
   connect(tab_bar, SIGNAL(tabCloseRequested(int)),
           this, SLOT(close_file_requested(int)));
@@ -631,6 +632,8 @@ void EditorTabs::current_editor_changed(int /* index */) {
     emit can_cut_changed(editor->can_cut());
     emit can_copy_changed(editor->can_copy());
     emit can_paste_changed(editor->can_paste());
+
+    editor->setFocus();
   }
 }
 
@@ -667,25 +670,29 @@ void EditorTabs::modification_state_changed(int index, bool clean) {
 /**
  * @brief Receives a key press event.
  *
- * Reimplemented to switch tabs with Ctrl+Tab.
- * TODO move this as actions of MainWindow to make it work from anywhere
+ * Reimplemented to switch tabs with Ctrl+Tab and Ctrl+PageUp or
+ * Ctrl+Shift+Tab and Ctrl+PageDown.
  *
  * @param event The event to handle.
  */
 void EditorTabs::keyPressEvent(QKeyEvent* event) {
 
-  if (event == QKeySequence::NextChild) {
-    if (count() > 1) {
-      setCurrentIndex((currentIndex() + 1) % count());
-    }
-    return;
-  }
+  const bool control = event->modifiers() & Qt::ControlModifier;
+  const bool shift = event->modifiers() & Qt::ShiftModifier;
+  const int key = event->key();
 
-  if (event == QKeySequence::PreviousChild) {
-    if (count() > 1) {
-      setCurrentIndex((currentIndex() + count() - 1) % count());
+  if (count() > 1) {
+    if ((control && key == Qt::Key_PageDown) ||
+        (control && key == Qt::Key_Tab)) {
+      setCurrentIndex((currentIndex() + 1) % count());
+      return;
     }
-    return;
+
+    if ((control && key == Qt::Key_PageUp) ||
+      (control && shift && key == Qt::Key_Tab)) {
+      setCurrentIndex((currentIndex() + count() - 1) % count());
+      return;
+    }
   }
 
   QTabWidget::keyPressEvent(event);
