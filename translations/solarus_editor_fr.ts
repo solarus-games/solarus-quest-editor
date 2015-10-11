@@ -1137,101 +1137,121 @@
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="77"/>
+        <location filename="../src/gui/main_window.ui" line="79"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="90"/>
+        <location filename="../src/gui/main_window.ui" line="92"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="96"/>
+        <location filename="../src/gui/main_window.ui" line="98"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="106"/>
+        <location filename="../src/gui/main_window.ui" line="108"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="113"/>
+        <location filename="../src/gui/main_window.ui" line="115"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="149"/>
+        <location filename="../src/gui/main_window.ui" line="151"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="154"/>
+        <location filename="../src/gui/main_window.ui" line="156"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="159"/>
+        <location filename="../src/gui/main_window.ui" line="161"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="168"/>
-        <location filename="../src/gui/main_window.cpp" line="1032"/>
+        <location filename="../src/gui/main_window.ui" line="170"/>
+        <location filename="../src/gui/main_window.cpp" line="1082"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="171"/>
+        <location filename="../src/gui/main_window.ui" line="173"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="242"/>
-        <location filename="../src/gui/main_window.ui" line="245"/>
+        <location filename="../src/gui/main_window.ui" line="244"/>
+        <location filename="../src/gui/main_window.ui" line="247"/>
         <source>Show layer 0</source>
         <translation>Afficher la couche 0</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="248"/>
+        <location filename="../src/gui/main_window.ui" line="250"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="263"/>
-        <location filename="../src/gui/main_window.ui" line="266"/>
+        <location filename="../src/gui/main_window.ui" line="265"/>
+        <location filename="../src/gui/main_window.ui" line="268"/>
         <source>Show layer 1</source>
         <translation>Afficher la couche 1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="269"/>
+        <location filename="../src/gui/main_window.ui" line="271"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="284"/>
-        <location filename="../src/gui/main_window.ui" line="287"/>
+        <location filename="../src/gui/main_window.ui" line="286"/>
+        <location filename="../src/gui/main_window.ui" line="289"/>
         <source>Show layer 2</source>
         <translation>Afficher la couche 2</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="290"/>
+        <location filename="../src/gui/main_window.ui" line="292"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="330"/>
+        <location filename="../src/gui/main_window.ui" line="332"/>
         <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="316"/>
+        <location filename="../src/gui/main_window.ui" line="337"/>
+        <source>Save all</source>
+        <translation>Enregistrer tout</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="340"/>
+        <source>Ctrl+Shift+S</source>
+        <translation>Ctrl+Shift+S</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="345"/>
+        <source>Close all</source>
+        <translation>Fermer tout</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="348"/>
+        <source>Ctrl+Shift+W</source>
+        <translation>Ctrl+Shift+W</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.ui" line="318"/>
         <source>Find...</source>
         <translation>Rechercher...</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="321"/>
+        <location filename="../src/gui/main_window.ui" line="323"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
@@ -1240,37 +1260,37 @@
         <translation type="vanished">Paramètres</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="180"/>
+        <location filename="../src/gui/main_window.ui" line="182"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="189"/>
+        <location filename="../src/gui/main_window.ui" line="191"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="198"/>
+        <location filename="../src/gui/main_window.ui" line="200"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="203"/>
+        <location filename="../src/gui/main_window.ui" line="205"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="212"/>
+        <location filename="../src/gui/main_window.ui" line="214"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="224"/>
+        <location filename="../src/gui/main_window.ui" line="226"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="227"/>
+        <location filename="../src/gui/main_window.ui" line="229"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
@@ -1299,17 +1319,17 @@
         <translation type="vanished">Ctrl+3</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="299"/>
+        <location filename="../src/gui/main_window.ui" line="301"/>
         <source>Documentation</source>
         <translation>Documentation</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="302"/>
+        <location filename="../src/gui/main_window.ui" line="304"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.ui" line="311"/>
+        <location filename="../src/gui/main_window.ui" line="313"/>
         <source>Website</source>
         <translation>Site web</translation>
     </message>
@@ -1442,43 +1462,53 @@ Your quest was kept unchanged in format %1.</source>
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1029"/>
+        <location filename="../src/gui/main_window.cpp" line="702"/>
+        <source>Files are modified</source>
+        <translation>Modifications non sauvegardées</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="703"/>
+        <source>Do you want to save modifications before running the quest?</source>
+        <translation>Enregistrer les modifications avant de lancer la quête ?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/main_window.cpp" line="1079"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1042"/>
+        <location filename="../src/gui/main_window.cpp" line="1092"/>
         <source>Quest terminated unexpectedly: %1</source>
         <translation>La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1130"/>
+        <location filename="../src/gui/main_window.cpp" line="1180"/>
         <source>File modified</source>
         <translation>Fichier en cours de modification</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1131"/>
+        <location filename="../src/gui/main_window.cpp" line="1181"/>
         <source>This file is open and has unsaved changes.
 Please save it or close it before renaming.</source>
         <translation>Ce fichier est ouvert et a été modifié.\nVeuillez le sauvegarder ou le fermer avant de le renommer.</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1153"/>
+        <location filename="../src/gui/main_window.cpp" line="1203"/>
         <source>Rename resource</source>
         <translation>Renommer la ressource</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1154"/>
+        <location filename="../src/gui/main_window.cpp" line="1204"/>
         <source>New id for %1 &apos;%2&apos;:</source>
         <translation>Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1170"/>
+        <location filename="../src/gui/main_window.cpp" line="1220"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1171"/>
+        <location filename="../src/gui/main_window.cpp" line="1221"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
@@ -1487,12 +1517,12 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1012"/>
+        <location filename="../src/gui/main_window.cpp" line="1062"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/gui/main_window.cpp" line="1059"/>
+        <location filename="../src/gui/main_window.cpp" line="1109"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -3498,94 +3528,114 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Éxécution</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="66"/>
+        <location filename="../src/gui/settings_dialog.ui" line="68"/>
+        <source>Save modified files before running:</source>
+        <translation>Enregistrer les fichiers avant de lancer :</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="76"/>
+        <source>Ask</source>
+        <translation>Demander</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="81"/>
+        <source>Yes</source>
+        <translation>Oui</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="86"/>
+        <source>No</source>
+        <translation>Non</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/settings_dialog.ui" line="109"/>
         <source>No audio</source>
         <translation>Désactiver l&apos;audio</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="73"/>
+        <location filename="../src/gui/settings_dialog.ui" line="116"/>
         <source>Video acceleration</source>
         <translation>Accélération vidéo</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="80"/>
+        <location filename="../src/gui/settings_dialog.ui" line="123"/>
         <source>Show console (only needed on Windows)</source>
         <translation>Afficher une console (nécéssaire uniquement sous Windows)</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="89"/>
+        <location filename="../src/gui/settings_dialog.ui" line="132"/>
         <source>Quest size:</source>
         <translation>Taille de la quête :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="189"/>
+        <location filename="../src/gui/settings_dialog.ui" line="232"/>
         <source>Tabulation</source>
         <translation>Tabulation</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="195"/>
+        <location filename="../src/gui/settings_dialog.ui" line="238"/>
         <source>Length:</source>
         <translation>Longueur :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="228"/>
+        <location filename="../src/gui/settings_dialog.ui" line="271"/>
         <source>Replace by space</source>
         <translation>Remplacer par des espaces</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="311"/>
-        <location filename="../src/gui/settings_dialog.ui" line="478"/>
+        <location filename="../src/gui/settings_dialog.ui" line="354"/>
+        <location filename="../src/gui/settings_dialog.ui" line="521"/>
         <source>Grid:</source>
         <translation>Grille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="344"/>
-        <location filename="../src/gui/settings_dialog.ui" line="521"/>
-        <location filename="../src/gui/settings_dialog.ui" line="618"/>
+        <location filename="../src/gui/settings_dialog.ui" line="387"/>
+        <location filename="../src/gui/settings_dialog.ui" line="564"/>
+        <location filename="../src/gui/settings_dialog.ui" line="661"/>
         <source>Show at opening</source>
         <translation>Afficher à l&apos;ouverture</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="361"/>
-        <location filename="../src/gui/settings_dialog.ui" line="544"/>
+        <location filename="../src/gui/settings_dialog.ui" line="404"/>
+        <location filename="../src/gui/settings_dialog.ui" line="587"/>
         <source>Default size:</source>
         <translation>Taille par défaut :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="368"/>
-        <location filename="../src/gui/settings_dialog.ui" line="551"/>
+        <location filename="../src/gui/settings_dialog.ui" line="411"/>
+        <location filename="../src/gui/settings_dialog.ui" line="594"/>
         <source>Style:</source>
         <translation>Style :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="375"/>
-        <location filename="../src/gui/settings_dialog.ui" line="558"/>
-        <location filename="../src/gui/settings_dialog.ui" line="625"/>
+        <location filename="../src/gui/settings_dialog.ui" line="418"/>
+        <location filename="../src/gui/settings_dialog.ui" line="601"/>
+        <location filename="../src/gui/settings_dialog.ui" line="668"/>
         <source>Color:</source>
         <translation>Couleur :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="432"/>
+        <location filename="../src/gui/settings_dialog.ui" line="475"/>
         <source>Sprite editor</source>
         <translation>Éditeur de sprite</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="438"/>
+        <location filename="../src/gui/settings_dialog.ui" line="481"/>
         <source>Main graphics view</source>
         <translation>Vue graphique principale</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="565"/>
+        <location filename="../src/gui/settings_dialog.ui" line="608"/>
         <source>Auto detect size</source>
         <translation>Détecter la taille automatiquement</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="592"/>
+        <location filename="../src/gui/settings_dialog.ui" line="635"/>
         <source>Previewer graphics view</source>
         <translation>Prévisualisation</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="709"/>
+        <location filename="../src/gui/settings_dialog.ui" line="752"/>
         <source>Origin:</source>
         <translation>Origine :</translation>
     </message>
@@ -3594,39 +3644,39 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation type="vanished">x</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="118"/>
+        <location filename="../src/gui/settings_dialog.ui" line="161"/>
         <source>Text editor</source>
         <translation>Éditeur de texte</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="124"/>
+        <location filename="../src/gui/settings_dialog.ui" line="167"/>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="130"/>
+        <location filename="../src/gui/settings_dialog.ui" line="173"/>
         <source>Family:</source>
         <translation>Famille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="164"/>
+        <location filename="../src/gui/settings_dialog.ui" line="207"/>
         <source>Size:</source>
         <translation>Taille :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="265"/>
+        <location filename="../src/gui/settings_dialog.ui" line="308"/>
         <source>Map editor</source>
         <translation>Éditeur de map</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="271"/>
+        <location filename="../src/gui/settings_dialog.ui" line="314"/>
         <source>Graphics view</source>
         <translation>Vue graphique</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.ui" line="279"/>
-        <location filename="../src/gui/settings_dialog.ui" line="446"/>
-        <location filename="../src/gui/settings_dialog.ui" line="675"/>
+        <location filename="../src/gui/settings_dialog.ui" line="322"/>
+        <location filename="../src/gui/settings_dialog.ui" line="489"/>
+        <location filename="../src/gui/settings_dialog.ui" line="718"/>
         <source>Background color:</source>
         <translation>Couleur de fond :</translation>
     </message>
@@ -3635,17 +3685,17 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation type="vanished">Taille de grille par défaut :</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="136"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="138"/>
         <source>Restore default settings</source>
         <translation>Restaurer les paramètres par défaut</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="137"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="139"/>
         <source>Do you really want to restore default settings?</source>
         <translation>Voulez-vous vraiment restaurer les paramètres par défaut ?</translation>
     </message>
     <message>
-        <location filename="../src/gui/settings_dialog.cpp" line="252"/>
+        <location filename="../src/gui/settings_dialog.cpp" line="255"/>
         <source>Working directory</source>
         <translation>Répertoire de travail</translation>
     </message>
