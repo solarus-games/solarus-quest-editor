@@ -112,7 +112,7 @@ EntityModelPtr EntityModel::create(
     return nullptr;
   }
 
-  if (!data.import_from_buffer(entity_string.toStdString())) {
+  if (!data.import_from_buffer(entity_string.toStdString(), "entity")) {
     return nullptr;
   }
 
