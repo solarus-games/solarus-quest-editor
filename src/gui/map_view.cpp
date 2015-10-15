@@ -50,9 +50,13 @@ public:
   DoingNothingState(MapView& view);
 
   void mouse_pressed(const QMouseEvent& event) override;
+  void mouse_moved(const QMouseEvent& event) override;
+  void mouse_released(const QMouseEvent& event) override;
   void context_menu_requested(const QPoint& where) override;
   void tileset_selection_changed() override;
 
+private:
+  bool clicked_with_control_or_shift;
 };
 
 /**
@@ -1351,7 +1355,8 @@ void MapView::State::tileset_selection_changed() {
  * @param view The map view to manage.
  */
 DoingNothingState::DoingNothingState(MapView& view) :
-  MapView::State(view) {
+  MapView::State(view),
+  clicked_with_control_or_shift(false) {
 
 }
 
@@ -1371,8 +1376,8 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
   QList<QGraphicsItem*> items_under_mouse = view.items(
         QRect(event.pos(), QSize(1, 1)),
         Qt::IntersectsItemBoundingRect  // Pick transparent items too.
-        );
-  QGraphicsItem* item = items_under_mouse.empty() ? nullptr : items_under_mouse.first();
+  );
+  QGraphicsItem* item = items_under_mouse.isEmpty() ? nullptr : items_under_mouse.first();
 
   const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
 
@@ -1395,8 +1400,9 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
     if (item != nullptr) {
 
       if (control_or_shift) {
-        // Left-clicking an item while pressing control or shift: toggle it.
-        item->setSelected(!item->isSelected());
+        // Either toggle the clicked item or start a selection rectangle.
+        // If will depend on wether the mouse moves before it is released.
+        clicked_with_control_or_shift = true;
       }
       else {
         if (!item->isSelected()) {
@@ -1421,6 +1427,46 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
         item->setSelected(true);
       }
     }
+  }
+}
+
+/**
+ * @copydoc MapView::State::mouse_moved
+ */
+void DoingNothingState::mouse_moved(const QMouseEvent& event) {
+
+  if (clicked_with_control_or_shift) {
+    // Clicking with control or shift and then moving the mouse:
+    // start a selection rectangle.
+    MapView& view = get_view();
+    view.start_state_drawing_rectangle(event.pos());
+  }
+}
+
+/**
+ * @copydoc MapView::State::mouse_released
+ */
+void DoingNothingState::mouse_released(const QMouseEvent& event) {
+
+  if (event.button() != Qt::LeftButton) {
+    return;
+  }
+
+  if (clicked_with_control_or_shift) {
+    // Left-clicking an item while pressing control or shift: toggle it.
+    // If the mouse had moved in the meantime, mouse_moved() would have started
+    // a selection rectangle.
+    MapView& view = get_view();
+
+    QList<QGraphicsItem*> items_under_mouse = view.items(
+          QRect(event.pos(), QSize(1, 1)),
+          Qt::IntersectsItemBoundingRect  // Pick transparent items too.
+    );
+    QGraphicsItem* item = items_under_mouse.isEmpty() ? nullptr : items_under_mouse.first();
+    if (item != nullptr) {
+      item->setSelected(!item->isSelected());
+    }
+    clicked_with_control_or_shift = false;
   }
 }
 
@@ -1518,7 +1564,6 @@ void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
   for (QGraphicsItem* item : initial_selection) {
       item->setSelected(true);
   }
-  return;
 }
 
 /**
@@ -1529,7 +1574,6 @@ void DrawingRectangleState::mouse_released(const QMouseEvent& event) {
   Q_UNUSED(event);
 
   get_view().start_state_doing_nothing();
-  return;
 }
 
 /**
