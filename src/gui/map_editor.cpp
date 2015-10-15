@@ -243,7 +243,7 @@ public:
     }
 
     // Make it selected.
-    get_map_view().set_selected_entity(index_before);
+    get_map_view().set_only_selected_entity(index_before);
   }
 
   void redo() override {
@@ -280,7 +280,7 @@ public:
     map.add_entities(std::move(addable_entities));
 
     // Make the new one selected.
-    get_map_view().set_selected_entity(index_after);
+    get_map_view().set_only_selected_entity(index_after);
   }
 
 private:
@@ -1548,6 +1548,21 @@ void MapEditor::map_selection_changed() {
   bool empty_selection = ui.map_view->is_selection_empty();
   can_cut_changed(!empty_selection);
   can_copy_changed(!empty_selection);
+
+  // Nofify the tileset view if of selected tile patterns.
+  TilesetModel* tileset = ui.tileset_view->get_model();
+  if (tileset != nullptr) {
+    const EntityIndexes& entity_indexes = ui.map_view->get_selected_entities();
+    MapModel& map = get_map();
+    QList<int> pattern_indexes;
+    for (const EntityIndex& entity_index : entity_indexes) {
+      QString pattern_id = map.get_entity_field(entity_index, "pattern").toString();
+      if (!pattern_id.isEmpty()) {
+        pattern_indexes << tileset->id_to_index(pattern_id);
+      }
+    }
+    tileset->set_selected_indexes(pattern_indexes);
+  }
 }
 
 /**

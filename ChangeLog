@@ -29,6 +29,7 @@ Bugfix release for the 1.4 branch.
 * Add keyboard shortcut (F4) to switch between map view and map script (#75).
 * Map editor: fix entity being moved after closing its dialog (#76).
 * Map editor: start selection when clicking a tile with control/shift (#47).
+* Map editor: synchronize tile patterns selection from map selection (#35).
 * Sprite editor: improve auto-selection after removing a direction (#70).
 * Dialogs/strings editor: add a duplicate button (#72).
 * Dialogs/strings editor: Shows also missing marks on parent nodes (#68).

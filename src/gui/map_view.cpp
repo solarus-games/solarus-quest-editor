@@ -168,6 +168,7 @@ MapView::MapView(QWidget* parent) :
   view_settings(nullptr),
   zoom(1.0),
   state(),
+  tileset_selection_changed_blocked(false),
   common_actions(nullptr),
   edit_action(nullptr),
   resize_action(nullptr),
@@ -937,6 +938,11 @@ void MapView::tileset_selection_changed() {
     return;
   }
 
+  if (tileset_selection_changed_blocked) {
+    // Ignored.
+    return;
+  }
+
   state->tileset_selection_changed();
 }
 
@@ -1151,14 +1157,33 @@ void MapView::set_selected_entities(const EntityIndexes& indexes) {
 }
 
 /**
- * @brief Selects the specified entity and unselect the rest.
+ * @brief Selects the specified entity and unselects the rest.
  * @param index Index of the entity to make selecteded.
  */
-void MapView::set_selected_entity(const EntityIndex& index) {
+void MapView::set_only_selected_entity(const EntityIndex& index) {
 
   EntityIndexes indexes;
   indexes << index;
   set_selected_entities(indexes);
+}
+
+/**
+ * @brief Selects or unselects an entity.
+ * @param entity The entity to change.
+ * @param selected @c true to select it.
+ */
+void MapView::select_entity(const EntityIndex& index, bool selected) {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  // Make sure that the tileset view does not trigger adding new entities
+  // from newly selected patterns.
+  bool was_blocked = tileset_selection_changed_blocked;
+  tileset_selection_changed_blocked = true;
+  scene->select_entity(index, selected);
+  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**
@@ -1440,6 +1465,7 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
         Qt::IntersectsItemBoundingRect  // Pick transparent items too.
   );
   QGraphicsItem* item = items_under_mouse.isEmpty() ? nullptr : items_under_mouse.first();
+  const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(item);
 
   const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
 
@@ -1469,7 +1495,9 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
       else {
         if (!item->isSelected()) {
           // Select the item.
-          item->setSelected(true);
+          if (entity_item != nullptr) {
+            view.select_entity(entity_item->get_index(), true);
+          }
         }
         // Allow to move selected items.
         view.start_state_moving_entities(event.pos());
@@ -1483,10 +1511,10 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
 
   else if (event.button() == Qt::RightButton) {
 
-    if (item != nullptr) {
-      if (!item->isSelected()) {
+    if (entity_item != nullptr) {
+      if (!entity_item->isSelected()) {
         // Select the right-clicked item.
-        item->setSelected(true);
+        view.select_entity(entity_item->get_index(), true);
       }
     }
   }
@@ -1525,8 +1553,9 @@ void DoingNothingState::mouse_released(const QMouseEvent& event) {
           Qt::IntersectsItemBoundingRect  // Pick transparent items too.
     );
     QGraphicsItem* item = items_under_mouse.isEmpty() ? nullptr : items_under_mouse.first();
-    if (item != nullptr) {
-      item->setSelected(!item->isSelected());
+    const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(item);
+    if (entity_item != nullptr) {
+      view.select_entity(entity_item->get_index(), !item->isSelected());
     }
     clicked_with_control_or_shift = false;
   }
@@ -1624,7 +1653,8 @@ void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
 
   // Also restore the initial selection.
   for (QGraphicsItem* item : initial_selection) {
-      item->setSelected(true);
+    const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(item);
+    view.select_entity(entity_item->get_index(), true);
   }
 }
 

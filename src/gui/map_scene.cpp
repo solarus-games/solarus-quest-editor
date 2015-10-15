@@ -537,6 +537,18 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
 }
 
 /**
+ * @brief Selects or unselects an entity.
+ * @param entity The entity to change.
+ * @param selected @c true to select it.
+ */
+void MapScene::select_entity(const EntityIndex& index, bool selected) {
+
+  EntityItem* item = get_entity_item(index);
+  Q_ASSERT(item != nullptr);
+  item->setSelected(selected);
+}
+
+/**
  * @brief Selects all entities of the map.
  */
 void MapScene::select_all() {

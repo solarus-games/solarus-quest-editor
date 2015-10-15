@@ -87,6 +87,15 @@ TilesetView::TilesetView(QWidget* parent) :
 }
 
 /**
+ * @brief Returns the tileset represented in this view.
+ * @return The tileset, or nullptr if there is currently no tileset.
+ */
+TilesetModel* TilesetView::get_model() {
+
+  return this->model;
+}
+
+/**
  * @brief Sets the tileset to represent in this view.
  * @param model The tileset model, or nullptr to remove any model.
  * This class does not take ownership on the model.
