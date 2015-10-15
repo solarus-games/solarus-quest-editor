@@ -1257,7 +1257,7 @@ bool MapModel::has_entity_field(const EntityIndex& index, const QString& key) co
 QVariant MapModel::get_entity_field(const EntityIndex& index, const QString& key) const {
 
   if (!entity_exists(index)) {
-    return QPoint();
+    return QVariant();
   }
 
   return get_entity(index).get_field(key);

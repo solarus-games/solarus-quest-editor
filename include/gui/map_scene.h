@@ -49,6 +49,7 @@ public:
 
   EntityIndexes get_selected_entities();
   void set_selected_entities(const EntityIndexes& indexes);
+  void select_entity(const EntityIndex& index, bool selected);
 
   Layer get_layer_in_rectangle(
       const QRect& rectangle

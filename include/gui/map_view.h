@@ -81,7 +81,8 @@ public:
   int get_num_selected_entities() const;
   EntityIndexes get_selected_entities() const;
   void set_selected_entities(const EntityIndexes& indexes);
-  void set_selected_entity(const EntityIndex& index);
+  void set_only_selected_entity(const EntityIndex& index);
+  void select_entity(const EntityIndex& index, bool selected);
   EntityModels clone_selected_entities() const;
 
   // Information about entities.
@@ -174,6 +175,8 @@ private:
       view_settings;               /**< What is displayed in the view. */
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
+  bool tileset_selection_changed_blocked;   /**< Whether we should ignore when
+                                    * the tileset selection changes. */
 
   // Actions of the context menu.
   const QMap<QString, QAction*>*

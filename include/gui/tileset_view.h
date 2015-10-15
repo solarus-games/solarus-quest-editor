@@ -39,6 +39,7 @@ public:
 
   TilesetView(QWidget* parent = nullptr);
 
+  TilesetModel* get_model();
   void set_model(TilesetModel* tileset);
   void set_view_settings(ViewSettings& view_settings);
   bool is_read_only() const;
