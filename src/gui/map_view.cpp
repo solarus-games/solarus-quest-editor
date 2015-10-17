@@ -1153,7 +1153,14 @@ void MapView::set_selected_entities(const EntityIndexes& indexes) {
     return;
   }
 
+  // Make sure that the tileset view does not trigger adding new entities
+  // from newly selected patterns.
+  bool was_blocked = tileset_selection_changed_blocked;
+  tileset_selection_changed_blocked = true;
+
   scene->set_selected_entities(indexes);
+
+  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**
@@ -1164,7 +1171,15 @@ void MapView::set_only_selected_entity(const EntityIndex& index) {
 
   EntityIndexes indexes;
   indexes << index;
+
+  // Make sure that the tileset view does not trigger adding new entities
+  // from newly selected patterns.
+  bool was_blocked = tileset_selection_changed_blocked;
+  tileset_selection_changed_blocked = true;
+
   set_selected_entities(indexes);
+
+  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**
@@ -1182,7 +1197,9 @@ void MapView::select_entity(const EntityIndex& index, bool selected) {
   // from newly selected patterns.
   bool was_blocked = tileset_selection_changed_blocked;
   tileset_selection_changed_blocked = true;
+
   scene->select_entity(index, selected);
+
   tileset_selection_changed_blocked = was_blocked;
 }
 
