@@ -1273,10 +1273,17 @@ void TilesetModel::set_selected_index(int index) {
  */
 void TilesetModel::set_selected_indexes(const QList<int>& indexes) {
 
+  const QModelIndexList& current_selection = selection_model.selectedIndexes();
+
   QItemSelection selection;
   for (int index : indexes) {
     QModelIndex model_index = this->index(index);
     selection.select(model_index, model_index);
+  }
+
+  if (selection.indexes() == current_selection) {
+    // No change.
+    return;
   }
 
   selection_model.select(selection, QItemSelectionModel::ClearAndSelect);
