@@ -589,12 +589,16 @@ public:
   }
 
   void undo() override {
+
+    MapEditor::TilesetSelectionChangedBlocker blocker(get_editor());
     get_map().undo_set_entities_layer(indexes_after, indexes_before);
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes_before);
   }
 
   void redo() override {
+
+    MapEditor::TilesetSelectionChangedBlocker blocker(get_editor());
     indexes_after = get_map().set_entities_layer(indexes_before, layer_after);
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes_after);
@@ -804,7 +808,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   map(nullptr),
   entity_creation_toolbar(nullptr),
   status_bar(nullptr),
-  ignore_tileset_selection_changes(false) {
+  tileset_selection_changed_blocked(false) {
 
   ui.setupUi(this);
   build_entity_creation_toolbar();
@@ -1410,7 +1414,7 @@ void MapEditor::tileset_id_changed(const QString& tileset_id) {
  */
 void MapEditor::tileset_selection_changed() {
 
-  if (ignore_tileset_selection_changes) {
+  if (tileset_selection_changed_blocked) {
     return;
   }
 
@@ -1674,9 +1678,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     TilesetModel* tileset = map->get_tileset_model();
     if (tileset != nullptr) {
       // But don't react to this unselection, it does not come from the user.
-      ignore_tileset_selection_changes = true;
+      TilesetSelectionChangedBlocker blocker(*this);
       tileset->clear_selection();
-      ignore_tileset_selection_changes = false;
     }
 
     // Uncheck other entity creation buttons.
