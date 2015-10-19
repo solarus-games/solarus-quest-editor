@@ -159,7 +159,6 @@ MapView::MapView(QWidget* parent) :
   view_settings(nullptr),
   zoom(1.0),
   state(),
-  tileset_selection_changed_blocked(false),
   common_actions(nullptr),
   edit_action(nullptr),
   resize_action(nullptr),
@@ -883,18 +882,14 @@ void MapView::update_entity_type_visibility(EntityType type) {
 }
 /**
 
- * @brief Slot called when the pattern selection of the tileset is changed.
+ * @brief Function called when the pattern selection of the tileset is changed
+ * by the user.
  *
  * Tiles with these new patterns are added if possible.
  */
 void MapView::tileset_selection_changed() {
 
   if (state == nullptr) {
-    return;
-  }
-
-  if (tileset_selection_changed_blocked) {
-    // Ignored.
     return;
   }
 
@@ -1091,14 +1086,7 @@ void MapView::set_selected_entities(const EntityIndexes& indexes) {
     return;
   }
 
-  // Make sure that the tileset view does not trigger adding new entities
-  // from newly selected patterns.
-  bool was_blocked = tileset_selection_changed_blocked;
-  tileset_selection_changed_blocked = true;
-
   scene->set_selected_entities(indexes);
-
-  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**
@@ -1110,14 +1098,7 @@ void MapView::set_only_selected_entity(const EntityIndex& index) {
   EntityIndexes indexes;
   indexes << index;
 
-  // Make sure that the tileset view does not trigger adding new entities
-  // from newly selected patterns.
-  bool was_blocked = tileset_selection_changed_blocked;
-  tileset_selection_changed_blocked = true;
-
   set_selected_entities(indexes);
-
-  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**
@@ -1131,14 +1112,7 @@ void MapView::select_entity(const EntityIndex& index, bool selected) {
     return;
   }
 
-  // Make sure that the tileset view does not trigger adding new entities
-  // from newly selected patterns.
-  bool was_blocked = tileset_selection_changed_blocked;
-  tileset_selection_changed_blocked = true;
-
   scene->select_entity(index, selected);
-
-  tileset_selection_changed_blocked = was_blocked;
 }
 
 /**

@@ -55,6 +55,7 @@ signals:
   void change_selected_patterns_default_layer_requested(Layer layer);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
+  void selection_changed_by_user();
 
 public slots:
 

@@ -106,25 +106,6 @@ private:
   MapModel* map;                            /**< Map model being edited. */
   QToolBar* entity_creation_toolbar;        /**< Toolbar allowing to add each type of entity. */
   QStatusBar* status_bar;                   /**< Status bar with information about the map view. */
-  bool tileset_selection_changed_blocked;   /**< Blocks the tileset_selection_changed() slot. */
-
-public:
-
-  struct TilesetSelectionChangedBlocker {
-
-    TilesetSelectionChangedBlocker(MapEditor& editor):
-      editor(editor),
-      was_blocked(editor.tileset_selection_changed_blocked) {
-      editor.tileset_selection_changed_blocked = true;
-    }
-
-    ~TilesetSelectionChangedBlocker() {
-      editor.tileset_selection_changed_blocked = was_blocked;
-    }
-
-    MapEditor& editor;
-    bool was_blocked;
-  };
 
 };
 
