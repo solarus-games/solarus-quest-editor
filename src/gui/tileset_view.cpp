@@ -346,6 +346,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       if (item != nullptr && !item->isSelected()) {
         // Select the right-clicked item.
         item->setSelected(true);
+        emit selection_changed_by_user();
       }
     }
   }
@@ -405,11 +406,13 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
           if (control_or_shift) {
             // Left-clicking an item while pressing control or shift: toggle it.
             item->setSelected(!item->isSelected());
+            emit selection_changed_by_user();
           }
           else {
             if (!item->isSelected()) {
               // Select the item.
               item->setSelected(true);
+              emit selection_changed_by_user();
             }
           }
         }
@@ -452,6 +455,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
       // The area has changed: recalculate the rectangle.
       QRect new_pattern_area = Rectangle::from_two_points(dragging_start_point, dragging_current_point);
       set_current_area(new_pattern_area);
+      emit selection_changed_by_user();
     }
   }
   else if (state == State::MOVING_PATTERN) {
@@ -860,6 +864,11 @@ void TilesetView::set_current_area(const QRect& area) {
     path.addRect(QRect(area.topLeft() - QPoint(1, 1),
                        area.size() + QSize(2, 2)));
     scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
+
+    // Re-select items that were already selected if Ctrl or Shift was pressed.
+    for (QGraphicsItem* item : initially_selected_items) {
+      item->setSelected(true);
+    }
   }
 
   if (state == State::MOVING_PATTERN) {
@@ -874,17 +883,12 @@ void TilesetView::set_current_area(const QRect& area) {
       current_area_item->setPen(QPen(Qt::red));
     }
   }
-
-  // Re-select items that were already selected if Ctrl or Shift was pressed.
-  for (QGraphicsItem* item : initially_selected_items) {
-    item->setSelected(true);
-  }
 }
 
 /**
  * @brief Returns all items that intersect the rectangle drawn by the user
  * except selected items.
- * @return The items thet intersect the drawn rectangle.
+ * @return The items that intersect the drawn rectangle.
  */
 QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
 

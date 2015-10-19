@@ -617,7 +617,6 @@ public:
 
   void undo() override {
 
-    MapEditor::TilesetSelectionChangedBlocker blocker(get_editor());
     get_map().undo_set_entities_layer(indexes_after, indexes_before);
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes_before);
@@ -625,7 +624,6 @@ public:
 
   void redo() override {
 
-    MapEditor::TilesetSelectionChangedBlocker blocker(get_editor());
     indexes_after = get_map().set_entities_layer(indexes_before, layer_after);
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes_after);
@@ -834,8 +832,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   map_id(),
   map(nullptr),
   entity_creation_toolbar(nullptr),
-  status_bar(nullptr),
-  tileset_selection_changed_blocked(false) {
+  status_bar(nullptr) {
 
   ui.setupUi(this);
   build_entity_creation_toolbar();
@@ -1520,24 +1517,17 @@ void MapEditor::tileset_id_changed(const QString& tileset_id) {
   update_tileset_view();
 
   // Watch the selection of the tileset to correctly add new tiles.
-  TilesetModel* tileset = map->get_tileset_model();
-  if (tileset != nullptr) {
-    connect(&tileset->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
-            this, SLOT(tileset_selection_changed()));
-  }
+  connect(ui.tileset_view, SIGNAL(selection_changed_by_user()),
+          this, SLOT(tileset_selection_changed()));
 
   // Notify the map view.
   ui.map_view->tileset_id_changed(tileset_id);
 }
 
 /**
- * @brief Slot called when the user changes the selection in the tileset.
+ * @brief Slot called when the user changes the selection in the tileset view.
  */
 void MapEditor::tileset_selection_changed() {
-
-  if (tileset_selection_changed_blocked) {
-    return;
-  }
 
   uncheck_entity_creation_buttons();
   ui.map_view->tileset_selection_changed();
@@ -1798,8 +1788,6 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     // Unselect patterns in the tileset.
     TilesetModel* tileset = map->get_tileset_model();
     if (tileset != nullptr) {
-      // But don't react to this unselection, it does not come from the user.
-      TilesetSelectionChangedBlocker blocker(*this);
       tileset->clear_selection();
     }
 

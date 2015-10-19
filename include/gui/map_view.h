@@ -175,8 +175,6 @@ private:
       view_settings;               /**< What is displayed in the view. */
   double zoom;                     /**< Zoom factor currently applied. */
   std::unique_ptr<State> state;    /**< Current state of the view. */
-  bool tileset_selection_changed_blocked;   /**< Whether we should ignore when
-                                    * the tileset selection changes. */
 
   // Actions of the context menu.
   const QMap<QString, QAction*>*
