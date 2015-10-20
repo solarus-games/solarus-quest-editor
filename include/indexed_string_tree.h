@@ -30,7 +30,7 @@ class IndexedStringTree {
 
 public:
 
-  IndexedStringTree(const QString& separator = ".");
+  explicit IndexedStringTree(const QString& separator = ".");
 
   bool key_exists(const QString& key) const;
   int get_index(const QString& key) const;
