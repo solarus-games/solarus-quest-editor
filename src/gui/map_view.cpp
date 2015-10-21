@@ -1645,6 +1645,12 @@ void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
   QRect area = Rectangle::from_two_points(initial_point, current_point);
   current_area_item->setRect(area);
 
+  bool was_blocked = scene.signalsBlocked();
+  if (!initial_selection.isEmpty()) {
+    // Block QGraphicsScene::selectionChanged() signal for individual selects.
+    scene.blockSignals(true);
+  }
+
   // Select items strictly in the rectangle.
   scene.clearSelection();
   QPainterPath path;
@@ -1653,8 +1659,15 @@ void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
   scene.setSelectionArea(path, Qt::ContainsItemBoundingRect);
 
   // Also restore the initial selection.
-  for (QGraphicsItem* item : initial_selection) {
-    const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(item);
+  for (int i = 0; i < initial_selection.size(); ++i) {
+    const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(initial_selection[i]);
+
+    // Unblock signals before the last select.
+    if (i == initial_selection.size() - 1 ) {
+      // Last element.
+      scene.blockSignals(was_blocked);
+    }
+
     view.select_entity(entity_item->get_index(), true);
   }
 }
