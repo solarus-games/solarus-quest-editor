@@ -380,6 +380,8 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
     }
   }
 
+  // The parent class tracks mouse movements for internal needs
+  // such as anchoring the viewport to the mouse when zooming.
   QGraphicsView::mouseMoveEvent(event);
 }
 

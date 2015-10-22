@@ -419,6 +419,8 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
       }
     }
   }
+
+  QGraphicsView::mouseReleaseEvent(event);
 }
 
 /**
@@ -477,6 +479,10 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
       set_current_area(new_pattern_area);
     }
   }
+
+  // The parent class tracks mouse movements for internal needs
+  // such as anchoring the viewport to the mouse when zooming.
+  QGraphicsView::mouseMoveEvent(event);
 }
 
 /**
