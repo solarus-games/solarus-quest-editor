@@ -13,6 +13,7 @@ Bugfix release for the 1.4 branch.
 * Dialogs/strings editor: add a duplicate button (#72).
 * Dialogs/strings editor: Shows also missing marks on parent nodes (#68).
 * Fix crash on FreeBSD when running the quest (#112).
+* Fix crash on Mac OS X 64 bit.
 
 _______________________________________
 
