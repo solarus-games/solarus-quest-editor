@@ -15,6 +15,7 @@ New features
 * Map editor: shortcuts for showing/hiding are now 0, 1 and 2, etc.
 * Map editor: fix entities still shown when put on a hidden layer.
 * Map editor: fix precision when starting selection above existing entities.
+* Map editor: stop adding tiles when unselecting them from the tileset view.
 * Text editor: improve tabulation behavior (#43).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor configurations.

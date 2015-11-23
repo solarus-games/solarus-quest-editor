@@ -396,12 +396,19 @@ void TilesetView::mouseReleaseEvent(QMouseEvent* event) {
       }
 
       if (!keep_selected) {
+        bool selection_was_empty = get_model()->is_selection_empty();
         scene->clearSelection();
+
+        if (item == nullptr && selection_was_empty) {
+          // The user clicked outside any item, to unselect everything.
+          emit selection_changed_by_user();
+        }
       }
 
-      if (event->button() == Qt::LeftButton) {
+      if (item != nullptr) {
+        // Clicked an item.
 
-        if (item != nullptr) {
+        if (event->button() == Qt::LeftButton) {
 
           if (control_or_shift) {
             // Left-clicking an item while pressing control or shift: toggle it.
