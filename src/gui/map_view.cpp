@@ -56,7 +56,7 @@ public:
   void tileset_selection_changed() override;
 
 private:
-  QPoint mouse_pressed_point;               /**< Point where the mouse was pressed, in scene coordinates. */
+  QPoint mouse_pressed_point;               /**< Point where the mouse was pressed, in view coordinates. */
   bool clicked_with_control_or_shift;
 };
 
@@ -1451,7 +1451,7 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
   MapView& view = get_view();
   MapScene& scene = get_scene();
 
-  mouse_pressed_point = view.mapToScene(event.pos()).toPoint();
+  mouse_pressed_point = event.pos();
 
   // Left or right button: possibly change the selection.
   QList<QGraphicsItem*> items_under_mouse = view.items(
@@ -1521,15 +1521,14 @@ void DoingNothingState::mouse_moved(const QMouseEvent& event) {
 
   if (clicked_with_control_or_shift) {
 
-    // Moving the mouse while it is pressed: start a selection rectangle
-    // after a small distance threshold.
-    MapView& view = get_view();
-    QPoint current_point =  view.mapToScene(event.pos()).toPoint();
+    // Moving the mouse while control or shift is pressed:
+    // start a selection rectangle after a small distance threshold.
+    QPoint current_point = event.pos();
     if ((current_point - mouse_pressed_point).manhattanLength() >= 4) {
       // Significant move: not a click.
       // Start a selection rectangle.
       MapView& view = get_view();
-      view.start_state_drawing_rectangle(event.pos());
+      view.start_state_drawing_rectangle(mouse_pressed_point);
     }
   }
 }
