@@ -122,6 +122,10 @@ signals:
   void set_entities_layer_requested(
       const EntityIndexes& indexes,
       int layer);
+  void increase_entities_layer_requested(
+      const EntityIndexes& indexes);
+  void decrease_entities_layer_requested(
+      const EntityIndexes& indexes);
   void bring_entities_to_front_requested(
       const EntityIndexes& indexes);
   void bring_entities_to_back_requested(
@@ -186,9 +190,11 @@ private:
       set_layer_actions;           /**< Actions of changing the layer of the selected entities. */
   QActionGroup*
       set_layer_actions_group;     /**< Groups of exclusive actions to change the layer. */
-  QAction* bring_to_front_action;  /**< Action of bringing the selected entities to front. */
-  QAction* bring_to_back_action;   /**< Action of bringing the selected entities to back. */
-  QAction* remove_action;          /**< Action of deleting the selected entities. */
+  QAction* up_one_layer_action;    /**< Action of putting selecting entities one layer up. */
+  QAction* down_one_layer_action;  /**< Action of putting selecting entities one layer down. */
+  QAction* bring_to_front_action;  /**< Action of bringing selected entities to front. */
+  QAction* bring_to_back_action;   /**< Action of bringing selected entities to back. */
+  QAction* remove_action;          /**< Action of deleting selected entities. */
 
 };
 

@@ -89,7 +89,7 @@ public:
   int get_entity_layer(const EntityIndex& index) const;
   EntityIndex set_entity_layer(const EntityIndex& index_before, int layer_after);
   bool is_common_layer(const EntityIndexes& indexes, int& layer) const;
-  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, int layer_after);
+  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, const QList<int>& layer_after);
   void undo_set_entities_layer(const EntityIndexes& indexes_after, const EntityIndexes& indexes_before);
   void set_entity_order(const EntityIndex& index_before, int order_after);
   EntityIndex bring_entity_to_front(const EntityIndex& index_before);

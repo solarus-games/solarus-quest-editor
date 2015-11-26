@@ -711,14 +711,16 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, int& layer) const {
  * Emits entity_layer_changed() for each change.
  *
  * @param indexes_before Sorted indexes of the entities to change.
- * @param layer The new layer. Each entity will be placed on top of other entities
- * of that layer.
+ * @param layers_after The new layer for each entity.
+ * Each entity will be placed on top of other entities of that layer.
  * @return The new indexes of the entities.
  */
-EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, int layer_after) {
+EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, const QList<int>& layers_after) {
 
   // TODO possible improvement: entities whose layer do not change should also
   // be moved to keep the relative order of the whole group.
+
+  Q_ASSERT(layers_after.size() == indexes_before.size());
 
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
@@ -726,8 +728,10 @@ EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, 
     entities.append(&get_entity(index_before));
   }
 
+  int i = 0;
   for (const EntityModel* entity : entities) {
     Q_ASSERT(entity != nullptr);
+    const int layer_after = layers_after[i];
     if (entity->get_layer() != layer_after) {
       set_entity_layer(entity->get_index(), layer_after);
     }

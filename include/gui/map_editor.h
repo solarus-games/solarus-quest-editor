@@ -91,6 +91,8 @@ private slots:
                                         int direction);
   void set_entities_layer_requested(const EntityIndexes& indexes,
                                     int layer);
+  void increase_entities_layer_requested(const EntityIndexes& indexes);
+  void decrease_entities_layer_requested(const EntityIndexes& indexes);
   void bring_entities_to_front_requested(const EntityIndexes& indexes);
   void bring_entities_to_back_requested(const EntityIndexes& indexes);
   void add_entities_requested(AddableEntities& entities);

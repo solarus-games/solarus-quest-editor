@@ -624,7 +624,11 @@ public:
 
   void redo() override {
 
-    indexes_after = get_map().set_entities_layer(indexes_before, layer_after);
+    QList<int> layers_after;
+    for (int i = 0; i < indexes_before.size(); ++i) {
+      layers_after << layer_after;
+    }
+    indexes_after = get_map().set_entities_layer(indexes_before, layers_after);
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes_after);
   }
@@ -633,6 +637,82 @@ private:
   EntityIndexes indexes_before;  // Sorted indexes before the change.
   EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
   int layer_after;
+};
+
+/**
+ * @brief Moving entities one layer up.
+ */
+class IncreaseEntitiesLayerCommand : public MapEditorCommand {
+
+public:
+  IncreaseEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Increment layer")),
+    indexes_before(indexes),
+    indexes_after() {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+
+    get_map().undo_set_entities_layer(indexes_after, indexes_before);
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+
+    QList<int> layers_after;
+    for (const EntityIndex& index_before : indexes_before) {
+      int layer_after = std::min(index_before.layer + 1, get_map().get_num_layers() - 1);
+      layers_after << layer_after;
+    }
+    indexes_after = get_map().set_entities_layer(indexes_before, layers_after);
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;  // Sorted indexes before the change.
+  EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
+};
+
+/**
+ * @brief Moving entities one layer down.
+ */
+class DecreaseEntitiesLayerCommand : public MapEditorCommand {
+
+public:
+  DecreaseEntitiesLayerCommand(MapEditor& editor, const EntityIndexes& indexes) :
+    MapEditorCommand(editor, MapEditor::tr("Decrement layer")),
+    indexes_before(indexes),
+    indexes_after() {
+
+    qSort(this->indexes_before);
+  }
+
+  void undo() override {
+
+    get_map().undo_set_entities_layer(indexes_after, indexes_before);
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_before);
+  }
+
+  void redo() override {
+
+    QList<int> layers_after;
+    for (const EntityIndex& index_before : indexes_before) {
+      int layer_after = std::max(index_before.layer - 1, 0);
+      layers_after << layer_after;
+    }
+    indexes_after = get_map().set_entities_layer(indexes_before, layers_after);
+    // Select impacted entities.
+    get_map_view().set_selected_entities(indexes_after);
+  }
+
+private:
+  EntityIndexes indexes_before;  // Sorted indexes before the change.
+  EntityIndexes indexes_after;  // Indexes after the change, in the same order as before.
 };
 
 /**
@@ -966,6 +1046,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(set_entities_direction_requested(EntityIndexes, int)));
   connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, int)),
           this, SLOT(set_entities_layer_requested(EntityIndexes, int)));
+  connect(ui.map_view, SIGNAL(increase_entities_layer_requested(EntityIndexes)),
+          this, SLOT(increase_entities_layer_requested(EntityIndexes)));
+  connect(ui.map_view, SIGNAL(decrease_entities_layer_requested(EntityIndexes)),
+          this, SLOT(decrease_entities_layer_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(bring_entities_to_front_requested(EntityIndexes)),
           this, SLOT(bring_entities_to_front_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(bring_entities_to_back_requested(EntityIndexes)),
@@ -1716,6 +1800,32 @@ void MapEditor::set_entities_layer_requested(const EntityIndexes& indexes,
   }
 
   try_command(new SetEntitiesLayerCommand(*this, indexes, layer));
+}
+
+/**
+ * @brief Slot called when the user wants to bring some entities one layer up.
+ * @param indexes Indexes of the entities to change.
+ */
+void MapEditor::increase_entities_layer_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new IncreaseEntitiesLayerCommand(*this, indexes));
+}
+
+/**
+ * @brief Slot called when the user wants to bring some entities one layer down.
+ * @param indexes Indexes of the entities to change.
+ */
+void MapEditor::decrease_entities_layer_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  try_command(new DecreaseEntitiesLayerCommand(*this, indexes));
 }
 
 /**

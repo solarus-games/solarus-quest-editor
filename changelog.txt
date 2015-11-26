@@ -13,6 +13,7 @@ New features
 * Allow to automatically save files before running the quest (#90).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding are now 0, 1 and 2, etc.
+* Map editor: shortcuts to move one layer up or down.
 * Map editor: fix entities still shown when put on a hidden layer.
 * Map editor: fix precision when starting selection above existing entities.
 * Map editor: stop adding tiles when unselecting them from the tileset view.

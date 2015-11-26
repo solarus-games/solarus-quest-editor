@@ -175,6 +175,8 @@ MapView::MapView(QWidget* parent) :
   convert_tiles_action(nullptr),
   set_layer_actions(),
   set_layer_actions_group(nullptr),
+  up_one_layer_action(nullptr),
+  down_one_layer_action(nullptr),
   bring_to_front_action(nullptr),
   bring_to_back_action(nullptr),
   remove_action(nullptr) {
@@ -490,6 +492,24 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
+  up_one_layer_action = new QAction(
+        tr("One layer up"), this);
+  up_one_layer_action->setShortcut(tr("+"));
+  up_one_layer_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(up_one_layer_action, &QAction::triggered, [&]() {
+    emit increase_entities_layer_requested(get_selected_entities());
+  });
+  addAction(up_one_layer_action);
+
+  down_one_layer_action = new QAction(
+        tr("One layer down"), this);
+  down_one_layer_action->setShortcut(tr("-"));
+  down_one_layer_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(down_one_layer_action, &QAction::triggered, [&]() {
+    emit decrease_entities_layer_requested(get_selected_entities());
+  });
+  addAction(down_one_layer_action);
+
   bring_to_front_action = new QAction(
         tr("Bring to front"), this);
   bring_to_front_action->setShortcut(tr("T"));
@@ -564,7 +584,7 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
-  // Layer
+  // Layers, One layer up, One layer down
   // Bring to front, Bring to back
   // Delete
 
@@ -630,6 +650,11 @@ QMenu* MapView::create_context_menu() {
       }
       menu->addAction(action);
     }
+
+    up_one_layer_action->setEnabled(!has_common_layer || common_layer < get_map()->get_num_layers() - 1);
+    down_one_layer_action->setEnabled(!has_common_layer || common_layer > 0);
+    menu->addAction(up_one_layer_action);
+    menu->addAction(down_one_layer_action);
 
     // Bring to front/back.
     menu->addAction(bring_to_front_action);
@@ -996,11 +1021,27 @@ void MapView::paintEvent(QPaintEvent* event) {
  */
 void MapView::keyPressEvent(QKeyEvent* event) {
 
-  if (event->key() == Qt::Key_Enter) {
+  switch (event->key()) {
+
+  case Qt::Key_Enter:
     // Numpad enter key.
     // For some reason, this particular key does not work as a QAction shortcut
     // on all systems.
     edit_selected_entity();
+    break;
+
+  case Qt::Key_Plus:
+    // Make sure that the numpad plus key works too.
+    emit increase_entities_layer_requested(get_selected_entities());
+    break;
+
+  case Qt::Key_Minus:
+    // Make sure that the numpad minus key works too.
+    emit decrease_entities_layer_requested(get_selected_entities());
+    break;
+
+  default:
+    break;
   }
 }
 
