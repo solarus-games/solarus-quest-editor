@@ -786,6 +786,7 @@ EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, 
     if (entity->get_layer() != layer_after) {
       set_entity_layer(entity->get_index(), layer_after);
     }
+    ++i;
   }
 
   // Now all indexes have finished their changes.
