@@ -232,7 +232,7 @@ QMenu* MainWindow::create_zoom_menu() {
 }
 
 /**
- * @brief Updates the show layers menu to match the current number of layers.
+ * @brief Updates the show layers menu to match the current range of layers.
  */
 void MainWindow::update_show_layers_menu() {
 
@@ -276,13 +276,15 @@ void MainWindow::update_show_layers_menu() {
     int min_layer = 0;
     int max_layer = 0;
     editor->get_layers_supported(min_layer, max_layer);
-    for (int i = min_layer; i < max_layer; ++i) {
+    for (int i = min_layer; i <= max_layer; ++i) {
       QAction* action = new QAction(tr("Show layer %1").arg(i), this);
-      if (i < 3) {
+      if (i >= 0 && i < 3) {
+        // Layers 0, 1 and 2 have an icon.
         QString file_name = QString(":/images/icon_layer_%1.png").arg(i);
         action->setIcon(QIcon(file_name));
       }
-      if (i <= 9) {
+      if (i >= 0 && i <= 9) {
+        // Layers 0 to 9 have a shortcut.
         action->setShortcut(QString::number(i));
       }
       action->setCheckable(true);
@@ -999,7 +1001,7 @@ void MainWindow::update_layer_visibility(int layer) {
   const int index = layer + 3 - min_layer;  // Skip "Show all", "Hide all" and the separator.
   QAction* action = show_layers_menu->actions().value(index);
   if (action == nullptr) {
-    qCritical() << "Missing show layer action " << index;
+    qCritical() << "Missing show layer action for layer " << layer << ": " << index;
     return;
   }
   action->setChecked(visible);
@@ -1021,8 +1023,8 @@ void MainWindow::update_layers_visibility() {
 
   ViewSettings& view_settings = editor->get_view_settings();
   ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(0));
-  ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(1));
-  ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(2));
+  ui.action_show_layer_1->setChecked(max_layer >= 1 && view_settings.is_layer_visible(1));
+  ui.action_show_layer_2->setChecked(max_layer >= 2 && view_settings.is_layer_visible(2));
 
   const QList<QAction*>& actions = show_layers_menu->actions();
   for (int i = min_layer; i <= max_layer; ++i) {
