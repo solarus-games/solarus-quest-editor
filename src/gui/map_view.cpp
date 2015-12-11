@@ -2391,7 +2391,7 @@ int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
   // The entity has a preferred layer:
   // see if there is something above its preferred layer.
   int preferred_layer = entity.get_preferred_layer();
-  if (get_map().is_valid_layer(preferred_layer)) {
+  if (!get_map().is_valid_layer(preferred_layer)) {
       // The preferred layer does not exist on this map.
       return layer_under;
   }
