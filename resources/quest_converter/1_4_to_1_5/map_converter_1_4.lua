@@ -1,6 +1,6 @@
 -- Solarus 1.4 to 1.5.
 -- Changes in the map syntax:
--- - New mandatory property num_layers.
+-- - New mandatory properties min_layer and max_layer.
 
 local converter = {}
 
@@ -14,10 +14,10 @@ function converter.convert(quest_path, map_id, default_font_id)
 
   local text = input_file:read("*a")  -- Read the whole file.
 
-  -- Add the num_layers property with value 3.
+  -- Add the min_layer and max_layer properties.
   text = text:gsub(
       "\n  tileset = \"",
-      "\n  num_layers = 3,\n  tileset = \""
+      "\n  min_layer = 0,\n  max_layer = 2,\n  tileset = \""
   )
 
   input_file:close()
