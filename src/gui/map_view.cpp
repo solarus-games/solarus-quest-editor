@@ -636,8 +636,9 @@ QMenu* MapView::create_context_menu() {
     // Layer.
     int common_layer = -1;
     bool has_common_layer = map->is_common_layer(indexes, common_layer);
-    for (int layer = 0; layer < set_layer_actions.size(); ++layer) {
-      QAction* action = set_layer_actions[layer];
+    for (int i = 0; i < set_layer_actions.size(); ++i) {
+      QAction* action = set_layer_actions[i];
+      int layer = i + map->get_min_layer();
       action->setChecked(false);
       if (has_common_layer && layer == common_layer) {
         action->setChecked(true);
