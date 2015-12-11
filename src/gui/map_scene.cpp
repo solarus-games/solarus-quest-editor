@@ -577,8 +577,8 @@ void MapScene::select_all() {
  * existing visible entity.
  * @param rectangle A rectangle in map coordinates.
  * If nullptr, all entities are considered visible.
- * @return The highest layer where an entity exists in this rectangle,
- * or 0 (the lowest layer of the map) if there is nothing here.
+ * @return The first layer from top where an entity exists in this rectangle,
+ * or the lowest layer if there is nothing here.
  */
 int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
 
@@ -588,7 +588,7 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
         scene_rectangle, Qt::IntersectsItemBoundingRect
   );
 
-  int max_layer = 0;
+  int max_layer = map.get_min_layer();
   for (QGraphicsItem* item : items_in_rectangle) {
 
     if (item->zValue() > map.get_max_layer()) {
