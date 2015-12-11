@@ -847,7 +847,7 @@ void EditEntityDialog::apply_ground() {
  */
 void EditEntityDialog::initialize_layer() {
 
-  ui.layer_field->setMaximum(entity_before.get_map().get_min_layer());
+  ui.layer_field->setMinimum(entity_before.get_map().get_min_layer());
   ui.layer_field->setMaximum(entity_before.get_map().get_max_layer());
   ui.layer_field->setValue(entity_before.get_layer());
 }

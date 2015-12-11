@@ -726,10 +726,10 @@
            </size>
           </property>
           <property name="minimum">
-           <number>0</number>
+           <number>-9999</number>
           </property>
           <property name="maximum">
-           <number>999</number>
+           <number>9999</number>
           </property>
          </widget>
         </item>
