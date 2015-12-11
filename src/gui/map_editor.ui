@@ -143,10 +143,10 @@
             <layout class="QHBoxLayout" name="horizontal_layout_6">
              <item>
               <widget class="QSpinBox" name="min_layer_field">
-               <property name="minimumSize">
+               <property name="maximumSize">
                 <size>
                  <width>70</width>
-                 <height>0</height>
+                 <height>16777215</height>
                 </size>
                </property>
                <property name="minimum">
@@ -166,10 +166,10 @@
              </item>
              <item>
               <widget class="QSpinBox" name="max_layer_field">
-               <property name="minimumSize">
+               <property name="maximumSize">
                 <size>
                  <width>70</width>
-                 <height>0</height>
+                 <height>16777215</height>
                 </size>
                </property>
                <property name="maximum">
