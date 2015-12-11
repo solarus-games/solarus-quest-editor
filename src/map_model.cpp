@@ -354,7 +354,8 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
   }
 
   // Notify children.
-  for (EntityModels& layer_entities : entities) {
+  for (auto& kvp : entities) {
+    EntityModels& layer_entities = kvp.second;
     for (EntityModelPtr& entity : layer_entities) {
       entity->notify_tileset_changed(tileset_id);
     }
@@ -452,7 +453,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
   }
 
   bool exists_in_solarus = map.entity_exists(index);
-  bool exists_in_model = (index.order >= 0 && index.order < (int) entities[index.layer].size());
+  bool exists_in_model = (index.order >= 0 && index.order < (int) entities.at(index.layer).size());
   Q_UNUSED(exists_in_solarus);
   Q_ASSERT(exists_in_model == exists_in_solarus);
 
@@ -465,7 +466,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  * @return The corresponding entity model.
  */
 const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
-  return *entities[index.layer].at(index.order);
+  return *entities.at(index.layer).at(index.order);
 }
 
 /**
@@ -474,7 +475,7 @@ const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
  * Non-const version.
  */
 EntityModel& MapModel::get_entity(const EntityIndex& index) {
-  return *entities[index.layer].at(index.order);
+  return *entities.at(index.layer).at(index.order);
 }
 
 /**
@@ -560,7 +561,8 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
 EntityIndexes MapModel::find_entities_of_type(EntityType type) const {
 
   EntityIndexes result;
-  for (const EntityModels& layer_entities : entities) {
+  for (const auto& kvp : entities) {
+    const EntityModels& layer_entities = kvp.second;
     for (const EntityModelPtr& entity : layer_entities) {
       if (entity->get_type() == type) {
         result << entity->get_index();

@@ -165,8 +165,8 @@ private:
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
-  std::vector<EntityModels>
-      entities;                   /**< All entities. */
+  std::map<int, EntityModels>
+      entities;                   /**< All entities by layer. */
 
 };
 
