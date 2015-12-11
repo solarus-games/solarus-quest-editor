@@ -351,6 +351,9 @@
               <property name="buttonSymbols">
                <enum>QAbstractSpinBox::UpDownArrows</enum>
               </property>
+              <property name="minimum">
+               <number>-9999</number>
+              </property>
               <property name="maximum">
                <number>9999</number>
               </property>

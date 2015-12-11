@@ -100,10 +100,8 @@ void MapScene::build() {
   update_scene_size();
   setBackgroundBrush(Qt::gray);
 
-  const int num_layers = map.get_num_layers();
-  entity_items.resize(num_layers);
-  layer_parent_items.resize(num_layers);
-  for (int layer = 0; layer < num_layers; ++layer) {
+  entity_items.clear();
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
 
     // Create the parent item of everything that will be on this layer.
     create_layer_parent_item(layer);
@@ -131,7 +129,7 @@ void MapScene::update_scene_size() {
  */
 void MapScene::create_layer_parent_item(int layer) {
 
-  Q_ASSERT(layer >= 0 && layer < (int) layer_parent_items.size());
+  Q_ASSERT(map.is_valid_layer(layer));
 
   if (layer_parent_items[layer] != nullptr) {
     removeItem(layer_parent_items[layer]);
@@ -211,11 +209,9 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
   this->view_settings = &view_settings;
 
   // Ensure the number of layers is up to date.
-  if (map.get_num_layers() != (int) entity_items.size()) {
-    // The number of layers must have changed and we are not notified yet.
-    // This is possible due to the order of slots.
-    num_layers_changed(map.get_num_layers());
-  }
+  // It may have changed and we are not notified yet.
+  // This is possible due to the order of slots.
+  num_layers_changed(map.get_min_layer(), map.get_max_layer());
 
   for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
@@ -230,7 +226,7 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
 void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings& view_settings) {
 
   this->view_settings = &view_settings;
-  for (int layer = 0; layer < map.get_num_layers(); ++layer) {
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
     for (EntityItem* item : get_entity_items(layer)) {
       if (item->get_entity_type() == type) {
         item->update_visibility(view_settings);
@@ -308,35 +304,45 @@ void MapScene::size_changed(const QSize& size) {
 
 /**
  * @brief Slot called when the number of layers of the map has changed.
- * @param num_layers The new number of layers.
+ * @param min_layer The new lowest layer.
+ * @param max_layer The new highest layer.
  */
-void MapScene::num_layers_changed(int num_layers) {
+void MapScene::num_layers_changed(int min_layer, int max_layer) {
 
-  int old_num_layers = layer_parent_items.size();
+  const int old_min_layer = layer_parent_items.firstKey();
+  const int old_max_layer = layer_parent_items.lastKey();
 
-  if (num_layers == old_num_layers) {
+  if (min_layer == old_min_layer && max_layer == old_max_layer) {
+    // No change.
     return;
   }
 
-  if (num_layers < old_num_layers) {
-    // Reducing the number of layers.
-    for (int layer = num_layers; layer < old_num_layers; ++layer) {
-      Q_ASSERT(entity_items[layer].isEmpty());
-      if (layer_parent_items[layer] != nullptr) {
-        removeItem(layer_parent_items[layer]);
-        delete layer_parent_items[layer];
-      }
+  // Reducing the number of layers.
+  for (int layer = old_min_layer; layer < min_layer; ++layer) {
+    Q_ASSERT(entity_items[layer].isEmpty());
+    if (layer_parent_items[layer] != nullptr) {
+      removeItem(layer_parent_items[layer]);
+      delete layer_parent_items[layer];
     }
+    entity_items.remove(layer);
+    layer_parent_items.remove(layer);
+  }
+  for (int layer = max_layer + 1; layer <= old_max_layer; ++layer) {
+    Q_ASSERT(entity_items[layer].isEmpty());
+    if (layer_parent_items[layer] != nullptr) {
+      removeItem(layer_parent_items[layer]);
+      delete layer_parent_items[layer];
+    }
+    entity_items.remove(layer);
+    layer_parent_items.remove(layer);
   }
 
-  entity_items.resize(num_layers);
-  layer_parent_items.resize(num_layers);
-
-  if (num_layers > old_num_layers) {
-    // Increasing the number of layers.
-    for (int layer = old_num_layers; layer < num_layers; ++layer) {
-      create_layer_parent_item(layer);
-    }
+  // Increasing the number of layers.
+  for (int layer = min_layer; layer < old_min_layer; ++layer) {
+    create_layer_parent_item(layer);
+  }
+  for (int layer = old_max_layer + 1; layer <= max_layer; ++layer) {
+    create_layer_parent_item(layer);
   }
 }
 
@@ -585,7 +591,7 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
   int max_layer = 0;
   for (QGraphicsItem* item : items_in_rectangle) {
 
-    if (item->zValue() >= map.get_num_layers()) {
+    if (item->zValue() > map.get_max_layer()) {
       // This is the case of the selection rectangle and
       // of entities being added.
       continue;

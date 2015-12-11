@@ -273,7 +273,10 @@ void MainWindow::update_show_layers_menu() {
   // Add an action for each layer.
   Editor* editor = get_current_editor();
   if (editor != nullptr) {
-    for (int i = 0; i < editor->get_num_layers_visibility_supported(); ++i) {
+    int min_layer = 0;
+    int max_layer = 0;
+    editor->get_layers_supported(min_layer, max_layer);
+    for (int i = min_layer; i < max_layer; ++i) {
       QAction* action = new QAction(tr("Show layer %1").arg(i), this);
       if (i < 3) {
         QString file_name = QString(":/images/icon_layer_%1.png").arg(i);
@@ -940,19 +943,20 @@ void MainWindow::update_num_layers() {
   Editor* editor = get_current_editor();
   const bool has_editor = editor != nullptr;
 
-  const int num_layers = has_editor ?
-        editor->get_num_layers_visibility_supported() : 0;
+  int min_layer = 0;
+  int max_layer = -1;
 
   if (has_editor) {
+    editor->get_layers_supported(min_layer, max_layer);
     ViewSettings& view_settings = editor->get_view_settings();
-    view_settings.set_num_layers(num_layers);
+    view_settings.set_layer_range(min_layer, max_layer);
   }
 
-  ui.action_show_layer_0->setVisible(num_layers > 0);
-  ui.action_show_layer_1->setVisible(num_layers > 1);
-  ui.action_show_layer_2->setVisible(num_layers > 2);
-  show_layers_action->setVisible(num_layers > 3);
-  show_layers_menu->setEnabled(num_layers > 3);
+  ui.action_show_layer_0->setVisible(max_layer >= 0);
+  ui.action_show_layer_1->setVisible(max_layer >= 1);
+  ui.action_show_layer_2->setVisible(max_layer >= 2);
+  show_layers_action->setVisible(min_layer < 0 || max_layer >= 3);
+  show_layers_menu->setEnabled(min_layer < 0 || max_layer >= 3);
   update_show_layers_menu();
 }
 
@@ -968,6 +972,10 @@ void MainWindow::update_layer_visibility(int layer) {
   }
   const ViewSettings& view_settings = editor->get_view_settings();
   const bool visible = view_settings.is_layer_visible(layer);
+
+  int min_layer = 0;
+  int max_layer = 0;
+  editor->get_layers_supported(min_layer, max_layer);
 
   switch (layer) {
 
@@ -988,7 +996,7 @@ void MainWindow::update_layer_visibility(int layer) {
   }
 
   // Update the show layer menu.
-  const int index = layer + 3;  // Skip "Show all", "Hide all" and the separator.
+  const int index = layer + 3 - min_layer;  // Skip "Show all", "Hide all" and the separator.
   QAction* action = show_layers_menu->actions().value(index);
   if (action == nullptr) {
     qCritical() << "Missing show layer action " << index;
@@ -1007,14 +1015,18 @@ void MainWindow::update_layers_visibility() {
     return;
   }
 
+  int min_layer = 0;
+  int max_layer = 0;
+  editor->get_layers_supported(min_layer, max_layer);
+
   ViewSettings& view_settings = editor->get_view_settings();
   ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(0));
   ui.action_show_layer_1->setChecked(view_settings.is_layer_visible(1));
   ui.action_show_layer_2->setChecked(view_settings.is_layer_visible(2));
 
   const QList<QAction*>& actions = show_layers_menu->actions();
-  for (int i = 0; i < editor->get_num_layers_visibility_supported(); ++i) {
-    QAction* action = actions.value(i);
+  for (int i = min_layer; i <= max_layer; ++i) {
+    QAction* action = actions.value(i - min_layer);
     if (action != nullptr) {
       action->setVisible(view_settings.is_layer_visible(i));
     }

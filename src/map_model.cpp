@@ -24,10 +24,6 @@
 #include <QIcon>
 #include <QSet>
 
-namespace {
-  constexpr int max_layers = 1000;  /**< Maximum number of layers for the editor. */
-}
-
 /**
  * @brief Creates a map model.
  * @param quest The quest.
@@ -43,7 +39,7 @@ MapModel::MapModel(
   quest(quest),
   map_id(map_id),
   tileset_model(nullptr),
-  entities(max_layers) {
+  entities() {
 
   // Load the map data file.
   QString path = quest.get_map_data_file_path(map_id);
@@ -58,9 +54,8 @@ MapModel::MapModel(
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
-  const int num_layers = get_num_layers();
-  Q_ASSERT((size_t) num_layers <= entities.size());
-  for (int layer = 0; layer < num_layers; ++layer) {
+  // Create entities.
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
     for (int i = 0; i < get_num_entities(layer); ++i) {
       EntityIndex index = { layer, i };
       entities[layer].emplace_back(EntityModel::create(*this, index));
@@ -133,38 +128,37 @@ void MapModel::set_size(const QSize& size) {
 }
 
 /**
- * @brief Returns the number of layers of the map.
- * @return The number of layers.
+ * @brief Returns the lowest layer of the map.
+ * @return The lowest layer (0 or less).
  */
-int MapModel::get_num_layers() const {
+int MapModel::get_min_layer() const {
 
-  return map.get_num_layers();
+  return map.get_min_layer();
 }
 
 /**
- * @brief Sets the number of layers of the map.
+ * @brief Sets the lowest layer of the map.
  *
  * Entities that are on removed layers are removed from the map.
  *
- * Emits num_layers_changed() if there is a change.
+ * Emits max_layer_changed() if there is a change.
  *
- * @param num_layers The new number of layers.
+ * @param min_layer The new lowest layer.
  * @return The entities that were on removed layers.
  */
-AddableEntities MapModel::set_num_layers(int num_layers) {
+AddableEntities MapModel::set_min_layer(int min_layer) {
 
-  Q_ASSERT(num_layers > 0);
-  Q_ASSERT(num_layers <= max_layers);
+  Q_ASSERT(min_layer <= 0);
 
-  if (num_layers == get_num_layers()) {
+  if (min_layer == get_min_layer()) {
     return AddableEntities();
   }
 
   // Delete entities on removed layers.
   AddableEntities removed_entities;
-  if (num_layers < get_num_layers()) {
+  if (min_layer > get_min_layer()) {
     EntityIndexes indexes_to_remove;
-    for (int layer = num_layers; layer < get_num_layers(); ++layer) {
+    for (int layer = get_min_layer(); layer <= min_layer; ++layer) {
       for (int i = 0; i < get_num_entities(layer); ++i) {
         indexes_to_remove.append({ layer, i });
       }
@@ -172,11 +166,66 @@ AddableEntities MapModel::set_num_layers(int num_layers) {
     removed_entities = remove_entities(indexes_to_remove);
   }
 
-  map.set_num_layers(num_layers);
+  map.set_min_layer(min_layer);
 
-  emit num_layers_changed(num_layers);
+  emit layer_range_changed(min_layer, get_max_layer());
 
   return removed_entities;
+}
+
+/**
+ * @brief Returns the highest layer of the map.
+ * @return The highest layer (0 or more).
+ */
+int MapModel::get_max_layer() const {
+
+  return map.get_max_layer();
+}
+
+/**
+ * @brief Sets the highest layer of the map.
+ *
+ * Entities that are on removed layers are removed from the map.
+ *
+ * Emits max_layer_changed() if there is a change.
+ *
+ * @param max_layer The new highest layer.
+ * @return The entities that were on removed layers.
+ */
+AddableEntities MapModel::set_max_layer(int max_layer) {
+
+  Q_ASSERT(max_layer >= 0);
+
+  if (max_layer == get_max_layer()) {
+    return AddableEntities();
+  }
+
+  // Delete entities on removed layers.
+  AddableEntities removed_entities;
+  if (max_layer < get_max_layer()) {
+    EntityIndexes indexes_to_remove;
+    for (int layer = max_layer + 1; layer <= get_max_layer(); ++layer) {
+      for (int i = 0; i < get_num_entities(layer); ++i) {
+        indexes_to_remove.append({ layer, i });
+      }
+    }
+    removed_entities = remove_entities(indexes_to_remove);
+  }
+
+  map.set_max_layer(max_layer);
+
+  emit layer_range_changed(get_min_layer(), max_layer);
+
+  return removed_entities;
+}
+
+/**
+ * @brief Returns whether a layer exists on this map.
+ * @param layer A layer value to check.
+ * @return @c true if there is a layer with this index.
+ */
+bool MapModel::is_valid_layer(int layer) const {
+  return map.is_valid_layer(layer);
 }
 
 /**
