@@ -1023,13 +1023,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   connect(ui.min_layer_field, SIGNAL(editingFinished()),
           this, SLOT(change_min_layer_requested()));
-  connect(map, SIGNAL(min_layer_changed(int)),
-          this, SLOT(min_layer_changed()));
-
   connect(ui.max_layer_field, SIGNAL(editingFinished()),
           this, SLOT(change_max_layer_requested()));
-  connect(map, SIGNAL(max_layer_changed(int)),
-          this, SLOT(max_layer_changed()));
+  connect(map, SIGNAL(layer_range_changed(int, int)),
+          this, SLOT(layer_range_changed()));
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
@@ -1375,24 +1372,6 @@ void MapEditor::update_min_layer_field() {
 }
 
 /**
- * @brief Updates the UI when the minimum of layers in the model has changed.
- */
-void MapEditor::min_layer_changed() {
-
-  const int min_layer = get_map().get_min_layer();
-  const int max_layer = get_map().get_max_layer();
-
-  // Update the spinbox.
-  update_min_layer_field();
-
-  // Notify the editor.
-  set_layers_supported(min_layer, max_layer);
-
-  // Notify the view settings.
-  get_view_settings().set_layer_range(min_layer, max_layer);
-}
-
-/**
  * @brief Modifies the minimum layer with new values entered by the user.
  */
 void MapEditor::change_min_layer_requested() {
@@ -1445,14 +1424,15 @@ void MapEditor::update_max_layer_field() {
 }
 
 /**
- * @brief Updates the UI when the maximum of layers in the model has changed.
+ * @brief Updates the UI when the range of layers in the model has changed.
  */
-void MapEditor::max_layer_changed() {
+void MapEditor::layer_range_changed() {
 
   const int min_layer = get_map().get_min_layer();
   const int max_layer = get_map().get_max_layer();
 
-  // Update the spinbox.
+  // Update the spinboxes.
+  update_min_layer_field();
   update_max_layer_field();
 
   // Notify the editor.

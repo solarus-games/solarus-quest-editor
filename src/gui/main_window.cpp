@@ -852,7 +852,7 @@ void MainWindow::current_editor_changed(int index) {
   }
   grid_size->setEnabled(ui.action_show_grid->isChecked());
 
-  update_num_layers();
+  update_layer_range();
 
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
@@ -873,8 +873,8 @@ void MainWindow::current_editor_changed(int index) {
     update_grid_visibility();
     update_grid_size();
 
-    connect(&view_settings, SIGNAL(num_layers_changed(int)),
-            this, SLOT(update_num_layers()));
+    connect(&view_settings, SIGNAL(layer_range_changed(int, int)),
+            this, SLOT(update_layer_range()));
     connect(&view_settings, SIGNAL(layer_visibility_changed(int, bool)),
             this, SLOT(update_layer_visibility(int)));
     update_layers_visibility();
@@ -936,9 +936,9 @@ void MainWindow::update_grid_size() {
 /**
  * @brief Updates the number of layer visibility buttons.
  *
- * This function is called when the number of layers of the current editor changes.
+ * This function is called when the range of layers of the current editor changes.
  */
-void MainWindow::update_num_layers() {
+void MainWindow::update_layer_range() {
 
   Editor* editor = get_current_editor();
   const bool has_editor = editor != nullptr;

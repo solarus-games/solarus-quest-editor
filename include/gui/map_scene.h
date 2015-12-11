@@ -62,7 +62,7 @@ protected:
 private slots:
 
   void size_changed(const QSize& size);
-  void num_layers_changed(int min_layer, int max_layer);
+  void layer_range_changed(int min_layer, int max_layer);
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entity_layer_changed(const EntityIndex& index_before,

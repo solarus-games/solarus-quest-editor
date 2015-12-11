@@ -78,7 +78,7 @@ private slots:
   void update_zoom();
   void update_grid_visibility();
   void update_grid_size();
-  void update_num_layers();
+  void update_layer_range();
   void update_layer_visibility(int layer);
   void update_layers_visibility();
   void update_entity_type_visibility(EntityType entity_type);

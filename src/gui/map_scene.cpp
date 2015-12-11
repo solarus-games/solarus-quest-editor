@@ -37,8 +37,8 @@ MapScene::MapScene(MapModel& map, QObject* parent) :
 
   connect(&map, SIGNAL(size_changed(QSize)),
           this, SLOT(size_changed(QSize)));
-  connect(&map, SIGNAL(num_layers_changed(int)),
-          this, SLOT(num_layers_changed(int)));
+  connect(&map, SIGNAL(layer_range_changed(int, int)),
+          this, SLOT(layer_range_changed(int, int)));
   connect(&map, SIGNAL(entities_added(EntityIndexes)),
           this, SLOT(entities_added(EntityIndexes)));
   connect(&map, SIGNAL(entities_about_to_be_removed(EntityIndexes)),
@@ -211,7 +211,7 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
   // Ensure the number of layers is up to date.
   // It may have changed and we are not notified yet.
   // This is possible due to the order of slots.
-  num_layers_changed(map.get_min_layer(), map.get_max_layer());
+  layer_range_changed(map.get_min_layer(), map.get_max_layer());
 
   for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
@@ -303,11 +303,11 @@ void MapScene::size_changed(const QSize& size) {
 }
 
 /**
- * @brief Slot called when the number of layers of the map has changed.
+ * @brief Slot called when the range of layers of the map has changed.
  * @param min_layer The new lowest layer.
  * @param max_layer The new highest layer.
  */
-void MapScene::num_layers_changed(int min_layer, int max_layer) {
+void MapScene::layer_range_changed(int min_layer, int max_layer) {
 
   const int old_min_layer = layer_parent_items.firstKey();
   const int old_max_layer = layer_parent_items.lastKey();
