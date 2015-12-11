@@ -152,7 +152,8 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   find_supported(false),
   zoom_supported(false),
   grid_supported(false),
-  num_layers_visibility_supported(0),
+  min_layer_supported(0),
+  max_layer_supported(-1),
   entity_type_visibility_supported(false),
   view_settings() {
 
@@ -602,30 +603,45 @@ void Editor::set_grid_supported(bool grid_supported) {
  * @brief Returns whether this editor supports showing and hiding layers.
  * @return @c true if layers can be shown or hidden.
  */
-bool Editor::is_layer_visibility_supported() const {
-  return get_num_layers_visibility_supported() > 0;
+bool Editor::is_layer_supported() const {
+  return max_layer_supported != -1;
 }
 
 /**
- * @brief Returns how many layers can be shown or hidden.
- * @return The number of layers, or 0 if showing and hiding layers is not
- * supported.
+ * @brief Returns the range of layers, if visibility is supported.
+ *
+ * Returns an empty range if layer visibility is not supported.
+ *
+ * @param[out] min_layer The lowest layer.
+ * @param[out] max_layer The highest layer.
  */
-int Editor::get_num_layers_visibility_supported() const {
-  return num_layers_visibility_supported;
+void Editor::get_layers_supported(int& min_layer, int& max_layer) const {
+
+  min_layer = this->min_layer_supported;
+  max_layer = this->max_layer_supported;
 }
 
 /**
- * @brief Sets how many layers can be shown or hidden.
+ * @brief Sets the range of layers that can be shown or hidden.
  *
  * If your editor supports this, you are responsible to apply the new
  * setting when the layer_visibility_changed() signal is emitted.
  *
- * @param num_layers_visibility_supported The number of layers, or 0 if
- * showing and hiding layers is not supported.
+ * Set an empty range if you don't want to support layer visibility.
+ *
+ * @param min_layer The lowest layer.
+ * @param max_layer The highest layer.
  */
-void Editor::set_num_layers_visibility_supported(int num_layers_visibility_supported) {
-  this->num_layers_visibility_supported = num_layers_visibility_supported;
+void Editor::set_layers_supported(int min_layer, int max_layer) {
+
+  if (min_layer > max_layer) {
+    // Empty range: layer visibility is not supported.
+    min_layer = 0;
+    max_layer = -1;
+  }
+
+  this->min_layer_supported = min_layer;
+  this->max_layer_supported = max_layer;
 }
 
 /**

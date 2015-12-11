@@ -57,9 +57,12 @@ private slots:
   void set_description_from_gui();
   void update_size_field();
   void change_size_requested();
-  void update_num_layers_field();
-  void change_num_layers_requested();
-  void num_layers_changed();
+  void update_min_layer_field();
+  void change_min_layer_requested();
+  void min_layer_changed();
+  void update_max_layer_field();
+  void change_max_layer_requested();
+  void max_layer_changed();
   void update_world_field();
   void world_check_box_changed();
   void change_world_requested();

@@ -92,30 +92,58 @@ private:
 };
 
 /**
- * @brief Changing the number of layers of the map.
+ * @brief Changing the lowest layer of the map.
  */
-class SetNumLayersCommand : public MapEditorCommand {
+class SetMinLayerCommand : public MapEditorCommand {
 
 public:
-  SetNumLayersCommand(MapEditor& editor, int num_layers) :
-    MapEditorCommand(editor, MapEditor::tr("Number of layers")),
-    num_layers_before(get_map().get_num_layers()),
-    num_layers_after(num_layers),
+  SetMinLayerCommand(MapEditor& editor, int min_layer) :
+    MapEditorCommand(editor, MapEditor::tr("Lowest layer")),
+    min_layer_before(get_map().get_min_layer()),
+    min_layer_after(min_layer),
     entities_removed() { }
 
   void undo() override {
-    get_map().set_num_layers(num_layers_before);
+    get_map().set_min_layer(min_layer_before);
     // Restore entities.
     get_map().add_entities(std::move(entities_removed));
   }
 
   void redo() override {
-    entities_removed = get_map().set_num_layers(num_layers_after);
+    entities_removed = get_map().set_min_layer(min_layer_after);
   }
 
 private:
-  int num_layers_before;
-  int num_layers_after;
+  int min_layer_before;
+  int min_layer_after;
+  AddableEntities entities_removed;  // Entities that were on removed layers.
+};
+
+/**
+ * @brief Changing the highest layer of the map.
+ */
+class SetMaxLayerCommand : public MapEditorCommand {
+
+public:
+  SetMaxLayerCommand(MapEditor& editor, int max_layer) :
+    MapEditorCommand(editor, MapEditor::tr("Highest layer")),
+    max_layer_before(get_map().get_max_layer()),
+    max_layer_after(max_layer),
+    entities_removed() { }
+
+  void undo() override {
+    get_map().set_max_layer(max_layer_before);
+    // Restore entities.
+    get_map().add_entities(std::move(entities_removed));
+  }
+
+  void redo() override {
+    entities_removed = get_map().set_max_layer(max_layer_after);
+  }
+
+private:
+  int max_layer_before;
+  int max_layer_after;
   AddableEntities entities_removed;  // Entities that were on removed layers.
 };
 
@@ -461,9 +489,9 @@ public:
 
     // Determine the indexes where to place the dynamic ones.
     indexes_after.clear();
-    std::vector<int> order_after_by_layer;
-    for (int i = 0; i < map.get_num_layers(); ++i) {
-      order_after_by_layer.push_back(map.get_num_entities(i));
+    std::map<int, int> order_after_by_layer;
+    for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
+      order_after_by_layer[layer] = map.get_num_entities(layer);
     }
     for (AddableEntity& addable : dynamic_tiles) {
       addable.index.order = order_after_by_layer[addable.index.layer];
@@ -518,9 +546,9 @@ public:
 
     // Determine the indexes where to place the dynamic ones.
     indexes_after.clear();
-    std::vector<int> order_after_by_layer;
-    for (int layer = 0; layer < map.get_num_layers(); ++layer) {
-      order_after_by_layer.push_back(map.get_num_tiles(layer));
+    std::map<int, int> order_after_by_layer;
+    for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
+      order_after_by_layer[layer] = map.get_num_tiles(layer);
     }
     for (AddableEntity& addable : tiles) {
       addable.index.order = order_after_by_layer[addable.index.layer];
@@ -664,7 +692,7 @@ public:
 
     QList<int> layers_after;
     for (const EntityIndex& index_before : indexes_before) {
-      int layer_after = std::min(index_before.layer + 1, get_map().get_num_layers() - 1);
+      int layer_after = std::min(index_before.layer + 1, get_map().get_max_layer());
       layers_after << layer_after;
     }
     indexes_after = get_map().set_entities_layer(indexes_before, layers_after);
@@ -702,7 +730,7 @@ public:
 
     QList<int> layers_after;
     for (const EntityIndex& index_before : indexes_before) {
-      int layer_after = std::max(index_before.layer - 1, 0);
+      int layer_after = std::max(index_before.layer - 1, get_map().get_min_layer());
       layers_after << layer_after;
     }
     indexes_after = get_map().set_entities_layer(indexes_before, layers_after);
@@ -977,7 +1005,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
     tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"),
     tr("Coordinates of the map in its world (useful to make adjacent scrolling maps)"));
 
-  set_num_layers_visibility_supported(map->get_num_layers());
+  set_layers_supported(map->get_min_layer(), map->get_max_layer());
 
   load_settings();
   update();
@@ -993,10 +1021,15 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(size_changed(QSize)),
           this, SLOT(update_size_field()));
 
-  connect(ui.num_layers_field, SIGNAL(editingFinished()),
-          this, SLOT(change_num_layers_requested()));
-  connect(map, SIGNAL(num_layers_changed(int)),
-          this, SLOT(num_layers_changed()));
+  connect(ui.min_layer_field, SIGNAL(editingFinished()),
+          this, SLOT(change_min_layer_requested()));
+  connect(map, SIGNAL(min_layer_changed(int)),
+          this, SLOT(min_layer_changed()));
+
+  connect(ui.max_layer_field, SIGNAL(editingFinished()),
+          this, SLOT(change_max_layer_requested()));
+  connect(map, SIGNAL(max_layer_changed(int)),
+          this, SLOT(max_layer_changed()));
 
   connect(ui.world_check_box, SIGNAL(stateChanged(int)),
           this, SLOT(world_check_box_changed()));
@@ -1243,7 +1276,8 @@ void MapEditor::update() {
   update_map_id_field();
   update_description_to_gui();
   update_size_field();
-  update_num_layers_field();
+  update_min_layer_field();
+  update_max_layer_field();
   update_world_field();
   update_floor_field();
   update_location_field();
@@ -1333,53 +1367,54 @@ void MapEditor::change_size_requested() {
 }
 
 /**
- * @brief Updates the number of layers field with the data from the model.
+ * @brief Updates the minimum layer field with the data from the model.
  */
-void MapEditor::update_num_layers_field() {
+void MapEditor::update_min_layer_field() {
 
-  ui.num_layers_field->setValue(map->get_num_layers());
+  ui.min_layer_field->setValue(map->get_min_layer());
 }
 
 /**
- * @brief Updates the UI when the number of layers in the model has changed.
+ * @brief Updates the UI when the minimum of layers in the model has changed.
  */
-void MapEditor::num_layers_changed() {
+void MapEditor::min_layer_changed() {
 
-  const int num_layers = get_map().get_num_layers();
+  const int min_layer = get_map().get_min_layer();
+  const int max_layer = get_map().get_max_layer();
 
   // Update the spinbox.
-  update_num_layers_field();
+  update_min_layer_field();
 
   // Notify the editor.
-  set_num_layers_visibility_supported(num_layers);
+  set_layers_supported(min_layer, max_layer);
 
   // Notify the view settings.
-  get_view_settings().set_num_layers(num_layers);
+  get_view_settings().set_layer_range(min_layer, max_layer);
 }
 
 /**
- * @brief Modifies the number of layers with new values entered by the user.
+ * @brief Modifies the minimum layer with new values entered by the user.
  */
-void MapEditor::change_num_layers_requested() {
+void MapEditor::change_min_layer_requested() {
 
-  int num_layers = ui.num_layers_field->value();
+  int min_layer = ui.min_layer_field->value();
 
-  if (num_layers == map->get_num_layers()) {
+  if (min_layer == map->get_min_layer()) {
     return;
   }
 
-  if (num_layers < map->get_num_layers()) {
+  if (min_layer > map->get_min_layer()) {
     // Reducing the number of layers: ask the user confirmation if entities are removed.
     int num_entities_removed = 0;
-    for (int layer = num_layers; layer < map->get_num_layers(); ++layer) {
+    for (int layer = map->get_min_layer(); layer < min_layer; ++layer) {
       num_entities_removed += map->get_num_entities(layer);
     }
     if (num_entities_removed > 0) {
       // Block spinbox signals to avoid reentrant calls to this function
       // (because the dialog box takes focus from the spinbox, trigerring
       // its signal again).
-      const bool was_blocked = ui.num_layers_field->signalsBlocked();
-      ui.num_layers_field->blockSignals(true);
+      const bool was_blocked = ui.min_layer_field->signalsBlocked();
+      ui.min_layer_field->blockSignals(true);
 
       QMessageBox::StandardButton answer = QMessageBox::warning(
           this,
@@ -1389,16 +1424,86 @@ void MapEditor::change_num_layers_requested() {
           QMessageBox::Ok
       );
 
-      ui.num_layers_field->blockSignals(was_blocked);
+      ui.min_layer_field->blockSignals(was_blocked);
 
       if (answer == QMessageBox::Cancel) {
-        update_num_layers_field();
+        update_min_layer_field();
         return;
       }
     }
   }
 
-  try_command(new SetNumLayersCommand(*this, num_layers));
+  try_command(new SetMinLayerCommand(*this, min_layer));
+}
+
+/**
+ * @brief Updates the maximum layer field with the data from the model.
+ */
+void MapEditor::update_max_layer_field() {
+
+  ui.max_layer_field->setValue(map->get_max_layer());
+}
+
+/**
+ * @brief Updates the UI when the maximum of layers in the model has changed.
+ */
+void MapEditor::max_layer_changed() {
+
+  const int min_layer = get_map().get_min_layer();
+  const int max_layer = get_map().get_max_layer();
+
+  // Update the spinbox.
+  update_max_layer_field();
+
+  // Notify the editor.
+  set_layers_supported(min_layer, max_layer);
+
+  // Notify the view settings.
+  get_view_settings().set_layer_range(min_layer, max_layer);
+}
+
+/**
+ * @brief Modifies the maximum layer with new values entered by the user.
+ */
+void MapEditor::change_max_layer_requested() {
+
+  int max_layer = ui.max_layer_field->value();
+
+  if (max_layer == map->get_max_layer()) {
+    return;
+  }
+
+  if (max_layer < map->get_max_layer()) {
+    // Reducing the number of layers: ask the user confirmation if entities are removed.
+    int num_entities_removed = 0;
+    for (int layer = max_layer + 1; layer <= map->get_max_layer(); ++layer) {
+      num_entities_removed += map->get_num_entities(layer);
+    }
+    if (num_entities_removed > 0) {
+      // Block spinbox signals to avoid reentrant calls to this function
+      // (because the dialog box takes focus from the spinbox, trigerring
+      // its signal again).
+      const bool was_blocked = ui.max_layer_field->signalsBlocked();
+      ui.max_layer_field->blockSignals(true);
+
+      QMessageBox::StandardButton answer = QMessageBox::warning(
+          this,
+          tr("Layer not empty"),
+          tr("This layer is not empty: %1 entities will be destroyed.").arg(num_entities_removed),
+          QMessageBox::Ok | QMessageBox::Cancel,
+          QMessageBox::Ok
+      );
+
+      ui.max_layer_field->blockSignals(was_blocked);
+
+      if (answer == QMessageBox::Cancel) {
+        update_max_layer_field();
+        return;
+      }
+    }
+  }
+
+  try_command(new SetMaxLayerCommand(*this, max_layer));
 }
 
 /**

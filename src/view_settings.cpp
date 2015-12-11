@@ -27,7 +27,8 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_size(16, 16),
   grid_style(GridStyle::DASHED),
   grid_color(Qt::black),
-  num_layers(0),
+  min_layer(0),
+  max_layer(-1),
   visible_layers(),
   visible_entity_types() {
 
@@ -177,31 +178,44 @@ void ViewSettings::set_grid_color(const QColor& color) {
 }
 
 /**
- * @brief Returns the number of layers supported for visibility.
- * @return The number of layers, or 0 if layer visibility is not supported.
+ * @brief Returns the range of layers supported for visibility.
+ *
+ * Returns an empty range if layer visibility is not supported.
+ *
+ * @param[ou] min_layer The lowest layer.
+ * @param[ou] max_layer The highest layer.
  */
-int ViewSettings::get_num_layers() const {
+void ViewSettings::get_layer_range(int& min_layer, int& max_layer) const {
 
-  return num_layers;
+  min_layer = this->min_layer;
+  max_layer = this->max_layer;
 }
 
 /**
- * @brief Sets the number of layers supported for visibility.
+ * @brief Sets the range of layers supported for visibility.
  *
- * Emits num_layers_changed() if there is a change.
+ * Emits layer_range_changed().
  * Calling this function resets all layers to visible.
  *
- * @param num_layers The number of layers, or if layer visibility is not supported.
+ * @param min_layer The lowest layer.
+ * @param max_layer The lowest layer.
  */
-void ViewSettings::set_num_layers(int num_layers) {
+void ViewSettings::set_layer_range(int min_layer, int max_layer) {
 
-  if (num_layers == this->num_layers) {
+  if (min_layer == this->min_layer && max_layer == this->max_layer) {
     return;
   }
 
-  this->num_layers = num_layers;
+  if (max_layer < min_layer) {
+    // Empty range: layer visibility is not supported.
+    min_layer = 0;
+    max_layer = -1;
+  }
 
-  emit num_layers_changed(num_layers);
+  this->min_layer = min_layer;
+  this->max_layer = max_layer;
+
+  emit layer_range_changed(min_layer, max_layer);
 
   visible_layers.clear();
   show_all_layers();
@@ -227,7 +241,7 @@ bool ViewSettings::is_layer_visible(int layer) const {
  */
 void ViewSettings::set_layer_visible(int layer, bool visible) {
 
-  Q_ASSERT(layer >= 0 && layer < get_num_layers());
+  Q_ASSERT(layer >= min_layer && layer <= max_layer);
 
   if (visible == is_layer_visible(layer)) {
     return;
@@ -249,7 +263,7 @@ void ViewSettings::set_layer_visible(int layer, bool visible) {
  */
 void ViewSettings::show_all_layers() {
 
-  for (int i = 0; i < get_num_layers(); ++i) {
+  for (int i = min_layer; i <= max_layer; ++i) {
     set_layer_visible(i, true);
   }
 }
@@ -261,7 +275,7 @@ void ViewSettings::show_all_layers() {
  */
 void ViewSettings::hide_all_layers() {
 
-  for (int i = 0; i < get_num_layers(); ++i) {
+  for (int i = min_layer; i <= max_layer; ++i) {
     set_layer_visible(i, false);
   }
 }

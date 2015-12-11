@@ -59,8 +59,8 @@ public:
   bool is_find_supported() const;
   bool is_zoom_supported() const;
   bool is_grid_supported() const;
-  bool is_layer_visibility_supported() const;
-  int get_num_layers_visibility_supported() const;
+  bool is_layer_supported() const;
+  void get_layers_supported(int& min_layer, int& max_layer) const;
   bool is_entity_type_visibility_supported() const;
   const ViewSettings& get_view_settings() const;
   ViewSettings& get_view_settings();
@@ -91,7 +91,7 @@ protected:
   void set_find_supported(bool find_supported);
   void set_zoom_supported(bool zoom_supported);
   void set_grid_supported(bool grid_supported);
-  void set_num_layers_visibility_supported(int num_layers_visibility_supported);
+  void set_layers_supported(int min_layer, int max_layer);
   void set_entity_type_visibility_supported(bool supported);
 
   QString get_close_confirm_message() const;
@@ -112,8 +112,9 @@ private:
   bool find_supported;                      /**< Whether the editor supports finding. */
   bool zoom_supported;                      /**< Whether the editor supports zooming. */
   bool grid_supported;                      /**< Whether the editor supports showing/hiding a grid. */
-  int num_layers_visibility_supported;      /**< Number of layers if the editor supports showing/hiding layers,
-                                             * 0 otherwise. */
+  int min_layer_supported;                  /**< Lowest layer if the editor supports showing/hiding layers. */
+  int max_layer_supported;                  /**< Highest layer if the editor supports showing/hiding layers,
+                                             * -1 otherwise. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
   ViewSettings view_settings;               /**< What is shown and how. */
 

@@ -222,7 +222,7 @@ void MapView::set_map(MapModel* map) {
     setScene(scene);
 
     // Initialize layers.
-    connect(map, &MapModel::num_layers_changed, [&]() {
+    connect(map, &MapModel::layer_range_changed, [&]() {
       build_context_menu_layer_actions();
     });
     build_context_menu_layer_actions();
@@ -550,12 +550,6 @@ void MapView::build_context_menu_layer_actions() {
     return;
   }
 
-  int num_layers = get_map()->get_num_layers();
-  if (set_layer_actions.size() == num_layers) {
-    // Nothing to do.
-    return;
-  }
-
   // Clean the old actions.
   delete set_layer_actions_group;
   set_layer_actions.clear();
@@ -563,7 +557,7 @@ void MapView::build_context_menu_layer_actions() {
   // Create new ones.
   set_layer_actions_group = new QActionGroup(this);
   set_layer_actions_group->setExclusive(true);
-  for (int layer = 0; layer < num_layers; ++layer) {
+  for (int layer = get_map()->get_min_layer(); layer <= get_map()->get_max_layer(); ++layer) {
     QAction* action = new QAction(tr("Layer %1").arg(layer), set_layer_actions_group);
     action->setCheckable(true);
     connect(action, &QAction::triggered, [=]() {
@@ -651,8 +645,8 @@ QMenu* MapView::create_context_menu() {
       menu->addAction(action);
     }
 
-    up_one_layer_action->setEnabled(!has_common_layer || common_layer < get_map()->get_num_layers() - 1);
-    down_one_layer_action->setEnabled(!has_common_layer || common_layer > 0);
+    up_one_layer_action->setEnabled(!has_common_layer || common_layer < get_map()->get_max_layer());
+    down_one_layer_action->setEnabled(!has_common_layer || common_layer > get_map()->get_min_layer());
     menu->addAction(up_one_layer_action);
     menu->addAction(down_one_layer_action);
 
@@ -1648,7 +1642,7 @@ DrawingRectangleState::DrawingRectangleState(MapView& view, const QPoint& initia
 void DrawingRectangleState::start() {
 
   current_area_item = new QGraphicsRectItem();
-  current_area_item->setZValue(get_map().get_num_layers() + 1);
+  current_area_item->setZValue(get_map().get_max_layer() + 2);
   current_area_item->setPen(QPen(Qt::yellow));
   get_scene().addItem(current_area_item);
   initial_selection = get_scene().selectedItems();
@@ -2160,7 +2154,7 @@ AddingEntitiesState::AddingEntitiesState(MapView& view, EntityModels&& entities,
 
   for (const EntityModelPtr& entity : this->entities) {
     EntityItem* item = new EntityItem(*entity);
-    item->setZValue(get_map().get_num_layers());
+    item->setZValue(get_map().get_max_layer() + 1);
     entity_items.push_back(item);
   }
 }
@@ -2242,7 +2236,7 @@ void AddingEntitiesState::sort_entities() {
     }
   }
   entities.clear();
-  for (int layer = 0; layer < get_map().get_num_layers(); ++layer) {
+  for (int layer = get_map().get_min_layer(); layer <= get_map().get_max_layer(); ++layer) {
     for (EntityModelPtr& entity : entities_by_layer[layer]) {
       entities.emplace_back(std::move(entity));
     }
@@ -2265,7 +2259,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // because every entity added will increment one of them.
   QMap<int, int> num_tiles_by_layer;     // Index where to append a tile.
   QMap<int, int> num_dynamic_entities_by_layer;  // Index where to append a dynamic entity.
-  for (int layer = 0; layer < map.get_num_layers(); ++layer) {
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
     num_tiles_by_layer[layer] = map.get_num_tiles(layer);
     num_dynamic_entities_by_layer[layer] = map.get_num_dynamic_entities(layer);
   }
@@ -2381,9 +2375,7 @@ void AddingEntitiesState::tileset_selection_changed() {
  */
 int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
 
-  const int num_layers = get_map().get_num_layers();
-
-  if (!guess_layer && entity.get_layer() < num_layers) {
+  if (!guess_layer && get_map().is_valid_layer(entity.get_layer())) {
     // The entity does not want us to guess a layer.
     return entity.get_layer();
   }
@@ -2399,7 +2391,7 @@ int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
   // The entity has a preferred layer:
   // see if there is something above its preferred layer.
   int preferred_layer = entity.get_preferred_layer();
-  if (preferred_layer >= num_layers) {
+  if (get_map().is_valid_layer(preferred_layer)) {
       // The preferred layer does not exist on this map.
       return layer_under;
   }

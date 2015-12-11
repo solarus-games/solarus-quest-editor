@@ -62,7 +62,7 @@ protected:
 private slots:
 
   void size_changed(const QSize& size);
-  void num_layers_changed(int num_layers);
+  void num_layers_changed(int min_layer, int max_layer);
   void entities_added(const EntityIndexes& indexes);
   void entities_about_to_be_removed(const EntityIndexes& indexes);
   void entity_layer_changed(const EntityIndex& index_before,
@@ -72,6 +72,9 @@ private slots:
   void entity_size_changed(const EntityIndex& index, const QSize& size);
 
 private:
+
+  template<typename T>
+  using ByLayer = QMap<int, T>;
 
   using EntityItems = QList<EntityItem*>;
 
@@ -83,9 +86,9 @@ private:
   const EntityItems& get_entity_items(int layer);
 
   MapModel& map;                            /**< The map represented. */
-  std::vector<EntityItems> entity_items;    /**< Entities items on each layer,
+  ByLayer<EntityItems> entity_items;        /**< Entities items on each layer,
                                              * ordered as in the map. */
-  std::vector<QGraphicsItem*>
+  ByLayer<QGraphicsItem*>
       layer_parent_items;                   /**< Artificial parent item of everything on a layer. */
 
   QPointer<const ViewSettings>

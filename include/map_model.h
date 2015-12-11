@@ -54,8 +54,11 @@ public:
   // Map properties.
   QSize get_size() const;
   void set_size(const QSize& size);
-  int get_num_layers() const;
-  AddableEntities set_num_layers(int num_layers);
+  int get_min_layer() const;
+  AddableEntities set_min_layer(int min_layer);
+  int get_max_layer() const;
+  AddableEntities set_max_layer(int max_layer);
+  bool is_valid_layer(int layer) const;
   bool has_world() const;
   QString get_world() const;
   void set_world(const QString& world);
@@ -130,7 +133,7 @@ public:
 signals:
 
   void size_changed(const QSize& size);
-  void num_layers_changed(int num_layers);
+  void layer_range_changed(int min_layer, int max_layer);
   void world_changed(const QString& world);
   void floor_changed(int floor);
   void location_changed(const QPoint& location);
