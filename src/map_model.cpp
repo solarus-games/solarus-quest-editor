@@ -158,7 +158,7 @@ AddableEntities MapModel::set_min_layer(int min_layer) {
   AddableEntities removed_entities;
   if (min_layer > get_min_layer()) {
     EntityIndexes indexes_to_remove;
-    for (int layer = get_min_layer(); layer <= min_layer; ++layer) {
+    for (int layer = get_min_layer(); layer < min_layer; ++layer) {
       for (int i = 0; i < get_num_entities(layer); ++i) {
         indexes_to_remove.append({ layer, i });
       }
