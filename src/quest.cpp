@@ -1123,6 +1123,8 @@ void Quest::create_map_data_file(const QString& map_id) {
     map.set_tileset_id(tileset_ids.first());
   }
   map.set_size(get_properties().get_normal_quest_size());
+  map.set_min_layer(0);
+  map.set_max_layer(2);
   map.save();
 }
 
