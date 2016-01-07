@@ -979,6 +979,8 @@ void MapView::tileset_id_changed(const QString& tileset_id) {
     return;
   }
   scene->update();
+
+  start_state_doing_nothing();
 }
 
 /**
@@ -990,6 +992,8 @@ void MapView::tileset_reloaded() {
     return;
   }
   scene->update();
+
+  start_state_doing_nothing();
 }
 
 /**
