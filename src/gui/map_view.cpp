@@ -205,7 +205,6 @@ MapModel* MapView::get_map() {
  * @brief Sets the map to represent in this view.
  * @param map The map model, or nullptr to remove any model.
  * This class does not take ownership on the map.
- * The map can be deleted safely.
  */
 void MapView::set_map(MapModel* map) {
 
