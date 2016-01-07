@@ -349,7 +349,26 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
   }
   map.set_tileset_id(std_tileset_id);
 
-  if (!tileset_id.isEmpty()) {
+  reload_tileset();
+
+  emit tileset_id_changed(tileset_id);
+}
+
+/**
+ * @brief Notifies this map that its tileset files may have changed.
+ *
+ * The tileset is refreshed.
+ *
+ * Emis tileset_reloaded().
+ */
+void MapModel::reload_tileset() {
+
+  const QString& tileset_id = get_tileset_id();
+
+  if (tileset_id.isEmpty()) {
+    tileset_model = nullptr;
+  }
+  else {
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
@@ -361,16 +380,7 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
     }
   }
 
-  emit tileset_id_changed(tileset_id);
-}
-
-/**
- * @brief Slot called when the tileset file is modified.
- */
-void MapModel::tileset_modified() {
-  QString tileset_id = get_tileset_id();
-  set_tileset_id("");
-  set_tileset_id(tileset_id);
+  emit tileset_reloaded();
 }
 
 /**

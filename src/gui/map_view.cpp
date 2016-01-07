@@ -239,6 +239,12 @@ void MapView::set_map(MapModel* map) {
     new ZoomTool(this);
     new MouseCoordinatesTrackingTool(this);
 
+    // Connect signals.
+    connect(map, SIGNAL(tileset_id_changed(QString)),
+            this, SLOT(tileset_id_changed(QString)));
+    connect(map, SIGNAL(tileset_reloaded()),
+            this, SLOT(tileset_reloaded()));
+
     // Start the state mechanism.
     start_state_doing_nothing();
   }
@@ -969,6 +975,17 @@ void MapView::tileset_selection_changed() {
 void MapView::tileset_id_changed(const QString& tileset_id) {
 
   Q_UNUSED(tileset_id);
+  if (scene == nullptr) {
+    return;
+  }
+  scene->update();
+}
+
+/**
+ * @brief Slot called when the tileset file is reloaded.
+ */
+void MapView::tileset_reloaded() {
+
   if (scene == nullptr) {
     return;
   }

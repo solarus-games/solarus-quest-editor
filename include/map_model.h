@@ -70,6 +70,7 @@ public:
   TilesetModel* get_tileset_model() const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
+  void reload_tileset();
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
 
@@ -138,6 +139,7 @@ signals:
   void floor_changed(int floor);
   void location_changed(const QPoint& location);
   void tileset_id_changed(const QString& tileset_id);
+  void tileset_reloaded();
   void music_id_changed(const QString& music_id);
 
   void entities_about_to_be_added(const EntityIndexes& indexes);
@@ -155,7 +157,6 @@ signals:
 public slots:
 
   void save() const;
-  void tileset_modified();
 
 private:
 

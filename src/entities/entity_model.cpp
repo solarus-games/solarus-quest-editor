@@ -1557,7 +1557,8 @@ bool EntityModel::draw_as_icon(QPainter& painter) const {
 }
 
 /**
- * @brief Notifies this entity that the tileset of the map has changed.
+ * @brief Notifies this entity that the tileset of the map has been modified or
+ * changed to another one.
  *
  * Entities whose displaying depends on the tileset may reimplement this function.
  *

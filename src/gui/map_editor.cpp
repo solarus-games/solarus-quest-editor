@@ -1052,7 +1052,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(tileset_id_changed(QString)),
           this, SLOT(tileset_id_changed(QString)));
   connect(ui.tileset_refresh_button, SIGNAL(clicked()),
-          map, SLOT(tileset_modified()));
+          this, SLOT(refresh_tileset_requested()));
   connect(ui.tileset_edit_button, SIGNAL(clicked()),
           this, SLOT(open_tileset_requested()));
 
@@ -1633,6 +1633,18 @@ void MapEditor::tileset_selector_activated() {
 }
 
 /**
+ * @brief Slot called when the user wants to refresh the selected tileset.
+ */
+void MapEditor::refresh_tileset_requested() {
+
+  // Refresh the map model.
+  get_map().reload_tileset();
+
+  // Rebuild the tileset view.
+  update_tileset_view();
+}
+
+/**
  * @brief Slot called when the user wants to open the selected tileset.
  */
 void MapEditor::open_tileset_requested() {
@@ -1671,6 +1683,7 @@ void MapEditor::update_tileset_view() {
 
   TilesetModel* tileset = map->get_tileset_model();
   ui.tileset_view->set_model(tileset);
+  // TODO keep scrollbar positions
 }
 
 /**
@@ -1678,6 +1691,8 @@ void MapEditor::update_tileset_view() {
  * @param tileset_id The new tileset id.
  */
 void MapEditor::tileset_id_changed(const QString& tileset_id) {
+
+  Q_UNUSED(tileset_id);
 
   // Show the correct tileset in the combobox.
   update_tileset_field();
@@ -1688,9 +1703,6 @@ void MapEditor::tileset_id_changed(const QString& tileset_id) {
   // Watch the selection of the tileset to correctly add new tiles.
   connect(ui.tileset_view, SIGNAL(selection_changed_by_user()),
           this, SLOT(tileset_selection_changed()));
-
-  // Notify the map view.
-  ui.map_view->tileset_id_changed(tileset_id);
 }
 
 /**
