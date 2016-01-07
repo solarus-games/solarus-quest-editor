@@ -1683,7 +1683,6 @@ void MapEditor::update_tileset_view() {
 
   TilesetModel* tileset = map->get_tileset_model();
   ui.tileset_view->set_model(tileset);
-  // TODO keep scrollbar positions
 }
 
 /**
