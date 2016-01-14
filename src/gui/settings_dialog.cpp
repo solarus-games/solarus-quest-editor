@@ -48,6 +48,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_working_directory()));
   connect(ui.working_directory_button, SIGNAL(clicked()),
           this, SLOT(browse_working_directory()));
+  connect(ui.restore_last_files_field, SIGNAL(toggled(bool)),
+          this, SLOT(change_restore_last_files()));
   connect(ui.save_files_field, SIGNAL(currentIndexChanged(int)),
           this, SLOT(change_save_files()));
   connect(ui.no_audio_field, SIGNAL(toggled(bool)),
@@ -165,6 +167,7 @@ void SettingsDialog::update() {
 
   // General.
   update_working_directory();
+  update_restore_last_files();
   update_save_files();
   update_no_audio();
   update_video_acceleration();
@@ -261,6 +264,23 @@ void SettingsDialog::browse_working_directory() {
 
   ui.working_directory_field->setText(new_working_directory);
   edited_settings[Settings::working_directory] = new_working_directory;
+  update_buttons();
+}
+
+/**
+ * @brief Updates the restore last files field.
+ */
+void SettingsDialog::update_restore_last_files() {
+
+  ui.restore_last_files_field->setChecked(settings.get_value_bool(Settings::restore_last_files));
+}
+
+/**
+ * @brief Slot called when the user changes the restore last files checkbox.
+ */
+void SettingsDialog::change_restore_last_files() {
+
+  edited_settings[Settings::restore_last_files] = ui.restore_last_files_field->isChecked();
   update_buttons();
 }
 

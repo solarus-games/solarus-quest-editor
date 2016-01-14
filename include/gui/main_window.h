@@ -98,6 +98,8 @@ private:
   bool confirm_close();
   void update_title();
   void upgrade_quest();
+  void add_quest_to_recent_list();
+
   QMenu* create_zoom_menu();
   void update_show_layers_menu();
   QMenu* create_show_entities_menu();

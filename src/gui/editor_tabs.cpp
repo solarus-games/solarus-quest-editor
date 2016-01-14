@@ -26,6 +26,7 @@
 #include "gui/dialogs_editor.h"
 #include "editor_exception.h"
 #include "quest.h"
+#include "settings.h"
 #include <QFileInfo>
 #include <QKeyEvent>
 #include <QUndoGroup>
@@ -50,6 +51,8 @@ EditorTabs::EditorTabs(QWidget* parent):
           this, SLOT(close_file_requested(int)));
   connect(tab_bar, SIGNAL(currentChanged(int)),
           this, SLOT(current_editor_changed(int)));
+  connect(tab_bar, SIGNAL(tabMoved(int, int)),
+          this, SLOT(update_recent_files_list()));
 }
 
 /**
@@ -660,6 +663,27 @@ void EditorTabs::current_editor_changed(int /* index */) {
 
     editor->setFocus();
   }
+
+  // Remember the current active tab.
+  QString file_path = (editor == nullptr) ? QString() : editor->get_file_path();
+  Settings settings;
+  settings.set_value(Settings::last_file, file_path);
+}
+
+/**
+ * @brief Saves the list of open tabs.
+ */
+void EditorTabs::update_recent_files_list() {
+
+  Settings settings;
+  QStringList last_files;
+  for (int i = 0; i < count(); ++i) {
+
+    Editor* editor = get_editor(i);
+    last_files << editor->get_file_path();
+  }
+
+  settings.set_value(Settings::last_files, last_files);
 }
 
 /**
@@ -721,4 +745,24 @@ void EditorTabs::keyPressEvent(QKeyEvent* event) {
   }
 
   QTabWidget::keyPressEvent(event);
+}
+
+/**
+ * @brief Function called when a tab is inserted.
+ * @param index Index of the inserted tab.
+ */
+void EditorTabs::tabInserted(int index) {
+
+  Q_UNUSED(index);
+  update_recent_files_list();
+}
+
+/**
+ * @brief Function called when a tab is removed.
+ * @param index Index of the removed tab.
+ */
+void EditorTabs::tabRemoved(int index) {
+
+  Q_UNUSED(index);
+  update_recent_files_list();
 }

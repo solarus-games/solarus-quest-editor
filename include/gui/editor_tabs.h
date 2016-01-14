@@ -84,10 +84,13 @@ public slots:
 protected:
 
   void keyPressEvent(QKeyEvent* event) override;
+  void tabInserted(int index) override;
+  void tabRemoved(int index) override;
 
 private slots:
 
   void current_editor_changed(int index);
+  void update_recent_files_list();
   void current_editor_modification_state_changed(bool clean);
   void modification_state_changed(int index, bool clean);
 

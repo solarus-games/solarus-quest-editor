@@ -34,14 +34,14 @@
  */
 int main(int argc, char* argv[]) {
 
-  QString quest_path;
-  QString file_path;
+  QString cmd_quest_path;
+  QString cmd_file_path;
   if (argc > 1) {
     // Quest to open initially.
-    quest_path = argv[1];
+    cmd_quest_path = argv[1];
     if (argc > 2) {
       // File to open in this quest.
-      file_path = argv[2];
+      cmd_file_path = argv[2];
     }
   }
 
@@ -63,12 +63,44 @@ int main(int argc, char* argv[]) {
   // Choose an appropriate initial window size and position.
   window.initialize_geometry_on_screen();
 
+  // Determine the quest and files to open,
+  // from the command line or from recent files.
+  QString quest_path;
+  QStringList file_paths;
+  QString active_file_path;
+
+  Settings settings;
+  if (!cmd_quest_path.isEmpty()) {
+    // Quest specified in the command line.
+    quest_path = cmd_quest_path;
+    if (!cmd_file_path.isEmpty()) {
+      file_paths << cmd_file_path;
+    }
+  }
+  else if (settings.get_value_bool("restore_last_files")) {
+    // Restore the default quest if any.
+    QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+    if (!last_quests.isEmpty()) {
+      quest_path = last_quests.first();
+      file_paths = settings.get_value_string_list(Settings::last_files);
+      active_file_path = settings.get_value_string(Settings::last_file);
+    }
+  }
+
   // Open the quest.
   if (!quest_path.isEmpty()) {
     window.open_quest(quest_path);
 
-    if (window.get_quest().is_valid() && !file_path.isEmpty()) {
-      window.open_file(window.get_quest(), file_path);
+    if (window.get_quest().is_valid()) {
+
+      // Open the tabs.
+      for (const QString& file_path : file_paths) {
+        window.open_file(window.get_quest(), file_path);
+      }
+      if (!active_file_path.isEmpty()) {
+        // Restore the active tab.
+        window.open_file(window.get_quest(), active_file_path);
+      }
     }
   }
 

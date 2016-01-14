@@ -47,6 +47,8 @@ public slots:
   void update_working_directory();
   void change_working_directory();
   void browse_working_directory();
+  void update_restore_last_files();
+  void change_restore_last_files();
   void update_save_files();
   void change_save_files();
   void update_no_audio();

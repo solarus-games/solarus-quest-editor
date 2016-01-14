@@ -443,6 +443,9 @@ bool MainWindow::open_quest(const QString& quest_path) {
             ui.tab_widget, SLOT(file_deleted(QString)));
 
     ui.action_run_quest->setEnabled(true);
+
+    add_quest_to_recent_list();
+
     success = true;
   }
   catch (const ObsoleteEditorException& ex) {
@@ -525,6 +528,40 @@ void MainWindow::upgrade_quest() {
           tr("An error occured while upgrading the quest.\n"
              "Your quest was kept unchanged in format %1.").arg(quest_version));
   }
+}
+
+/**
+ * @brief Adds the quest path to the list of recent quests.
+ *
+ * Moves it to the beginning of the list if it is already presents.
+ * Keeps the number of recent quests in the list limited.
+ */
+void MainWindow::add_quest_to_recent_list() {
+
+  Settings settings;
+  QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+  QString quest_path = get_quest().get_root_path();
+
+  if (!last_quests.isEmpty() && last_quests.first() == quest_path) {
+    // Nothing to do.
+    return;
+  }
+
+  // Remove if already present.
+  if (last_quests.contains(quest_path)) {
+    last_quests.removeAll(quest_path);
+  }
+
+  // Add to the beginning of the list.
+  last_quests.prepend(quest_path);
+
+  // Keep the list limited to 5 quests.
+  constexpr int max = 5;
+  while (last_quests.size() > max) {
+    last_quests.removeAt(last_quests.size() - 1);
+  }
+
+  settings.set_value(Settings::last_quests, last_quests);
 }
 
 /**

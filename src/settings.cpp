@@ -21,6 +21,10 @@
 
 // General keys.
 const QString Settings::working_directory = "working_directory";
+const QString Settings::last_quests = "last_quests";
+const QString Settings::last_files = "last_files";
+const QString Settings::last_file = "last_file";
+const QString Settings::restore_last_files = "restore_last_files";
 const QString Settings::save_files_before_running = "save_files_before_running";
 const QString Settings::no_audio = "no_audio";
 const QString Settings::video_acceleration = "video_acceleration";
@@ -62,6 +66,10 @@ QMap<QString, QVariant> Settings::default_values = {
 
   // General.
   { Settings::working_directory, "" },
+  { Settings::last_quests, QStringList() },
+  { Settings::last_files, QStringList() },
+  { Settings::last_file, "" },
+  { Settings::restore_last_files, true },
   { Settings::save_files_before_running, "ask" },
   { Settings::no_audio, false },
   { Settings::video_acceleration, true },
@@ -158,6 +166,16 @@ int Settings::get_value_int(const QString& key) {
 QString Settings::get_value_string(const QString& key) {
 
   return get_value(key).toString();
+}
+
+/**
+ * @brief Returns a settings string list value.
+ * @param key The key of the setting.
+ * @return The string list value of the setting.
+ */
+QStringList Settings::get_value_string_list(const QString& key) {
+
+  return get_value(key).toStringList();
 }
 
 /**

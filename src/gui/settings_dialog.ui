@@ -25,9 +25,9 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QGroupBox" name="directory_group_box">
+        <widget class="QGroupBox" name="files_group_box">
          <property name="title">
-          <string>Directory</string>
+          <string>Files</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
@@ -50,6 +50,13 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="restore_last_files_field">
+            <property name="text">
+             <string>Restore open tabs at startup</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

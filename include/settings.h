@@ -28,6 +28,10 @@ public:
 
   // General keys.
   static const QString working_directory;
+  static const QString last_quests;
+  static const QString last_files;
+  static const QString last_file;
+  static const QString restore_last_files;
   static const QString save_files_before_running;
   static const QString no_audio;
   static const QString video_acceleration;
@@ -66,6 +70,7 @@ public:
   bool get_value_bool(const QString& key);
   int get_value_int(const QString& key);
   QString get_value_string(const QString& key);
+  QStringList get_value_string_list(const QString& key);
   QSize get_value_size(const QString& key);
   QColor get_value_color(const QString& key);
 
