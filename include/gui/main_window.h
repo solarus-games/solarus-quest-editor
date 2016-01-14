@@ -100,6 +100,7 @@ private:
   void upgrade_quest();
   void add_quest_to_recent_list();
 
+  void update_recent_quests_menu();
   QMenu* create_zoom_menu();
   void update_show_layers_menu();
   QMenu* create_show_entities_menu();
@@ -108,6 +109,7 @@ private:
   Quest quest;                    /**< The current quest open if any. */
   QuestRunner* quest_runner;      /**< The dedicated thread to run quest. */
 
+  QMenu* recent_quests_menu;      /**< The menu to open a recent quest. */
   QMenu* zoom_menu;               /**< The zoom menu. */
   QToolButton* zoom_button;       /**< The zoom toolbar button. */
   QMap<double, QAction*>

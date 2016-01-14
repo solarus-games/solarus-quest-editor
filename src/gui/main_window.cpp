@@ -49,6 +49,7 @@ using EntityType = Solarus::EntityType;
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
   quest_runner(new QuestRunner(this)),
+  recent_quests_menu(nullptr),
   zoom_menu(nullptr),
   zoom_button(nullptr),
   zoom_actions(),
@@ -81,6 +82,10 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.splitter->setSizes({ tree_width, width() - tree_width });
 
   // Menu and toolbar actions.
+  recent_quests_menu = new QMenu(tr("Recent quests"));
+  update_recent_quests_menu();
+  ui.menu_quest->insertMenu(ui.menu_quest->actions()[2], recent_quests_menu);
+
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
   undo_action->setIcon(QIcon(":/images/icon_undo.png"));
@@ -198,6 +203,43 @@ MainWindow::~MainWindow() {
 Editor* MainWindow::get_current_editor() {
 
   return ui.tab_widget->get_editor();
+}
+
+/**
+ * @brief Builds or rebuilds the recent quests menu.
+ *
+ * Disables it if there is no recent quest.
+ */
+void MainWindow::update_recent_quests_menu() {
+
+  if (recent_quests_menu == nullptr) {
+    return;
+  }
+
+  // Get the recent quest list.
+  Settings settings;
+  QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+
+  // Clear previous actions.
+  recent_quests_menu->clear();
+
+  // Disable if there is no recent quest.
+  recent_quests_menu->setEnabled(!last_quests.isEmpty());
+
+  // Create new actions.
+  for (const QString& quest_path : last_quests) {
+
+    QAction* action = new QAction(quest_path, recent_quests_menu);
+    connect(action, &QAction::triggered, [=]() {
+
+      // Close the previous quest and open the new one.
+      if (close_quest()) {
+        open_quest(quest_path);
+      }
+    });
+
+    recent_quests_menu->addAction(action);
+  }
 }
 
 /**
@@ -560,13 +602,16 @@ void MainWindow::add_quest_to_recent_list() {
   // Add to the beginning of the list.
   last_quests.prepend(quest_path);
 
-  // Keep the list limited to 5 quests.
-  constexpr int max = 5;
+  // Keep the list limited to 10 quests.
+  constexpr int max = 10;
   while (last_quests.size() > max) {
     last_quests.removeAt(last_quests.size() - 1);
   }
 
   settings.set_value(Settings::last_quests, last_quests);
+
+  // Rebuild the recent quest menu.
+  update_recent_quests_menu();
 }
 
 /**

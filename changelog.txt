@@ -12,6 +12,7 @@ New features
 * Allow to switch tabs with keyboard shortcuts (#101).
 * Allow to automatically save files before running the quest (#90).
 * Allow to restore open tabs at startup (#131).
+* Add a recent quests menu (#89).
 * Fix tabs not closed when opening another quest (#44).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
