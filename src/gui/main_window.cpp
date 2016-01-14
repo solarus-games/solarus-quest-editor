@@ -397,8 +397,15 @@ Quest& MainWindow::get_quest() {
 
 /**
  * @brief Closes the current quest if any.
+ * @return @c true if the quest was closed, @c false if the user canceled.
  */
-void MainWindow::close_quest() {
+bool MainWindow::close_quest() {
+
+  ui.tab_widget->close_all_files_requested();
+  if (ui.tab_widget->count() > 0) {
+    // Some tabs of the previous quests are still here: the user canceled the closing.
+    return false;
+  }
 
   if (quest.exists()) {
     disconnect(&quest, SIGNAL(file_renamed(QString, QString)),
@@ -411,6 +418,7 @@ void MainWindow::close_quest() {
   update_title();
   ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
+  return true;
 }
 
 /**
@@ -422,9 +430,6 @@ void MainWindow::close_quest() {
  * @return @c true if the quest was successfully opened.
  */
 bool MainWindow::open_quest(const QString& quest_path) {
-
-  // Close the previous quest.
-  close_quest();
 
   // Load the requested quest.
   quest.set_root_path(quest_path);
@@ -569,6 +574,11 @@ void MainWindow::add_quest_to_recent_list() {
  */
 void MainWindow::on_action_new_quest_triggered() {
 
+  // Close the previous quest.
+  if (!close_quest()) {
+    return;
+  }
+
   Settings settings;
 
   QString quest_path = QFileDialog::getExistingDirectory(
@@ -598,6 +608,11 @@ void MainWindow::on_action_new_quest_triggered() {
  * @brief Slot called when the user triggers the "Load quest" action.
  */
 void MainWindow::on_action_load_quest_triggered() {
+
+  // Close the previous quest.
+  if (!close_quest()) {
+    return;
+  }
 
   Settings settings;
 
