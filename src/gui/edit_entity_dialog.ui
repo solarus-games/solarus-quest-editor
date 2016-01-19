@@ -62,6 +62,53 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QWidget" name="layer_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="layer_field">
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>-9999</number>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="layer_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="position_label">
        <property name="text">
@@ -189,23 +236,13 @@
       <widget class="ResourceSelector" name="model_field"/>
      </item>
      <item row="10" column="0">
-      <widget class="QLabel" name="rank_label">
-       <property name="text">
-        <string>Rank</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QComboBox" name="rank_field"/>
-     </item>
-     <item row="11" column="0">
       <widget class="QCheckBox" name="savegame_variable_checkbox">
        <property name="text">
         <string>Save the state</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="1">
+     <item row="10" column="1">
       <widget class="QWidget" name="savegame_variable_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="leftMargin">
@@ -233,14 +270,14 @@
        </layout>
       </widget>
      </item>
-     <item row="12" column="0">
+     <item row="11" column="0">
       <widget class="QLabel" name="treasure_label">
        <property name="text">
         <string>Treasure</string>
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
+     <item row="11" column="1">
       <widget class="QWidget" name="treasure_layout" native="true">
        <layout class="QVBoxLayout" name="layout_3">
         <property name="leftMargin">
@@ -322,64 +359,64 @@
        </layout>
       </widget>
      </item>
-     <item row="13" column="0">
+     <item row="12" column="0">
       <widget class="QLabel" name="font_label">
        <property name="text">
         <string>Price font</string>
        </property>
       </widget>
      </item>
-     <item row="13" column="1">
+     <item row="12" column="1">
       <widget class="ResourceSelector" name="font_field"/>
      </item>
-     <item row="14" column="0">
+     <item row="13" column="0">
       <widget class="QCheckBox" name="sound_checkbox">
        <property name="text">
         <string>Play a sound</string>
        </property>
       </widget>
      </item>
-     <item row="14" column="1">
+     <item row="13" column="1">
       <widget class="ResourceSelector" name="sound_field"/>
      </item>
-     <item row="15" column="0">
+     <item row="14" column="0">
       <widget class="QLabel" name="transition_label">
        <property name="text">
         <string>Transition</string>
        </property>
       </widget>
      </item>
-     <item row="15" column="1">
+     <item row="14" column="1">
       <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
      </item>
-     <item row="16" column="0">
+     <item row="15" column="0">
       <widget class="QLabel" name="destination_map_label">
        <property name="text">
         <string>Destination map</string>
        </property>
       </widget>
      </item>
-     <item row="16" column="1">
+     <item row="15" column="1">
       <widget class="ResourceSelector" name="destination_map_field"/>
      </item>
-     <item row="17" column="0">
+     <item row="16" column="0">
       <widget class="QLabel" name="destination_label">
        <property name="text">
         <string>Destination</string>
        </property>
       </widget>
      </item>
-     <item row="17" column="1">
+     <item row="16" column="1">
       <widget class="EntitySelector" name="destination_field"/>
      </item>
-     <item row="18" column="0">
+     <item row="17" column="0">
       <widget class="QCheckBox" name="weight_checkbox">
        <property name="text">
         <string>Weight</string>
        </property>
       </widget>
      </item>
-     <item row="18" column="1">
+     <item row="17" column="1">
       <widget class="QWidget" name="weight_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <property name="leftMargin">
@@ -426,14 +463,14 @@
        </layout>
       </widget>
      </item>
-     <item row="19" column="0">
+     <item row="18" column="0">
       <widget class="QCheckBox" name="damage_on_enemies_checkbox">
        <property name="text">
         <string>Damage on enemies</string>
        </property>
       </widget>
      </item>
-     <item row="19" column="1">
+     <item row="18" column="1">
       <widget class="QWidget" name="damage_on_enemies_layout" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <property name="leftMargin">
@@ -480,34 +517,34 @@
        </layout>
       </widget>
      </item>
-     <item row="20" column="0">
+     <item row="19" column="0">
       <widget class="QCheckBox" name="ground_checkbox">
        <property name="text">
         <string>Set a special ground</string>
        </property>
       </widget>
      </item>
-     <item row="20" column="1">
+     <item row="19" column="1">
       <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
      </item>
-     <item row="21" column="0">
+     <item row="20" column="0">
       <widget class="QLabel" name="maximum_moves_label">
        <property name="text">
         <string>Maximum moves</string>
        </property>
       </widget>
      </item>
-     <item row="21" column="1">
+     <item row="20" column="1">
       <widget class="QComboBox" name="maximum_moves_field"/>
      </item>
-     <item row="22" column="0">
+     <item row="21" column="0">
       <widget class="QLabel" name="opening_method_label">
        <property name="text">
         <string>Opening mode</string>
        </property>
       </widget>
      </item>
-     <item row="22" column="1">
+     <item row="21" column="1">
       <widget class="QWidget" name="opening_method_layout" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="leftMargin">
@@ -635,14 +672,14 @@
        </layout>
       </widget>
      </item>
-     <item row="23" column="0">
+     <item row="22" column="0">
       <widget class="QLabel" name="behavior_label">
        <property name="text">
         <string>Action</string>
        </property>
       </widget>
      </item>
-     <item row="23" column="1">
+     <item row="22" column="1">
       <widget class="QWidget" name="behavior_layout" native="true">
        <layout class="QVBoxLayout" name="layout_5">
         <property name="leftMargin">
@@ -698,53 +735,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QWidget" name="layer_layout" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QSpinBox" name="layer_field">
-          <property name="minimumSize">
-           <size>
-            <width>70</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <number>-9999</number>
-          </property>
-          <property name="maximum">
-           <number>9999</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="layer_spacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>

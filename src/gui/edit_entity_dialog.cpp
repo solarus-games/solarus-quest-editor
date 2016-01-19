@@ -34,7 +34,6 @@ const QString model_field_name = "model";
 const QString opening_method_field_name = "opening_method";
 const QString opening_condition_field_name = "opening_condition";
 const QString opening_condition_consumed_field_name = "opening_condition_consumed";
-const QString rank_field_name = "rank";
 const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
@@ -218,7 +217,6 @@ void EditEntityDialog::initialize() {
   initialize_model();
   initialize_name();
   initialize_opening_method();
-  initialize_rank();
   initialize_savegame_variable();
   initialize_size();
   initialize_sound();
@@ -255,7 +253,6 @@ void EditEntityDialog::apply() {
   apply_model();
   apply_name();
   apply_opening_method();
-  apply_rank();
   apply_savegame_variable();
   apply_size();
   apply_sound();
@@ -1110,38 +1107,6 @@ void EditEntityDialog::apply_opening_method() {
   else if (ui.opening_method_item_radio->isChecked()) {
     entity_after->set_field(opening_condition_field_name, ui.opening_condition_item_field->get_selected_id());
     entity_after->set_field(opening_condition_consumed_field_name, ui.opening_condition_item_consumed_checkbox->isChecked());
-  }
-}
-
-/**
- * @brief Initializes the rank field.
- */
-void EditEntityDialog::initialize_rank() {
-
-  if (!entity_before.has_field(rank_field_name)) {
-    remove_field(ui.rank_label, ui.rank_field);
-    return;
-  }
-
-  ui.rank_field->addItem(tr("Normal"), 0);
-  ui.rank_field->addItem(tr("Miniboss"), 1);
-  ui.rank_field->addItem(tr("Boss"), 2);
-
-  int value = entity_before.get_field(rank_field_name).toInt();
-  int index = ui.rank_field->findData(value);
-  if (index != -1) {
-    ui.rank_field->setCurrentIndex(index);
-  }
-}
-
-/**
- * @brief Updates the entity from the rank field.
- */
-void EditEntityDialog::apply_rank() {
-
-  if (entity_after->has_field(rank_field_name)) {
-    int value = ui.rank_field->currentData().toInt();
-    entity_after->set_field(rank_field_name, value);
   }
 }
 

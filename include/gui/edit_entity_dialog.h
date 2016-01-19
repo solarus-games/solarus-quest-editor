@@ -79,8 +79,6 @@ private:
   void apply_name();
   void initialize_opening_method();
   void apply_opening_method();
-  void initialize_rank();
-  void apply_rank();
   void initialize_savegame_variable();
   void apply_savegame_variable();
   void initialize_size();
