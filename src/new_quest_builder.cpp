@@ -24,7 +24,7 @@ namespace NewQuestBuilder {
  * @brief Creates initial files of a new quest.
  * @param quest_path Root path of the quest to create.
  * The data directory will be created there.
- * @throws EditorException if the files creation failed.
+ * @throws EditorException If the files creation failed.
  */
 void create_initial_quest_files(const QString& quest_path) {
 
