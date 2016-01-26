@@ -38,6 +38,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
 
   setUniformRowHeights(true);
   setAutoScroll(false);
+  setAlternatingRowColors(true);
 
   open_action = new QAction(tr("Open"), this);
   open_action->setShortcut(Qt::Key_Return);
