@@ -77,9 +77,14 @@ MainWindow::MainWindow(QWidget* parent) :
   }
   setWindowIcon(icon);
 
-  // Main splitter.
+  // Quest tree splitter.
   const int tree_width = 300;
-  ui.splitter->setSizes({ tree_width, width() - tree_width });
+  ui.quest_tree_splitter->setSizes({ tree_width, width() - tree_width });
+
+  // Console splitter.
+  const int console_height = 100;
+  ui.console_splitter->setSizes({ height() - console_height, console_height});
+  ui.console_widget->setVisible(false);
 
   // Menu and toolbar actions.
   recent_quests_menu = new QMenu(tr("Recent quests"));
@@ -815,6 +820,7 @@ void MainWindow::on_action_run_quest_triggered() {
     }
 
     quest_runner.start(quest.get_root_path());
+    ui.console_widget->setVisible(true);
   }
   else {
     quest_runner.stop();
@@ -833,6 +839,15 @@ void MainWindow::on_action_show_grid_triggered() {
   }
 
   editor->get_view_settings().set_grid_visible(ui.action_show_grid->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show console" action.
+ */
+void MainWindow::on_action_show_console_triggered() {
+
+  const bool show_console = ui.action_show_console->isChecked();
+  ui.console_widget->setVisible(show_console);
 }
 
 /**
