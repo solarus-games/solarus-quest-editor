@@ -16,12 +16,6 @@
  */
 #include "quest_runner.h"
 #include "settings.h"
-#include <solarus/Arguments.h>
-#include <solarus/MainLoop.h>
-#include <solarus/SolarusFatal.h>
-#include <solarus/lowlevel/Debug.h>
-#include <solarus/lua/LuaContext.h>
-#include <iostream>
 #include <QApplication>
 #include <QSize>
 
@@ -29,108 +23,138 @@
  * @brief Creates a quest runner.
  * @param parent The parent object of the thread.
  */
-QuestRunner::QuestRunner(QObject *parent) :
-  QThread(parent),
-  quest_path(""),
-  main_loop(nullptr) {
+QuestRunner::QuestRunner(QObject* parent) :
+  QObject(parent),
+  process(this) {
 
-  Solarus::Debug::set_show_popup_on_die(false);
+  // Connect to QProcess signals to know when the quest is running and finished.
+  connect(&process, SIGNAL(started()),
+          this, SIGNAL(running()));
+  connect(&process, SIGNAL(finished(int)),
+          this, SIGNAL(finished()));
+  connect(&process, SIGNAL(error(QProcess::ProcessError)),
+          this, SIGNAL(finished()));  // TODO show the error
+
+
+  // TODO emit solarus_fatal
 }
 
 /**
- * @brief Returns the path of the current quest.
- * @return The path of the quest.
+ * @brief Destroys the quest runner.
+ *
+ * If a quest is running, terminates it.
  */
-QString QuestRunner::get_quest_path() const {
-  return quest_path;
+QuestRunner::~QuestRunner() {
+
+  if (process.state() == QProcess::Running) {
+    // Give a chance to the quest process to finish properly.
+    process.terminate();
+    if (!process.waitForFinished(1000)) {
+      // Kill it after a delay.
+      process.kill();
+    }
+  }
 }
 
 /**
- * @brief Returns the main loop of the current quest.
- * @return The main loop of the current quest or nullptr if no quest is running.
+ * @brief Creates and returns the list of arguments to pass to the process.
+ * @param quest_path The path of the quest to run.
  */
-MainLoop* QuestRunner::get_main_loop() const {
-  return main_loop;
+QStringList QuestRunner::create_arguments(const QString& quest_path) {
+
+  QStringList arguments;
+
+  Settings settings;
+
+  // no-audio.
+  if (settings.get_value_bool(Settings::no_audio)) {
+    arguments << "-no-audio";
+  }
+
+  // video-acceleration.
+  const bool video_acceleration =
+      settings.get_value_bool(Settings::video_acceleration);
+  arguments << "-video-acceleration=" + QString(video_acceleration ? "yes" : "no");
+
+  // win-console.
+  const bool win_console = settings.get_value_bool(Settings::win_console);
+  arguments << "-win-console=" + QString(win_console ? "yes" : "no");
+
+  // quest-size.
+  const QSize size = settings.get_value_size(Settings::quest_size);
+  if (size.isValid()) {
+    QString size_str = QString::number(size.width()) + "x" +
+        QString::number(size.height());
+    arguments << "-quest-size=" + size_str;
+  }
+
+  // Path of the quest.
+  arguments << quest_path;
+
+  return arguments;
+}
+
+/**
+ * @brief Returns whether the quest is started.
+ *
+ * The quest is started as soon as you call start(),
+ * but it then takes a slight delay for the process to actually load and run.
+ * The signal running() is emitted when the process is running.
+ *
+ * @return @c true if the quest is started.
+ */
+bool QuestRunner::is_started() const {
+
+  return process.state() != QProcess::NotRunning;
+}
+
+/**
+ * @brief Returns whether the quest is running.
+ * @return @c true if the quest is running.
+ */
+bool QuestRunner::is_running() const {
+
+  return process.state() == QProcess::Running;
 }
 
 /**
  * @brief Runs a specific quest.
  * @param quest_path The path of the quest to run.
- * @param priority The priority of the thread.
+ * Does nothing if the path is empty or if a quest is already running.
+ *
+ * This function returns immediately.
+ * The signal running() is emitted when the process actually runs.
  */
-void QuestRunner::start(const QString& quest_path, Priority priority) {
-
-  if (!isRunning()) {
-    this->quest_path = quest_path;
-    QThread::start(priority);
-  }
-}
-
-/**
- * @brief Stops the current quest.
- */
-void QuestRunner::stop() {
-
-  if (main_loop != nullptr) {
-    main_loop->set_exiting();
-  }
-}
-
-/**
- * @brief Runs the quest.
- */
-void QuestRunner::run() {
+void QuestRunner::start(const QString& quest_path) {
 
   if (quest_path.isEmpty()) {
     return;
   }
 
-  Settings settings;
+  if (is_started()) {
+    return;
+  }
 
-  try {
-
-    Solarus::Arguments arguments;
-
+  /* TODO run solarus-quest-editor itself with a special option
     QString argv0 = QApplication::arguments().at(0);
     arguments.set_program_name(argv0.toStdString());
+    */
+  QString program_name = "solarus_run";
+  QStringList arguments = create_arguments(quest_path);
 
-    // no-audio.
-    if (settings.get_value_bool(Settings::no_audio)) {
-      arguments.add_argument("-no-audio");
-    }
+  process.start(program_name, arguments);
 
-    // video-acceleration.
-    bool video_acceleration =
-      settings.get_value_bool(Settings::video_acceleration);
-    arguments.add_argument(
-      "-video-acceleration", video_acceleration ? "yes" : "no");
+}
 
-    // win-console.
-    if (settings.get_value_bool(Settings::win_console)) {
-      arguments.add_argument("-win-console", "yes");
-    }
+/**
+ * @brief Stops the current quest.
+ *
+ * Returns immediately.
+ * The signal finished() is emitted when the process is finished.
+ */
+void QuestRunner::stop() {
 
-    // quest-size.
-    QSize size = settings.get_value_size(Settings::quest_size);
-    if (size.isValid()) {
-      QString size_str = QString::number(size.width()) + "x" +
-                         QString::number(size.height());
-      arguments.add_argument("-quest-size", size_str.toStdString());
-    }
-
-    // Path of the quest.
-    arguments.add_argument(quest_path.toStdString());
-
-    main_loop = new MainLoop(arguments);
-    main_loop->run();
-  }
-  catch (const Solarus::SolarusFatal& ex) {
-
-    emit solarus_fatal(QString::fromStdString(ex.what()));
-  }
-
-  if (main_loop != nullptr) {
-    delete main_loop;
-    main_loop = nullptr;
+  if (is_started()) {
+    process.terminate();
   }
 }
