@@ -17,6 +17,7 @@
 #include "quest_runner.h"
 #include "settings.h"
 #include <QApplication>
+#include <QMessageBox>
 #include <QSize>
 
 /**
@@ -66,21 +67,25 @@ QStringList QuestRunner::create_arguments(const QString& quest_path) {
 
   Settings settings;
 
-  // no-audio.
+  // -run quest_path
+  arguments << "-run";
+  arguments << quest_path;
+
+  // no-audio
   if (settings.get_value_bool(Settings::no_audio)) {
     arguments << "-no-audio";
   }
 
-  // video-acceleration.
+  // video-acceleration
   const bool video_acceleration =
       settings.get_value_bool(Settings::video_acceleration);
   arguments << "-video-acceleration=" + QString(video_acceleration ? "yes" : "no");
 
-  // win-console.
+  // win-console
   const bool win_console = settings.get_value_bool(Settings::win_console);
   arguments << "-win-console=" + QString(win_console ? "yes" : "no");
 
-  // quest-size.
+  // quest-size
   const QSize size = settings.get_value_size(Settings::quest_size);
   if (size.isValid()) {
     QString size_str = QString::number(size.width()) + "x" +
@@ -135,11 +140,16 @@ void QuestRunner::start(const QString& quest_path) {
     return;
   }
 
-  /* TODO run solarus-quest-editor itself with a special option
-    QString argv0 = QApplication::arguments().at(0);
-    arguments.set_program_name(argv0.toStdString());
-    */
-  QString program_name = "solarus_run";
+  // Run the solarus-quest-editor executable itself with the special option "-run quest_path".
+  QStringList editor_arguments = QApplication::arguments();
+  if (editor_arguments.isEmpty()) {
+    QMessageBox::warning(
+          nullptr,
+          tr("Failed to run quest"),
+          tr("Cannot start quest process: no program name")
+    );
+  }
+  QString program_name = editor_arguments.at(0);
   QStringList arguments = create_arguments(quest_path);
 
   process.start(program_name, arguments);

@@ -17,22 +17,24 @@
 #include "gui/main_window.h"
 #include "settings.h"
 #include "version.h"
+#include <solarus/lowlevel/Debug.h>
+#include <solarus/Arguments.h>
+#include <solarus/MainLoop.h>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLibraryInfo>
 #include <QStyleFactory>
 #include <QTranslator>
 
+namespace {
+
 /**
- * @brief Entry point of the quest editor.
- *
- * Arguments: [quest_path [file_path]]
- *
+ * @brief Runs the quest editor GUI.
  * @param argc Number of arguments of the command line.
  * @param argv Command-line arguments.
  * @return 0 in case of success.
  */
-int main(int argc, char* argv[]) {
+int run_editor_gui(int argc, char* argv[]) {
 
   QString cmd_quest_path;
   QString cmd_file_path;
@@ -107,4 +109,48 @@ int main(int argc, char* argv[]) {
   window.show();
 
   return application.exec();
+}
+
+/**
+ * @brief Runs a quest like the solarus_run executable does.
+ * @param argc Number of arguments of the command line.
+ * @param argv Command-line arguments.
+ * @return 0 in case of success.
+ */
+int run_quest(int argc, char* argv[]) {
+
+  // Show a popup in case of fatal error.
+  Solarus::Debug::set_abort_on_die(true);
+
+  // Run the Solarus main loop.
+  const Solarus::Arguments args(argc, argv);
+  Solarus::MainLoop(args).run();
+
+  return 0;
+}
+
+}
+
+/**
+ * @brief Entry point of the quest editor.
+ *
+ * To run the editor GUI:
+ *   solarus-quest-editor [quest_path [file_path]]
+ * To directly run a quest (no GUI, similar to solarus_run):
+ *   -run quest_path
+ *
+ * @param argc Number of arguments of the command line.
+ * @param argv Command-line arguments.
+ * @return 0 in case of success.
+ */
+int main(int argc, char* argv[]) {
+
+  if (argc > 1 && QString(argv[1]) == "-run") {
+    // Quest run mode.
+    return run_quest(argc, argv);
+  }
+  else {
+    // Editor GUI mode.
+    return run_editor_gui(argc, argv);
+  }
 }
