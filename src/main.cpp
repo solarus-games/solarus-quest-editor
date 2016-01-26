@@ -119,7 +119,7 @@ int run_editor_gui(int argc, char* argv[]) {
  */
 int run_quest(int argc, char* argv[]) {
 
-  // Show a popup in case of fatal error.
+  // Abort the process in case of fatal error.
   Solarus::Debug::set_abort_on_die(true);
 
   // Run the Solarus main loop.
