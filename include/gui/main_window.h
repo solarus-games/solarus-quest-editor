@@ -88,7 +88,7 @@ private slots:
   void update_run_quest();
   void quest_running();
   void quest_finished();
-  void solarus_fatal(const QString& what);
+  void quest_output_produced(const QStringList& lines);
 
   void reload_settings();
 

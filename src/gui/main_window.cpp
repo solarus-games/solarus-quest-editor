@@ -180,10 +180,12 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
 
-  connect(&quest_runner, SIGNAL(running()), this, SLOT(quest_running()));
-  connect(&quest_runner, SIGNAL(finished()), this, SLOT(quest_finished()));
-  connect(&quest_runner, SIGNAL(solarus_fatal(QString)),
-          this, SLOT(solarus_fatal(QString)));
+  connect(&quest_runner, SIGNAL(running()),
+          this, SLOT(quest_running()));
+  connect(&quest_runner, SIGNAL(finished()),
+          this, SLOT(quest_finished()));
+  connect(&quest_runner, SIGNAL(output_produced(QStringList)),
+          this, SLOT(quest_output_produced(QStringList)));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
@@ -1258,12 +1260,15 @@ void MainWindow::quest_finished() {
 }
 
 /**
- * @brief Slot called when the quest throws a fatal error.
- * @param what The message of the error.
+ * @brief Slot called when the quest execution produced some output lines.
+ * @param lines The lines read from the standard output of the quest.
  */
-void MainWindow::solarus_fatal(const QString& what) {
+void MainWindow::quest_output_produced(const QStringList& lines) {
 
-  GuiTools::error_dialog(tr("Quest terminated unexpectedly: %1").arg(what));
+  // TODO separate class
+  for (const QString& line : lines) {
+    ui.console_output_view->appendPlainText(line);
+  }
 }
 
 /**
