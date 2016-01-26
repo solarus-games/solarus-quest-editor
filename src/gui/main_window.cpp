@@ -77,9 +77,14 @@ MainWindow::MainWindow(QWidget* parent) :
   }
   setWindowIcon(icon);
 
-  // Main splitter.
+  // Quest tree splitter.
   const int tree_width = 300;
-  ui.splitter->setSizes({ tree_width, width() - tree_width });
+  ui.quest_tree_splitter->setSizes({ tree_width, width() - tree_width });
+
+  // Console splitter.
+  const int console_height = 100;
+  ui.console_splitter->setSizes({ height() - console_height, console_height });
+  ui.console_widget->setVisible(false);
 
   // Menu and toolbar actions.
   recent_quests_menu = new QMenu(tr("Recent quests"));
@@ -175,10 +180,12 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
 
-  connect(&quest_runner, SIGNAL(running()), this, SLOT(update_run_quest()));
-  connect(&quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
-  connect(&quest_runner, SIGNAL(solarus_fatal(QString)),
-          this, SLOT(solarus_fatal(QString)));
+  connect(&quest_runner, SIGNAL(running()),
+          this, SLOT(quest_running()));
+  connect(&quest_runner, SIGNAL(finished()),
+          this, SLOT(quest_finished()));
+  connect(&quest_runner, SIGNAL(output_produced(QStringList)),
+          this, SLOT(quest_output_produced(QStringList)));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
@@ -815,6 +822,9 @@ void MainWindow::on_action_run_quest_triggered() {
     }
 
     quest_runner.start(quest.get_root_path());
+
+    // Automatically show the console when the quest starts.
+    set_console_visible(true);
   }
   else {
     quest_runner.stop();
@@ -833,6 +843,42 @@ void MainWindow::on_action_show_grid_triggered() {
   }
 
   editor->get_view_settings().set_grid_visible(ui.action_show_grid->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show console" action.
+ */
+void MainWindow::on_action_show_console_triggered() {
+
+  // Show or hide the console.
+  const bool show_console = ui.action_show_console->isChecked();
+  set_console_visible(show_console);
+}
+
+/**
+ * @brief Returns whether the execution console is shown.
+ * @return @c true if the execution console is visible.
+ */
+bool MainWindow::is_console_visible() const {
+
+  return ui.console_widget->isVisible();
+}
+
+/**
+ * @brief Shows or hide the execution visible.
+ * @param console_visible @c true to show the console.
+ */
+void MainWindow::set_console_visible(bool console_visible) {
+
+  if (!console_visible &&
+      ui.console_widget->height() < 16) {
+    // Hiding a very small console: make sure it gets a decent size
+    // when restored later.
+    const int console_height = 100;
+    ui.console_splitter->setSizes({ height() - console_height, console_height });
+  }
+
+  ui.console_widget->setVisible(console_visible);
 }
 
 /**
@@ -1194,12 +1240,35 @@ void MainWindow::update_run_quest() {
 }
 
 /**
- * @brief Slot called when the quest throws a fatal error.
- * @param what The message of the error.
+ * @brief Slot called when the quest execution begins.
  */
-void MainWindow::solarus_fatal(const QString& what) {
+void MainWindow::quest_running() {
 
-  GuiTools::error_dialog(tr("Quest terminated unexpectedly: %1").arg(what));
+  // Update the run quest action.
+  update_run_quest();
+  ui.console_field->setEnabled(true);
+}
+
+/**
+ * @brief Slot called when the quest execution is finished.
+ */
+void MainWindow::quest_finished() {
+
+  // Update the run quest action.
+  update_run_quest();
+  ui.console_field->setEnabled(false);
+}
+
+/**
+ * @brief Slot called when the quest execution produced some output lines.
+ * @param lines The lines read from the standard output of the quest.
+ */
+void MainWindow::quest_output_produced(const QStringList& lines) {
+
+  // TODO separate class
+  for (const QString& line : lines) {
+    ui.console_output_view->appendPlainText(line);
+  }
 }
 
 /**

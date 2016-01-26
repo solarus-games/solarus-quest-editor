@@ -190,7 +190,9 @@ int TextEditorWidget::get_line_number_area_width() {
  *
  * @param new_block_count The new block count.
  */
-void TextEditorWidget::update_line_number_area_width(int /* new_block_count */) {
+void TextEditorWidget::update_line_number_area_width(int new_block_count) {
+
+  Q_UNUSED(new_block_count);
   setViewportMargins(get_line_number_area_width(), 0, 0, 0);
 }
 

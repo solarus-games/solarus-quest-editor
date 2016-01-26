@@ -65,6 +65,7 @@ private slots:
   void on_action_find_triggered();
   void on_action_run_quest_triggered();
   void on_action_show_grid_triggered();
+  void on_action_show_console_triggered();
   void change_grid_size();
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
@@ -85,7 +86,9 @@ private slots:
   void update_entity_types_visibility();
 
   void update_run_quest();
-  void solarus_fatal(const QString& what);
+  void quest_running();
+  void quest_finished();
+  void quest_output_produced(const QStringList& lines);
 
   void reload_settings();
 
@@ -104,6 +107,8 @@ private:
   QMenu* create_zoom_menu();
   void update_show_layers_menu();
   QMenu* create_show_entities_menu();
+  bool is_console_visible() const;
+  void set_console_visible(bool console_visible);
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */

@@ -34,10 +34,9 @@ QuestRunner::QuestRunner(QObject* parent) :
   connect(&process, SIGNAL(finished(int)),
           this, SIGNAL(finished()));
   connect(&process, SIGNAL(error(QProcess::ProcessError)),
-          this, SIGNAL(finished()));  // TODO show the error
-
-
-  // TODO emit solarus_fatal
+          this, SIGNAL(finished()));  // TODO report the error
+  connect(&process, SIGNAL(readyReadStandardOutput()),
+          this, SLOT(standard_output_data_available()));
 }
 
 /**
@@ -168,3 +167,27 @@ void QuestRunner::stop() {
     process.terminate();
   }
 }
+
+/**
+ * @brief Slot called when lines are written on the standard output of the
+ * quest process.
+ */
+void QuestRunner::standard_output_data_available() {
+
+  // Read the UTF-8 data available.
+  QStringList lines;
+  QByteArray bytes = process.readLine();
+  while (!bytes.isEmpty()) {
+    QString line(bytes);
+    line = line.trimmed();  // Remove the final '\n'.
+    if (!line.isEmpty()) {
+      lines << line;
+    }
+    bytes = process.readLine();
+  }
+
+  if (!lines.isEmpty()) {
+    emit output_produced(lines);
+  }
+}
+

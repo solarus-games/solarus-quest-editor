@@ -43,10 +43,16 @@ signals:
   void running();
   void finished();
   void solarus_fatal(const QString& what);
+  void output_produced(const QStringList& lines);
+
+private slots:
+
+  void standard_output_data_available();
 
 private:
 
   QStringList create_arguments(const QString& quest_path);
+
 
   QProcess process;     /**< The Solarus process. */
 };
