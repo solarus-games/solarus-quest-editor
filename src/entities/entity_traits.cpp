@@ -55,7 +55,7 @@ QString EnumTraits<EntityType>::get_friendly_name(EntityType value) {
   case EntityType::CAMERA:
     return QApplication::tr("Camera");
 
-  case EntityType::CARRIED_ITEM:
+  case EntityType::CARRIED_OBJECT:
     return QApplication::tr("Carried object");
 
   case EntityType::CHEST:
