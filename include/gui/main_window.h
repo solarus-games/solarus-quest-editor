@@ -105,6 +105,8 @@ private:
   QMenu* create_zoom_menu();
   void update_show_layers_menu();
   QMenu* create_show_entities_menu();
+  bool is_console_visible() const;
+  void set_console_visible(bool console_visible);
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */

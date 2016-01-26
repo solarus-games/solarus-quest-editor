@@ -156,17 +156,6 @@
    <addaction name="action_show_layer_1"/>
    <addaction name="action_show_layer_2"/>
   </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <action name="action_new_quest">
    <property name="text">
     <string>New quest...</string>

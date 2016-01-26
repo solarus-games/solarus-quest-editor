@@ -82,8 +82,6 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.quest_tree_splitter->setSizes({ tree_width, width() - tree_width });
 
   // Console splitter.
-  const int console_height = 100;
-  ui.console_splitter->setSizes({ height() - console_height, console_height});
   ui.console_widget->setVisible(false);
 
   // Menu and toolbar actions.
@@ -820,7 +818,9 @@ void MainWindow::on_action_run_quest_triggered() {
     }
 
     quest_runner.start(quest.get_root_path());
-    ui.console_widget->setVisible(true);
+
+    // Automatically show the console when the quest starts.
+    set_console_visible(true);
   }
   else {
     quest_runner.stop();
@@ -846,8 +846,35 @@ void MainWindow::on_action_show_grid_triggered() {
  */
 void MainWindow::on_action_show_console_triggered() {
 
+  // Show or hide the console.
   const bool show_console = ui.action_show_console->isChecked();
-  ui.console_widget->setVisible(show_console);
+  set_console_visible(show_console);
+}
+
+/**
+ * @brief Returns whether the execution console is shown.
+ * @return @c true if the execution console is visible.
+ */
+bool MainWindow::is_console_visible() const {
+
+  return ui.console_widget->isVisible();
+}
+
+/**
+ * @brief Shows or hide the execution visible.
+ * @param console_visible @c true to show the console.
+ */
+void MainWindow::set_console_visible(bool console_visible) {
+
+  ui.console_widget->setVisible(console_visible);
+
+  if (console_visible) {
+    // Ensure the console is not too much collapsed when set to visible.
+    if (ui.console_splitter->sizes()[1] < 16) {
+      const int console_height = 100;
+      ui.console_splitter->setSizes({ height() - console_height, console_height });
+    }
+  }
 }
 
 /**
