@@ -17,40 +17,38 @@
 #ifndef SOLARUSEDITOR_QUEST_RUNNER_H
 #define SOLARUSEDITOR_QUEST_RUNNER_H
 
-#include <solarus/MainLoop.h>
-#include <QThread>
-
-using MainLoop = Solarus::MainLoop;
+#include <QProcess>
 
 /**
- * @brief Class to run a quest in a dedicated thread.
+ * @brief Class to run a quest in a dedicated process.
  */
-class QuestRunner : public QThread {
+class QuestRunner : public QObject {
   Q_OBJECT
 
 public:
 
   QuestRunner(QObject* parent = nullptr);
+  ~QuestRunner();
 
-  QString get_quest_path() const;
-  MainLoop* get_main_loop() const;
+  bool is_started() const;
+  bool is_running() const;
 
 public slots:
 
-  void start(const QString& quest_path, Priority priority = InheritPriority);
+  void start(const QString& quest_path);
   void stop();
 
 signals:
 
+  void running();
+  void finished();
   void solarus_fatal(const QString& what);
 
 private:
 
-  void run() override;
+  QStringList create_arguments(const QString& quest_path);
 
-  QString quest_path;   /**< The path of the quest to run. */
-  MainLoop* main_loop;  /**< The main loop of the current quest. */
-
+  QProcess process;     /**< The Solarus process. */
 };
 
 #endif

@@ -48,7 +48,7 @@ using EntityType = Solarus::EntityType;
  */
 MainWindow::MainWindow(QWidget* parent) :
   QMainWindow(parent),
-  quest_runner(new QuestRunner(this)),
+  quest_runner(),
   recent_quests_menu(nullptr),
   zoom_menu(nullptr),
   zoom_button(nullptr),
@@ -175,9 +175,9 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
 
-  connect(quest_runner, SIGNAL(started()), this, SLOT(update_run_quest()));
-  connect(quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
-  connect(quest_runner, SIGNAL(solarus_fatal(QString)),
+  connect(&quest_runner, SIGNAL(running()), this, SLOT(update_run_quest()));
+  connect(&quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
+  connect(&quest_runner, SIGNAL(solarus_fatal(QString)),
           this, SLOT(solarus_fatal(QString)));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
@@ -192,8 +192,6 @@ MainWindow::MainWindow(QWidget* parent) :
  */
 MainWindow::~MainWindow() {
 
-  quest_runner->stop();
-  quest_runner->wait();
 }
 
 /**
@@ -784,7 +782,7 @@ void MainWindow::on_action_find_triggered() {
  */
 void MainWindow::on_action_run_quest_triggered() {
 
-  if (!quest_runner->isRunning()) {
+  if (!quest_runner.is_started()) {
 
     if (ui.tab_widget->has_unsaved_files()) {
 
@@ -816,11 +814,12 @@ void MainWindow::on_action_run_quest_triggered() {
       }
     }
 
-    quest_runner->start(quest.get_root_path());
+    quest_runner.start(quest.get_root_path());
   }
   else {
-    quest_runner->stop();
+    quest_runner.stop();
   }
+  update_run_quest();
 }
 
 /**
@@ -1185,7 +1184,7 @@ void MainWindow::update_entity_types_visibility() {
  */
 void MainWindow::update_run_quest() {
 
-  if (quest_runner->isRunning()) {
+  if (quest_runner.is_started()) {
     ui.action_run_quest->setIcon(QIcon(":/images/icon_stop.png"));
     ui.action_run_quest->setToolTip(tr("Stop quest"));
   } else {
