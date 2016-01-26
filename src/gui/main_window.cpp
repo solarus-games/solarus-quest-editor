@@ -82,6 +82,8 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.quest_tree_splitter->setSizes({ tree_width, width() - tree_width });
 
   // Console splitter.
+  const int console_height = 100;
+  ui.console_splitter->setSizes({ height() - console_height, console_height });
   ui.console_widget->setVisible(false);
 
   // Menu and toolbar actions.
@@ -178,8 +180,8 @@ MainWindow::MainWindow(QWidget* parent) :
   connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
 
-  connect(&quest_runner, SIGNAL(running()), this, SLOT(update_run_quest()));
-  connect(&quest_runner, SIGNAL(finished()), this, SLOT(update_run_quest()));
+  connect(&quest_runner, SIGNAL(running()), this, SLOT(quest_running()));
+  connect(&quest_runner, SIGNAL(finished()), this, SLOT(quest_finished()));
   connect(&quest_runner, SIGNAL(solarus_fatal(QString)),
           this, SLOT(solarus_fatal(QString)));
 
@@ -866,15 +868,15 @@ bool MainWindow::is_console_visible() const {
  */
 void MainWindow::set_console_visible(bool console_visible) {
 
-  ui.console_widget->setVisible(console_visible);
-
-  if (console_visible) {
-    // Ensure the console is not too much collapsed when set to visible.
-    if (ui.console_splitter->sizes()[1] < 16) {
-      const int console_height = 100;
-      ui.console_splitter->setSizes({ height() - console_height, console_height });
-    }
+  if (!console_visible &&
+      ui.console_widget->height() < 16) {
+    // Hiding a very small console: make sure it gets a decent size
+    // when restored later.
+    const int console_height = 100;
+    ui.console_splitter->setSizes({ height() - console_height, console_height });
   }
+
+  ui.console_widget->setVisible(console_visible);
 }
 
 /**
@@ -1233,6 +1235,26 @@ void MainWindow::update_run_quest() {
     ui.action_run_quest->setIcon(QIcon(":/images/icon_start.png"));
     ui.action_run_quest->setToolTip(tr("Run quest"));
   }
+}
+
+/**
+ * @brief Slot called when the quest execution begins.
+ */
+void MainWindow::quest_running() {
+
+  // Update the run quest action.
+  update_run_quest();
+  ui.console_field->setEnabled(true);
+}
+
+/**
+ * @brief Slot called when the quest execution is finished.
+ */
+void MainWindow::quest_finished() {
+
+  // Update the run quest action.
+  update_run_quest();
+  ui.console_field->setEnabled(false);
 }
 
 /**

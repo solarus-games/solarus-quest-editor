@@ -86,6 +86,8 @@ private slots:
   void update_entity_types_visibility();
 
   void update_run_quest();
+  void quest_running();
+  void quest_finished();
   void solarus_fatal(const QString& what);
 
   void reload_settings();

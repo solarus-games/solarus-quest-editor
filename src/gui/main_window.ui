@@ -15,6 +15,18 @@
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>3</number>
+    </property>
+    <property name="topMargin">
+     <number>3</number>
+    </property>
+    <property name="rightMargin">
+     <number>3</number>
+    </property>
+    <property name="bottomMargin">
+     <number>3</number>
+    </property>
     <item>
      <widget class="QSplitter" name="quest_tree_splitter">
       <property name="orientation">
@@ -35,6 +47,9 @@
        <widget class="EditorTabs" name="tab_widget"/>
        <widget class="QWidget" name="console_widget" native="true">
         <layout class="QVBoxLayout" name="console_layout">
+         <property name="spacing">
+          <number>3</number>
+         </property>
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -51,7 +66,11 @@
           <widget class="QListView" name="console_output_view"/>
          </item>
          <item>
-          <widget class="QLineEdit" name="console_field"/>
+          <widget class="QLineEdit" name="console_field">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
