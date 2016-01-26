@@ -63,7 +63,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QListView" name="console_output_view"/>
+          <widget class="QPlainTextEdit" name="console_output_view">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLineEdit" name="console_field">
