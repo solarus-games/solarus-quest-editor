@@ -1270,8 +1270,8 @@ void MainWindow::quest_output_produced(const QStringList& lines) {
   // TODO separate class
   for (const QString& line : lines) {
 
-    if (line.startsWith("[Solarus] ====== Begin Lua command #") ||
-        line.startsWith("[Solarus] ====== End Lua command #")) {
+    if (line.startsWith("[Solarus]") &&
+        (line.contains(" ====== Begin Lua command #") || line.contains(" ====== End Lua command #"))) {
       // Filter special markers indicating the output of a command from the console.
       continue;
     }
