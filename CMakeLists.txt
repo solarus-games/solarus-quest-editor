@@ -99,6 +99,7 @@ set(solarus_quest_editor_SOURCES
   include/gui/change_pattern_id_dialog.h
   include/gui/change_source_image_dialog.h
   include/gui/closable_tab_bar.h
+  include/gui/console.h
   include/gui/edit_entity_dialog.h
   include/gui/editor.h
   include/gui/editor_tabs.h
@@ -210,6 +211,7 @@ set(solarus_quest_editor_SOURCES
   src/gui/change_pattern_id_dialog.cpp
   src/gui/change_source_image_dialog.cpp
   src/gui/closable_tab_bar.cpp
+  src/gui/console.cpp
   src/gui/edit_entity_dialog.cpp
   src/gui/editor.cpp
   src/gui/editor_tabs.cpp
@@ -296,6 +298,7 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
+  src/gui/console.ui
   src/gui/change_pattern_id_dialog.ui
   src/gui/edit_entity_dialog.ui
   src/gui/external_script_dialog.ui

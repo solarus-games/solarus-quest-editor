@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget* parent) :
   const int console_height = 100;
   ui.console_splitter->setSizes({ height() - console_height, console_height });
   ui.console_widget->setVisible(false);
+  ui.console_widget->set_quest_runner(quest_runner);
 
   // Menu and toolbar actions.
   recent_quests_menu = new QMenu(tr("Recent quests"));
@@ -184,10 +185,6 @@ MainWindow::MainWindow(QWidget* parent) :
           this, SLOT(quest_running()));
   connect(&quest_runner, SIGNAL(finished()),
           this, SLOT(quest_finished()));
-  connect(&quest_runner, SIGNAL(output_produced(QStringList)),
-          this, SLOT(quest_output_produced(QStringList)));
-  connect(ui.console_field, SIGNAL(returnPressed()),
-          this, SLOT(quest_console_field_activated()));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
@@ -1248,7 +1245,6 @@ void MainWindow::quest_running() {
 
   // Update the run quest action.
   update_run_quest();
-  ui.console_field->setEnabled(true);
 }
 
 /**
@@ -1258,39 +1254,6 @@ void MainWindow::quest_finished() {
 
   // Update the run quest action.
   update_run_quest();
-  ui.console_field->setEnabled(false);
-}
-
-/**
- * @brief Slot called when the quest execution produced some output lines.
- * @param lines The lines read from the standard output of the quest.
- */
-void MainWindow::quest_output_produced(const QStringList& lines) {
-
-  // TODO separate class
-  for (const QString& line : lines) {
-
-    if (line.startsWith("[Solarus]") &&
-        (line.contains(" ====== Begin Lua command #") || line.contains(" ====== End Lua command #"))) {
-      // Filter special markers indicating the output of a command from the console.
-      continue;
-    }
-
-    ui.console_output_view->appendPlainText(line);
-  }
-}
-
-/**
- * @brief Slot called when the user wants to execute a Lua instruction from the console.
- */
-void MainWindow::quest_console_field_activated() {
-
-  const QString& command = ui.console_field->text();
-  quest_runner.execute_command(command);
-  ui.console_field->clear();
-
-  // Show the command in the console.
-  ui.console_output_view->appendPlainText("> " + command);
 }
 
 /**

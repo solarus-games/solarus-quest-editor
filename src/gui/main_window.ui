@@ -45,45 +45,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="EditorTabs" name="tab_widget"/>
-       <widget class="QWidget" name="console_widget" native="true">
-        <layout class="QVBoxLayout" name="console_layout">
-         <property name="spacing">
-          <number>3</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPlainTextEdit" name="console_output_view">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="maximumBlockCount">
-            <number>10000</number>
-           </property>
-           <property name="centerOnScroll">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="console_field">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+       <widget class="Console" name="console_widget" native="true"/>
       </widget>
      </widget>
     </item>
@@ -413,6 +375,12 @@
    <class>EditorTabs</class>
    <extends>QTabWidget</extends>
    <header>include/gui/editor_tabs.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Console</class>
+   <extends>QWidget</extends>
+   <header>include/gui/console.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
