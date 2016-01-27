@@ -20,7 +20,7 @@ New features
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: shortcuts to move one layer up or down.
 * Sprite editor: auto-detect the grid size (#13).
-* Settings: add sprite editor configurations.
+* Settings: add sprite editor options.
 * Add select all to map, tileset and text editors (#106).
 
 Bug fixes
