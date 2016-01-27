@@ -40,6 +40,8 @@ private slots:
 
 private:
 
+  QString decorate_output(const QString& line);
+
   Ui::Console ui;
   QPointer<QuestRunner> quest_runner;  /**< The quest execution. */
 

@@ -16,6 +16,25 @@
  */
 #include "gui/console.h"
 #include "quest_runner.h"
+#include <QRegularExpression>
+
+namespace {
+
+/**
+ * @brief Wraps a line of plain text in html color tags.
+ * @param line A plain text line.
+ * @param color The color to set, with "#rrggbb" syntax.
+ * @return The HTML colorized line.
+ */
+QString colorize(const QString& line, const QString& color) {
+
+  return QString("<span style=\"color: %1\">%2</span>").arg(color, line.toHtmlEscaped());
+}
+
+QRegularExpression output_regexp("^\\[Solarus\\] \\[(\\d+)\\] (\\w+): (.+)$");
+QRegularExpression output_simplify_console_error_regexp("In Lua command: \\[string \".*\"\\]:\\d+: ");
+
+}
 
 /**
  * @brief Creates a console view.
@@ -72,15 +91,12 @@ void Console::quest_output_produced(const QStringList& lines) {
 
   for (const QString& line : lines) {
 
-    // TODO colorize warnings and errors
-
-    if (line.startsWith("[Solarus]") &&
-        (line.contains(" ====== Begin Lua command #") || line.contains(" ====== End Lua command #"))) {
-      // Filter special markers indicating the output of a command from the console.
+    QString line_html = decorate_output(line);
+    if (line_html.isEmpty()) {
       continue;
     }
 
-    ui.log_view->appendPlainText(line);
+    ui.log_view->appendHtml(line_html);
   }
 }
 
@@ -107,4 +123,73 @@ void Console::command_field_activated() {
   // TODO: show it only when receiving its results, to make sure it is displayed
   // just before its results.
   ui.log_view->appendPlainText("> " + command);
+}
+
+/**
+ * @brief Parses a Solarus output line and returns a decorated version of it.
+ *
+ * Colors may be added, and parts of the line may be removed or changed.
+ *
+ * @param line The raw output line.
+ * @return The HTML decorated line, or an empty string if this line should not be
+ * displayed in the console.
+ */
+QString Console::decorate_output(const QString& line) {
+
+  if (line.isEmpty()) {
+    return line;
+  }
+
+  QRegularExpressionMatch match_result = output_regexp.match(line);
+  if (!match_result.hasMatch()) {
+    // Not a line from Solarus, probably one from the quest.
+    return line;
+  }
+
+  // 4 captures expected: full line, time, log level, message.
+  QString log_level;
+  QString message;
+  QStringList captures = match_result.capturedTexts();
+  if (captures.size() != 4) {
+    return line;
+  }
+
+  log_level = captures[2];
+  message = captures[3];
+
+  // Filter out technical delimiters of commands output.
+  if (message.startsWith("====== Begin Lua command #")
+      || message.startsWith("====== End Lua command #")) {
+    return QString();
+  }
+
+  if (log_level == "Error") {
+    // Clean specific error messages.
+    message.remove(output_simplify_console_error_regexp);
+  }
+
+  QString decorated_line = log_level + ": " + message;
+
+  // Colorize warnings and errors.
+  if (log_level == "Debug") {
+    decorated_line = colorize(decorated_line, "#808080");
+  }
+  else if (log_level == "Info") {
+    decorated_line = colorize(decorated_line, "#0000ff");
+  }
+  else if (log_level == "Warning") {
+    decorated_line = colorize(decorated_line, "#b05000");
+  }
+  else if (log_level == "Error") {
+    decorated_line = colorize(decorated_line, "#ff0000");
+  }
+  else if (log_level == "Fatal") {
+    decorated_line = colorize(decorated_line, "#ff0000");
+  }
+  else {
+    // Unknown log level.
+    decorated_line = message;
+  }
+
+  return decorated_line;
 }

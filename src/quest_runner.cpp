@@ -20,8 +20,6 @@
 #include <QMessageBox>
 #include <QSize>
 
-#include <QDebug>
-
 /**
  * @brief Creates a quest runner.
  * @param parent The parent object of the thread.
