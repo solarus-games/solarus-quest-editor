@@ -1269,6 +1269,13 @@ void MainWindow::quest_output_produced(const QStringList& lines) {
 
   // TODO separate class
   for (const QString& line : lines) {
+
+    if (line.startsWith("[Solarus] ====== Begin Lua command #") ||
+        line.startsWith("[Solarus] ====== End Lua command #")) {
+      // Filter special markers indicating the output of a command from the console.
+      continue;
+    }
+
     ui.console_output_view->appendPlainText(line);
   }
 }
@@ -1281,6 +1288,9 @@ void MainWindow::quest_console_field_activated() {
   const QString& command = ui.console_field->text();
   quest_runner.execute_command(command);
   ui.console_field->clear();
+
+  // Show the command in the console.
+  ui.console_output_view->appendPlainText("> " + command);
 }
 
 /**
