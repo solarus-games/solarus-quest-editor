@@ -6,7 +6,8 @@ ________________________________________
 New features
 ------------
 
-* Add a console with the execution log of the quest.
+* Add an execution log view of the quest.
+* Add a console to execute Lua instructions when the quest is running.
 * Add a command-line option -run to run a quest instead of opening the GUI.
 * Allow to save all open files at once (#98).
 * Allow to close all open files at once.

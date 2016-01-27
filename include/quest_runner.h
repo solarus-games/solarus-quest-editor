@@ -32,6 +32,7 @@ public:
 
   bool is_started() const;
   bool is_running() const;
+  bool execute_command(const QString& command);
 
 public slots:
 

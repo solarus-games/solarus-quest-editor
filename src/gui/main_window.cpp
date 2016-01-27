@@ -186,6 +186,8 @@ MainWindow::MainWindow(QWidget* parent) :
           this, SLOT(quest_finished()));
   connect(&quest_runner, SIGNAL(output_produced(QStringList)),
           this, SLOT(quest_output_produced(QStringList)));
+  connect(ui.console_field, SIGNAL(returnPressed()),
+          this, SLOT(quest_console_field_activated()));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
@@ -1269,6 +1271,16 @@ void MainWindow::quest_output_produced(const QStringList& lines) {
   for (const QString& line : lines) {
     ui.console_output_view->appendPlainText(line);
   }
+}
+
+/**
+ * @brief Slot called when the user wants to execute a Lua instruction from the console.
+ */
+void MainWindow::quest_console_field_activated() {
+
+  const QString& command = ui.console_field->text();
+  quest_runner.execute_command(command);
+  ui.console_field->clear();
 }
 
 /**

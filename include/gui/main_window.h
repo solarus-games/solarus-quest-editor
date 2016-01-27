@@ -89,6 +89,7 @@ private slots:
   void quest_running();
   void quest_finished();
   void quest_output_produced(const QStringList& lines);
+  void quest_console_field_activated();
 
   void reload_settings();
 

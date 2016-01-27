@@ -20,6 +20,8 @@
 #include <QMessageBox>
 #include <QSize>
 
+#include <QDebug>
+
 /**
  * @brief Creates a quest runner.
  * @param parent The parent object of the thread.
@@ -176,18 +178,35 @@ void QuestRunner::standard_output_data_available() {
 
   // Read the UTF-8 data available.
   QStringList lines;
-  QByteArray bytes = process.readLine();
-  while (!bytes.isEmpty()) {
-    QString line(bytes);
+  QByteArray line_utf8 = process.readLine();
+  while (!line_utf8.isEmpty()) {
+    QString line(line_utf8);
     line = line.trimmed();  // Remove the final '\n'.
     if (!line.isEmpty()) {
       lines << line;
     }
-    bytes = process.readLine();
+    line_utf8 = process.readLine();
   }
 
   if (!lines.isEmpty()) {
     emit output_produced(lines);
   }
+}
+
+/**
+ * @brief Executes some Lua code in the quest process.
+ * @param command The Lua code.
+ * @return @c true if the code could be sent to the process (even if it produces an error).
+ */
+bool QuestRunner::execute_command(const QString& command) {
+
+  if (!is_running()) {
+    return false;
+  }
+
+  QByteArray command_utf8 = command.toUtf8();
+  command_utf8.append("\n");
+  qint64 bytes_written = process.write(command_utf8);
+  return bytes_written == command_utf8.size();
 }
 
