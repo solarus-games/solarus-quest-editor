@@ -22,6 +22,7 @@
 #include <QHash>
 #include <QStringListModel>
 #include <QValidator>
+#include <algorithm>
 #include <memory>
 
 namespace {
@@ -84,14 +85,13 @@ ConsoleLineEdit::ConsoleLineEdit(QWidget* parent) :
   });
 
   // Set a completer.
-  QStringList unique_commands = history;
-  unique_commands.removeDuplicates();
-  completer_model = new QStringListModel(unique_commands, this);
+  QStringList unique_recent_commands = history;
+  unique_recent_commands.removeDuplicates();
+  std::reverse(unique_recent_commands.begin(), unique_recent_commands.end());
+  completer_model = new QStringListModel(unique_recent_commands, this);
   QCompleter* completer = new QCompleter(completer_model, this);
   completer->setCompletionMode(QCompleter::InlineCompletion);
   setCompleter(completer);
-
-  // TODO Set a custom completion model to suggest most frequent commands first.
 }
 
 /**
@@ -196,9 +196,8 @@ void ConsoleLineEdit::command_executed(const QString& command) {
 
   // Update the completer.
   if (!completer_model->stringList().contains(command)) {
-    int row = completer_model->rowCount();
-    completer_model->insertRow(row);
-    QModelIndex index = completer_model->index(row, 0);
+    completer_model->insertRow(0);
+    QModelIndex index = completer_model->index(0, 0);
     completer_model->setData(index, command);
   }
 }

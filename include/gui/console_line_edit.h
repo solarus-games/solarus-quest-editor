@@ -53,7 +53,7 @@ private:
                               * 0 and history.size() - 1, or
                               * history.size() if not navigating the history. */
   QString current_command;   /**< Command currently being edited, preserved
-                              * when navigating the history. */
+                              * while navigating the history. */
   QStringListModel*
       completer_model;       /**< Model for the completer. */
 
