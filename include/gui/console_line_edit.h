@@ -25,7 +25,6 @@
  * Manages the history of commands.
  *
  * TODO popup completion
- * TODO Lua syntax validation
  */
 class ConsoleLineEdit : public QLineEdit {
   Q_OBJECT

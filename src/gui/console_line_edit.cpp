@@ -16,11 +16,41 @@
  */
 #include "gui/console_line_edit.h"
 #include "settings.h"
+#include <lua.hpp>
 #include <QKeyEvent>
+#include <QHash>
+#include <QValidator>
+#include <memory>
 
 namespace {
 
 constexpr int max_history_size = 100;
+
+/**
+ * @brief A QValidator that checks Lua syntax.
+ *
+ * Only the syntax of the code is checked (via lua_load()), not its execution.
+ */
+class LuaSyntaxValidator : public QValidator {
+
+public :
+
+  LuaSyntaxValidator(QObject* parent = nullptr);
+
+  State validate(QString& input, int& pos) const override;
+
+private:
+
+  struct LuaStateDeleter {
+      void operator()(lua_State* l) {
+        lua_close(l);
+      }
+  };
+
+  std::unique_ptr<lua_State, LuaStateDeleter> l;    /**< Lua context. */
+  mutable QHash<QString, State> result_cache;       /**< Cache of previous results. */
+
+};
 
 }  // Anonymous namespace
 
@@ -37,6 +67,18 @@ ConsoleLineEdit::ConsoleLineEdit(QWidget* parent) :
   Settings settings;
   history = settings.get_value_string_list(Settings::console_history);
   set_history_position(history.size());  // Start after the history.
+
+  setValidator(new LuaSyntaxValidator(this));
+  connect(this, &ConsoleLineEdit::textChanged, [&](const QString& text) {
+    QString text_copy = text;
+    int cursor_position = cursorPosition();
+    if (validator()->validate(text_copy, cursor_position) == QValidator::Acceptable) {
+      setStyleSheet("");
+    }
+    else {
+      setStyleSheet("background-color: #ffffc0");
+    }
+  });
 }
 
 /**
@@ -137,4 +179,39 @@ void ConsoleLineEdit::command_executed(const QString& command) {
 
   current_command.clear();
   set_history_position(history.size());
+}
+
+/**
+ * @brief Creates a Lua syntax validator.
+ * @param parent Parent object or nullptr.
+ */
+LuaSyntaxValidator::LuaSyntaxValidator(QObject* parent) :
+  QValidator(parent),
+  l(luaL_newstate()) {
+
+}
+
+/**
+ * @brief Validates the Lua syntax of an input.
+ * @param input The input to check.
+ * @param pos The cursor position.
+ * @return The syntax validity: Acceptable or Intermediate.
+ */
+QValidator::State LuaSyntaxValidator::validate(QString& input, int& pos) const {
+
+  Q_UNUSED(pos);
+
+  const auto& it = result_cache.find(input);
+  if (it != result_cache.end()) {
+    // We already know the result.
+    return it.value();
+  }
+
+  // New input: ask Lua.
+  QByteArray input_utf8 = input.toUtf8();
+  const int load_result = luaL_loadstring(l.get(), input_utf8.data());
+
+  State result = (load_result == 0) ? State::Acceptable : State::Intermediate;
+  result_cache.insert(input, result);
+  return result;
 }
