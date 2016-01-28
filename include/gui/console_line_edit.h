@@ -19,6 +19,8 @@
 
 #include <QLineEdit>
 
+class QStringListModel;
+
 /**
  * @brief A line field to execute Lua commands to the quest.
  *
@@ -52,6 +54,8 @@ private:
                               * history.size() if not navigating the history. */
   QString current_command;   /**< Command currently being edited, preserved
                               * when navigating the history. */
+  QStringListModel*
+      completer_model;       /**< Model for the completer. */
 
 };
 
