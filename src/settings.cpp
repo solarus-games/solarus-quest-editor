@@ -31,6 +31,9 @@ const QString Settings::video_acceleration = "video_acceleration";
 const QString Settings::win_console = "win_console";
 const QString Settings::quest_size = "quest_size";
 
+// Console keys.
+const QString Settings::console_history = "console_history";
+
 // Text editor keys.
 const QString Settings::font_family = "text_editor/font_family";
 const QString Settings::font_size = "text_editor/font_size";
@@ -75,6 +78,9 @@ QMap<QString, QVariant> Settings::default_values = {
   { Settings::video_acceleration, true },
   { Settings::win_console, false },
   { Settings::quest_size, QSize() },
+
+  // Console.
+  { Settings::console_history, QStringList() },
 
   // Text editor.
   { Settings::font_family, "DejaVu Sans Mono" },

@@ -22,6 +22,10 @@
 
 class QuestRunner;
 
+/**
+ * @brief Quest execution log viewer and interactive console to execute Lua
+ * commands.
+ */
 class Console : public QWidget {
   Q_OBJECT
 

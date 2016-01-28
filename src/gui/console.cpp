@@ -72,7 +72,6 @@ void Console::set_quest_runner(QuestRunner& quest_runner) {
  */
 void Console::quest_running() {
 
-  ui.command_field->setEnabled(true);
 }
 
 /**
@@ -80,7 +79,6 @@ void Console::quest_running() {
  */
 void Console::quest_finished() {
 
-  ui.command_field->setEnabled(false);
 }
 
 /**
@@ -114,10 +112,8 @@ void Console::command_field_activated() {
 
   const QString& command = ui.command_field->text();
 
-  // TODO check Lua syntax before sending it to the quest.
-
   quest_runner->execute_command(command);
-  ui.command_field->clear();
+  ui.command_field->command_executed(command);
 
   // Show the command in the log view.
   // TODO: show it only when receiving its results, to make sure it is displayed

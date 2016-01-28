@@ -38,6 +38,9 @@ public:
   static const QString win_console;
   static const QString quest_size;
 
+  // Console keys.
+  static const QString console_history;
+
   // Text editor keys.
   static const QString font_family;
   static const QString font_size;

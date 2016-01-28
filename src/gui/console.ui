@@ -37,10 +37,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="command_field">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
+    <widget class="ConsoleLineEdit" name="command_field">
      <property name="toolTip">
       <string>Run Lua code to the quest</string>
      </property>
@@ -48,6 +45,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ConsoleLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>include/gui/console_line_edit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
