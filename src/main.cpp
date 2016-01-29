@@ -112,7 +112,7 @@ int run_editor_gui(int argc, char* argv[]) {
 }
 
 /**
- * @brief Runs a quest like the solarus_run executable does.
+ * @brief Runs a quest like the solarus-run executable does.
  * @param argc Number of arguments of the command line.
  * @param argv Command-line arguments.
  * @return 0 in case of success.
@@ -136,8 +136,8 @@ int run_quest(int argc, char* argv[]) {
  *
  * To run the editor GUI:
  *   solarus-quest-editor [quest_path [file_path]]
- * To directly run a quest (no GUI, similar to solarus_run):
- *   -run quest_path
+ * To directly run a quest (no GUI, similar to solarus-run):
+ *   solarus-quest-editor -run quest_path
  *
  * @param argc Number of arguments of the command line.
  * @param argv Command-line arguments.
