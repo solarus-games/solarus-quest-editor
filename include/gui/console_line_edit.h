@@ -25,8 +25,6 @@ class QStringListModel;
  * @brief A line field to execute Lua commands to the quest.
  *
  * Manages the history of commands.
- *
- * TODO popup completion
  */
 class ConsoleLineEdit : public QLineEdit {
   Q_OBJECT
