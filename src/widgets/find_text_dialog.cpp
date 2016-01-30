@@ -14,26 +14,25 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_ENUM_TRAITS_H
-#define SOLARUSEDITOR_ENUM_TRAITS_H
-
-#include "widgets/enum_selector.h"  // To help QtDesigner build selectors using a single include.
-#include <QIcon>
-#include <QList>
-#include <QString>
+#include "widgets/find_text_dialog.h"
+#include <QPushButton>
 
 /**
- * \brief Gives info about enumerated values of a type E.
- *
- * Specializations of this template class should implement at least the
- * following public functions:
- * - static QList<E> get_values();
- * - static QString get_friendly_name(E value);
- * - static QIcon get_icon(E value);
+ * @brief Creates a find text dialog.
+ * @param parent The parent object or nullptr.
  */
-template<typename E>
-class EnumTraits {
+FindTextDialog::FindTextDialog(QWidget* parent) :
+  QDialog(parent),
+  ui() {
 
-};
+  ui.setupUi(this);
 
-#endif
+  QPushButton* find_button = new QPushButton(tr("Find"), this);
+  ui.button_box->addButton(find_button, QDialogButtonBox::ApplyRole);
+
+  find_button->setDefault(true);
+
+  connect(find_button, &QPushButton::pressed, [&]() {
+    emit find_text_requested(ui.find_field->text());
+  });
+}

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/gui_tools.h"
+#include "widgets/gui_tools.h"
 #include "editor_exception.h"
 #include <iostream>
 

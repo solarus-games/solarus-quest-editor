@@ -14,26 +14,20 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_ENUM_TRAITS_H
-#define SOLARUSEDITOR_ENUM_TRAITS_H
+#include "widgets/layer_selector.h"
 
-#include "widgets/enum_selector.h"  // To help QtDesigner build selectors using a single include.
-#include <QIcon>
-#include <QList>
-#include <QString>
+// TODO
 
-/**
- * \brief Gives info about enumerated values of a type E.
- *
- * Specializations of this template class should implement at least the
- * following public functions:
- * - static QList<E> get_values();
- * - static QString get_friendly_name(E value);
- * - static QIcon get_icon(E value);
- */
-template<typename E>
-class EnumTraits {
+LayerSelector::LayerSelector(QWidget* parent):
+  QComboBox(parent) {
 
-};
+}
 
-#endif
+int LayerSelector::get_selected_layer() const {
+
+  return 0;
+}
+
+void LayerSelector::set_selected_layer(int layer) {
+  Q_UNUSED(layer);
+}

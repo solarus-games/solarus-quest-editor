@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/main_window.h"
+#include "widgets/main_window.h"
 #include "settings.h"
 #include "version.h"
 #include <solarus/lowlevel/Debug.h>

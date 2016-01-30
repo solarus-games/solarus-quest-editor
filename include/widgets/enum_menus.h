@@ -14,26 +14,43 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_ENUM_TRAITS_H
-#define SOLARUSEDITOR_ENUM_TRAITS_H
+#ifndef SOLARUSEDITOR_ENUM_MENUS_H
+#define SOLARUSEDITOR_ENUM_MENUS_H
 
-#include "widgets/enum_selector.h"  // To help QtDesigner build selectors using a single include.
-#include <QIcon>
 #include <QList>
-#include <QString>
+#include <functional>
+
+class QAction;
+class QWidget;
+class QMenu;
 
 /**
- * \brief Gives info about enumerated values of a type E.
- *
- * Specializations of this template class should implement at least the
- * following public functions:
- * - static QList<E> get_values();
- * - static QString get_friendly_name(E value);
- * - static QIcon get_icon(E value);
+ * @brief Whether actions should be non-checkable, checkable or mutually exclusive.
+ */
+enum class EnumMenuCheckableOption {
+  NON_CHECKABLE,
+  CHECKABLE,
+  CHECKABLE_EXCLUSIVE,
+};
+
+/**
+ * @brief Helps creating actions and menus from the values of an enum.
  */
 template<typename E>
-class EnumTraits {
+class EnumMenus {
 
+public:
+
+  static QMenu* create_menu(EnumMenuCheckableOption checkable);
+
+  static QList<QAction*> create_actions(
+      QWidget& parent,
+      EnumMenuCheckableOption checkable,
+      std::function<void (const E&)> on_triggered = std::function<void (const E&)>());
+
+  // TODO create_toolbar()
 };
+
+#include "widgets/enum_menus.inl"
 
 #endif

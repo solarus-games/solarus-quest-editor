@@ -14,26 +14,34 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_ENUM_TRAITS_H
-#define SOLARUSEDITOR_ENUM_TRAITS_H
-
-#include "widgets/enum_selector.h"  // To help QtDesigner build selectors using a single include.
-#include <QIcon>
-#include <QList>
-#include <QString>
+#include "widgets/closable_tab_bar.h"
+#include <QMouseEvent>
 
 /**
- * \brief Gives info about enumerated values of a type E.
- *
- * Specializations of this template class should implement at least the
- * following public functions:
- * - static QList<E> get_values();
- * - static QString get_friendly_name(E value);
- * - static QIcon get_icon(E value);
+ * @brief Creates a closable tab bar.
+ * @param parent The parent object or nullptr.
  */
-template<typename E>
-class EnumTraits {
+ClosableTabBar::ClosableTabBar(QWidget* parent) :
+  QTabBar(parent) {
 
-};
+  setTabsClosable(true);
+}
 
-#endif
+/**
+ * @brief Receives a mouse press event.
+ * @param event The event to handle.
+ */
+void ClosableTabBar::mousePressEvent(QMouseEvent* event) {
+
+  if (event->button() == Qt::MidButton) {
+    int index = tabAt(event->pos());
+    if (index != -1) {
+      // Middle mouse button on a tab: close it.
+      emit tabCloseRequested(index);
+      return;
+    }
+  }
+
+  // Default mouse press behavior otherwise.
+  QTabBar::mousePressEvent(event);
+}

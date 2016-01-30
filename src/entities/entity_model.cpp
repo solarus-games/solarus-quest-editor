@@ -37,7 +37,7 @@
 #include "entities/teletransporter.h"
 #include "entities/tile.h"
 #include "entities/wall.h"
-#include "gui/gui_tools.h"
+#include "widgets/gui_tools.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"

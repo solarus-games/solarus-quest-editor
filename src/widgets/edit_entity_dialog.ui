@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditEntityDialog</class>
+ <widget class="QDialog" name="EditEntityDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>625</width>
+    <height>1153</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Edit an entity</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QFormLayout" name="form_layout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="type_label">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="type_field">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="name_label">
+       <property name="text">
+        <string>Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="name_field"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="layer_label">
+       <property name="text">
+        <string>Layer</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QWidget" name="layer_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="layer_field">
+          <property name="minimumSize">
+           <size>
+            <width>70</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>-9999</number>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="layer_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="position_label">
+       <property name="text">
+        <string>Position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="PairSpinBox" name="xy_field" native="true"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="size_label">
+       <property name="text">
+        <string>Size</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="PairSpinBox" name="size_field" native="true"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="direction_label">
+       <property name="text">
+        <string>Direction</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QWidget" name="direction_layout" native="true">
+       <layout class="QHBoxLayout" name="layout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QComboBox" name="direction_field"/>
+        </item>
+        <item>
+         <spacer name="direction_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QWidget" name="sprite_label_checkbox" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="sprite_label">
+          <property name="text">
+           <string>Sprite</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="sprite_checkbox">
+          <property name="text">
+           <string>Sprite</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="ResourceSelector" name="sprite_field"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="subtype_label">
+       <property name="text">
+        <string>Subtype</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QComboBox" name="subtype_field"/>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="breed_label">
+       <property name="text">
+        <string>Breed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="ResourceSelector" name="breed_field"/>
+     </item>
+     <item row="9" column="0">
+      <widget class="QCheckBox" name="model_checkbox">
+       <property name="text">
+        <string>Custom entity script</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="ResourceSelector" name="model_field"/>
+     </item>
+     <item row="10" column="0">
+      <widget class="QCheckBox" name="savegame_variable_checkbox">
+       <property name="text">
+        <string>Save the state</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QWidget" name="savegame_variable_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="savegame_variable_label">
+          <property name="text">
+           <string>in variable</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="savegame_variable_field"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="11" column="0">
+      <widget class="QLabel" name="treasure_label">
+       <property name="text">
+        <string>Treasure</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="1">
+      <widget class="QWidget" name="treasure_layout" native="true">
+       <layout class="QVBoxLayout" name="layout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="ResourceSelector" name="treasure_name_field"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontal_layout_3">
+          <item>
+           <widget class="QLabel" name="treasure_variant_label">
+            <property name="text">
+             <string>Variant of this item</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="treasure_variant_field">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontal_spacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="save_treasure_checkbox">
+          <property name="text">
+           <string>Save the treasure state</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontal_layout_4">
+          <item>
+           <widget class="QLabel" name="treasure_savegame_variable_label">
+            <property name="text">
+             <string>in variable</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="treasure_savegame_variable_field"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="font_label">
+       <property name="text">
+        <string>Price font</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="ResourceSelector" name="font_field"/>
+     </item>
+     <item row="13" column="0">
+      <widget class="QCheckBox" name="sound_checkbox">
+       <property name="text">
+        <string>Play a sound</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="ResourceSelector" name="sound_field"/>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="transition_label">
+       <property name="text">
+        <string>Transition</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="1">
+      <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
+     </item>
+     <item row="15" column="0">
+      <widget class="QLabel" name="destination_map_label">
+       <property name="text">
+        <string>Destination map</string>
+       </property>
+      </widget>
+     </item>
+     <item row="15" column="1">
+      <widget class="ResourceSelector" name="destination_map_field"/>
+     </item>
+     <item row="16" column="0">
+      <widget class="QLabel" name="destination_label">
+       <property name="text">
+        <string>Destination</string>
+       </property>
+      </widget>
+     </item>
+     <item row="16" column="1">
+      <widget class="EntitySelector" name="destination_field"/>
+     </item>
+     <item row="17" column="0">
+      <widget class="QCheckBox" name="weight_checkbox">
+       <property name="text">
+        <string>Weight</string>
+       </property>
+      </widget>
+     </item>
+     <item row="17" column="1">
+      <widget class="QWidget" name="weight_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="weight_field">
+          <property name="maximumSize">
+           <size>
+            <width>70</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="weight_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="18" column="0">
+      <widget class="QCheckBox" name="damage_on_enemies_checkbox">
+       <property name="text">
+        <string>Damage on enemies</string>
+       </property>
+      </widget>
+     </item>
+     <item row="18" column="1">
+      <widget class="QWidget" name="damage_on_enemies_layout" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSpinBox" name="damage_on_enemies_field">
+          <property name="maximumSize">
+           <size>
+            <width>70</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>999999</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="damage_on_enemies_spacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="19" column="0">
+      <widget class="QCheckBox" name="ground_checkbox">
+       <property name="text">
+        <string>Set a special ground</string>
+       </property>
+      </widget>
+     </item>
+     <item row="19" column="1">
+      <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
+     </item>
+     <item row="20" column="0">
+      <widget class="QLabel" name="maximum_moves_label">
+       <property name="text">
+        <string>Maximum moves</string>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="1">
+      <widget class="QComboBox" name="maximum_moves_field"/>
+     </item>
+     <item row="21" column="0">
+      <widget class="QLabel" name="opening_method_label">
+       <property name="text">
+        <string>Opening mode</string>
+       </property>
+      </widget>
+     </item>
+     <item row="21" column="1">
+      <widget class="QWidget" name="opening_method_layout" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="opening_method_none_radio">
+          <property name="text">
+           <string>By script</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="opening_method_interaction_radio">
+          <property name="text">
+           <string>By hero</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_condition_savegame_variable_layout">
+          <item>
+           <widget class="QRadioButton" name="opening_method_savegame_variable_radio">
+            <property name="text">
+             <string>By hero, savegame variable required</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="opening_condition_savegame_variable_field"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_condition_savegame_variable_consumed_layout">
+          <item>
+           <spacer name="opening_condition_savegame_variable_consumed_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="opening_condition_savegame_variable_consumed_checkbox">
+            <property name="text">
+             <string>Reset/decrement when opening</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_condition_item_layout">
+          <item>
+           <widget class="QRadioButton" name="opening_method_item_radio">
+            <property name="text">
+             <string>By hero, item required</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ResourceSelector" name="opening_condition_item_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="opening_condition_item_consumed_layout">
+          <item>
+           <spacer name="opening_condition_item_consumed_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="opening_condition_item_consumed_checkbox">
+            <property name="text">
+             <string>Remove/decrement when opening</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="opening_method_explosion_radio">
+          <property name="text">
+           <string>By explosion</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="22" column="0">
+      <widget class="QLabel" name="behavior_label">
+       <property name="text">
+        <string>Action</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="1">
+      <widget class="QWidget" name="behavior_layout" native="true">
+       <layout class="QVBoxLayout" name="layout_5">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="behavior_dialog_layout">
+          <item>
+           <widget class="QRadioButton" name="behavior_dialog_radio">
+            <property name="text">
+             <string>Show a dialog</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="behavior_dialog_field"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="behavior_map_radio">
+          <property name="text">
+           <string>Call the map script</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="behavior_item_layout">
+          <item>
+           <widget class="QRadioButton" name="behavior_item_radio">
+            <property name="text">
+             <string>Call an item script</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ResourceSelector" name="behavior_item_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResourceSelector</class>
+   <extends>QComboBox</extends>
+   <header>widgets/resource_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PairSpinBox</class>
+   <extends>QWidget</extends>
+   <header>widgets/pair_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;TransitionStyle&gt;</class>
+   <extends>QComboBox</extends>
+   <header>transition_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EntitySelector</class>
+   <extends>QComboBox</extends>
+   <header>widgets/entity_selector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EnumSelector&lt;Ground&gt;</class>
+   <extends>QComboBox</extends>
+   <header>ground_traits.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>EditEntityDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>EditEntityDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
