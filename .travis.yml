@@ -3,6 +3,16 @@ branches:
     - master
     - dev
 
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#solarus"
+    on_success: change
+    on_failure: always
+    use_notice: true
+    skip_join: true
+
+
 language: cpp
 compiler:
   - gcc
