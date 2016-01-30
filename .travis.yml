@@ -25,7 +25,7 @@ install:
 # The Solarus library is also a dependency. Branch master of the editor is
 # supposed to compile with branch master of Solarus.
   - git clone --branch=$TRAVIS_BRANCH https://github.com/christopho/solarus
-  - cd solarus && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="$HOME" .. && make && make install && cd ../..
+  - cd solarus && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$HOME;$HOME/qt/gcc_64;$HOME/qt/gcc_64/lib/cmake" -DCMAKE_INSTALL_PREFIX="$HOME" .. && make && make install && cd ../..
 
 script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$HOME;$HOME/qt/gcc_64;$HOME/qt/gcc_64/lib/cmake" .. && make
 
