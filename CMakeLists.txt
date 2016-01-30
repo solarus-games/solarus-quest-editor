@@ -32,6 +32,7 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(Solarus REQUIRED)
+find_package(SolarusGui REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -54,11 +55,13 @@ endif()
 
 # Include directories.
 include_directories(
+  "${CMAKE_BINARY_DIR}"
   "${CMAKE_SOURCE_DIR}/include"
 )
 
 include_directories(SYSTEM
   "${SOLARUS_INCLUDE_DIR}"
+  "${SOLARUS_GUI_INCLUDE_DIR}"
   "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
   "${SDL2_INCLUDE_DIR}"
   "${SDL2_TTF_INCLUDE_DIR}"
@@ -99,8 +102,6 @@ set(solarus_quest_editor_SOURCES
   include/widgets/change_pattern_id_dialog.h
   include/widgets/change_source_image_dialog.h
   include/widgets/closable_tab_bar.h
-  include/widgets/console.h
-  include/widgets/console_line_edit.h
   include/widgets/edit_entity_dialog.h
   include/widgets/editor.h
   include/widgets/editor_tabs.h
@@ -174,7 +175,6 @@ set(solarus_quest_editor_SOURCES
   include/quest_files_model.h
   include/quest_properties.h
   include/quest_resources.h
-  include/quest_runner.h
   include/rectangle.h
   include/resize_mode.h
   include/settings.h
@@ -211,8 +211,6 @@ set(solarus_quest_editor_SOURCES
   src/widgets/change_pattern_id_dialog.cpp
   src/widgets/change_source_image_dialog.cpp
   src/widgets/closable_tab_bar.cpp
-  src/widgets/console.cpp
-  src/widgets/console_line_edit.cpp
   src/widgets/edit_entity_dialog.cpp
   src/widgets/editor.cpp
   src/widgets/editor_tabs.cpp
@@ -278,7 +276,6 @@ set(solarus_quest_editor_SOURCES
   src/quest_files_model.cpp
   src/quest_properties.cpp
   src/quest_resources.cpp
-  src/quest_runner.cpp
   src/rectangle.cpp
   src/settings.cpp
   src/size.cpp
@@ -299,7 +296,6 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
-  src/widgets/console.ui
   src/widgets/change_pattern_id_dialog.ui
   src/widgets/edit_entity_dialog.ui
   src/widgets/external_script_dialog.ui
@@ -356,6 +352,7 @@ add_executable(solarus-quest-editor
 target_link_libraries(solarus-quest-editor
   Qt5::Widgets
   "${SOLARUS_LIBRARIES}"
+  "${SOLARUS_GUI_LIBRARIES}"
   "${SDL2_LIBRARY}"
   "${SDL2_IMAGE_LIBRARY}"
   "${SDL2_TTF_LIBRARY}"

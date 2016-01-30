@@ -51,7 +51,7 @@
         <enum>Qt::Vertical</enum>
        </property>
        <widget class="EditorTabs" name="tab_widget"/>
-       <widget class="Console" name="console_widget" native="true"/>
+       <widget class="SolarusGui::Console" name="console_widget" native="true"/>
       </widget>
      </widget>
     </item>
@@ -373,6 +373,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>SolarusGui::Console</class>
+   <extends>QWidget</extends>
+   <header>solarus/gui/console.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>QuestTreeView</class>
    <extends>QTreeView</extends>
    <header>widgets/quest_tree_view.h</header>
@@ -381,12 +387,6 @@
    <class>EditorTabs</class>
    <extends>QTabWidget</extends>
    <header>widgets/editor_tabs.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Console</class>
-   <extends>QWidget</extends>
-   <header>widgets/console.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -27,8 +27,8 @@
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
-#include "quest_runner.h"
 #include "version.h"
+#include <solarus/gui/quest_runner.h>
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDebug>

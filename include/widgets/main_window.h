@@ -19,9 +19,9 @@
 
 #include "widgets/settings_dialog.h"
 #include "quest.h"
-#include "quest_runner.h"
 #include "ui_main_window.h"
 #include <solarus/entities/EntityType.h>
+#include <solarus/gui/quest_runner.h>
 #include <QMainWindow>
 
 class Editor;
@@ -111,7 +111,8 @@ private:
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */
-  QuestRunner quest_runner;       /**< The executor of the current quest. */
+  SolarusGui::QuestRunner
+      quest_runner;               /**< The executor of the current quest. */
 
   QMenu* recent_quests_menu;      /**< The menu to open a recent quest. */
   QMenu* zoom_menu;               /**< The zoom menu. */

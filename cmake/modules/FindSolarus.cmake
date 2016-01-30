@@ -1,5 +1,6 @@
 # - Find Solarus
 # Find the Solarus includes and library.
+# Does not look for the Solarus GUI library.
 #
 #  SOLARUS_INCLUDE_DIR - where to find solarus headers.
 #  SOLARUS_LIBRARIES   - List of libraries when using libsolarus.
