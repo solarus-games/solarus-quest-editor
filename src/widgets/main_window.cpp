@@ -406,7 +406,7 @@ QMenu* MainWindow::create_show_entities_menu() {
 }
 
 /**
- * @brief Set an appropriate size and centers the window on the screen having
+ * @brief Sets an appropriate size and centers the window on the screen having
  * the mouse.
  */
 void MainWindow::initialize_geometry_on_screen() {
