@@ -17,8 +17,8 @@
 #ifndef SOLARUSEDITOR_SETTINGS_DIALOG_H
 #define SOLARUSEDITOR_SETTINGS_DIALOG_H
 
+#include "editor_settings.h"
 #include "ui_settings_dialog.h"
-#include "include/settings.h"
 #include <QDialog>
 
 /**
@@ -110,7 +110,7 @@ private:
 
   Ui::SettingsDialog ui;                    /**< The settings dialog widgets. */
 
-  Settings settings;                        /**< The settings. */
+  EditorSettings settings;                  /**< The settings. */
   QMap<QString, QVariant> edited_settings;  /**< The edited settings. */
 
 };

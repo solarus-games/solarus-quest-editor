@@ -20,10 +20,10 @@
 #include "widgets/sprite_editor.h"
 #include "widgets/sprite_scene.h"
 #include "editor_exception.h"
+#include "editor_settings.h"
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
-#include "settings.h"
 #include "sprite_model.h"
 #include <QFileInfo>
 #include <QUndoStack>
@@ -812,25 +812,25 @@ void SpriteEditor::save() {
  */
 void SpriteEditor::reload_settings() {
 
-  Settings settings;
+  EditorSettings settings;
 
   SpriteScene* scene = ui.sprite_view->get_scene();
   if (scene != nullptr) {
-    QBrush brush(settings.get_value_color(Settings::sprite_main_background));
+    QBrush brush(settings.get_value_color(EditorSettings::sprite_main_background));
     scene->setBackgroundBrush(brush);
   }
 
   get_view_settings().set_grid_style(static_cast<GridStyle>(
-    settings.get_value_int(Settings::sprite_grid_style)));
+    settings.get_value_int(EditorSettings::sprite_grid_style)));
   get_view_settings().set_grid_color(
-    settings.get_value_color(Settings::sprite_grid_color));
+    settings.get_value_color(EditorSettings::sprite_grid_color));
 
   ui.sprite_previewer->set_background_color(
-    settings.get_value_color(Settings::sprite_previewer_background));
+    settings.get_value_color(EditorSettings::sprite_previewer_background));
   ui.sprite_previewer->set_origin_color(
-    settings.get_value_color(Settings::sprite_origin_color));
+    settings.get_value_color(EditorSettings::sprite_origin_color));
 
-  auto_detect_grid = settings.get_value_bool(Settings::sprite_auto_detect_grid);
+  auto_detect_grid = settings.get_value_bool(EditorSettings::sprite_auto_detect_grid);
 }
 
 /**
@@ -1453,14 +1453,14 @@ void SpriteEditor::change_direction_num_columns_requested() {
 void SpriteEditor::load_settings() {
 
   ViewSettings& view = get_view_settings();
-  Settings settings;
+  EditorSettings settings;
 
   view.set_grid_visible(
-    settings.get_value_bool(Settings::sprite_grid_show_at_opening));
-  view.set_grid_size(settings.get_value_size(Settings::sprite_grid_size));
+    settings.get_value_bool(EditorSettings::sprite_grid_show_at_opening));
+  view.set_grid_size(settings.get_value_size(EditorSettings::sprite_grid_size));
 
   ui.sprite_previewer->set_show_origin(
-    settings.get_value_bool(Settings::sprite_origin_show_at_opening));
+    settings.get_value_bool(EditorSettings::sprite_origin_show_at_opening));
 
   reload_settings();
 }

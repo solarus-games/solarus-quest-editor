@@ -221,8 +221,8 @@ void MainWindow::update_recent_quests_menu() {
   }
 
   // Get the recent quest list.
-  Settings settings;
-  QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+  EditorSettings settings;
+  QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
 
   // Clear previous actions.
   recent_quests_menu->clear();
@@ -589,8 +589,8 @@ void MainWindow::upgrade_quest() {
  */
 void MainWindow::add_quest_to_recent_list() {
 
-  Settings settings;
-  QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+  EditorSettings settings;
+  QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
   QString quest_path = get_quest().get_root_path();
 
   if (!last_quests.isEmpty() && last_quests.first() == quest_path) {
@@ -612,7 +612,7 @@ void MainWindow::add_quest_to_recent_list() {
     last_quests.removeAt(last_quests.size() - 1);
   }
 
-  settings.set_value(Settings::last_quests, last_quests);
+  settings.set_value(EditorSettings::last_quests, last_quests);
 
   // Rebuild the recent quest menu.
   update_recent_quests_menu();
@@ -628,12 +628,12 @@ void MainWindow::on_action_new_quest_triggered() {
     return;
   }
 
-  Settings settings;
+  EditorSettings settings;
 
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        settings.get_value_string(Settings::working_directory),
+        settings.get_value_string(EditorSettings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -663,12 +663,12 @@ void MainWindow::on_action_load_quest_triggered() {
     return;
   }
 
-  Settings settings;
+  EditorSettings settings;
 
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
-        settings.get_value_string(Settings::working_directory),
+        settings.get_value_string(EditorSettings::working_directory),
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
@@ -792,8 +792,8 @@ void MainWindow::on_action_run_quest_triggered() {
 
     if (ui.tab_widget->has_unsaved_files()) {
 
-      Settings settings;
-      const QString& save_files = settings.get_value_string(Settings::save_files_before_running);
+      EditorSettings settings;
+      const QString& save_files = settings.get_value_string(EditorSettings::save_files_before_running);
 
       QMessageBox::StandardButton answer = QMessageBox::Yes;
       if (save_files == "yes") {

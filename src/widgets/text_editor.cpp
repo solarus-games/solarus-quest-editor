@@ -19,8 +19,8 @@
 #include "widgets/text_editor.h"
 #include "widgets/text_editor_widget.h"
 #include "editor_exception.h"
+#include "editor_settings.h"
 #include "quest.h"
-#include "settings.h"
 #include <QIcon>
 #include <QLayout>
 #include <QList>
@@ -232,16 +232,16 @@ void TextEditor::find() {
  */
 void TextEditor::reload_settings() {
 
-  Settings settings;
+  EditorSettings settings;
 
   // Font.
-  QFont font(settings.get_value_string(Settings::font_family));
-  font.setPointSize(settings.get_value_int(Settings::font_size));
+  QFont font(settings.get_value_string(EditorSettings::font_family));
+  font.setPointSize(settings.get_value_int(EditorSettings::font_size));
   font.setStyleHint(QFont::TypeWriter);
   setFont(font);
-  text_widget->set_tab_length(settings.get_value_int(Settings::tab_length));
+  text_widget->set_tab_length(settings.get_value_int(EditorSettings::tab_length));
   text_widget->set_replace_tab_by_spaces(
-    settings.get_value_bool(Settings::replace_tab_by_spaces));
+    settings.get_value_bool(EditorSettings::replace_tab_by_spaces));
 }
 
 /**

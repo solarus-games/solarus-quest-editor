@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/main_window.h"
-#include "settings.h"
+#include "editor_settings.h"
 #include "version.h"
 #include <solarus/lowlevel/Debug.h>
 #include <solarus/Arguments.h>
@@ -48,7 +48,7 @@ int run_editor_gui(int argc, char* argv[]) {
   }
 
   QApplication application(argc, argv);
-  Settings::load_default_application_settings();
+  EditorSettings::load_default_application_settings();
 
   // Set up the translations.
   QTranslator qt_translator;
@@ -71,7 +71,7 @@ int run_editor_gui(int argc, char* argv[]) {
   QStringList file_paths;
   QString active_file_path;
 
-  Settings settings;
+  EditorSettings settings;
   if (!cmd_quest_path.isEmpty()) {
     // Quest specified in the command line.
     quest_path = cmd_quest_path;
@@ -79,13 +79,13 @@ int run_editor_gui(int argc, char* argv[]) {
       file_paths << cmd_file_path;
     }
   }
-  else if (settings.get_value_bool("restore_last_files")) {
+  else if (settings.get_value_bool(EditorSettings::restore_last_files)) {
     // Restore the default quest if any.
-    QStringList last_quests = settings.get_value_string_list(Settings::last_quests);
+    QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
     if (!last_quests.isEmpty()) {
       quest_path = last_quests.first();
-      file_paths = settings.get_value_string_list(Settings::last_files);
-      active_file_path = settings.get_value_string(Settings::last_file);
+      file_paths = settings.get_value_string_list(EditorSettings::last_files);
+      active_file_path = settings.get_value_string(EditorSettings::last_file);
     }
   }
 

@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/settings_dialog.h"
-#include "settings.h"
+#include "editor_settings.h"
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -236,7 +236,7 @@ void SettingsDialog::update_buttons() {
 void SettingsDialog::update_working_directory() {
 
   ui.working_directory_field->setText(
-    settings.get_value_string(Settings::working_directory));
+    settings.get_value_string(EditorSettings::working_directory));
 }
 
 /**
@@ -244,7 +244,7 @@ void SettingsDialog::update_working_directory() {
  */
 void SettingsDialog::change_working_directory() {
 
-  edited_settings[Settings::working_directory] =
+  edited_settings[EditorSettings::working_directory] =
     ui.working_directory_field->text();
   update_buttons();
 }
@@ -263,7 +263,7 @@ void SettingsDialog::browse_working_directory() {
   }
 
   ui.working_directory_field->setText(new_working_directory);
-  edited_settings[Settings::working_directory] = new_working_directory;
+  edited_settings[EditorSettings::working_directory] = new_working_directory;
   update_buttons();
 }
 
@@ -272,7 +272,7 @@ void SettingsDialog::browse_working_directory() {
  */
 void SettingsDialog::update_restore_last_files() {
 
-  ui.restore_last_files_field->setChecked(settings.get_value_bool(Settings::restore_last_files));
+  ui.restore_last_files_field->setChecked(settings.get_value_bool(EditorSettings::restore_last_files));
 }
 
 /**
@@ -280,7 +280,7 @@ void SettingsDialog::update_restore_last_files() {
  */
 void SettingsDialog::change_restore_last_files() {
 
-  edited_settings[Settings::restore_last_files] = ui.restore_last_files_field->isChecked();
+  edited_settings[EditorSettings::restore_last_files] = ui.restore_last_files_field->isChecked();
   update_buttons();
 }
 
@@ -289,7 +289,7 @@ void SettingsDialog::change_restore_last_files() {
  */
 void SettingsDialog::update_save_files() {
 
-  const QString& value = settings.get_value_string(Settings::save_files_before_running);
+  const QString& value = settings.get_value_string(EditorSettings::save_files_before_running);
   int index = 0;
   if (value == "ask") {
     index = 0;
@@ -311,7 +311,7 @@ void SettingsDialog::change_save_files() {
   int index = ui.save_files_field->currentIndex();
   const QString values[] = { "ask", "yes", "no" };
   Q_ASSERT(index >= 0 && index < 3);
-  edited_settings[Settings::save_files_before_running] = values[index];
+  edited_settings[EditorSettings::save_files_before_running] = values[index];
   update_buttons();
 }
 
@@ -320,7 +320,7 @@ void SettingsDialog::change_save_files() {
  */
 void SettingsDialog::update_no_audio() {
 
-  ui.no_audio_field->setChecked(settings.get_value_bool(Settings::no_audio));
+  ui.no_audio_field->setChecked(settings.get_value_bool(EditorSettings::no_audio));
 }
 
 /**
@@ -328,7 +328,7 @@ void SettingsDialog::update_no_audio() {
  */
 void SettingsDialog::change_no_audio() {
 
-  edited_settings[Settings::no_audio] = ui.no_audio_field->isChecked();
+  edited_settings[EditorSettings::no_audio] = ui.no_audio_field->isChecked();
   update_buttons();
 }
 
@@ -338,7 +338,7 @@ void SettingsDialog::change_no_audio() {
 void SettingsDialog::update_video_acceleration() {
 
   ui.video_acceleration_field->setChecked(
-    settings.get_value_bool(Settings::video_acceleration));
+    settings.get_value_bool(EditorSettings::video_acceleration));
 }
 
 /**
@@ -346,7 +346,7 @@ void SettingsDialog::update_video_acceleration() {
  */
 void SettingsDialog::change_video_acceleration() {
 
-  edited_settings[Settings::video_acceleration] =
+  edited_settings[EditorSettings::video_acceleration] =
     ui.video_acceleration_field->isChecked();
   update_buttons();
 }
@@ -357,7 +357,7 @@ void SettingsDialog::change_video_acceleration() {
 void SettingsDialog::update_win_console() {
 
   ui.win_console_field->setChecked(
-    settings.get_value_bool(Settings::win_console));
+    settings.get_value_bool(EditorSettings::win_console));
 }
 
 /**
@@ -365,7 +365,7 @@ void SettingsDialog::update_win_console() {
  */
 void SettingsDialog::change_win_console() {
 
-  edited_settings[Settings::win_console] = ui.win_console_field->isChecked();
+  edited_settings[EditorSettings::win_console] = ui.win_console_field->isChecked();
   update_buttons();
 }
 
@@ -374,7 +374,7 @@ void SettingsDialog::change_win_console() {
  */
 void SettingsDialog::update_quest_size() {
 
-  QSize size = settings.get_value_size(Settings::quest_size);
+  QSize size = settings.get_value_size(EditorSettings::quest_size);
   bool enable = size.isValid();
 
   ui.quest_size_check_box->setChecked(enable);
@@ -401,7 +401,7 @@ void SettingsDialog::change_quest_size() {
 
   ui.quest_size_field->setEnabled(enable);
 
-  edited_settings[Settings::quest_size] = new_size;
+  edited_settings[EditorSettings::quest_size] = new_size;
   update_buttons();
 }
 
@@ -411,7 +411,7 @@ void SettingsDialog::change_quest_size() {
 void SettingsDialog::update_font_family() {
 
   ui.font_family_field->setCurrentText(
-    settings.get_value_string(Settings::font_family));
+    settings.get_value_string(EditorSettings::font_family));
 }
 
 /**
@@ -419,7 +419,7 @@ void SettingsDialog::update_font_family() {
  */
 void SettingsDialog::change_font_family() {
 
-  edited_settings[Settings::font_family] = ui.font_family_field->currentText();
+  edited_settings[EditorSettings::font_family] = ui.font_family_field->currentText();
   update_buttons();
 }
 
@@ -428,7 +428,7 @@ void SettingsDialog::change_font_family() {
  */
 void SettingsDialog::update_font_size() {
 
-  ui.font_size_field->setValue(settings.get_value_int(Settings::font_size));
+  ui.font_size_field->setValue(settings.get_value_int(EditorSettings::font_size));
 }
 
 /**
@@ -436,7 +436,7 @@ void SettingsDialog::update_font_size() {
  */
 void SettingsDialog::change_font_size() {
 
-  edited_settings[Settings::font_size] = ui.font_size_field->value();
+  edited_settings[EditorSettings::font_size] = ui.font_size_field->value();
   update_buttons();
 }
 
@@ -445,7 +445,7 @@ void SettingsDialog::change_font_size() {
  */
 void SettingsDialog::update_tab_length() {
 
-  ui.tab_length_field->setValue(settings.get_value_int(Settings::tab_length));
+  ui.tab_length_field->setValue(settings.get_value_int(EditorSettings::tab_length));
 }
 
 /**
@@ -453,7 +453,7 @@ void SettingsDialog::update_tab_length() {
  */
 void SettingsDialog::change_tab_length() {
 
-  edited_settings[Settings::tab_length] = ui.tab_length_field->value();
+  edited_settings[EditorSettings::tab_length] = ui.tab_length_field->value();
   update_buttons();
 }
 
@@ -463,7 +463,7 @@ void SettingsDialog::change_tab_length() {
 void SettingsDialog::update_replace_tab_by_spaces() {
 
   ui.replace_tab_by_spaces->setChecked(
-    settings.get_value_bool(Settings::replace_tab_by_spaces));
+    settings.get_value_bool(EditorSettings::replace_tab_by_spaces));
 }
 
 /**
@@ -471,7 +471,7 @@ void SettingsDialog::update_replace_tab_by_spaces() {
  */
 void SettingsDialog::change_replace_tab_by_spaces() {
 
-  edited_settings[Settings::replace_tab_by_spaces] =
+  edited_settings[EditorSettings::replace_tab_by_spaces] =
     ui.replace_tab_by_spaces->isChecked();
 }
 
@@ -481,7 +481,7 @@ void SettingsDialog::change_replace_tab_by_spaces() {
 void SettingsDialog::update_map_background() {
 
   ui.map_background_field->set_color(
-    settings.get_value_color(Settings::map_background));
+    settings.get_value_color(EditorSettings::map_background));
 }
 
 /**
@@ -489,7 +489,7 @@ void SettingsDialog::update_map_background() {
  */
 void SettingsDialog::change_map_background() {
 
-  edited_settings[Settings::map_background] =
+  edited_settings[EditorSettings::map_background] =
     ui.map_background_field->get_color().name();
   update_buttons();
 }
@@ -500,7 +500,7 @@ void SettingsDialog::change_map_background() {
 void SettingsDialog::update_map_grid_show_at_opening() {
 
   ui.map_grid_show_at_opening_field->setChecked(
-    settings.get_value_bool(Settings::map_grid_show_at_opening));
+    settings.get_value_bool(EditorSettings::map_grid_show_at_opening));
 }
 
 /**
@@ -508,7 +508,7 @@ void SettingsDialog::update_map_grid_show_at_opening() {
  */
 void SettingsDialog::change_map_grid_show_at_opening() {
 
-  edited_settings[Settings::map_grid_show_at_opening] =
+  edited_settings[EditorSettings::map_grid_show_at_opening] =
     ui.map_grid_show_at_opening_field->isChecked();
   update_buttons();
 }
@@ -519,7 +519,7 @@ void SettingsDialog::change_map_grid_show_at_opening() {
 void SettingsDialog::update_map_grid_size() {
 
   ui.map_grid_size_field->set_size(
-    settings.get_value_size(Settings::map_grid_size));
+    settings.get_value_size(EditorSettings::map_grid_size));
 }
 
 /**
@@ -527,7 +527,7 @@ void SettingsDialog::update_map_grid_size() {
  */
 void SettingsDialog::change_map_grid_size() {
 
-  edited_settings[Settings::map_grid_size] = ui.map_grid_size_field->get_size();
+  edited_settings[EditorSettings::map_grid_size] = ui.map_grid_size_field->get_size();
   update_buttons();
 }
 
@@ -537,7 +537,7 @@ void SettingsDialog::change_map_grid_size() {
 void SettingsDialog::update_map_grid_style() {
 
   ui.map_grid_style_field->set_selected_value(static_cast<GridStyle>(
-    settings.get_value_int(Settings::map_grid_style)));
+    settings.get_value_int(EditorSettings::map_grid_style)));
 }
 
 /**
@@ -545,7 +545,7 @@ void SettingsDialog::update_map_grid_style() {
  */
 void SettingsDialog::change_map_grid_style() {
 
-  edited_settings[Settings::map_grid_style] =
+  edited_settings[EditorSettings::map_grid_style] =
     static_cast<int>(ui.map_grid_style_field->get_selected_value());
   update_buttons();
 }
@@ -556,7 +556,7 @@ void SettingsDialog::change_map_grid_style() {
 void SettingsDialog::update_map_grid_color() {
 
   ui.map_grid_color_field->set_color(
-    settings.get_value_color(Settings::map_grid_color));
+    settings.get_value_color(EditorSettings::map_grid_color));
 }
 
 /**
@@ -564,7 +564,7 @@ void SettingsDialog::update_map_grid_color() {
  */
 void SettingsDialog::change_map_grid_color() {
 
-  edited_settings[Settings::map_grid_color] =
+  edited_settings[EditorSettings::map_grid_color] =
     ui.map_grid_color_field->get_color().name();
   update_buttons();
 }
@@ -575,7 +575,7 @@ void SettingsDialog::change_map_grid_color() {
 void SettingsDialog::update_sprite_main_background() {
 
   ui.sprite_main_background_field->set_color(
-    settings.get_value_color(Settings::sprite_main_background));
+    settings.get_value_color(EditorSettings::sprite_main_background));
 }
 
 /**
@@ -583,7 +583,7 @@ void SettingsDialog::update_sprite_main_background() {
  */
 void SettingsDialog::change_sprite_main_background() {
 
-  edited_settings[Settings::sprite_main_background] =
+  edited_settings[EditorSettings::sprite_main_background] =
     ui.sprite_main_background_field->get_color().name();
   update_buttons();
 }
@@ -594,7 +594,7 @@ void SettingsDialog::change_sprite_main_background() {
 void SettingsDialog::update_sprite_grid_show_at_opening() {
 
   ui.sprite_grid_show_at_opening_field->setChecked(
-    settings.get_value_bool(Settings::sprite_grid_show_at_opening));
+    settings.get_value_bool(EditorSettings::sprite_grid_show_at_opening));
 }
 
 /**
@@ -602,7 +602,7 @@ void SettingsDialog::update_sprite_grid_show_at_opening() {
  */
 void SettingsDialog::change_sprite_grid_show_at_opening() {
 
-  edited_settings[Settings::sprite_grid_show_at_opening] =
+  edited_settings[EditorSettings::sprite_grid_show_at_opening] =
     ui.sprite_grid_show_at_opening_field->isChecked();
   update_buttons();
 }
@@ -613,7 +613,7 @@ void SettingsDialog::change_sprite_grid_show_at_opening() {
 void SettingsDialog::update_sprite_grid_size() {
 
   ui.sprite_grid_size_field->set_size(
-    settings.get_value_size(Settings::sprite_grid_size));
+    settings.get_value_size(EditorSettings::sprite_grid_size));
 }
 
 /**
@@ -621,7 +621,7 @@ void SettingsDialog::update_sprite_grid_size() {
  */
 void SettingsDialog::change_sprite_grid_size() {
 
-  edited_settings[Settings::sprite_grid_size] =
+  edited_settings[EditorSettings::sprite_grid_size] =
     ui.sprite_grid_size_field->get_size();
   update_buttons();
 }
@@ -632,7 +632,7 @@ void SettingsDialog::change_sprite_grid_size() {
 void SettingsDialog::update_sprite_grid_style() {
 
   ui.sprite_grid_style_field->set_selected_value(static_cast<GridStyle>(
-    settings.get_value_int(Settings::sprite_grid_style)));
+    settings.get_value_int(EditorSettings::sprite_grid_style)));
 }
 
 /**
@@ -640,7 +640,7 @@ void SettingsDialog::update_sprite_grid_style() {
  */
 void SettingsDialog::change_sprite_grid_style() {
 
-  edited_settings[Settings::sprite_grid_style] =
+  edited_settings[EditorSettings::sprite_grid_style] =
     static_cast<int>(ui.sprite_grid_style_field->get_selected_value());
   update_buttons();
 }
@@ -651,7 +651,7 @@ void SettingsDialog::change_sprite_grid_style() {
 void SettingsDialog::update_sprite_grid_color() {
 
   ui.sprite_grid_color_field->set_color(
-    settings.get_value_color(Settings::sprite_grid_color));
+    settings.get_value_color(EditorSettings::sprite_grid_color));
 }
 
 /**
@@ -659,7 +659,7 @@ void SettingsDialog::update_sprite_grid_color() {
  */
 void SettingsDialog::change_sprite_grid_color() {
 
-  edited_settings[Settings::sprite_grid_color] =
+  edited_settings[EditorSettings::sprite_grid_color] =
     ui.sprite_grid_color_field->get_color().name();
   update_buttons();
 }
@@ -670,7 +670,7 @@ void SettingsDialog::change_sprite_grid_color() {
 void SettingsDialog::update_sprite_auto_detect_grid() {
 
   ui.sprite_auto_detect_grid_field->setChecked(
-    settings.get_value_bool(Settings::sprite_auto_detect_grid));
+    settings.get_value_bool(EditorSettings::sprite_auto_detect_grid));
 }
 
 /**
@@ -678,7 +678,7 @@ void SettingsDialog::update_sprite_auto_detect_grid() {
  */
 void SettingsDialog::change_sprite_auto_detect_grid() {
 
-  edited_settings[Settings::sprite_auto_detect_grid] =
+  edited_settings[EditorSettings::sprite_auto_detect_grid] =
     ui.sprite_auto_detect_grid_field->isChecked();
   update_buttons();
 }
@@ -689,7 +689,7 @@ void SettingsDialog::change_sprite_auto_detect_grid() {
 void SettingsDialog::update_sprite_previewer_background() {
 
   ui.sprite_previewer_background_field->set_color(
-    settings.get_value_color(Settings::sprite_previewer_background));
+    settings.get_value_color(EditorSettings::sprite_previewer_background));
 }
 
 /**
@@ -697,7 +697,7 @@ void SettingsDialog::update_sprite_previewer_background() {
  */
 void SettingsDialog::change_sprite_previewer_background() {
 
-  edited_settings[Settings::sprite_previewer_background] =
+  edited_settings[EditorSettings::sprite_previewer_background] =
     ui.sprite_previewer_background_field->get_color().name();
   update_buttons();
 }
@@ -708,7 +708,7 @@ void SettingsDialog::change_sprite_previewer_background() {
 void SettingsDialog::update_sprite_origin_show_at_opening() {
 
   ui.sprite_origin_show_at_opening_field->setChecked(
-    settings.get_value_bool(Settings::sprite_origin_show_at_opening));
+    settings.get_value_bool(EditorSettings::sprite_origin_show_at_opening));
 }
 
 /**
@@ -716,7 +716,7 @@ void SettingsDialog::update_sprite_origin_show_at_opening() {
  */
 void SettingsDialog::change_sprite_origin_show_at_opening() {
 
-  edited_settings[Settings::sprite_origin_show_at_opening] =
+  edited_settings[EditorSettings::sprite_origin_show_at_opening] =
     ui.sprite_origin_show_at_opening_field->isChecked();
   update_buttons();
 }
@@ -727,7 +727,7 @@ void SettingsDialog::change_sprite_origin_show_at_opening() {
 void SettingsDialog::update_sprite_origin_color() {
 
   ui.sprite_origin_color_field->set_color(
-    settings.get_value_color(Settings::sprite_origin_color));
+    settings.get_value_color(EditorSettings::sprite_origin_color));
 }
 
 /**
@@ -735,7 +735,7 @@ void SettingsDialog::update_sprite_origin_color() {
  */
 void SettingsDialog::change_sprite_origin_color() {
 
-  edited_settings[Settings::sprite_origin_color] =
+  edited_settings[EditorSettings::sprite_origin_color] =
     ui.sprite_origin_color_field->get_color().name();
   update_buttons();
 }

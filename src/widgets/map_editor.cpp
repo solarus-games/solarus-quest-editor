@@ -20,12 +20,12 @@
 #include "widgets/map_editor.h"
 #include "widgets/map_scene.h"
 #include "editor_exception.h"
+#include "editor_settings.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
-#include "settings.h"
 #include "view_settings.h"
 #include <QItemSelectionModel>
 #include <QMessageBox>
@@ -1251,18 +1251,18 @@ void MapEditor::select_all() {
  */
 void MapEditor::reload_settings() {
 
-  Settings settings;
+  EditorSettings settings;
 
   MapScene* scene = ui.map_view->get_scene();
   if (scene != nullptr) {
-    QBrush brush(settings.get_value_color(Settings::map_background));
+    QBrush brush(settings.get_value_color(EditorSettings::map_background));
     scene->setBackgroundBrush(brush);
   }
 
   get_view_settings().set_grid_style(static_cast<GridStyle>(
-    settings.get_value_int(Settings::map_grid_style)));
+    settings.get_value_int(EditorSettings::map_grid_style)));
   get_view_settings().set_grid_color(
-    settings.get_value_color(Settings::map_grid_color));
+    settings.get_value_color(EditorSettings::map_grid_color));
 }
 
 /**
@@ -2030,11 +2030,11 @@ void MapEditor::uncheck_entity_creation_buttons() {
 void MapEditor::load_settings() {
 
   ViewSettings& view = get_view_settings();
-  Settings settings;
+  EditorSettings settings;
 
   view.set_grid_visible(
-    settings.get_value_bool(Settings::map_grid_show_at_opening));
-  view.set_grid_size(settings.get_value_size(Settings::map_grid_size));
+    settings.get_value_bool(EditorSettings::map_grid_show_at_opening));
+  view.set_grid_size(settings.get_value_size(EditorSettings::map_grid_size));
 
   reload_settings();
 }

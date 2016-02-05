@@ -25,8 +25,8 @@
 #include "widgets/strings_editor.h"
 #include "widgets/dialogs_editor.h"
 #include "editor_exception.h"
+#include "editor_settings.h"
 #include "quest.h"
-#include "settings.h"
 #include <QFileInfo>
 #include <QKeyEvent>
 #include <QUndoGroup>
@@ -666,8 +666,8 @@ void EditorTabs::current_editor_changed(int /* index */) {
 
   // Remember the current active tab.
   QString file_path = (editor == nullptr) ? QString() : editor->get_file_path();
-  Settings settings;
-  settings.set_value(Settings::last_file, file_path);
+  EditorSettings settings;
+  settings.set_value(EditorSettings::last_file, file_path);
 }
 
 /**
@@ -675,7 +675,7 @@ void EditorTabs::current_editor_changed(int /* index */) {
  */
 void EditorTabs::update_recent_files_list() {
 
-  Settings settings;
+  EditorSettings settings;
   QStringList last_files;
   for (int i = 0; i < count(); ++i) {
 
@@ -683,7 +683,7 @@ void EditorTabs::update_recent_files_list() {
     last_files << editor->get_file_path();
   }
 
-  settings.set_value(Settings::last_files, last_files);
+  settings.set_value(EditorSettings::last_files, last_files);
 }
 
 /**

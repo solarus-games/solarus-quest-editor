@@ -155,6 +155,7 @@ set(solarus_quest_editor_SOURCES
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
+  include/editor_settings.h
   include/enum_traits.h
   include/file_tools.h
   include/grid_style.h
@@ -177,7 +178,6 @@ set(solarus_quest_editor_SOURCES
   include/quest_resources.h
   include/rectangle.h
   include/resize_mode.h
-  include/settings.h
   include/size.h
   include/sprite_model.h
   include/strings_model.h
@@ -259,6 +259,7 @@ set(solarus_quest_editor_SOURCES
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
+  src/editor_settings.cpp
   src/file_tools.cpp
   src/grid_style.cpp
   src/ground_traits.cpp
@@ -277,7 +278,6 @@ set(solarus_quest_editor_SOURCES
   src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp
-  src/settings.cpp
   src/size.cpp
   src/sprite_model.cpp
   src/strings_model.cpp

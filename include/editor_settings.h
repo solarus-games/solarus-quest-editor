@@ -14,15 +14,15 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_SETTINGS_H
-#define SOLARUSEDITOR_SETTINGS_H
+#ifndef SOLARUSEDITOR_EDITOR_SETTINGS_H
+#define SOLARUSEDITOR_EDITOR_SETTINGS_H
 
 #include <QSettings>
 
 /**
- * @brief Manages settings of the editor.
+ * @brief Manages settings of the quest editor.
  */
-class Settings {
+class EditorSettings {
 
 public:
 
@@ -65,7 +65,7 @@ public:
   static const QString sprite_origin_show_at_opening;
   static const QString sprite_origin_color;
 
-  Settings();
+  EditorSettings();
 
   static void load_default_application_settings();
 
@@ -91,7 +91,7 @@ public:
 
 private:
 
-  QSettings settings;  /**< The settings. */
+  QSettings settings;  /**< The wrapped settings. */
 
   static QMap<QString, QVariant>
     default_values;    /**< The default values. */
