@@ -79,33 +79,33 @@ private:
 };
 
 /**
- * @brief Change title bar.
+ * @brief Change title.
  */
-class SetTitleBarCommand : public QuestPropertiesEditorCommand {
+class SetTitleCommand : public QuestPropertiesEditorCommand {
 
 public:
 
-  SetTitleBarCommand(QuestPropertiesEditor& editor, const QString& title_bar) :
+  SetTitleCommand(QuestPropertiesEditor& editor, const QString& title) :
     QuestPropertiesEditorCommand(
-      editor, QuestPropertiesEditor::tr("Change title bar")),
-    title_bar_before(get_model().get_title_bar()),
-    title_bar_after(title_bar) {
+      editor, QuestPropertiesEditor::tr("Change title")),
+    title_before(get_model().get_title()),
+    title_after(title) {
   }
 
   virtual void undo() override {
 
-    get_model().set_title_bar(title_bar_before);
+    get_model().set_title(title_before);
   }
 
   virtual void redo() override {
 
-    get_model().set_title_bar(title_bar_after);
+    get_model().set_title(title_after);
   }
 
 private:
 
-  QString title_bar_before;
-  QString title_bar_after;
+  QString title_before;
+  QString title_after;
 };
 
 /**
@@ -253,10 +253,10 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
   connect(ui.write_dir_field, SIGNAL(editingFinished()),
           this, SLOT(change_write_dir_requested()));
 
-  connect(&model, SIGNAL(title_bar_changed(QString)),
-          this, SLOT(update_title_bar_field()));
-  connect(ui.title_bar_field, SIGNAL(editingFinished()),
-          this, SLOT(change_title_bar_requested()));
+  connect(&model, SIGNAL(title_changed(QString)),
+          this, SLOT(update_title_field()));
+  connect(ui.title_field, SIGNAL(editingFinished()),
+          this, SLOT(change_title_requested()));
 
   connect(&model, SIGNAL(normal_size_changed(QSize)),
           this, SLOT(update_normal_size_field()));
@@ -294,10 +294,10 @@ QuestProperties& QuestPropertiesEditor::get_model() {
  */
 void QuestPropertiesEditor::save() {
 
-  // Update properties of the quest
+  // Update properties of the quest.
   QuestProperties& properties = get_quest().get_properties();
   properties.set_write_dir(model.get_write_dir());
-  properties.set_title_bar(model.get_title_bar());
+  properties.set_title(model.get_title());
   properties.set_normal_quest_size(model.get_normal_quest_size());
   properties.set_min_quest_size(model.get_min_quest_size());
   properties.set_max_quest_size(model.get_max_quest_size());
@@ -313,7 +313,7 @@ void QuestPropertiesEditor::update() {
   ui.solarus_version_value->setText(model.get_solarus_version());
 
   update_write_dir_field();
-  update_title_bar_field();
+  update_title_field();
   update_normal_size_field();
   update_min_size_field();
   update_max_size_field();
@@ -343,26 +343,26 @@ void QuestPropertiesEditor::change_write_dir_requested() {
 }
 
 /**
- * @brief Update the title bar field.
+ * @brief Update the title field.
  */
-void QuestPropertiesEditor::update_title_bar_field() {
+void QuestPropertiesEditor::update_title_field() {
 
-  ui.title_bar_field->setText(model.get_title_bar());
+  ui.title_field->setText(model.get_title());
 }
 
 /**
- * @brief Slot called when the user change the title bar.
+ * @brief Slot called when the user changes the title.
  */
-void QuestPropertiesEditor::change_title_bar_requested() {
+void QuestPropertiesEditor::change_title_requested() {
 
-  QString title_bar = ui.title_bar_field->text();
-  QString old_title_bar = model.get_title_bar();
-  if (title_bar == old_title_bar) {
+  QString title = ui.title_field->text();
+  QString old_title = model.get_title();
+  if (title == old_title) {
     // No change.
     return;
   }
 
-  try_command(new SetTitleBarCommand(*this, title_bar));
+  try_command(new SetTitleCommand(*this, title));
 }
 
 /**

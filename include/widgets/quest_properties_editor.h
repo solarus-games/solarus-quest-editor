@@ -42,8 +42,8 @@ private slots:
   void update_write_dir_field();
   void change_write_dir_requested();
 
-  void update_title_bar_field();
-  void change_title_bar_requested();
+  void update_title_field();
+  void change_title_requested();
 
   void update_normal_size_field();
   void change_normal_size_requested();

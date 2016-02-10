@@ -117,27 +117,27 @@ void QuestProperties::set_write_dir(const QString& write_dir) {
 }
 
 /**
- * @brief Returns the title bar of the quest.
- * @return The title bar.
+ * @brief Returns the title of the quest.
+ * @return The title.
  */
-QString QuestProperties::get_title_bar() const {
+QString QuestProperties::get_title() const {
 
-  return properties.get_title_bar().c_str();
+  return properties.get_title().c_str();
 }
 
 /**
- * @brief Changes the title bar of the quest.
- * @param title_bar The new title bar.
+ * @brief Changes the title of the quest.
+ * @param title The new title.
  */
-void QuestProperties::set_title_bar(const QString& title_bar) {
+void QuestProperties::set_title(const QString& title) {
 
-  QString old_title_bar = get_title_bar();
-  if (title_bar == old_title_bar) {
+  QString old_title = get_title();
+  if (title == old_title) {
     return;
   }
 
-  properties.set_title_bar(title_bar.toStdString());
-  emit title_bar_changed(title_bar);
+  properties.set_title(title.toStdString());
+  emit title_changed(title);
 }
 
 /**
