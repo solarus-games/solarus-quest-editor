@@ -94,6 +94,7 @@ public:
   void check_not_is_dir(const QString& path) const;
   bool is_script(const QString& path) const;
   void check_is_script(const QString& path) const;
+  bool is_properties_path(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_potential_resource_element(

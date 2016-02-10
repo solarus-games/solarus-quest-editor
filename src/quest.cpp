@@ -571,6 +571,16 @@ QString Quest::get_tileset_entities_image_path(
 }
 
 /**
+ * @brief Returns whether a path is the quest properties file quest.dat.
+ * @param path The path to test.
+ * @return @c true if this is the quest properties file.
+ */
+bool Quest::is_properties_path(const QString& path) const {
+
+  return path == get_properties_path();
+}
+
+/**
  * @brief Returns whether a path is a resource path.
  * @param[in] path The path to test.
  * @param[out] resource_type The resource type found if any.

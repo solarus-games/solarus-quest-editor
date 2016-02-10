@@ -493,7 +493,12 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     // A Lua script that is not a resource element.
     open_text_editor(quest, canonical_path);
   }
+  else if (quest.is_properties_path(canonical_path)) {
+    // Opening quest.dat directly.
+    open_quest_properties_editor(quest);
+  }
   else if (quest.is_data_path(canonical_path)) {
+    // Opening the quest root also opens quest.dat.
     open_quest_properties_editor(quest);
   }
 }
