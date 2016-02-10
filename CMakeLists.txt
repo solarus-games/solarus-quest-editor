@@ -115,7 +115,6 @@ set(solarus_quest_editor_SOURCES
   include/widgets/find_text_dialog.h
   include/widgets/get_animation_name_dialog.h
   include/widgets/gui_tools.h
-  include/widgets/layer_selector.h
   include/widgets/lua_syntax_highlighter.h
   include/widgets/map_editor.h
   include/widgets/map_view.h
@@ -220,7 +219,6 @@ set(solarus_quest_editor_SOURCES
   src/widgets/find_text_dialog.cpp
   src/widgets/get_animation_name_dialog.cpp
   src/widgets/gui_tools.cpp
-  src/widgets/layer_selector.cpp
   src/widgets/lua_syntax_highlighter.cpp
   src/widgets/main_window.cpp
   src/widgets/map_editor.cpp
