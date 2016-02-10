@@ -21,6 +21,8 @@
 #include <QSpinBox>
 #include <QLabel>
 
+namespace SolarusEditor {
+
 /**
  * @brief Widget with two spinboxes to edit a pair of integer.
  */
@@ -105,5 +107,7 @@ private:
   QLabel separator_label;
 
 };
+
+}
 
 #endif

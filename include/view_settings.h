@@ -22,6 +22,8 @@
 #include <QObject>
 #include <set>
 
+namespace SolarusEditor {
+
 /**
  * @brief Stores the view settings of an editor.
  *
@@ -89,5 +91,7 @@ private:
       visible_entity_types;                 /**< Types of entities currently shown, if supported. */
 
 };
+
+}
 
 #endif

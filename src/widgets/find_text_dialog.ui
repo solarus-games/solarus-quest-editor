@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FindTextDialog</class>
- <widget class="QDialog" name="FindTextDialog">
+ <class>SolarusEditor::FindTextDialog</class>
+ <widget class="QDialog" name="SolarusEditor::FindTextDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -52,7 +52,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>FindTextDialog</receiver>
+   <receiver>SolarusEditor::FindTextDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -68,7 +68,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>FindTextDialog</receiver>
+   <receiver>SolarusEditor::FindTextDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

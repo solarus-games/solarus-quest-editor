@@ -21,6 +21,8 @@
 #include <QPainter>
 #include <cmath>
 
+namespace SolarusEditor {
+
 /**
  * @brief A plain text editor that sends editing_finished() signal when the text
  * was changed and focus is lost.
@@ -98,5 +100,7 @@ private:
   int margin;
 
 };
+
+}
 
 #endif

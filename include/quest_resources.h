@@ -21,6 +21,8 @@
 #include <QMap>
 #include <QObject>
 
+namespace SolarusEditor {
+
 using ResourceType = Solarus::ResourceType;
 
 class Quest;
@@ -104,5 +106,7 @@ private:
                                                   * resource elements. */
 
 };
+
+}
 
 #endif

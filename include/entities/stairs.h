@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable staircase.
  */
@@ -37,5 +39,7 @@ private:
   void update_drawing_info();
 
 };
+
+}
 
 #endif

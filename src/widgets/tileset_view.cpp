@@ -33,6 +33,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a tileset view.
  * @param parent The parent widget or nullptr.
@@ -922,4 +924,6 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   }
 
   return items;
+}
+
 }

@@ -17,15 +17,18 @@
 #ifndef SOLARUSEDITOR_EDITOR_H
 #define SOLARUSEDITOR_EDITOR_H
 
+class QUndoCommand;
+class QUndoStack;
+
 #include "view_settings.h"
 #include <QIcon>
 #include <QWidget>
 #include <memory>
 
+namespace SolarusEditor {
+
 class Quest;
 class QuestResources;
-class QUndoCommand;
-class QUndoStack;
 
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
@@ -119,5 +122,7 @@ private:
   ViewSettings view_settings;               /**< What is shown and how. */
 
 };
+
+}
 
 #endif

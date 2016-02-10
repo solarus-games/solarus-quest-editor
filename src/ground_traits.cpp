@@ -18,6 +18,8 @@
 #include <solarus/entities/GroundInfo.h>
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -131,4 +133,6 @@ QString EnumTraits<Ground>::get_lua_name(Ground value) {
 Ground EnumTraits<Ground>::get_by_lua_name(
     const QString& name) {
   return Solarus::name_to_enum<Ground>(name.toStdString());
+}
+
 }

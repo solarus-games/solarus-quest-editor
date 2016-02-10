@@ -16,6 +16,8 @@
  */
 #include "entities/separator.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -34,4 +36,6 @@ Separator::Separator(MapModel& map, const EntityIndex& index) :
   info.pixmap = QPixmap(":/images/entity_separator_resizable.png");
   info.tiled_pixmap = true;
   set_draw_shape_info(info);
+}
+
 }

@@ -18,6 +18,8 @@
 #include <solarus/entities/EntityTypeInfo.h>
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -164,4 +166,6 @@ QString EnumTraits<EntityType>::get_lua_name(EntityType value) {
 bool EnumTraits<EntityType>::can_be_stored_in_map_file(EntityType type) {
 
   return Solarus::EntityTypeInfo::can_be_stored_in_map_file(type);
+}
+
 }

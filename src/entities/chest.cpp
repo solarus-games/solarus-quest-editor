@@ -16,6 +16,8 @@
  */
 #include "entities/chest.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -25,4 +27,6 @@ Chest::Chest(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::CHEST) {
 
   set_origin(QPoint(8, 13));
+}
+
 }

@@ -19,6 +19,8 @@
 #include "dialogs_model.h"
 #include <QIcon>
 
+namespace SolarusEditor {
+
 using StringResources = Solarus::DialogResources;
 using DialogData = Solarus::DialogData;
 
@@ -1014,4 +1016,6 @@ void DialogsModel::clear_translation_from_tree() {
       dialog_tree.remove_ref(id, dialog_exists(id));
     }
   }
+}
+
 }

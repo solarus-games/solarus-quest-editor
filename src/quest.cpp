@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QMap>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -1647,3 +1649,4 @@ bool Quest::is_resource_element_open(ResourceType resource_type) const {
   return false;
 }
 
+}

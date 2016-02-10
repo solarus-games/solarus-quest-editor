@@ -16,6 +16,8 @@
  */
 #include "entities/custom_entity.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -36,4 +38,6 @@ CustomEntity::CustomEntity(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(184, 96, 96);
   info.pixmap = QPixmap(":/images/entity_custom_resizable.png");
   set_draw_shape_info(info);
+}
+
 }

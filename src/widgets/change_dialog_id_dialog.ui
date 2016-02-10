@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ChangeDialogIdDialog</class>
- <widget class="QDialog" name="ChangeDialogIdDialog">
+ <class>SolarusEditor::ChangeDialogIdDialog</class>
+ <widget class="QDialog" name="SolarusEditor::ChangeDialogIdDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -48,7 +48,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>ChangeDialogIdDialog</receiver>
+   <receiver>SolarusEditor::ChangeDialogIdDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -64,7 +64,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>ChangeDialogIdDialog</receiver>
+   <receiver>SolarusEditor::ChangeDialogIdDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

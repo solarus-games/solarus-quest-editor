@@ -23,6 +23,8 @@
 #include <QTemporaryFile>
 #include <QTimer>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -247,4 +249,6 @@ void ExternalScriptDialog::run_script() {
   }
 
   set_finished(true);
+}
+
 }

@@ -19,6 +19,8 @@
 
 #include "editor_exception.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Exception thrown if the quest has a too recent format for the editor.
  */
@@ -35,5 +37,7 @@ private:
   QString quest_format;
 
 };
+
+}
 
 #endif

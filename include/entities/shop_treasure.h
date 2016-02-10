@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable shop treasure.
  */
@@ -33,5 +35,7 @@ protected:
   void set_initial_values() override;
 
 };
+
+}
 
 #endif

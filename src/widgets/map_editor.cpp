@@ -34,6 +34,8 @@
 #include <QUndoStack>
 #include <memory>
 
+namespace SolarusEditor {
+
 namespace {
 
 constexpr int move_entities_command_id = 1;
@@ -2037,4 +2039,6 @@ void MapEditor::load_settings() {
   view.set_grid_size(settings.get_value_size(EditorSettings::map_grid_size));
 
   reload_settings();
+}
+
 }

@@ -16,6 +16,8 @@
  */
 #include "color.h"
 
+namespace SolarusEditor {
+
 namespace Color {
 
 /**
@@ -39,6 +41,8 @@ Solarus::Color to_solarus_color(const QColor& qt_color) {
 
   return Solarus::Color(
         qt_color.red(), qt_color.green(), qt_color.blue(), qt_color.alpha());
+}
+
 }
 
 }

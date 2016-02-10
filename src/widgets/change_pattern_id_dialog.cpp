@@ -18,6 +18,8 @@
 #include "widgets/gui_tools.h"
 #include "tileset_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a change pattern id dialog.
  * @param initial_pattern_id Initial value of the pattern id.
@@ -90,4 +92,6 @@ void ChangePatternIdDialog::done(int result) {
   }
 
   QDialog::done(result);
+}
+
 }

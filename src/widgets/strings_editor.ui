@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>StringsEditor</class>
- <widget class="QWidget" name="StringsEditor">
+ <class>SolarusEditor::StringsEditor</class>
+ <widget class="QWidget" name="SolarusEditor::StringsEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -79,7 +79,7 @@
       </widget>
      </item>
      <item>
-      <widget class="ResourceSelector" name="translation_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="translation_field"/>
      </item>
      <item>
       <widget class="QToolButton" name="translation_refresh_button">
@@ -122,7 +122,7 @@
    <item>
     <layout class="QHBoxLayout" name="strings_layout">
      <item>
-      <widget class="StringsTreeView" name="strings_tree_view">
+      <widget class="SolarusEditor::StringsTreeView" name="strings_tree_view">
        <property name="allColumnsShowFocus">
         <bool>true</bool>
        </property>
@@ -291,12 +291,12 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ResourceSelector</class>
+   <class>SolarusEditor::ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>widgets/resource_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>StringsTreeView</class>
+   <class>SolarusEditor::StringsTreeView</class>
    <extends>QTreeView</extends>
    <header>widgets/strings_tree_view.h</header>
   </customwidget>

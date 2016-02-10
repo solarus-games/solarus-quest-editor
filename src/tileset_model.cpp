@@ -22,6 +22,8 @@
 #include "tileset_model.h"
 #include <QIcon>
 
+namespace SolarusEditor {
+
 using TilePatternData = Solarus::TilePatternData;
 
 /**
@@ -1351,4 +1353,6 @@ void TilesetModel::select_all() {
 void TilesetModel::clear_selection() {
 
   selection_model.clear();
+}
+
 }

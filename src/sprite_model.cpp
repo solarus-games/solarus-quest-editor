@@ -23,6 +23,8 @@
 #include <QIcon>
 #include <QFont>
 
+namespace SolarusEditor {
+
 using SpriteAnimationData = Solarus::SpriteAnimationData;
 using SpriteAnimationDirectionData = Solarus::SpriteAnimationDirectionData;
 
@@ -1683,4 +1685,6 @@ Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
     const Index& index) {
 
   return get_animation(index).get_direction(index.direction_nb);
+}
+
 }

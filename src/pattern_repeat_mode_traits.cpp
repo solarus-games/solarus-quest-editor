@@ -17,6 +17,8 @@
 #include "pattern_repeat_mode_traits.h"
 #include <QApplication>
 
+namespace SolarusEditor {
+
 namespace {
   const QList<TilePatternRepeatMode> names = QList<TilePatternRepeatMode>()
     << TilePatternRepeatMode::ALL
@@ -87,4 +89,6 @@ QString EnumTraits<TilePatternRepeatMode>::get_lua_name(TilePatternRepeatMode va
 TilePatternRepeatMode EnumTraits<TilePatternRepeatMode>::get_by_lua_name(
     const QString& name) {
   return Solarus::name_to_enum<TilePatternRepeatMode>(name.toStdString());
+}
+
 }

@@ -18,6 +18,8 @@
 #include "widgets/gui_tools.h"
 #include "sprite_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a new animation name dialog.
  * @param model The sprite model.
@@ -101,4 +103,6 @@ void GetAnimationNameDialog::setup_ui () {
 
   setInputMode(InputMode::TextInput);
   setLabelText(tr("Animation name:"));
+}
+
 }

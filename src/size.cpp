@@ -16,6 +16,8 @@
  */
 #include "size.h"
 
+namespace SolarusEditor {
+
 namespace Size {
 
 /**
@@ -36,6 +38,8 @@ QSize to_qsize(const Solarus::Size& solarus_size) {
 Solarus::Size to_solarus_size(const QSize& qt_size) {
 
   return Solarus::Size(qt_size.width(), qt_size.height());
+}
+
 }
 
 }

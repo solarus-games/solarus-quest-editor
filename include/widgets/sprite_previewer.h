@@ -25,6 +25,8 @@
 #include <QGraphicsLineItem>
 #include "sprite_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief A widget to preview animation directions of sprites.
  */
@@ -84,5 +86,7 @@ private:
   double zoom;                  /**< Zoom factor currently applied. */
 
 };
+
+}
 
 #endif

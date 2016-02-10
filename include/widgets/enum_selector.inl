@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+namespace SolarusEditor {
+
 template<typename E>
 class EnumTraits;
 
@@ -124,4 +126,6 @@ void EnumSelector<E>::set_selected_value(const E& value) {
     ++index;
   }
   setCurrentIndex(index);
+}
+
 }

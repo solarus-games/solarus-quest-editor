@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable custom entity.
  */
@@ -29,5 +31,7 @@ public:
   CustomEntity(MapModel& map, const EntityIndex& index);
 
 };
+
+}
 
 #endif

@@ -17,6 +17,8 @@
 #include "entities/stairs.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -72,4 +74,6 @@ void Stairs::update_drawing_info() {
     info.scale = 2.0;
   }
   set_draw_image_info(info);
+}
+
 }

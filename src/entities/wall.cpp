@@ -16,6 +16,8 @@
  */
 #include "entities/wall.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -49,4 +51,6 @@ void Wall::set_initial_values() {
   set_field("stops_enemies", true);
   set_field("stops_blocks", true);
   set_field("stops_projectiles", true);
+}
+
 }

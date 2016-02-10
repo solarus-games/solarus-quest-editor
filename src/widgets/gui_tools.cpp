@@ -18,6 +18,8 @@
 #include <QMessageBox>
 #include <QPainter>
 
+namespace SolarusEditor {
+
 namespace GuiTools {
 
 /**
@@ -183,6 +185,8 @@ void draw_grid_point(
 
   painter.setPen(QPen(color, 1));
   painter.drawPoints(points.data(), points.size());
+}
+
 }
 
 }

@@ -20,6 +20,8 @@
 #include "ui_external_script_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 /**
  * @brief A dialog that runs an external Lua script and shows its output.
  *
@@ -65,5 +67,7 @@ private:
   bool successful;                     /**< Whether the script is successfully finished. */
 
 };
+
+}
 
 #endif

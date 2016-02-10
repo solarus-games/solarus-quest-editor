@@ -20,6 +20,8 @@
 #include "enum_traits.h"
 #include "pattern_separation.h"
 
+namespace SolarusEditor {
+
 /**
  * \brief Provides useful properties of tile pattern separation enum values.
  */
@@ -33,5 +35,7 @@ public:
   static QIcon get_icon(PatternSeparation value);
 
 };
+
+}
 
 #endif

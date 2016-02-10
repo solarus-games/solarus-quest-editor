@@ -20,6 +20,8 @@
 #include "ui_change_dialog_id_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 class DialogsModel;
 
 /**
@@ -51,5 +53,7 @@ private:
   DialogsModel* model;
 
 };
+
+}
 
 #endif

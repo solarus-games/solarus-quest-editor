@@ -20,6 +20,8 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty sprite tree view.
  * @param parent The parent object or nullptr.
@@ -106,3 +108,4 @@ void SpriteTreeView::set_model(SpriteModel* model) {
   setSelectionModel(&model->get_selection_model());
 }
 
+}

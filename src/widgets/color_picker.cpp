@@ -17,6 +17,8 @@
 #include "widgets/color_picker.h"
 #include <QColorDialog>
 
+namespace SolarusEditor {
+
 const QString ColorPicker::style_sheet =
   ".ColorPicker {\n"
   "    background-color: %1;\n"
@@ -85,4 +87,6 @@ void ColorPicker::change_color() {
 void ColorPicker::update_style_sheet() {
 
   setStyleSheet(style_sheet.arg(color.name()));
+}
+
 }

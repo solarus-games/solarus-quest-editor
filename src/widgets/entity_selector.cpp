@@ -19,6 +19,8 @@
 #include "map_model.h"
 #include "quest.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty entity selector.
  *
@@ -165,4 +167,6 @@ void EntitySelector::build() {
     // The map file could not be opened: the map id is probably unset or incorrect.
     Q_UNUSED(ex);
   }
+}
+
 }

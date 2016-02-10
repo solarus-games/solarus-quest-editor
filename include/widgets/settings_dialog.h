@@ -21,6 +21,8 @@
 #include "ui_settings_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 /**
  * @brief A dialog to edit settings of the editor.
  */
@@ -114,5 +116,7 @@ private:
   QMap<QString, QVariant> edited_settings;  /**< The edited settings. */
 
 };
+
+}
 
 #endif

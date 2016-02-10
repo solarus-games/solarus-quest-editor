@@ -17,6 +17,8 @@
 #include "widgets/pair_spin_box.h"
 #include <QHBoxLayout>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a pair spin box.
  * @param parent The parent widget.
@@ -391,4 +393,6 @@ void PairSpinBox::on_second_value_changed() {
 
   emit second_value_changed(get_second_value());
   emit value_changed(get_first_value(), get_second_value());
+}
+
 }

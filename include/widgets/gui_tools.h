@@ -25,6 +25,8 @@ class QRect;
 class QSize;
 class QString;
 
+namespace SolarusEditor {
+
 namespace GuiTools {
 
 void information_dialog(const QString& message);
@@ -50,6 +52,8 @@ void draw_grid_point(QPainter& painter,
                const QRect& where,
                const QSize& size,
                const QColor& color = Qt::black);
+
+}
 
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MapEditor</class>
- <widget class="QWidget" name="MapEditor">
+ <class>SolarusEditor::MapEditor</class>
+ <widget class="QWidget" name="SolarusEditor::MapEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -142,7 +142,7 @@
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="PairSpinBox" name="size_field" native="true"/>
+            <widget class="SolarusEditor::PairSpinBox" name="size_field" native="true"/>
            </item>
            <item row="6" column="0">
             <widget class="QLabel" name="layers_label">
@@ -269,7 +269,7 @@
             </widget>
            </item>
            <item row="10" column="1">
-            <widget class="PairSpinBox" name="location_field" native="true"/>
+            <widget class="SolarusEditor::PairSpinBox" name="location_field" native="true"/>
            </item>
            <item row="11" column="0">
             <widget class="QLabel" name="tileset_label">
@@ -281,7 +281,7 @@
            <item row="11" column="1">
             <layout class="QHBoxLayout" name="horizontal_layout_5">
              <item>
-              <widget class="ResourceSelector" name="tileset_field">
+              <widget class="SolarusEditor::ResourceSelector" name="tileset_field">
                <property name="toolTip">
                 <string>Tileset of the map</string>
                </property>
@@ -337,7 +337,7 @@
             </widget>
            </item>
            <item row="12" column="1">
-            <widget class="ResourceSelector" name="music_field">
+            <widget class="SolarusEditor::ResourceSelector" name="music_field">
              <property name="toolTip">
               <string>Background music of the map</string>
              </property>
@@ -345,7 +345,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="TilesetView" name="tileset_view">
+         <widget class="SolarusEditor::TilesetView" name="tileset_view">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -360,7 +360,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="entity_creation_layout">
        <item>
-        <widget class="MapView" name="map_view"/>
+        <widget class="SolarusEditor::MapView" name="map_view"/>
        </item>
       </layout>
      </widget>
@@ -370,23 +370,23 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ResourceSelector</class>
+   <class>SolarusEditor::ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>widgets/resource_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>PairSpinBox</class>
+   <class>SolarusEditor::PairSpinBox</class>
    <extends>QWidget</extends>
    <header>widgets/pair_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>TilesetView</class>
+   <class>SolarusEditor::TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>widgets/tileset_view.h</header>
   </customwidget>
   <customwidget>
-   <class>MapView</class>
+   <class>SolarusEditor::MapView</class>
    <extends>QGraphicsView</extends>
    <header>widgets/map_view.h</header>
   </customwidget>

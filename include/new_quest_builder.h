@@ -19,9 +19,13 @@
 
 class QString;
 
+namespace SolarusEditor {
+
 namespace NewQuestBuilder {
 
 void create_initial_quest_files(const QString& quest_path);
+
+}
 
 }
 

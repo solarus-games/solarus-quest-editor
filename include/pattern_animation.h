@@ -17,6 +17,8 @@
 #ifndef SOLARUSEDITOR_PATTERN_ANIMATION_H
 #define SOLARUSEDITOR_PATTERN_ANIMATION_H
 
+namespace SolarusEditor {
+
 /**
  * \brief The possible kinds of animations for a pattern in a tileset.
  */
@@ -31,5 +33,7 @@ enum class PatternAnimation {
   SEQUENCE_0121_PARALLAX
 
 };
+
+}
 
 #endif

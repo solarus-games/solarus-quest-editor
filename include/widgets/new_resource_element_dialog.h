@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QPair>
 
+namespace SolarusEditor {
+
 /**
  * @brief Dialog shown when creating a new resource element in the quest.
  *
@@ -52,5 +54,7 @@ private:
   ResourceType resource_type;          /**< Type of resource to create. */
 
 };
+
+}
 
 #endif

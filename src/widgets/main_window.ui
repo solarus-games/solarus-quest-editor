@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>SolarusEditor::MainWindow</class>
+ <widget class="QMainWindow" name="SolarusEditor::MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -38,7 +38,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QuestTreeView" name="quest_tree_view">
+      <widget class="SolarusEditor::QuestTreeView" name="quest_tree_view">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -50,7 +50,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="EditorTabs" name="tab_widget"/>
+       <widget class="SolarusEditor::EditorTabs" name="tab_widget"/>
        <widget class="SolarusGui::Console" name="console_widget" native="true"/>
       </widget>
      </widget>
@@ -379,12 +379,12 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QuestTreeView</class>
+   <class>SolarusEditor::QuestTreeView</class>
    <extends>QTreeView</extends>
    <header>widgets/quest_tree_view.h</header>
   </customwidget>
   <customwidget>
-   <class>EditorTabs</class>
+   <class>SolarusEditor::EditorTabs</class>
    <extends>QTabWidget</extends>
    <header>widgets/editor_tabs.h</header>
    <container>1</container>

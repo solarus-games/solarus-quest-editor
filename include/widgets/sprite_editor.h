@@ -21,6 +21,8 @@
 #include "ui_sprite_editor.h"
 #include <QMenu>
 
+namespace SolarusEditor {
+
 class SpriteModel;
 
 /**
@@ -100,5 +102,7 @@ private:
   bool auto_detect_grid;        /**< The grid auto detection option. */
 
 };
+
+}
 
 #endif

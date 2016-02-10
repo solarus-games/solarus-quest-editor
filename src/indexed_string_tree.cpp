@@ -17,6 +17,8 @@
 #include "indexed_string_tree.h"
 #include "editor_exception.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an indexed string tree.
  * @param separator The separator of keys to split them in the tree.
@@ -447,4 +449,6 @@ void IndexedStringTree::clear_children(Node* node) {
     it++;
   }
   node->children.clear();
+}
+
 }

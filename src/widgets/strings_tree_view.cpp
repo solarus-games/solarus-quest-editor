@@ -20,6 +20,8 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty strings tree view.
  * @param parent The parent object or nullptr.
@@ -97,3 +99,4 @@ void StringsTreeView::set_model(StringsModel* model) {
   setSelectionModel(&model->get_selection_model());
 }
 
+}

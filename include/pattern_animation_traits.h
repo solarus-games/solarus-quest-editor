@@ -21,6 +21,8 @@
 #include "pattern_animation.h"
 #include <solarus/entities/TilesetData.h>
 
+namespace SolarusEditor {
+
 using PatternAnimationTraits = EnumTraits<PatternAnimation>;
 
 /**
@@ -40,5 +42,7 @@ public:
   static Solarus::TileScrolling get_scrolling(PatternAnimation value);
 
 };
+
+}
 
 #endif

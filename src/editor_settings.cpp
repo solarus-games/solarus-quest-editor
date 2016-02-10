@@ -19,6 +19,8 @@
 #include <QPalette>
 #include <QSize>
 
+namespace SolarusEditor {
+
 // General keys.
 const QString EditorSettings::working_directory = "working_directory";
 const QString EditorSettings::last_quests = "last_quests";
@@ -295,4 +297,6 @@ void EditorSettings::restore_default() {
   for (QString key : default_values.keys()) {
     settings.setValue(key, default_values[key]);
   }
+}
+
 }

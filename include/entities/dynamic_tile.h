@@ -19,6 +19,8 @@
 
 #include "entities/tile.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable dynamic tile.
  */
@@ -31,5 +33,7 @@ public:
   static EntityModelPtr create_from_normal_tile(MapModel& map, const EntityIndex& tile_index);
 
 };
+
+}
 
 #endif

@@ -18,6 +18,8 @@
 #include "widgets/gui_tools.h"
 #include "quest.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a change source image dialog.
  * @param initial_source_image Initial value of the source image.
@@ -165,4 +167,6 @@ void ChangeSourceImageDialog::change_source_image_requested() {
   }
 
   update_image_view();
+}
+
 }

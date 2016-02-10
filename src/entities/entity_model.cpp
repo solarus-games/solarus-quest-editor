@@ -46,6 +46,8 @@
 #include <QDebug>
 #include <QPainter>
 
+namespace SolarusEditor {
+
 using EntityData = Solarus::EntityData;
 
 /**
@@ -1578,4 +1580,6 @@ void EntityModel::notify_tileset_changed(const QString& tileset_id) {
 void EntityModel::reload_sprite() {
 
   sprite_image = QPixmap();
+}
+
 }

@@ -18,6 +18,8 @@
 #include <solarus/Common.h>
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an obsolete editor exception.
  * @param quest_format Format of the quest.
@@ -39,4 +41,6 @@ ObsoleteEditorException::ObsoleteEditorException(const QString& quest_format) :
  */
 QString ObsoleteEditorException::get_quest_format() const {
   return quest_format;
+}
+
 }

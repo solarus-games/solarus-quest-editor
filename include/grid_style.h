@@ -19,6 +19,8 @@
 
 #include "enum_traits.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Grid Styles.
  */
@@ -44,5 +46,7 @@ public:
   static QIcon get_icon(GridStyle value);
 
 };
+
+}
 
 #endif

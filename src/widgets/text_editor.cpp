@@ -28,6 +28,8 @@
 #include <QScrollBar>
 #include <QTextStream>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a text editor.
  * @param quest The quest containing the file.
@@ -275,3 +277,6 @@ void TextEditor::open_map_requested() {
       get_quest(), get_quest().get_map_data_file_path(map_id));
   }
 }
+
+}
+

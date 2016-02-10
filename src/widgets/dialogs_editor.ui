@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogsEditor</class>
- <widget class="QWidget" name="DialogsEditor">
+ <class>SolarusEditor::DialogsEditor</class>
+ <widget class="QWidget" name="SolarusEditor::DialogsEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -95,7 +95,7 @@
           </widget>
          </item>
          <item>
-          <widget class="ResourceSelector" name="translation_field"/>
+          <widget class="SolarusEditor::ResourceSelector" name="translation_field"/>
          </item>
          <item>
           <widget class="QToolButton" name="translation_refresh_button">
@@ -138,7 +138,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="DialogsTreeView" name="dialogs_tree_view">
+          <widget class="SolarusEditor::DialogsTreeView" name="dialogs_tree_view">
            <property name="allColumnsShowFocus">
             <bool>true</bool>
            </property>
@@ -405,7 +405,7 @@
         </layout>
        </item>
        <item>
-        <widget class="PlainTextEdit" name="dialog_text_field">
+        <widget class="SolarusEditor::PlainTextEdit" name="dialog_text_field">
          <property name="font">
           <font>
            <family>Monospace</family>
@@ -422,7 +422,7 @@
         </widget>
        </item>
        <item>
-        <widget class="PlainTextEdit" name="translation_text_field">
+        <widget class="SolarusEditor::PlainTextEdit" name="translation_text_field">
          <property name="font">
           <font>
            <family>Monospace</family>
@@ -447,7 +447,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="DialogPropertiesTable" name="dialog_properties_table">
+          <widget class="SolarusEditor::DialogPropertiesTable" name="dialog_properties_table">
            <property name="indentation">
             <number>10</number>
            </property>
@@ -609,22 +609,22 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ResourceSelector</class>
+   <class>SolarusEditor::ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>widgets/resource_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>DialogsTreeView</class>
+   <class>SolarusEditor::DialogsTreeView</class>
    <extends>QTreeView</extends>
    <header>widgets/dialogs_tree_view.h</header>
   </customwidget>
   <customwidget>
-   <class>PlainTextEdit</class>
+   <class>SolarusEditor::PlainTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>widgets/plain_text_edit.h</header>
   </customwidget>
   <customwidget>
-   <class>DialogPropertiesTable</class>
+   <class>SolarusEditor::DialogPropertiesTable</class>
    <extends>QTreeWidget</extends>
    <header>widgets/dialog_properties_table.h</header>
   </customwidget>

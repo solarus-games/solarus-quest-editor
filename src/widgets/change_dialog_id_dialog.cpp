@@ -18,6 +18,8 @@
 #include "widgets/gui_tools.h"
 #include "dialogs_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a change dialog id dialog.
  * @param initial_id Initial key of the string.
@@ -117,4 +119,6 @@ void ChangeDialogIdDialog::done(int result) {
   }
 
   QDialog::done(result);
+}
+
 }

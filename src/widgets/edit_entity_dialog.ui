@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EditEntityDialog</class>
- <widget class="QDialog" name="EditEntityDialog">
+ <class>SolarusEditor::EditEntityDialog</class>
+ <widget class="QDialog" name="SolarusEditor::EditEntityDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -117,7 +117,7 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="PairSpinBox" name="xy_field" native="true"/>
+      <widget class="SolarusEditor::PairSpinBox" name="xy_field" native="true"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="size_label">
@@ -127,7 +127,7 @@
       </widget>
      </item>
      <item row="4" column="1">
-      <widget class="PairSpinBox" name="size_field" native="true"/>
+      <widget class="SolarusEditor::PairSpinBox" name="size_field" native="true"/>
      </item>
      <item row="5" column="0">
       <widget class="QLabel" name="direction_label">
@@ -203,7 +203,7 @@
       </widget>
      </item>
      <item row="6" column="1">
-      <widget class="ResourceSelector" name="sprite_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="sprite_field"/>
      </item>
      <item row="7" column="0">
       <widget class="QLabel" name="subtype_label">
@@ -223,7 +223,7 @@
       </widget>
      </item>
      <item row="8" column="1">
-      <widget class="ResourceSelector" name="breed_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="breed_field"/>
      </item>
      <item row="9" column="0">
       <widget class="QCheckBox" name="model_checkbox">
@@ -233,7 +233,7 @@
       </widget>
      </item>
      <item row="9" column="1">
-      <widget class="ResourceSelector" name="model_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="model_field"/>
      </item>
      <item row="10" column="0">
       <widget class="QCheckBox" name="savegame_variable_checkbox">
@@ -293,7 +293,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="ResourceSelector" name="treasure_name_field"/>
+         <widget class="SolarusEditor::ResourceSelector" name="treasure_name_field"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontal_layout_3">
@@ -367,7 +367,7 @@
       </widget>
      </item>
      <item row="12" column="1">
-      <widget class="ResourceSelector" name="font_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="font_field"/>
      </item>
      <item row="13" column="0">
       <widget class="QCheckBox" name="sound_checkbox">
@@ -377,7 +377,7 @@
       </widget>
      </item>
      <item row="13" column="1">
-      <widget class="ResourceSelector" name="sound_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="sound_field"/>
      </item>
      <item row="14" column="0">
       <widget class="QLabel" name="transition_label">
@@ -387,7 +387,7 @@
       </widget>
      </item>
      <item row="14" column="1">
-      <widget class="EnumSelector&lt;TransitionStyle&gt;" name="transition_field"/>
+      <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::TransitionStyle&gt;" name="transition_field"/>
      </item>
      <item row="15" column="0">
       <widget class="QLabel" name="destination_map_label">
@@ -397,7 +397,7 @@
       </widget>
      </item>
      <item row="15" column="1">
-      <widget class="ResourceSelector" name="destination_map_field"/>
+      <widget class="SolarusEditor::ResourceSelector" name="destination_map_field"/>
      </item>
      <item row="16" column="0">
       <widget class="QLabel" name="destination_label">
@@ -407,7 +407,7 @@
       </widget>
      </item>
      <item row="16" column="1">
-      <widget class="EntitySelector" name="destination_field"/>
+      <widget class="SolarusEditor::EntitySelector" name="destination_field"/>
      </item>
      <item row="17" column="0">
       <widget class="QCheckBox" name="weight_checkbox">
@@ -525,7 +525,7 @@
       </widget>
      </item>
      <item row="19" column="1">
-      <widget class="EnumSelector&lt;Ground&gt;" name="ground_field"/>
+      <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::Ground&gt;" name="ground_field"/>
      </item>
      <item row="20" column="0">
       <widget class="QLabel" name="maximum_moves_label">
@@ -624,7 +624,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ResourceSelector" name="opening_condition_item_field">
+           <widget class="SolarusEditor::ResourceSelector" name="opening_condition_item_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -725,7 +725,7 @@
            </widget>
           </item>
           <item>
-           <widget class="ResourceSelector" name="behavior_item_field">
+           <widget class="SolarusEditor::ResourceSelector" name="behavior_item_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -758,28 +758,28 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ResourceSelector</class>
+   <class>SolarusEditor::ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>widgets/resource_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>PairSpinBox</class>
+   <class>SolarusEditor::PairSpinBox</class>
    <extends>QWidget</extends>
    <header>widgets/pair_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;TransitionStyle&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::TransitionStyle&gt;</class>
    <extends>QComboBox</extends>
    <header>transition_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>EntitySelector</class>
+   <class>SolarusEditor::EntitySelector</class>
    <extends>QComboBox</extends>
    <header>widgets/entity_selector.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;Ground&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::Ground&gt;</class>
    <extends>QComboBox</extends>
    <header>ground_traits.h</header>
   </customwidget>
@@ -789,7 +789,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>EditEntityDialog</receiver>
+   <receiver>SolarusEditor::EditEntityDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -805,7 +805,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>EditEntityDialog</receiver>
+   <receiver>SolarusEditor::EditEntityDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

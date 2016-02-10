@@ -16,6 +16,8 @@
  */
 #include "entities/pickable.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -53,4 +55,6 @@ void Pickable::update_treasure() {
     info.animation = treasure_name;
     set_draw_sprite_info(info);
   }
+}
+
 }

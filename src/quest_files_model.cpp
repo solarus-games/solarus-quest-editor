@@ -21,6 +21,8 @@
 #include <QFileSystemModel>
 #include <QItemSelection>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a quest files model.
  * @param parent Path of the quest to represent.
@@ -1202,4 +1204,6 @@ void QuestFilesModel::ExtraPaths::rebuild_index_cache() {
     path_indexes.insert(current_path, i);
     ++i;
   }
+}
+
 }

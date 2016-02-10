@@ -40,6 +40,8 @@
 #include <QToolButton>
 #include <QUndoGroup>
 
+namespace SolarusEditor {
+
 using EntityType = Solarus::EntityType;
 
 /**
@@ -1398,5 +1400,7 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
+
+}
 
 }

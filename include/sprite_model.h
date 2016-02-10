@@ -21,11 +21,13 @@
 
 #include <solarus/SpriteData.h>
 #include <QAbstractItemModel>
+#include <QImage>
 #include <QItemSelectionModel>
 #include <QPixmap>
-#include <QImage>
-#include <memory>
 #include <map>
+#include <memory>
+
+namespace SolarusEditor {
 
 class Quest;
 
@@ -290,5 +292,7 @@ private:
   QItemSelectionModel
       selection_model;            /**< Animations currently selected. */
 };
+
+}
 
 #endif

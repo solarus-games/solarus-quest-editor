@@ -20,6 +20,8 @@
 #include <solarus/lowlevel/Point.h>
 #include <QPoint>
 
+namespace SolarusEditor {
+
 namespace Point {
 
 QPoint to_qpoint(const Solarus::Point& solarus_point);
@@ -33,6 +35,8 @@ QPoint floor_8(const QPointF& point);
 
 QPoint round_down(const QPoint& point, int step_x, int step_y);
 QPoint round_down(const QPointF& point, int step_x, int step_y);
+
+}
 
 }
 

@@ -20,6 +20,8 @@
 #include <QGraphicsScene>
 #include "sprite_model.h"
 
+namespace SolarusEditor {
+
 class DirectionItem;
 
 /**
@@ -66,5 +68,7 @@ private:
                                        * ordered as in the model. */
 
 };
+
+}
 
 #endif

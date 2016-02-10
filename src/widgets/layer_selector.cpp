@@ -16,6 +16,8 @@
  */
 #include "widgets/layer_selector.h"
 
+namespace SolarusEditor {
+
 // TODO
 
 LayerSelector::LayerSelector(QWidget* parent):
@@ -30,4 +32,6 @@ int LayerSelector::get_selected_layer() const {
 
 void LayerSelector::set_selected_layer(int layer) {
   Q_UNUSED(layer);
+}
+
 }

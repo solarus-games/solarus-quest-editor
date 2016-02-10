@@ -28,6 +28,8 @@
 #include <QMenu>
 #include <QMessageBox>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a quest tree view.
  * @param parent The parent or nullptr.
@@ -801,4 +803,6 @@ void QuestTreeView::delete_action_triggered() {
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
+}
+
 }

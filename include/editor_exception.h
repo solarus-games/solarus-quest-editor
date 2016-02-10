@@ -20,6 +20,8 @@
 #include <QString>
 #include <exception>
 
+namespace SolarusEditor {
+
 /**
  * @brief Exception thrown if something wrong happens in the quest editor.
  */
@@ -42,5 +44,7 @@ private:
   mutable QByteArray message_utf8;     /**< The error message in UTF-8. */
 
 };
+
+}
 
 #endif

@@ -23,6 +23,8 @@
 #include <QList>
 #include <memory>
 
+namespace SolarusEditor {
+
 class EntityModel;
 
 using EntityType = Solarus::EntityType;
@@ -49,5 +51,7 @@ public:
   static bool can_be_stored_in_map_file(EntityType type);
 
 };
+
+}
 
 #endif

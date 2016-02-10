@@ -17,6 +17,8 @@
 #include "entities/dynamic_tile.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -44,4 +46,6 @@ EntityModelPtr DynamicTile::create_from_normal_tile(MapModel& map, const EntityI
   dynamic_tile->set_xy(map.get_entity_xy(tile_index));
   dynamic_tile->set_size(map.get_entity_size(tile_index));
   return dynamic_tile;
+}
+
 }

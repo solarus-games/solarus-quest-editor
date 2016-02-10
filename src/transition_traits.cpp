@@ -17,6 +17,8 @@
 #include "transition_traits.h"
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -81,4 +83,6 @@ QString EnumTraits<TransitionStyle>::get_lua_name(TransitionStyle value) {
 TransitionStyle EnumTraits<TransitionStyle>::get_by_lua_name(
     const QString& name) {
   return Solarus::name_to_enum<TransitionStyle>(name.toStdString());
+}
+
 }

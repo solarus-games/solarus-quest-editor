@@ -19,6 +19,8 @@
 
 #include <QComboBox>
 
+namespace SolarusEditor {
+
 /**
  * @brief A combo box that allows to choose a layer.
  */
@@ -33,5 +35,7 @@ public:
   void set_selected_layer(int layer);
 
 };
+
+}
 
 #endif

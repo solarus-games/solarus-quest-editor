@@ -21,6 +21,8 @@
 
 class QAbstractScrollArea;
 
+namespace SolarusEditor {
+
 /**
  * @brief Notifies a scrolling widget of mouse movements.
  *
@@ -39,5 +41,7 @@ public:
   bool eventFilter(QObject* object, QEvent* event) override;
 
 };
+
+}
 
 #endif

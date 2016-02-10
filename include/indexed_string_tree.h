@@ -21,6 +21,8 @@
 #include <QString>
 #include <map>
 
+namespace SolarusEditor {
+
 /**
  * @brief Tree of indexed string keys.
  * This class provides methods to manage a map indexed by string like a tree
@@ -100,5 +102,7 @@ private:
   Node* root;         /**< The root node of the tree. */
 
 };
+
+}
 
 #endif

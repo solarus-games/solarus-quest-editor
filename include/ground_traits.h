@@ -20,6 +20,8 @@
 #include "enum_traits.h"
 #include <solarus/entities/Ground.h>
 
+namespace SolarusEditor {
+
 using Ground = Solarus::Ground;
 using GroundTraits = EnumTraits<Ground>;
 
@@ -39,5 +41,7 @@ public:
   static Ground get_by_lua_name(const QString& name);
 
 };
+
+}
 
 #endif

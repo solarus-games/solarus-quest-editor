@@ -17,6 +17,8 @@
 #include "entities/switch.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -31,4 +33,6 @@ Switch::Switch(MapModel& map, const EntityIndex& index) :
     { "solid", MapModel::tr("Solid") }
   };
   set_existing_subtypes(subtypes);
+}
+
 }

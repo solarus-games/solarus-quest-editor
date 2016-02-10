@@ -24,6 +24,8 @@ class QAction;
 class QWidget;
 class QMenu;
 
+namespace SolarusEditor {
+
 /**
  * @brief Whether actions should be non-checkable, checkable or mutually exclusive.
  */
@@ -50,6 +52,8 @@ public:
 
   // TODO create_toolbar()
 };
+
+}
 
 #include "widgets/enum_menus.inl"
 

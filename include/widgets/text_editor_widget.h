@@ -14,7 +14,12 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef SOLARUSEDITOR_TEXT_EDITOR_WIDGET_H
+#define SOLARUSEDITOR_TEXT_EDITOR_WIDGET_H
+
 #include <QPlainTextEdit>
+
+namespace SolarusEditor {
 
 class TextEditor;
 
@@ -73,3 +78,7 @@ private:
   bool replace_tab_by_spaces;   /**< To replace tabulation by spaces. */
 
 };
+
+}
+
+#endif

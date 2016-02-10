@@ -21,6 +21,8 @@
 #include "view_settings.h"
 #include <QPainter>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an entity item.
  * @param entity The entity to represent.
@@ -139,4 +141,6 @@ void EntityItem::paint(QPainter* painter,
     painter->setPen(QPen(line_color, 0, Qt::SolidLine));
     painter->drawRect(bounding_rect);
   }
+}
+
 }

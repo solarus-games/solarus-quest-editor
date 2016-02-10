@@ -16,6 +16,8 @@
  */
 #include "view_settings.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates default view settings.
  * @param parent The parent object or nullptr.
@@ -335,4 +337,6 @@ void ViewSettings::hide_all_entity_types() {
   for (EntityType entity_type: EntityTraits::get_values()) {
     set_entity_type_visible(entity_type, false);
   }
+}
+
 }

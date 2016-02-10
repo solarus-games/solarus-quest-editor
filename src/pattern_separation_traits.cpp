@@ -17,6 +17,8 @@
 #include "pattern_separation_traits.h"
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -68,3 +70,4 @@ QIcon EnumTraits<PatternSeparation>::get_icon(PatternSeparation value) {
   return QIcon();
 }
 
+}

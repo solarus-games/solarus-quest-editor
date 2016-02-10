@@ -19,6 +19,8 @@
 
 #include <QTreeView>
 
+namespace SolarusEditor {
+
 class StringsModel;
 
 /**
@@ -60,5 +62,7 @@ private:
     delete_action;    /**< Action of deleting the selected string(s). */
 
 };
+
+}
 
 #endif

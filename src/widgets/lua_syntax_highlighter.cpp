@@ -17,6 +17,8 @@
 #include "widgets/lua_syntax_highlighter.h"
 #include <QVariant>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a Lua syntax highlighter.
  * @param document The text document to highlight.
@@ -128,4 +130,6 @@ void LuaSyntaxHighlighter::highlightBlock(const QString& text) {
     setFormat(start_index, comment_length, multi_line_comment_format);
     start_index = comment_start_pattern.indexIn(text, start_index + comment_length);
   }
+}
+
 }

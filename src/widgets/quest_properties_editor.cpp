@@ -19,6 +19,8 @@
 #include "quest.h"
 #include <QUndoStack>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -475,4 +477,6 @@ void QuestPropertiesEditor::set_max_size_values() {
 
   ui.min_size_width_field->setMaximum(size.width());
   ui.min_size_height_field->setMaximum(size.height());
+}
+
 }

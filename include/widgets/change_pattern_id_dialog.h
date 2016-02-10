@@ -20,6 +20,8 @@
 #include "ui_change_pattern_id_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 /**
  * @brief A dialog to rename a pattern in the tileset editor.
  *
@@ -50,5 +52,7 @@ private:
   Ui::ChangePatternIdDialog ui;   /**< The widgets. */
 
 };
+
+}
 
 #endif

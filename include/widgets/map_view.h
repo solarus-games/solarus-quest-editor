@@ -21,6 +21,8 @@
 #include <QGraphicsView>
 #include <QPointer>
 
+namespace SolarusEditor {
+
 class MapModel;
 class MapScene;
 class ViewSettings;
@@ -198,5 +200,7 @@ private:
   QAction* remove_action;          /**< Action of deleting selected entities. */
 
 };
+
+}
 
 #endif

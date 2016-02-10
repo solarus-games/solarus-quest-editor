@@ -20,6 +20,8 @@
 #include <solarus/QuestProperties.h>
 #include <QObject>
 
+namespace SolarusEditor {
+
 class Quest;
 
 /**
@@ -70,5 +72,7 @@ private:
   Solarus::QuestProperties properties;           /**< The wrapped data. */
 
 };
+
+}
 
 #endif

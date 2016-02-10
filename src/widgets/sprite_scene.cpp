@@ -26,6 +26,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <memory>
 
+namespace SolarusEditor {
+
 /**
  * @brief Graphic item representing a direction.
  */
@@ -368,4 +370,6 @@ void DirectionItem::paint(QPainter* painter,
       GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }
   }
+}
+
 }

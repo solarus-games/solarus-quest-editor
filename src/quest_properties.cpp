@@ -19,6 +19,8 @@
 #include "quest_properties.h"
 #include "size.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates quest properties for the specified quest.
  * @param quest The quest.
@@ -210,4 +212,6 @@ void QuestProperties::set_max_quest_size(const QSize& size) {
 
   properties.set_max_quest_size(Size::to_solarus_size(size));
   emit max_size_changed(size);
+}
+
 }

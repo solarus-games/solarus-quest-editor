@@ -21,6 +21,8 @@
 #include "view_settings.h"
 #include <QGraphicsScene>
 
+namespace SolarusEditor {
+
 class EntityItem;
 class Quest;
 class ViewSettings;
@@ -94,5 +96,7 @@ private:
   QPointer<const ViewSettings>
       view_settings;                        /**< Last view settings applied. */
 };
+
+}
 
 #endif

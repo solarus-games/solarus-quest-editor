@@ -26,6 +26,8 @@
 #include <QStyleOptionGraphicsItem>
 #include <memory>
 
+namespace SolarusEditor {
+
 /**
  * @brief Graphic item representing a tile pattern.
  */
@@ -409,4 +411,6 @@ void PatternItem::paint(QPainter* painter,
       GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }
   }
+}
+
 }

@@ -30,6 +30,8 @@
 #include <QUndoStack>
 #include <QTextStream>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -1184,4 +1186,6 @@ void TilesetEditor::delete_selected_patterns_requested() {
   }
 
   try_command(new DeletePatternsCommand(*this, indexes));
+}
+
 }

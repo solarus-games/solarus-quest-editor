@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QSet>
 
+namespace SolarusEditor {
+
 /**
  * @brief A Solarus project that can be open with the editor.
  *
@@ -159,5 +161,7 @@ private:
   QSet<QString> open_paths;        /**< Files currently edited by the user. */
 
 };
+
+}
 
 #endif

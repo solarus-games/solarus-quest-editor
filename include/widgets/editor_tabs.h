@@ -22,9 +22,12 @@
 #include <QPointer>
 #include <QTabWidget>
 
+class QUndoGroup;
+
+namespace SolarusEditor {
+
 class Editor;
 class Quest;
-class QUndoGroup;
 
 /**
  * \brief The main tab widget with all editors currently open.
@@ -104,5 +107,7 @@ private:
   QUndoGroup* undo_group;              /**< Undo/redo stacks of open files. */
   QPointer<Quest> quest;               /**< The quest edited files belong to. */
 };
+
+}
 
 #endif

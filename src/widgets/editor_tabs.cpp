@@ -32,6 +32,8 @@
 #include <QUndoGroup>
 #include <QUndoStack>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an editor tab widget.
  * @param parent The parent object or nullptr.
@@ -770,4 +772,6 @@ void EditorTabs::tabRemoved(int index) {
 
   Q_UNUSED(index);
   update_recent_files_list();
+}
+
 }

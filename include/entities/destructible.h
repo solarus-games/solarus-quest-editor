@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable destructible object.
  */
@@ -29,5 +31,7 @@ public:
   Destructible(MapModel& map, const EntityIndex& index);
 
 };
+
+}
 
 #endif

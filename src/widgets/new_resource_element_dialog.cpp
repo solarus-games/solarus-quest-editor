@@ -18,6 +18,8 @@
 #include "widgets/new_resource_element_dialog.h"
 #include "quest.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a dialog for a new resource element.
  * @param resource_type The type of resource to create.
@@ -162,4 +164,6 @@ void NewResourceElementDialog::done(int result) {
   }
 
   QDialog::done(result);
+}
+
 }

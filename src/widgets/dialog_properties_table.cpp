@@ -21,6 +21,8 @@
 #include <QContextMenuEvent>
 #include <cmath>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty dialogs tree view.
  * @param parent The parent object or nullptr.
@@ -301,4 +303,6 @@ void DialogPropertiesTable::add_translation_property(
     items.insert(key, item);
     insertTopLevelItem(topLevelItemCount(), item);
   }
+}
+
 }

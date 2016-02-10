@@ -19,10 +19,13 @@
 
 #include <QGraphicsScene>
 
+class QItemSelection;
+
+namespace SolarusEditor {
+
 class PatternItem;
 class Quest;
 class TilesetModel;
-class QItemSelection;
 
 /**
  * @brief The scene containing all patterns in the tileset main view.
@@ -67,5 +70,7 @@ private:
                                    * ordered as in the model. */
 
 };
+
+}
 
 #endif

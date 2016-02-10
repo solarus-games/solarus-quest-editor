@@ -16,6 +16,8 @@
  */
 #include "entities/sensor.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -35,4 +37,6 @@ Sensor::Sensor(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(184, 200, 96);
   info.pixmap = QPixmap(":/images/entity_sensor_resizable.png");
   set_draw_shape_info(info);
+}
+
 }

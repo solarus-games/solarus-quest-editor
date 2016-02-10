@@ -20,11 +20,14 @@
 #include <QComboBox>
 #include <solarus/ResourceType.h>
 
+class QTreeView;
+
+namespace SolarusEditor {
+
 using ResourceType = Solarus::ResourceType;
 
 class Quest;
 class ResourceModel;
-class QTreeView;
 
 /**
  * @brief A combo box that allows to choose a resource element.
@@ -61,5 +64,7 @@ private:
   ResourceModel* model;           /**< The underlying model. */
 
 };
+
+}
 
 #endif

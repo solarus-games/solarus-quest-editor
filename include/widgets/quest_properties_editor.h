@@ -21,6 +21,8 @@
 #include "ui_quest_properties_editor.h"
 #include "quest_properties.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief A dialog to change properties of the quest.
  */
@@ -63,5 +65,7 @@ private:
   QuestProperties model;          /**< The model. */
 
 };
+
+}
 
 #endif

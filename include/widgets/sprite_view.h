@@ -21,9 +21,12 @@
 #include <QPointer>
 #include "sprite_model.h"
 
+class QAction;
+
+namespace SolarusEditor {
+
 class SpriteScene;
 class ViewSettings;
-class QAction;
 
 /**
  * @brief Graphical view of the sprite animation image, allowing to manage
@@ -113,5 +116,7 @@ private:
   double zoom;                         /**< Zoom factor currently applied. */
 
 };
+
+}
 
 #endif

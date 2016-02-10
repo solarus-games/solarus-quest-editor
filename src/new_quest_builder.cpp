@@ -18,6 +18,8 @@
 #include "new_quest_builder.h"
 #include "quest.h"
 
+namespace SolarusEditor {
+
 namespace NewQuestBuilder {
 
 /**
@@ -40,3 +42,4 @@ void create_initial_quest_files(const QString& quest_path) {
 
 }
 
+}

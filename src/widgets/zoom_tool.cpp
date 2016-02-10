@@ -19,6 +19,8 @@
 #include <QApplication>
 #include <QWheelEvent>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a zoom tool on the specified object.
  * @param widget The scrolling area to manage.
@@ -58,4 +60,6 @@ bool ZoomTool::eventFilter(QObject* object, QEvent* event) {
   }
 
   return QObject::eventFilter(object, event);
+}
+
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ChangeSourceImageDialog</class>
- <widget class="QDialog" name="ChangeSourceImageDialog">
+ <class>SolarusEditor::ChangeSourceImageDialog</class>
+ <widget class="QDialog" name="SolarusEditor::ChangeSourceImageDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -67,7 +67,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>ChangeSourceImageDialog</receiver>
+   <receiver>SolarusEditor::ChangeSourceImageDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -83,7 +83,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>ChangeSourceImageDialog</receiver>
+   <receiver>SolarusEditor::ChangeSourceImageDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

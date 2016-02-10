@@ -17,6 +17,8 @@
 #include "widgets/find_text_dialog.h"
 #include <QPushButton>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a find text dialog.
  * @param parent The parent object or nullptr.
@@ -35,4 +37,6 @@ FindTextDialog::FindTextDialog(QWidget* parent) :
   connect(find_button, &QPushButton::pressed, [&]() {
     emit find_text_requested(ui.find_field->text());
   });
+}
+
 }

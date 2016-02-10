@@ -21,6 +21,8 @@
 #include <QMap>
 #include <QStandardItemModel>
 
+namespace SolarusEditor {
+
 using ResourceType = Solarus::ResourceType;
 
 class Quest;
@@ -82,5 +84,7 @@ private:
   QString tileset_id;             /**< Id of a tileset to use when showing sprite icon. */
 
 };
+
+}
 
 #endif

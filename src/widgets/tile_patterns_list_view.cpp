@@ -18,6 +18,8 @@
 #include "tileset_model.h"
 #include <QAction>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty tile patterns list view.
  * @param parent The parent object or nullptr.
@@ -59,4 +61,6 @@ void TilePatternsListView::set_model(TilesetModel& model) {
   QListView::setModel(&model);
   selectionModel()->deleteLater();
   setSelectionModel(&model.get_selection_model());
+}
+
 }

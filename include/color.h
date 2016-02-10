@@ -20,10 +20,14 @@
 #include <solarus/lowlevel/Color.h>
 #include <QColor>
 
+namespace SolarusEditor {
+
 namespace Color {
 
 QColor to_qcolor(const Solarus::Color& solarus_color);
 Solarus::Color to_solarus_color(const QColor& qt_color);
+
+}
 
 }
 

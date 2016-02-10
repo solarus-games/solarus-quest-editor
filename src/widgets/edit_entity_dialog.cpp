@@ -17,6 +17,8 @@
 #include "widgets/edit_entity_dialog.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 namespace {
 
 // Put field names in constants to avoid repeated identical literals.
@@ -1483,4 +1485,6 @@ void EditEntityDialog::update_size_constraints() {
   ui.size_field->set_second_enabled(
     resize_mode != ResizeMode::NONE &&
     resize_mode != ResizeMode::HORIZONTAL_ONLY);
+}
+
 }

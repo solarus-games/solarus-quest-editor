@@ -20,6 +20,8 @@
 #include "entities/entity_traits.h"
 #include <QGraphicsItem>
 
+namespace SolarusEditor {
+
 class EntityModel;
 class ViewSettings;
 
@@ -64,5 +66,7 @@ private:
                              * than the entity's bounding box because of sprites. */
 
 };
+
+}
 
 #endif

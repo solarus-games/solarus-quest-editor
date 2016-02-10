@@ -24,8 +24,11 @@
 #include <solarus/gui/quest_runner.h>
 #include <QMainWindow>
 
-class Editor;
 class QToolButton;
+
+namespace SolarusEditor {
+
+class Editor;
 class PairSpinBox;
 
 using EntityType = Solarus::EntityType;
@@ -148,5 +151,7 @@ private:
   SettingsDialog settings_dialog; /**< The settings dialog. */
 
 };
+
+}
 
 #endif

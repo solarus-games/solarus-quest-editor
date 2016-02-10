@@ -28,6 +28,8 @@
 #include <QFileInfo>
 #include <QUndoStack>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -1485,4 +1487,6 @@ void SpriteEditor::auto_detect_grid_size() {
     get_view_settings().set_grid_size(
       model->get_direction_first_frame_rect(index).size());
   }
+}
+
 }

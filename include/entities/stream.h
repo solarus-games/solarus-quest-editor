@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable stream.
  */
@@ -29,5 +31,7 @@ public:
   Stream(MapModel& map, const EntityIndex& index);
 
 };
+
+}
 
 #endif

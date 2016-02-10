@@ -20,6 +20,8 @@
 #include <QStandardItemModel>
 #include <QTreeView>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a resource selector.
  * @param parent The parent object or nullptr.
@@ -174,4 +176,6 @@ void ResourceSelector::set_tileset_id(const QString& tileset_id) {
   }
 
   model->set_tileset_id(tileset_id);
+}
+
 }

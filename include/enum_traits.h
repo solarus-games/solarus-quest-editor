@@ -22,6 +22,8 @@
 #include <QList>
 #include <QString>
 
+namespace SolarusEditor {
+
 /**
  * \brief Gives info about enumerated values of a type E.
  *
@@ -35,5 +37,7 @@ template<typename E>
 class EnumTraits {
 
 };
+
+}
 
 #endif

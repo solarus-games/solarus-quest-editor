@@ -19,6 +19,8 @@
 
 #include <QListView>
 
+namespace SolarusEditor {
+
 class TilesetModel;
 
 /**
@@ -39,5 +41,7 @@ signals:
   void change_selected_pattern_id_requested();
 
 };
+
+}
 
 #endif

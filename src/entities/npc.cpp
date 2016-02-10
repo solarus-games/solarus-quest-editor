@@ -17,6 +17,8 @@
 #include "entities/npc.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -36,4 +38,6 @@ Npc::Npc(MapModel& map, const EntityIndex& index) :
     { "1", MapModel::tr("Usual NPC (somebody)") }
   };
   set_existing_subtypes(subtypes);
+}
+
 }

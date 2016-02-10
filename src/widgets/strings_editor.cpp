@@ -25,6 +25,8 @@
 #include <QMessageBox>
 #include <cmath>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -657,4 +659,6 @@ void StringsEditor::translation_refresh_requested() {
     return;
   }
   model->reload_translation();
+}
+
 }

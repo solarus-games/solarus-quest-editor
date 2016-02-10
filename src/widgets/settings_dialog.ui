@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SettingsDialog</class>
- <widget class="QDialog" name="SettingsDialog">
+ <class>SolarusEditor::SettingsDialog</class>
+ <widget class="QDialog" name="SolarusEditor::SettingsDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -141,7 +141,7 @@
              </widget>
             </item>
             <item>
-             <widget class="PairSpinBox" name="quest_size_field" native="true"/>
+             <widget class="SolarusEditor::PairSpinBox" name="quest_size_field" native="true"/>
             </item>
            </layout>
           </item>
@@ -331,7 +331,7 @@
              </widget>
             </item>
             <item>
-             <widget class="ColorPicker" name="map_background_field">
+             <widget class="SolarusEditor::ColorPicker" name="map_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -383,10 +383,10 @@
             <item>
              <layout class="QGridLayout" name="map_grid_layout_2">
               <item row="0" column="4">
-               <widget class="EnumSelector&lt;GridStyle&gt;" name="map_grid_style_field"/>
+               <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::GridStyle&gt;" name="map_grid_style_field"/>
               </item>
               <item row="1" column="1">
-               <widget class="PairSpinBox" name="map_grid_size_field" native="true"/>
+               <widget class="SolarusEditor::PairSpinBox" name="map_grid_size_field" native="true"/>
               </item>
               <item row="0" column="0" colspan="2">
                <widget class="QCheckBox" name="map_grid_show_at_opening_field">
@@ -396,7 +396,7 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="ColorPicker" name="map_grid_color_field">
+               <widget class="SolarusEditor::ColorPicker" name="map_grid_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -498,7 +498,7 @@
              </widget>
             </item>
             <item>
-             <widget class="ColorPicker" name="sprite_main_background_field">
+             <widget class="SolarusEditor::ColorPicker" name="sprite_main_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -550,13 +550,13 @@
             <item>
              <layout class="QGridLayout" name="sprite_grid_layout_2">
               <item row="0" column="4">
-               <widget class="EnumSelector&lt;GridStyle&gt;" name="sprite_grid_style_field"/>
+               <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::GridStyle&gt;" name="sprite_grid_style_field"/>
               </item>
               <item row="1" column="1">
-               <widget class="PairSpinBox" name="sprite_grid_size_field" native="true"/>
+               <widget class="SolarusEditor::PairSpinBox" name="sprite_grid_size_field" native="true"/>
               </item>
               <item row="1" column="4">
-               <widget class="ColorPicker" name="sprite_grid_color_field">
+               <widget class="SolarusEditor::ColorPicker" name="sprite_grid_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -677,7 +677,7 @@
                </widget>
               </item>
               <item row="0" column="4">
-               <widget class="ColorPicker" name="sprite_origin_color_field">
+               <widget class="SolarusEditor::ColorPicker" name="sprite_origin_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -729,7 +729,7 @@
           <item row="0" column="1">
            <layout class="QHBoxLayout" name="sprite_previewer_background_layout">
             <item>
-             <widget class="ColorPicker" name="sprite_previewer_background_field">
+             <widget class="SolarusEditor::ColorPicker" name="sprite_previewer_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -794,18 +794,18 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PairSpinBox</class>
+   <class>SolarusEditor::PairSpinBox</class>
    <extends>QWidget</extends>
    <header>widgets/pair_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ColorPicker</class>
+   <class>SolarusEditor::ColorPicker</class>
    <extends>QPushButton</extends>
    <header>widgets/color_picker.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;GridStyle&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::GridStyle&gt;</class>
    <extends>QComboBox</extends>
    <header>grid_style.h</header>
   </customwidget>
@@ -815,7 +815,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>SettingsDialog</receiver>
+   <receiver>SolarusEditor::SettingsDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -831,7 +831,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>SettingsDialog</receiver>
+   <receiver>SolarusEditor::SettingsDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -22,8 +22,11 @@
 #include <QSortFilterProxyModel>
 #include <array>
 
-class Quest;
 class QFileSystemModel;
+
+namespace SolarusEditor {
+
+class Quest;
 
 /**
  * @brief A hierarchical model of files, resources and scripts of a quest.
@@ -151,5 +154,7 @@ private:
                                         * (redundant info for performance). */
 
 };
+
+}
 
 #endif

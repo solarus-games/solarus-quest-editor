@@ -19,6 +19,8 @@
 
 #include <QInputDialog>
 
+namespace SolarusEditor {
+
 class SpriteModel;
 
 /**
@@ -48,5 +50,7 @@ private:
   const SpriteModel& model;
   QString animation_name;
 };
+
+}
 
 #endif

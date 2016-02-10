@@ -17,6 +17,8 @@
 #include "grid_style.h"
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -63,4 +65,6 @@ QString GridStyleTraits::get_friendly_name(GridStyle value) {
 QIcon GridStyleTraits::get_icon(GridStyle /*value*/) {
 
   return QIcon();
+}
+
 }

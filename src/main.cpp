@@ -26,6 +26,8 @@
 #include <QStyleFactory>
 #include <QTranslator>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -129,7 +131,9 @@ int run_quest(int argc, char* argv[]) {
   return 0;
 }
 
-}
+}  // Anonymous namespace
+
+}  // namespace SolarusEditor
 
 /**
  * @brief Entry point of the quest editor.
@@ -147,10 +151,10 @@ int main(int argc, char* argv[]) {
 
   if (argc > 1 && QString(argv[1]) == "-run") {
     // Quest run mode.
-    return run_quest(argc, argv);
+    return SolarusEditor::run_quest(argc, argv);
   }
   else {
     // Editor GUI mode.
-    return run_editor_gui(argc, argv);
+    return SolarusEditor::run_editor_gui(argc, argv);
   }
 }

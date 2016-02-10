@@ -24,6 +24,8 @@
 class QStatusBar;
 class QToolBar;
 
+namespace SolarusEditor {
+
 /**
  * \brief A widget to edit graphically a map file.
  */
@@ -117,5 +119,7 @@ private:
   QStatusBar* status_bar;                   /**< Status bar with information about the map view. */
 
 };
+
+}
 
 #endif

@@ -17,6 +17,8 @@
 #include "entities/destination.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -44,4 +46,6 @@ Destination::Destination(MapModel& map, const EntityIndex& index) :
     info.images_by_direction.append(sub_image);
   }
   set_draw_image_info(info);
+}
+
 }

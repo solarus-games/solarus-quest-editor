@@ -20,6 +20,8 @@
 #include "enum_traits.h"
 #include <solarus/entities/TilesetData.h>
 
+namespace SolarusEditor {
+
 using TilePatternRepeatMode = Solarus::TilePatternRepeatMode;
 using TilePatternRepeatModeTraits = EnumTraits<TilePatternRepeatMode>;
 
@@ -39,5 +41,7 @@ public:
   static TilePatternRepeatMode get_by_lua_name(const QString& name);
 
 };
+
+}
 
 #endif

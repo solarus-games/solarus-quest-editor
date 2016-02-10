@@ -16,6 +16,8 @@
  */
 #include "rectangle.h"
 
+namespace SolarusEditor {
+
 namespace Rectangle {
 
 /**
@@ -68,6 +70,8 @@ QRect from_two_points(const QPoint& p1, const QPoint& p2) {
   }
 
   return result;
+}
+
 }
 
 }

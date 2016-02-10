@@ -28,6 +28,8 @@
 #include <QPixmap>
 #include <map>
 
+namespace SolarusEditor {
+
 class Quest;
 
 using Ground = Solarus::Ground;
@@ -187,5 +189,7 @@ private:
       selection_model;            /**< Patterns currently selected. */
 
 };
+
+}
 
 #endif

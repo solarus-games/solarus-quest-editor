@@ -17,6 +17,8 @@
 #include "widgets/closable_tab_bar.h"
 #include <QMouseEvent>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a closable tab bar.
  * @param parent The parent object or nullptr.
@@ -44,4 +46,6 @@ void ClosableTabBar::mousePressEvent(QMouseEvent* event) {
 
   // Default mouse press behavior otherwise.
   QTabBar::mousePressEvent(event);
+}
+
 }

@@ -27,6 +27,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a sprite view.
  * @param parent The parent widget or nullptr.
@@ -564,4 +566,6 @@ void SpriteView::set_current_area(const QRect& area) {
   }
 
   current_area_item->setRect(area);
+}
+
 }

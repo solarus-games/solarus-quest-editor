@@ -20,6 +20,8 @@
 #include "ui_change_string_key_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 class StringsModel;
 
 /**
@@ -53,5 +55,7 @@ private:
   StringsModel* model;
 
 };
+
+}
 
 #endif

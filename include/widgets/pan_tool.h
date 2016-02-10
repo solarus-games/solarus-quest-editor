@@ -22,6 +22,8 @@
 
 class QAbstractScrollArea;
 
+namespace SolarusEditor {
+
 /**
  * @brief Provides to a scrolling widget the ability to pan the view using
  * the middle mouse button.
@@ -42,5 +44,7 @@ private:
                                         * coordinates. */
 
 };
+
+}
 
 #endif

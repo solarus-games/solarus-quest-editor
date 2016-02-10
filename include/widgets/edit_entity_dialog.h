@@ -20,6 +20,8 @@
 #include "ui_edit_entity_dialog.h"
 #include "entities/entity_traits.h"
 
+namespace SolarusEditor {
+
 class MapModel;
 enum class ResizeMode;
 
@@ -211,5 +213,7 @@ private:
   QList<SimpleStringField> simple_string_fields;
 
 };
+
+}
 
 #endif

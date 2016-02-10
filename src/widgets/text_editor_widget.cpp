@@ -21,7 +21,7 @@
 #include <QTextBlock>
 #include <QUndoStack>
 
-#include <QDebug>
+namespace SolarusEditor {
 
 namespace {
 
@@ -580,4 +580,6 @@ void TextEditorWidget::remove_tab () {
   }
 
   cursor.endEditBlock();
+}
+
 }

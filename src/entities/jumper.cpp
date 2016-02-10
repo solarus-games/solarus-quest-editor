@@ -18,6 +18,8 @@
 #include "map_model.h"
 #include <QPainter>
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -268,5 +270,7 @@ void Jumper::draw(QPainter& painter) const {
   painter.fillPath(inner_path, background_color);
   painter.drawPath(outer_path);
   painter.drawPath(inner_path);
+
+}
 
 }

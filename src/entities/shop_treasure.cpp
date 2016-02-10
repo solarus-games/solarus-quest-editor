@@ -16,6 +16,8 @@
  */
 #include "entities/shop_treasure.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -43,4 +45,6 @@ void ShopTreasure::set_initial_values() {
 
   // The default price in the data file format is poor (0).
   set_field("price", 10);
+}
+
 }

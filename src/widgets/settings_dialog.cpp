@@ -21,6 +21,8 @@
 #include <QMessageBox>
 #include <QPushButton>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a settings dialog.
  * @param parent Parent widget or nullptr.
@@ -738,4 +740,6 @@ void SettingsDialog::change_sprite_origin_color() {
   edited_settings[EditorSettings::sprite_origin_color] =
     ui.sprite_origin_color_field->get_color().name();
   update_buttons();
+}
+
 }

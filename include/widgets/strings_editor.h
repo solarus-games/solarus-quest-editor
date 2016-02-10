@@ -20,6 +20,8 @@
 #include "widgets/editor.h"
 #include "ui_strings_editor.h"
 
+namespace SolarusEditor {
+
 class StringsModel;
 
 /**
@@ -66,5 +68,7 @@ private:
   Quest& quest;              /**< The quest. */
 
 };
+
+}
 
 #endif

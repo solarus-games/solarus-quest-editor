@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TilesetEditor</class>
- <widget class="QWidget" name="TilesetEditor">
+ <class>SolarusEditor::TilesetEditor</class>
+ <widget class="QWidget" name="SolarusEditor::TilesetEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -120,7 +120,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="ColorPicker" name="background_field">
+           <widget class="SolarusEditor::ColorPicker" name="background_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -156,7 +156,7 @@
         </widget>
        </item>
        <item>
-        <widget class="TilePatternsListView" name="patterns_list_view"/>
+        <widget class="SolarusEditor::TilePatternsListView" name="patterns_list_view"/>
        </item>
        <item>
         <widget class="QGroupBox" name="pattern_properties_group_box">
@@ -253,7 +253,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="EnumSelector&lt;Ground&gt;" name="ground_field">
+           <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::Ground&gt;" name="ground_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -283,7 +283,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="EnumSelector&lt;TilePatternRepeatMode&gt;" name="repeat_mode_field">
+           <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::TilePatternRepeatMode&gt;" name="repeat_mode_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -326,7 +326,7 @@
              <item>
               <layout class="QVBoxLayout" name="vertical_layout">
                <item>
-                <widget class="EnumSelector&lt;PatternAnimation&gt;" name="animation_type_field">
+                <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::PatternAnimation&gt;" name="animation_type_field">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -339,7 +339,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="EnumSelector&lt;PatternSeparation&gt;" name="animation_separation_field">
+                <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::PatternSeparation&gt;" name="animation_separation_field">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -391,44 +391,44 @@
        </item>
       </layout>
      </widget>
-     <widget class="TilesetView" name="tileset_view"/>
+     <widget class="SolarusEditor::TilesetView" name="tileset_view"/>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EnumSelector&lt;Ground&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::Ground&gt;</class>
    <extends>QComboBox</extends>
    <header>ground_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>TilesetView</class>
+   <class>SolarusEditor::TilesetView</class>
    <extends>QGraphicsView</extends>
    <header>widgets/tileset_view.h</header>
   </customwidget>
   <customwidget>
-   <class>TilePatternsListView</class>
+   <class>SolarusEditor::TilePatternsListView</class>
    <extends>QListView</extends>
    <header>widgets/tile_patterns_list_view.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;PatternAnimation&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::PatternAnimation&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_animation_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;PatternSeparation&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::PatternSeparation&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_separation_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>ColorPicker</class>
+   <class>SolarusEditor::ColorPicker</class>
    <extends>QPushButton</extends>
    <header>widgets/color_picker.h</header>
   </customwidget>
   <customwidget>
-   <class>EnumSelector&lt;TilePatternRepeatMode&gt;</class>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::TilePatternRepeatMode&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_repeat_mode_traits.h</header>
   </customwidget>

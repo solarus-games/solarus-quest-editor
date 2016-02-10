@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable jumper.
  */
@@ -46,5 +48,7 @@ private:
   void update_resize_mode();
 
 };
+
+}
 
 #endif

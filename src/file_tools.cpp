@@ -20,6 +20,8 @@
 #include <QDir>
 #include <QFileInfo>
 
+namespace SolarusEditor {
+
 namespace FileTools {
 
 /**
@@ -113,6 +115,8 @@ void delete_recursive(const QString& path) {
       throw EditorException(QApplication::tr("Failed to delete folder '%1'").arg(path));
     }
   }
+}
+
 }
 
 }

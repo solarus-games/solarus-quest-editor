@@ -22,6 +22,8 @@
 #include <QFileSystemModel>
 #include <QGraphicsPixmapItem>
 
+namespace SolarusEditor {
+
 class Quest;
 
 /**
@@ -59,5 +61,7 @@ private:
   QGraphicsPixmapItem image_item;     /**< The image item of the graphics scene. */
 
 };
+
+}
 
 #endif

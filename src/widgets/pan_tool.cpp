@@ -21,6 +21,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a pan tool on the specified object.
  * @param widget The scrolling area to manage.
@@ -98,4 +100,6 @@ bool PanTool::eventFilter(QObject* object, QEvent* event) {
   }
 
   return QObject::eventFilter(object, event);
+}
+
 }

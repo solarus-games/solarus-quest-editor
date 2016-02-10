@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ExternalScriptDialog</class>
- <widget class="QDialog" name="ExternalScriptDialog">
+ <class>SolarusEditor::ExternalScriptDialog</class>
+ <widget class="QDialog" name="SolarusEditor::ExternalScriptDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -91,7 +91,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>ExternalScriptDialog</receiver>
+   <receiver>SolarusEditor::ExternalScriptDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -107,7 +107,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>ExternalScriptDialog</receiver>
+   <receiver>SolarusEditor::ExternalScriptDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

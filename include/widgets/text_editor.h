@@ -19,6 +19,8 @@
 
 #include "widgets/editor.h"
 
+namespace SolarusEditor {
+
 class TextEditorWidget;
 
 /**
@@ -57,5 +59,7 @@ private:
   QString map_id;   /**< The map id of this script (if it is a map script). */
 
 };
+
+}
 
 #endif

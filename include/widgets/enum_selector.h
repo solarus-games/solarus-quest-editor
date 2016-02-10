@@ -19,6 +19,8 @@
 
 #include <QComboBox>
 
+namespace SolarusEditor {
+
 /**
  * @brief Combobox to select a value from an enumerated type.
  *
@@ -48,6 +50,8 @@ private:
   bool with_none;                 /**< Whether an empty option is included in the list. */
 
 };
+
+}
 
 #include "widgets/enum_selector.inl"
 

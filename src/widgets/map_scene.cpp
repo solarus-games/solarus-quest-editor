@@ -21,6 +21,8 @@
 #include "view_settings.h"
 #include <QPainter>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a map scene.
  * @param map The map data to represent in the scene.
@@ -612,3 +614,4 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
   return max_layer;
 }
 
+}

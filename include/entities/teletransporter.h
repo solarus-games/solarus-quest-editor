@@ -20,6 +20,8 @@
 #include "entity_model.h"
 #include "transition_traits.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable teletransporter.
  */
@@ -34,5 +36,7 @@ protected:
   void set_initial_values() override;
 
 };
+
+}
 
 #endif

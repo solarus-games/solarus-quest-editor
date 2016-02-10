@@ -20,6 +20,8 @@
 #include "widgets/editor.h"
 #include "ui_tileset_editor.h"
 
+namespace SolarusEditor {
+
 class TilesetModel;
 
 /**
@@ -84,5 +86,7 @@ private:
   TilesetModel* model;          /**< Tileset model being edited. */
 
 };
+
+}
 
 #endif

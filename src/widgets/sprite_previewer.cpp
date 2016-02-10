@@ -17,6 +17,8 @@
 #include "widgets/sprite_previewer.h"
 #include <QMenu>
 
+namespace SolarusEditor {
+
 /**
  * @brief Create a sprite previewer.
  * @param parent The parent object or nullptr.
@@ -389,4 +391,6 @@ QMenu* SpritePreviewer::create_zoom_menu() {
   }
 
   return zoom_menu;
+}
+
 }

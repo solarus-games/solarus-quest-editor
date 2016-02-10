@@ -18,6 +18,8 @@
 #include "editor_exception.h"
 #include <iostream>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a quest editor exception.
  * @param message The error message.
@@ -61,4 +63,6 @@ void EditorException::print_message() const {
 void EditorException::show_dialog() const {
 
   GuiTools::error_dialog(message);
+}
+
 }

@@ -24,6 +24,8 @@
 #include <QIcon>
 #include <QSet>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a map model.
  * @param quest The quest.
@@ -1571,4 +1573,6 @@ void MapModel::rebuild_entity_indexes(int layer) {
     entity->index_changed(index);
     ++i;
   }
+}
+
 }

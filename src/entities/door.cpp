@@ -16,6 +16,8 @@
  */
 #include "entities/door.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -25,4 +27,6 @@ Door::Door(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DOOR) {
 
   set_num_directions(4);
+}
+
 }

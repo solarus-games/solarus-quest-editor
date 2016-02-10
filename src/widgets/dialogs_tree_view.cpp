@@ -20,6 +20,8 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty dialogs tree view.
  * @param parent The parent object or nullptr.
@@ -95,4 +97,6 @@ void DialogsTreeView::set_model(DialogsModel* model) {
   DialogsTreeView::setModel(model);
   selectionModel()->deleteLater();
   setSelectionModel(&model->get_selection_model());
+}
+
 }

@@ -19,6 +19,8 @@
 
 #include <QTreeWidget>
 
+namespace SolarusEditor {
+
 class DialogsModel;
 
 /**
@@ -85,5 +87,7 @@ private:
     set_action;     /**< Action of setting the selected property from translation. */
 
 };
+
+}
 
 #endif

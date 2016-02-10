@@ -22,6 +22,8 @@
 #include "sprite_model.h"
 #include <QPointer>
 
+namespace SolarusEditor {
+
 class MapModel;
 class Quest;
 class QuestResources;
@@ -260,5 +262,7 @@ private:
   mutable QPixmap icon;           /**< Icon to use when the entity is drawn as
                                    * an icon. */
 };
+
+}
 
 #endif

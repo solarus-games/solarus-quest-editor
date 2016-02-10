@@ -22,6 +22,8 @@
 #include <array>
 #include <memory>
 
+namespace SolarusEditor {
+
 struct AddableEntity;
 class Quest;
 class QuestResources;
@@ -193,5 +195,7 @@ public:
   EntityIndex index;
 
 };
+
+}
 
 #endif

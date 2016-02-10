@@ -37,6 +37,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -2425,4 +2427,6 @@ int AddingEntitiesState::find_best_layer(const EntityModel& entity) const {
   }
 
   return preferred_layer;
+}
+
 }

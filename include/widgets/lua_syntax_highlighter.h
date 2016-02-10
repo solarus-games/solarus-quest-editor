@@ -22,6 +22,8 @@
 #include <QTextCharFormat>
 #include <QVector>
 
+namespace SolarusEditor {
+
 /**
  * @brief A simple syntax highlighter for Lua code.
  *
@@ -59,5 +61,7 @@ protected:
   QTextCharFormat string_format;                 /**< Format applied to strings litterals. */
 
 };
+
+}
 
 #endif

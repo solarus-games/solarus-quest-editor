@@ -19,6 +19,8 @@
 #include "quest_resources.h"
 #include "sprite_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a resource model.
  * @param quest The quest.
@@ -428,3 +430,4 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const {
   return QStandardItemModel::data(index, role);
 }
 
+}

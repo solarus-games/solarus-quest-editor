@@ -20,6 +20,8 @@
 #include "widgets/editor.h"
 #include "ui_dialogs_editor.h"
 
+namespace SolarusEditor {
+
 class DialogsModel;
 
 /**
@@ -84,5 +86,7 @@ private:
   Quest& quest;              /**< The quest. */
 
 };
+
+}
 
 #endif

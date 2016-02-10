@@ -17,6 +17,8 @@
 #include "point.h"
 #include <QtMath>
 
+namespace SolarusEditor {
+
 namespace Point {
 
 /**
@@ -112,6 +114,8 @@ QPoint round_down(const QPoint& point, int step_x, int step_y) {
 QPoint round_down(const QPointF& point, int step_x, int step_y) {
 
   return round_down(point.toPoint(), step_x, step_y);
+}
+
 }
 
 }

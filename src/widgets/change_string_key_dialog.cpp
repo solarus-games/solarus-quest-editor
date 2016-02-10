@@ -18,6 +18,8 @@
 #include "widgets/gui_tools.h"
 #include "strings_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a change string key dialog.
  * @param initial_key Initial key of the string.
@@ -117,4 +119,6 @@ void ChangeStringKeyDialog::done(int result) {
   }
 
   QDialog::done(result);
+}
+
 }

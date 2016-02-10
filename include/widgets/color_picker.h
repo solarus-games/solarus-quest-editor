@@ -19,6 +19,8 @@
 
 #include <QPushButton>
 
+namespace SolarusEditor {
+
 /**
  * @brief Widget to pick color.
  */
@@ -49,5 +51,7 @@ private:
   QColor color;
 
 };
+
+}
 
 #endif

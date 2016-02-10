@@ -17,6 +17,8 @@
 #include "entities/teletransporter.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -45,4 +47,6 @@ void Teletransporter::set_initial_values() {
 
   // Initially propose to stay on the same map.
   set_field("destination_map", get_map().get_map_id());
+}
+
 }

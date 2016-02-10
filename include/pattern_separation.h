@@ -17,6 +17,8 @@
 #ifndef SOLARUSEDITOR_PATTERN_SEPARATION_H
 #define SOLARUSEDITOR_PATTERN_SEPARATION_H
 
+namespace SolarusEditor {
+
 /**
  * \brief The possible kinds of separation for an animated tile pattern.
  */
@@ -26,5 +28,7 @@ enum class PatternSeparation {
   VERTICAL
 
 };
+
+}
 
 #endif

@@ -19,6 +19,8 @@
 
 #include <QSettings>
 
+namespace SolarusEditor {
+
 /**
  * @brief Manages settings of the quest editor.
  */
@@ -97,5 +99,7 @@ private:
     default_values;    /**< The default values. */
 
 };
+
+}
 
 #endif

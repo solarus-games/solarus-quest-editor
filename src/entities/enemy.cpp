@@ -16,6 +16,8 @@
  */
 #include "entities/enemy.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -51,4 +53,6 @@ void Enemy::update_breed() {
   info.sprite_id = QString("enemies/") + get_field("breed").toString();
   info.animation = "stopped";
   set_draw_sprite_info(info);
+}
+
 }

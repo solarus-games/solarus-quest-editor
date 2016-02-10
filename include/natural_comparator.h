@@ -19,6 +19,8 @@
 
 #include <QCollator>
 
+namespace SolarusEditor {
+
 /**
  * @brief A string comparator that sorts number parts intuitively.
  *
@@ -41,5 +43,7 @@ private:
   QCollator collator;
 
 };
+
+}
 
 #endif

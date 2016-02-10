@@ -20,6 +20,8 @@
 #include "enum_traits.h"
 #include <solarus/Transition.h>
 
+namespace SolarusEditor {
+
 using TransitionStyle = Solarus::Transition::Style;
 using TransitionTraits = EnumTraits<TransitionStyle>;
 
@@ -39,5 +41,7 @@ public:
   static TransitionStyle get_by_lua_name(const QString& name);
 
 };
+
+}
 
 #endif

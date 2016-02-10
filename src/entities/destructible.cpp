@@ -16,6 +16,8 @@
  */
 #include "entities/destructible.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -25,4 +27,6 @@ Destructible::Destructible(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DESTRUCTIBLE) {
 
   set_origin(QPoint(8, 13));
+}
+
 }

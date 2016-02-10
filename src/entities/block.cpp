@@ -17,6 +17,8 @@
 #include "entities/block.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -30,4 +32,6 @@ Block::Block(MapModel& map, const EntityIndex& index) :
   set_num_directions(4);
   set_no_direction_allowed(true);
   set_no_direction_text(MapModel::tr("Any"));
+}
+
 }

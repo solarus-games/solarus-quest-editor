@@ -23,6 +23,8 @@
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
 
+namespace SolarusEditor {
+
 class Quest;
 
 /**
@@ -147,5 +149,7 @@ private:
   QItemSelectionModel
     selection_model;              /**< Dialog currently selected. */
 };
+
+}
 
 #endif

@@ -20,6 +20,8 @@
 #include <QFile>
 #include <QTextStream>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates an empty resource list for the specified quest.
  * @param quest The quest.
@@ -318,4 +320,6 @@ QString QuestResources::get_directory_friendly_name(ResourceType resource_type) 
  */
 QString QuestResources::get_create_friendly_name(ResourceType resource_type) const {
   return resource_type_create_friendly_names[resource_type];
+}
+
 }

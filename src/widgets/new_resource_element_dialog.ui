@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewResourceElementDialog</class>
- <widget class="QDialog" name="NewResourceElementDialog">
+ <class>SolarusEditor::NewResourceElementDialog</class>
+ <widget class="QDialog" name="SolarusEditor::NewResourceElementDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -58,7 +58,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>accepted()</signal>
-   <receiver>NewResourceElementDialog</receiver>
+   <receiver>SolarusEditor::NewResourceElementDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -74,7 +74,7 @@
   <connection>
    <sender>button_box</sender>
    <signal>rejected()</signal>
-   <receiver>NewResourceElementDialog</receiver>
+   <receiver>SolarusEditor::NewResourceElementDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

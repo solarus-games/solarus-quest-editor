@@ -19,6 +19,8 @@
 #include "tileset_model.h"
 #include <QPainter>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a normal tile.
  * @param map The map containing the entity.
@@ -177,4 +179,6 @@ void Tile::notify_tileset_changed(const QString& tileset_id) {
 
   EntityModel::notify_tileset_changed(tileset_id);
   update_pattern();
+}
+
 }

@@ -19,6 +19,8 @@
 
 #include <QTabBar>
 
+namespace SolarusEditor {
+
 /**
  * \brief QTabBar whose tabs can be closed with a button and a middle mouse
  * button press event.
@@ -40,5 +42,7 @@ protected:
   virtual void mousePressEvent(QMouseEvent* event) override;
 
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -1069,4 +1071,6 @@ void DialogsEditor::update_display_margin() {
   ui.display_margin_field->setEnabled(display_margin);
   ui.dialog_text_field->set_show_margin(display_margin, margin);
   ui.translation_text_field->set_show_margin(display_margin, margin);
+}
+
 }

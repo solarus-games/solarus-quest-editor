@@ -21,6 +21,8 @@
 
 class QAbstractScrollArea;
 
+namespace SolarusEditor {
+
 /**
  * @brief Provides to a scrolling widget the ability to zoom the view using
  * the middle mouse wheel and the control key.
@@ -37,5 +39,7 @@ public:
   bool eventFilter(QObject* object, QEvent* event) override;
 
 };
+
+}
 
 #endif

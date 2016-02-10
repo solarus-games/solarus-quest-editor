@@ -20,6 +20,8 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates a tool that tracks the specified widget.
  * @param widget The widget to track.
@@ -65,4 +67,6 @@ bool MouseCoordinatesTrackingTool::eventFilter(QObject* object, QEvent* event) {
   }
 
   return QObject::eventFilter(object, event);
+}
+
 }

@@ -23,6 +23,8 @@
 #include <QPair>
 #include <QPointer>
 
+namespace SolarusEditor {
+
 class Quest;
 
 /**
@@ -61,5 +63,7 @@ private:
   EntityType entity_type_filter;             /**< The type of entity to only show. */
 
 };
+
+}
 
 #endif

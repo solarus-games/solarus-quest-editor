@@ -19,6 +19,8 @@
 
 class QString;
 
+namespace SolarusEditor {
+
 /**
  * \brief Utility functions on files and directories.
  *
@@ -29,6 +31,8 @@ namespace FileTools {
 
 void copy_recursive(const QString& src, const QString& dst);
 void delete_recursive(const QString& path);
+
+}
 
 }
 

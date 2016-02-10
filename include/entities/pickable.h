@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable pickable treasure.
  */
@@ -37,5 +39,7 @@ private:
   void update_treasure();
 
 };
+
+}
 
 #endif

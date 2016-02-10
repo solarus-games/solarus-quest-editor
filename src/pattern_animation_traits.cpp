@@ -17,6 +17,8 @@
 #include "pattern_animation_traits.h"
 #include <QApplication>
 
+namespace SolarusEditor {
+
 /**
  * @brief Returns all values.
  * @return The existing values.
@@ -144,3 +146,4 @@ Solarus::TileScrolling EnumTraits<PatternAnimation>::get_scrolling(PatternAnimat
   return Solarus::TileScrolling::NONE;
 }
 
+}

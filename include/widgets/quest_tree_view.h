@@ -20,6 +20,8 @@
 #include <QPointer>
 #include <QTreeView>
 
+namespace SolarusEditor {
+
 class Quest;
 class QuestFilesModel;
 class MainWindow;
@@ -75,5 +77,7 @@ private:
   QAction* delete_action;         /**< Action of deleting the selected file. */
 
 };
+
+}
 
 #endif

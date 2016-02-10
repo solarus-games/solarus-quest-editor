@@ -24,6 +24,8 @@
 #include <QVBoxLayout>
 #include <iostream>
 
+namespace SolarusEditor {
+
 namespace {
 
 /**
@@ -678,4 +680,6 @@ const ViewSettings& Editor::get_view_settings() const {
  */
 ViewSettings& Editor::get_view_settings() {
   return view_settings;
+}
+
 }

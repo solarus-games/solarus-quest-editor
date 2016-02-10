@@ -24,10 +24,13 @@
 #include <QGraphicsView>
 #include <QPointer>
 
+class QAction;
+
+namespace SolarusEditor {
+
 class TilesetModel;
 class TilesetScene;
 class ViewSettings;
-class QAction;
 
 /**
  * @brief Graphical view of the tileset image, allowing to manage tile patterns.
@@ -134,5 +137,7 @@ private:
   bool read_only;                      /**< Whether the view forbids editing the tileset. */
 
 };
+
+}
 
 #endif

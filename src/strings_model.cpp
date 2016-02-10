@@ -19,6 +19,8 @@
 #include "strings_model.h"
 #include <QIcon>
 
+namespace SolarusEditor {
+
 using StringResources = Solarus::StringResources;
 
 /**
@@ -896,4 +898,6 @@ void StringsModel::clear_translation_from_tree() {
       dataChanged(model_index, model_index);
     }
   }
+}
+
 }

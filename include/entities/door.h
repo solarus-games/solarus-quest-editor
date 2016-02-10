@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable door.
  */
@@ -29,5 +31,7 @@ public:
   Door(MapModel& map, const EntityIndex& index);
 
 };
+
+}
 
 #endif

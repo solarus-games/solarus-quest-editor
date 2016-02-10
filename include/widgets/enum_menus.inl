@@ -17,6 +17,8 @@
 #include "enum_traits.h"
 #include <QMenu>
 
+namespace SolarusEditor {
+
 template<typename E>
 class EnumTraits;
 
@@ -86,4 +88,6 @@ QList<QAction*> EnumMenus<E>::create_actions(
   parent.addActions(actions);
 
   return actions;
+}
+
 }

@@ -17,6 +17,8 @@
 #include "entities/crystal_block.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -60,5 +62,7 @@ void CrystalBlock::update_subtype() {
   info.frame = -1;
   info.tiled = true;
   set_draw_sprite_info(info);
+
+}
 
 }

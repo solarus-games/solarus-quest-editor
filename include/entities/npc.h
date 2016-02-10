@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable non-playing character.
  */
@@ -29,5 +31,7 @@ public:
   Npc(MapModel& map, const EntityIndex& index);
 
 };
+
+}
 
 #endif

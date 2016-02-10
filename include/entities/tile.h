@@ -19,6 +19,8 @@
 
 #include "entity_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief An editable tile.
  */
@@ -49,5 +51,7 @@ private:
   mutable QPixmap pattern_image;     /**< Cached image of the tile pattern. */
 
 };
+
+}
 
 #endif

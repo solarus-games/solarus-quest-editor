@@ -20,6 +20,8 @@
 #include "ui_find_text_dialog.h"
 #include <QDialog>
 
+namespace SolarusEditor {
+
 /**
  * @brief A dialog to find text in a text editor.
  */
@@ -39,5 +41,7 @@ private:
   Ui::FindTextDialog ui;
 
 };
+
+}
 
 #endif

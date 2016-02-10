@@ -19,6 +19,8 @@
 
 #include <QTreeView>
 
+namespace SolarusEditor {
+
 class SpriteModel;
 
 /**
@@ -57,5 +59,7 @@ private:
   QAction* delete_action;             /**< Action of deleting. */
 
 };
+
+}
 
 #endif
