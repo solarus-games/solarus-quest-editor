@@ -479,12 +479,12 @@ bool MainWindow::close_quest() {
  */
 bool MainWindow::open_quest(const QString& quest_path) {
 
-  // Load the requested quest.
-  quest.set_root_path(quest_path);
-
   bool success = false;
 
   try {
+    // Load the requested quest.
+    quest.set_root_path(quest_path);
+
     if (!quest.exists()) {
       throw EditorException(tr("No quest was found in directory\n'%1'").arg(quest_path));
     }

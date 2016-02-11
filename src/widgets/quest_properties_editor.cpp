@@ -111,6 +111,162 @@ private:
 };
 
 /**
+ * @brief Changing the short description.
+ */
+class SetShortDescriptionCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetShortDescriptionCommand(QuestPropertiesEditor& editor, const QString& short_description) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change summary")),
+    short_description_before(get_model().get_short_description()),
+    short_description_after(short_description) {
+  }
+
+  void undo() override {
+    get_model().set_short_description(short_description_before);
+  }
+
+  void redo() override {
+    get_model().set_short_description(short_description_after);
+  }
+
+private:
+  QString short_description_before;
+  QString short_description_after;
+};
+
+/**
+ * @brief Changing the long description.
+ */
+class SetLongDescriptionCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetLongDescriptionCommand(QuestPropertiesEditor& editor, const QString& long_description) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change detailed description")),
+    long_description_before(get_model().get_long_description()),
+    long_description_after(long_description) {
+  }
+
+  void undo() override {
+    get_model().set_long_description(long_description_before);
+  }
+
+  void redo() override {
+    get_model().set_long_description(long_description_after);
+  }
+
+private:
+  QString long_description_before;
+  QString long_description_after;
+};
+
+/**
+ * @brief Changing the author.
+ */
+class SetAuthorCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetAuthorCommand(QuestPropertiesEditor& editor, const QString& author) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change author")),
+    author_before(get_model().get_author()),
+    author_after(author) {
+  }
+
+  void undo() override {
+    get_model().set_author(author_before);
+  }
+
+  void redo() override {
+    get_model().set_author(author_after);
+  }
+
+private:
+  QString author_before;
+  QString author_after;
+};
+
+/**
+ * @brief Changing the quest version.
+ */
+class SetQuestVersionCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetQuestVersionCommand(QuestPropertiesEditor& editor, const QString& quest_version) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change quest version")),
+    quest_version_before(get_model().get_quest_version()),
+    quest_version_after(quest_version) {
+  }
+
+  void undo() override {
+    get_model().set_quest_version(quest_version_before);
+  }
+
+  void redo() override {
+    get_model().set_quest_version(quest_version_after);
+  }
+
+private:
+  QString quest_version_before;
+  QString quest_version_after;
+};
+
+/**
+ * @brief Changing the release date.
+ */
+class SetReleaseDateCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetReleaseDateCommand(QuestPropertiesEditor& editor, const QDate& release_date) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change release_date")),
+    release_date_before(get_model().get_release_date()),
+    release_date_after(release_date) {
+  }
+
+  void undo() override {
+    get_model().set_release_date(release_date_before);
+  }
+
+  void redo() override {
+    get_model().set_release_date(release_date_after);
+  }
+
+private:
+  QDate release_date_before;
+  QDate release_date_after;
+};
+
+/**
+ * @brief Changing the website.
+ */
+class SetWebsiteCommand : public QuestPropertiesEditorCommand {
+
+public:
+  SetWebsiteCommand(QuestPropertiesEditor& editor, const QString& website) :
+    QuestPropertiesEditorCommand(
+      editor, QuestPropertiesEditor::tr("Change website")),
+    website_before(get_model().get_website()),
+    website_after(website) {
+  }
+
+  void undo() override {
+    get_model().set_website(website_before);
+  }
+
+  void redo() override {
+    get_model().set_website(website_after);
+  }
+
+private:
+  QString website_before;
+  QString website_after;
+};
+
+/**
  * @brief Change normal size.
  */
 class SetNormalSizeCommand : public QuestPropertiesEditorCommand {
@@ -232,14 +388,15 @@ private:
 
 /**
  * @brief Creates a quest properties editor.
- * @param properties Initial value properties.
+ * @param quest The quest.
  * @param parent Parent object or nullptr.
  */
-QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
+QuestPropertiesEditor::QuestPropertiesEditor(Quest& quest, QWidget* parent) :
   Editor(quest, quest.get_properties_path(), parent),
   model(quest) {
 
   ui.setupUi(this);
+  ui.release_date_field->setDate(QDate::currentDate());
   update();
 
   // Editor properties.
@@ -259,6 +416,40 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest &quest, QWidget* parent) :
           this, SLOT(update_title_field()));
   connect(ui.title_field, SIGNAL(editingFinished()),
           this, SLOT(change_title_requested()));
+
+  connect(&model, SIGNAL(short_description_changed(QString)),
+          this, SLOT(update_short_description_field()));
+  connect(ui.short_description_field, SIGNAL(editingFinished()),
+          this, SLOT(change_short_description_requested()));
+
+  connect(&model, SIGNAL(long_description_changed(QString)),
+          this, SLOT(update_long_description_field()));
+  connect(ui.long_description_field, SIGNAL(editing_finished()),
+          this, SLOT(change_long_description_requested()));
+
+  connect(&model, SIGNAL(author_changed(QString)),
+          this, SLOT(update_author_field()));
+  connect(ui.author_field, SIGNAL(editingFinished()),
+          this, SLOT(change_author_requested()));
+
+  connect(&model, SIGNAL(quest_version_changed(QString)),
+          this, SLOT(update_quest_version_field()));
+  connect(ui.quest_version_field, SIGNAL(editingFinished()),
+          this, SLOT(change_quest_version_requested()));
+
+  connect(&model, SIGNAL(release_date_changed(QDate)),
+          this, SLOT(update_release_date_field()));
+  connect(ui.release_status_progress_radio, SIGNAL(clicked()),
+          this, SLOT(change_release_date_requested()));
+  connect(ui.release_status_released_radio, SIGNAL(clicked()),
+          this, SLOT(change_release_date_requested()));
+  connect(ui.release_date_field, SIGNAL(dateChanged(QDate)),
+          this, SLOT(change_release_date_requested()));
+
+  connect(&model, SIGNAL(website_changed(QString)),
+          this, SLOT(update_website_field()));
+  connect(ui.website_field, SIGNAL(editingFinished()),
+          this, SLOT(change_website_requested()));
 
   connect(&model, SIGNAL(normal_size_changed(QSize)),
           this, SLOT(update_normal_size_field()));
@@ -296,15 +487,7 @@ QuestProperties& QuestPropertiesEditor::get_model() {
  */
 void QuestPropertiesEditor::save() {
 
-  // Update properties of the quest.
-  QuestProperties& properties = get_quest().get_properties();
-  properties.set_write_dir(model.get_write_dir());
-  properties.set_title(model.get_title());
-  properties.set_normal_quest_size(model.get_normal_quest_size());
-  properties.set_min_quest_size(model.get_min_quest_size());
-  properties.set_max_quest_size(model.get_max_quest_size());
-
-  properties.save();
+  model.save();
 }
 
 /**
@@ -316,6 +499,12 @@ void QuestPropertiesEditor::update() {
 
   update_write_dir_field();
   update_title_field();
+  update_short_description_field();
+  update_long_description_field();
+  update_author_field();
+  update_quest_version_field();
+  update_release_date_field();
+  update_website_field();
   update_normal_size_field();
   update_min_size_field();
   update_max_size_field();
@@ -345,7 +534,7 @@ void QuestPropertiesEditor::change_write_dir_requested() {
 }
 
 /**
- * @brief Update the title field.
+ * @brief Updates the title field.
  */
 void QuestPropertiesEditor::update_title_field() {
 
@@ -365,6 +554,155 @@ void QuestPropertiesEditor::change_title_requested() {
   }
 
   try_command(new SetTitleCommand(*this, title));
+}
+
+/**
+ * @brief Updates the short description field.
+ */
+void QuestPropertiesEditor::update_short_description_field() {
+
+  ui.short_description_field->setText(model.get_short_description());
+}
+
+/**
+ * @brief Slot called when the user changes the short description.
+ */
+void QuestPropertiesEditor::change_short_description_requested() {
+
+  QString short_description = ui.short_description_field->text();
+  QString old_short_description = model.get_short_description();
+  if (short_description == old_short_description) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetShortDescriptionCommand(*this, short_description));
+}
+
+/**
+ * @brief Updates the long description field.
+ */
+void QuestPropertiesEditor::update_long_description_field() {
+
+  ui.long_description_field->setPlainText(model.get_long_description());
+}
+
+/**
+ * @brief Slot called when the user changes the long description.
+ */
+void QuestPropertiesEditor::change_long_description_requested() {
+
+  QString long_description = ui.long_description_field->toPlainText();
+  QString old_long_description = model.get_long_description();
+  if (long_description == old_long_description) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetLongDescriptionCommand(*this, long_description));
+}
+
+/**
+ * @brief Updates the author field.
+ */
+void QuestPropertiesEditor::update_author_field() {
+
+  ui.author_field->setText(model.get_author());
+}
+
+/**
+ * @brief Slot called when the user changes the author.
+ */
+void QuestPropertiesEditor::change_author_requested() {
+
+  QString author = ui.author_field->text();
+  QString old_author = model.get_author();
+  if (author == old_author) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetAuthorCommand(*this, author));
+}
+
+/**
+ * @brief Updates the quest version field.
+ */
+void QuestPropertiesEditor::update_quest_version_field() {
+
+  ui.quest_version_field->setText(model.get_quest_version());
+}
+
+/**
+ * @brief Slot called when the user changes the quest version.
+ */
+void QuestPropertiesEditor::change_quest_version_requested() {
+
+  QString quest_version = ui.quest_version_field->text();
+  QString old_quest_version = model.get_quest_version();
+  if (quest_version == old_quest_version) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetQuestVersionCommand(*this, quest_version));
+}
+
+/**
+ * @brief Updates the short release date field.
+ */
+void QuestPropertiesEditor::update_release_date_field() {
+
+  QDate release_date = model.get_release_date();
+  if (!release_date.isValid()) {
+    ui.release_status_progress_radio->setChecked(true);
+    ui.release_date_field->setEnabled(false);
+  }
+  else {
+    ui.release_status_released_radio->setChecked(true);
+    ui.release_date_field->setEnabled(true);
+    ui.release_date_field->setDate(release_date);
+  }
+}
+
+/**
+ * @brief Slot called when the user changes the release date.
+ */
+void QuestPropertiesEditor::change_release_date_requested() {
+
+  QDate release_date;
+  if (ui.release_status_released_radio->isChecked()) {
+    release_date = ui.release_date_field->date();
+  }
+  QDate old_release_date = model.get_release_date();
+  if (release_date == old_release_date) {
+    return;
+  }
+
+  try_command(new SetReleaseDateCommand(*this, release_date));
+}
+
+/**
+ * @brief Updates the website field.
+ */
+void QuestPropertiesEditor::update_website_field() {
+
+  ui.website_field->setText(model.get_website());
+}
+
+/**
+ * @brief Slot called when the user changes the website.
+ */
+void QuestPropertiesEditor::change_website_requested() {
+
+  QString website = ui.website_field->text();
+  QString old_website = model.get_website();
+  if (website == old_website) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetWebsiteCommand(*this, website));
 }
 
 /**

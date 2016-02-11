@@ -43,16 +43,24 @@ private slots:
 
   void update_write_dir_field();
   void change_write_dir_requested();
-
   void update_title_field();
   void change_title_requested();
-
+  void update_short_description_field();
+  void change_short_description_requested();
+  void update_long_description_field();
+  void change_long_description_requested();
+  void update_author_field();
+  void change_author_requested();
+  void update_quest_version_field();
+  void change_quest_version_requested();
+  void update_release_date_field();
+  void change_release_date_requested();
+  void update_website_field();
+  void change_website_requested();
   void update_normal_size_field();
   void change_normal_size_requested();
-
   void update_min_size_field();
   void change_min_size_requested();
-
   void update_max_size_field();
   void change_max_size_requested();
 

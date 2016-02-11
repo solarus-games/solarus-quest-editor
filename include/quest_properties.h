@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_QUEST_PROPERTIES_H
 
 #include <solarus/QuestProperties.h>
+#include <QDate>
 #include <QObject>
 
 namespace SolarusEditor {
@@ -47,6 +48,14 @@ public:
   void set_short_description(const QString& short_description);
   QString get_long_description() const;
   void set_long_description(const QString& long_description);
+  QString get_author() const;
+  void set_author(const QString& author);
+  QString get_quest_version() const;
+  void set_quest_version(const QString& quest_version);
+  QDate get_release_date() const;
+  void set_release_date(const QDate& release_date);
+  QString get_website() const;
+  void set_website(const QString& website);
   QSize get_normal_quest_size() const;
   void set_normal_quest_size(const QSize& size);
   QSize get_min_quest_size() const;
@@ -58,6 +67,12 @@ signals:
 
   void write_dir_changed(const QString& write_dir);
   void title_changed(const QString& title);
+  void short_description_changed(const QString& short_description);
+  void long_description_changed(const QString& long_description);
+  void author_changed(const QString& author);
+  void quest_version_changed(const QString& quest_version);
+  void release_date_changed(const QDate& release_date);
+  void website_changed(const QString& website);
   void normal_size_changed(const QSize& size);
   void min_size_changed(const QSize& size);
   void max_size_changed(const QSize& size);

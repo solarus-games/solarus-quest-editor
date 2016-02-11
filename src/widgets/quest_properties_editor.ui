@@ -6,13 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
-    <height>1100</height>
+    <width>952</width>
+    <height>1154</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <widget class="QScrollArea" name="scroll_area">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -21,8 +33,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>580</width>
-        <height>1064</height>
+        <width>934</width>
+        <height>1136</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -40,12 +52,21 @@
        </property>
        <item>
         <widget class="QGroupBox" name="quest_info_group_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Quest information</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
            <layout class="QFormLayout" name="formLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::ExpandingFieldsGrow</enum>
+            </property>
             <property name="verticalSpacing">
              <number>24</number>
             </property>
@@ -170,20 +191,6 @@ Must identify your quest to avoid confusion with other quests.</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <layout class="QVBoxLayout" name="long_description_layout">
-              <item>
-               <widget class="QPlainTextEdit" name="long_description_field"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_12">
-                <property name="text">
-                 <string>A more detailed description of your quest.</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
             <item row="5" column="0">
              <widget class="QLabel" name="author_label">
               <property name="font">
@@ -270,7 +277,17 @@ Must identify your quest to avoid confusion with other quests.</string>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="release_date_field"/>
+                 <widget class="QDateEdit" name="release_date_field">
+                  <property name="minimumSize">
+                   <size>
+                    <width>130</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_4">
@@ -323,6 +340,33 @@ Must identify your quest to avoid confusion with other quests.</string>
               </item>
              </layout>
             </item>
+            <item row="4" column="1">
+             <layout class="QVBoxLayout" name="long_description_layout">
+              <item>
+               <widget class="SolarusEditor::PlainTextEdit" name="long_description_field">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>100</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_12">
+                <property name="text">
+                 <string>A more detailed description of your quest.</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
            </layout>
           </item>
          </layout>
@@ -330,12 +374,21 @@ Must identify your quest to avoid confusion with other quests.</string>
        </item>
        <item>
         <widget class="QGroupBox" name="quest_size_group_box">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Quest size</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <layout class="QFormLayout" name="quest_info_form">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="normal_size_label">
               <property name="font">
@@ -603,12 +656,32 @@ This will be the visible space of the current map.</string>
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SolarusEditor::PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header>widgets/plain_text_edit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

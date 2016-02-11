@@ -100,7 +100,7 @@ QString QuestProperties::get_solarus_version_without_patch() const {
  */
 QString QuestProperties::get_write_dir() const {
 
-  return properties.get_quest_write_dir().c_str();
+  return QString::fromStdString(properties.get_quest_write_dir());
 }
 
 /**
@@ -124,7 +124,7 @@ void QuestProperties::set_write_dir(const QString& write_dir) {
  */
 QString QuestProperties::get_title() const {
 
-  return properties.get_title().c_str();
+  return QString::fromStdString(properties.get_title());
 }
 
 /**
@@ -140,6 +140,155 @@ void QuestProperties::set_title(const QString& title) {
 
   properties.set_title(title.toStdString());
   emit title_changed(title);
+}
+
+/**
+ * @brief Returns the one-line description of the quest.
+ * @return The one-line description.
+ */
+QString QuestProperties::get_short_description() const {
+
+  return QString::fromStdString(properties.get_short_description());
+}
+
+/**
+ * @brief Changes the one-line description of the quest.
+ * @param short_description The one-line description.
+ */
+void QuestProperties::set_short_description(const QString& short_description) {
+
+  QString old_short_description = get_short_description();
+  if (short_description == old_short_description) {
+    return;
+  }
+
+  properties.set_short_description(short_description.toStdString());
+  emit short_description_changed(short_description);
+}
+
+/**
+ * @brief Returns the one-line description of the quest.
+ * @return The one-line description.
+ */
+QString QuestProperties::get_long_description() const {
+
+  return QString::fromStdString(properties.get_long_description());
+}
+
+/**
+ * @brief Changes the one-line description of the quest.
+ * @param long_description The one-line description.
+ */
+void QuestProperties::set_long_description(const QString& long_description) {
+
+  QString old_long_description = get_long_description();
+  if (long_description == old_long_description) {
+    return;
+  }
+
+  properties.set_long_description(long_description.toStdString());
+  emit long_description_changed(long_description);
+}
+
+/**
+ * @brief Returns the author of the quest.
+ * @return The author.
+ */
+QString QuestProperties::get_author() const {
+
+  return QString::fromStdString(properties.get_author());
+}
+
+/**
+ * @brief Changes the author of the quest.
+ * @param author The author.
+ */
+void QuestProperties::set_author(const QString& author) {
+
+  QString old_author = get_author();
+  if (author == old_author) {
+    return;
+  }
+
+  properties.set_author(author.toStdString());
+  emit author_changed(author);
+}
+
+/**
+ * @brief Returns the version of the quest.
+ * @return The version.
+ */
+QString QuestProperties::get_quest_version() const {
+
+  return QString::fromStdString(properties.get_quest_version());
+}
+
+/**
+ * @brief Changes the version of the quest.
+ * @param quest_version The version.
+ */
+void QuestProperties::set_quest_version(const QString& quest_version) {
+
+  QString old_quest_version = get_quest_version();
+  if (quest_version == old_quest_version) {
+    return;
+  }
+
+  properties.set_quest_version(quest_version.toStdString());
+  emit quest_version_changed(quest_version);
+}
+
+/**
+ * @brief Returns the website of the quest.
+ * @return The website.
+ */
+QString QuestProperties::get_website() const {
+
+  return QString::fromStdString(properties.get_website());
+}
+
+/**
+ * @brief Changes the website of the quest.
+ * @param website The website.
+ */
+void QuestProperties::set_website(const QString& website) {
+
+  QString old_website = get_website();
+  if (website == old_website) {
+    return;
+  }
+
+  properties.set_website(website.toStdString());
+  emit website_changed(website);
+}
+
+/**
+ * @brief Returns the quest release date.
+ * @return The release date or an invalid date.
+ */
+QDate QuestProperties::get_release_date() const {
+
+  QString date_string = QString::fromStdString(properties.get_release_date());
+  return QDate::fromString(date_string, "yyyyMMdd");
+}
+
+/**
+ * @brief Changes the quest release date.
+ * @param release_date The release date or an invalid date.
+ */
+void QuestProperties::set_release_date(const QDate& release_date) {
+
+  QDate old_release_date = get_release_date();
+  if (release_date == old_release_date) {
+    return;
+  }
+
+  QString date_string;
+  if (release_date.isValid()) {
+    date_string = release_date.toString("yyyyMMdd");
+  }
+  properties.set_release_date(date_string.toStdString());
+  emit release_date_changed(release_date);
 }
 
 /**
