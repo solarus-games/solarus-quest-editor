@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>ChangeDialogIdDialog</name>
+    <name>SolarusEditor::ChangeDialogIdDialog</name>
     <message>
         <location filename="../src/gui/change_dialog_id_dialog.ui" line="14"/>
         <source>Change dialog id</source>
@@ -41,7 +41,7 @@
     </message>
 </context>
 <context>
-    <name>ChangePatternIdDialog</name>
+    <name>SolarusEditor::ChangePatternIdDialog</name>
     <message>
         <location filename="../src/gui/change_pattern_id_dialog.ui" line="24"/>
         <source>New pattern id:</source>
@@ -64,7 +64,7 @@
     </message>
 </context>
 <context>
-    <name>ChangeSourceImageDialog</name>
+    <name>SolarusEditor::ChangeSourceImageDialog</name>
     <message>
         <location filename="../src/gui/change_source_image_dialog.ui" line="14"/>
         <source>Change source image</source>
@@ -87,7 +87,7 @@
     </message>
 </context>
 <context>
-    <name>ChangeStringKeyDialog</name>
+    <name>SolarusEditor::ChangeStringKeyDialog</name>
     <message>
         <location filename="../src/gui/change_string_key_dialog.ui" line="14"/>
         <source>Change string key</source>
@@ -126,7 +126,7 @@
     </message>
 </context>
 <context>
-    <name>ColorPicker</name>
+    <name>SolarusEditor::ColorPicker</name>
     <message>
         <location filename="../src/gui/color_picker.cpp" line="75"/>
         <source>Select color</source>
@@ -134,7 +134,7 @@
     </message>
 </context>
 <context>
-    <name>Console</name>
+    <name>SolarusGui::Console</name>
     <message>
         <location filename="../src/gui/console.ui" line="45"/>
         <source>Run Lua code to the quest</source>
@@ -142,7 +142,7 @@
     </message>
 </context>
 <context>
-    <name>DialogPropertiesTable</name>
+    <name>SolarusEditor::DialogPropertiesTable</name>
     <message>
         <location filename="../src/gui/dialog_properties_table.cpp" line="33"/>
         <source>New property...</source>
@@ -170,7 +170,7 @@
     </message>
 </context>
 <context>
-    <name>DialogsEditor</name>
+    <name>SolarusEditor::DialogsEditor</name>
     <message>
         <location filename="../src/gui/dialogs_editor.ui" line="14"/>
         <source>Dialogss editor</source>
@@ -422,7 +422,7 @@
     </message>
 </context>
 <context>
-    <name>DialogsModel</name>
+    <name>SolarusEditor::DialogsModel</name>
     <message>
         <location filename="../src/dialogs_model.cpp" line="44"/>
         <location filename="../src/dialogs_model.cpp" line="870"/>
@@ -456,7 +456,7 @@
     </message>
 </context>
 <context>
-    <name>DialogsTreeView</name>
+    <name>SolarusEditor::DialogsTreeView</name>
     <message>
         <location filename="../src/gui/dialogs_tree_view.cpp" line="35"/>
         <source>New dialog...</source>
@@ -484,7 +484,7 @@
     </message>
 </context>
 <context>
-    <name>DocWidget</name>
+    <name>SolarusEditor::DocWidget</name>
     <message>
         <source>MainWindow</source>
         <translation type="vanished">MainWindow</translation>
@@ -495,7 +495,7 @@
     </message>
 </context>
 <context>
-    <name>EditEntityDialog</name>
+    <name>SolarusEditor::EditEntityDialog</name>
     <message>
         <location filename="../src/gui/edit_entity_dialog.ui" line="20"/>
         <source>Edit an entity</source>
@@ -1030,7 +1030,7 @@
     </message>
 </context>
 <context>
-    <name>Editor</name>
+    <name>SolarusEditor::Editor</name>
     <message>
         <location filename="../src/gui/editor.cpp" line="162"/>
         <source>File &apos;%1&apos; has been modified. Save changes?</source>
@@ -1043,7 +1043,7 @@
     </message>
 </context>
 <context>
-    <name>ExternalScriptDialog</name>
+    <name>SolarusEditor::ExternalScriptDialog</name>
     <message>
         <location filename="../src/gui/external_script_dialog.ui" line="14"/>
         <source>Running script</source>
@@ -1087,7 +1087,7 @@
     </message>
 </context>
 <context>
-    <name>FindTextDialog</name>
+    <name>SolarusEditor::FindTextDialog</name>
     <message>
         <location filename="../src/gui/find_text_dialog.ui" line="14"/>
         <source>Find text</source>
@@ -1101,7 +1101,7 @@
     </message>
 </context>
 <context>
-    <name>GetAnimationNameDialog</name>
+    <name>SolarusEditor::GetAnimationNameDialog</name>
     <message>
         <location filename="../src/gui/get_animation_name_dialog.cpp" line="32"/>
         <source>New animation</source>
@@ -1129,7 +1129,7 @@
     </message>
 </context>
 <context>
-    <name>MainWindow</name>
+    <name>SolarusEditor::MainWindow</name>
     <message>
         <location filename="../src/gui/main_window.ui" line="14"/>
         <source>Solarus Quest Editor</source>
@@ -1562,7 +1562,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>MapEditor</name>
+    <name>SolarusEditor::MapEditor</name>
     <message>
         <location filename="../src/gui/map_editor.ui" line="14"/>
         <source>Map editor</source>
@@ -1959,7 +1959,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>MapModel</name>
+    <name>SolarusEditor::MapModel</name>
     <message>
         <location filename="../src/map_model.cpp" line="48"/>
         <source>Cannot open map data file &apos;%1&apos;</source>
@@ -2101,7 +2101,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>MapScene</name>
+    <name>SolarusEditor::MapScene</name>
     <message>
         <source>This entity is not on the map</source>
         <translation type="vanished">Cette entité n&apos;est pas sur la map</translation>
@@ -2128,7 +2128,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>MapView</name>
+    <name>SolarusEditor::MapView</name>
     <message>
         <location filename="../src/gui/map_view.cpp" line="478"/>
         <source>Edit</source>
@@ -2270,7 +2270,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>NewResourceElementDialog</name>
+    <name>SolarusEditor::NewResourceElementDialog</name>
     <message>
         <location filename="../src/gui/new_resource_element_dialog.ui" line="14"/>
         <source>Create resource</source>
@@ -2388,7 +2388,7 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
-    <name>NewStringDialog</name>
+    <name>SolarusEditor::NewStringDialog</name>
     <message>
         <location filename="../src/gui/new_string_dialog.ui" line="14"/>
         <source>New string</source>
@@ -2860,7 +2860,7 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
 </context>
 <context>
-    <name>Quest</name>
+    <name>SolarusEditor::Quest</name>
     <message>
         <location filename="../src/quest.cpp" line="263"/>
         <source>Unknown resource type</source>
@@ -2967,7 +2967,7 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
 </context>
 <context>
-    <name>QuestFilesModel</name>
+    <name>SolarusEditor::QuestFilesModel</name>
     <message>
         <location filename="../src/quest_files_model.cpp" line="335"/>
         <source>Resource</source>
@@ -3010,7 +3010,7 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
 </context>
 <context>
-    <name>QuestProperties</name>
+    <name>SolarusEditor::QuestProperties</name>
     <message>
         <location filename="../src/quest_properties.cpp" line="45"/>
         <source>Cannot open file &apos;%1&apos;</source>
@@ -3028,7 +3028,7 @@ Veuillez mettre à jour vos fichiers de données vers Solarus %2.</translation>
     </message>
 </context>
 <context>
-    <name>QuestPropertiesEditor</name>
+    <name>SolarusEditor::QuestPropertiesEditor</name>
     <message>
         <location filename="../src/gui/quest_properties_editor.ui" line="41"/>
         <source>Solarus version</source>
@@ -3180,7 +3180,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>QuestResources</name>
+    <name>SolarusEditor::QuestResources</name>
     <message>
         <location filename="../src/quest_resources.cpp" line="33"/>
         <source>Map</source>
@@ -3415,7 +3415,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>QuestRunner</name>
+    <name>SolarusGui::QuestRunner</name>
     <message>
         <location filename="../src/quest_runner.cpp" line="147"/>
         <source>Failed to run quest</source>
@@ -3428,7 +3428,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>QuestTreeView</name>
+    <name>SolarusEditor::QuestTreeView</name>
     <message>
         <location filename="../src/gui/quest_tree_view.cpp" line="270"/>
         <source>New folder...</source>
@@ -3569,7 +3569,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SettingsDialog</name>
+    <name>SolarusEditor::SettingsDialog</name>
     <message>
         <source>Settings</source>
         <translation type="vanished">Paramètres</translation>
@@ -3791,7 +3791,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpriteEditor</name>
+    <name>SolarusEditor::SpriteEditor</name>
     <message>
         <location filename="../src/gui/sprite_editor.ui" line="14"/>
         <source>Sprite editor</source>
@@ -4109,7 +4109,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpriteModel</name>
+    <name>SolarusEditor::SpriteModel</name>
     <message>
         <location filename="../src/sprite_model.cpp" line="49"/>
         <source>Cannot open sprite &apos;%1&apos;</source>
@@ -4188,7 +4188,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpritePreviewer</name>
+    <name>SolarusEditor::SpritePreviewer</name>
     <message>
         <location filename="../src/gui/sprite_previewer.ui" line="34"/>
         <source>Show origin</source>
@@ -4262,7 +4262,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpriteScene</name>
+    <name>SolarusEditor::SpriteScene</name>
     <message>
         <location filename="../src/gui/sprite_scene.cpp" line="198"/>
         <source>Missing source image &apos;%1&apos;</source>
@@ -4275,7 +4275,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpriteTreeView</name>
+    <name>SolarusEditor::SpriteTreeView</name>
     <message>
         <location filename="../src/gui/sprite_tree_view.cpp" line="36"/>
         <source>Create animation</source>
@@ -4308,7 +4308,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>SpriteView</name>
+    <name>SolarusEditor::SpriteView</name>
     <message>
         <location filename="../src/gui/sprite_view.cpp" line="46"/>
         <source>Delete...</source>
@@ -4343,7 +4343,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>StringsEditor</name>
+    <name>SolarusEditor::StringsEditor</name>
     <message>
         <location filename="../src/gui/strings_editor.ui" line="14"/>
         <source>Strings editor</source>
@@ -4486,7 +4486,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>StringsModel</name>
+    <name>SolarusEditor::StringsModel</name>
     <message>
         <location filename="../src/strings_model.cpp" line="43"/>
         <location filename="../src/strings_model.cpp" line="784"/>
@@ -4544,7 +4544,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>StringsTreeView</name>
+    <name>SolarusEditor::StringsTreeView</name>
     <message>
         <location filename="../src/gui/strings_tree_view.cpp" line="35"/>
         <source>New string...</source>
@@ -4572,7 +4572,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TextEditor</name>
+    <name>SolarusEditor::TextEditor</name>
     <message>
         <location filename="../src/gui/text_editor.cpp" line="56"/>
         <source>F4</source>
@@ -4590,7 +4590,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TextEditorWidget</name>
+    <name>SolarusEditor::TextEditorWidget</name>
     <message>
         <location filename="../src/gui/text_editor_widget.cpp" line="347"/>
         <source>Cut</source>
@@ -4613,7 +4613,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TilePatternsListView</name>
+    <name>SolarusEditor::TilePatternsListView</name>
     <message>
         <location filename="../src/gui/tile_patterns_list_view.cpp" line="37"/>
         <source>Delete...</source>
@@ -4631,7 +4631,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TilesetEditor</name>
+    <name>SolarusEditor::TilesetEditor</name>
     <message>
         <location filename="../src/gui/tileset_editor.ui" line="14"/>
         <source>Tileset editor</source>
@@ -4827,7 +4827,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TilesetModel</name>
+    <name>SolarusEditor::TilesetModel</name>
     <message>
         <location filename="../src/tileset_model.cpp" line="47"/>
         <source>Cannot open tileset data file &apos;%1&apos;</source>
@@ -4865,7 +4865,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TilesetScene</name>
+    <name>SolarusEditor::TilesetScene</name>
     <message>
         <location filename="../src/gui/tileset_scene.cpp" line="159"/>
         <source>Missing tileset image &apos;%1&apos;</source>
@@ -4878,7 +4878,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
 </context>
 <context>
-    <name>TilesetView</name>
+    <name>SolarusEditor::TilesetView</name>
     <message>
         <location filename="../src/gui/tileset_view.cpp" line="55"/>
         <source>Change id...</source>
