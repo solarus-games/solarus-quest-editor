@@ -222,7 +222,7 @@ class SetReleaseDateCommand : public QuestPropertiesEditorCommand {
 public:
   SetReleaseDateCommand(QuestPropertiesEditor& editor, const QDate& release_date) :
     QuestPropertiesEditorCommand(
-      editor, QuestPropertiesEditor::tr("Change release_date")),
+      editor, QuestPropertiesEditor::tr("Change release date")),
     release_date_before(get_model().get_release_date()),
     release_date_after(release_date) {
   }
