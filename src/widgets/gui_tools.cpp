@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/gui_tools.h"
+#include <solarus/gui/gui_tools.h>
 #include <QMessageBox>
 #include <QPainter>
 
@@ -28,11 +29,7 @@ namespace GuiTools {
  */
 void information_dialog(const QString& message) {
 
-  QMessageBox messageBox;
-  messageBox.setIcon(QMessageBox::Information);
-  messageBox.setText(message);
-  messageBox.setWindowTitle(QMessageBox::tr("Information"));
-  messageBox.exec();
+  SolarusGui::GuiTools::information_dialog(message);
 }
 
 /**
@@ -41,11 +38,7 @@ void information_dialog(const QString& message) {
  */
 void warning_dialog(const QString& message) {
 
-  QMessageBox messageBox;
-  messageBox.setIcon(QMessageBox::Warning);
-  messageBox.setText(message);
-  messageBox.setWindowTitle(QMessageBox::tr("Warning"));
-  messageBox.exec();
+  SolarusGui::GuiTools::warning_dialog(message);
 }
 
 /**
@@ -54,11 +47,7 @@ void warning_dialog(const QString& message) {
  */
 void error_dialog(const QString& message) {
 
-  QMessageBox messageBox;
-  messageBox.setIcon(QMessageBox::Critical);
-  messageBox.setText(message);
-  messageBox.setWindowTitle(QMessageBox::tr("Error"));
-  messageBox.exec();
+  SolarusGui::GuiTools::error_dialog(message);
 }
 
 /**
