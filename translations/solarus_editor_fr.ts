@@ -3137,7 +3137,8 @@ Permet d&apos;identifier votre quête pour éviter toute confusion avec d&apos;a
         <location filename="../src/widgets/quest_properties_editor.ui" line="472"/>
         <source>Size of the logical game area (before any scaling).
 This will be the visible space of the current map.</source>
-        <translation>Taille de l&apos;espace logique de jeu (avant tout agrandissement).\nDéfinit l&apos;espace visible de la map actuelle.</translation>
+        <translation type="unfinished">Taille de l&apos;espace logique de jeu (avant tout agrandissement).
+Définit l&apos;espace visible de la map actuelle.</translation>
     </message>
     <message>
         <source>Window title</source>
