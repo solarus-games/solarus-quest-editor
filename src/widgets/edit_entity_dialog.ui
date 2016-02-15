@@ -747,7 +747,11 @@
       </widget>
      </item>
      <item row="23" column="1">
-      <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::StartingLocationMode&gt;" name="starting_location_mode_field"/>
+      <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::StartingLocationMode&gt;" name="starting_location_mode_field">
+       <property name="toolTip">
+        <string>Only possible if the destination has a name</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
