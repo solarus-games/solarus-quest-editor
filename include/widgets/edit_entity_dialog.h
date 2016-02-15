@@ -89,6 +89,8 @@ private:
   void apply_sound();
   void initialize_sprite();
   void apply_sprite();
+  void initialize_starting_location_mode();
+  void apply_starting_location_mode();
   void initialize_subtype();
   void apply_subtype();
   void initialize_transition();

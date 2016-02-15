@@ -179,6 +179,7 @@ set(solarus_quest_editor_SOURCES
   include/resize_mode.h
   include/size.h
   include/sprite_model.h
+  include/starting_location_mode_traits.h
   include/strings_model.h
   include/tileset_model.h
   include/transition_traits.h
@@ -204,7 +205,8 @@ set(solarus_quest_editor_SOURCES
   src/entities/shop_treasure.cpp
   src/entities/stairs.cpp
   src/entities/stream.cpp
-  src/entities/switch.cpp  src/entities/teletransporter.cpp
+  src/entities/switch.cpp
+  src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
   src/widgets/change_pattern_id_dialog.cpp
@@ -278,6 +280,7 @@ set(solarus_quest_editor_SOURCES
   src/rectangle.cpp
   src/size.cpp
   src/sprite_model.cpp
+  src/starting_location_mode_traits.cpp
   src/strings_model.cpp
   src/tileset_model.cpp
   src/transition_traits.cpp

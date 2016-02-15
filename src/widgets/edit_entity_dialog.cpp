@@ -39,6 +39,7 @@ const QString opening_condition_consumed_field_name = "opening_condition_consume
 const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
+const QString starting_location_mode_field_name = "starting_location_mode";
 const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
 const QString treasure_variant_field_name = "treasure_variant";
@@ -223,6 +224,7 @@ void EditEntityDialog::initialize() {
   initialize_size();
   initialize_sound();
   initialize_sprite();
+  initialize_starting_location_mode();
   initialize_subtype();
   initialize_transition();
   initialize_treasure();
@@ -259,6 +261,7 @@ void EditEntityDialog::apply() {
   apply_size();
   apply_sound();
   apply_sprite();
+  apply_starting_location_mode();
   apply_subtype();
   apply_transition();
   apply_treasure();
@@ -1295,6 +1298,33 @@ void EditEntityDialog::apply_sprite() {
   if (entity_after->has_field(sprite_field_name)) {
     entity_after->set_field(sprite_field_name, ui.sprite_checkbox->isChecked() ?
                               ui.sprite_field->get_selected_id() : "");
+  }
+}
+
+/**
+ * @brief Initializes the starting location mode field.
+ */
+void EditEntityDialog::initialize_starting_location_mode() {
+
+  if (!entity_before.has_field(starting_location_mode_field_name)) {
+    remove_field(ui.starting_location_mode_label, ui.starting_location_mode_field);
+    return;
+  }
+
+  QString starting_location_mode_name = entity_before.get_field(starting_location_mode_field_name).toString();
+  ui.starting_location_mode_field->set_selected_value(StartingLocationModeTraits::get_by_lua_name(starting_location_mode_name));
+}
+
+/**
+ * @brief Updates the entity from the starting location mode field.
+ */
+void EditEntityDialog::apply_starting_location_mode() {
+
+  if (entity_after->has_field(starting_location_mode_field_name)) {
+    entity_after->set_field(
+          starting_location_mode_field_name,
+          StartingLocationModeTraits::get_lua_name(ui.starting_location_mode_field->get_selected_value())
+    );
   }
 }
 

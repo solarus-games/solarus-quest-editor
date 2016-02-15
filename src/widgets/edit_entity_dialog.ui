@@ -739,6 +739,16 @@
        </layout>
       </widget>
      </item>
+     <item row="23" column="0">
+      <widget class="QLabel" name="starting_location_mode_label">
+       <property name="text">
+        <string>Update starting location</string>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="1">
+      <widget class="SolarusEditor::EnumSelector&lt;SolarusEditor::StartingLocationMode&gt;" name="starting_location_mode_field"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -782,6 +792,11 @@
    <class>SolarusEditor::EnumSelector&lt;SolarusEditor::Ground&gt;</class>
    <extends>QComboBox</extends>
    <header>ground_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SolarusEditor::EnumSelector&lt;SolarusEditor::StartingLocationMode&gt;</class>
+   <extends>QComboBox</extends>
+   <header>starting_location_mode_traits.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
