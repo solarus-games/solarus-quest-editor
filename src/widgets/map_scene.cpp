@@ -534,6 +534,8 @@ EntityIndexes MapScene::get_selected_entities() {
 void MapScene::set_selected_entities(const EntityIndexes& indexes) {
 
   clearSelection();
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
   for (const EntityIndex& index : indexes) {
     EntityItem* item = get_entity_item(index);
     Q_ASSERT(item != nullptr);
@@ -542,6 +544,9 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
     }
     item->setSelected(true);
   }
+  blockSignals(was_blocked);
+
+  emit selectionChanged();
 }
 
 /**

@@ -28,6 +28,7 @@ Bug fixes
 
 * Fix wrong hero movements sometimes when playing from the editor (#138).
 * Fix tabs not closed when opening another quest (#44).
+* Map editor: fix performance regression when pasting a lot of entities (#141).
 * Map editor: fix entities still shown when put on a hidden layer.
 * Map editor: fix precision when starting selection above existing entities.
 * Map editor: stop adding tiles when unselecting them from the tileset view.
