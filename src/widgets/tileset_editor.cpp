@@ -420,10 +420,11 @@ public:
 
   virtual void redo() override {
 
+    QList<int> indexes;
     for (const Pattern& pattern : patterns) {
-      int index = get_model().id_to_index(pattern.id);
-      get_model().delete_pattern(index);
+      indexes << get_model().id_to_index(pattern.id);
     }
+    get_model().delete_patterns(indexes);
   }
 
 private:

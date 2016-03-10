@@ -316,10 +316,11 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
  * The selection is cleared before the operations and restored after,
  * updated with the new indexes.
  *
+ * If you have multiple patterns to delete, call delete_patterns()
+ * for better performance.
+ *
  * @param index Index of the pattern to delete.
  * @throws EditorException in case of error.
- *
- * TODO make a function to delete several patterns at once.
  */
 void TilesetModel::delete_pattern(int index) {
 
@@ -364,6 +365,63 @@ void TilesetModel::delete_pattern(int index) {
     }
 
     int new_index = id_to_index(selected_pattern_id);
+    add_to_selected(new_index);
+  }
+}
+
+/**
+ * @brief Deletes some tile patterns.
+ *
+ * The index of multiple patterns in the pattern list may change, since
+ * patterns are sorted alphabetically.
+ * For each pattern, emits rowsAboutToBeRemoved(), removes the pattern,
+ * emits rowsRemoved() as required by QAbstractItemModel,
+ * and then, emits pattern_deleted().
+ *
+ * Except for the deleted patterns, the existing selection is preserved,
+ * though the index of many patterns can change.
+ * The selection is cleared before the operations and restored after,
+ * updated with the new indexes.
+ *
+ * @param indexes Indexes of the patterns to delete.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::delete_patterns(const QList<int>& indexes) {
+
+  QStringList ids_to_delete;
+  for (int index : indexes) {
+    QString pattern_id = index_to_id(index);
+    if (pattern_id.isEmpty()) {
+        throw EditorException(tr("Invalid tile pattern index: %1").arg(index));
+    }
+    ids_to_delete << index_to_id(index);
+  }
+
+  // Save and clear the selection during the whole operation.
+  QModelIndexList old_selected_indexes = selection_model.selection().indexes();
+  QStringList old_selection_ids;
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+    old_selection_ids << index_to_id(old_selected_index.row());
+  }
+  clear_selection();
+
+  // Delete patterns.
+  for (const QString id : ids_to_delete) {
+    int index = id_to_index(id);
+    if (index == -1) {
+      throw EditorException(tr("No such tile pattern: %1").arg(id));
+    }
+    delete_pattern(index);
+  }
+
+  // Restore the selection.
+  for (QString selected_pattern_id : old_selection_ids) {
+
+    int new_index = id_to_index(selected_pattern_id);
+    if (new_index == -1) {
+      // This one was just deleted.
+      continue;
+    }
     add_to_selected(new_index);
   }
 }

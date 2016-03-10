@@ -72,6 +72,7 @@ public:
   QString index_to_id(int index) const;
   int create_pattern(const QString& pattern_id, const QRect& frame);
   void delete_pattern(int index);
+  void delete_patterns(const QList<int>& indexes);
   int set_pattern_id(int index, const QString& new_id);
   static bool is_valid_pattern_id(const QString& pattern_id);
 
