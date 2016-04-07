@@ -1313,12 +1313,6 @@ void EditEntityDialog::initialize_starting_location_mode() {
 
   QString starting_location_mode_name = entity_before.get_field(starting_location_mode_field_name).toString();
   ui.starting_location_mode_field->set_selected_value(StartingLocationModeTraits::get_by_lua_name(starting_location_mode_name));
-
-  // Disable the starting location mode if the destination has no name.
-  connect(ui.name_field, &QLineEdit::textChanged, [=] () {
-    ui.starting_location_mode_field->setEnabled(!ui.name_field->text().isEmpty());
-  });
-  ui.starting_location_mode_field->setEnabled(!ui.name_field->text().isEmpty());
 }
 
 /**
