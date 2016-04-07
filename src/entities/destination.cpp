@@ -48,4 +48,17 @@ Destination::Destination(MapModel& map, const EntityIndex& index) :
   set_draw_image_info(info);
 }
 
+/**
+ * @copydoc EntityModel::set_initial_values
+ */
+void Destination::set_initial_values() {
+
+  EntityModel::set_initial_values();
+
+  // Set a default name to avoid surprises with destinations that save
+  // the starting location.
+  // (Its uniqueness will be ensured later by appending a suffix.)
+  set_name("destination");
+}
+
 }
