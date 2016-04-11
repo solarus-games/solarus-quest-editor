@@ -58,8 +58,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_no_audio()));
   connect(ui.video_acceleration_field, SIGNAL(toggled(bool)),
           this, SLOT(change_video_acceleration()));
-  connect(ui.win_console_field, SIGNAL(toggled(bool)),
-          this, SLOT(change_win_console()));
   connect(ui.quest_size_check_box, SIGNAL(toggled(bool)),
           this, SLOT(change_quest_size()));
   connect(ui.quest_size_field, SIGNAL(value_changed(int,int)),
@@ -173,7 +171,6 @@ void SettingsDialog::update() {
   update_save_files();
   update_no_audio();
   update_video_acceleration();
-  update_win_console();
   update_quest_size();
 
   // Text editor.
@@ -350,24 +347,6 @@ void SettingsDialog::change_video_acceleration() {
 
   edited_settings[EditorSettings::video_acceleration] =
     ui.video_acceleration_field->isChecked();
-  update_buttons();
-}
-
-/**
- * @brief Updates the win console field.
- */
-void SettingsDialog::update_win_console() {
-
-  ui.win_console_field->setChecked(
-    settings.get_value_bool(EditorSettings::win_console));
-}
-
-/**
- * @brief Slot called when the user changes the win console.
- */
-void SettingsDialog::change_win_console() {
-
-  edited_settings[EditorSettings::win_console] = ui.win_console_field->isChecked();
   update_buttons();
 }
 

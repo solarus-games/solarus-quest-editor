@@ -30,7 +30,6 @@ const QString EditorSettings::restore_last_files = "restore_last_files";
 const QString EditorSettings::save_files_before_running = "save_files_before_running";
 const QString EditorSettings::no_audio = "no_audio";
 const QString EditorSettings::video_acceleration = "video_acceleration";
-const QString EditorSettings::win_console = "win_console";
 const QString EditorSettings::quest_size = "quest_size";
 
 // Console keys.
@@ -78,7 +77,6 @@ QMap<QString, QVariant> EditorSettings::default_values = {
   { EditorSettings::save_files_before_running, "ask" },
   { EditorSettings::no_audio, false },
   { EditorSettings::video_acceleration, true },
-  { EditorSettings::win_console, false },
   { EditorSettings::quest_size, QSize() },
 
   // Console.
@@ -113,7 +111,7 @@ QMap<QString, QVariant> EditorSettings::default_values = {
  * @brief Creates settings.
  */
 EditorSettings::EditorSettings() :
-  settings("solarus", "solarus-quest-editor") {
+  settings() {
 }
 
 /**

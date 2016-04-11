@@ -125,13 +125,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="win_console_field">
-            <property name="text">
-             <string>Show console (only needed on Windows)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="quest_size_layout">
             <item>
              <widget class="QCheckBox" name="quest_size_check_box">
