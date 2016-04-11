@@ -57,8 +57,6 @@ public slots:
   void change_no_audio();
   void update_video_acceleration();
   void change_video_acceleration();
-  void update_win_console();
-  void change_win_console();
   void update_quest_size();
   void change_quest_size();
 

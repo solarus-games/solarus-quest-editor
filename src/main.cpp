@@ -49,8 +49,6 @@ int run_editor_gui(int argc, char* argv[]) {
     }
   }
 
-  QApplication application(argc, argv);
-
   // Set up the application.
   QApplication application(argc, argv);
   application.setApplicationName("Solarus Quest Editor");
