@@ -390,7 +390,7 @@ void EditEntityDialog::initialize_simple_booleans() {
  */
 void EditEntityDialog::apply_simple_booleans() {
 
-  for (const SimpleBooleanField& field : simple_boolean_fields) {
+  Q_FOREACH (const SimpleBooleanField& field, simple_boolean_fields) {
     if (entity_before.has_field(field.field_name) && field.checkbox != nullptr) {
       entity_after->set_field(field.field_name, field.checkbox->isChecked());
     }

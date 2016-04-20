@@ -146,7 +146,7 @@ void EntitySelector::build() {
     MapModel map(*quest, map_id);
 
     // Add special value items first.
-    for (const SpecialValue& special_value : special_values) {
+    Q_FOREACH (const SpecialValue& special_value, special_values) {
       addItem(special_value.second, special_value.first);
     }
 

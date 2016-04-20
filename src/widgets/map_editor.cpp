@@ -334,7 +334,7 @@ public:
     allow_merge_to_previous(allow_merge_to_previous) { }
 
   void undo() override {
-    for (const EntityIndex& index : indexes) {
+    Q_FOREACH (const EntityIndex& index, indexes) {
       get_map().add_entity_xy(index, -translation);
     }
     // Select impacted entities.
@@ -342,7 +342,7 @@ public:
   }
 
   void redo() override {
-    for (const EntityIndex& index : indexes) {
+    Q_FOREACH (const EntityIndex& index, indexes) {
       get_map().add_entity_xy(index, translation);
     }
     // Select impacted entities.
@@ -479,7 +479,7 @@ public:
     AddableEntities dynamic_tiles;
 
     // Create the dynamic tiles.
-    for (const EntityIndex& index_before : indexes_before) {
+    Q_FOREACH (const EntityIndex& index_before, indexes_before) {
       EntityModelPtr dynamic_tile = DynamicTile::create_from_normal_tile(map, index_before);
       int layer = index_before.layer;
       EntityIndex index_after = { layer, -1 };
@@ -1731,7 +1731,7 @@ void MapEditor::map_selection_changed() {
     const EntityIndexes& entity_indexes = ui.map_view->get_selected_entities();
     MapModel& map = get_map();
     QList<int> pattern_indexes;
-    for (const EntityIndex& entity_index : entity_indexes) {
+    Q_FOREACH (const EntityIndex& entity_index, entity_indexes) {
       QString pattern_id = map.get_entity_field(entity_index, "pattern").toString();
       if (!pattern_id.isEmpty()) {
         pattern_indexes << tileset->id_to_index(pattern_id);
@@ -1838,7 +1838,7 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
 
   const bool dynamic = map->get_entity(indexes.first()).is_dynamic();
 
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     EntityType current_type = map->get_entity_type(index);
     if (current_type != EntityType::TILE && current_type != EntityType::DYNAMIC_TILE) {
       return;
@@ -2000,7 +2000,7 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     }
 
     // Uncheck other entity creation buttons.
-    for (QAction* action : entity_creation_toolbar->actions()) {
+    Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
       bool ok = false;
       EntityType action_type = static_cast<EntityType>(action->data().toInt(&ok));
       if (ok) {
@@ -2021,7 +2021,7 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
  */
 void MapEditor::uncheck_entity_creation_buttons() {
 
-  for (QAction* action : entity_creation_toolbar->actions()) {
+  Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
     action->setChecked(false);
   }
 }
