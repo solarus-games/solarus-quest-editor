@@ -34,7 +34,7 @@ FindTextDialog::FindTextDialog(QWidget* parent) :
 
   find_button->setDefault(true);
 
-  connect(find_button, &QPushButton::pressed, [&]() {
+  connect(find_button, &QPushButton::pressed, [this]() {
     emit find_text_requested(ui.find_field->text());
   });
 }

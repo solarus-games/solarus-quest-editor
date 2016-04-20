@@ -236,7 +236,7 @@ void MainWindow::update_recent_quests_menu() {
   for (const QString& quest_path : last_quests) {
 
     QAction* action = new QAction(quest_path, recent_quests_menu);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, quest_path]() {
 
       // Close the previous quest and open the new one.
       if (close_quest()) {
@@ -267,7 +267,7 @@ QMenu* MainWindow::create_zoom_menu() {
     QAction* action = new QAction(zoom.first, action_group);
     zoom_actions[zoom.second] = action;
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, zoom]() {
       Editor* editor = get_current_editor();
       if (editor != nullptr) {
         editor->get_view_settings().set_zoom(zoom.second);
@@ -299,7 +299,7 @@ void MainWindow::update_show_layers_menu() {
   QAction* show_all_action = new QAction(tr("Show all layers"), this);
   show_layers_subactions["action_show_all"] = show_all_action;
   show_layers_menu->addAction(show_all_action);
-  connect(show_all_action, &QAction::triggered, [=]() {
+  connect(show_all_action, &QAction::triggered, [this]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       editor->get_view_settings().show_all_layers();
@@ -309,7 +309,7 @@ void MainWindow::update_show_layers_menu() {
   QAction* hide_all_action = new QAction(tr("Hide all layers"), this);
   show_layers_subactions["action_hide_all"] = hide_all_action;
   show_layers_menu->addAction(hide_all_action);
-  connect(hide_all_action, &QAction::triggered, [=]() {
+  connect(hide_all_action, &QAction::triggered, [this]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       editor->get_view_settings().hide_all_layers();
@@ -338,7 +338,7 @@ void MainWindow::update_show_layers_menu() {
       action->setCheckable(true);
       action->setChecked(true);
       show_layers_menu->addAction(action);
-      connect(action, &QAction::triggered, [=]() {
+      connect(action, &QAction::triggered, [this, action, i]() {
         Editor* editor = get_current_editor();
         if (editor != nullptr) {
           const bool visible = action->isChecked();
@@ -361,7 +361,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   QList<QAction*> entity_actions = EnumMenus<EntityType>::create_actions(
         *menu,
         EnumMenuCheckableOption::CHECKABLE,
-        [=](EntityType type) {
+        [this](EntityType type) {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       QString type_name = EntityTraits::get_lua_name(type);
@@ -385,7 +385,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   QAction* show_all_action = new QAction(tr("Show all entities"), this);
   show_entities_subactions["action_show_all"] = show_all_action;
   menu->insertAction(entity_actions.first(), show_all_action);
-  connect(show_all_action, &QAction::triggered, [=]() {
+  connect(show_all_action, &QAction::triggered, [this]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       editor->get_view_settings().show_all_entity_types();
@@ -395,7 +395,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   QAction* hide_all_action = new QAction(tr("Hide all entities"), this);
   show_entities_subactions["action_hide_all"] = hide_all_action;
   menu->insertAction(entity_actions.first(), hide_all_action);
-  connect(hide_all_action, &QAction::triggered, [=]() {
+  connect(hide_all_action, &QAction::triggered, [this]() {
     Editor* editor = get_current_editor();
     if (editor != nullptr) {
       editor->get_view_settings().hide_all_entity_types();

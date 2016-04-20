@@ -649,17 +649,17 @@ void EditorTabs::current_editor_changed(int /* index */) {
   }
   else {
     get_undo_group().setActiveStack(&editor->get_undo_stack());
-    connect(editor, &Editor::can_cut_changed, [=](bool can_cut) {
+    connect(editor, &Editor::can_cut_changed, [this, editor](bool can_cut) {
       if (get_editor() == editor) {
         emit can_cut_changed(can_cut);
       }
     });
-    connect(editor, &Editor::can_copy_changed, [=](bool can_copy) {
+    connect(editor, &Editor::can_copy_changed, [this, editor](bool can_copy) {
       if (get_editor() == editor) {
         emit can_copy_changed(can_copy);
       }
     });
-    connect(editor, &Editor::can_paste_changed, [=](bool can_paste) {
+    connect(editor, &Editor::can_paste_changed, [this, editor](bool can_paste) {
       if (get_editor() == editor) {
         emit can_paste_changed(can_paste);
       }

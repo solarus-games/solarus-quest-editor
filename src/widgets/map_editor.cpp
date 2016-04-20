@@ -1156,7 +1156,7 @@ void MapEditor::build_entity_creation_toolbar() {
     action->setCheckable(true);
     action->setData(static_cast<int>(type));
     entity_creation_toolbar->addAction(action);
-    connect(action, &QAction::triggered, [=](bool checked) {
+    connect(action, &QAction::triggered, [this, type](bool checked) {
       entity_creation_button_triggered(type, checked);
     });
   }

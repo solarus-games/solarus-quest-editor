@@ -72,7 +72,7 @@ TilesetView::TilesetView(QWidget* parent) :
   set_repeat_mode_actions = EnumMenus<TilePatternRepeatMode>::create_actions(
         *this,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](TilePatternRepeatMode repeat_mode) {
+        [this](TilePatternRepeatMode repeat_mode) {
     emit change_selected_patterns_repeat_mode_requested(repeat_mode);
   });
   // TODO add shortcut support to EnumMenus
@@ -598,7 +598,7 @@ void TilesetView::build_context_menu_ground(
   QList<QAction*> ground_actions = EnumMenus<Ground>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](Ground ground) {
+        [this](Ground ground) {
     emit change_selected_patterns_ground_requested(ground);
   });
 
@@ -634,7 +634,7 @@ void TilesetView::build_context_menu_layer(
     QAction* action = new QAction(tr("Layer %1").arg(i), &menu);
     action->setCheckable(true);
     menu.addAction(action);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, i]() {
       emit change_selected_patterns_default_layer_requested(i);
     });
 
@@ -694,14 +694,14 @@ void TilesetView::build_context_menu_animation(
   QList<QAction*> animation_actions = EnumMenus<PatternAnimation>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](PatternAnimation animation) {
+        [this](PatternAnimation animation) {
     emit change_selected_patterns_animation_requested(animation);
   });
   menu.addSeparator();
   QList<QAction*> separation_actions = EnumMenus<PatternSeparation>::create_actions(
         menu,
         EnumMenuCheckableOption::CHECKABLE_EXCLUSIVE,
-        [=](PatternSeparation separation) {
+        [this](PatternSeparation separation) {
     emit change_selected_patterns_separation_requested(separation);
   });
 
@@ -767,7 +767,7 @@ void TilesetView::end_state_drawing_rectangle() {
     // Context menu to create a pattern.
     QMenu menu;
     EnumMenus<Ground>::create_actions(
-          menu, EnumMenuCheckableOption::NON_CHECKABLE, [=](Ground ground) {
+          menu, EnumMenuCheckableOption::NON_CHECKABLE, [this, rectangle](Ground ground) {
       QString pattern_id;
       do {
         ++last_integer_pattern_id;
@@ -844,7 +844,7 @@ void TilesetView::end_state_moving_pattern() {
     // Context menu to move the pattern.
     QMenu menu;
     QAction* move_pattern_action = new QAction(tr("Move here"), this);
-    connect(move_pattern_action, &QAction::triggered, [=] {
+    connect(move_pattern_action, &QAction::triggered, [this, box] {
       emit change_selected_pattern_position_requested(box.topLeft());
     });
     menu.addAction(move_pattern_action);

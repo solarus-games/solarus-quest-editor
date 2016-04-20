@@ -223,7 +223,7 @@ void MapView::set_map(MapModel* map) {
     setScene(scene);
 
     // Initialize layers.
-    connect(map, &MapModel::layer_range_changed, [&]() {
+    connect(map, &MapModel::layer_range_changed, [this]() {
       build_context_menu_layer_actions();
     });
     build_context_menu_layer_actions();
@@ -488,7 +488,7 @@ void MapView::build_context_menu_actions() {
         tr("Resize"), this);
   resize_action->setShortcut(tr("R"));
   resize_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(resize_action, &QAction::triggered, [&]() {
+  connect(resize_action, &QAction::triggered, [this]() {
     start_state_resizing_entities();
   });
   addAction(resize_action);
@@ -503,7 +503,7 @@ void MapView::build_context_menu_actions() {
         tr("One layer up"), this);
   up_one_layer_action->setShortcut(tr("+"));
   up_one_layer_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(up_one_layer_action, &QAction::triggered, [&]() {
+  connect(up_one_layer_action, &QAction::triggered, [this]() {
     emit increase_entities_layer_requested(get_selected_entities());
   });
   addAction(up_one_layer_action);
@@ -512,7 +512,7 @@ void MapView::build_context_menu_actions() {
         tr("One layer down"), this);
   down_one_layer_action->setShortcut(tr("-"));
   down_one_layer_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(down_one_layer_action, &QAction::triggered, [&]() {
+  connect(down_one_layer_action, &QAction::triggered, [this]() {
     emit decrease_entities_layer_requested(get_selected_entities());
   });
   addAction(down_one_layer_action);
@@ -521,7 +521,7 @@ void MapView::build_context_menu_actions() {
         tr("Bring to front"), this);
   bring_to_front_action->setShortcut(tr("T"));
   bring_to_front_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(bring_to_front_action, &QAction::triggered, [&]() {
+  connect(bring_to_front_action, &QAction::triggered, [this]() {
     emit bring_entities_to_front_requested(get_selected_entities());
   });
   addAction(bring_to_front_action);
@@ -530,7 +530,7 @@ void MapView::build_context_menu_actions() {
         tr("Bring to back"), this);
   bring_to_back_action->setShortcut(tr("B"));
   bring_to_back_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-  connect(bring_to_back_action, &QAction::triggered, [&]() {
+  connect(bring_to_back_action, &QAction::triggered, [this]() {
     emit bring_entities_to_back_requested(get_selected_entities());
   });
   addAction(bring_to_back_action);
@@ -567,7 +567,7 @@ void MapView::build_context_menu_layer_actions() {
   for (int layer = get_map()->get_min_layer(); layer <= get_map()->get_max_layer(); ++layer) {
     QAction* action = new QAction(tr("Layer %1").arg(layer), set_layer_actions_group);
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, layer]() {
       emit set_entities_layer_requested(get_selected_entities(), layer);
     });
     set_layer_actions.push_back(action);
@@ -728,7 +728,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     // Special no-direction value.
     QAction* action = new QAction(no_direction_text, menu);
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, indexes]() {
       emit set_entities_direction_requested(indexes, -1);
     });
     menu->addAction(action);
@@ -737,7 +737,7 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
     // Normal direction.
     QAction* action = new QAction(texts[i], menu);
     action->setCheckable(true);
-    connect(action, &QAction::triggered, [=]() {
+    connect(action, &QAction::triggered, [this, indexes, i]() {
       emit set_entities_direction_requested(indexes, i);
     });
     menu->addAction(action);

@@ -477,7 +477,7 @@ void SpriteView::end_state_drawing_rectangle() {
     // Context menu to create a direction.
     QMenu menu;
     QAction* new_direction_action = new QAction(tr("New direction"), this);
-    connect(new_direction_action, &QAction::triggered, [=] {
+    connect(new_direction_action, &QAction::triggered, [this, rectangle] {
       emit add_direction_requested(rectangle);
     });
     menu.addAction(new_direction_action);
@@ -529,13 +529,13 @@ void SpriteView::end_state_moving_direction() {
     // Context menu to move the direction.
     QMenu menu;
     QAction* move_direction_action = new QAction(tr("Move here"), this);
-    connect(move_direction_action, &QAction::triggered, [=] {
+    connect(move_direction_action, &QAction::triggered, [this, box] {
       emit change_selected_direction_position_requested(box.topLeft());
     });
     menu.addAction(move_direction_action);
     QAction* duplicate_direction_action =
       new QAction(QIcon(":/images/icon_copy.png"), tr("Duplicate here"), this);
-    connect(duplicate_direction_action, &QAction::triggered, [=] {
+    connect(duplicate_direction_action, &QAction::triggered, [this, box] {
       emit duplicate_selected_direction_requested(box.topLeft());
     });
     menu.addAction(duplicate_direction_action);
