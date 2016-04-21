@@ -166,7 +166,7 @@ public:
 
   virtual void undo() override {
 
-    for (auto pair : edited_keys) {
+    Q_FOREACH (const auto& pair, edited_keys) {
       get_model().set_string_key(pair.second, pair.first);
     }
     if (!edited_keys.isEmpty()) {
@@ -233,7 +233,7 @@ public:
 
   virtual void undo() override {
 
-    for (auto pair : values) {
+    Q_FOREACH (const auto& pair, values) {
       get_model().create_string(pair.first, pair.second);
     }
     if (!values.isEmpty()) {

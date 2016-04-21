@@ -441,7 +441,7 @@ void EditEntityDialog::initialize_simple_integers() {
  */
 void EditEntityDialog::apply_simple_integers() {
 
-  for (const SimpleIntegerField& field : simple_integer_fields) {
+  Q_FOREACH (const SimpleIntegerField& field, simple_integer_fields) {
     if (entity_before.has_field(field.field_name) && field.spinbox != nullptr) {
       entity_after->set_field(field.field_name, field.spinbox->value());
     }
@@ -506,7 +506,7 @@ void EditEntityDialog::initialize_simple_strings() {
  */
 void EditEntityDialog::apply_simple_strings() {
 
-  for (const SimpleStringField& field : simple_string_fields) {
+  Q_FOREACH (const SimpleStringField& field, simple_string_fields) {
     if (entity_before.has_field(field.field_name) && field.line_edit != nullptr) {
       QString value;
       if (field.checkbox == nullptr || field.checkbox->isChecked()) {
