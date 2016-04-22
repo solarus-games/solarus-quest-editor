@@ -185,14 +185,14 @@ void TilesetScene::update_selection_to_scene(
     const QItemSelection& selected, const QItemSelection& deselected) {
 
   // Update the scene with the change.
-  for (const QModelIndex& model_index: selected.indexes()) {
+  Q_FOREACH (const QModelIndex& model_index, selected.indexes()) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
       pattern_items[index]->setSelected(true);
     }
   }
 
-  for (const QModelIndex& model_index: deselected.indexes()) {
+  Q_FOREACH (const QModelIndex& model_index, deselected.indexes()) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
       pattern_items[index]->setSelected(false);
@@ -209,7 +209,7 @@ void TilesetScene::set_selection_from_scene() {
 
   // Forward the change to the tileset.
   QList<int> indexes;
-  for (QGraphicsItem* item : selectedItems()) {
+  Q_FOREACH (QGraphicsItem* item, selectedItems()) {
     PatternItem* pattern_item = qgraphicsitem_cast<PatternItem*>(item);
     if (pattern_item != nullptr) {
       indexes << pattern_item->get_index();
@@ -226,7 +226,7 @@ void TilesetScene::select_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  for (PatternItem* item : pattern_items) {
+  Q_FOREACH (PatternItem* item, pattern_items) {
     if (item == nullptr) {
       continue;
     }
@@ -406,7 +406,7 @@ void PatternItem::paint(QPainter* painter,
   if (selected) {
     QList<QRect> frames = model.get_pattern_frames(index);
 
-    for (QRect frame : frames) {
+    Q_FOREACH (QRect frame, frames) {
       frame.translate(-top_left);
       GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }

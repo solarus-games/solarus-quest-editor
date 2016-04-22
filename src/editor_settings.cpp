@@ -292,7 +292,7 @@ void EditorSettings::set_value_color(const QString& key, const QColor& value) {
  */
 void EditorSettings::restore_default() {
 
-  for (QString key : default_values.keys()) {
+  Q_FOREACH (const QString& key, default_values.keys()) {
     settings.setValue(key, default_values[key]);
   }
 }

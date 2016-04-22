@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget* parent) :
   // Icon.
   QStringList icon_sizes = { "16", "32", "48", "256" };
   QIcon icon;
-  for (const QString size : icon_sizes) {
+  Q_FOREACH (const QString size, icon_sizes) {
     icon.addPixmap(":/images/icon_quest_editor_" + size + ".png");
   }
   setWindowIcon(icon);
@@ -233,7 +233,7 @@ void MainWindow::update_recent_quests_menu() {
   recent_quests_menu->setEnabled(!last_quests.isEmpty());
 
   // Create new actions.
-  for (const QString& quest_path : last_quests) {
+  Q_FOREACH (const QString& quest_path, last_quests) {
 
     QAction* action = new QAction(quest_path, recent_quests_menu);
     connect(action, &QAction::triggered, [this, quest_path]() {
@@ -290,7 +290,7 @@ void MainWindow::update_show_layers_menu() {
 
   // Clear previous actions.
   const QList<QAction*> actions = show_layers_menu->actions();
-  for (QAction* action : actions) {
+  Q_FOREACH (QAction* action, actions) {
     delete action;
   }
   show_layers_menu->clear();
@@ -370,7 +370,7 @@ QMenu* MainWindow::create_show_entities_menu() {
     }
   });
 
-  for (QAction* action : entity_actions) {
+  Q_FOREACH (QAction* action, entity_actions) {
     EntityType type = static_cast<EntityType>(action->data().toInt());
     if (!EntityTraits::can_be_stored_in_map_file(type)) {
       // Only show the ones that can exist in map files.
@@ -1214,7 +1214,7 @@ void MainWindow::update_entity_types_visibility() {
   }
 
   ViewSettings& view_settings = editor->get_view_settings();
-  for (QAction* action: show_entities_subactions) {
+  Q_FOREACH (QAction* action, show_entities_subactions) {
     if (action == nullptr) {
       qCritical() << tr("Missing show entity type action");
       return;

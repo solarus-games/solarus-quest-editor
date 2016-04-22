@@ -1085,7 +1085,7 @@ QRect SpriteModel::get_direction_all_frames_rect(const Index& index) const {
   }
 
   QRect rect = get_direction_first_frame_rect(index);
-  for (const QRect& frame: get_direction_frames(index)) {
+  Q_FOREACH (const QRect& frame, get_direction_frames(index)) {
     rect.setBottom(qMax(frame.bottom(), rect.bottom()));
     rect.setRight(qMax(frame.right(), rect.right()));
   }
@@ -1105,7 +1105,7 @@ QList<QRect> SpriteModel::get_direction_frames(const Index& index) const {
     return list;
   }
 
-  for (const auto& rect: get_direction(index).get_all_frames()) {
+  for (const Solarus::Rectangle& rect: get_direction(index).get_all_frames()) {
     list.append(Rectangle::to_qrect(rect));
   }
   return list;
@@ -1371,7 +1371,7 @@ QList<QPixmap> SpriteModel::get_direction_all_frames(const Index& index) const {
   std::string name = index.animation_name.toStdString();
   const auto& data = sprite.get_animation(name).get_direction(index.direction_nb);
 
-  for (const auto& rect: data.get_all_frames()) {
+  for (const Solarus::Rectangle& rect: data.get_all_frames()) {
     QRect r(rect.get_x(), rect.get_y(), rect.get_width(), rect.get_height());
     direction.frames.append(QPixmap::fromImage(image.copy(r)));
   }

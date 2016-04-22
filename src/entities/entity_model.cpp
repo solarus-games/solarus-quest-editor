@@ -557,7 +557,7 @@ void EntityModel::ensure_name_unique() {
     else {
       words.removeLast();
       name = "";
-      for (QString word : words) {
+      Q_FOREACH (const QString& word, words) {
         name = name + word + "_";
       }
     }

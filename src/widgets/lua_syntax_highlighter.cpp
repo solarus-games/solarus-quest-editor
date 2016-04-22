@@ -60,7 +60,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
                    << "\\buntil\\b"
                    << "\\bwhile\\b";
 
-  for (const QString& pattern: keyword_patterns) {
+  Q_FOREACH (const QString& pattern, keyword_patterns) {
     rule.pattern = QRegExp(pattern);
     rule.format = keyword_format;
     rules.append(rule);
@@ -95,7 +95,7 @@ LuaSyntaxHighlighter::LuaSyntaxHighlighter(QTextDocument* document) :
  */
 void LuaSyntaxHighlighter::highlightBlock(const QString& text) {
 
-  for (const HighlightingRule& rule: rules) {
+  Q_FOREACH (const HighlightingRule& rule, rules) {
     QRegExp pattern(rule.pattern);
     int index = pattern.indexIn(text);
     if (pattern.captureCount() > 0) {

@@ -32,7 +32,7 @@ QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 
   QMenu* menu = new QMenu();
   QList<QAction*> actions = create_actions(*menu, checkable);
-  for (QAction* action : actions) {
+  Q_FOREACH (QAction* action, actions) {
     menu->addAction(action);
   }
   return menu;
@@ -66,7 +66,7 @@ QList<QAction*> EnumMenus<E>::create_actions(
 
   // Create the actions.
   QList<QAction*> actions;
-  for (const E& value : EnumTraits<E>::get_values()) {
+  Q_FOREACH (const E& value, EnumTraits<E>::get_values()) {
     const QIcon& icon = EnumTraits<E>::get_icon(value);
     const QString& text = EnumTraits<E>::get_friendly_name(value);
     QAction* action = new QAction(icon, text, action_parent);

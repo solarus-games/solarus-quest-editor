@@ -65,7 +65,7 @@ void copy_recursive(const QString& src, const QString& dst) {
     QDir src_dir(src);
     QStringList file_names = src_dir.entryList(
           QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
-    for (const QString& file_name : file_names) {
+    Q_FOREACH (const QString& file_name, file_names) {
       QString next_src = src + '/' + file_name;
       QString next_dst = dst + '/' + file_name;
       copy_recursive(next_src, next_dst);

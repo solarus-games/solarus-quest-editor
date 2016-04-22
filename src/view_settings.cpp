@@ -35,7 +35,7 @@ ViewSettings::ViewSettings(QObject* parent) :
   visible_entity_types() {
 
   // Default settings.
-  for (EntityType entity_type : EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     visible_entity_types.insert(entity_type);
   }
 }
@@ -322,7 +322,7 @@ void ViewSettings::set_entity_type_visible(EntityType entity_type, bool visible)
  */
 void ViewSettings::show_all_entity_types() {
 
-  for (EntityType entity_type: EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     set_entity_type_visible(entity_type, true);
   }
 }
@@ -334,7 +334,7 @@ void ViewSettings::show_all_entity_types() {
  */
 void ViewSettings::hide_all_entity_types() {
 
-  for (EntityType entity_type: EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     set_entity_type_visible(entity_type, false);
   }
 }

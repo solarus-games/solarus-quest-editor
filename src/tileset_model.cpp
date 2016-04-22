@@ -268,7 +268,7 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
   // Save and clear the selection since a lot of indexes may change.
   QModelIndexList old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -293,7 +293,7 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
   emit pattern_created(index, pattern_id);
 
   // Restore the selection.
-  for (QString selected_pattern_id : old_selection_ids) {
+  Q_FOREACH (QString selected_pattern_id, old_selection_ids) {
     int new_index = id_to_index(selected_pattern_id);
     add_to_selected(new_index);
   }
@@ -334,7 +334,7 @@ void TilesetModel::delete_pattern(int index) {
   // Save and clear the selection since a lot of indexes may change.
   QModelIndexList old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -357,7 +357,7 @@ void TilesetModel::delete_pattern(int index) {
   emit pattern_deleted(index, pattern_id);
 
   // Restore the selection.
-  for (QString selected_pattern_id : old_selection_ids) {
+  Q_FOREACH (const QString& selected_pattern_id, old_selection_ids) {
 
     if (selected_pattern_id == pattern_id) {
       // Exclude the deleted one.
@@ -389,7 +389,7 @@ void TilesetModel::delete_pattern(int index) {
 void TilesetModel::delete_patterns(const QList<int>& indexes) {
 
   QStringList ids_to_delete;
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     QString pattern_id = index_to_id(index);
     if (pattern_id.isEmpty()) {
         throw EditorException(tr("Invalid tile pattern index: %1").arg(index));
@@ -400,13 +400,13 @@ void TilesetModel::delete_patterns(const QList<int>& indexes) {
   // Save and clear the selection during the whole operation.
   QModelIndexList old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
 
   // Delete patterns.
-  for (const QString id : ids_to_delete) {
+  Q_FOREACH (const QString id, ids_to_delete) {
     int index = id_to_index(id);
     if (index == -1) {
       throw EditorException(tr("No such tile pattern: %1").arg(id));
@@ -415,7 +415,7 @@ void TilesetModel::delete_patterns(const QList<int>& indexes) {
   }
 
   // Restore the selection.
-  for (QString selected_pattern_id : old_selection_ids) {
+  Q_FOREACH (QString selected_pattern_id, old_selection_ids) {
 
     int new_index = id_to_index(selected_pattern_id);
     if (new_index == -1) {
@@ -469,7 +469,7 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   // Save and clear the selection since a lot of indexes may change.
   QModelIndexList old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  for (const QModelIndex& old_selected_index : old_selected_indexes) {
+  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -505,7 +505,7 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   emit pattern_id_changed(index, old_id, new_index, new_id);
 
   // Restore the selection.
-  for (QString pattern_id : old_selection_ids) {
+  Q_FOREACH (QString pattern_id, old_selection_ids) {
     if (pattern_id == old_id) {
       pattern_id = new_id;
     }
@@ -684,7 +684,7 @@ bool TilesetModel::is_common_pattern_ground(const QList<int>& indexes, Ground& g
   }
 
   Ground candidate = get_pattern_ground(indexes.first());
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     if (get_pattern_ground(index) != candidate) {
       return false;
     }
@@ -738,7 +738,7 @@ bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, in
   }
 
   int candidate = get_pattern_default_layer(indexes.first());
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     if (get_pattern_default_layer(index) != candidate) {
       return false;
     }
@@ -794,7 +794,7 @@ bool TilesetModel::is_common_pattern_repeat_mode(
   }
 
   TilePatternRepeatMode candidate = get_pattern_repeat_mode(indexes.first());
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     if (get_pattern_repeat_mode(index) != candidate) {
       return false;
     }
@@ -880,7 +880,7 @@ bool TilesetModel::is_common_pattern_animation(const QList<int>& indexes, Patter
   }
 
   PatternAnimation candidate = get_pattern_animation(indexes.first());
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     if (get_pattern_animation(index) != candidate) {
       return false;
     }
@@ -1047,7 +1047,7 @@ bool TilesetModel::is_common_pattern_separation(const QList<int>& indexes, Patte
   }
 
   PatternSeparation candidate = get_pattern_separation(indexes.first());
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     if (get_pattern_separation(index) != candidate) {
       return false;
     }
@@ -1312,7 +1312,7 @@ int TilesetModel::get_selected_index() const {
 QList<int> TilesetModel::get_selected_indexes() const {
 
   QList<int> result;
-  for (const QModelIndex& index : selection_model.selectedIndexes()) {
+  Q_FOREACH (const QModelIndex& index, selection_model.selectedIndexes()) {
     result << index.row();
   }
   return result;
@@ -1336,7 +1336,7 @@ void TilesetModel::set_selected_indexes(const QList<int>& indexes) {
   const QModelIndexList& current_selection = selection_model.selectedIndexes();
 
   QItemSelection selection;
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     QModelIndex model_index = this->index(index);
     selection.select(model_index, model_index);
   }
@@ -1366,7 +1366,7 @@ void TilesetModel::add_to_selected(int index) {
 void TilesetModel::add_to_selected(const QList<int>& indexes) {
 
   QItemSelection selection;
-  for (int index : indexes) {
+  Q_FOREACH (int index, indexes) {
     QModelIndex model_index = this->index(index);
     selection.select(model_index, model_index);
   }

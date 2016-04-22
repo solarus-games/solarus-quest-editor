@@ -156,7 +156,7 @@ void DialogPropertiesTable::update() {
 
   dialog_id = model->get_selected_id();
   QMap<QString, QString> properties = model->get_dialog_properties(dialog_id);
-  for (QString key : properties.keys()) {
+  Q_FOREACH (const QString& key, properties.keys()) {
     dialog_property_created(dialog_id, key, properties[key]);
   }
 
@@ -176,7 +176,7 @@ void DialogPropertiesTable::update() {
   }
 
   properties = model->get_translated_dialog_properties(dialog_id);
-  for (QString key : properties.keys()) {
+  Q_FOREACH (const QString& key, properties.keys()) {
     add_translation_property(key, properties[key]);
   }
 }
@@ -278,7 +278,7 @@ void DialogPropertiesTable::on_item_changed(QTreeWidgetItem *item, int column) {
  */
 void DialogPropertiesTable::clear_table() {
 
-  for (QString key : items.keys()) {
+  Q_FOREACH (const QString& key, items.keys()) {
     takeTopLevelItem(indexOfTopLevelItem(items[key]));
     delete items[key];
     items.remove(key);

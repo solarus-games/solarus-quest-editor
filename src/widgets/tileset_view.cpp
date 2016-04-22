@@ -780,7 +780,7 @@ void TilesetView::end_state_drawing_rectangle() {
     // Put most actions in a submenu to make the context menu smaller.
     QMenu sub_menu(tr("New pattern (more options)"));
     int i = 0;
-    for (QAction* action : menu.actions()) {
+    Q_FOREACH (QAction* action, menu.actions()) {
       Ground ground = static_cast<Ground>(action->data().toInt());
       if (ground == Ground::TRAVERSABLE ||
           ground == Ground::WALL) {
@@ -885,7 +885,7 @@ void TilesetView::set_current_area(const QRect& area) {
     scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
 
     // Re-select items that were already selected if Ctrl or Shift was pressed.
-    for (QGraphicsItem* item : initially_selected_items) {
+    Q_FOREACH (QGraphicsItem* item, initially_selected_items) {
       item->setSelected(true);
     }
   }
@@ -919,7 +919,7 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
 
   // Ignore selected items.
-  for (QGraphicsItem* item : scene->selectedItems()) {
+  Q_FOREACH (QGraphicsItem* item, scene->selectedItems()) {
     items.removeAll(item);
   }
 

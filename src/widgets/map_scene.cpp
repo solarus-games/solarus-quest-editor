@@ -215,7 +215,7 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
   // This is possible due to the order of slots.
   layer_range_changed(map.get_min_layer(), map.get_max_layer());
 
-  for (EntityItem* item : get_entity_items(layer)) {
+  Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
     item->update_visibility(view_settings);
   }
 }
@@ -229,7 +229,7 @@ void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings
 
   this->view_settings = &view_settings;
   for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
-    for (EntityItem* item : get_entity_items(layer)) {
+    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
       if (item->get_entity_type() == type) {
         item->update_visibility(view_settings);
       }
@@ -357,7 +357,7 @@ void MapScene::layer_range_changed(int min_layer, int max_layer) {
  */
 void MapScene::entities_added(const EntityIndexes& indexes) {
 
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
 
     Q_ASSERT(map.entity_exists(index));
     EntityModel& entity = map.get_entity(index);
@@ -511,7 +511,7 @@ void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) 
 EntityIndexes MapScene::get_selected_entities() {
 
   EntityIndexes result;
-  for (QGraphicsItem* item : selectedItems()) {
+  Q_FOREACH (QGraphicsItem* item, selectedItems()) {
     EntityModel* entity = get_entity_from_item(*item);
     if (entity == nullptr) {
       continue;
@@ -536,7 +536,7 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
   clearSelection();
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     EntityItem* item = get_entity_item(index);
     Q_ASSERT(item != nullptr);
     if (item == nullptr) {
@@ -568,8 +568,8 @@ void MapScene::select_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  for (const EntityItems& layer_items: entity_items) {
-    for (EntityItem* item : layer_items) {
+  Q_FOREACH (const EntityItems& layer_items, entity_items) {
+    Q_FOREACH (EntityItem* item, layer_items) {
       if (item == nullptr) {
         continue;
       }
@@ -596,7 +596,7 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
   );
 
   int max_layer = map.get_min_layer();
-  for (QGraphicsItem* item : items_in_rectangle) {
+  Q_FOREACH (QGraphicsItem* item, items_in_rectangle) {
 
     if (item->zValue() > map.get_max_layer()) {
       // This is the case of the selection rectangle and
