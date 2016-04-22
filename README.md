@@ -1,6 +1,6 @@
 ![Solarus Quest Editor logo](/images/solarus-quest-editor-github-readme-logo.png)
 
-[![Build Status](https://travis-ci.org/christopho/solarus-quest-editor.svg?branch=master)](https://travis-ci.org/christopho/solarus-quest-editor)
+[![Build Status](https://travis-ci.org/christopho/solarus-quest-editor.svg?branch=dev)](https://travis-ci.org/christopho/solarus-quest-editor)
 
 Solarus Quest Editor is a graphical user interface to create and modify quests for the
 [Solarus engine](https://github.com/christopho/solarus).
@@ -39,8 +39,8 @@ To build Solarus Quest Editor, you need:
   - lua5.1 (LuaJIT is recommended)
   - physfs
 
-We always keep branch master of Solarus Quest Editor compatible with branch
-master of Solarus.
+We always keep branch dev of Solarus Quest Editor compatible with branch
+dev of Solarus.
 
 ### With Qt Creator
 
