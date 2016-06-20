@@ -405,7 +405,7 @@ void EditEntityDialog::initialize_simple_integers() {
   simple_integer_fields <<
     SimpleIntegerField("price", tr("Price"), 0, 10, ui.font_field) <<
     SimpleIntegerField("jump_length", tr("Jump length"), 16, 8) <<
-    SimpleIntegerField("speed", tr("Speed"), 1, 8);
+    SimpleIntegerField("speed", tr("Speed"), 0, 8);
 
   for (SimpleIntegerField& field : simple_integer_fields) {
     if (entity_before.has_field(field.field_name)) {
