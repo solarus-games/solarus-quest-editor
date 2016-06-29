@@ -16,6 +16,7 @@ New features
 * Allow to automatically save files before running the quest (#90).
 * Allow to restore open tabs at startup (#131).
 * Add a recent quests menu (#89).
+* Add resource dialog: set the id as initial value for the description (#192).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: shortcuts to move one layer up or down.

@@ -452,12 +452,14 @@ void QuestTreeView::new_element_action_triggered() {
     QuestResources& resources = quest.get_resources();
     ResourceType resource_type;
     QString initial_id_value;
+    QString initial_description_value;
 
     if (quest.is_potential_resource_element(path, resource_type, initial_id_value)) {
       if (resources.exists(resource_type, initial_id_value)) {
         // The element already exists.
         return;
       }
+      initial_description_value = initial_id_value;
     }
     else {
       if (!quest.is_resource_path(path, resource_type) &&
@@ -478,6 +480,7 @@ void QuestTreeView::new_element_action_triggered() {
 
     NewResourceElementDialog dialog(resource_type, parentWidget());
     dialog.set_element_id(initial_id_value);
+    dialog.set_element_description(initial_description_value);
     int result = dialog.exec();
 
     if (result != QDialog::Accepted) {

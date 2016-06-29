@@ -137,6 +137,13 @@ QString NewResourceElementDialog::get_element_description() const {
 void NewResourceElementDialog::set_element_description(const QString& value) {
 
   ui.description_line_edit->setText(value);
+
+  // Select and focus the description if the id looks correct.
+  if (!ui.id_line_edit->text().isEmpty() &&
+      !ui.id_line_edit->text().endsWith('/')) {
+    ui.description_line_edit->selectAll();
+    ui.description_line_edit->setFocus();
+  }
 }
 
 /**
