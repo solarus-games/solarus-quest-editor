@@ -239,7 +239,8 @@ void MainWindow::update_recent_quests_menu() {
     connect(action, &QAction::triggered, [this, quest_path]() {
 
       // Close the previous quest and open the new one.
-      if (close_quest()) {
+      if (confirm_before_closing()) {
+        close_quest();
         open_quest(quest_path);
       }
     });
@@ -444,16 +445,11 @@ Quest& MainWindow::get_quest() {
 }
 
 /**
- * @brief Closes the current quest if any.
- * @return @c true if the quest was closed, @c false if the user canceled.
+ * @brief Closes the current quest if any and without confirmation.
  */
-bool MainWindow::close_quest() {
+void MainWindow::close_quest() {
 
-  ui.tab_widget->close_all_files_requested();
-  if (ui.tab_widget->count() > 0) {
-    // Some tabs of the previous quests are still here: the user canceled the closing.
-    return false;
-  }
+  ui.tab_widget->close_without_confirmation();
 
   if (quest.exists()) {
     disconnect(&quest, SIGNAL(file_renamed(QString, QString)),
@@ -466,7 +462,6 @@ bool MainWindow::close_quest() {
   update_title();
   ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
-  return true;
 }
 
 /**
@@ -625,8 +620,9 @@ void MainWindow::add_quest_to_recent_list() {
  */
 void MainWindow::on_action_new_quest_triggered() {
 
-  // Close the previous quest.
-  if (!close_quest()) {
+  // Check unsaved files but don't close them yet
+  // in case the user cancels.
+  if (!confirm_before_closing()) {
     return;
   }
 
@@ -641,6 +637,8 @@ void MainWindow::on_action_new_quest_triggered() {
   if (quest_path.isEmpty()) {
     return;
   }
+
+  close_quest();
 
   try {
     NewQuestBuilder::create_initial_quest_files(quest_path);
@@ -660,13 +658,14 @@ void MainWindow::on_action_new_quest_triggered() {
  */
 void MainWindow::on_action_load_quest_triggered() {
 
-  // Close the previous quest.
-  if (!close_quest()) {
+  // Check unsaved files but don't close them yet
+  // in case the user cancels.
+  if (!confirm_before_closing()) {
     return;
   }
 
+  // Ask the quest path.
   EditorSettings settings;
-
   QString quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select quest directory"),
@@ -674,9 +673,11 @@ void MainWindow::on_action_load_quest_triggered() {
         QFileDialog::ShowDirsOnly);
 
   if (quest_path.isEmpty()) {
+    // Canceled.
     return;
   }
 
+  close_quest();
   open_quest(quest_path);
 }
 
@@ -725,7 +726,7 @@ void MainWindow::on_action_close_all_triggered() {
  */
 void MainWindow::on_action_exit_triggered() {
 
-  if (confirm_close()) {
+  if (confirm_before_closing()) {
     QApplication::exit(0);
   }
 }
@@ -1297,7 +1298,7 @@ void MainWindow::open_file(Quest& quest, const QString& path) {
  */
 void MainWindow::closeEvent(QCloseEvent* event) {
 
-  if (confirm_close()) {
+  if (confirm_before_closing()) {
     event->accept();
   }
   else {
@@ -1312,9 +1313,9 @@ void MainWindow::closeEvent(QCloseEvent* event) {
  *
  * @return @c false to cancel the closing operation.
  */
-bool MainWindow::confirm_close() {
+bool MainWindow::confirm_before_closing() {
 
-  return ui.tab_widget->confirm_close();
+  return ui.tab_widget->confirm_before_closing();
 }
 
 /**

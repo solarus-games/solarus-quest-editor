@@ -63,8 +63,9 @@ public:
   Editor* get_editor(int index);
   Editor* get_editor();
 
-  bool confirm_close();
+  bool confirm_before_closing();
   bool has_unsaved_files();
+  void close_without_confirmation();
 
   void reload_settings();
 

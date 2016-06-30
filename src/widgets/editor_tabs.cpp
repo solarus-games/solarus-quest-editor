@@ -512,7 +512,7 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
 void EditorTabs::close_file_requested(int index) {
 
   Editor* editor = get_editor(index);
-  if (editor != nullptr && editor->confirm_close()) {
+  if (editor != nullptr && editor->confirm_before_closing()) {
     remove_editor(index);
   }
 }
@@ -522,18 +522,8 @@ void EditorTabs::close_file_requested(int index) {
  */
 void EditorTabs::close_all_files_requested() {
 
-  for (int i = 0; i < count(); ++i) {
-    Editor* editor = get_editor(i);
-    if (editor == nullptr) {
-      return;
-    }
-    if (!editor->confirm_close()) {
-      return;
-    }
-  }
-
-  for (int i = count() - 1; i >= 0; --i) {
-    remove_editor(i);
+  if (confirm_before_closing()) {
+    close_without_confirmation();
   }
 }
 
@@ -592,16 +582,16 @@ void EditorTabs::file_deleted(const QString& path) {
 /**
  * @brief Function called when the user wants to close all editors.
  *
- * The user can save files if necessary.
+ * This function does not close any editor, it only lets the user save them.
  *
  * @return @c false to cancel the closing operation.
  */
-bool EditorTabs::confirm_close() {
+bool EditorTabs::confirm_before_closing() {
 
   for (int i = 0; i < count(); ++i) {
 
     Editor* editor = get_editor(i);
-    if (!editor->confirm_close()) {
+    if (!editor->confirm_before_closing()) {
       return false;
     }
   }
@@ -622,6 +612,16 @@ bool EditorTabs::has_unsaved_files() {
   }
 
   return false;
+}
+
+/**
+ * @brief Closes all editors without confirmation.
+ */
+void EditorTabs::close_without_confirmation() {
+
+  for (int i = count() - 1; i >= 0; --i) {
+    remove_editor(i);
+  }
 }
 
 /**

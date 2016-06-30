@@ -394,7 +394,7 @@ bool Editor::has_unsaved_changes() const {
  *
  * @return @c false to cancel the closing operation.
  */
-bool Editor::confirm_close() {
+bool Editor::confirm_before_closing() {
 
   if (!has_unsaved_changes()) {
     // The file is saved.
