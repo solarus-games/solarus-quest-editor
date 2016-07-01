@@ -182,7 +182,8 @@ MapView::MapView(QWidget* parent) :
   down_one_layer_action(nullptr),
   bring_to_front_action(nullptr),
   bring_to_back_action(nullptr),
-  remove_action(nullptr) {
+  remove_action(nullptr),
+  cancel_action(nullptr) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
@@ -543,6 +544,13 @@ void MapView::build_context_menu_actions() {
   connect(remove_action, SIGNAL(triggered()),
           this, SLOT(remove_selected_entities()));
   addAction(remove_action);
+
+  cancel_action = new QAction(tr("Cancel"), this);
+  cancel_action->setShortcut(Qt::Key_Escape);
+  cancel_action->setShortcutContext(Qt::WindowShortcut);
+  connect(cancel_action, SIGNAL(triggered()),
+          this, SLOT(cancel_state_requested()));
+  addAction(cancel_action);
 
   build_context_menu_layer_actions();
 }
@@ -1287,6 +1295,14 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
   }
 
   return entity->get_index();
+}
+
+/**
+ * @brief Slot called when the user wants to cancel the current state.
+ */
+void MapView::cancel_state_requested() {
+
+  start_state_doing_nothing();
 }
 
 /**

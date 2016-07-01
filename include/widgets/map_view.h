@@ -152,6 +152,7 @@ public slots:
   void tileset_id_changed(const QString& tileset_id);
   void tileset_reloaded();
 
+  void cancel_state_requested();
   void edit_selected_entity();
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
   void resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous);
@@ -198,6 +199,7 @@ private:
   QAction* bring_to_front_action;  /**< Action of bringing selected entities to front. */
   QAction* bring_to_back_action;   /**< Action of bringing selected entities to back. */
   QAction* remove_action;          /**< Action of deleting selected entities. */
+  QAction* cancel_action;          /**< Action of stopping the current state. */
 
 };
 
