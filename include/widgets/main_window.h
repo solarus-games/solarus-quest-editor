@@ -65,6 +65,7 @@ private slots:
   void on_action_copy_triggered();
   void on_action_paste_triggered();
   void on_action_select_all_triggered();
+  void on_action_unselect_all_triggered();
   void on_action_find_triggered();
   void on_action_run_quest_triggered();
   void on_action_show_grid_triggered();

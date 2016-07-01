@@ -52,6 +52,7 @@ public:
   void set_selected_entities(const EntityIndexes& indexes);
   void select_entity(const EntityIndex& index, bool selected);
   void select_all();
+  void unselect_all();
 
   int get_layer_in_rectangle(
       const QRect& rectangle

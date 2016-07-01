@@ -1249,6 +1249,17 @@ void MapEditor::select_all() {
 }
 
 /**
+ * @copydoc Editor::unselect_all
+ */
+void MapEditor::unselect_all() {
+
+  MapScene* scene = ui.map_view->get_scene();
+  if (scene != nullptr) {
+    scene->unselect_all();
+  }
+}
+
+/**
  * @copydoc Editor::reload_settings
  */
 void MapEditor::reload_settings() {

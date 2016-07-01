@@ -580,6 +580,24 @@ void MapScene::select_all() {
 }
 
 /**
+ * @brief Unselects all entities of the map.
+ */
+void MapScene::unselect_all() {
+
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
+  Q_FOREACH (const EntityItems& layer_items, entity_items) {
+    Q_FOREACH (EntityItem* item, layer_items) {
+      if (item == nullptr) {
+        continue;
+      }
+      item->setSelected(false);
+    }
+  }
+  blockSignals(was_blocked);
+}
+
+/**
  * @brief Returns the highest layer where a specified rectangle overlaps an
  * existing visible entity.
  * @param rectangle A rectangle in map coordinates.

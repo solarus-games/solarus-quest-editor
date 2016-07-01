@@ -544,6 +544,15 @@ void Editor::select_all() {
 }
 
 /**
+ * @brief Performs an unselect all operation.
+ *
+ * The default implementation does nothing.
+ * Subclasses that support unselect all should reimplement this function.
+ */
+void Editor::unselect_all() {
+}
+
+/**
  * @brief Performs a find operation.
  *
  * The default implementation does nothing.

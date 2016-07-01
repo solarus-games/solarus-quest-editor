@@ -632,6 +632,17 @@ void TilesetEditor::select_all() {
 }
 
 /**
+ * @copydoc Editor::unselect_all
+ */
+void TilesetEditor::unselect_all() {
+
+  if (ui.tileset_view == nullptr) {
+    return;
+  }
+  ui.tileset_view->unselect_all();
+}
+
+/**
  * @brief Updates everything in the gui.
  */
 void TilesetEditor::update() {

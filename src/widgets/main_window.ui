@@ -90,6 +90,7 @@
     <addaction name="action_paste"/>
     <addaction name="separator"/>
     <addaction name="action_select_all"/>
+    <addaction name="action_unselect_all"/>
     <addaction name="separator"/>
     <addaction name="action_find"/>
    </widget>
@@ -367,6 +368,11 @@
    </property>
    <property name="shortcutContext">
     <enum>Qt::WindowShortcut</enum>
+   </property>
+  </action>
+  <action name="action_unselect_all">
+   <property name="text">
+    <string>Unselect all</string>
    </property>
   </action>
  </widget>

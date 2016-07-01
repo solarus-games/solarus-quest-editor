@@ -20,11 +20,12 @@ New features
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: add shortcuts to move one layer up or down (+ and -).
-* Map editor: add Escape shortcut to stop adding entities (#115).
+* Map editor: add Escape shortcut to stop adding entities (#92).
 * Map editor: fix multiple default destinations when copy-pasting (#118).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor options.
 * Add select all to map, tileset and text editors (#106).
+* Add unselect all to map, tileset and text editors (#115).
 
 Bug fixes
 ---------

@@ -38,6 +38,7 @@ public:
 
   void save() override;
   void select_all() override;
+  void unselect_all() override;
 
 public slots:
 

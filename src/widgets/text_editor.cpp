@@ -215,6 +215,14 @@ void TextEditor::select_all() {
 }
 
 /**
+ * @copydoc Editor::unselect_all
+ */
+void TextEditor::unselect_all() {
+
+  text_widget->moveCursor(QTextCursor::Left);
+}
+
+/**
  * @copydoc Editor::find
  */
 void TextEditor::find() {

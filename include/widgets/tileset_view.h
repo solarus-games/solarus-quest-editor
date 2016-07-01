@@ -69,6 +69,7 @@ public slots:
   void zoom_out();
   void update_grid_visibility();
   void select_all();
+  void unselect_all();
 
 protected:
 

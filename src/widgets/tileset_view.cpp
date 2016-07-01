@@ -279,6 +279,18 @@ void TilesetView::select_all() {
 }
 
 /**
+ * @brief Unselects all patterns.
+ */
+void TilesetView::unselect_all() {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->unselect_all();
+}
+
+/**
  * @brief Draws the tileset view.
  * @param event The paint event.
  */

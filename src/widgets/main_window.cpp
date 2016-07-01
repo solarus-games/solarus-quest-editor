@@ -163,6 +163,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_copy->setShortcut(QKeySequence::Copy);
   ui.action_paste->setShortcut(QKeySequence::Paste);
   ui.action_select_all->setShortcut(QKeySequence::SelectAll);
+  ui.action_unselect_all->setShortcut(QKeySequence::Deselect);
   ui.action_find->setShortcut(QKeySequence::Find);
 
   // Connect children.
@@ -765,13 +766,24 @@ void MainWindow::on_action_paste_triggered() {
 }
 
 /**
- * @brief Slot called when the user triggers the "Select" action.
+ * @brief Slot called when the user triggers the "Select all" action.
  */
 void MainWindow::on_action_select_all_triggered() {
 
   Editor* editor = get_current_editor();
   if (editor != nullptr) {
     editor->select_all();
+  }
+}
+
+/**
+ * @brief Slot called when the user triggers the "Unselect all" action.
+ */
+void MainWindow::on_action_unselect_all_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    editor->unselect_all();
   }
 }
 

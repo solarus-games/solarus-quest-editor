@@ -43,6 +43,7 @@ public:
   int get_pattern_index(const QGraphicsItem* item);
 
   void select_all();
+  void unselect_all();
 
 protected:
 

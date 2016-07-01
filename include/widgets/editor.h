@@ -76,6 +76,7 @@ public:
   virtual bool can_paste() const;
   virtual void paste();
   virtual void select_all();
+  virtual void unselect_all();
   virtual void find();
   virtual void reload_settings();
 
