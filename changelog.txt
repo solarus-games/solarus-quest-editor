@@ -54,6 +54,7 @@ Bugfix release for the 1.4 branch.
 * Dialogs/strings editor: Shows also missing marks on parent nodes (#68).
 * Fix crash on FreeBSD when running the quest (#112).
 * Fix crash on Mac OS X 64 bit.
+* Fix crash when removing from the tree a resource that does not exist (#124).
 
 _______________________________________
 

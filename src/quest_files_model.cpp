@@ -890,7 +890,6 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
   // Get all declared elements of this resource type that are directly in
   // the directory.
   QStringList element_ids = quest.get_resources().get_elements(resource_type);
-  int i = 0;
   Q_FOREACH (const QString& element_id, element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
     if (!current_path.startsWith(parent_path)) {
@@ -918,10 +917,9 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
         all_extra_paths.insert(path_internal_ptr);
       }
       extra_paths.paths.append(columns);
-      extra_paths.path_indexes[current_path] = i;
+      extra_paths.path_indexes[current_path] = extra_paths.paths.size() - 1;
       extra_paths.element_ids.append(element_id);
     }
-    ++i;
   }
 }
 
