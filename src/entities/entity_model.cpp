@@ -518,6 +518,18 @@ void EntityModel::set_name(const QString& name) {
 }
 
 /**
+ * @brief Ensures that this entity does not conflict with existing entities of
+ * the map.
+ *
+ * Renames it or changes some other properties if necessary.
+ */
+void EntityModel::ensure_valid_on_map() {
+
+  ensure_name_unique();
+  ensure_default_destination_unique();
+}
+
+/**
  * @brief Renames this entity if necessary so that its name is unique on the map.
  *
  * This function should be called before adding the entity on the map.
@@ -570,6 +582,36 @@ void EntityModel::ensure_name_unique() {
   }
   name = name + counter_string;
   set_name(name);
+}
+
+/**
+ * @brief Ensures that this entity is not a second default destination.
+ *
+ * Does nothing if the entity is not a destination.
+ * If this is a default destination and there is already a default destination
+ * on the map, set the "default" property of this one to false.
+ */
+void EntityModel::ensure_default_destination_unique() {
+
+  if (get_type() != EntityType::DESTINATION) {
+    // Not a destination: nothing to do.
+    return;
+  }
+
+  if (!get_field("default").toBool()) {
+    // Property "default" is not set to true: nothing to do.
+    return;
+  }
+
+  // Check if there is already a default destination.
+  const EntityIndex& index = get_map().find_default_destination_index();
+  if (!index.is_valid()) {
+    // No other default destination: we are okay.
+    return;
+  }
+
+  // Unset property default.
+  set_field("default", false);
 }
 
 /**

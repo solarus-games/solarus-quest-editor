@@ -82,7 +82,9 @@ public:
   bool has_name() const;
   QString get_name() const;
   void set_name(const QString& name);
+  void ensure_valid_on_map();
   void ensure_name_unique();
+  void ensure_default_destination_unique();
   int get_layer() const;
   void set_layer(int layer);
   QPoint get_xy() const;

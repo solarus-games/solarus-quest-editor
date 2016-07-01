@@ -1453,7 +1453,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
     Q_ASSERT(index.is_valid());
 
     // Check the name uniqueness.
-    entity->ensure_name_unique();
+    entity->ensure_valid_on_map();
     const std::string& std_name = entity->get_entity().get_name();
     Q_UNUSED(std_name);
     Q_ASSERT(entity->get_name().toStdString() == std_name);
