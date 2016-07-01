@@ -31,6 +31,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
+#include <QDebug>
 #include <QGraphicsItem>
 #include <QMap>
 #include <QMenu>
@@ -1937,7 +1938,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
           reference_change,
           horizontal_preferred,
           center
-          );
+    );
     new_boxes.insert(index, new_box);
     changed |= new_box != old_box;
   }
@@ -2140,9 +2141,10 @@ bool ResizingEntitiesState::is_horizontally_resizable(
     ResizeMode resize_mode, bool horizontal_preferred) {
 
   return resize_mode == ResizeMode::HORIZONTAL_ONLY ||
-        resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
-        resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
-        (resize_mode == ResizeMode::SINGLE_DIMENSION && horizontal_preferred);
+      resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+      resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
+      resize_mode == ResizeMode::SQUARE ||
+      (resize_mode == ResizeMode::SINGLE_DIMENSION && horizontal_preferred);
 }
 
 /**
@@ -2155,9 +2157,10 @@ bool ResizingEntitiesState::is_vertically_resizable(
     ResizeMode resize_mode, bool horizontal_preferred) {
 
   return resize_mode == ResizeMode::VERTICAL_ONLY ||
-        resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
-        resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
-        (resize_mode == ResizeMode::SINGLE_DIMENSION && !horizontal_preferred);
+      resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
+      resize_mode == ResizeMode::MULTI_DIMENSION_ONE ||
+      resize_mode == ResizeMode::SQUARE ||
+      (resize_mode == ResizeMode::SINGLE_DIMENSION && !horizontal_preferred);
 }
 
 /**
