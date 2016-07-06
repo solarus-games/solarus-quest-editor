@@ -17,6 +17,7 @@ New features
 * Allow to restore open tabs at startup (#131).
 * Add a recent quests menu (#89).
 * Add resource dialog: set the id as initial value for the description (#192).
+* Automatically add .lua extension when creating a script file (#46).
 * Map editor: allow more than 3 layers.
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: add shortcuts to move one layer up or down (+ and -).

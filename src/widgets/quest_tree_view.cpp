@@ -572,6 +572,11 @@ void QuestTreeView::new_script_action_triggered() {
           &ok);
 
     if (ok) {
+
+      // Automatically add .lua extension if not present.
+      if (!file_name.contains(".")) {
+        file_name = file_name + ".lua";
+      }
       Quest::check_valid_file_name(file_name);
       Quest& quest = model->get_quest();
       QString script_path = parent_path + '/' + file_name;
