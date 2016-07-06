@@ -72,6 +72,7 @@
     </property>
     <addaction name="action_new_quest"/>
     <addaction name="action_load_quest"/>
+    <addaction name="action_close_quest"/>
     <addaction name="separator"/>
     <addaction name="action_close"/>
     <addaction name="action_close_all"/>
@@ -376,6 +377,11 @@
   <action name="action_unselect_all">
    <property name="text">
     <string>Unselect all</string>
+   </property>
+  </action>
+  <action name="action_close_quest">
+   <property name="text">
+    <string>Close quest</string>
    </property>
   </action>
  </widget>

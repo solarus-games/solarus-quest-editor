@@ -11,6 +11,7 @@ New features
 * Add a command-line option -run to run a quest instead of opening the GUI.
 * Allow to save all open files at once (#98).
 * Allow to close all open files at once.
+* Allow to close the current quest (#88).
 * Allow to reorder tabs (#107).
 * Allow to switch tabs with keyboard shortcuts (#101).
 * Allow to automatically save files before running the quest (#90).

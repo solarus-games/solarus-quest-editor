@@ -92,7 +92,7 @@ MainWindow::MainWindow(QWidget* parent) :
   // Menu and toolbar actions.
   recent_quests_menu = new QMenu(tr("Recent quests"));
   update_recent_quests_menu();
-  ui.menu_quest->insertMenu(ui.menu_quest->actions()[2], recent_quests_menu);
+  ui.menu_quest->insertMenu(ui.menu_quest->actions()[3], recent_quests_menu);
 
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
@@ -679,6 +679,19 @@ void MainWindow::on_action_load_quest_triggered() {
 
   close_quest();
   open_quest(quest_path);
+}
+
+/**
+ * @brief Slot called when the user triggers the "Close quest" action.
+ */
+void MainWindow::on_action_close_quest_triggered() {
+
+  // Check unsaved files.
+  if (!confirm_before_closing()) {
+    return;
+  }
+
+  close_quest();
 }
 
 /**
