@@ -153,7 +153,6 @@ MainWindow::MainWindow(QWidget* parent) :
 
   // Set standard keyboard shortcuts.
   ui.action_new_quest->setShortcut(QKeySequence::New);
-  ui.action_load_quest->setShortcut(QKeySequence::Open);
   ui.action_close->setShortcut(QKeySequence::Close);
   ui.action_save->setShortcut(QKeySequence::Save);
   ui.action_exit->setShortcut(QKeySequence::Quit);

@@ -163,6 +163,9 @@
    <property name="text">
     <string>Load quest...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
   </action>
   <action name="action_exit">
    <property name="text">
