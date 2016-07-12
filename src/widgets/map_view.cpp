@@ -1872,8 +1872,8 @@ void ResizingEntitiesState::start() {
 
       // Determine a leader if none was found with previous resize modes.
       found_leader = true;
-      const QPoint& bottom_right = entity.get_bottom_right();
-      int distance = (bottom_right - mouse_position).manhattanLength();
+      const QPoint& corner = entity.get_top_left();
+      int distance = (corner - mouse_position).manhattanLength();
       if (distance < min_distance) {
         leader_index = index;
         min_distance = distance;
@@ -2026,12 +2026,12 @@ QRect ResizingEntitiesState::update_box(
 
   const QRect& old_box = old_boxes.value(index);
 
-  QPoint point_a = old_box.topLeft();
-  QPoint point_b = old_box.bottomRight() + reference_change;
-  // A is the original point of the rectangle we are drawing.
+  QPoint point_a = old_box.bottomRight() + QPoint(1, 1);
+  QPoint point_b = old_box.topLeft() + reference_change;
+  // A is the fixed point of the rectangle we are drawing.
   // B is the second point of the rectangle, determined by the mouse position.
 
-  // We want to extend the entity's rectangle with units of base_size() from A to B.
+  // We want to extend the entity's rectangle with units of base_size from A to B.
   QPoint diff = point_b - point_a;
   int sign_x = diff.x() >= 0 ? 1 : -1;
   int sign_y = diff.y() >= 0 ? 1 : -1;
@@ -2075,29 +2075,30 @@ QRect ResizingEntitiesState::update_box(
       // Here, the right wall is not horizontally resizable, but it moves
       // on the right instead when resizing the full room, following the
       // reference change.
-      if (old_box.center().x() > center.x()) {
-        point_a.setX(old_box.x() + reference_change.x());
+      if (old_box.center().x() < center.x()) {
+        point_a.setX(old_box.x() + old_box.width() + reference_change.x());
       }
       else {
-        point_a.setX(old_box.x());
+        point_a.setX(old_box.x() + old_box.width());
       }
-      point_b.setX(point_a.x() + old_box.width());
+      point_b.setX(point_a.x() - old_box.width());
     }
     else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible only vertically with the x coordinate of B fixed to the base width.
-      point_b.setX(point_a.x() + base_width);
+      point_b.setX(point_a.x() - base_width);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
              !horizontal_preferred) {
       // Extensible only vertically with the x coordinate of B fixed to the current width.
-      point_b.setX(point_a.x() + old_box.width());
+      point_b.setX(point_a.x() - old_box.width());
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
              resize_mode == ResizeMode::HORIZONTAL_ONLY) {
       // Extensible horizontally.
-      if (point_b.x() <= point_a.x()) {
-        // B is actually before A: in this case, set A to its right coordinate.
-        point_a.setX(point_a.x() + base_width);
+      if (point_b.x() >= point_a.x()) {
+        // B actually crossed A: in this case, set A to the coordinates of
+        // its other side.
+        point_a.setX(point_a.x() - base_width);
       }
     }
 
@@ -2106,29 +2107,29 @@ QRect ResizingEntitiesState::update_box(
       // Smart resizing:
       // When trying to resize a non vertically resizable entity located
       // on the right of vertically resizable things, we move it instead.
-      if (old_box.center().y() > center.y()) {
-        point_a.setY(old_box.y() + reference_change.y());
+      if (old_box.center().y() < center.y()) {
+        point_a.setY(old_box.y() + old_box.height() + reference_change.y());
       }
       else {
-        point_a.setY(old_box.y());
+        point_a.setY(old_box.y() + old_box.height());
       }
-      point_b.setY(point_a.y() + old_box.height());
+      point_b.setY(point_a.y() - old_box.height());
     }
     else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
       // Extensible only horizontally with the y coordinate of B fixed to the base height.
-      point_b.setY(point_a.y() + base_height);
+      point_b.setY(point_a.y() - base_height);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
              horizontal_preferred) {
       // Extensible only horizontally with the y coordinate of B fixed to the current height.
-      point_b.setY(point_a.y() + old_box.height());
+      point_b.setY(point_a.y() - old_box.height());
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
              resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible vertically.
-      if (point_b.y() <= point_a.y()) {
+      if (point_b.y() >= point_a.y()) {
         // B is actually before A: in this case, set A to its bottom coordinate.
-        point_a.setY(point_a.y() + base_height);
+        point_a.setY(point_a.y() - base_height);
       }
     }
   }
