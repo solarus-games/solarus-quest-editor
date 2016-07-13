@@ -37,6 +37,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QtMath>
 
 namespace SolarusEditor {
 
@@ -1431,6 +1432,21 @@ MapModel& MapView::State::get_map() {
 }
 
 /**
+ * @brief Returns the point of a mouse event in map coordinates.
+ * @param mouse_event A mouse event.
+ * @return The point in mouse coordinates.
+ */
+QPoint MapView::State::to_map_point(const QMouseEvent& mouse_event) const {
+
+  // Need to floor to know exactly the square that has the mouse.
+  QPointF map_point_f = view.mapToScene(mouse_event.pos()) - MapScene::get_margin_top_left();
+  return QPoint(
+        qFloor(map_point_f.x()),
+        qFloor(map_point_f.y())
+  );
+}
+
+/**
  * @brief Called when entering this state.
  *
  * Subclasses can reimplement this function to initialize data.
@@ -1890,32 +1906,35 @@ void ResizingEntitiesState::start() {
 void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
-  QPoint current_point = view.mapToScene(event.pos()).toPoint() - MapScene::get_margin_top_left();
+
+  // Need to floor to know exactly the square that has the mouse.
+  QPoint current_point = to_map_point(event);
 
   QMap<EntityIndex, QRect> new_boxes;
   const QRect& old_leader_box = old_boxes.value(leader_index);
 
   // Choose once for all entitites the preferred dimension to use
   // in case resizing is constrained.
-  QPoint leader_distance_to_mouse = current_point - (old_leader_box.bottomRight() + QPoint(1, 1));
+
+  QPoint leader_distance_to_mouse = current_point - old_leader_box.topLeft();
   bool horizontal_preferred = qAbs(leader_distance_to_mouse.x()) > qAbs(leader_distance_to_mouse.y());
 
   // Determine the change to apply to all selected entities.
   const MapModel& map = *view.get_map();
   const EntityModel& leader = map.get_entity(leader_index);
   const QSize& leader_base_size = leader.get_base_size();
-  int floor_x = 8;
-  int floor_y = 8;
+  QSize reference_base_size(8, 8);
   ResizeMode leader_resize_mode = leader.get_resize_mode();
   if (is_horizontally_resizable(leader_resize_mode, horizontal_preferred)) {
     // If the leader has a base size of 16x16, it is better to make all
     // entities resize this way as well (if they can).
-    floor_x = leader_base_size.width();
+    reference_base_size.setWidth(leader_base_size.width());
   }
   if (is_vertically_resizable(leader_resize_mode, horizontal_preferred)) {
-    floor_y = leader_base_size.height();
+    reference_base_size.setHeight(leader_base_size.height());
   }
-  QPoint reference_change = Point::round_down(leader_distance_to_mouse, floor_x, floor_y);
+
+  QPoint reference_change = Point::round_down(leader_distance_to_mouse, reference_base_size);
 
   // Determine if at least one entity is resizable horizontally and
   // if at least one entity is resizable vertically.
@@ -1942,6 +1961,8 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     // Same thing vertically.
     reference_change.setY(0);
   }
+
+  qDebug() << "ref change " << reference_change;
 
   // Compute the new size and position of each entity.
   bool changed = false;
@@ -1995,7 +2016,7 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  * @brief Updates with new coordinates the rectangle of one entity.
  * @param index Index of the entity to resize.
  * @param reference_change Translation representing how the user wants to
- * resize. This translation will be applied at best, preserving constrains on
+ * resize. This translation will be applied at best, preserving constraints on
  * the specific entity: its size will remain a multiple of its base size,
  * and its resizing mode will be respected.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
@@ -2026,22 +2047,43 @@ QRect ResizingEntitiesState::update_box(
 
   const QRect& old_box = old_boxes.value(index);
 
-  QPoint point_a = old_box.bottomRight() + QPoint(1, 1);
-  QPoint point_b = old_box.topLeft() + reference_change;
+  QPoint point_a;
+  QPoint point_b;
   // A is the fixed point of the rectangle we are drawing.
-  // B is the second point of the rectangle, determined by the mouse position.
+  // It is one of the four corners of the old bounding box of the entity:
+  // the furthest one from the mouse.
+  // B is the second point of the rectangle, determined by the current
+  // mouse position.
+  if (reference_change.x() >= 0) {
+    point_a.setX(old_box.left());
+    point_b.setX(old_box.left() + old_box.width() + reference_change.x());
+  }
+  else {
+    point_a.setX(old_box.left() + old_box.width());
+    point_b.setX(old_box.left() + reference_change.x());
+  }
+  if (reference_change.y() >= 0) {
+    point_a.setY(old_box.top());
+    point_b.setY(old_box.top() + old_box.height() + reference_change.y());
+  }
+  else {
+    point_a.setY(old_box.top() + old_box.height());
+    point_b.setY(old_box.top() + reference_change.y());
+  }
+
+  qDebug() << "point A: " << point_a;
+  qDebug() << "point B: " << point_b;
 
   // We want to extend the entity's rectangle with units of base_size from A to B.
   QPoint diff = point_b - point_a;
   int sign_x = diff.x() >= 0 ? 1 : -1;
   int sign_y = diff.y() >= 0 ? 1 : -1;
 
-  // Calculate the coordinates of B such that the size of the
-  // rectangle from A to B is a multiple of base_size.
-  point_b += QPoint(
-        sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_width)),
-        sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
-  );
+  // Round the size to the nearest upper multiple of base_size.
+  diff = Point::ceil(diff, base_size);
+  point_b = point_a + diff;
+
+  qDebug() << "point B after ensuring multiple of base size: " << point_b;
 
   QPoint abs_diff = QPoint(
         qAbs(point_b.x() - point_a.x()),
@@ -2098,7 +2140,7 @@ QRect ResizingEntitiesState::update_box(
       if (point_b.x() >= point_a.x()) {
         // B actually crossed A: in this case, set A to the coordinates of
         // its other side.
-        point_a.setX(point_a.x() - base_width);
+      // TODO remove?  point_a.setX(point_a.x() - base_width);
       }
     }
 
