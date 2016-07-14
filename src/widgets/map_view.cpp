@@ -117,7 +117,7 @@ public:
 private:
   void compute_center();
   void compute_leader();
-  void compute_free_corner();
+  void compute_fixed_corner();
   void update_boxes(
       const QPoint& reference_change, bool horizontal_preferred);
   QRect update_box(
@@ -135,9 +135,9 @@ private:
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
   QPoint center;                  /**< Center of the bounding box of entities to resize. */
-  QPoint free_corner;             /**< Which corner of entities follows the mouse
-                                   * (+-1, +-1).
-                                   * The opposite one is fixed. */
+  QPoint fixed_corner;            /**< Which corner of the initial entities box
+                                   * is fixed (+-1, +-1).
+                                   * The opposite one follows the mouse. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
   int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
@@ -1918,7 +1918,7 @@ void ResizingEntitiesState::compute_leader() {
  * Determines which corner of entities should be fixed
  * and which one should follow the mouse.
  */
-void ResizingEntitiesState::compute_free_corner() {
+void ResizingEntitiesState::compute_fixed_corner() {
 
   // Decide the resizing directions depending
   // on the mouse position relative to the leader.
@@ -1933,8 +1933,8 @@ void ResizingEntitiesState::compute_free_corner() {
   const EntityModel& entity = map.get_entity(leader_index);
   const QPoint& entity_center = entity.get_center();
 
-  free_corner.setX(mouse_position.x() >= entity_center.x() ? 1 : -1);
-  free_corner.setY(mouse_position.y() >= entity_center.y() ? 1 : -1);
+  fixed_corner.setX(mouse_position.x() >= entity_center.x() ? -1 : 1);
+  fixed_corner.setY(mouse_position.y() >= entity_center.y() ? -1 : 1);
 }
 
 /**
@@ -1950,7 +1950,7 @@ void ResizingEntitiesState::start() {
 
   // Determine which corner of entities will be fixed
   // and which one will follow the mouse.
-  compute_free_corner();
+  compute_fixed_corner();
 }
 
 /**
