@@ -115,13 +115,15 @@ public:
   void mouse_released(const QMouseEvent& event) override;
 
 private:
-  void compute_leader();
   void compute_center();
+  void compute_leader();
+  void compute_free_corner();
+  void update_boxes(
+      const QPoint& reference_change, bool horizontal_preferred);
   QRect update_box(
       const EntityIndex& index,
       const QPoint& reference_change,
-      bool horizontal_preferred,
-      const QPoint& center);
+      bool horizontal_preferred);
   static bool is_horizontally_resizable(
       ResizeMode resize_mode, bool horizontal_preferred);
   static bool is_vertically_resizable(
@@ -133,6 +135,9 @@ private:
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
   QPoint center;                  /**< Center of the bounding box of entities to resize. */
+  QPoint free_corner;             /**< Which corner of entities follows the mouse
+                                   * (+-1, +-1).
+                                   * The opposite one is fixed. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
   int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
@@ -1906,6 +1911,30 @@ void ResizingEntitiesState::compute_leader() {
       }
     }
   }
+  Q_ASSERT(leader_index.is_valid());
+}
+
+/**
+ * Determines which corner of entities should be fixed
+ * and which one should follow the mouse.
+ */
+void ResizingEntitiesState::compute_free_corner() {
+
+  // Decide the resizing directions depending
+  // on the mouse position relative to the leader.
+  Q_ASSERT(leader_index.is_valid());
+
+  MapModel& map = get_map();
+  MapView& view = get_view();
+
+  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
+  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
+
+  const EntityModel& entity = map.get_entity(leader_index);
+  const QPoint& entity_center = entity.get_center();
+
+  free_corner.setX(mouse_position.x() >= entity_center.x() ? 1 : -1);
+  free_corner.setY(mouse_position.y() >= entity_center.y() ? 1 : -1);
 }
 
 /**
@@ -1916,10 +1945,12 @@ void ResizingEntitiesState::start() {
   // Determine the center of the entities to resize.
   compute_center();
 
-  // Determie the leader entity.
+  // Determine the leader entity.
   compute_leader();
 
-  Q_ASSERT(leader_index.is_valid());
+  // Determine which corner of entities will be fixed
+  // and which one will follow the mouse.
+  compute_free_corner();
 }
 
 /**
@@ -1929,10 +1960,9 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   MapView& view = get_view();
 
-  // Need to floor to know exactly the square that has the mouse.
+  // Need to floor to know exactly which 8x8 square has the mouse.
   QPoint current_point = to_map_point(event);
 
-  QMap<EntityIndex, QRect> new_boxes;
   const QRect& old_leader_box = old_boxes.value(leader_index);
 
   // Choose once for all entitites the preferred dimension to use
@@ -1986,25 +2016,8 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
   qDebug() << "ref change " << reference_change;
 
-  // Compute the new size and position of each entity.
-  bool changed = false;
-  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
-    const EntityIndex& index = it.key();
-    const QRect& old_box = it.value();
-
-    QRect new_box = update_box(
-          index,
-          reference_change,
-          horizontal_preferred,
-          center
-    );
-    new_boxes.insert(index, new_box);
-    changed |= new_box != old_box;
-  }
-
-  const bool allow_merge_to_previous = first_resize_done;
-  view.resize_entities(new_boxes, allow_merge_to_previous);
-  first_resize_done = true;
+  // Apply the change to the entities.
+  update_boxes(reference_change, horizontal_preferred);
 }
 
 /**
@@ -2035,6 +2048,42 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 }
 
 /**
+ * @brief Applies the resizing to the bounding boxes of entities.
+ * @param reference_change How much to extend the base size from the fixed
+ * corner.
+ * @param horizontal_preferred When only one of both dimensions can be resized, whether
+ * this should be the horizontal or vertical dimension.
+ *
+ * This change will be applied at best, respecting the constraints of
+ * each entity.
+ */
+void ResizingEntitiesState::update_boxes(
+    const QPoint& reference_change,
+    bool horizontal_preferred
+) {
+
+  // Compute the new size and position of each entity.
+  QMap<EntityIndex, QRect> new_boxes;
+  bool changed = false;
+  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
+    const EntityIndex& index = it.key();
+    const QRect& old_box = it.value();
+
+    QRect new_box = update_box(
+          index,
+          reference_change,
+          horizontal_preferred
+    );
+    new_boxes.insert(index, new_box);
+    changed |= new_box != old_box;
+  }
+
+  const bool allow_merge_to_previous = first_resize_done;
+  get_view().resize_entities(new_boxes, allow_merge_to_previous);
+  first_resize_done = true;
+}
+
+/**
  * @brief Updates with new coordinates the rectangle of one entity.
  * @param index Index of the entity to resize.
  * @param reference_change Translation representing how the user wants to
@@ -2043,15 +2092,13 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  * and its resizing mode will be respected.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
  * this should be the horizontal or vertical dimension.
- * @param center Center point of all entities being resized.
  * @return A new bounding box for the entity.
  * Returns a null rectangle in case of error.
  */
 QRect ResizingEntitiesState::update_box(
     const EntityIndex& index,
     const QPoint& reference_change,
-    bool horizontal_preferred,
-    const QPoint& center) {
+    bool horizontal_preferred) {
 
   MapModel& map = get_map();
   Q_ASSERT(map.entity_exists(index));
