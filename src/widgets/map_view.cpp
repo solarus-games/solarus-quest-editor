@@ -115,6 +115,8 @@ public:
   void mouse_released(const QMouseEvent& event) override;
 
 private:
+  void compute_leader();
+  void compute_center();
   QRect update_box(
       const EntityIndex& index,
       const QPoint& reference_change,
@@ -1836,25 +1838,27 @@ ResizingEntitiesState::ResizingEntitiesState(
 }
 
 /**
- * @copydoc MapView::State::start
+ * @brief Determines the center of the entities to resize.
  */
-void ResizingEntitiesState::start() {
-
-  MapView& view = get_view();
-  MapModel& map = get_map();
-  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
-  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
+void ResizingEntitiesState::compute_center() {
 
   // Compute the total bounding box to determine its center.
+  MapModel& map = get_map();
   QRect total_box = map.get_entity_bounding_box(entities.first());
   Q_FOREACH (const EntityIndex& index, entities) {
     total_box |= map.get_entity_bounding_box(index);
   }
   center = total_box.center();
+}
 
-  // Choose the leader: among the most freely resizable entities,
-  // it will be the one whose bottom-right corner
-  // is the nearest to the mouse.
+/**
+ * @brief Determines the entity whose resizing follows the cursor position.
+ * Other ones will reproduce an equivalent change.
+ */
+void ResizingEntitiesState::compute_leader() {
+
+  // Among the most freely resizable entities,
+  // the leader will be the closest to the mouse.
   const std::vector<ResizeMode> resize_modes_by_priority = {
     ResizeMode::MULTI_DIMENSION_ALL,
     ResizeMode::MULTI_DIMENSION_ONE,
@@ -1864,6 +1868,12 @@ void ResizingEntitiesState::start() {
     ResizeMode::VERTICAL_ONLY,
     ResizeMode::NONE
   };
+
+  MapModel& map = get_map();
+  MapView& view = get_view();
+
+  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
+  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
 
   bool found_leader = false;
   for (ResizeMode wanted_resize_mode : resize_modes_by_priority) {
@@ -1888,14 +1898,26 @@ void ResizingEntitiesState::start() {
 
       // Determine a leader if none was found with previous resize modes.
       found_leader = true;
-      const QPoint& corner = entity.get_top_left();
-      int distance = (corner - mouse_position).manhattanLength();
+      const QPoint& entity_center = entity.get_center();
+      int distance = (entity_center - mouse_position).manhattanLength();
       if (distance < min_distance) {
         leader_index = index;
         min_distance = distance;
       }
     }
   }
+}
+
+/**
+ * @copydoc MapView::State::start
+ */
+void ResizingEntitiesState::start() {
+
+  // Determine the center of the entities to resize.
+  compute_center();
+
+  // Determie the leader entity.
+  compute_leader();
 
   Q_ASSERT(leader_index.is_valid());
 }
