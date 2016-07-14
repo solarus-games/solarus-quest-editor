@@ -2123,8 +2123,6 @@ QRect ResizingEntitiesState::update_box(
 
   // How much to extend from the base size.
   QPoint extension = Point::ceil(reference_change, base_size);
-  bool freeze_x = false;
-  //bool freeze_y = false;
 
   // How much to translate the entity.
   // Only used for non-resizable entities that get moved instead of being
@@ -2175,12 +2173,12 @@ QRect ResizingEntitiesState::update_box(
     }
     else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
       // Extensible only vertically with the width fixed to the base width.
-      freeze_x = true;
+      extension.setX(0);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
              !horizontal_preferred) {
       // Extensible only vertically with the width fixed to the old width.
-      freeze_x = true;
+      extension.setX(0);
     }
 /*
     // Vertically.
@@ -2217,29 +2215,27 @@ QRect ResizingEntitiesState::update_box(
   }
 
   // Compute the final bounding box.
-  if (!freeze_x) {
-    if (fixed_corner.x() == -1) {
-      // Left side fixed, right side free.
-      int width = old_box.width() + extension.x();
-      if (width > 0) {
-        new_box.setWidth(width);
-      }
-      else {
-        new_box.setWidth(-width + 2 * base_size.width());
-        new_box.translate(width - base_size.width(), 0);
-      }
+  if (fixed_corner.x() == -1) {
+    // Left side fixed, right side free.
+    int width = old_box.width() + extension.x();
+    if (width > 0) {
+      new_box.setWidth(width);
     }
     else {
-      // Right side fixed, left side free.
-      int width = old_box.width() - extension.x();
-      if (width > 0) {
-        new_box.setWidth(width);
-        new_box.translate(extension.x(), 0);
-      }
-      else {
-        new_box.setWidth(-width + 2 * base_size.width());
-        new_box.translate(old_box.width() - base_size.width(), 0);
-      }
+      new_box.setWidth(-width + 2 * base_size.width());
+      new_box.translate(width - base_size.width(), 0);
+    }
+  }
+  else {
+    // Right side fixed, left side free.
+    int width = old_box.width() - extension.x();
+    if (width > 0) {
+      new_box.setWidth(width);
+      new_box.translate(extension.x(), 0);
+    }
+    else {
+      new_box.setWidth(-width + 2 * base_size.width());
+      new_box.translate(old_box.width() - base_size.width(), 0);
     }
   }
 
