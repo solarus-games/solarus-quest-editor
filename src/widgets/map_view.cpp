@@ -2078,9 +2078,11 @@ void ResizingEntitiesState::update_boxes(
     changed |= new_box != old_box;
   }
 
-  const bool allow_merge_to_previous = first_resize_done;
-  get_view().resize_entities(new_boxes, allow_merge_to_previous);
-  first_resize_done = true;
+  if (changed) {
+    const bool allow_merge_to_previous = first_resize_done;
+    get_view().resize_entities(new_boxes, allow_merge_to_previous);
+    first_resize_done = true;
+  }
 }
 
 /**
