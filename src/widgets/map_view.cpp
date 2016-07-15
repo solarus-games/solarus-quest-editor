@@ -2163,11 +2163,11 @@ QRect ResizingEntitiesState::update_box(
       // reference change.
       if (fixed_corner.x() == -1 &&
           old_box.center().x() > center.x()) {
-        translation.setX(extension.x());
+        translation.setX(reference_change.x());
       }
       else if (fixed_corner.x() == 1 &&
           old_box.center().x() < center.x()) {
-        translation.setX(-extension.x());
+        translation.setX(reference_change.x());
       }
       extension.setX(0);
     }
@@ -2180,38 +2180,29 @@ QRect ResizingEntitiesState::update_box(
       // Extensible only vertically with the width fixed to the old width.
       extension.setX(0);
     }
-/*
+
     // Vertically.
     if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
-      // Smart resizing:
-      // When trying to resize a non vertically resizable entity located
-      // on the right of vertically resizable things, we move it instead.
-      if (old_box.center().y() < center.y()) {
-        point_a.setY(old_box.y() + old_box.height() + reference_change.y());
+      // Smart resizing.
+      if (fixed_corner.y() == -1 &&
+          old_box.center().y() > center.y()) {
+        translation.setY(reference_change.y());
       }
-      else {
-        point_a.setY(old_box.y() + old_box.height());
+      else if (fixed_corner.y() == 1 &&
+          old_box.center().y() < center.y()) {
+        translation.setY(reference_change.y());
       }
-      point_b.setY(point_a.y() - old_box.height());
+      extension.setY(0);
     }
     else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
-      // Extensible only horizontally with the y coordinate of B fixed to the base height.
-      point_b.setY(point_a.y() - base_height);
+      // Extensible only horizontally with the height fixed to the base height.
+      extension.setY(0);
     }
     else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
              horizontal_preferred) {
-      // Extensible only horizontally with the y coordinate of B fixed to the current height.
-      point_b.setY(point_a.y() - old_box.height());
+      // Extensible only horizontally with the height fixed to the old height.
+      extension.setY(0);
     }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
-             resize_mode == ResizeMode::VERTICAL_ONLY) {
-      // Extensible vertically.
-      if (point_b.y() >= point_a.y()) {
-        // B is actually before A: in this case, set A to its bottom coordinate.
-        point_a.setY(point_a.y() - base_height);
-      }
-    }
-*/
   }
 
   // Compute the final bounding box.
@@ -2236,6 +2227,29 @@ QRect ResizingEntitiesState::update_box(
     else {
       new_box.setWidth(-width + 2 * base_size.width());
       new_box.translate(old_box.width() - base_size.width(), 0);
+    }
+  }
+  if (fixed_corner.y() == -1) {
+    // Top side fixed, bottom side free.
+    int height = old_box.height() + extension.y();
+    if (height > 0) {
+      new_box.setHeight(height);
+    }
+    else {
+      new_box.setHeight(-height + 2 * base_size.height());
+      new_box.translate(0, height - base_size.height());
+    }
+  }
+  else {
+    // Bottom side fixed, top side free.
+    int height = old_box.height() - extension.y();
+    if (height > 0) {
+      new_box.setHeight(height);
+      new_box.translate(0, extension.y());
+    }
+    else {
+      new_box.setHeight(-height + 2 * base_size.height());
+      new_box.translate(0, old_box.height() - base_size.height());
     }
   }
 
