@@ -17,6 +17,7 @@
 #include "quest.h"
 #include "sound.h"
 #include <solarus/lowlevel/QuestFiles.h>
+#include <solarus/lowlevel/Music.h>
 #include <solarus/lowlevel/Sound.h>
 #include <solarus/Arguments.h>
 #include <QApplication>
@@ -118,8 +119,45 @@ void play_music(const Quest& quest, const QString& music_id) {
     initialize();
   }
 
-  Q_UNUSED(quest);
-  Q_UNUSED(music_id);
+  if (!open_quest(quest)) {
+    qWarning() << "Failed to open quest " << quest.get_root_path();
+    return;
+  }
+
+  if (!Solarus::Music::exists(music_id.toStdString())) {
+    qWarning() << "Cannot open music file " << music_id;
+    return;
+  }
+  Solarus::Music::play(music_id.toStdString(), true);
+
+  close_quest();
+}
+
+/**
+ * @brief Returns whether a specific music is currently playing.
+ * @param quest The quest.
+ * @param music_id Id of the music to test.
+ * @return @c truc if this music is currently playing.
+ */
+bool is_playing_music(const Quest& quest, const QString& music_id) {
+
+  if (!initialized) {
+    initialize();
+  }
+
+  if (!open_quest(quest)) {
+    qWarning() << "Failed to open quest " << quest.get_root_path();
+    return false;
+  }
+
+  std::string current_music_id = Solarus::Music::get_current_music_id();
+  close_quest();
+
+  if (current_music_id == Solarus::Music::none) {
+    return false;
+  }
+
+  return current_music_id == music_id.toStdString();
 }
 
 /**
@@ -130,6 +168,8 @@ void stop_music() {
   if (!initialized) {
     initialize();
   }
+
+  Solarus::Music::stop_playing();
 }
 
 }  // namespace Sound

@@ -43,8 +43,7 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   setAutoScroll(false);
   setAlternatingRowColors(true);
 
-  play_action = new QAction(
-        QIcon(":/images/icon_start.png"), tr("Play"), this);
+  play_action = new QAction(tr("Play"), this);
   play_action->setShortcutContext(Qt::WidgetShortcut);
   connect(play_action, SIGNAL(triggered()),
           this, SLOT(play_action_triggered()));
@@ -308,10 +307,23 @@ void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
     switch (resource_type) {
 
     case ResourceType::MUSIC:
-    case ResourceType::SOUND:
       play_action->setEnabled(quest.exists(path));
+      if (Sound::is_playing_music(quest, element_id)) {
+        play_action->setIcon(QIcon(":/images/icon_stop.png"));
+        play_action->setText(tr("Stop"));
+      }
+      else {
+        play_action->setIcon(QIcon(":/images/icon_start.png"));
+        play_action->setText(tr("Play"));
+      }
       menu.addAction(play_action);
       break;
+
+    case ResourceType::SOUND:
+      play_action->setEnabled(quest.exists(path));
+      play_action->setIcon(QIcon(":/images/icon_start.png"));
+      play_action->setText(tr("Play"));
+      menu.addAction(play_action);
 
     default:
       break;
@@ -671,11 +683,16 @@ void QuestTreeView::play_action_triggered() {
   QString element_id;
   if (quest.is_potential_resource_element(path, resource_type, element_id)) {
     if (resource_type == ResourceType::SOUND) {
-      Sound::play_sound(model->get_quest(), element_id);
+      Sound::play_sound(quest, element_id);
     }
     else if (resource_type == ResourceType::MUSIC) {
-      Sound::play_music(model->get_quest(), element_id);
-      // TODO or stop the music.
+      if (Sound::is_playing_music(quest, element_id)) {
+        Sound::stop_music();
+      }
+      else {
+        Sound::play_music(quest, element_id);
+      }
+      // TODO pause/continue (with another menu item and with the space shortcut)
     }
   }
 

@@ -75,7 +75,7 @@ private:
   void build_context_menu_delete(QMenu& menu, const QString& path);
 
   QuestFilesModel* model;         /**< The underlying model. */
-  QAction* play_action;           /**< Action of playing the selected file. */
+  QAction* play_action;           /**< Action of playing or stopping the selected file. */
   QAction* open_action;           /**< Action of opening the selected file. */
   QAction* rename_action;         /**< Action of renaming the selected file. */
   QAction* delete_action;         /**< Action of deleting the selected file. */
