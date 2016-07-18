@@ -113,7 +113,7 @@ void play_sound(const Quest& quest, const QString& sound_id) {
  * @param music_id Id of the music to play: filename without extension,
  * relative to the musics directory.
  */
-void play_music(const Quest& quest, const QString& music_id) {
+void play_music(Quest& quest, const QString& music_id) {
 
   if (!initialized) {
     initialize();
@@ -131,13 +131,15 @@ void play_music(const Quest& quest, const QString& music_id) {
   Solarus::Music::play(music_id.toStdString(), true);
 
   close_quest();
+
+  quest.set_current_music_id(music_id);
 }
 
 /**
  * @brief Returns whether a specific music is currently playing.
  * @param quest The quest.
  * @param music_id Id of the music to test.
- * @return @c truc if this music is currently playing.
+ * @return @c true if this music is currently playing.
  */
 bool is_playing_music(const Quest& quest, const QString& music_id) {
 
@@ -162,14 +164,17 @@ bool is_playing_music(const Quest& quest, const QString& music_id) {
 
 /**
  * @brief Stops playing any music.
+ * @param quest The quest.
  */
-void stop_music() {
+void stop_music(Quest& quest) {
 
   if (!initialized) {
     initialize();
   }
 
   Solarus::Music::stop_playing();
+
+  quest.set_current_music_id("");
 }
 
 }  // namespace Sound

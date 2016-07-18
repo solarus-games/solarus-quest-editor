@@ -678,7 +678,7 @@ void QuestTreeView::play_action_triggered() {
     return;
   }
 
-  const Quest& quest = model->get_quest();
+  Quest& quest = model->get_quest();
   ResourceType resource_type;
   QString element_id;
   if (quest.is_potential_resource_element(path, resource_type, element_id)) {
@@ -687,12 +687,11 @@ void QuestTreeView::play_action_triggered() {
     }
     else if (resource_type == ResourceType::MUSIC) {
       if (Sound::is_playing_music(quest, element_id)) {
-        Sound::stop_music();
+        Sound::stop_music(quest);
       }
       else {
         Sound::play_music(quest, element_id);
       }
-      // TODO pause/continue (with another menu item and with the space shortcut)
     }
   }
 

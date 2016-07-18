@@ -125,10 +125,17 @@
     </property>
     <addaction name="action_settings"/>
    </widget>
+   <widget class="QMenu" name="menuAudio">
+    <property name="title">
+     <string>Audio</string>
+    </property>
+    <addaction name="action_stop_music"/>
+   </widget>
    <addaction name="menu_quest"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menu_run"/>
+   <addaction name="menuAudio"/>
    <addaction name="menu_tools"/>
    <addaction name="menu_help"/>
   </widget>
@@ -149,6 +156,7 @@
    <addaction name="action_paste"/>
    <addaction name="separator"/>
    <addaction name="action_run_quest"/>
+   <addaction name="action_stop_music"/>
    <addaction name="separator"/>
    <addaction name="action_show_grid"/>
    <addaction name="action_show_layer_0"/>
@@ -382,6 +390,24 @@
   <action name="action_close_quest">
    <property name="text">
     <string>Close quest</string>
+   </property>
+  </action>
+  <action name="action_pause_music">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_pause_music.png</normaloff>:/images/icon_pause_music.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause music</string>
+   </property>
+  </action>
+  <action name="action_stop_music">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_stop_music.png</normaloff>:/images/icon_stop_music.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop music</string>
    </property>
   </action>
  </widget>

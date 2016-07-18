@@ -69,6 +69,7 @@ private slots:
   void on_action_unselect_all_triggered();
   void on_action_find_triggered();
   void on_action_run_quest_triggered();
+  void on_action_stop_music_triggered();
   void on_action_show_grid_triggered();
   void on_action_show_console_triggered();
   void change_grid_size();
@@ -93,6 +94,7 @@ private slots:
   void update_run_quest();
   void quest_running();
   void quest_finished();
+  void current_music_changed(const QString& music_id);
 
   void reload_settings();
 

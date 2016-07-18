@@ -1649,4 +1649,29 @@ bool Quest::is_resource_element_open(ResourceType resource_type) const {
   return false;
 }
 
+/**
+ * @brief Returns the id of the music currently playing if any.
+ * @return The current music id or an empty string.
+ */
+QString Quest::get_current_music_id() const {
+  return current_music_id;
+}
+
+/**
+ * @brief Sets the music currently playing.
+ *
+ * Emits current_music_changed() if there is a change.
+ *
+ * @param music_id The current music id or an empty string.
+ */
+void Quest::set_current_music_id(const QString& music_id) {
+
+  if (music_id == this->current_music_id) {
+    return;
+  }
+
+  this->current_music_id = music_id;
+  emit current_music_changed(music_id);
+}
+
 }

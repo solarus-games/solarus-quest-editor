@@ -27,6 +27,7 @@
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
+#include "sound.h"
 #include "version.h"
 #include <solarus/gui/quest_runner.h>
 #include <QActionGroup>
@@ -106,6 +107,9 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
   ui.action_run_quest->setEnabled(false);
+
+  ui.action_pause_music->setEnabled(false);
+  ui.action_stop_music->setEnabled(false);
 
   zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
@@ -187,6 +191,9 @@ MainWindow::MainWindow(QWidget* parent) :
           this, SLOT(quest_running()));
   connect(&quest_runner, SIGNAL(finished()),
           this, SLOT(quest_finished()));
+
+  connect(&quest, SIGNAL(current_music_changed(QString)),
+          this, SLOT(current_music_changed(QString)));
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
@@ -859,6 +866,14 @@ void MainWindow::on_action_run_quest_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Stop music" action.
+ */
+void MainWindow::on_action_stop_music_triggered() {
+
+  Sound::stop_music(get_quest());
+}
+
+/**
  * @brief Slot called when the user triggers the "Show grid" action.
  */
 void MainWindow::on_action_show_grid_triggered() {
@@ -1281,6 +1296,24 @@ void MainWindow::quest_finished() {
 
   // Update the run quest action.
   update_run_quest();
+}
+
+/**
+ * @brief Slot called when a music is started or stopped.
+ * @param music_id Id of the music currently playing
+ * or an empty string.
+ */
+void MainWindow::current_music_changed(const QString& music_id) {
+
+  if (music_id.isEmpty()) {
+    ui.action_pause_music->setEnabled(false);
+    ui.action_stop_music->setEnabled(false);
+  }
+  else {
+    ui.action_pause_music->setEnabled(true);
+    ui.action_stop_music->setEnabled(true);
+
+  }
 }
 
 /**
