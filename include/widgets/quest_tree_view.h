@@ -47,9 +47,11 @@ signals:
 
 public slots:
 
+  void default_action_triggered();
   void new_element_action_triggered();
   void new_directory_action_triggered();
   void new_script_action_triggered();
+  void play_action_triggered();
   void open_action_triggered();
   void open_map_script_action_triggered();
   void open_language_strings_action_triggered();
@@ -67,11 +69,13 @@ protected:
 private:
 
   void build_context_menu_new(QMenu& menu, const QString& path);
+  void build_context_menu_play(QMenu& menu, const QString& path);
   void build_context_menu_open(QMenu& menu, const QString& path);
   void build_context_menu_rename(QMenu& menu, const QString& path);
   void build_context_menu_delete(QMenu& menu, const QString& path);
 
   QuestFilesModel* model;         /**< The underlying model. */
+  QAction* play_action;           /**< Action of playing the selected file. */
   QAction* open_action;           /**< Action of opening the selected file. */
   QAction* rename_action;         /**< Action of renaming the selected file. */
   QAction* delete_action;         /**< Action of deleting the selected file. */

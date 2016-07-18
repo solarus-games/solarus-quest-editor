@@ -178,6 +178,7 @@ set(solarus_quest_editor_SOURCES
   include/rectangle.h
   include/resize_mode.h
   include/size.h
+  include/sound.h
   include/sprite_model.h
   include/starting_location_mode_traits.h
   include/strings_model.h
@@ -278,6 +279,7 @@ set(solarus_quest_editor_SOURCES
   src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp
+  src/sound.cpp
   src/size.cpp
   src/sprite_model.cpp
   src/starting_location_mode_traits.cpp

@@ -20,6 +20,7 @@
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_files_model.h"
+#include "sound.h"
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QFile>
@@ -41,6 +42,14 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   setUniformRowHeights(true);
   setAutoScroll(false);
   setAlternatingRowColors(true);
+
+  play_action = new QAction(
+        QIcon(":/images/icon_start.png"), tr("Play"), this);
+  play_action->setShortcut(Qt::Key_Return);
+  play_action->setShortcutContext(Qt::WidgetShortcut);
+  connect(play_action, SIGNAL(triggered()),
+          this, SLOT(play_action_triggered()));
+  addAction(play_action);
 
   open_action = new QAction(tr("Open"), this);
   open_action->setShortcut(Qt::Key_Return);
@@ -144,7 +153,7 @@ void QuestTreeView::keyPressEvent(QKeyEvent* event) {
     // Numpad enter key.
     // For some reason, this particular key does not work as a QAction shortcut
     // on all systems.
-    open_action_triggered();
+    default_action_triggered();
   }
 }
 
@@ -159,8 +168,8 @@ void QuestTreeView::mouseDoubleClickEvent(QMouseEvent* event) {
       index.column() == QuestFilesModel::FILE_COLUMN &&
       !model->hasChildren(index) &&
       event->button() == Qt::LeftButton) {
-    // Left double-click on leaf item: open the file.
-    open_action_triggered();
+    // Left double-click on leaf item: open or play the file.
+    default_action_triggered();
     return;
   }
 
@@ -189,6 +198,7 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
   QString path = model->get_file_path(index);
   QMenu* menu = new QMenu(this);
 
+  build_context_menu_play(*menu, path);
   build_context_menu_open(*menu, path);
   build_context_menu_new(*menu, path);
   build_context_menu_rename(*menu, path);
@@ -282,6 +292,34 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
     connect(action, SIGNAL(triggered()),
             this, SLOT(new_script_action_triggered()));
     menu.addAction(action);
+  }
+}
+
+/**
+ * @brief Builds the "Play" part of a context menu for a file.
+ * @param menu The context menu being created.
+ * @param path Path whose context menu is requested.
+ */
+void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
+
+  Quest& quest = model->get_quest();
+
+  ResourceType resource_type;
+  QString element_id;
+  if (quest.is_potential_resource_element(path, resource_type, element_id)) {
+    // A resource element.
+
+    switch (resource_type) {
+
+    case ResourceType::MUSIC:
+    case ResourceType::SOUND:
+      menu.addAction(play_action);
+      break;
+
+    default:
+      break;
+    }
+
   }
 }
 
@@ -591,6 +629,54 @@ void QuestTreeView::new_script_action_triggered() {
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
+  }
+
+}
+
+/**
+ * @brief Slot called when the user wants to play the selected file.
+ */
+void QuestTreeView::default_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  const Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (quest.is_potential_resource_element(path, resource_type, element_id)) {
+    if (resource_type == ResourceType::SOUND || resource_type == ResourceType::MUSIC) {
+      play_action_triggered();
+    }
+    else {
+      open_action_triggered();
+    }
+  }
+}
+
+/**
+ * @brief Slot called when the user wants to play the selected file.
+ */
+void QuestTreeView::play_action_triggered() {
+
+  QString path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
+  const Quest& quest = model->get_quest();
+  ResourceType resource_type;
+  QString element_id;
+  if (quest.is_potential_resource_element(path, resource_type, element_id)) {
+    if (resource_type == ResourceType::SOUND) {
+      Sound::play_sound(model->get_quest(), element_id);
+    }
+    else if (resource_type == ResourceType::MUSIC) {
+      Sound::play_music(model->get_quest(), element_id);
+      // TODO or stop the music.
+    }
   }
 
 }
