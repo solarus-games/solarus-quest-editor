@@ -119,21 +119,25 @@ private:
   void compute_leader();
   void compute_fixed_corner();
   void update_boxes(
-      const QPoint& reference_change, bool horizontal_preferred);
+      const QPoint& leader_expansion,
+      bool horizontal_preferred
+  );
   QRect update_box(
       const EntityIndex& index,
-      const QPoint& reference_change,
+      const QPoint& leader_expansion,
       bool horizontal_preferred);
   void apply_smart_resizing(
       const EntityIndex& index,
       ResizeMode resize_mode,
       bool horizontal_preferred,
+      const QPoint& leader_expansion,
       QPoint& expansion,
       QPoint& translation
   );
-  QRect get_box_from_expansion(
+  QRect get_box_from_expansion_and_translation(
       const EntityIndex& index,
-      const QPoint& expansion
+      const QPoint& expansion,
+      const QPoint& translation
   );
   static bool is_horizontally_resizable(
       ResizeMode resize_mode, bool horizontal_preferred);
@@ -1989,7 +1993,6 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     leader_free_corner.ry() += old_leader_box.height() - leader_base_size.height();
   }
 
-  qDebug() << "leader_free_corner " << leader_free_corner;
   QPoint leader_distance_to_mouse = current_point - leader_free_corner;
 
   // Choose once for all entitites the preferred dimension to use
@@ -2008,7 +2011,7 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     reference_base_size.setHeight(leader_base_size.height());
   }
 
-  QPoint reference_change = Point::round_down(leader_distance_to_mouse, reference_base_size);
+  QPoint leader_expansion = Point::round_down(leader_distance_to_mouse, reference_base_size);
 
   // Determine if at least one entity is resizable horizontally and
   // if at least one entity is resizable vertically.
@@ -2029,17 +2032,15 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     // We need to take care of this because with smart resizing,
     // non horizontally resizable entities could still be moved
     // to follow the ones that are.
-    reference_change.setX(0);
+    leader_expansion.setX(0);
   }
   if (!is_resizing_vertically) {
     // Same thing vertically.
-    reference_change.setY(0);
+    leader_expansion.setY(0);
   }
 
-  qDebug() << "ref change " << reference_change;
-
   // Apply the change to the entities.
-  update_boxes(reference_change, horizontal_preferred);
+  update_boxes(leader_expansion, horizontal_preferred);
 }
 
 /**
@@ -2071,7 +2072,7 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 
 /**
  * @brief Applies the resizing to the bounding boxes of entities.
- * @param reference_change How much to extend the current box.
+ * @param leader_expansion How much to expand the current box.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
  * this should be the horizontal or vertical dimension.
  *
@@ -2079,7 +2080,7 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
  * each entity.
  */
 void ResizingEntitiesState::update_boxes(
-    const QPoint& reference_change,
+    const QPoint& leader_expansion,
     bool horizontal_preferred
 ) {
 
@@ -2089,7 +2090,7 @@ void ResizingEntitiesState::update_boxes(
     const EntityIndex& index = it.key();
     QRect new_box = update_box(
           index,
-          reference_change,
+          leader_expansion,
           horizontal_preferred
     );
     new_boxes.insert(index, new_box);
@@ -2103,8 +2104,8 @@ void ResizingEntitiesState::update_boxes(
 /**
  * @brief Updates with new coordinates the rectangle of one entity.
  * @param index Index of the entity to resize.
- * @param reference_change How much the user wants to extend.
- * This extension will be applied at best, preserving constraints on
+ * @param leader_expansion How much the user wants to expand.
+ * This expansion will be applied at best, preserving constraints on
  * the specific entity: its size will remain a multiple of its base size,
  * and its resizing mode will be respected.
  * @param horizontal_preferred When only one of both dimensions can be resized,
@@ -2114,14 +2115,12 @@ void ResizingEntitiesState::update_boxes(
  */
 QRect ResizingEntitiesState::update_box(
     const EntityIndex& index,
-    const QPoint& reference_change,
+    const QPoint& leader_expansion,
     bool horizontal_preferred) {
 
   MapModel& map = get_map();
   Q_ASSERT(map.entity_exists(index));
   EntityModel& entity = map.get_entity(index);
-
-  const QSize& base_size = entity.get_base_size();
 
   // Choose the appropriate resize mode.
   ResizeMode resize_mode = entity.get_resize_mode();
@@ -2134,20 +2133,15 @@ QRect ResizingEntitiesState::update_box(
     resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
   }
 
-  // How much to expand from the current size.
-  QPoint expansion = Point::ceil(reference_change, base_size);
-
   // How much to translate the entity.
   // Only used for non-resizable entities that get moved instead of being
   // resized (smart resizing).
-  QPoint translation(0, 0);
-  apply_smart_resizing(index, resize_mode, horizontal_preferred, expansion, translation);
+  QPoint expansion;
+  QPoint translation;
+  apply_smart_resizing(index, resize_mode, horizontal_preferred, leader_expansion, expansion, translation);
 
   // Compute the bounding box from the expansion and translation.
-  QRect new_box = get_box_from_expansion(index, expansion);
-  if (!translation.isNull()) {
-    new_box.translate(translation);
-  }
+  QRect new_box = get_box_from_expansion_and_translation(index, expansion, translation);
 
   // Apply resize mode constraints to the bounding box.
   // TODO
@@ -2156,7 +2150,7 @@ QRect ResizingEntitiesState::update_box(
 }
 
 /**
- * @brief Decides how to extend or translate an entity with smart resizing.
+ * @brief Decides how to expand or translate an entity.
  *
  * When trying to resize a non horizontally resizable entity located
  * on the right of horizontally resizable things, we move it instead.
@@ -2176,29 +2170,39 @@ QRect ResizingEntitiesState::update_box(
  * @param[in] resize_mode Current resize mode for the entity.
  * @param[in] horizontal_preferred When only one of both dimensions can be resized,
  * whether this should be the horizontal or vertical dimension.
- * @param[in,out] expand How to expand the entity.
- * @param[out] translation How to translate the entity.
+ * @param[in] leader_expansion How the leader entity gets expanded
+ * @param[out] expansion How to expand this entity.
+ * @param[out] translation How to translate this entity.
+ * Zero if no smart resizing is involved.
  */
 void ResizingEntitiesState::apply_smart_resizing(
     const EntityIndex& index,
     ResizeMode resize_mode,
     bool horizontal_preferred,
+    const QPoint& leader_expansion,
     QPoint& expansion,
     QPoint& translation
 ) {
 
+  MapModel& map = get_map();
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
   const QRect& old_box = old_boxes.value(index);
+
+  // Expand like the leader, but keeping a multiple of the base size.
+  expansion = Point::ceil(leader_expansion, base_size);
+  translation = QPoint(0, 0);
 
   // Horizontal smart resizing.
   if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
 
     if (fixed_corner.x() == -1 &&
         old_box.center().x() > center.x()) {
-      translation.setX(expansion.x());
+      translation.setX(leader_expansion.x());
     }
     else if (fixed_corner.x() == 1 &&
         old_box.center().x() < center.x()) {
-      translation.setX(expansion.x());
+      translation.setX(leader_expansion.x());
     }
     expansion.setX(0);
   }
@@ -2208,11 +2212,11 @@ void ResizingEntitiesState::apply_smart_resizing(
     // Smart resizing.
     if (fixed_corner.y() == -1 &&
         old_box.center().y() > center.y()) {
-      translation.setY(expansion.y());
+      translation.setY(leader_expansion.y());
     }
     else if (fixed_corner.y() == 1 &&
         old_box.center().y() < center.y()) {
-      translation.setY(expansion.y());
+      translation.setY(leader_expansion.y());
     }
     expansion.setY(0);
   }
@@ -2221,24 +2225,26 @@ void ResizingEntitiesState::apply_smart_resizing(
 /**
  * @brief Returns the bounding box of an entity expanded with the given amount.
  * @param index Index of an entity.
- * @param extension How much to extend it in both directions, keeping the
+ * @param expansion How much to extend it in both directions, keeping the
  * current fixed corner.
+ * @param translation How much to translate the entity.
  * @return The corresponding new bounding box.
  * The resize mode is not taken into account at this point
  * (this function acts like if the resize mode is the most permissive one:
  * ResizeMode::MULTI_DIMENSION_ALL).
  */
-QRect ResizingEntitiesState::get_box_from_expansion(
+QRect ResizingEntitiesState::get_box_from_expansion_and_translation(
     const EntityIndex& index,
-    const QPoint& expansion
+    const QPoint& expansion,
+    const QPoint& translation
 ) {
   MapModel& map = get_map();
-  Q_ASSERT(map.entity_exists(index));
   EntityModel& entity = map.get_entity(index);
   const QSize& base_size = entity.get_base_size();
   const QRect& old_box = old_boxes.value(index);
   QRect new_box = old_box;
 
+  // Expansion.
   if (fixed_corner.x() == -1) {
     // Left side fixed, right side free.
     int width = old_box.width() + expansion.x();
@@ -2284,6 +2290,11 @@ QRect ResizingEntitiesState::get_box_from_expansion(
       new_box.setHeight(-height + 2 * base_size.height());
       new_box.translate(0, old_box.height() - base_size.height());
     }
+  }
+
+  // Translation.
+  if (!translation.isNull()) {
+    new_box.translate(translation);
   }
 
   return new_box;
