@@ -528,10 +528,31 @@ EntityIndexes MapScene::get_selected_entities() {
 }
 
 /**
- * @brief Selects the specified entities and unselect the rest.
+ * @brief Selects the specified entities and unselects the rest.
  * @param indexes Indexes of the entities to make selecteded.
  */
 void MapScene::set_selected_entities(const EntityIndexes& indexes) {
+
+  // Is there a change?
+  bool changed = false;
+  if (indexes.size() != selectedItems().size()) {
+    changed = true;
+  }
+  else {
+    Q_FOREACH (const EntityIndex& index, indexes) {
+      EntityItem* item = get_entity_item(index);
+      Q_ASSERT(item != nullptr);
+      if (!item->isSelected()) {
+        changed = true;
+        break;
+      }
+    }
+  }
+
+  if (!changed) {
+    // Do nothing for better performance.
+    return;
+  }
 
   clearSelection();
   const bool was_blocked = signalsBlocked();
