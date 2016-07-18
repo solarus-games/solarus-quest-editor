@@ -2132,10 +2132,6 @@ QRect ResizingEntitiesState::update_box(
     // Multiple resize: restrict the resizing to only one dimension.
     resize_mode = ResizeMode::MULTI_DIMENSION_ONE;
   }
-  else if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
-    // Only in one direction: choose which one.
-    resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
-  }
 
   QRect new_box = apply_smart_resizing(
       index,
