@@ -124,6 +124,17 @@ private:
       const EntityIndex& index,
       const QPoint& reference_change,
       bool horizontal_preferred);
+  void apply_smart_resizing(
+      const EntityIndex& index,
+      ResizeMode resize_mode,
+      bool horizontal_preferred,
+      QPoint& expansion,
+      QPoint& translation
+  );
+  QRect get_box_from_expansion(
+      const EntityIndex& index,
+      const QPoint& expansion
+  );
   static bool is_horizontally_resizable(
       ResizeMode resize_mode, bool horizontal_preferred);
   static bool is_vertically_resizable(
@@ -2096,8 +2107,8 @@ void ResizingEntitiesState::update_boxes(
  * This extension will be applied at best, preserving constraints on
  * the specific entity: its size will remain a multiple of its base size,
  * and its resizing mode will be respected.
- * @param horizontal_preferred When only one of both dimensions can be resized, whether
- * this should be the horizontal or vertical dimension.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
  * @return A new bounding box for the entity.
  * Returns a null rectangle in case of error.
  */
@@ -2112,103 +2123,125 @@ QRect ResizingEntitiesState::update_box(
 
   const QSize& base_size = entity.get_base_size();
 
+  // Choose the appropriate resize mode.
   ResizeMode resize_mode = entity.get_resize_mode();
   if (num_free_entities > 1 && resize_mode == ResizeMode::MULTI_DIMENSION_ALL) {
     // Multiple resize: restrict the resizing to only one dimension.
     resize_mode = ResizeMode::MULTI_DIMENSION_ONE;
   }
+  else if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
+    // Only in one direction: choose which one.
+    resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
+  }
 
-  const QRect& old_box = old_boxes.value(index);
-  QRect new_box = old_box;
-
-  // How much to extend from the base size.
-  QPoint extension = Point::ceil(reference_change, base_size);
+  // How much to expand from the current size.
+  QPoint expansion = Point::ceil(reference_change, base_size);
 
   // How much to translate the entity.
   // Only used for non-resizable entities that get moved instead of being
   // resized (smart resizing).
   QPoint translation(0, 0);
+  apply_smart_resizing(index, resize_mode, horizontal_preferred, expansion, translation);
 
-  qDebug() << "Extension after ensuring multiple of base size: " << extension;
-
-  if (resize_mode == ResizeMode::SQUARE) {
-    int sign_x = extension.x() >= 0 ? 1 : -1;
-    int sign_y = extension.y() >= 0 ? 1 : -1;
-    QPoint abs_diff = QPoint(
-          qAbs(extension.x()),
-          qAbs(extension.y())
-    );
-    int length = qMax(abs_diff.x(), abs_diff.y());  // Length of the square.
-    extension = QPoint(sign_x * length, sign_y * length);
-  }
-  else {
-    // Make sure that the entity is extended only in allowed directions.
-    if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
-      resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
-    }
-
-    // Horizontally.
-    if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
-      // Smart resizing:
-      // When trying to resize a non horizontally resizable entity located
-      // on the right of horizontally resizable things, we move it instead.
-      // This allows to resize a full room in only one operation:
-      // ______          ________________
-      // |....|          |..............|
-      // |....|   ===>   |..............|
-      // |____|          |______________|
-      //
-      // Here, the right wall is not horizontally resizable, but it moves
-      // on the right instead when resizing the full room, following the
-      // reference change.
-      if (fixed_corner.x() == -1 &&
-          old_box.center().x() > center.x()) {
-        translation.setX(reference_change.x());
-      }
-      else if (fixed_corner.x() == 1 &&
-          old_box.center().x() < center.x()) {
-        translation.setX(reference_change.x());
-      }
-      extension.setX(0);
-    }
-    else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
-      // Extensible only vertically with the width fixed to the base width.
-      extension.setX(0);
-    }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             !horizontal_preferred) {
-      // Extensible only vertically with the width fixed to the old width.
-      extension.setX(0);
-    }
-
-    // Vertically.
-    if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
-      // Smart resizing.
-      if (fixed_corner.y() == -1 &&
-          old_box.center().y() > center.y()) {
-        translation.setY(reference_change.y());
-      }
-      else if (fixed_corner.y() == 1 &&
-          old_box.center().y() < center.y()) {
-        translation.setY(reference_change.y());
-      }
-      extension.setY(0);
-    }
-    else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
-      // Extensible only horizontally with the height fixed to the base height.
-      extension.setY(0);
-    }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             horizontal_preferred) {
-      // Extensible only horizontally with the height fixed to the old height.
-      extension.setY(0);
-    }
+  // Compute the bounding box from the expansion and translation.
+  QRect new_box = get_box_from_expansion(index, expansion);
+  if (!translation.isNull()) {
+    new_box.translate(translation);
   }
 
-  // Compute the final bounding box.
+  // Apply resize mode constraints to the bounding box.
+  // TODO
+
+  return new_box;
+}
+
+/**
+ * @brief Decides how to extend or translate an entity with smart resizing.
+ *
+ * When trying to resize a non horizontally resizable entity located
+ * on the right of horizontally resizable things, we move it instead.
+ * This allows to resize a full room in only one operation:
+ *     ______          ________________
+ *     |....|          |..............|
+ *     |....|   ===>   |..............|
+ *     |____|          |______________|
+ *
+ * We call this "smart resizing".
+ * Here, the right wall is not horizontally resizable,
+ * but when resizing the full room, it moves
+ * to the right instead of expanding to the right.
+ * The expansion is replaced by a translation.
+ *
+ * @param[in] index Index of the entity to resize.
+ * @param[in] resize_mode Current resize mode for the entity.
+ * @param[in] horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
+ * @param[in,out] expand How to expand the entity.
+ * @param[out] translation How to translate the entity.
+ */
+void ResizingEntitiesState::apply_smart_resizing(
+    const EntityIndex& index,
+    ResizeMode resize_mode,
+    bool horizontal_preferred,
+    QPoint& expansion,
+    QPoint& translation
+) {
+
+  const QRect& old_box = old_boxes.value(index);
+
+  // Horizontal smart resizing.
+  if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
+
+    if (fixed_corner.x() == -1 &&
+        old_box.center().x() > center.x()) {
+      translation.setX(expansion.x());
+    }
+    else if (fixed_corner.x() == 1 &&
+        old_box.center().x() < center.x()) {
+      translation.setX(expansion.x());
+    }
+    expansion.setX(0);
+  }
+
+  // Vertical smart resizing.
+  if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
+    // Smart resizing.
+    if (fixed_corner.y() == -1 &&
+        old_box.center().y() > center.y()) {
+      translation.setY(expansion.y());
+    }
+    else if (fixed_corner.y() == 1 &&
+        old_box.center().y() < center.y()) {
+      translation.setY(expansion.y());
+    }
+    expansion.setY(0);
+  }
+}
+
+/**
+ * @brief Returns the bounding box of an entity expanded with the given amount.
+ * @param index Index of an entity.
+ * @param extension How much to extend it in both directions, keeping the
+ * current fixed corner.
+ * @return The corresponding new bounding box.
+ * The resize mode is not taken into account at this point
+ * (this function acts like if the resize mode is the most permissive one:
+ * ResizeMode::MULTI_DIMENSION_ALL).
+ */
+QRect ResizingEntitiesState::get_box_from_expansion(
+    const EntityIndex& index,
+    const QPoint& expansion
+) {
+  MapModel& map = get_map();
+  Q_ASSERT(map.entity_exists(index));
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
+  const QRect& old_box = old_boxes.value(index);
+  QRect new_box = old_box;
+
   if (fixed_corner.x() == -1) {
     // Left side fixed, right side free.
-    int width = old_box.width() + extension.x();
+    int width = old_box.width() + expansion.x();
     if (width > 0) {
       new_box.setWidth(width);
     }
@@ -2219,10 +2252,10 @@ QRect ResizingEntitiesState::update_box(
   }
   else {
     // Right side fixed, left side free.
-    int width = old_box.width() - extension.x();
+    int width = old_box.width() - expansion.x();
     if (width > 0) {
       new_box.setWidth(width);
-      new_box.translate(extension.x(), 0);
+      new_box.translate(expansion.x(), 0);
     }
     else {
       new_box.setWidth(-width + 2 * base_size.width());
@@ -2231,7 +2264,7 @@ QRect ResizingEntitiesState::update_box(
   }
   if (fixed_corner.y() == -1) {
     // Top side fixed, bottom side free.
-    int height = old_box.height() + extension.y();
+    int height = old_box.height() + expansion.y();
     if (height > 0) {
       new_box.setHeight(height);
     }
@@ -2242,10 +2275,10 @@ QRect ResizingEntitiesState::update_box(
   }
   else {
     // Bottom side fixed, top side free.
-    int height = old_box.height() - extension.y();
+    int height = old_box.height() - expansion.y();
     if (height > 0) {
       new_box.setHeight(height);
-      new_box.translate(0, extension.y());
+      new_box.translate(0, expansion.y());
     }
     else {
       new_box.setHeight(-height + 2 * base_size.height());
@@ -2253,11 +2286,6 @@ QRect ResizingEntitiesState::update_box(
     }
   }
 
-  if (!translation.isNull()) {
-    new_box.translate(translation);
-  }
-
-  qDebug() << "Return " << new_box;
   return new_box;
 }
 
