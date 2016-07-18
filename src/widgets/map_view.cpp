@@ -377,6 +377,8 @@ void MapView::set_state(std::unique_ptr<State> state) {
 void MapView::start_state_doing_nothing() {
 
   set_state(std::unique_ptr<State>(new DoingNothingState(*this)));
+
+  emit stopped_state();
 }
 
 /**

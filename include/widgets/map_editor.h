@@ -83,6 +83,7 @@ private slots:
   void update_music_field();
   void music_selector_activated();
   void map_selection_changed();
+  void uncheck_entity_creation_buttons();
   void update_status_bar();
 
   void edit_entity_requested(const EntityIndex& index,
@@ -109,7 +110,6 @@ private:
   void build_entity_creation_toolbar();
   void build_status_bar();
   void entity_creation_button_triggered(EntityType type, bool checked);
-  void uncheck_entity_creation_buttons();
 
   void load_settings();
 

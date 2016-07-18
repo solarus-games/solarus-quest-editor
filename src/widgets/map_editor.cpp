@@ -1090,6 +1090,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(add_entities_requested(AddableEntities&)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
           this, SLOT(remove_entities_requested(EntityIndexes)));
+  connect(ui.map_view, SIGNAL(stopped_state()),
+          this, SLOT(uncheck_entity_creation_buttons()));
 
   connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
           this, SLOT(map_selection_changed()));
@@ -2023,7 +2025,6 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
   else {
     // Stop adding entities.
     ui.map_view->start_state_doing_nothing();
-    uncheck_entity_creation_buttons();
   }
 }
 

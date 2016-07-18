@@ -39,6 +39,7 @@ Bug fixes
 * Map editor: fix entities still shown when put on a hidden layer.
 * Map editor: fix precision when starting selection above existing entities.
 * Map editor: stop adding tiles when unselecting them from the tileset view.
+* Map editor: uncheck entity creation button after adding an entity (#105).
 * Map editor: keep tileset scroll position when refreshing/changing it (#129).
 * Tileset editor: improve performance of deleting multiple tile pattenrs (#120).
 * Text editor: improve tabulation behavior (#43).

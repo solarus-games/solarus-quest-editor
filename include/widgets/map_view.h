@@ -107,6 +107,8 @@ signals:
 
   void mouse_map_coordinates_changed(const QPoint& xy);
   void mouse_left();
+  void stopped_state();
+
   void undo_requested();
   void edit_entity_requested(const EntityIndex& index,
                              EntityModelPtr& values);
