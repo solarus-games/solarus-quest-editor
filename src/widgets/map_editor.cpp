@@ -1151,7 +1151,7 @@ void MapEditor::build_entity_creation_toolbar() {
   for (const auto& pair : types_in_toolbar) {
     EntityType type = pair.first;
     QString text = pair.second;
-    QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".png";
+    QString icon_name = ":/images/entity_" + EntityTraits::get_lua_name(type) + ".svg";
     QAction* action = new QAction(QIcon(icon_name), text, nullptr);
     action->setCheckable(true);
     action->setData(static_cast<int>(type));

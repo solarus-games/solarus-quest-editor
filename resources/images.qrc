@@ -2,29 +2,29 @@
     <qresource prefix="/">
         <file>images/animation_separation_horizontal.png</file>
         <file>images/animation_separation_vertical.png</file>
-        <file>images/entity_block.png</file>
-        <file>images/entity_chest.png</file>
-        <file>images/entity_crystal.png</file>
-        <file>images/entity_crystal_block.png</file>
+        <file>images/entity_block.svg</file>
+        <file>images/entity_chest.svg</file>
+        <file>images/entity_crystal.svg</file>
+        <file>images/entity_crystal_block.svg</file>
         <file>images/entity_custom_resizable.png</file>
-        <file>images/entity_destination.png</file>
-        <file>images/entity_destructible.png</file>
-        <file>images/entity_door.png</file>
-        <file>images/entity_enemy.png</file>
-        <file>images/entity_jumper.png</file>
-        <file>images/entity_npc.png</file>
-        <file>images/entity_pickable.png</file>
-        <file>images/entity_sensor.png</file>
+        <file>images/entity_destination.svg</file>
+        <file>images/entity_destructible.svg</file>
+        <file>images/entity_door.svg</file>
+        <file>images/entity_enemy.svg</file>
+        <file>images/entity_jumper.svg</file>
+        <file>images/entity_npc.svg</file>
+        <file>images/entity_pickable.svg</file>
+        <file>images/entity_sensor.svg</file>
         <file>images/entity_sensor_resizable.png</file>
-        <file>images/entity_separator.png</file>
+        <file>images/entity_separator.svg</file>
         <file>images/entity_separator_resizable.png</file>
-        <file>images/entity_shop_treasure.png</file>
-        <file>images/entity_stairs.png</file>
-        <file>images/entity_stream.png</file>
-        <file>images/entity_switch.png</file>
-        <file>images/entity_teletransporter.png</file>
+        <file>images/entity_shop_treasure.svg</file>
+        <file>images/entity_stairs.svg</file>
+        <file>images/entity_stream.svg</file>
+        <file>images/entity_switch.svg</file>
+        <file>images/entity_teletransporter.svg</file>
         <file>images/entity_teletransporter_resizable.png</file>
-        <file>images/entity_wall.png</file>
+        <file>images/entity_wall.svg</file>
         <file>images/entity_wall_resizable.png</file>
         <file>images/ground_deep_water.png</file>
         <file>images/ground_empty.png</file>
@@ -120,7 +120,7 @@
         <file>images/entity_destination_all.png</file>
         <file>images/entity_stairs_all.png</file>
         <file>images/entity_stream_all.png</file>
-        <file>images/entity_custom_entity.png</file>
+        <file>images/entity_custom_entity.svg</file>
         <file>images/icon_doc.png</file>
         <file>images/icon_web.png</file>
         <file>images/icon_string.png</file>
