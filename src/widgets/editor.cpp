@@ -19,6 +19,7 @@
 #include "editor_exception.h"
 #include "quest.h"
 #include <solarus/SolarusFatal.h>
+#include <QApplication>
 #include <QMessageBox>
 #include <QUndoStack>
 #include <QVBoxLayout>
@@ -159,9 +160,14 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   entity_type_visibility_supported(false),
   view_settings() {
 
+  setFocusPolicy(Qt::StrongFocus);
+
   // Default close confirmation message.
   set_close_confirm_message(
         tr("File '%1' has been modified. Save changes?").arg(get_file_name()));
+
+  connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)),
+          this, SLOT(application_state_changed(Qt::ApplicationState)));
 }
 
 /**
@@ -689,6 +695,41 @@ const ViewSettings& Editor::get_view_settings() const {
  */
 ViewSettings& Editor::get_view_settings() {
   return view_settings;
+}
+
+/**
+ * @brief Function called when this editor becomes active.
+ *
+ * This happens if the application gets active and the editor is the active one.
+ */
+void Editor::editor_made_visible() {
+
+}
+
+/**
+ * @brief Event called when this editor gets focused.
+ * @param event The focuse in event.
+ */
+void Editor::focusInEvent(QFocusEvent* event) {
+
+  Q_UNUSED(event);
+  editor_made_visible();
+}
+
+/**
+ * @brief Slot called when the application state changes.
+ * @param event The new state.
+ */
+void Editor::application_state_changed(Qt::ApplicationState state) {
+
+  if (state != Qt::ApplicationActive) {
+    return;
+  }
+
+  // Check if the tileset image has changed.
+  if (isVisible()) {
+    editor_made_visible();
+  }
 }
 
 }

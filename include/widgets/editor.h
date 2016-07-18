@@ -98,10 +98,17 @@ protected:
   void set_layers_supported(int min_layer, int max_layer);
   void set_entity_type_visibility_supported(bool supported);
 
+  void focusInEvent(QFocusEvent* event) override;
+  virtual void editor_made_visible();
+
   QString get_close_confirm_message() const;
   void set_close_confirm_message(const QString& message);
 
   bool try_command(QUndoCommand* command);
+
+private slots:
+
+  void application_state_changed(Qt::ApplicationState state);
 
 private:
 

@@ -21,8 +21,11 @@
 #include "quest.h"
 #include "quest_resources.h"
 #include "tileset_model.h"
+#include <QGuiApplication>
 #include <QColorDialog>
+#include <QDebug>
 #include <QFile>
+#include <QFileSystemWatcher>
 #include <QInputDialog>
 #include <QItemSelectionModel>
 #include <QMessageBox>
@@ -488,7 +491,8 @@ private:
  */
 TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent) :
   Editor(quest, path, parent),
-  model(nullptr) {
+  model(nullptr),
+  tileset_image_dirty(false) {
 
   ui.setupUi(this);
 
@@ -599,6 +603,11 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
 
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
+
+  QFileSystemWatcher* watcher = new QFileSystemWatcher(this);
+  watcher->addPath(quest.get_tileset_tiles_image_path(tileset_id));
+  connect(watcher, SIGNAL(fileChanged(QString)),
+          this, SLOT(tileset_image_changed()));
 }
 
 /**
@@ -754,6 +763,14 @@ void TilesetEditor::update_pattern_view() {
 
   // If no pattern is selected, disable the tile pattern view.
   ui.pattern_properties_group_box->setEnabled(!model->is_selection_empty());
+}
+
+/**
+ * @brief Slot called when the PNG file of the tileset has changed.
+ */
+void TilesetEditor::tileset_image_changed() {
+
+  tileset_image_dirty = true;
 }
 
 /**
@@ -1198,6 +1215,37 @@ void TilesetEditor::delete_selected_patterns_requested() {
   }
 
   try_command(new DeletePatternsCommand(*this, indexes));
+}
+
+/**
+ * @copydoc Editor::editor_made_visible
+ */
+void TilesetEditor::editor_made_visible() {
+
+  Editor::editor_made_visible();
+
+  if (tileset_image_dirty) {
+    tileset_image_dirty = false;
+    QMessageBox::StandardButton answer = QMessageBox::question(
+          this,
+          tr("Image was modified externally"),
+          tr("The tileset image was modified.\nDo you want to refresh the tileset?"),
+          QMessageBox::Yes | QMessageBox::No,
+          QMessageBox::Yes
+          );
+
+    if (answer == QMessageBox::QMessageBox::No) {
+      return;
+    }
+
+    TilesetModel* old_model = model;
+
+    model = new TilesetModel(get_quest(), tileset_id, this);
+    ui.tileset_view->set_model(model);
+    ui.patterns_list_view->set_model(*model);
+
+    delete old_model;
+  }
 }
 
 }
