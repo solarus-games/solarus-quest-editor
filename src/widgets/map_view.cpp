@@ -2302,6 +2302,7 @@ QRect ResizingEntitiesState::get_box_from_expansion_and_translation(
  * @param horizontal_preferred When only one of both dimensions can be resized,
  * whether this should be the horizontal or vertical dimension.
  * @param box The candidate bounding box, before applying constraints.
+ * Assumed to be a multiple of the base size.
  * @return The resulting bounding box.
  */
 QRect ResizingEntitiesState::apply_constraints(
@@ -2310,14 +2311,125 @@ QRect ResizingEntitiesState::apply_constraints(
     bool horizontal_preferred,
     const QRect& box
 ) {
-  Q_UNUSED(index);
-  Q_UNUSED(resize_mode);
-  Q_UNUSED(horizontal_preferred);
-//  MapModel& map = get_map();
-//  EntityModel& entity = map.get_entity(index);
-//  const QSize& base_size = entity.get_base_size();
-//  const QRect& old_box = old_boxes.value(index);
+  MapModel& map = get_map();
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
+  const QRect& old_box = old_boxes.value(index);
   QRect new_box = box;
+
+  // Only in one direction: choose which one.
+  if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
+    resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
+  }
+
+  // If we are going to fix the size, first we need to decide where to anchor
+  // the entity after the change of size.
+  QRect base_box = old_box;
+  base_box.setSize(base_size);
+  if (fixed_corner.x() == 1) {
+    base_box.setRight(old_box.right());
+  }
+  if (fixed_corner.y() == 1) {
+    base_box.setBottom(old_box.bottom());
+  }
+  bool anchor_to_right = box.right() == base_box.right();
+  bool anchor_to_bottom = box.bottom() == base_box.bottom();
+
+  // Fix the size or not depending on the resize mode.
+  switch (resize_mode) {
+
+  case ResizeMode::SINGLE_DIMENSION:
+  {
+    // Already handled (see above).
+    break;
+  }
+
+  case ResizeMode::MULTI_DIMENSION_ALL:
+  {
+    // No additional constraint.
+    break;
+  }
+
+  case ResizeMode::NONE:
+  {
+    // The size must always be the base size.
+    if (new_box.size() != base_size) {
+      new_box.setSize(base_size);
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::HORIZONTAL_ONLY:
+  {
+    // The height must be the base height.
+    if (new_box.height() != base_size.height()) {
+      new_box.setHeight(base_size.height());
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::VERTICAL_ONLY:
+  {
+    // The width must be the base width.
+    if (new_box.width() != base_size.width()) {
+      new_box.setWidth(base_size.width());
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::MULTI_DIMENSION_ONE:
+  {
+    // The width or height must remain unchanged.
+    if (horizontal_preferred) {
+      // The width must be the previous width.
+      if (new_box.width() != old_box.width()) {
+        new_box.setWidth(old_box.width());
+        if (anchor_to_right) {
+          new_box.moveBottom(base_box.bottom());
+        }
+      }
+    }
+    else {
+      // The height must be the previous height.
+      if (new_box.height() != old_box.height()) {
+        new_box.setHeight(old_box.height());
+        if (anchor_to_bottom) {
+          new_box.moveBottom(base_box.bottom());
+        }
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::SQUARE:
+  {
+    // The width and height must be equal.
+    if (new_box.width() != new_box.height()) {
+      int max = qMax(new_box.width(), new_box.height());
+      new_box.setSize(QSize(max, max));
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  }  // switch
 
   return new_box;
 }
