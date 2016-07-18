@@ -302,7 +302,7 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
  */
 void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
 
-  Quest& quest = model->get_quest();
+  const Quest& quest = model->get_quest();
 
   ResourceType resource_type;
   QString element_id;
@@ -313,6 +313,7 @@ void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
 
     case ResourceType::MUSIC:
     case ResourceType::SOUND:
+      play_action->setEnabled(quest.exists(path));
       menu.addAction(play_action);
       break;
 
