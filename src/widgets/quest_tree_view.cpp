@@ -45,14 +45,12 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
 
   play_action = new QAction(
         QIcon(":/images/icon_start.png"), tr("Play"), this);
-  play_action->setShortcut(Qt::Key_Return);
   play_action->setShortcutContext(Qt::WidgetShortcut);
   connect(play_action, SIGNAL(triggered()),
           this, SLOT(play_action_triggered()));
   addAction(play_action);
 
   open_action = new QAction(tr("Open"), this);
-  open_action->setShortcut(Qt::Key_Return);
   open_action->setShortcutContext(Qt::WidgetShortcut);
   connect(open_action, SIGNAL(triggered()),
           this, SLOT(open_action_triggered()));
@@ -149,10 +147,8 @@ void QuestTreeView::set_selected_path(const QString& path) {
  */
 void QuestTreeView::keyPressEvent(QKeyEvent* event) {
 
-  if (event->key() == Qt::Key_Enter) {
-    // Numpad enter key.
-    // For some reason, this particular key does not work as a QAction shortcut
-    // on all systems.
+  if (event->key() == Qt::Key_Enter ||
+      event->key() == Qt::Key_Return) {
     default_action_triggered();
   }
 }
@@ -635,7 +631,7 @@ void QuestTreeView::new_script_action_triggered() {
 }
 
 /**
- * @brief Slot called when the user wants to play the selected file.
+ * @brief Slot called when the user double-clicks or presses enter on a file.
  */
 void QuestTreeView::default_action_triggered() {
 
@@ -648,11 +644,14 @@ void QuestTreeView::default_action_triggered() {
   ResourceType resource_type;
   QString element_id;
   if (quest.is_potential_resource_element(path, resource_type, element_id)) {
-    if (resource_type == ResourceType::SOUND || resource_type == ResourceType::MUSIC) {
-      play_action_triggered();
-    }
-    else {
-      open_action_triggered();
+
+    if (quest.exists(path)) {
+      if (resource_type == ResourceType::SOUND || resource_type == ResourceType::MUSIC) {
+        play_action_triggered();
+      }
+      else {
+        open_action_triggered();
+      }
     }
   }
 }
