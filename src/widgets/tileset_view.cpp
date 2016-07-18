@@ -106,12 +106,16 @@ void TilesetView::set_model(TilesetModel* model) {
 
   int horizontal_scrollbar_value = 0;
   int vertical_scrollbar_value = 0;
+  double zoom = 2.0;  // Initial zoom: x2.
 
   if (this->model != nullptr) {
     this->model = nullptr;
     this->scene = nullptr;
     horizontal_scrollbar_value = horizontalScrollBar()->value();
     vertical_scrollbar_value = verticalScrollBar()->value();
+    if (view_settings != nullptr) {
+      zoom = view_settings->get_zoom();
+    }
   }
 
   this->model = model;
@@ -127,7 +131,7 @@ void TilesetView::set_model(TilesetModel* model) {
 
     // Enable useful features if there is an image.
     if (view_settings != nullptr) {
-      view_settings->set_zoom(2.0);  // Initial zoom: x2.
+      view_settings->set_zoom(zoom);  // Initial zoom: x2.
     }
     horizontalScrollBar()->setValue(horizontal_scrollbar_value);
     verticalScrollBar()->setValue(vertical_scrollbar_value);
