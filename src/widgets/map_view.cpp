@@ -126,18 +126,22 @@ private:
       const EntityIndex& index,
       const QPoint& leader_expansion,
       bool horizontal_preferred);
-  void apply_smart_resizing(
+  QRect apply_smart_resizing(
       const EntityIndex& index,
       ResizeMode resize_mode,
       bool horizontal_preferred,
-      const QPoint& leader_expansion,
-      QPoint& expansion,
-      QPoint& translation
+      const QPoint& leader_expansion
   );
   QRect get_box_from_expansion_and_translation(
       const EntityIndex& index,
       const QPoint& expansion,
       const QPoint& translation
+  );
+  QRect apply_constraints(
+      const EntityIndex& index,
+      ResizeMode resize_mode,
+      bool horizontal_preferred,
+      const QRect& box
   );
   static bool is_horizontally_resizable(
       ResizeMode resize_mode, bool horizontal_preferred);
@@ -2133,18 +2137,15 @@ QRect ResizingEntitiesState::update_box(
     resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
   }
 
-  // How much to translate the entity.
-  // Only used for non-resizable entities that get moved instead of being
-  // resized (smart resizing).
-  QPoint expansion;
-  QPoint translation;
-  apply_smart_resizing(index, resize_mode, horizontal_preferred, leader_expansion, expansion, translation);
-
-  // Compute the bounding box from the expansion and translation.
-  QRect new_box = get_box_from_expansion_and_translation(index, expansion, translation);
+  QRect new_box = apply_smart_resizing(
+      index,
+      resize_mode,
+      horizontal_preferred,
+      leader_expansion
+  );
 
   // Apply resize mode constraints to the bounding box.
-  // TODO
+  new_box = apply_constraints(index, resize_mode, horizontal_preferred, new_box);
 
   return new_box;
 }
@@ -2166,32 +2167,27 @@ QRect ResizingEntitiesState::update_box(
  * to the right instead of expanding to the right.
  * The expansion is replaced by a translation.
  *
- * @param[in] index Index of the entity to resize.
- * @param[in] resize_mode Current resize mode for the entity.
- * @param[in] horizontal_preferred When only one of both dimensions can be resized,
+ * @param index Index of the entity to resize.
+ * @param resize_mode Current resize mode for the entity.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
  * whether this should be the horizontal or vertical dimension.
- * @param[in] leader_expansion How the leader entity gets expanded
- * @param[out] expansion How to expand this entity.
- * @param[out] translation How to translate this entity.
- * Zero if no smart resizing is involved.
+ * @param leader_expansion How the leader entity gets expanded
+ * @return The resulting bounding box.
  */
-void ResizingEntitiesState::apply_smart_resizing(
+QRect ResizingEntitiesState::apply_smart_resizing(
     const EntityIndex& index,
     ResizeMode resize_mode,
     bool horizontal_preferred,
-    const QPoint& leader_expansion,
-    QPoint& expansion,
-    QPoint& translation
+    const QPoint& leader_expansion
 ) {
-
   MapModel& map = get_map();
   EntityModel& entity = map.get_entity(index);
   const QSize& base_size = entity.get_base_size();
   const QRect& old_box = old_boxes.value(index);
 
   // Expand like the leader, but keeping a multiple of the base size.
-  expansion = Point::ceil(leader_expansion, base_size);
-  translation = QPoint(0, 0);
+  QPoint expansion = Point::ceil(leader_expansion, base_size);
+  QPoint translation(0, 0);
 
   // Horizontal smart resizing.
   if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
@@ -2220,6 +2216,9 @@ void ResizingEntitiesState::apply_smart_resizing(
     }
     expansion.setY(0);
   }
+
+  // Compute the bounding box from the expansion and translation.
+  return get_box_from_expansion_and_translation(index, expansion, translation);
 }
 
 /**
@@ -2296,6 +2295,33 @@ QRect ResizingEntitiesState::get_box_from_expansion_and_translation(
   if (!translation.isNull()) {
     new_box.translate(translation);
   }
+
+  return new_box;
+}
+
+/**
+ * Ensures that a bounding box respects the constraints of the resize mode.
+ * @param index Index of the entity to resize.
+ * @param resize_mode Current resize mode for thi entity.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
+ * @param box The candidate bounding box, before applying constraints.
+ * @return The resulting bounding box.
+ */
+QRect ResizingEntitiesState::apply_constraints(
+    const EntityIndex& index,
+    ResizeMode resize_mode,
+    bool horizontal_preferred,
+    const QRect& box
+) {
+  Q_UNUSED(index);
+  Q_UNUSED(resize_mode);
+  Q_UNUSED(horizontal_preferred);
+//  MapModel& map = get_map();
+//  EntityModel& entity = map.get_entity(index);
+//  const QSize& base_size = entity.get_base_size();
+//  const QRect& old_box = old_boxes.value(index);
+  QRect new_box = box;
 
   return new_box;
 }
