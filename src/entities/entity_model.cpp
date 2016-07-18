@@ -38,6 +38,7 @@
 #include "entities/tile.h"
 #include "entities/wall.h"
 #include "widgets/gui_tools.h"
+#include "editor_exception.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
@@ -1411,67 +1412,80 @@ bool EntityModel::draw_as_sprite(
     const QString& animation,
     int frame) const {
 
+  const Quest& quest = get_quest();
+
   if (sprite_id.isEmpty()) {
     // No sprite sheet.
     return false;
   }
 
   if (!get_resources().exists(ResourceType::SPRITE, sprite_id)) {
-    // The sprite does not exist in the quest.
+    // The sprite is not declared in the quest.
     return false;
   }
 
-  if (sprite_model == nullptr ||
-      sprite_model->get_sprite_id() != sprite_id) {
-    sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(get_quest(), sprite_id));
-    sprite_model->set_tileset_id(get_tileset_id());
+  if (!quest.exists(quest.get_resource_element_path(ResourceType::SPRITE, sprite_id))) {
+    // The sprite file does not exist.
+    return false;
   }
 
-  SpriteModel::Index index(animation, 0);
-  if (!sprite_model->animation_exists(index)) {
-    // Try the default animation.
-    index.animation_name = sprite_model->get_default_animation_name();
+  try {
+    if (sprite_model == nullptr ||
+        sprite_model->get_sprite_id() != sprite_id) {
+      sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(quest, sprite_id));
+      sprite_model->set_tileset_id(get_tileset_id());
+    }
+
+    SpriteModel::Index index(animation, 0);
     if (!sprite_model->animation_exists(index)) {
-      // No animation.
+      // Try the default animation.
+      index.animation_name = sprite_model->get_default_animation_name();
+      if (!sprite_model->animation_exists(index)) {
+        // No animation.
+        return false;
+      }
+    }
+
+    bool has_direction_field;
+    int direction = get_field("direction").toInt(&has_direction_field);
+    if (!has_direction_field) {
+      direction = 0;
+    }
+    index.direction_nb = direction;
+
+    if (!sprite_model->direction_exists(index)) {
+      index.direction_nb = 0;
+    }
+    if (!sprite_model->direction_exists(index)) {
+      // No direction.
       return false;
     }
-  }
 
-  bool has_direction_field;
-  int direction = get_field("direction").toInt(&has_direction_field);
-  if (!has_direction_field) {
-    direction = 0;
-  }
-  index.direction_nb = direction;
+    // Lazily create the image.
+    if (sprite_image.isNull()) {
+      int frame_positive_number = frame;
+      if (frame_positive_number < 0) {
+        frame_positive_number = sprite_model->get_direction_num_frames(index) + frame_positive_number;
+      }
+      sprite_image = sprite_model->get_direction_frame(index, frame_positive_number);
+      if (sprite_image.isNull()) {
+        // The sprite model did not give a valid image.
+        return false;
+      }
+    }
 
-  if (!sprite_model->direction_exists(index)) {
-    index.direction_nb = 0;
+    QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
+    if (draw_sprite_info.tiled) {
+      painter.drawTiledPixmap(QRect(dst_top_left, get_size()), sprite_image);
+    }
+    else {
+      painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
+    }
   }
-  if (!sprite_model->direction_exists(index)) {
-    // No direction.
+  catch (const EditorException&) {
     return false;
   }
 
-  // Lazily create the image.
-  if (sprite_image.isNull()) {
-    int frame_positive_number = frame;
-    if (frame_positive_number < 0) {
-      frame_positive_number = sprite_model->get_direction_num_frames(index) + frame_positive_number;
-    }
-    sprite_image = sprite_model->get_direction_frame(index, frame_positive_number);
-    if (sprite_image.isNull()) {
-      // The sprite model did not give a valid image.
-      return false;
-    }
-  }
-
-  QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
-  if (draw_sprite_info.tiled) {
-    painter.drawTiledPixmap(QRect(dst_top_left, get_size()), sprite_image);
-  }
-  else {
-    painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
-  }
   return true;
 }
 
