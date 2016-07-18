@@ -1341,7 +1341,7 @@ void TilesetModel::set_selected_indexes(const QList<int>& indexes) {
     selection.select(model_index, model_index);
   }
 
-  if (selection.indexes() == current_selection) {
+  if (selection.indexes().toSet() == current_selection.toSet()) {
     // No change.
     return;
   }

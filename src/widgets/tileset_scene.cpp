@@ -184,19 +184,34 @@ void TilesetScene::build() {
 void TilesetScene::update_selection_to_scene(
     const QItemSelection& selected, const QItemSelection& deselected) {
 
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
+
   // Update the scene with the change.
+  bool changed = false;
   Q_FOREACH (const QModelIndex& model_index, selected.indexes()) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
-      pattern_items[index]->setSelected(true);
+      if (!pattern_items[index]->isSelected()) {
+        pattern_items[index]->setSelected(true);
+        changed = true;
+      }
     }
   }
 
   Q_FOREACH (const QModelIndex& model_index, deselected.indexes()) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
-      pattern_items[index]->setSelected(false);
+      if (pattern_items[index]->isSelected()) {
+        pattern_items[index]->setSelected(false);
+        changed = true;
+      }
     }
+  }
+  blockSignals(was_blocked);
+
+  if (changed) {
+    emit selectionChanged();
   }
 }
 

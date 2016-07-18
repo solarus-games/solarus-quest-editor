@@ -1738,7 +1738,7 @@ void MapEditor::map_selection_changed() {
   can_cut_changed(!empty_selection);
   can_copy_changed(!empty_selection);
 
-  // Nofify the tileset view if of selected tile patterns.
+  // Nofify the tileset view of selected tile patterns.
   TilesetModel* tileset = ui.tileset_view->get_model();
   if (tileset != nullptr) {
     const EntityIndexes& entity_indexes = ui.map_view->get_selected_entities();

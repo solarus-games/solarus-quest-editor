@@ -46,6 +46,8 @@ Bug fixes
 * Map editor: stop adding tiles when unselecting them from the tileset view.
 * Map editor: uncheck entity creation button after adding an entity (#105).
 * Map editor: keep tileset scroll position when refreshing/changing it (#129).
+* Map editor: improve performance of selecting multiple entities.
+* Map editor: improve performance of moving multiple entities.
 * Tileset editor: improve performance of deleting multiple tile pattenrs (#120).
 * Text editor: improve tabulation behavior (#43).
 
