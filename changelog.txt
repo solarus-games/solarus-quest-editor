@@ -20,7 +20,10 @@ New features
 * The shortcut to load a quest is now Ctrl+L.
 * Add resource dialog: set the id as initial value for the description (#192).
 * Automatically add .lua extension when creating a script file (#46).
+* Allow to play musics and sounds from the quest (#8).
 * Map editor: allow more than 3 layers.
+* Map editor: implement smart resizing to resize full rooms at once (#54).
+* Map editor: allow to resize from the left and from the top (#111).
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: add shortcuts to move one layer up or down (+ and -).
 * Map editor: add Escape shortcut to stop adding entities (#92).
@@ -35,6 +38,7 @@ Bug fixes
 
 * Fix wrong hero movements sometimes when playing from the editor (#138).
 * Fix tabs not closed when opening another quest (#44).
+* Map editor: fix crash when creating a block with a missing sprite (#195).
 * Map editor: fix performance regression when pasting a lot of entities (#141).
 * Map editor: fix entities still shown when put on a hidden layer.
 * Map editor: fix precision when starting selection above existing entities.
