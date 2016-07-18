@@ -37,6 +37,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QtMath>
 
 namespace SolarusEditor {
 
@@ -114,11 +115,34 @@ public:
   void mouse_released(const QMouseEvent& event) override;
 
 private:
+  void compute_center();
+  void compute_leader();
+  void compute_fixed_corner();
+  void update_boxes(
+      const QPoint& leader_expansion,
+      bool horizontal_preferred
+  );
   QRect update_box(
       const EntityIndex& index,
-      const QPoint& reference_change,
+      const QPoint& leader_expansion,
+      bool horizontal_preferred);
+  QRect apply_smart_resizing(
+      const EntityIndex& index,
+      ResizeMode resize_mode,
       bool horizontal_preferred,
-      const QPoint& center);
+      const QPoint& leader_expansion
+  );
+  QRect get_box_from_expansion_and_translation(
+      const EntityIndex& index,
+      const QPoint& expansion,
+      const QPoint& translation
+  );
+  QRect apply_constraints(
+      const EntityIndex& index,
+      ResizeMode resize_mode,
+      bool horizontal_preferred,
+      const QRect& box
+  );
   static bool is_horizontally_resizable(
       ResizeMode resize_mode, bool horizontal_preferred);
   static bool is_vertically_resizable(
@@ -130,6 +154,9 @@ private:
   EntityIndex leader_index;       /**< Entity whose resizing follows the cursor position.
                                    * Other ones reproduce an equivalent change. */
   QPoint center;                  /**< Center of the bounding box of entities to resize. */
+  QPoint fixed_corner;            /**< Which corner of the initial entities box
+                                   * is fixed (+-1, +-1).
+                                   * The opposite one follows the mouse. */
   bool first_resize_done;         /**< Whether at least one resizing was done during the state. */
   int num_free_entities;          /**< Number of entities freely resizable (mode ResizeMode::MULTI_DIMENSION_ALL). */
 
@@ -1431,6 +1458,21 @@ MapModel& MapView::State::get_map() {
 }
 
 /**
+ * @brief Returns the point of a mouse event in map coordinates.
+ * @param mouse_event A mouse event.
+ * @return The point in mouse coordinates.
+ */
+QPoint MapView::State::to_map_point(const QMouseEvent& mouse_event) const {
+
+  // Need to floor to know exactly the square that has the mouse.
+  QPointF map_point_f = view.mapToScene(mouse_event.pos()) - MapScene::get_margin_top_left();
+  return QPoint(
+        qFloor(map_point_f.x()),
+        qFloor(map_point_f.y())
+  );
+}
+
+/**
  * @brief Called when entering this state.
  *
  * Subclasses can reimplement this function to initialize data.
@@ -1820,25 +1862,27 @@ ResizingEntitiesState::ResizingEntitiesState(
 }
 
 /**
- * @copydoc MapView::State::start
+ * @brief Determines the center of the entities to resize.
  */
-void ResizingEntitiesState::start() {
-
-  MapView& view = get_view();
-  MapModel& map = get_map();
-  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
-  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
+void ResizingEntitiesState::compute_center() {
 
   // Compute the total bounding box to determine its center.
+  MapModel& map = get_map();
   QRect total_box = map.get_entity_bounding_box(entities.first());
   Q_FOREACH (const EntityIndex& index, entities) {
     total_box |= map.get_entity_bounding_box(index);
   }
   center = total_box.center();
+}
 
-  // Choose the leader: among the most freely resizable entities,
-  // it will be the one whose bottom-right corner
-  // is the nearest to the mouse.
+/**
+ * @brief Determines the entity whose resizing follows the cursor position.
+ * Other ones will reproduce an equivalent change.
+ */
+void ResizingEntitiesState::compute_leader() {
+
+  // Among the most freely resizable entities,
+  // the leader will be the closest to the mouse.
   const std::vector<ResizeMode> resize_modes_by_priority = {
     ResizeMode::MULTI_DIMENSION_ALL,
     ResizeMode::MULTI_DIMENSION_ONE,
@@ -1848,6 +1892,12 @@ void ResizingEntitiesState::start() {
     ResizeMode::VERTICAL_ONLY,
     ResizeMode::NONE
   };
+
+  MapModel& map = get_map();
+  MapView& view = get_view();
+
+  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
+  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
 
   bool found_leader = false;
   for (ResizeMode wanted_resize_mode : resize_modes_by_priority) {
@@ -1872,16 +1922,54 @@ void ResizingEntitiesState::start() {
 
       // Determine a leader if none was found with previous resize modes.
       found_leader = true;
-      const QPoint& bottom_right = entity.get_bottom_right();
-      int distance = (bottom_right - mouse_position).manhattanLength();
+      const QPoint& entity_center = entity.get_center();
+      int distance = (entity_center - mouse_position).manhattanLength();
       if (distance < min_distance) {
         leader_index = index;
         min_distance = distance;
       }
     }
   }
-
   Q_ASSERT(leader_index.is_valid());
+}
+
+/**
+ * Determines which corner of entities should be fixed
+ * and which one should follow the mouse.
+ */
+void ResizingEntitiesState::compute_fixed_corner() {
+
+  // Decide the resizing directions depending
+  // on the mouse position relative to the leader.
+  Q_ASSERT(leader_index.is_valid());
+
+  MapModel& map = get_map();
+  MapView& view = get_view();
+
+  const QPoint mouse_position_in_view = view.mapFromGlobal(QCursor::pos());
+  QPoint mouse_position = view.mapToScene(mouse_position_in_view).toPoint() - MapScene::get_margin_top_left();
+
+  const EntityModel& entity = map.get_entity(leader_index);
+  const QPoint& entity_center = entity.get_center();
+
+  fixed_corner.setX(mouse_position.x() >= entity_center.x() ? -1 : 1);
+  fixed_corner.setY(mouse_position.y() >= entity_center.y() ? -1 : 1);
+}
+
+/**
+ * @copydoc MapView::State::start
+ */
+void ResizingEntitiesState::start() {
+
+  // Determine the center of the entities to resize.
+  compute_center();
+
+  // Determine the leader entity.
+  compute_leader();
+
+  // Determine which corner of entities will be fixed
+  // and which one will follow the mouse.
+  compute_fixed_corner();
 }
 
 /**
@@ -1889,33 +1977,45 @@ void ResizingEntitiesState::start() {
  */
 void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
 
-  MapView& view = get_view();
-  QPoint current_point = view.mapToScene(event.pos()).toPoint() - MapScene::get_margin_top_left();
+  const MapModel& map = get_map();
+  const EntityModel& leader = map.get_entity(leader_index);
+  const QSize& leader_base_size = leader.get_base_size();
 
-  QMap<EntityIndex, QRect> new_boxes;
+  // Need to floor to know exactly which 8x8 square has the mouse.
+  QPoint current_point = to_map_point(event);
+
   const QRect& old_leader_box = old_boxes.value(leader_index);
+
+  // See which corner of the leader is following the mouse.
+  QPoint leader_free_corner = old_leader_box.topLeft();
+  if (fixed_corner.x() == -1) {
+    // The left side is fixed, the right side moves.
+    leader_free_corner.rx() += old_leader_box.width() - leader_base_size.width();
+  }
+  if (fixed_corner.y() == -1) {
+    // The top side is fixed, the bottom side moves.
+    leader_free_corner.ry() += old_leader_box.height() - leader_base_size.height();
+  }
+
+  QPoint leader_distance_to_mouse = current_point - leader_free_corner;
 
   // Choose once for all entitites the preferred dimension to use
   // in case resizing is constrained.
-  QPoint leader_distance_to_mouse = current_point - (old_leader_box.bottomRight() + QPoint(1, 1));
   bool horizontal_preferred = qAbs(leader_distance_to_mouse.x()) > qAbs(leader_distance_to_mouse.y());
 
   // Determine the change to apply to all selected entities.
-  const MapModel& map = *view.get_map();
-  const EntityModel& leader = map.get_entity(leader_index);
-  const QSize& leader_base_size = leader.get_base_size();
-  int floor_x = 8;
-  int floor_y = 8;
+  QSize reference_base_size(8, 8);
   ResizeMode leader_resize_mode = leader.get_resize_mode();
   if (is_horizontally_resizable(leader_resize_mode, horizontal_preferred)) {
     // If the leader has a base size of 16x16, it is better to make all
     // entities resize this way as well (if they can).
-    floor_x = leader_base_size.width();
+    reference_base_size.setWidth(leader_base_size.width());
   }
   if (is_vertically_resizable(leader_resize_mode, horizontal_preferred)) {
-    floor_y = leader_base_size.height();
+    reference_base_size.setHeight(leader_base_size.height());
   }
-  QPoint reference_change = Point::round_down(leader_distance_to_mouse, floor_x, floor_y);
+
+  QPoint leader_expansion = Point::round_down(leader_distance_to_mouse, reference_base_size);
 
   // Determine if at least one entity is resizable horizontally and
   // if at least one entity is resizable vertically.
@@ -1936,32 +2036,15 @@ void ResizingEntitiesState::mouse_moved(const QMouseEvent& event) {
     // We need to take care of this because with smart resizing,
     // non horizontally resizable entities could still be moved
     // to follow the ones that are.
-    reference_change.setX(0);
+    leader_expansion.setX(0);
   }
   if (!is_resizing_vertically) {
     // Same thing vertically.
-    reference_change.setY(0);
+    leader_expansion.setY(0);
   }
 
-  // Compute the new size and position of each entity.
-  bool changed = false;
-  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
-    const EntityIndex& index = it.key();
-    const QRect& old_box = it.value();
-
-    QRect new_box = update_box(
-          index,
-          reference_change,
-          horizontal_preferred,
-          center
-    );
-    new_boxes.insert(index, new_box);
-    changed |= new_box != old_box;
-  }
-
-  const bool allow_merge_to_previous = first_resize_done;
-  view.resize_entities(new_boxes, allow_merge_to_previous);
-  first_resize_done = true;
+  // Apply the change to the entities.
+  update_boxes(leader_expansion, horizontal_preferred);
 }
 
 /**
@@ -1992,159 +2075,363 @@ void ResizingEntitiesState::mouse_released(const QMouseEvent& event) {
 }
 
 /**
- * @brief Updates with new coordinates the rectangle of one entity.
- * @param index Index of the entity to resize.
- * @param reference_change Translation representing how the user wants to
- * resize. This translation will be applied at best, preserving constrains on
- * the specific entity: its size will remain a multiple of its base size,
- * and its resizing mode will be respected.
+ * @brief Applies the resizing to the bounding boxes of entities.
+ * @param leader_expansion How much to expand the current box.
  * @param horizontal_preferred When only one of both dimensions can be resized, whether
  * this should be the horizontal or vertical dimension.
- * @param center Center point of all entities being resized.
+ *
+ * This change will be applied at best, respecting the constraints of
+ * each entity.
+ */
+void ResizingEntitiesState::update_boxes(
+    const QPoint& leader_expansion,
+    bool horizontal_preferred
+) {
+
+  // Compute the new size and position of each entity.
+  QMap<EntityIndex, QRect> new_boxes;
+  for (auto it = old_boxes.constBegin(); it != old_boxes.constEnd(); ++it) {
+    const EntityIndex& index = it.key();
+    QRect new_box = update_box(
+          index,
+          leader_expansion,
+          horizontal_preferred
+    );
+    new_boxes.insert(index, new_box);
+  }
+
+  const bool allow_merge_to_previous = first_resize_done;
+  get_view().resize_entities(new_boxes, allow_merge_to_previous);
+  first_resize_done = true;
+}
+
+/**
+ * @brief Updates with new coordinates the rectangle of one entity.
+ * @param index Index of the entity to resize.
+ * @param leader_expansion How much the user wants to expand.
+ * This expansion will be applied at best, preserving constraints on
+ * the specific entity: its size will remain a multiple of its base size,
+ * and its resizing mode will be respected.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
  * @return A new bounding box for the entity.
  * Returns a null rectangle in case of error.
  */
 QRect ResizingEntitiesState::update_box(
     const EntityIndex& index,
-    const QPoint& reference_change,
-    bool horizontal_preferred,
-    const QPoint& center) {
+    const QPoint& leader_expansion,
+    bool horizontal_preferred) {
 
   MapModel& map = get_map();
   Q_ASSERT(map.entity_exists(index));
   EntityModel& entity = map.get_entity(index);
 
-  const QSize& base_size = entity.get_base_size();
-  int base_width = base_size.width();
-  int base_height = base_size.height();
-
+  // Choose the appropriate resize mode.
   ResizeMode resize_mode = entity.get_resize_mode();
   if (num_free_entities > 1 && resize_mode == ResizeMode::MULTI_DIMENSION_ALL) {
     // Multiple resize: restrict the resizing to only one dimension.
     resize_mode = ResizeMode::MULTI_DIMENSION_ONE;
   }
 
+  QRect new_box = apply_smart_resizing(
+      index,
+      resize_mode,
+      horizontal_preferred,
+      leader_expansion
+  );
+
+  // Apply resize mode constraints to the bounding box.
+  new_box = apply_constraints(index, resize_mode, horizontal_preferred, new_box);
+
+  return new_box;
+}
+
+/**
+ * @brief Decides how to expand or translate an entity.
+ *
+ * When trying to resize a non horizontally resizable entity located
+ * on the right of horizontally resizable things, we move it instead.
+ * This allows to resize a full room in only one operation:
+ *     ______          ________________
+ *     |....|          |..............|
+ *     |....|   ===>   |..............|
+ *     |____|          |______________|
+ *
+ * We call this "smart resizing".
+ * Here, the right wall is not horizontally resizable,
+ * but when resizing the full room, it moves
+ * to the right instead of expanding to the right.
+ * The expansion is replaced by a translation.
+ *
+ * @param index Index of the entity to resize.
+ * @param resize_mode Current resize mode for the entity.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
+ * @param leader_expansion How the leader entity gets expanded
+ * @return The resulting bounding box.
+ */
+QRect ResizingEntitiesState::apply_smart_resizing(
+    const EntityIndex& index,
+    ResizeMode resize_mode,
+    bool horizontal_preferred,
+    const QPoint& leader_expansion
+) {
+  MapModel& map = get_map();
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
   const QRect& old_box = old_boxes.value(index);
 
-  QPoint point_a = old_box.topLeft();
-  QPoint point_b = old_box.bottomRight() + reference_change;
-  // A is the original point of the rectangle we are drawing.
-  // B is the second point of the rectangle, determined by the mouse position.
+  // Expand like the leader, but keeping a multiple of the base size.
+  QPoint expansion = Point::ceil(leader_expansion, base_size);
+  QPoint translation(0, 0);
 
-  // We want to extend the entity's rectangle with units of base_size() from A to B.
-  QPoint diff = point_b - point_a;
-  int sign_x = diff.x() >= 0 ? 1 : -1;
-  int sign_y = diff.y() >= 0 ? 1 : -1;
+  // Horizontal smart resizing.
+  if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
 
-  // Calculate the coordinates of B such that the size of the
-  // rectangle from A to B is a multiple of base_size.
-  point_b += QPoint(
-        sign_x * (base_width - ((qAbs(diff.x()) + base_width) % base_width)),
-        sign_y * (base_height - ((qAbs(diff.y()) + base_height) % base_height))
-  );
+    if (fixed_corner.x() == -1 &&
+        old_box.center().x() > center.x()) {
+      translation.setX(leader_expansion.x());
+    }
+    else if (fixed_corner.x() == 1 &&
+        old_box.center().x() < center.x()) {
+      translation.setX(leader_expansion.x());
+    }
+    expansion.setX(0);
+  }
 
-  QPoint abs_diff = QPoint(
-        qAbs(point_b.x() - point_a.x()),
-        qAbs(point_b.y() - point_a.y())
-  );
-  if (resize_mode == ResizeMode::SQUARE) {
-    int length = qMax(abs_diff.x(), abs_diff.y());  // Length of the square.
-    point_b = QPoint(
-          point_a.x() + sign_x * length,
-          point_a.y() + sign_y * length
-    );
+  // Vertical smart resizing.
+  if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
+    // Smart resizing.
+    if (fixed_corner.y() == -1 &&
+        old_box.center().y() > center.y()) {
+      translation.setY(leader_expansion.y());
+    }
+    else if (fixed_corner.y() == 1 &&
+        old_box.center().y() < center.y()) {
+      translation.setY(leader_expansion.y());
+    }
+    expansion.setY(0);
+  }
+
+  // Compute the bounding box from the expansion and translation.
+  return get_box_from_expansion_and_translation(index, expansion, translation);
+}
+
+/**
+ * @brief Returns the bounding box of an entity expanded with the given amount.
+ * @param index Index of an entity.
+ * @param expansion How much to extend it in both directions, keeping the
+ * current fixed corner.
+ * @param translation How much to translate the entity.
+ * @return The corresponding new bounding box.
+ * The resize mode is not taken into account at this point
+ * (this function acts like if the resize mode is the most permissive one:
+ * ResizeMode::MULTI_DIMENSION_ALL).
+ */
+QRect ResizingEntitiesState::get_box_from_expansion_and_translation(
+    const EntityIndex& index,
+    const QPoint& expansion,
+    const QPoint& translation
+) {
+  MapModel& map = get_map();
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
+  const QRect& old_box = old_boxes.value(index);
+  QRect new_box = old_box;
+
+  // Expansion.
+  if (fixed_corner.x() == -1) {
+    // Left side fixed, right side free.
+    int width = old_box.width() + expansion.x();
+    if (width > 0) {
+      new_box.setWidth(width);
+    }
+    else {
+      new_box.setWidth(-width + 2 * base_size.width());
+      new_box.translate(width - base_size.width(), 0);
+    }
   }
   else {
-    // Make sure that the entity is extended only in allowed directions,
-    // and that the size is never zero.
-    if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
-      resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
+    // Right side fixed, left side free.
+    int width = old_box.width() - expansion.x();
+    if (width > 0) {
+      new_box.setWidth(width);
+      new_box.translate(expansion.x(), 0);
     }
-
-    // Horizontally.
-    if (!is_horizontally_resizable(resize_mode, horizontal_preferred)) {
-      // Smart resizing:
-      // When trying to resize a non horizontally resizable entity located
-      // on the right of horizontally resizable things, we move it instead.
-      // This allows to resize a full room in only one operation:
-      // ______          ________________
-      // |....|          |..............|
-      // |....|   ===>   |..............|
-      // |____|          |______________|
-      //
-      // Here, the right wall is not horizontally resizable, but it moves
-      // on the right instead when resizing the full room, following the
-      // reference change.
-      if (old_box.center().x() > center.x()) {
-        point_a.setX(old_box.x() + reference_change.x());
-      }
-      else {
-        point_a.setX(old_box.x());
-      }
-      point_b.setX(point_a.x() + old_box.width());
+    else {
+      new_box.setWidth(-width + 2 * base_size.width());
+      new_box.translate(old_box.width() - base_size.width(), 0);
     }
-    else if (resize_mode == ResizeMode::VERTICAL_ONLY) {
-      // Extensible only vertically with the x coordinate of B fixed to the base width.
-      point_b.setX(point_a.x() + base_width);
+  }
+  if (fixed_corner.y() == -1) {
+    // Top side fixed, bottom side free.
+    int height = old_box.height() + expansion.y();
+    if (height > 0) {
+      new_box.setHeight(height);
     }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             !horizontal_preferred) {
-      // Extensible only vertically with the x coordinate of B fixed to the current width.
-      point_b.setX(point_a.x() + old_box.width());
+    else {
+      new_box.setHeight(-height + 2 * base_size.height());
+      new_box.translate(0, height - base_size.height());
     }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
-             resize_mode == ResizeMode::HORIZONTAL_ONLY) {
-      // Extensible horizontally.
-      if (point_b.x() <= point_a.x()) {
-        // B is actually before A: in this case, set A to its right coordinate.
-        point_a.setX(point_a.x() + base_width);
-      }
+  }
+  else {
+    // Bottom side fixed, top side free.
+    int height = old_box.height() - expansion.y();
+    if (height > 0) {
+      new_box.setHeight(height);
+      new_box.translate(0, expansion.y());
     }
-
-    // Vertically.
-    if (!is_vertically_resizable(resize_mode, horizontal_preferred)) {
-      // Smart resizing:
-      // When trying to resize a non vertically resizable entity located
-      // on the right of vertically resizable things, we move it instead.
-      if (old_box.center().y() > center.y()) {
-        point_a.setY(old_box.y() + reference_change.y());
-      }
-      else {
-        point_a.setY(old_box.y());
-      }
-      point_b.setY(point_a.y() + old_box.height());
-    }
-    else if (resize_mode == ResizeMode::HORIZONTAL_ONLY) {
-      // Extensible only horizontally with the y coordinate of B fixed to the base height.
-      point_b.setY(point_a.y() + base_height);
-    }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ONE &&
-             horizontal_preferred) {
-      // Extensible only horizontally with the y coordinate of B fixed to the current height.
-      point_b.setY(point_a.y() + old_box.height());
-    }
-    else if (resize_mode == ResizeMode::MULTI_DIMENSION_ALL ||
-             resize_mode == ResizeMode::VERTICAL_ONLY) {
-      // Extensible vertically.
-      if (point_b.y() <= point_a.y()) {
-        // B is actually before A: in this case, set A to its bottom coordinate.
-        point_a.setY(point_a.y() + base_height);
-      }
+    else {
+      new_box.setHeight(-height + 2 * base_size.height());
+      new_box.translate(0, old_box.height() - base_size.height());
     }
   }
 
-  // Compute the final bounding box from A to B.
-  // Note that A is not necessarily the top-left corner of the rectangle.
-  QPoint top_left(
-        qMin(point_a.x(), point_b.x()),
-        qMin(point_a.y(), point_b.y())
-  );
-  QSize size(
-        qAbs(point_b.x() - point_a.x()),
-        qAbs(point_b.y() - point_a.y())
-  );
+  // Translation.
+  if (!translation.isNull()) {
+    new_box.translate(translation);
+  }
 
-  return QRect(top_left, size);
+  return new_box;
+}
+
+/**
+ * Ensures that a bounding box respects the constraints of the resize mode.
+ * @param index Index of the entity to resize.
+ * @param resize_mode Current resize mode for thi entity.
+ * @param horizontal_preferred When only one of both dimensions can be resized,
+ * whether this should be the horizontal or vertical dimension.
+ * @param box The candidate bounding box, before applying constraints.
+ * Assumed to be a multiple of the base size.
+ * @return The resulting bounding box.
+ */
+QRect ResizingEntitiesState::apply_constraints(
+    const EntityIndex& index,
+    ResizeMode resize_mode,
+    bool horizontal_preferred,
+    const QRect& box
+) {
+  MapModel& map = get_map();
+  EntityModel& entity = map.get_entity(index);
+  const QSize& base_size = entity.get_base_size();
+  const QRect& old_box = old_boxes.value(index);
+  QRect new_box = box;
+
+  // Only in one direction: choose which one.
+  if (resize_mode == ResizeMode::SINGLE_DIMENSION) {
+    resize_mode = horizontal_preferred ? ResizeMode::HORIZONTAL_ONLY : ResizeMode::VERTICAL_ONLY;
+  }
+
+  // If we are going to fix the size, first we need to decide where to anchor
+  // the entity after the change of size.
+  QRect base_box = old_box;
+  base_box.setSize(base_size);
+  if (fixed_corner.x() == 1) {
+    base_box.setRight(old_box.right());
+  }
+  if (fixed_corner.y() == 1) {
+    base_box.setBottom(old_box.bottom());
+  }
+  bool anchor_to_right = box.right() == base_box.right();
+  bool anchor_to_bottom = box.bottom() == base_box.bottom();
+
+  // Fix the size or not depending on the resize mode.
+  switch (resize_mode) {
+
+  case ResizeMode::SINGLE_DIMENSION:
+  {
+    // Already handled (see above).
+    break;
+  }
+
+  case ResizeMode::MULTI_DIMENSION_ALL:
+  {
+    // No additional constraint.
+    break;
+  }
+
+  case ResizeMode::NONE:
+  {
+    // The size must always be the base size.
+    if (new_box.size() != base_size) {
+      new_box.setSize(base_size);
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::HORIZONTAL_ONLY:
+  {
+    // The height must be the base height.
+    if (new_box.height() != base_size.height()) {
+      new_box.setHeight(base_size.height());
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::VERTICAL_ONLY:
+  {
+    // The width must be the base width.
+    if (new_box.width() != base_size.width()) {
+      new_box.setWidth(base_size.width());
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::MULTI_DIMENSION_ONE:
+  {
+    // The width or height must remain unchanged.
+    if (horizontal_preferred) {
+      // The width must be the previous width.
+      if (new_box.width() != old_box.width()) {
+        new_box.setWidth(old_box.width());
+        if (anchor_to_right) {
+          new_box.moveBottom(base_box.bottom());
+        }
+      }
+    }
+    else {
+      // The height must be the previous height.
+      if (new_box.height() != old_box.height()) {
+        new_box.setHeight(old_box.height());
+        if (anchor_to_bottom) {
+          new_box.moveBottom(base_box.bottom());
+        }
+      }
+    }
+    break;
+  }
+
+  case ResizeMode::SQUARE:
+  {
+    // The width and height must be equal.
+    if (new_box.width() != new_box.height()) {
+      int max = qMax(new_box.width(), new_box.height());
+      new_box.setSize(QSize(max, max));
+      if (anchor_to_right) {
+        new_box.moveRight(base_box.right());
+      }
+      if (anchor_to_bottom) {
+        new_box.moveBottom(base_box.bottom());
+      }
+    }
+    break;
+  }
+
+  }  // switch
+
+  return new_box;
 }
 
 /**

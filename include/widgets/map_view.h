@@ -51,6 +51,7 @@ public:
     MapScene& get_scene();
     const MapModel& get_map() const;
     MapModel& get_map();
+    QPoint to_map_point(const QMouseEvent& mouse_event) const;
 
     virtual void start();
     virtual void stop();
