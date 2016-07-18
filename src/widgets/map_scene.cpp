@@ -577,6 +577,8 @@ void MapScene::select_all() {
     }
   }
   blockSignals(was_blocked);
+
+  emit selectionChanged();
 }
 
 /**
@@ -595,6 +597,8 @@ void MapScene::unselect_all() {
     }
   }
   blockSignals(was_blocked);
+
+  emit selectionChanged();
 }
 
 /**
