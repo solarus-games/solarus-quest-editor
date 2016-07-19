@@ -25,6 +25,7 @@
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "sound.h"
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QItemSelectionModel>
@@ -1062,6 +1063,10 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(music_selector_activated()));
   connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
+  connect(ui.music_play_button, SIGNAL(clicked(bool)),
+          this, SLOT(play_music_requested()));
+  connect(&quest, SIGNAL(current_music_changed(QString)),
+          this, SLOT(update_music_field()));
 
   connect(ui.open_script_button, SIGNAL(clicked()),
           this, SLOT(open_script_requested()));
@@ -1669,11 +1674,53 @@ void MapEditor::open_tileset_requested() {
 }
 
 /**
- * @brief Updates the tileset selector with the data from the model.
+ * @brief Updates the music selector with the data from the model.
  */
 void MapEditor::update_music_field() {
 
-  ui.music_field->set_selected_id(map->get_music_id());
+  // Update the music selector.
+  const QString& music_id = map->get_music_id();
+  ui.music_field->set_selected_id(music_id);
+
+  // Update the play/stop music button.
+  ui.music_play_button->setIcon(QIcon(":/images/icon_start.png"));
+  ui.music_play_button->setToolTip(tr("Play music"));
+  if (music_id.isEmpty() ||
+      music_id == "none" ||
+      music_id == "same") {
+    ui.music_play_button->setEnabled(false);
+  }
+  else {
+    ui.music_play_button->setEnabled(true);
+    const QString& music_playing_id = get_quest().get_current_music_id();
+    if (music_playing_id == music_id) {
+      ui.music_play_button->setIcon(QIcon(":/images/icon_stop.png"));
+      ui.music_play_button->setToolTip(tr("Stop music"));
+    }
+  }
+}
+
+/**
+ * @brief Slot called when the user wants to play or stop the music.
+ */
+void MapEditor::play_music_requested() {
+
+  const QString& music_id = ui.music_field->get_selected_id();
+  if (music_id.isEmpty() ||
+      music_id == "none" ||
+      music_id == "same") {
+    return;
+  }
+
+  Quest& quest = get_quest();
+  const QString& current_music_id = quest.get_current_music_id();
+  if (current_music_id == music_id) {
+    // This music is already playing, stop it.
+    Sound::stop_music(quest);
+  }
+  else {
+    Sound::play_music(quest, music_id);
+  }
 }
 
 /**
@@ -1687,6 +1734,9 @@ void MapEditor::music_selector_activated() {
     // No change.
     return;
   }
+
+  // Stop playing any music if there is a change.
+  Sound::stop_music(get_quest());
 
   try_command(new SetMusicCommand(*this, new_music_id));
 }
