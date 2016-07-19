@@ -99,9 +99,15 @@ set(solarus_quest_editor_SOURCES
   include/entities/teletransporter.h
   include/entities/tile.h
   include/entities/wall.h
+  include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
   include/widgets/change_source_image_dialog.h
+  include/widgets/change_string_key_dialog.h
   include/widgets/closable_tab_bar.h
+  include/widgets/color_picker.h
+  include/widgets/dialog_properties_table.h
+  include/widgets/dialogs_editor.h
+  include/widgets/dialogs_tree_view.h
   include/widgets/edit_entity_dialog.h
   include/widgets/editor.h
   include/widgets/editor_tabs.h
@@ -122,16 +128,22 @@ set(solarus_quest_editor_SOURCES
   include/widgets/main_window.h
   include/widgets/mouse_coordinates_tracking_tool.h
   include/widgets/new_resource_element_dialog.h
+  include/widgets/new_string_dialog.h
+  include/widgets/pair_spin_box.h
   include/widgets/pan_tool.h
+  include/widgets/plain_text_edit.h
   include/widgets/quest_properties_editor.h
   include/widgets/quest_tree_view.h
   include/widgets/resource_model.h
   include/widgets/resource_selector.h
+  include/widgets/settings_dialog.h
   include/widgets/sprite_editor.h
   include/widgets/sprite_tree_view.h
   include/widgets/sprite_scene.h
   include/widgets/sprite_view.h
   include/widgets/sprite_previewer.h
+  include/widgets/strings_editor.h
+  include/widgets/strings_tree_view.h
   include/widgets/text_editor.h
   include/widgets/text_editor_widget.h
   include/widgets/tile_patterns_list_view.h
@@ -139,18 +151,6 @@ set(solarus_quest_editor_SOURCES
   include/widgets/tileset_scene.h
   include/widgets/tileset_view.h
   include/widgets/zoom_tool.h
-  include/widgets/strings_editor.h
-  include/widgets/strings_tree_view.h
-  include/widgets/new_string_dialog.h
-  include/widgets/change_string_key_dialog.h
-  include/widgets/dialogs_editor.h
-  include/widgets/dialogs_tree_view.h
-  include/widgets/dialog_properties_table.h
-  include/widgets/plain_text_edit.h
-  include/widgets/change_dialog_id_dialog.h
-  include/widgets/settings_dialog.h
-  include/widgets/color_picker.h
-  include/widgets/pair_spin_box.h
   include/audio.h
   include/color.h
   include/dialogs_model.h
@@ -210,9 +210,15 @@ set(solarus_quest_editor_SOURCES
   src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
+  src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp
   src/widgets/change_source_image_dialog.cpp
+  src/widgets/change_string_key_dialog.cpp
   src/widgets/closable_tab_bar.cpp
+  src/widgets/color_picker.cpp
+  src/widgets/dialog_properties_table.cpp
+  src/widgets/dialogs_editor.cpp
+  src/widgets/dialogs_tree_view.cpp
   src/widgets/edit_entity_dialog.cpp
   src/widgets/editor.cpp
   src/widgets/editor_tabs.cpp
@@ -229,16 +235,21 @@ set(solarus_quest_editor_SOURCES
   src/widgets/map_scene.cpp
   src/widgets/mouse_coordinates_tracking_tool.cpp
   src/widgets/new_resource_element_dialog.cpp
+  src/widgets/new_string_dialog.cpp
+  src/widgets/pair_spin_box.cpp
   src/widgets/pan_tool.cpp
   src/widgets/quest_properties_editor.cpp
   src/widgets/quest_tree_view.cpp
   src/widgets/resource_model.cpp
   src/widgets/resource_selector.cpp
+  src/widgets/settings_dialog.cpp
   src/widgets/sprite_editor.cpp
   src/widgets/sprite_tree_view.cpp
   src/widgets/sprite_scene.cpp
   src/widgets/sprite_view.cpp
   src/widgets/sprite_previewer.cpp
+  src/widgets/strings_editor.cpp
+  src/widgets/strings_tree_view.cpp
   src/widgets/text_editor.cpp
   src/widgets/text_editor_widget.cpp
   src/widgets/tile_patterns_list_view.cpp
@@ -246,17 +257,6 @@ set(solarus_quest_editor_SOURCES
   src/widgets/tileset_scene.cpp
   src/widgets/tileset_view.cpp
   src/widgets/zoom_tool.cpp
-  src/widgets/strings_editor.cpp
-  src/widgets/strings_tree_view.cpp
-  src/widgets/new_string_dialog.cpp
-  src/widgets/change_string_key_dialog.cpp
-  src/widgets/dialogs_editor.cpp
-  src/widgets/dialogs_tree_view.cpp
-  src/widgets/dialog_properties_table.cpp
-  src/widgets/change_dialog_id_dialog.cpp
-  src/widgets/settings_dialog.cpp
-  src/widgets/color_picker.cpp
-  src/widgets/pair_spin_box.cpp
   src/audio.cpp
   src/color.cpp
   src/dialogs_model.cpp
