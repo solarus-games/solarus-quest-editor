@@ -80,7 +80,7 @@ private:
       items;                      /**< Mapping of items from element ids. */
   mutable QMap<QString, QIcon>
       icons;                      /**< Mapping of item icons from element ids. */
-  QIcon directory_icon;              /**< Icon for directory items. */
+  QIcon directory_icon;           /**< Icon for directory items. */
   QString tileset_id;             /**< Id of a tileset to use when showing sprite icon. */
 
 };
