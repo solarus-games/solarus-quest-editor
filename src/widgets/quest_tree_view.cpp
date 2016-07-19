@@ -664,12 +664,11 @@ void QuestTreeView::default_action_triggered() {
     if (quest.exists(path)) {
       if (resource_type == ResourceType::SOUND || resource_type == ResourceType::MUSIC) {
         play_action_triggered();
-      }
-      else {
-        open_action_triggered();
+        return;
       }
     }
   }
+  open_action_triggered();
 }
 
 /**
