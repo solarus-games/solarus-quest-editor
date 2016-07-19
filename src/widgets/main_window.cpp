@@ -106,6 +106,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, undo_action);
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
+  addAction(ui.action_run_quest);
   ui.action_run_quest->setEnabled(false);
   update_music_actions();
 
@@ -166,6 +167,35 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_select_all->setShortcut(QKeySequence::SelectAll);
   ui.action_unselect_all->setShortcut(QKeySequence::Deselect);
   ui.action_find->setShortcut(QKeySequence::Find);
+
+  // Workaround for broken window shortcuts with appmenu-qt on Ubuntu.
+  addAction(ui.action_close);
+  addAction(ui.action_run_quest);
+  addAction(ui.action_new_quest);
+  addAction(ui.action_load_quest);
+  addAction(ui.action_exit);
+  addAction(ui.action_run_quest);
+  addAction(ui.action_cut);
+  addAction(ui.action_copy);
+  addAction(ui.action_paste);
+  addAction(ui.action_close);
+  addAction(ui.action_save);
+  addAction(ui.action_show_grid);
+  addAction(ui.action_show_layer_0);
+  addAction(ui.action_show_layer_1);
+  addAction(ui.action_show_layer_2);
+  addAction(ui.action_doc);
+  addAction(ui.action_website);
+  addAction(ui.action_find);
+  addAction(ui.action_settings);
+  addAction(ui.action_select_all);
+  addAction(ui.action_save_all);
+  addAction(ui.action_close_all);
+  addAction(ui.action_show_console);
+  addAction(ui.action_unselect_all);
+  addAction(ui.action_close_quest);
+  addAction(ui.action_pause_music);
+  addAction(ui.action_stop_music);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, QString)),
@@ -342,6 +372,7 @@ void MainWindow::update_show_layers_menu() {
       if (i >= 0 && i <= 9) {
         // Layers 0 to 9 have a shortcut.
         action->setShortcut(QString::number(i));
+        addAction(action);
       }
       action->setCheckable(true);
       action->setChecked(true);
