@@ -17,6 +17,7 @@
 #include "widgets/quest_properties_editor.h"
 #include "widgets/gui_tools.h"
 #include "quest.h"
+#include <QRegularExpressionValidator>
 #include <QUndoStack>
 
 namespace SolarusEditor {
@@ -397,6 +398,11 @@ QuestPropertiesEditor::QuestPropertiesEditor(Quest& quest, QWidget* parent) :
 
   ui.setupUi(this);
   ui.release_date_field->setDate(QDate::currentDate());
+
+  // Don't allow slashes or backslashes in the write dir field.
+  ui.write_dir_field->setValidator(
+        new QRegularExpressionValidator(QRegularExpression(R"(^[^/\\]*$)"), this));
+
   update();
 
   // Editor properties.
