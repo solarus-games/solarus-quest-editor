@@ -56,10 +56,10 @@ void MusicChooser::set_quest(Quest& quest) {
 
   connect(&play_music_button, SIGNAL(clicked(bool)),
           this, SLOT(play_music_button_clicked()));
-  connect(&quest, SIGNAL(current_music_changed(QString)),
-          this, SLOT(quest_music_changed(QString)));
   connect(&music_selector, SIGNAL(activated(QString)),
           this, SLOT(music_selector_activated(QString)));
+  connect(&quest, SIGNAL(current_music_changed(QString)),
+          this, SLOT(quest_music_changed(QString)));
 
   update_play_button();
 }
@@ -166,12 +166,13 @@ void MusicChooser::update_play_button() {
   }
 
   QString selected_music_id = music_selector.get_selected_id();
-  QString path = quest->get_resource_element_path(ResourceType::MUSIC, selected_music_id);
+  QString path = quest->get_resource_element_path(
+        ResourceType::MUSIC, selected_music_id
+  );
 
   if (selected_music_id.isEmpty() ||
       selected_music_id == "none" ||
       selected_music_id == "same" ||
-      quest == nullptr ||
       !quest->exists(path)) {
     play_music_button.setEnabled(false);
   }
