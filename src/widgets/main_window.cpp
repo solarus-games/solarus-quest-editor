@@ -1517,6 +1517,7 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
  */
 void MainWindow::selected_path_changed(const QString& path) {
 
+  Q_UNUSED(path);
   update_music_actions();
 }
 
