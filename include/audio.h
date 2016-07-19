@@ -27,8 +27,10 @@ namespace Audio {
 
 void play_sound(const Quest& quest, const QString& sound_id);
 void play_music(Quest& quest, const QString& music_id);
-bool is_playing_music(const Quest& quest, const QString& music_id);
 void stop_music(Quest& quest);
+QString get_current_music_id(const Quest& quest);
+bool is_playing_music(const Quest& quest);
+bool is_playing_music(const Quest& quest, const QString& music_id);
 
 }
 

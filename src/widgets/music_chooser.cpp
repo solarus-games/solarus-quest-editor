@@ -131,7 +131,7 @@ void MusicChooser::play_music_button_clicked() {
     return;
   }
 
-  const QString& current_music_id = quest->get_current_music_id();
+  const QString& current_music_id = Audio::get_current_music_id(*quest);
   if (current_music_id == selected_music_id) {
     // This music is already playing, stop it.
     Audio::stop_music(*quest);
@@ -160,15 +160,24 @@ void MusicChooser::update_play_button() {
   play_music_button.setIcon(QIcon(":/images/icon_start.png"));
   play_music_button.setToolTip(tr("Play music"));
 
+  if (quest == nullptr) {
+    play_music_button.setEnabled(false);
+    return;
+  }
+
   QString selected_music_id = music_selector.get_selected_id();
+  QString path = quest->get_resource_element_path(ResourceType::MUSIC, selected_music_id);
+
   if (selected_music_id.isEmpty() ||
       selected_music_id == "none" ||
-      selected_music_id == "same") {
+      selected_music_id == "same" ||
+      quest == nullptr ||
+      !quest->exists(path)) {
     play_music_button.setEnabled(false);
   }
   else {
     play_music_button.setEnabled(true);
-    const QString& music_playing_id = quest->get_current_music_id();
+    const QString& music_playing_id = Audio::get_current_music_id(*quest);
     if (music_playing_id == selected_music_id) {
       play_music_button.setIcon(QIcon(":/images/icon_stop.png"));
       play_music_button.setToolTip(tr("Stop music"));

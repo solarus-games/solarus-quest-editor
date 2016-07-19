@@ -872,7 +872,7 @@ void MainWindow::on_action_run_quest_triggered() {
 void MainWindow::on_action_stop_music_triggered() {
 
   Quest& quest = get_quest();
-  if (!quest.get_current_music_id().isEmpty()) {
+  if (Audio::is_playing_music(quest)) {
     // A music is playing: stop it.
     Audio::stop_music(quest);
   }
@@ -1333,7 +1333,8 @@ void MainWindow::current_music_changed(const QString& music_id) {
  */
 void MainWindow::update_music_actions() {
 
-  const QString& music_id = get_quest().get_current_music_id();
+  const Quest& quest = get_quest();
+  const QString& music_id = Audio::get_current_music_id(quest);
   if (!music_id.isEmpty()) {
     // A music is being played.
     ui.action_stop_music->setEnabled(true);
@@ -1353,9 +1354,9 @@ void MainWindow::update_music_actions() {
     ResourceType resource_type;
     QString element_id;
     if (!selected_path.isEmpty() &&
-        get_quest().is_potential_resource_element(selected_path, resource_type, element_id) &&
+        quest.is_potential_resource_element(selected_path, resource_type, element_id) &&
         resource_type == ResourceType::MUSIC &&
-        get_quest().exists(selected_path)) {
+        quest.exists(selected_path)) {
       // A music is selected: allow to play it.
       ui.action_stop_music->setEnabled(true);
     }
