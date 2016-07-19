@@ -20,7 +20,8 @@ New features
 * The shortcut to load a quest is now Ctrl+L.
 * Add resource dialog: set the id as initial value for the description (#192).
 * Automatically add .lua extension when creating a script file (#46).
-* Allow to play musics and sounds from the quest (#8).
+* Allow to play musics and sounds from the quest tree (#8).
+* Allow to play music and sounds from music and sound selectors.
 * Map editor: allow more than 3 layers.
 * Map editor: implement smart resizing to resize full rooms at once (#54).
 * Map editor: allow to resize from the left and from the top (#111).

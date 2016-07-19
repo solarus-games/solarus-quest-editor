@@ -1236,7 +1236,6 @@ void EditEntityDialog::initialize_sound() {
   }
 
   ui.sound_field->set_quest(get_quest());
-  ui.sound_field->set_resource_type(ResourceType::SOUND);
   initialize_possibly_optional_field(
         field_name,
         nullptr,

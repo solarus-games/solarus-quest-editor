@@ -376,9 +376,6 @@
        </property>
       </widget>
      </item>
-     <item row="13" column="1">
-      <widget class="SolarusEditor::ResourceSelector" name="sound_field"/>
-     </item>
      <item row="14" column="0">
       <widget class="QLabel" name="transition_label">
        <property name="text">
@@ -753,6 +750,9 @@
        </property>
       </widget>
      </item>
+     <item row="13" column="1">
+      <widget class="SolarusEditor::SoundChooser" name="sound_field" native="true"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -801,6 +801,12 @@
    <class>SolarusEditor::EnumSelector&lt;SolarusEditor::StartingLocationMode&gt;</class>
    <extends>QComboBox</extends>
    <header>starting_location_mode_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SolarusEditor::SoundChooser</class>
+   <extends>QWidget</extends>
+   <header>widgets/sound_chooser.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
