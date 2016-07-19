@@ -197,13 +197,13 @@ QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
     return QApplication::tr("Ctrl+E,Ctrl+C");
 
   case EntityType::CRYSTAL:
-    return QApplication::tr("Ctrl+E,Ctrl+Y");
+    return QApplication::tr("Ctrl+E,Ctrl+L");
 
   case EntityType::CRYSTAL_BLOCK:
     return QApplication::tr("Ctrl+E,Ctrl+K");
 
   case EntityType::CUSTOM:
-    return QApplication::tr("Ctrl+E,Ctrl+U");
+    return QApplication::tr("Ctrl+E,Ctrl+Y");
 
   case EntityType::DESTINATION:
     return QApplication::tr("Ctrl+E,Ctrl+I");
@@ -215,7 +215,7 @@ QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
     return QApplication::tr("Ctrl+E,Ctrl+O");
 
   case EntityType::DYNAMIC_TILE:
-    return QApplication::tr("Ctrl+E,Ctrl+Shift+T");
+    return QApplication::tr("Ctrl+E,Ctrl+2");
 
   case EntityType::ENEMY:
     return QApplication::tr("Ctrl+E,Ctrl+E");
@@ -236,7 +236,7 @@ QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
     return QApplication::tr("Ctrl+E,Ctrl+A");
 
   case EntityType::SHOP_TREASURE:
-    return QApplication::tr("Ctrl+E,Ctrl+Shift+H");
+    return QApplication::tr("Ctrl+E,Ctrl+U");
 
   case EntityType::STAIRS:
     return QApplication::tr("Ctrl+E,Ctrl+R");
@@ -248,10 +248,10 @@ QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
     return QApplication::tr("Ctrl+E,Ctrl+H");
 
   case EntityType::TELETRANSPORTER:
-    return QApplication::tr("Ctrl+E,Ctrl+L");
+    return QApplication::tr("Ctrl+E,Ctrl+T");
 
   case EntityType::TILE:
-    return QApplication::tr("Ctrl+E,Ctrl+T");
+    return QApplication::tr("Ctrl+E,Ctrl+1");
 
   case EntityType::WALL:
     return QApplication::tr("Ctrl+E,Ctrl+W");
