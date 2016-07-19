@@ -1385,7 +1385,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
 
   // Try to draw the sprite from the sprite field if any.
   const QString& sprite_field_value = get_field("sprite").toString();
-  if (draw_as_sprite(painter, sprite_field_value, "", 0)) {
+  if (draw_as_sprite(painter, sprite_field_value, "", 0, 0)) {
     return true;
   }
 
@@ -1393,6 +1393,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
   return draw_as_sprite(painter,
                         draw_sprite_info.sprite_id,
                         draw_sprite_info.animation,
+                        draw_sprite_info.direction,
                         draw_sprite_info.frame);
 }
 
@@ -1402,6 +1403,8 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
  * @param sprite_id Sprite to use.
  * @param animation Animation to use in this sprite.
  * If it does not exists, the default animation will be used.
+ * @param direction Direction to show.
+ * Only used if there is no direction field.
  * @param frame Frame to show. If negative, we count from the end
  * (-1 is the last frame).
  * @return @c true if the sprite was successfully drawn.
@@ -1410,6 +1413,7 @@ bool EntityModel::draw_as_sprite(
     QPainter& painter,
     const QString& sprite_id,
     const QString& animation,
+    int direction,
     int frame) const {
 
   const Quest& quest = get_quest();
@@ -1446,10 +1450,8 @@ bool EntityModel::draw_as_sprite(
       }
     }
 
-    bool has_direction_field;
-    int direction = get_field("direction").toInt(&has_direction_field);
-    if (!has_direction_field) {
-      direction = 0;
+    if (has_field("direction")) {
+      direction = get_field("direction").toInt();
     }
     index.direction_nb = direction;
 

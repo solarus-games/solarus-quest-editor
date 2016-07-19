@@ -148,6 +148,8 @@ protected:
     bool enabled = true;  // false means not drawn as a sprite.
     QString sprite_id;    // Only used if there is no "sprite" field.
     QString animation;    // Animation for sprite_id (empty means default).
+    int direction = 0;    // Direction of the sprite.
+                          // Only used if there is no "direction" field.
     int frame = 0;        // Index of the frame to show. If negative,
                           // we count from the end (-1 is the last frame).
     bool tiled = false;   // Tiled or only once at origin point.
@@ -220,6 +222,7 @@ protected:
   bool draw_as_sprite(QPainter& painter,
                       const QString& sprite_id,
                       const QString& animation,
+                      int direction,
                       int frame) const;
   bool draw_as_shape(QPainter& painter) const;
   bool draw_as_image(QPainter& painter) const;
