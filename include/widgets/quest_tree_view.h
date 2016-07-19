@@ -44,6 +44,7 @@ signals:
 
   void open_file_requested(Quest& quest, const QString& path);
   void rename_file_requested(Quest& quest, const QString& path);
+  void selected_path_changed(const QString& path);
 
 public slots:
 

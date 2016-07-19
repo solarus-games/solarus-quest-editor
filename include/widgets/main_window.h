@@ -94,7 +94,10 @@ private slots:
   void update_run_quest();
   void quest_running();
   void quest_finished();
+
   void current_music_changed(const QString& music_id);
+  void update_music_actions();
+  void selected_path_changed(const QString& path);
 
   void reload_settings();
 

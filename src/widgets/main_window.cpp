@@ -107,9 +107,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.tool_bar->insertAction(ui.action_run_quest, redo_action);
   ui.tool_bar->insertSeparator(ui.action_run_quest);
   ui.action_run_quest->setEnabled(false);
-
-  ui.action_pause_music->setEnabled(false);
-  ui.action_stop_music->setEnabled(false);
+  update_music_actions();
 
   zoom_button = new QToolButton();
   zoom_button->setIcon(QIcon(":/images/icon_zoom.png"));
@@ -174,6 +172,8 @@ MainWindow::MainWindow(QWidget* parent) :
           ui.tab_widget, SLOT(open_file_requested(Quest&, QString)));
   connect(ui.quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
           this, SLOT(rename_file_requested(Quest&, QString)));
+  connect(ui.quest_tree_view, SIGNAL(selected_path_changed(QString)),
+          this, SLOT(selected_path_changed(QString)));
 
   connect(ui.tab_widget, SIGNAL(currentChanged(int)),
           this, SLOT(current_editor_changed(int)));
@@ -866,11 +866,28 @@ void MainWindow::on_action_run_quest_triggered() {
 }
 
 /**
- * @brief Slot called when the user triggers the "Stop music" action.
+ * @brief Slot called when the user triggers the "Play music"
+ * or "Stop music" action.
  */
 void MainWindow::on_action_stop_music_triggered() {
 
-  Sound::stop_music(get_quest());
+  Quest& quest = get_quest();
+  if (!quest.get_current_music_id().isEmpty()) {
+    // A music is playing: stop it.
+    Sound::stop_music(quest);
+  }
+  else {
+    // No music is playing: play the selected one if any.
+    const QString& selected_path = ui.quest_tree_view->get_selected_path();
+    ResourceType resource_type;
+    QString element_id;
+    if (!selected_path.isEmpty() &&
+        get_quest().is_potential_resource_element(selected_path, resource_type, element_id) &&
+        resource_type == ResourceType::MUSIC &&
+        get_quest().exists(selected_path)) {
+      Sound::play_music(quest, element_id);
+    }
+  }
 }
 
 /**
@@ -1305,14 +1322,47 @@ void MainWindow::quest_finished() {
  */
 void MainWindow::current_music_changed(const QString& music_id) {
 
-  if (music_id.isEmpty()) {
-    ui.action_pause_music->setEnabled(false);
-    ui.action_stop_music->setEnabled(false);
+  Q_UNUSED(music_id);
+  update_music_actions();
+}
+
+/**
+ * @brief Sets ups the play/stop and pause/continue actions.
+ *
+ * This depends on the current music and on the selection in the quest tree.
+ */
+void MainWindow::update_music_actions() {
+
+  const QString& music_id = get_quest().get_current_music_id();
+  if (!music_id.isEmpty()) {
+    // A music is being played.
+    ui.action_stop_music->setEnabled(true);
+    ui.action_stop_music->setText(tr("Stop music"));
+    ui.action_stop_music->setIcon(QIcon(":/images/icon_stop_music.png"));
+
+    ui.action_pause_music->setEnabled(true);
+    ui.action_pause_music->setText(tr("Pause music"));
+    ui.action_pause_music->setIcon(QIcon(":/images/icon_pause_music.png"));
   }
   else {
-    ui.action_pause_music->setEnabled(true);
-    ui.action_stop_music->setEnabled(true);
-
+    ui.action_stop_music->setText(tr("Play selected music"));
+    ui.action_stop_music->setIcon(QIcon(":/images/icon_start_music.png"));
+    ui.action_pause_music->setEnabled(false);
+    ui.action_pause_music->setText(tr("Pause music"));
+    const QString& selected_path = ui.quest_tree_view->get_selected_path();
+    ResourceType resource_type;
+    QString element_id;
+    if (!selected_path.isEmpty() &&
+        get_quest().is_potential_resource_element(selected_path, resource_type, element_id) &&
+        resource_type == ResourceType::MUSIC &&
+        get_quest().exists(selected_path)) {
+      // A music is selected: allow to play it.
+      ui.action_stop_music->setEnabled(true);
+    }
+    else {
+      // No music is selected.
+      ui.action_stop_music->setEnabled(false);
+    }
   }
 }
 
@@ -1459,6 +1509,15 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
     ex.show_dialog();
   }
 
+}
+
+/**
+ * @brief Slot called when the selection changes in the quest tree view.
+ * @param path The new selected path or an empty string.
+ */
+void MainWindow::selected_path_changed(const QString& path) {
+
+  update_music_actions();
 }
 
 }

@@ -99,6 +99,10 @@ void QuestTreeView::set_quest(Quest& quest) {
 
     connect(&quest, SIGNAL(file_renamed(QString, QString)),
             this, SLOT(file_renamed(QString, QString)));
+    connect(selectionModel(), &QItemSelectionModel::selectionChanged,
+            [this](const QItemSelection&, const QItemSelection&) {
+      emit selected_path_changed(get_selected_path());
+    });
 
     // It is better for performance to enable sorting only after the model is ready.
     setSortingEnabled(true);
