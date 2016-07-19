@@ -55,6 +55,7 @@ Bug fixes
 * Map editor: fix multiple default destinations when copy-pasting (#118).
 * Tileset editor: improve performance of deleting multiple tile pattenrs (#120).
 * Text editor: improve tabulation behavior (#43).
+* Text editor: fix multiline comments matching to the end of the line (#63).
 
 _______________________________________
 
