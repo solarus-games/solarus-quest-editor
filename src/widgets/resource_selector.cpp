@@ -55,8 +55,10 @@ void ResourceSelector::set_resource_type(ResourceType resource_type) {
   this->resource_type = resource_type;
 
   if (model != nullptr) {
+    const QString& tileset_id = get_tileset_id();
     model = new ResourceModel(model->get_quest(), resource_type);
     setModel(model);
+    model->set_tileset_id(tileset_id);
   }
 }
 
@@ -75,6 +77,7 @@ void ResourceSelector::set_quest(const Quest& quest) {
   view->setAlternatingRowColors(true);
   view->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
   view->setHeaderHidden(true);
+  view->setUniformRowHeights(true);
 
   setView(view);
 }

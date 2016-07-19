@@ -608,8 +608,9 @@ void EditEntityDialog::initialize_breed() {
     return;
   }
 
-  ui.breed_field->set_quest(get_quest());
   ui.breed_field->set_resource_type(ResourceType::ENEMY);
+  ui.breed_field->set_quest(get_quest());
+  ui.breed_field->set_tileset_id(get_map().get_tileset_id());
   QString breed = entity_before.get_field(breed_field_name).toString();
   ui.breed_field->set_selected_id(breed);
 }

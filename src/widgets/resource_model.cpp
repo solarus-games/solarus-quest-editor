@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/resource_model.h"
+#include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "sprite_model.h"
@@ -90,7 +91,8 @@ void ResourceModel::set_tileset_id(const QString& tileset_id) {
 
   this->tileset_id = tileset_id;
 
-  if (resource_type == ResourceType::SPRITE) {
+  if (resource_type == ResourceType::SPRITE ||
+      resource_type == ResourceType::ENEMY) {
 
     // Icons may change.
     icons.clear();  // Clear the icon cache.
@@ -277,16 +279,33 @@ QIcon ResourceModel::create_icon(const QString& element_id) const {
   const Quest& quest = get_quest();
   Q_ASSERT(!element_id.isEmpty());
   Q_ASSERT(quest.get_resources().exists(resource_type, element_id));
-  if (resource_type == ResourceType::SPRITE) {
-    // Special case of sprites: show the sprite icon.
-    if (quest.exists(quest.get_sprite_path(element_id))) {
-      SpriteModel sprite(quest, element_id);
+
+  try {
+    if (resource_type == ResourceType::SPRITE) {
+      // Special case of sprites: show the sprite icon.
+      if (quest.exists(quest.get_sprite_path(element_id))) {
+        SpriteModel sprite(quest, element_id);
+        sprite.set_tileset_id(tileset_id);
+        const QPixmap& pixmap = sprite.get_icon();
+        if (!pixmap.isNull()) {
+          return QIcon(pixmap);
+        }
+      }
+    }
+    else if (resource_type == ResourceType::ENEMY) {
+      // Enemy: show the enemy's sprite.
+      QString sprite_id = QString("enemies/%1").arg(element_id);
+      SpriteModel sprite(quest, sprite_id);
       sprite.set_tileset_id(tileset_id);
       const QPixmap& pixmap = sprite.get_icon();
       if (!pixmap.isNull()) {
         return QIcon(pixmap);
       }
     }
+  }
+  catch (const EditorException&) {
+    // The sprite is missing: just return the generic
+    // icon instead.
   }
 
   // Return an icon representing the resource type.
