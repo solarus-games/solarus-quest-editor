@@ -134,9 +134,7 @@ void SoundChooser::update_play_button() {
   }
 
   QString selected_sound_id = sound_selector.get_selected_id();
-  QString path = quest->get_resource_element_path(
-        ResourceType::SOUND, selected_sound_id
-  );
+  QString path = quest->get_sound_path(selected_sound_id);
 
   if (selected_sound_id.isEmpty() ||
       !quest->exists(path)) {

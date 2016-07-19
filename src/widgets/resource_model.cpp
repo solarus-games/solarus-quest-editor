@@ -412,7 +412,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const {
       return QIcon();
     }
 
-    // Resource elemnt item.
+    // Resource element item.
     Q_ASSERT(!element_id.isEmpty());
     auto it = icons.find(element_id);
     if (it != icons.end()) {

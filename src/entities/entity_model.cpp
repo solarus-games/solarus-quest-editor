@@ -1424,7 +1424,7 @@ bool EntityModel::draw_as_sprite(
     return false;
   }
 
-  if (!quest.exists(quest.get_resource_element_path(ResourceType::SPRITE, sprite_id))) {
+  if (!quest.exists(quest.get_sprite_path(sprite_id))) {
     // The sprite file does not exist.
     return false;
   }

@@ -166,9 +166,7 @@ void MusicChooser::update_play_button() {
   }
 
   QString selected_music_id = music_selector.get_selected_id();
-  QString path = quest->get_resource_element_path(
-        ResourceType::MUSIC, selected_music_id
-  );
+  QString path = quest->get_music_path(selected_music_id);
 
   if (selected_music_id.isEmpty() ||
       selected_music_id == "none" ||
