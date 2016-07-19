@@ -39,7 +39,7 @@ class ResourceSelector : public QComboBox {
 
 public:
 
-  ResourceSelector(QWidget* parent);
+  ResourceSelector(QWidget* parent = nullptr);
 
   void set_quest(const Quest& quest);
 

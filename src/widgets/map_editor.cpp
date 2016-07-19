@@ -989,10 +989,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.map_side_splitter->setStretchFactor(1, 1);  // but only the tileset view.
   ui.tileset_field->set_resource_type(ResourceType::TILESET);
   ui.tileset_field->set_quest(quest);
-  ui.music_field->set_resource_type(ResourceType::MUSIC);
   ui.music_field->set_quest(quest);
-  ui.music_field->add_special_value("none", tr("<No music>"), 0);
-  ui.music_field->add_special_value("same", tr("<Same as before>"), 1);
+  ui.music_field->get_selector().add_special_value("none", tr("<No music>"), 0);
+  ui.music_field->get_selector().add_special_value("same", tr("<Same as before>"), 1);
   ui.tileset_view->set_read_only(true);
   ui.map_view->set_map(map);
   ui.map_view->set_view_settings(get_view_settings());
@@ -1062,10 +1061,6 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(ui.music_field, SIGNAL(activated(QString)),
           this, SLOT(music_selector_activated()));
   connect(map, SIGNAL(music_id_changed(QString)),
-          this, SLOT(update_music_field()));
-  connect(ui.music_play_button, SIGNAL(clicked(bool)),
-          this, SLOT(play_music_requested()));
-  connect(&quest, SIGNAL(current_music_changed(QString)),
           this, SLOT(update_music_field()));
 
   connect(ui.open_script_button, SIGNAL(clicked()),
@@ -1681,46 +1676,6 @@ void MapEditor::update_music_field() {
   // Update the music selector.
   const QString& music_id = map->get_music_id();
   ui.music_field->set_selected_id(music_id);
-
-  // Update the play/stop music button.
-  ui.music_play_button->setIcon(QIcon(":/images/icon_start.png"));
-  ui.music_play_button->setToolTip(tr("Play music"));
-  if (music_id.isEmpty() ||
-      music_id == "none" ||
-      music_id == "same") {
-    ui.music_play_button->setEnabled(false);
-  }
-  else {
-    ui.music_play_button->setEnabled(true);
-    const QString& music_playing_id = get_quest().get_current_music_id();
-    if (music_playing_id == music_id) {
-      ui.music_play_button->setIcon(QIcon(":/images/icon_stop.png"));
-      ui.music_play_button->setToolTip(tr("Stop music"));
-    }
-  }
-}
-
-/**
- * @brief Slot called when the user wants to play or stop the music.
- */
-void MapEditor::play_music_requested() {
-
-  const QString& music_id = ui.music_field->get_selected_id();
-  if (music_id.isEmpty() ||
-      music_id == "none" ||
-      music_id == "same") {
-    return;
-  }
-
-  Quest& quest = get_quest();
-  const QString& current_music_id = quest.get_current_music_id();
-  if (current_music_id == music_id) {
-    // This music is already playing, stop it.
-    Audio::stop_music(quest);
-  }
-  else {
-    Audio::play_music(quest, music_id);
-  }
 }
 
 /**

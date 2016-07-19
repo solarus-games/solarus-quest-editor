@@ -81,7 +81,6 @@ private slots:
   void update_tileset_view();
   void tileset_selection_changed();
   void update_music_field();
-  void play_music_requested();
   void music_selector_activated();
   void map_selection_changed();
   void uncheck_entity_creation_buttons();
