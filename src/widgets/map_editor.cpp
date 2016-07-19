@@ -21,11 +21,11 @@
 #include "widgets/map_scene.h"
 #include "editor_exception.h"
 #include "editor_settings.h"
+#include "audio.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
-#include "sound.h"
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QItemSelectionModel>
@@ -1716,10 +1716,10 @@ void MapEditor::play_music_requested() {
   const QString& current_music_id = quest.get_current_music_id();
   if (current_music_id == music_id) {
     // This music is already playing, stop it.
-    Sound::stop_music(quest);
+    Audio::stop_music(quest);
   }
   else {
-    Sound::play_music(quest, music_id);
+    Audio::play_music(quest, music_id);
   }
 }
 
@@ -1736,7 +1736,7 @@ void MapEditor::music_selector_activated() {
   }
 
   // Stop playing any music if there is a change.
-  Sound::stop_music(get_quest());
+  Audio::stop_music(get_quest());
 
   try_command(new SetMusicCommand(*this, new_music_id));
 }

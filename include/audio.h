@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_SOUND_H
-#define SOLARUSEDITOR_SOUND_H
+#ifndef SOLARUSEDITOR_AUDIO_H
+#define SOLARUSEDITOR_AUDIO_H
 
 class QString;
 
@@ -23,7 +23,7 @@ namespace SolarusEditor {
 
 class Quest;
 
-namespace Sound {
+namespace Audio {
 
 void play_sound(const Quest& quest, const QString& sound_id);
 void play_music(Quest& quest, const QString& music_id);

@@ -17,10 +17,10 @@
 #include "widgets/gui_tools.h"
 #include "widgets/new_resource_element_dialog.h"
 #include "widgets/quest_tree_view.h"
+#include "audio.h"
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_files_model.h"
-#include "sound.h"
 #include <QContextMenuEvent>
 #include <QDir>
 #include <QFile>
@@ -312,7 +312,7 @@ void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
 
     case ResourceType::MUSIC:
       play_action->setEnabled(quest.exists(path));
-      if (Sound::is_playing_music(quest, element_id)) {
+      if (Audio::is_playing_music(quest, element_id)) {
         play_action->setIcon(QIcon(":/images/icon_stop.png"));
         play_action->setText(tr("Stop"));
       }
@@ -687,14 +687,14 @@ void QuestTreeView::play_action_triggered() {
   QString element_id;
   if (quest.is_potential_resource_element(path, resource_type, element_id)) {
     if (resource_type == ResourceType::SOUND) {
-      Sound::play_sound(quest, element_id);
+      Audio::play_sound(quest, element_id);
     }
     else if (resource_type == ResourceType::MUSIC) {
-      if (Sound::is_playing_music(quest, element_id)) {
-        Sound::stop_music(quest);
+      if (Audio::is_playing_music(quest, element_id)) {
+        Audio::stop_music(quest);
       }
       else {
-        Sound::play_music(quest, element_id);
+        Audio::play_music(quest, element_id);
       }
     }
   }

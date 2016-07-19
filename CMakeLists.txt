@@ -151,6 +151,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/settings_dialog.h
   include/widgets/color_picker.h
   include/widgets/pair_spin_box.h
+  include/audio.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
@@ -178,7 +179,6 @@ set(solarus_quest_editor_SOURCES
   include/rectangle.h
   include/resize_mode.h
   include/size.h
-  include/sound.h
   include/sprite_model.h
   include/starting_location_mode_traits.h
   include/strings_model.h
@@ -257,6 +257,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/settings_dialog.cpp
   src/widgets/color_picker.cpp
   src/widgets/pair_spin_box.cpp
+  src/audio.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
@@ -279,7 +280,6 @@ set(solarus_quest_editor_SOURCES
   src/quest_properties.cpp
   src/quest_resources.cpp
   src/rectangle.cpp
-  src/sound.cpp
   src/size.cpp
   src/sprite_model.cpp
   src/starting_location_mode_traits.cpp

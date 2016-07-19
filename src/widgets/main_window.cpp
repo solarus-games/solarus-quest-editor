@@ -21,13 +21,13 @@
 #include "widgets/gui_tools.h"
 #include "widgets/main_window.h"
 #include "widgets/pair_spin_box.h"
+#include "audio.h"
 #include "file_tools.h"
 #include "map_model.h"
 #include "new_quest_builder.h"
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
-#include "sound.h"
 #include "version.h"
 #include <solarus/gui/quest_runner.h>
 #include <QActionGroup>
@@ -874,7 +874,7 @@ void MainWindow::on_action_stop_music_triggered() {
   Quest& quest = get_quest();
   if (!quest.get_current_music_id().isEmpty()) {
     // A music is playing: stop it.
-    Sound::stop_music(quest);
+    Audio::stop_music(quest);
   }
   else {
     // No music is playing: play the selected one if any.
@@ -885,7 +885,7 @@ void MainWindow::on_action_stop_music_triggered() {
         get_quest().is_potential_resource_element(selected_path, resource_type, element_id) &&
         resource_type == ResourceType::MUSIC &&
         get_quest().exists(selected_path)) {
-      Sound::play_music(quest, element_id);
+      Audio::play_music(quest, element_id);
     }
   }
 }

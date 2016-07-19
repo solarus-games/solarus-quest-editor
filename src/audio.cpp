@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "audio.h"
 #include "quest.h"
-#include "sound.h"
 #include <solarus/lowlevel/QuestFiles.h>
 #include <solarus/lowlevel/Music.h>
 #include <solarus/lowlevel/Sound.h>
@@ -79,7 +79,7 @@ void close_quest() {
 
 }  // Anonymous namespace.
 
-namespace Sound {
+namespace Audio {
 
 /**
  * @brief Plays a sound of the given quest.
