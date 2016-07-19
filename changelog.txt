@@ -42,6 +42,7 @@ Bug fixes
 
 * Fix wrong hero movements sometimes when playing from the editor (#138).
 * Fix tabs not closed when opening another quest (#44).
+* Fix the drop-down list of resource selectors too small on some systems.
 * Map editor: fix crash when creating a block with a missing sprite (#195).
 * Map editor: fix performance regression when pasting a lot of entities (#141).
 * Map editor: fix entities still shown when put on a hidden layer.

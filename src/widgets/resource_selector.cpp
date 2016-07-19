@@ -32,6 +32,7 @@ ResourceSelector::ResourceSelector(QWidget* parent) :
   view(nullptr),
   model(nullptr) {
 
+  setMaxVisibleItems(100);
 }
 
 /**
