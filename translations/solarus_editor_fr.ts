@@ -180,7 +180,7 @@
         <translation>Ctrl+E,Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="200"/>
+        <location filename="../src/entities/entity_traits.cpp" line="206"/>
         <source>Ctrl+E,Ctrl+Y</source>
         <translation>Ctrl+E,Ctrl+Y</translation>
     </message>
@@ -190,7 +190,7 @@
         <translation>Ctrl+E,Ctrl+K</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="206"/>
+        <location filename="../src/entities/entity_traits.cpp" line="239"/>
         <source>Ctrl+E,Ctrl+U</source>
         <translation>Ctrl+E,Ctrl+U</translation>
     </message>
@@ -210,9 +210,8 @@
         <translation>Ctrl+E,Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="218"/>
         <source>Ctrl+E,Ctrl+Shift+T</source>
-        <translation>Ctrl+E,Ctrl+Shift+T</translation>
+        <translation type="vanished">Ctrl+E,Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="../src/entities/entity_traits.cpp" line="221"/>
@@ -245,9 +244,8 @@
         <translation>Ctrl+E,Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="239"/>
         <source>Ctrl+E,Ctrl+Shift+H</source>
-        <translation>Ctrl+E,Ctrl+Shift+H</translation>
+        <translation type="vanished">Ctrl+E,Ctrl+Shift+H</translation>
     </message>
     <message>
         <location filename="../src/entities/entity_traits.cpp" line="242"/>
@@ -265,14 +263,24 @@
         <translation>Ctrl+E,Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="251"/>
+        <location filename="../src/entities/entity_traits.cpp" line="200"/>
         <source>Ctrl+E,Ctrl+L</source>
         <translation>Ctrl+E,Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/entities/entity_traits.cpp" line="254"/>
+        <location filename="../src/entities/entity_traits.cpp" line="218"/>
+        <source>Ctrl+E,Ctrl+2</source>
+        <translation>Ctrl+E,Ctrl+2</translation>
+    </message>
+    <message>
+        <location filename="../src/entities/entity_traits.cpp" line="251"/>
         <source>Ctrl+E,Ctrl+T</source>
         <translation>Ctrl+E,Ctrl+T</translation>
+    </message>
+    <message>
+        <location filename="../src/entities/entity_traits.cpp" line="254"/>
+        <source>Ctrl+E,Ctrl+1</source>
+        <translation>Ctrl+E,Ctrl+1</translation>
     </message>
     <message>
         <location filename="../src/entities/entity_traits.cpp" line="257"/>
