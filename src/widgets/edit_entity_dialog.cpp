@@ -1397,8 +1397,9 @@ void EditEntityDialog::initialize_treasure() {
     return;
   }
 
-  ui.treasure_name_field->set_quest(get_quest());
   ui.treasure_name_field->set_resource_type(ResourceType::ITEM);
+  ui.treasure_name_field->set_quest(get_quest());
+  ui.treasure_name_field->set_tileset_id(get_map().get_tileset_id());
   ui.treasure_name_field->add_special_value("", tr("(None)"), 0);  // Add the special value "None".
 
   // Only accept valid identifiers as savegame variable names.

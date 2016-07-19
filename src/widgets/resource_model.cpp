@@ -92,7 +92,8 @@ void ResourceModel::set_tileset_id(const QString& tileset_id) {
   this->tileset_id = tileset_id;
 
   if (resource_type == ResourceType::SPRITE ||
-      resource_type == ResourceType::ENEMY) {
+      resource_type == ResourceType::ENEMY ||
+      resource_type == ResourceType::ITEM) {
 
     // Icons may change.
     icons.clear();  // Clear the icon cache.
@@ -298,6 +299,16 @@ QIcon ResourceModel::create_icon(const QString& element_id) const {
       SpriteModel sprite(quest, sprite_id);
       sprite.set_tileset_id(tileset_id);
       const QPixmap& pixmap = sprite.get_icon();
+      if (!pixmap.isNull()) {
+        return QIcon(pixmap);
+      }
+    }
+    else if (resource_type == ResourceType::ITEM) {
+      // Item: show the treasure's sprite.
+      QString sprite_id = "entities/items";
+      SpriteModel sprite(quest, sprite_id);
+      sprite.set_tileset_id(tileset_id);
+      const QPixmap& pixmap = sprite.get_direction_icon({ element_id, 0 });
       if (!pixmap.isNull()) {
         return QIcon(pixmap);
       }
