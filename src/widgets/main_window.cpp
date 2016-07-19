@@ -416,6 +416,8 @@ QMenu* MainWindow::create_show_entities_menu() {
       menu->removeAction(action);
       continue;
     }
+    const QString& shortcut = EntityTraits::get_show_hide_shortcut(type);
+    action->setShortcut(shortcut);
     QString type_name = EntityTraits::get_lua_name(type);
     show_entities_subactions[type_name] = action;
   }

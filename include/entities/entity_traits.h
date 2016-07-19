@@ -49,6 +49,7 @@ public:
   static QString get_lua_name(EntityType value);
 
   static bool can_be_stored_in_map_file(EntityType type);
+  static QString get_show_hide_shortcut(EntityType type);
 
 };
 

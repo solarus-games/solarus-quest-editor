@@ -168,4 +168,97 @@ bool EnumTraits<EntityType>::can_be_stored_in_map_file(EntityType type) {
   return Solarus::EntityTypeInfo::can_be_stored_in_map_file(type);
 }
 
+/**
+ * @brief Returns the keyboard shortcut to show or hide entities to a type.
+ * @param type A type of entity.
+ * @return The keyboard shortcut to use.
+ */
+QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
+
+  // Use a switch to ensure we don't forget a value,
+  // and also to translate names dynamically.
+  switch (type) {
+
+  case EntityType::ARROW:
+  case EntityType::BOMB:
+  case EntityType::BOOMERANG:
+  case EntityType::CAMERA:
+  case EntityType::CARRIED_OBJECT:
+  case EntityType::EXPLOSION:
+  case EntityType::HERO:
+  case EntityType::HOOKSHOT:
+  case EntityType::FIRE:
+    return QString();
+
+  case EntityType::BLOCK:
+    return QApplication::tr("Ctrl+E,Ctrl+B");
+
+  case EntityType::CHEST:
+    return QApplication::tr("Ctrl+E,Ctrl+C");
+
+  case EntityType::CRYSTAL:
+    return QApplication::tr("Ctrl+E,Ctrl+Y");
+
+  case EntityType::CRYSTAL_BLOCK:
+    return QApplication::tr("Ctrl+E,Ctrl+K");
+
+  case EntityType::CUSTOM:
+    return QApplication::tr("Ctrl+E,Ctrl+U");
+
+  case EntityType::DESTINATION:
+    return QApplication::tr("Ctrl+E,Ctrl+I");
+
+  case EntityType::DESTRUCTIBLE:
+    return QApplication::tr("Ctrl+E,Ctrl+D");
+
+  case EntityType::DOOR:
+    return QApplication::tr("Ctrl+E,Ctrl+O");
+
+  case EntityType::DYNAMIC_TILE:
+    return QApplication::tr("Ctrl+E,Ctrl+Shift+T");
+
+  case EntityType::ENEMY:
+    return QApplication::tr("Ctrl+E,Ctrl+E");
+
+  case EntityType::JUMPER:
+    return QApplication::tr("Ctrl+E,Ctrl+J");
+
+  case EntityType::NPC:
+    return QApplication::tr("Ctrl+E,Ctrl+N");
+
+  case EntityType::PICKABLE:
+    return QApplication::tr("Ctrl+E,Ctrl+P");
+
+  case EntityType::SENSOR:
+    return QApplication::tr("Ctrl+E,Ctrl+S");
+
+  case EntityType::SEPARATOR:
+    return QApplication::tr("Ctrl+E,Ctrl+A");
+
+  case EntityType::SHOP_TREASURE:
+    return QApplication::tr("Ctrl+E,Ctrl+Shift+H");
+
+  case EntityType::STAIRS:
+    return QApplication::tr("Ctrl+E,Ctrl+R");
+
+  case EntityType::STREAM:
+    return QApplication::tr("Ctrl+E,Ctrl+M");
+
+  case EntityType::SWITCH:
+    return QApplication::tr("Ctrl+E,Ctrl+H");
+
+  case EntityType::TELETRANSPORTER:
+    return QApplication::tr("Ctrl+E,Ctrl+L");
+
+  case EntityType::TILE:
+    return QApplication::tr("Ctrl+E,Ctrl+T");
+
+  case EntityType::WALL:
+    return QApplication::tr("Ctrl+E,Ctrl+W");
+
+  }
+
+  return "";
+}
+
 }
