@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>initial_files/map_script_template.lua</file>
+        <file>initial_files/entity_script_template.lua</file>
+        <file>initial_files/enemy_script_template.lua</file>
+        <file>initial_files/item_script_template.lua</file>
+    </qresource>
+</RCC>

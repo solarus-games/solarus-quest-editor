@@ -19,6 +19,7 @@ New features
 * Add a recent quests menu (#89).
 * The shortcut to load a quest is now Ctrl+L.
 * Add resource dialog: set the id as initial value for the description (#192).
+* Initialize map/item/enemy/entity scripts with helpful code (#33).
 * Automatically add .lua extension when creating a script file (#46).
 * Allow to play musics and sounds from the quest tree (#8).
 * Allow to play music and sounds from music and sound selectors.

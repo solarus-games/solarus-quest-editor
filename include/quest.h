@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QSet>
 
+class QRegularExpression;
+
 namespace SolarusEditor {
 
 /**
@@ -111,11 +113,25 @@ public:
 
   // Create, rename and delete paths.
   void create_file(const QString& path);
+  void create_file_from_template(
+      const QString& output_file_path,
+      const QString& template_file_path,
+      const QRegularExpression& pattern,
+      const QString& replacement
+  );
   bool create_file_if_not_exists(const QString& path);
   void create_script(const QString& path);
   bool create_script_if_not_exists(const QString& path);
   void create_map_data_file(const QString& map_id);
   bool create_map_data_file_if_not_exists(const QString& map_id);
+  void create_map_script(const QString& map_id);
+  bool create_map_script_if_not_exists(const QString& map_id);
+  void create_item_script(const QString& item_id);
+  bool create_item_script_if_not_exists(const QString& item_id);
+  void create_enemy_script(const QString& enemy_id);
+  bool create_enemy_script_if_not_exists(const QString& enemy_id);
+  void create_entity_script(const QString& entity_id);
+  bool create_entity_script_if_not_exists(const QString& entity_id);
 
   void create_dir(const QString& path);
   bool create_dir_if_not_exists(const QString& path);

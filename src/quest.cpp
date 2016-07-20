@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QMap>
 
 namespace SolarusEditor {
@@ -1068,6 +1069,44 @@ void Quest::create_file(const QString& path) {
 }
 
 /**
+ * @brief Attempts to create a file in this quest from a template file.
+ * @param output_file_path Path of the file to create. It must not exist.
+ * @param template_file_path Path of the template file to use.
+ * @param pattern Regular expression to replace in the template file.
+ * @param replacement Value to put instead of the pattern.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file_from_template(
+    const QString& output_file_path,
+    const QString& template_file_path,
+    const QRegularExpression& pattern,
+    const QString& replacement
+) {
+
+  check_is_in_root_path(output_file_path);
+  check_not_exists(output_file_path);
+
+  QFile template_file(template_file_path);
+  if (!template_file.open(QIODevice::ReadOnly)) {
+    throw EditorException(tr("Cannot read file '%1'").arg(template_file_path));
+  }
+  QString content = QString::fromUtf8(template_file.readAll());
+  template_file.close();
+  content = content.replace(QRegularExpression(pattern), replacement);
+
+  QFile output_file(output_file_path);
+  if (!output_file.open(QIODevice::WriteOnly)) {
+    throw EditorException(tr("Cannot write file '%1'").arg(output_file_path));
+  }
+  QTextStream out(&output_file);
+  out.setCodec("UTF-8");
+  out << content;
+  output_file.close();
+
+  emit file_created(output_file_path);
+}
+
+/**
  * @brief Attempts to create a file in this quest if it does not exist yet.
  * @param path Path of the file to create. If it already exists, it must not
  * be a directory.
@@ -1156,6 +1195,150 @@ bool Quest::create_map_data_file_if_not_exists(const QString& map_id) {
   }
 
   create_map_data_file(map_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a map script file in this quest.
+ * @param map_id Id of the map to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_map_script(const QString& map_id) {
+
+  QString path = get_map_script_path(map_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/map_script_template.lua",
+        QRegularExpression("\\$map_id"),
+        map_id
+  );
+}
+
+/**
+ * @brief Attempts to create a map script file in this quest if it does not
+ * exist yet.
+ * @param map_id Id of the map to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_map_script_if_not_exists(const QString& map_id) {
+
+  QString path = get_map_script_path(map_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_map_script(map_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a item script file in this quest.
+ * @param item_id Id of the item to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_item_script(const QString& item_id) {
+
+  QString path = get_item_script_path(item_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/item_script_template.lua",
+        QRegularExpression("\\$item_id"),
+        item_id
+  );
+}
+
+/**
+ * @brief Attempts to create a item script file in this quest if it does not
+ * exist yet.
+ * @param item_id Id of the item to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_item_script_if_not_exists(const QString& item_id) {
+
+  QString path = get_item_script_path(item_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_item_script(item_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a enemy script file in this quest.
+ * @param enemy_id Id of the enemy to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_enemy_script(const QString& enemy_id) {
+
+  QString path = get_enemy_script_path(enemy_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/enemy_script_template.lua",
+        QRegularExpression("\\$enemy_id"),
+        enemy_id
+  );
+}
+
+/**
+ * @brief Attempts to create a enemy script file in this quest if it does not
+ * exist yet.
+ * @param enemy_id Id of the enemy to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_enemy_script_if_not_exists(const QString& enemy_id) {
+
+  QString path = get_enemy_script_path(enemy_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_enemy_script(enemy_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a entity script file in this quest.
+ * @param entity_id Id of the entity to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_entity_script(const QString& entity_id) {
+
+  QString path = get_entity_script_path(entity_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/entity_script_template.lua",
+        QRegularExpression("\\$entity_id"),
+        entity_id
+  );
+}
+
+/**
+ * @brief Attempts to create a entity script file in this quest if it does not
+ * exist yet.
+ * @param entity_id Id of the entity to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_entity_script_if_not_exists(const QString& entity_id) {
+
+  QString path = get_entity_script_path(entity_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_entity_script(entity_id);
   return true;
 }
 
@@ -1275,14 +1458,23 @@ void Quest::create_resource_element(ResourceType resource_type,
   case ResourceType::MAP:
     // Create the map data file and the map script.
     create_map_data_file_if_not_exists(element_id);
-    create_script_if_not_exists(get_map_script_path(element_id));
+    create_map_script_if_not_exists(element_id);
     break;
 
   case ResourceType::ITEM:
-  case ResourceType::SPRITE:
+    create_item_script_if_not_exists(element_id);
+    break;
+
   case ResourceType::ENEMY:
+    create_enemy_script_if_not_exists(element_id);
+    break;
+
   case ResourceType::ENTITY:
-    // For these type of resources, files to create are simply blank text files.
+    create_entity_script_if_not_exists(element_id);
+    break;
+
+  case ResourceType::SPRITE:
+    // For this type of resources, files to create are simply blank text files.
     Q_FOREACH (const QString& path, paths) {
       done_on_filesystem |= create_file_if_not_exists(path);
     }
