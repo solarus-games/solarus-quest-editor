@@ -135,4 +135,44 @@ Ground EnumTraits<Ground>::get_by_lua_name(
   return Solarus::name_to_enum<Ground>(name.toStdString());
 }
 
+/**
+ * @brief Returns whether a ground is traversable or obstacle.
+ *
+ * This is a simplification of the various possible grounds.
+ *
+ * @param value A ground value.
+ * @return @c true if is traversable, @c false if it obstacle.
+ */
+bool EnumTraits<Ground>::is_traversable(Ground value) {
+
+  switch (value) {
+
+  case Ground::EMPTY:
+  case Ground::TRAVERSABLE:
+  case Ground::DEEP_WATER:
+  case Ground::SHALLOW_WATER:
+  case Ground::GRASS:
+  case Ground::HOLE:
+  case Ground::LAVA:
+  case Ground::PRICKLE:
+  case Ground::ICE:
+  case Ground::LADDER:
+    return true;
+
+  case Ground::WALL:
+  case Ground::LOW_WALL:
+  case Ground::WALL_TOP_RIGHT:
+  case Ground::WALL_TOP_LEFT:
+  case Ground::WALL_BOTTOM_LEFT:
+  case Ground::WALL_BOTTOM_RIGHT:
+  case Ground::WALL_TOP_RIGHT_WATER:
+  case Ground::WALL_TOP_LEFT_WATER:
+  case Ground::WALL_BOTTOM_LEFT_WATER:
+  case Ground::WALL_BOTTOM_RIGHT_WATER:
+    return false;
+  }
+
+  return true;
+}
+
 }

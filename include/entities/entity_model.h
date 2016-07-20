@@ -122,6 +122,7 @@ public:
   bool is_field_unset(const QString& key) const;
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
+  bool is_traversable() const;
   QString to_string() const;
 
   // Resizing from the editor.
@@ -206,6 +207,8 @@ protected:
   void set_no_direction_allowed(bool no_direction_allowed);
   void set_no_direction_text(const QString& no_direction_text);
 
+  void set_traversable(bool traversable);
+
   void set_existing_subtypes(const SubtypeList& subtypes);
 
   virtual void notify_field_changed(const QString& key, const QVariant& value);
@@ -250,6 +253,7 @@ private:
   int num_directions;             /**< Number of possible directions (except the possible special one -1). */
   bool no_direction_allowed;      /**< Whether the special no-value -1 is an allowed direction. */
   QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed). */
+  bool traversable;               /**< Whether this entity is assumed to be traversable. */
   SubtypeList subtypes;           /**< Existing subtypes of this entity type. */
 
   // Displaying.

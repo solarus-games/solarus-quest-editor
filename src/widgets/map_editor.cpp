@@ -968,6 +968,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_zoom_supported(true);
   get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
+  set_traversables_visibility_supported(true);
+  set_obstacles_visibility_supported(true);
   set_entity_type_visibility_supported(true);
 
   // Shortcuts.

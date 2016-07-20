@@ -27,6 +27,7 @@ Door::Door(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::DOOR) {
 
   set_num_directions(4);
+  set_traversable(false);
 }
 
 }

@@ -31,6 +31,7 @@ Crystal::Crystal(MapModel& map, const EntityIndex& index) :
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal";
   set_draw_sprite_info(info);
+  set_traversable(false);
 }
 
 }

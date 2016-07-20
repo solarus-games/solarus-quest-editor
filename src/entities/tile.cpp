@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/tile.h"
+#include "ground_traits.h"
 #include "map_model.h"
 #include "tileset_model.h"
 #include <QPainter>
@@ -107,6 +108,10 @@ void Tile::update_pattern() {
 
       // Update the preferred initial layer.
       set_preferred_layer(tileset->get_pattern_default_layer(pattern_index));
+
+      // Update the traversable property.
+      Ground ground = tileset->get_pattern_ground(pattern_index);
+      set_traversable(GroundTraits::is_traversable(ground));
     }
   }
 

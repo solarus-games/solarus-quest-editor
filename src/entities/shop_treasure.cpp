@@ -34,6 +34,7 @@ ShopTreasure::ShopTreasure(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(184, 96, 96);
   info.pixmap = QPixmap(":/images/entity_shop_treasure.png");
   set_draw_shape_info(info);
+  set_traversable(false);
 }
 
 /**

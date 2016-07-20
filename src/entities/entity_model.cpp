@@ -76,6 +76,7 @@ EntityModel::EntityModel(
   num_directions(1),
   no_direction_allowed(false),
   no_direction_text(MapModel::tr("No direction")),
+  traversable(true),
   draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
@@ -1086,6 +1087,30 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
   }
 
   notify_field_changed(key, value);
+}
+
+/**
+ * @brief Returns whether this entity is assumed to be traversable.
+ *
+ * This property is just a hint for the editor, it is not always
+ * accurate because for some entities it can change at runtime.
+ *
+ * @return @c true if the entity is traversable.
+ */
+bool EntityModel::is_traversable() const {
+  return traversable;
+}
+
+/**
+ * @brief Sets whether this entity is assumed to be traversable.
+ *
+ * This property is just a hint for the editor, it is not always
+ * accurate because for some entities it can change at runtime.
+ *
+ * @param traversable @c true if the entity is traversable.
+ */
+void EntityModel::set_traversable(bool traversable) {
+  this->traversable = traversable;
 }
 
 /**

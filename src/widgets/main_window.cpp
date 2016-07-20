@@ -135,9 +135,10 @@ MainWindow::MainWindow(QWidget* parent) :
   show_layers_menu = new QMenu(tr("Show/hide more layers"));
   show_layers_button->setMenu(show_layers_menu);
   show_layers_button->setPopupMode(QToolButton::InstantPopup);
-  show_layers_action = ui.tool_bar->addWidget(show_layers_button);
-  ui.menu_view->addMenu(show_layers_menu);
-  ui.menu_view->addSeparator();
+  show_layers_action = ui.tool_bar->insertWidget(ui.action_show_traversables, show_layers_button);
+  ui.tool_bar->insertSeparator(ui.action_show_traversables);
+  ui.menu_view->insertMenu(ui.action_show_traversables, show_layers_menu);
+  ui.menu_view->insertSeparator(ui.action_show_traversables);
 
   show_entities_button = new QToolButton();
   show_entities_button->setIcon(QIcon(":/images/icon_glasses.png"));
@@ -1025,6 +1026,32 @@ void MainWindow::on_action_show_layer_2_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Show traversable entities" action.
+ */
+void MainWindow::on_action_show_traversables_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_traversables_visible(ui.action_show_traversables->isChecked());
+}
+
+/**
+ * @brief Slot called when the user triggers the "Show obstacle entities" action.
+ */
+void MainWindow::on_action_show_obstacles_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  editor->get_view_settings().set_obstacles_visible(ui.action_show_obstacles->isChecked());
+}
+
+/**
  * @brief Slot called when the user triggers the "Settings" action.
  */
 void MainWindow::on_action_settings_triggered() {
@@ -1089,6 +1116,19 @@ void MainWindow::current_editor_changed(int index) {
 
   update_layer_range();
 
+  const bool traversables_visibility_supported =
+      has_editor && editor->is_traversables_visibility_supported();
+  ui.action_show_traversables->setEnabled(traversables_visibility_supported);
+  if (!traversables_visibility_supported) {
+    ui.action_show_traversables->setChecked(false);
+  }
+  const bool obstacles_visibility_supported =
+      has_editor && editor->is_obstacles_visibility_supported();
+  ui.action_show_obstacles->setEnabled(obstacles_visibility_supported);
+  if (!obstacles_visibility_supported) {
+    ui.action_show_obstacles->setChecked(false);
+  }
+
   bool entity_type_visibility_supported =
       has_editor && editor->is_entity_type_visibility_supported();
   show_entities_menu->setEnabled(entity_type_visibility_supported);
@@ -1105,7 +1145,6 @@ void MainWindow::current_editor_changed(int index) {
     update_grid_visibility();
     connect(&view_settings, SIGNAL(grid_size_changed(QSize)),
             this, SLOT(update_grid_size()));
-    update_grid_visibility();
     update_grid_size();
 
     connect(&view_settings, SIGNAL(layer_range_changed(int, int)),
@@ -1114,6 +1153,12 @@ void MainWindow::current_editor_changed(int index) {
             this, SLOT(update_layer_visibility(int)));
     update_layers_visibility();
 
+    connect(&view_settings, SIGNAL(traversables_visibility_changed(bool)),
+            this, SLOT(update_traversables_visibility()));
+    update_traversables_visibility();
+    connect(&view_settings, SIGNAL(obstacles_visibility_changed(bool)),
+            this, SLOT(update_obstacles_visibility()));
+    update_obstacles_visibility();
     connect(&view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
             this, SLOT(update_entity_type_visibility(EntityType)));
     update_entity_types_visibility();
@@ -1266,6 +1311,38 @@ void MainWindow::update_layers_visibility() {
       action->setVisible(view_settings.is_layer_visible(i));
     }
   }
+}
+
+/**
+ * @brief Slot called when the traversables of the current editor were just
+ * shown or hidden.
+ */
+void MainWindow::update_traversables_visibility() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  bool visible = editor->get_view_settings().are_traversables_visible();
+
+  ui.action_show_traversables->setChecked(visible);
+}
+
+/**
+ * @brief Slot called when the obstacles of the current editor were just
+ * shown or hidden.
+ */
+void MainWindow::update_obstacles_visibility() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  bool visible = editor->get_view_settings().are_obstacles_visible();
+
+  ui.action_show_obstacles->setChecked(visible);
 }
 
 /**

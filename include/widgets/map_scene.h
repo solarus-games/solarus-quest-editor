@@ -46,6 +46,8 @@ public:
   static QSize get_margin_size();
 
   void update_layer_visibility(int layer, const ViewSettings& view_settings);
+  void update_traversables_visibility(const ViewSettings& view_settings);
+  void update_obstacles_visibility(const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
 
   EntityIndexes get_selected_entities();

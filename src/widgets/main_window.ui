@@ -111,6 +111,8 @@
     <addaction name="action_show_layer_0"/>
     <addaction name="action_show_layer_1"/>
     <addaction name="action_show_layer_2"/>
+    <addaction name="action_show_traversables"/>
+    <addaction name="action_show_obstacles"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -162,6 +164,8 @@
    <addaction name="action_show_layer_0"/>
    <addaction name="action_show_layer_1"/>
    <addaction name="action_show_layer_2"/>
+   <addaction name="action_show_traversables"/>
+   <addaction name="action_show_obstacles"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">
@@ -408,6 +412,30 @@
    </property>
    <property name="text">
     <string>Stop music</string>
+   </property>
+  </action>
+  <action name="action_show_traversables">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/ground_traversable.png</normaloff>:/images/ground_traversable.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show traversable entities</string>
+   </property>
+  </action>
+  <action name="action_show_obstacles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/ground_wall.png</normaloff>:/images/ground_wall.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show obstacle entities</string>
    </property>
   </action>
  </widget>

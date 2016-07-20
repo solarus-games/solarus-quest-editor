@@ -35,4 +35,27 @@ Switch::Switch(MapModel& map, const EntityIndex& index) :
   set_existing_subtypes(subtypes);
 }
 
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Switch::notify_field_changed(const QString& key, const QVariant& value) {
+
+  EntityModel::notify_field_changed(key, value);
+
+  if (key == "subtype") {
+    update_subtype();
+  }
+}
+
+/**
+ * @brief Updates the representation of the crystal block.
+ *
+ * This function should be called when the subtype changes.
+ */
+void Switch::update_subtype() {
+
+  bool solid = get_subtype() == "solid";
+  set_traversable(!solid);
+}
+
 }

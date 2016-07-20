@@ -40,6 +40,8 @@ public:
   static QString get_lua_name(Ground value);
   static Ground get_by_lua_name(const QString& name);
 
+  static bool is_traversable(Ground value);
+
 };
 
 }

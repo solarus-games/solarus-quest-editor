@@ -33,6 +33,7 @@ public:
 protected:
 
   void set_initial_values() override;
+  void notify_field_changed(const QString& key, const QVariant& value) override;
 
 };
 

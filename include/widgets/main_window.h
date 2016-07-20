@@ -76,6 +76,8 @@ private slots:
   void on_action_show_layer_0_triggered();
   void on_action_show_layer_1_triggered();
   void on_action_show_layer_2_triggered();
+  void on_action_show_traversables_triggered();
+  void on_action_show_obstacles_triggered();
   void on_action_settings_triggered();
   void on_action_website_triggered();
   void on_action_doc_triggered();
@@ -88,6 +90,8 @@ private slots:
   void update_layer_range();
   void update_layer_visibility(int layer);
   void update_layers_visibility();
+  void update_traversables_visibility();
+  void update_obstacles_visibility();
   void update_entity_type_visibility(EntityType entity_type);
   void update_entity_types_visibility();
 

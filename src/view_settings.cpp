@@ -32,6 +32,8 @@ ViewSettings::ViewSettings(QObject* parent) :
   min_layer(0),
   max_layer(-1),
   visible_layers(),
+  traversables_visible(true),
+  obstacles_visible(true),
   visible_entity_types() {
 
   // Default settings.
@@ -282,6 +284,57 @@ void ViewSettings::hide_all_layers() {
   }
 }
 
+/**
+ * @brief Returns whether traversable entities are currently shown.
+ * @return @c true if traversablers are shown.
+ */
+bool ViewSettings::are_traversables_visible() const {
+  return traversables_visible;
+}
+
+/**
+ * @brief Shows or hide traversable entities.
+ *
+ * Emits traversables_visbility_changed() if there is a change.
+ *
+ * @param traversable_visible @c true to show traversables.
+ */
+void ViewSettings::set_traversables_visible(bool traversables_visible) {
+
+  if (traversables_visible == this->traversables_visible) {
+    return;
+  }
+
+  this->traversables_visible = traversables_visible;
+
+  emit traversables_visibility_changed(traversables_visible);
+}
+
+/**
+ * @brief Returns whether obstacle entities are currently shown.
+ * @return @c true if obstaclers are shown.
+ */
+bool ViewSettings::are_obstacles_visible() const {
+  return obstacles_visible;
+}
+
+/**
+ * @brief Shows or hide obstacle entities.
+ *
+ * Emits obstacles_visbility_changed() if there is a change.
+ *
+ * @param obstacle_visible @c true to show obstacles.
+ */
+void ViewSettings::set_obstacles_visible(bool obstacles_visible) {
+
+  if (obstacles_visible == this->obstacles_visible) {
+    return;
+  }
+
+  this->obstacles_visible = obstacles_visible;
+
+  emit obstacles_visibility_changed(obstacles_visible);
+}
 /**
  * @brief Returns whether a entity type is currently visible.
  * @param entity_type The entity type to test.

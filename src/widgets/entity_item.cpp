@@ -79,9 +79,12 @@ void EntityItem::update_visibility(const ViewSettings& view_settings) {
 
   int layer = entity.get_layer();
   EntityType type = get_entity_type();
+  bool traversable = entity.is_traversable();
 
   const bool visible = view_settings.is_layer_visible(layer) &&
-             view_settings.is_entity_type_visible(type);
+      view_settings.is_entity_type_visible(type) &&
+      ((traversable && view_settings.are_traversables_visible()) ||
+       (!traversable && view_settings.are_obstacles_visible()));
   setVisible(visible);
 }
 

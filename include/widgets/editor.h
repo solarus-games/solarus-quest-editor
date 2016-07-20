@@ -64,6 +64,8 @@ public:
   bool is_grid_supported() const;
   bool is_layer_supported() const;
   void get_layers_supported(int& min_layer, int& max_layer) const;
+  bool is_traversables_visibility_supported() const;
+  bool is_obstacles_visibility_supported() const;
   bool is_entity_type_visibility_supported() const;
   const ViewSettings& get_view_settings() const;
   ViewSettings& get_view_settings();
@@ -96,6 +98,8 @@ protected:
   void set_zoom_supported(bool zoom_supported);
   void set_grid_supported(bool grid_supported);
   void set_layers_supported(int min_layer, int max_layer);
+  void set_traversables_visibility_supported(bool supported);
+  void set_obstacles_visibility_supported(bool supported);
   void set_entity_type_visibility_supported(bool supported);
 
   void focusInEvent(QFocusEvent* event) override;
@@ -126,6 +130,8 @@ private:
   int min_layer_supported;                  /**< Lowest layer if the editor supports showing/hiding layers. */
   int max_layer_supported;                  /**< Highest layer if the editor supports showing/hiding layers,
                                              * -1 otherwise. */
+  bool traversables_visibility_supported;   /**< Whether the editor supports showing/hiding traversables. */
+  bool obstacles_visibility_supported;      /**< Whether the editor supports showing/hiding obstacles. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
   ViewSettings view_settings;               /**< What is shown and how. */
 

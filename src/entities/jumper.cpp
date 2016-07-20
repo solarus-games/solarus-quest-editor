@@ -38,6 +38,7 @@ Jumper::Jumper(MapModel& map, const EntityIndex& index) :
   update_resize_mode();
 
   set_num_directions(8);
+  set_traversable(false);
 }
 
 /**

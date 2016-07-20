@@ -27,6 +27,7 @@ Chest::Chest(MapModel& map, const EntityIndex& index) :
   EntityModel(map, index, EntityType::CHEST) {
 
   set_origin(QPoint(8, 13));
+  set_traversable(false);
 }
 
 }

@@ -38,6 +38,7 @@ Npc::Npc(MapModel& map, const EntityIndex& index) :
     { "1", MapModel::tr("Usual NPC (somebody)") }
   };
   set_existing_subtypes(subtypes);
+  set_traversable(false);
 }
 
 }

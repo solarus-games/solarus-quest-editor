@@ -157,6 +157,8 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   grid_supported(false),
   min_layer_supported(0),
   max_layer_supported(-1),
+  traversables_visibility_supported(false),
+  obstacles_visibility_supported(false),
   entity_type_visibility_supported(false),
   view_settings() {
 
@@ -662,6 +664,46 @@ void Editor::set_layers_supported(int min_layer, int max_layer) {
 }
 
 /**
+ * @brief Returns whether this editor supports showing and hiding traversables.
+ * @return @c true if traversables can be shown or hidden.
+ */
+bool Editor::is_traversables_visibility_supported() const {
+  return traversables_visibility_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports showing and hiding traversables.
+ *
+ * If your editor supports this, you are responsible to apply the new
+ * setting when the traversables_visibility_changed() signal is emitted.
+ *
+ * @param supported @c true if show traversables can be shown and hidden.
+ */
+void Editor::set_traversables_visibility_supported(bool supported) {
+  this->traversables_visibility_supported = supported;
+}
+
+/**
+ * @brief Returns whether this editor supports showing and hiding obstacles.
+ * @return @c true if obstacles can be shown or hidden.
+ */
+bool Editor::is_obstacles_visibility_supported() const {
+  return obstacles_visibility_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports showing and hiding obstacles.
+ *
+ * If your editor supports this, you are responsible to apply the new
+ * setting when the obstacles_visibility_changed() signal is emitted.
+ *
+ * @param supported @c true if show obstacles can be shown and hidden.
+ */
+void Editor::set_obstacles_visibility_supported(bool supported) {
+  this->obstacles_visibility_supported = supported;
+}
+
+/**
  * @brief Returns whether this editor supports showing and hiding entity types.
  * @return @c true if entity types can be shown or hidden.
  */
@@ -675,7 +717,7 @@ bool Editor::is_entity_type_visibility_supported() const {
  * If your editor supports this, you are responsible to apply the new
  * setting when the entity_type_visibility_changed() signal is emitted.
  *
- * @param upported @c true if show entity types operations are
+ * @param supported @c true if show entity types operations are
  * supported.
  */
 void Editor::set_entity_type_visibility_supported(bool supported) {

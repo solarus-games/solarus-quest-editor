@@ -28,7 +28,6 @@ DynamicTile::DynamicTile(MapModel& map, const EntityIndex& index) :
   Tile(map, index, EntityType::DYNAMIC_TILE) {
 
   set_resizable(true);
-
 }
 
 /**

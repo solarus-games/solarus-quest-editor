@@ -150,6 +150,8 @@ public slots:
   void mouse_coordinates_changed(const QPoint& xy);
   void update_grid_visibility();
   void update_layer_visibility(int layer);
+  void update_traversables_visibility();
+  void update_obstacles_visibility();
   void update_entity_type_visibility(EntityType type);
   void tileset_selection_changed();
   void tileset_id_changed(const QString& tileset_id);

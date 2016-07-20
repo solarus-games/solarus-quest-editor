@@ -59,6 +59,11 @@ public:
   void show_all_layers();
   void hide_all_layers();
 
+  bool are_traversables_visible() const;
+  void set_traversables_visible(bool traversables_visible);
+  bool are_obstacles_visible() const;
+  void set_obstacles_visible(bool obstacles_visible);
+
   bool is_entity_type_visible(EntityType entity_type) const;
   void set_entity_type_visible(EntityType entity_type, bool visible);
   void show_all_entity_types();
@@ -73,12 +78,14 @@ signals:
   void grid_color_changed(const QColor& color);
   void layer_range_changed(int min_layer, int max_layer);
   void layer_visibility_changed(int layer, bool visible);
+  void traversables_visibility_changed(bool traversables_visible);
+  void obstacles_visibility_changed(bool obstacles_visible);
   void entity_type_visibility_changed(EntityType entity_type, bool visible);
 
 private:
 
   double zoom;                              /**< If supported, the current zoom factor. */
-  bool grid_visible;                        /**< If supported, whether the grid is currently shown.*/
+  bool grid_visible;                        /**< If supported, whether the grid is currently shown. */
   QSize grid_size;                          /**< If supported, the current grid size. */
   GridStyle grid_style;                     /**< If supported, the current grid style. */
   QColor grid_color;                        /**< If supported, the current grid color. */
@@ -87,6 +94,8 @@ private:
   int max_layer;                            /**< Highest layer in the editor
                                              * (-1 if showing/hiding layers is not supported). */
   std::set<int> visible_layers;             /**< Layers currently shown, if supported. */
+  bool traversables_visible;                /**< If supported, whether traversables are currently shown. */
+  bool obstacles_visible;                   /**< If supported, whether obstacles are currently shown. */
   std::set<EntityType>
       visible_entity_types;                 /**< Types of entities currently shown, if supported. */
 

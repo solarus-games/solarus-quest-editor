@@ -324,6 +324,10 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
   connect(this->view_settings, SIGNAL(layer_visibility_changed(int, bool)),
           this, SLOT(update_layer_visibility(int)));
 
+  connect(this->view_settings, SIGNAL(traversables_visibility_changed(bool)),
+          this, SLOT(update_traversables_visibility()));
+  connect(this->view_settings, SIGNAL(obstacles_visibility_changed(bool)),
+          this, SLOT(update_obstacles_visibility()));
   connect(this->view_settings, SIGNAL(entity_type_visibility_changed(EntityType, bool)),
           this, SLOT(update_entity_type_visibility(EntityType)));
 
@@ -981,6 +985,30 @@ void MapView::update_layer_visibility(int layer) {
   }
 
   scene->update_layer_visibility(layer, *view_settings);
+}
+
+/**
+ * @brief Shows or hides traversables according to the view settings.
+ */
+void MapView::update_traversables_visibility() {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->update_traversables_visibility(*view_settings);
+}
+
+/**
+ * @brief Shows or hides obstacles according to the view settings.
+ */
+void MapView::update_obstacles_visibility() {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->update_obstacles_visibility(*view_settings);
 }
 
 /**

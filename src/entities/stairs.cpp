@@ -37,6 +37,7 @@ Stairs::Stairs(MapModel& map, const EntityIndex& index) :
     { "4", MapModel::tr("Platform stairs (same map)") }
   };
   set_existing_subtypes(subtypes);
+  set_traversable(false);
 }
 
 /**

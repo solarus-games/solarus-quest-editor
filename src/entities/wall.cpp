@@ -53,4 +53,17 @@ void Wall::set_initial_values() {
   set_field("stops_projectiles", true);
 }
 
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Wall::notify_field_changed(const QString& key, const QVariant& value) {
+
+  EntityModel::notify_field_changed(key, value);
+
+  if (key == "stops_hero") {
+    bool stops_hero = value.toBool();
+    set_traversable(!stops_hero);
+  }
+}
+
 }

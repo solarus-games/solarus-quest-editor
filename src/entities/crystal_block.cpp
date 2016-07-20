@@ -56,13 +56,14 @@ void CrystalBlock::notify_field_changed(const QString& key, const QVariant& valu
  */
 void CrystalBlock::update_subtype() {
 
+  bool initially_lowered = get_subtype() == "0";
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal_block";
-  info.animation = (get_subtype() == "0") ? "orange_lowered" : "blue_raised";
+  info.animation = initially_lowered ? "orange_lowered" : "blue_raised";
   info.frame = -1;
   info.tiled = true;
   set_draw_sprite_info(info);
-
+  set_traversable(initially_lowered);
 }
 
 }

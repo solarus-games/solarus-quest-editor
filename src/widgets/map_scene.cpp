@@ -221,6 +221,38 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
 }
 
 /**
+ * @brief Shows or hide traversable entities.
+ * @param view_settings The new view settings to apply.
+ */
+void MapScene::update_traversables_visibility(const ViewSettings& view_settings) {
+
+  this->view_settings = &view_settings;
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
+    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+      if (item->get_entity().is_traversable()) {
+        item->update_visibility(view_settings);
+      }
+    }
+  }
+}
+
+/**
+ * @brief Shows or hide obstacle entities.
+ * @param view_settings The new view settings to apply.
+ */
+void MapScene::update_obstacles_visibility(const ViewSettings& view_settings) {
+
+  this->view_settings = &view_settings;
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
+    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+      if (!item->get_entity().is_traversable()) {
+        item->update_visibility(view_settings);
+      }
+    }
+  }
+}
+
+/**
  * @brief Shows or hides entities of the specified type.
  * @param type The entity type to change.
  * @param view_settings The new view settings to apply.

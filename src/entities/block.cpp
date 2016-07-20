@@ -32,6 +32,7 @@ Block::Block(MapModel& map, const EntityIndex& index) :
   set_num_directions(4);
   set_no_direction_allowed(true);
   set_no_direction_text(MapModel::tr("Any"));
+  set_traversable(false);
 }
 
 }
