@@ -20,6 +20,7 @@ New features
 * The shortcut to load a quest is now Ctrl+L.
 * Allow to update teletransporters when changing the id of a map (#56).
 * Allow to update teletransporters when renaming a destination (#58).
+* Allow to update maps when changing the id of a tileset (#57).
 * Add resource dialog: set the id as initial value for the description (#192).
 * Initialize map/item/enemy/entity scripts with helpful code (#33).
 * Automatically add .lua extension when creating a script file (#46).

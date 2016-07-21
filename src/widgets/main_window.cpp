@@ -1541,6 +1541,16 @@ bool MainWindow::confirm_before_closing() {
 }
 
 /**
+ * @brief Slot called when the selection changes in the quest tree view.
+ * @param path The new selected path or an empty string.
+ */
+void MainWindow::selected_path_changed(const QString& path) {
+
+  Q_UNUSED(path);
+  update_music_actions();
+}
+
+/**
  * @brief Slot called when the user wants to rename a file.
  *
  * The new file name will be prompted to the user.
@@ -1588,12 +1598,22 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
       int result = dialog.exec();
       if (result == QDialog::Accepted) {
         const QString& new_element_id = dialog.get_element_id();
-        if (!dialog.get_update_references()) {
-          quest.rename_resource_element(resource_type, element_id, new_element_id);
-        }
-        else {
-          // Refactoring: update teletransporters leading to this map.
-          refactor_map_id(element_id, new_element_id);
+        if (new_element_id != element_id) {
+          if (!dialog.get_update_references()) {
+            // Regular renaming.
+            quest.rename_resource_element(resource_type, element_id, new_element_id);
+          }
+          else {
+            // Refactoring.
+            if (resource_type == ResourceType::MAP) {
+              // Update teletransporters leading to this map.
+              refactor_map_id(element_id, new_element_id);
+            }
+            else if (resource_type == ResourceType::TILESET) {
+              // Update maps using this tileset.
+              refactor_tileset_id(element_id, new_element_id);
+            }
+          }
         }
       }
     }
@@ -1734,13 +1754,55 @@ bool MainWindow::update_destination_map_in_map(
 }
 
 /**
- * @brief Slot called when the selection changes in the quest tree view.
- * @param path The new selected path or an empty string.
+ * @brief Changes the id of the tileset and updates maps using it.
+ * @param tileset_id_before Current tileset id.
+ * @param tileset_id_after New tileset id.
  */
-void MainWindow::selected_path_changed(const QString& path) {
+void MainWindow::refactor_tileset_id(const QString& tileset_id_before, const QString& tileset_id_after) {
 
-  Q_UNUSED(path);
-  update_music_actions();
+  Refactoring refactoring([=]() {
+
+    // Change the id.
+    quest.rename_resource_element(ResourceType::TILESET, tileset_id_before, tileset_id_after);
+
+    // Update all maps.
+    QStringList modified_paths;
+    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+      if (update_tileset_in_map(map_id, tileset_id_before, tileset_id_after)) {
+        modified_paths << quest.get_map_data_file_path(map_id);
+      }
+    }
+    return modified_paths;
+  });
+
+  refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates the tileset id in a map file.
+ * @param map_id Id of the map to update.
+ * @param tileset_id_before Id of the tileset that has changed.
+ * @param tileset_id_after New id of the changed tileset.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MainWindow::update_tileset_in_map(
+    const QString& map_id,
+    const QString& tileset_id_before,
+    const QString& tileset_id_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QString path = get_quest().get_map_data_file_path(map_id);
+
+  QString pattern = QString("\n  tileset = \"?%1\"?,\n").arg(
+        QRegularExpression::escape(tileset_id_before));
+
+  QString replacement = QString("\n  tileset = \"%1\",\n").arg(tileset_id_after);
+
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
 }
 
 }

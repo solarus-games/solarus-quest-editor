@@ -132,6 +132,12 @@ private:
       const QString& map_id_before,
       const QString& map_id_after
   );
+  void refactor_tileset_id(const QString& tileset_id_before, const QString& tileset_id_after);
+  bool update_tileset_in_map(
+      const QString& map_id,
+      const QString& tileset_id_before,
+      const QString& tileset_id_after
+  );
 
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */

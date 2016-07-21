@@ -51,6 +51,9 @@ ChangeResourceIdDialog::ChangeResourceIdDialog(
   if (resource_type == ResourceType::MAP) {
     ui.update_references_checkbox->setText(tr("Update existing teletransporters leading to this map"));
   }
+  else if (resource_type == ResourceType::TILESET) {
+    ui.update_references_checkbox->setText(tr("Update existing maps using this tileset"));
+  }
   else {
     ui.update_references_checkbox->hide();
     layout()->removeWidget(ui.update_references_checkbox);
