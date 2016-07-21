@@ -30,6 +30,7 @@ namespace SolarusEditor {
 
 class Editor;
 class PairSpinBox;
+class Refactoring;
 
 using EntityType = Solarus::EntityType;
 
@@ -84,6 +85,8 @@ private slots:
 
   void current_editor_changed(int index);
   void rename_file_requested(Quest& quest, const QString& path);
+  void refactoring_requested(const Refactoring& refactoring);
+
   void update_zoom();
   void update_grid_visibility();
   void update_grid_size();

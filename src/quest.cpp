@@ -1087,7 +1087,7 @@ void Quest::create_file_from_template(
   check_not_exists(output_file_path);
 
   QFile template_file(template_file_path);
-  if (!template_file.open(QIODevice::ReadOnly)) {
+  if (!template_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     throw EditorException(tr("Cannot read file '%1'").arg(template_file_path));
   }
   QString content = QString::fromUtf8(template_file.readAll());
@@ -1095,7 +1095,7 @@ void Quest::create_file_from_template(
   content = content.replace(QRegularExpression(pattern), replacement);
 
   QFile output_file(output_file_path);
-  if (!output_file.open(QIODevice::WriteOnly)) {
+  if (!output_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     throw EditorException(tr("Cannot write file '%1'").arg(output_file_path));
   }
   QTextStream out(&output_file);
@@ -1770,75 +1770,6 @@ void Quest::delete_resource_element(
     // Nothing was done. This must be an error.
     throw EditorException(tr("No such resource: '%1'").arg(element_id));
   }
-}
-
-/**
- * @brief Returns the list of files currently opened in this quest.
- * @return Paths of the tiles currently edited.
- */
-QSet<QString> Quest::get_open_paths() const {
-
-  return open_paths;
-}
-
-/**
- * @brief Returns whether a file of this quest is currently open.
- * @param path A file of this quest.
- * @return @c true if the file is currently edited.
- */
-bool Quest::is_path_open(const QString& path) const {
-
-  return open_paths.contains(path);
-}
-
-/**
- * @brief Indicates whether a file of this quest is currently open.
- *
- * This function should be called whenever a file starts or ends being edited
- * by the user.
- *
- * @param path A file of this quest.
- * @return @c true if the file is currently edited.
- */
-void Quest::set_path_open(const QString& path, bool open) {
-
-  if (open) {
-    open_paths.insert(path);
-  }
-  else {
-    open_paths.remove(path);
-  }
-}
-
-/**
- * @brief Returns whether a resource element of this quest is currently open.
- * @param resource_type A type of resource.
- * @param element_id Id of the element to check
- * @return @c true if a file of this element is currently edited.
- */
-bool Quest::is_resource_element_open(ResourceType resource_type, const QString& element_id) const {
-
-  Q_FOREACH (const QString& path, get_resource_element_paths(resource_type, element_id)) {
-    if (is_path_open(path)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * @brief Returns whether any resource element of a particular type is currently open.
- * @param resource_type A type of resource.
- * @return @c true if any file of this type is currently edited.
- */
-bool Quest::is_resource_element_open(ResourceType resource_type) const {
-
-  Q_FOREACH (const QString& element_id, resources.get_elements(resource_type)) {
-    if (is_resource_element_open(resource_type, element_id)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 /**

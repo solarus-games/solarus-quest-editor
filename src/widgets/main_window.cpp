@@ -28,6 +28,7 @@
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
+#include "refactoring.h"
 #include "version.h"
 #include <solarus/gui/quest_runner.h>
 #include <QActionGroup>
@@ -214,6 +215,8 @@ MainWindow::MainWindow(QWidget* parent) :
           ui.action_copy, SLOT(setEnabled(bool)));
   connect(ui.tab_widget, SIGNAL(can_paste_changed(bool)),
           ui.action_paste, SLOT(setEnabled(bool)));
+  connect(ui.tab_widget, SIGNAL(refactoring_requested(Refactoring)),
+          this, SLOT(refactoring_requested(Refactoring)));
 
   connect(grid_size, SIGNAL(value_changed(int,int)),
           this, SLOT(change_grid_size()));
@@ -1620,6 +1623,64 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
     ex.show_dialog();
   }
 
+}
+
+/**
+ * @brief Slot called when the user wants to perform some refactoring.
+ *
+ * Makes sure that all files are saved first, performs the refactoring
+ * and closes the files that were modified during the operation.
+ *
+ * @param refactoring The refactoring action to perform.
+ */
+void MainWindow::refactoring_requested(const Refactoring& refactoring) {
+
+  try {
+
+    // Make sure that all open files are saved before doing the refactoring.
+    if (ui.tab_widget->has_unsaved_files()) {
+
+      QMessageBox::StandardButton answer = QMessageBox::question(
+            nullptr,
+            tr("Unsaved changes"),
+            tr("All files must be saved before this operation.\nDo you want to save them now?"),
+            QMessageBox::SaveAll | QMessageBox::Cancel,
+            QMessageBox::SaveAll
+      );
+
+      switch (answer) {
+
+      case QMessageBox::SaveAll:
+        if (!ui.tab_widget->save_all_files_requested()) {
+          return;
+        }
+        break;
+
+      case QMessageBox::Cancel:
+      case QMessageBox::Escape:
+        // Cancel the refactoring.
+        return;
+
+      default:
+        return;
+      }
+    }
+
+    // Do the work.
+    QStringList modified_paths = refactoring.execute();
+
+    // See if some of the impacted files was open.
+    for (const QString& path : modified_paths) {
+      int editor_index = ui.tab_widget->find_editor(path);
+      if (editor_index != -1) {
+        // Reload the file.
+        ui.tab_widget->reload_file_requested(editor_index);
+      }
+    }
+  }
+  catch (const EditorException& ex) {
+    ex.show_dialog();
+  }
 }
 
 /**

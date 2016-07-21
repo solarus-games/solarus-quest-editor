@@ -29,6 +29,7 @@ namespace SolarusEditor {
 
 class Quest;
 class QuestResources;
+class Refactoring;
 
 /**
  * \brief Abstract class for a widget that can edit something in Solarus.
@@ -88,6 +89,7 @@ signals:
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
   void open_file_requested(Quest& quest, const QString& path);
+  void refactoring_requested(const Refactoring& refactoring);
 
 protected:
 

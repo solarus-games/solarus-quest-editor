@@ -40,8 +40,7 @@ namespace SolarusEditor {
  */
 EditorTabs::EditorTabs(QWidget* parent):
   QTabWidget(parent),
-  undo_group(new QUndoGroup(this)),
-  quest(nullptr) {
+  undo_group(new QUndoGroup(this)) {
 
   ClosableTabBar* tab_bar = new ClosableTabBar();
   setTabBar(tab_bar);
@@ -328,19 +327,24 @@ void EditorTabs::open_strings_editor(
  * @param editor The editor to put in the new tab.
  */
 void EditorTabs::add_editor(Editor* editor) {
+  insert_editor(editor, count());
+  setCurrentIndex(count() - 1);
+}
+
+/**
+ * @brief Creates a new tab.
+ * @param editor The editor to put in the new tab.
+ * @param index Index of the tab to add.
+ */
+void EditorTabs::insert_editor(Editor* editor, int index) {
 
   QUndoStack* undo_stack = &editor->get_undo_stack();
   undo_group->addStack(undo_stack);
 
   QString path = editor->get_file_path();
   editors.insert(path, editor);
-  addTab(editor, editor->get_icon(), editor->get_title());
-  int index = count() - 1;
+  insertTab(index, editor, editor->get_icon(), editor->get_title());
   setTabToolTip(index, editor->get_file_path());
-  setCurrentIndex(index);
-
-  // Tell the quest that this file is now open.
-  editor->get_quest().set_path_open(path, true);
 
   // Show an asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
@@ -348,6 +352,8 @@ void EditorTabs::add_editor(Editor* editor) {
 
   connect(editor, SIGNAL(open_file_requested(Quest&, QString)),
           this, SLOT(open_file_requested(Quest&, QString)));
+  connect(editor, SIGNAL(refactoring_requested(Refactoring)),
+          this, SIGNAL(refactoring_requested(Refactoring)));
 }
 
 /**
@@ -360,9 +366,6 @@ void EditorTabs::remove_editor(int index) {
   QString path = editor->get_file_path();
 
   undo_group->removeStack(&editor->get_undo_stack());
-
-  // Tell the quest that this file is now closed.
-  editor->get_quest().set_path_open(path, false);
 
   editors.remove(path);
   removeTab(index);
@@ -431,12 +434,13 @@ bool EditorTabs::show_editor(const QString& path) {
 /**
  * @brief Slot called when the user attempts to save a file.
  * @param index Index of the tab to save.
+ * @return @c true in case of success.
  */
-void EditorTabs::save_file_requested(int index) {
+bool EditorTabs::save_file_requested(int index) {
 
   Editor* editor = get_editor(index);
   if (editor == nullptr) {
-    return;
+    return false;
   }
 
   try {
@@ -446,17 +450,23 @@ void EditorTabs::save_file_requested(int index) {
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
+    return false;
   }
+
+  return true;
 }
 
 /**
  * @brief Slot called when the user attempts to save all tabs.
+ * @return @c true in case of success.
  */
-void EditorTabs::save_all_files_requested() {
+bool EditorTabs::save_all_files_requested() {
 
+  bool success = true;
   for (int i = 0; i < count(); ++i) {
-    save_file_requested(i);
+    success = success && save_file_requested(i);
   }
+  return success;
 }
 
 /**
@@ -525,6 +535,31 @@ void EditorTabs::close_all_files_requested() {
   if (confirm_before_closing()) {
     close_without_confirmation();
   }
+}
+
+/**
+ * @brief Slot called when the user wants to reload the file of a tab.
+ * @param index Index of the tab to reload.
+ */
+void EditorTabs::reload_file_requested(int index) {
+
+  int active_editor_index = currentIndex();
+
+  Editor* editor = get_editor(index);
+  if (editor == nullptr) {
+    return;
+  }
+  Quest& quest = editor->get_quest();
+  QString path = editor->get_file_path();
+
+  close_file_requested(index);
+  open_file_requested(quest, path);
+
+  editor = get_editor(count() - 1);
+  remove_editor(count() - 1);
+  insert_editor(editor, index);
+
+  setCurrentIndex(active_editor_index);
 }
 
 /**

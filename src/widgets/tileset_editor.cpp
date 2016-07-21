@@ -20,6 +20,7 @@
 #include "editor_exception.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "refactoring.h"
 #include "tileset_model.h"
 #include <QGuiApplication>
 #include <QColorDialog>
@@ -835,17 +836,8 @@ void TilesetEditor::change_selected_pattern_id_requested() {
   else {
     // Also update references in existing maps
     // (not as an undoable command).
+    Refactoring refactoring([=]() {
 
-    if (get_quest().is_resource_element_open(ResourceType::MAP)) {
-      // All maps needs to be closed before doing that.
-      QMessageBox::warning(
-            nullptr,
-            dialog.windowTitle(),
-            tr("Please close all maps before updating tile pattern references."));
-      return;
-    }
-
-    try {
       // Do the change in the tileset.
       model->set_pattern_id(old_index, new_id);
 
@@ -854,11 +846,9 @@ void TilesetEditor::change_selected_pattern_id_requested() {
       get_undo_stack().clear();
 
       // Update all maps that use this tileset.
-      change_pattern_id_in_maps(old_id, new_id);
-    }
-    catch (const EditorException& ex) {
-      ex.show_dialog();
-    }
+      return change_pattern_id_in_maps(old_id, new_id);
+    });
+    emit refactoring_requested(refactoring);
   }
 }
 
@@ -866,23 +856,29 @@ void TilesetEditor::change_selected_pattern_id_requested() {
  * @brief Replaces a pattern id by a new value in all maps that use this tileset.
  * @param old_pattern_id The pattern id to change.
  * @param new_pattern_id The new value.
+ * @return The list of files that were modified.
  * @throws EditorException In case of error.
  */
-void TilesetEditor::change_pattern_id_in_maps(
+QStringList TilesetEditor::change_pattern_id_in_maps(
     const QString& old_pattern_id, const QString& new_pattern_id) {
 
+  QStringList modified_paths;
   Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
-    change_pattern_id_in_map(map_id, old_pattern_id, new_pattern_id);
+    if (change_pattern_id_in_map(map_id, old_pattern_id, new_pattern_id)) {
+      modified_paths << get_quest().get_map_data_file_path(map_id);
+    }
   }
+  return modified_paths;
 }
 
 /**
  * @brief Replaces a pattern id by a new value in a map if it uses this tileset.
  * @param old_pattern_id The pattern id to change.
  * @param new_pattern_id The new value.
+ * @return @c true if there was a change.
  * @throws EditorException In case of error.
  */
-void TilesetEditor::change_pattern_id_in_map(
+bool TilesetEditor::change_pattern_id_in_map(
     const QString& map_id, const QString& old_pattern_id, const QString& new_pattern_id) {
 
   // We don't load the entire map with all its entities for performance.
@@ -902,12 +898,18 @@ void TilesetEditor::change_pattern_id_in_map(
   QString tileset_line = "\n  tileset = \"" + model->get_tileset_id() + "\",\n";
   if (!content.contains(tileset_line)) {
     // This map uses another tileset: nothing to do.
-    return;
+    return false;
   }
 
   QRegExp regex("\n  pattern = \"?" + QRegExp::escape(old_pattern_id) + "\"?,\n");
   QString replacement("\n  pattern = \"" + new_pattern_id + "\",\n");
-  content = content.replace(regex, replacement);
+  QString old_content = content;
+  content.replace(regex, replacement);
+
+  if (content == old_content) {
+    // No change.
+    return false;
+  }
 
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     throw EditorException(tr("Cannot open map file '%1' for writing").arg(file.fileName()));
@@ -916,6 +918,7 @@ void TilesetEditor::change_pattern_id_in_map(
   out.setCodec("UTF-8");
   out << content;
   file.close();
+  return true;
 }
 
 /**

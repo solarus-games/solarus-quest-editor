@@ -35,6 +35,7 @@ New features
 * Map editor: new entity icons by Amine (#119).
 * Map editor: show the real variant of pickables (#109).
 * Tileset editor: propose to refresh the image when it has changed (#86).
+* Tileset editor: don't force the user to close maps before renaming patterns.
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor options.
 * Add select all to map, tileset and text editors (#106).

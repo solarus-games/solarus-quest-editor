@@ -28,6 +28,7 @@ namespace SolarusEditor {
 
 class Editor;
 class Quest;
+class Refactoring;
 
 /**
  * \brief The main tab widget with all editors currently open.
@@ -74,14 +75,16 @@ signals:
   void can_cut_changed(bool can_cut);
   void can_copy_changed(bool can_copy);
   void can_paste_changed(bool can_paste);
+  void refactoring_requested(const Refactoring& refactoring);
 
 public slots:
 
-  void save_file_requested(int index);
-  void save_all_files_requested();
+  bool save_file_requested(int index);
+  bool save_all_files_requested();
   void close_file_requested(int index);
   void close_all_files_requested();
   void open_file_requested(Quest& quest, const QString& path);
+  void reload_file_requested(int index);
   void file_renamed(const QString& old_path, const QString& new_path);
   void file_deleted(const QString& path);
 
@@ -101,12 +104,12 @@ private slots:
 private:
 
   void add_editor(Editor* editor);
+  void insert_editor(Editor* editor, int index);
   void remove_editor(int index);
 
   QMap<QString, Editor*> editors;      /**< All editors currently open,
                                         * indexed by their file path. */
   QUndoGroup* undo_group;              /**< Undo/redo stacks of open files. */
-  QPointer<Quest> quest;               /**< The quest edited files belong to. */
 };
 
 }

@@ -152,13 +152,6 @@ public:
   void delete_resource_element(ResourceType resource_type,
                                const QString& element_id);
 
-  // Tracking which files are currently open by the user.
-  QSet<QString> get_open_paths() const;
-  bool is_path_open(const QString& path) const;
-  void set_path_open(const QString& path, bool open);
-  bool is_resource_element_open(
-      ResourceType resource_type, const QString& element_id) const;
-  bool is_resource_element_open(ResourceType resource_type) const;
   QString get_current_music_id() const;
   void set_current_music_id(const QString& music_id);
 
@@ -177,7 +170,6 @@ private:
 
   QuestProperties properties;      /**< Properties given in quest.dat. */
   QuestResources resources;        /**< Resources declared in project_db.dat. */
-  QSet<QString> open_paths;        /**< Files currently edited by the user. */
   QString current_music_id;        /**< Id of the music currently playing if any. */
 
 };
