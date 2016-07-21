@@ -113,6 +113,21 @@ private:
 
   void load_settings();
 
+  void refactor_destination_name(
+      QUndoCommand* command,
+      const QString& name_before,
+      const QString& name_after
+  );
+  QStringList update_destination_name_in_other_maps(
+      const QString& name_before,
+      const QString& name_after
+  );
+  bool update_destination_name_in_map(
+      const QString& map_id,
+      const QString& name_before,
+      const QString& name_after
+  );
+
   Ui::MapEditor ui;                         /**< The map editor widgets. */
   QString map_id;                           /**< Id of the map being edited. */
   MapModel* map;                            /**< Map model being edited. */

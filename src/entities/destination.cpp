@@ -25,7 +25,8 @@ namespace SolarusEditor {
  * @param index Index of the entity in the map.
  */
 Destination::Destination(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index, EntityType::DESTINATION) {
+  EntityModel(map, index, EntityType::DESTINATION),
+  update_teletransporters(true) {
 
   set_origin(QPoint(8, 13));
 
@@ -59,6 +60,24 @@ void Destination::set_initial_values() {
   // the starting location.
   // (Its uniqueness will be ensured later by appending a suffix.)
   set_name("destination");
+}
+
+/**
+ * @brief Returns whether existing teletransporters should be updated when
+ * the name of this destination changes.
+ * @return @c true if teletransporters should be updated.
+ */
+bool Destination::get_update_teletransporters() const {
+  return update_teletransporters;
+}
+
+/**
+ * @brief Sets whether existing teletransporters should be updated when
+ * the name of this destination changes.
+ * @param update_teletransporters @c true if teletransporters should be updated.
+ */
+void Destination::set_update_teletransporters(bool update_teletransporters) {
+  this->update_teletransporters = update_teletransporters;
 }
 
 }

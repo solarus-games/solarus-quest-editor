@@ -211,6 +211,7 @@ protected:
 
   void set_existing_subtypes(const SubtypeList& subtypes);
 
+  virtual void notify_name_changed(const QString& name);
   virtual void notify_field_changed(const QString& key, const QVariant& value);
   virtual void set_initial_values();
 

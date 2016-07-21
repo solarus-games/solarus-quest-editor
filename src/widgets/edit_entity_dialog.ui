@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>625</width>
-    <height>1153</height>
+    <height>1178</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,9 +22,6 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QFormLayout" name="form_layout">
-     <property name="fieldGrowthPolicy">
-      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="type_label">
        <property name="text">
@@ -53,7 +50,21 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="name_field"/>
+      <layout class="QVBoxLayout" name="name_layout">
+       <item>
+        <widget class="QLineEdit" name="name_field"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="name_update_teletransporters_checkbox">
+         <property name="text">
+          <string>Update existing teletransporters</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="layer_label">
@@ -375,6 +386,9 @@
         <string>Play a sound</string>
        </property>
       </widget>
+     </item>
+     <item row="13" column="1">
+      <widget class="SolarusEditor::SoundChooser" name="sound_field" native="true"/>
      </item>
      <item row="14" column="0">
       <widget class="QLabel" name="transition_label">
@@ -749,9 +763,6 @@
         <string>Only possible if the destination has a name</string>
        </property>
       </widget>
-     </item>
-     <item row="13" column="1">
-      <widget class="SolarusEditor::SoundChooser" name="sound_field" native="true"/>
      </item>
     </layout>
    </item>

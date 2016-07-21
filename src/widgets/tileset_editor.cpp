@@ -873,6 +873,7 @@ QStringList TilesetEditor::change_pattern_id_in_maps(
 
 /**
  * @brief Replaces a pattern id by a new value in a map if it uses this tileset.
+ * @param map_id Id of the map to update.
  * @param old_pattern_id The pattern id to change.
  * @param new_pattern_id The new value.
  * @return @c true if there was a change.
@@ -901,7 +902,7 @@ bool TilesetEditor::change_pattern_id_in_map(
     return false;
   }
 
-  QRegExp regex("\n  pattern = \"?" + QRegExp::escape(old_pattern_id) + "\"?,\n");
+  QRegularExpression regex("\n  pattern = \"?" + QRegularExpression::escape(old_pattern_id) + "\"?,\n");
   QString replacement("\n  pattern = \"" + new_pattern_id + "\",\n");
   QString old_content = content;
   content.replace(regex, replacement);

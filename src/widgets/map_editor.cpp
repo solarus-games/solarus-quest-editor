@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/destination.h"
 #include "entities/entity_model.h"
 #include "entities/dynamic_tile.h"
 #include "widgets/gui_tools.h"
@@ -26,11 +27,14 @@
 #include "point.h"
 #include "quest.h"
 #include "quest_resources.h"
+#include "refactoring.h"
 #include "tileset_model.h"
 #include "view_settings.h"
+#include <QFile>
 #include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QTextStream>
 #include <QToolBar>
 #include <QUndoStack>
 #include <memory>
@@ -313,6 +317,9 @@ public:
     // Make the new one selected.
     get_map_view().set_only_selected_entity(index_after);
   }
+
+  EntityIndex get_index_before() const { return index_before; }
+  EntityIndex get_index_after() const { return index_after; }
 
 private:
   EntityIndex index_before;
@@ -1762,6 +1769,137 @@ void MapEditor::map_selection_changed() {
 }
 
 /**
+ * @brief Updates existing teletransporters in all maps when a destination
+ * of this map is renamed.
+ * @param command The edit entity command that changes a destination's name.
+ * @param name_before The old destination name.
+ * @param name_after The new destination name.
+ */
+void MapEditor::refactor_destination_name(
+    QUndoCommand* command,
+    const QString& name_before,
+    const QString& name_after
+) {
+  Refactoring refactoring([=]() {
+
+    // Perform the entity edition.
+    if (!try_command(command)) {
+      return QStringList();
+    }
+
+    // Update teletransporters in this map.
+    EntityIndexes teletransporter_indexes =
+        map->find_entities_of_type(EntityType::TELETRANSPORTER);
+    Q_FOREACH (const EntityIndex& index, teletransporter_indexes) {
+      const QString& destination_map_id =
+          map->get_entity_field(index, "destination_map").toString();
+      const QString& destination_name =
+          map->get_entity_field(index, "destination").toString();
+
+      if (destination_map_id == this->map_id &&
+          destination_name == name_before) {
+        map->set_entity_field(index, "destination", name_after);
+      }
+    }
+
+    // Save the map and clear the undo history.
+    save();
+    get_undo_stack().clear();
+
+    // Update teletransporters in all other maps.
+    return update_destination_name_in_other_maps(name_before, name_after);
+  });
+
+  emit refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates existing teletransporters in other maps when a destination
+ * of this map is renamed.
+ * @param name_before The old destination name.
+ * @param name_after The new destination name.
+ * @return The list of files that were modified.
+ * @throws EditorException In case of error.
+ */
+QStringList MapEditor::update_destination_name_in_other_maps(
+    const QString& name_before,
+    const QString& name_after
+) {
+  QStringList modified_paths;
+  Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
+    if (map_id != this->map_id) {
+      if (update_destination_name_in_map(map_id, name_before, name_after)) {
+        modified_paths << get_quest().get_map_data_file_path(map_id);
+      }
+    }
+  }
+  return modified_paths;
+}
+
+/**
+ * @brief Updates existing teletransporters in a map when a destination
+ * of this map is renamed.
+ * @param map_id Id of the map to update.
+ * @param name_before The old destination name.
+ * @param name_after The new destination name.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MapEditor::update_destination_name_in_map(
+    const QString& map_id,
+    const QString& name_before,
+    const QString& name_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QFile file(get_quest().get_map_data_file_path(map_id));
+
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    throw EditorException(tr("Cannot open map file '%1'").arg(file.fileName()));
+  }
+  QTextStream in(&file);
+  in.setCodec("UTF-8");
+  QString content = in.readAll();
+  file.close();
+
+  QString pattern = QString(
+        "\n  destination_map = \"?%1\"?,\n"
+        "  destination = \"%2\",\n").arg(
+        QRegularExpression::escape(this->map_id), QRegularExpression::escape(name_before));
+  QRegularExpression regex(pattern);
+
+  QString replacement;
+  if (name_after.isEmpty()) {
+    replacement = QString(
+        "\n  destination_map = \"%1\",\n").arg(this->map_id);
+  }
+  else {
+    replacement = QString(
+        "\n  destination_map = \"%1\",\n"
+        "  destination = \"%2\",\n").arg(
+              this->map_id, name_after);
+  }
+  QString old_content = content;
+  content.replace(regex, replacement);
+
+  if (content == old_content) {
+    // No change.
+    return false;
+  }
+
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    throw EditorException(tr("Cannot open map file '%1' for writing").arg(file.fileName()));
+  }
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+  out << content;
+  file.close();
+  return true;
+}
+
+/**
  * @brief Shows in the status bar information about the cursor.
  */
 void MapEditor::update_status_bar() {
@@ -1811,7 +1949,27 @@ void MapEditor::update_status_bar() {
 void MapEditor::edit_entity_requested(const EntityIndex& index,
                                       EntityModelPtr& entity_after) {
 
-  try_command(new EditEntityCommand(*this, index, std::move(entity_after)));
+  const QString& name_before = map->get_entity_name(index);
+  const QString& name_after = entity_after->get_name();
+  bool update_teletransporters = false;
+
+  if (!name_before.isEmpty() &&
+      name_after != name_before) {
+    // When renaming a destination, the user may want to update existing teletransporters.
+    const EntityModel& entity_before = map->get_entity(index);
+    if (entity_before.get_type() == EntityType::DESTINATION) {
+      const Destination& destination = static_cast<const Destination&>(entity_before);
+      update_teletransporters = destination.get_update_teletransporters();
+    }
+  }
+
+  EditEntityCommand* command = new EditEntityCommand(*this, index, std::move(entity_after));
+  if (!update_teletransporters) {
+    try_command(command);
+  }
+  else {
+    refactor_destination_name(command, name_before, name_after);
+  }
 }
 
 /**

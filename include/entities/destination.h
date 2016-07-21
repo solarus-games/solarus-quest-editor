@@ -30,10 +30,17 @@ public:
 
   Destination(MapModel& map, const EntityIndex& index);
 
+  bool get_update_teletransporters() const;
+  void set_update_teletransporters(bool update_teletransporters);
+
 protected:
 
   void set_initial_values() override;
 
+private:
+
+  bool update_teletransporters;    /**< Whether teletransporters should be updated
+                                     * when this destination is renamed. */
 };
 
 }

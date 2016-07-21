@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "entities/destination.h"
 #include "widgets/edit_entity_dialog.h"
 #include "map_model.h"
 
@@ -940,6 +941,10 @@ void EditEntityDialog::initialize_name() {
 
   ui.name_field->setText(entity_before.get_name());
   ui.name_field->setValidator(create_name_validator());
+
+  if (entity_before.get_type() != EntityType::DESTINATION) {
+    ui.name_update_teletransporters_checkbox->setVisible(false);
+  }
 }
 
 /**
@@ -948,6 +953,11 @@ void EditEntityDialog::initialize_name() {
 void EditEntityDialog::apply_name() {
 
   entity_after->set_name(ui.name_field->text());
+
+  if (entity_after->get_type() == EntityType::DESTINATION) {
+    const bool update_teletransporters = ui.name_update_teletransporters_checkbox->isChecked();
+    static_cast<Destination&>(entity_before).set_update_teletransporters(update_teletransporters);
+  }
 }
 
 /**

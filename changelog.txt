@@ -27,6 +27,7 @@ New features
 * Map editor: allow more than 3 layers.
 * Map editor: implement smart resizing to resize full rooms at once (#54).
 * Map editor: allow to resize from the left and from the top (#111).
+* Map editor: update teletransporters when renaming a destination (#58).
 * Map editor: shortcuts for showing/hiding layers are now 0, 1 and 2, etc.
 * Map editor: add shortcuts to show/hide entity types (#82).
 * Map editor: allow to show/hide obstacles (#6).

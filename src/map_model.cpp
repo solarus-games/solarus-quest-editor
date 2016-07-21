@@ -619,7 +619,7 @@ QString MapModel::get_entity_name(const EntityIndex& index) const {
 /**
  * @brief Sets the name of an entity.
  *
- * Emits entity_name_changed() if there is a change.
+ * Emits entity_name_changed().
  *
  * @param index Index of a map entity.
  * @param name The new name or an empty string to set no name.

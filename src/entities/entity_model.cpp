@@ -517,6 +517,7 @@ void EntityModel::set_name(const QString& name) {
 
   this->name = name;
   get_entity().set_name(name.toStdString());
+  notify_name_changed(name);
 }
 
 /**
@@ -1271,6 +1272,21 @@ bool EntityModel::is_size_valid(const QSize& size) const {
 QSize EntityModel::get_valid_size() const {
 
   return QSize(16, 16);
+}
+
+/**
+ * @brief This function is called when the name of this entity was just changed.
+ *
+ * This function is also called at initialization time when creating an entity
+ * model from data.
+ * Subclasses can reimplement it to react to the change.
+ *
+ * @param name The new name.
+ */
+void EntityModel::notify_name_changed(const QString& name) {
+
+  // Nothing done by default.
+  Q_UNUSED(name);
 }
 
 /**

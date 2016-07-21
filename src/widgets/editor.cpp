@@ -346,6 +346,7 @@ void Editor::set_common_actions(const QMap<QString, QAction*>& common_actions) {
  *
  * @param command The command to do.
  * This function takes ownership of the pointer.
+ * TODO unique_ptr
  * @return @c true in case of success, @c false if an exception occurred.
  */
 bool Editor::try_command(QUndoCommand* command) {
