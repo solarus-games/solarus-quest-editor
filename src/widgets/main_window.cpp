@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/entity_traits.h"
+#include "widgets/change_resource_id_dialog.h"
 #include "widgets/editor.h"
 #include "widgets/enum_menus.h"
 #include "widgets/external_script_dialog.h"
@@ -1579,24 +1580,21 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
   }
 
   try {
-    QuestResources& resources = quest.get_resources();
     QString element_id;
     if (quest.is_resource_element(path, resource_type, element_id)) {
       // Change the filename (and thereforce the id) of a resource element.
 
-      QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
-      bool ok = false;
-      QString new_id = QInputDialog::getText(
-            this,
-            tr("Rename resource"),
-            tr("New id for %1 '%2':").arg(resource_friendly_type_name_for_id, element_id),
-            QLineEdit::Normal,
-            element_id,
-            &ok);
-
-      if (ok && new_id != element_id) {
-        Quest::check_valid_file_name(new_id);
-        quest.rename_resource_element(resource_type, element_id, new_id);
+      ChangeResourceIdDialog dialog(quest, resource_type, element_id);
+      int result = dialog.exec();
+      if (result == QDialog::Accepted) {
+        const QString& new_element_id = dialog.get_element_id();
+        if (!dialog.get_update_references()) {
+          quest.rename_resource_element(resource_type, element_id, new_element_id);
+        }
+        else {
+          // Refactoring: update teletransporters leading to this map.
+          refactor_map_id(element_id, new_element_id);
+        }
       }
     }
     else {
@@ -1681,6 +1679,58 @@ void MainWindow::refactoring_requested(const Refactoring& refactoring) {
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
+}
+
+/**
+ * @brief Changes the id of the map and updates teletransporters leading to it.
+ * @param map_id_before Current map id.
+ * @param map_id_after New map id.
+ */
+void MainWindow::refactor_map_id(const QString& map_id_before, const QString& map_id_after) {
+
+  Refactoring refactoring([=]() {
+
+    // Change the id.
+    quest.rename_resource_element(ResourceType::MAP, map_id_before, map_id_after);
+
+    // Update teletransporters in all maps.
+    QStringList modified_paths;
+    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+      if (update_destination_map_in_map(map_id, map_id_before, map_id_after)) {
+        modified_paths << quest.get_map_data_file_path(map_id);
+      }
+    }
+    return modified_paths;
+  });
+
+  refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates existing teletransporters in a map when a map id was changed.
+ * @param map_id Id of the map to update.
+ * @param map_id_before Id of the map that has changed.
+ * @param map_id_after New id of the changed map.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MainWindow::update_destination_map_in_map(
+    const QString& map_id,
+    const QString& map_id_before,
+    const QString& map_id_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QString path = get_quest().get_map_data_file_path(map_id);
+
+  QString pattern = QString("\n  destination_map = \"?%1\"?,\n").arg(
+        QRegularExpression::escape(map_id_before));
+
+  QString replacement = QString("\n  destination_map = \"%1\",\n").arg(map_id_after);
+
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
 }
 
 /**

@@ -101,6 +101,7 @@ set(solarus_quest_editor_SOURCES
   include/entities/wall.h
   include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
+  include/widgets/change_resource_id_dialog.h
   include/widgets/change_source_image_dialog.h
   include/widgets/change_string_key_dialog.h
   include/widgets/closable_tab_bar.h
@@ -215,6 +216,7 @@ set(solarus_quest_editor_SOURCES
   src/entities/wall.cpp
   src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp
+  src/widgets/change_resource_id_dialog.cpp
   src/widgets/change_source_image_dialog.cpp
   src/widgets/change_string_key_dialog.cpp
   src/widgets/closable_tab_bar.cpp
@@ -305,24 +307,25 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
+  src/widgets/change_dialog_id_dialog.ui
   src/widgets/change_pattern_id_dialog.ui
+  src/widgets/change_resource_id_dialog.ui
+  src/widgets/change_source_image_dialog.ui
+  src/widgets/change_string_key_dialog.ui
+  src/widgets/dialogs_editor.ui
   src/widgets/edit_entity_dialog.ui
   src/widgets/external_script_dialog.ui
   src/widgets/find_text_dialog.ui
   src/widgets/main_window.ui
   src/widgets/map_editor.ui
   src/widgets/new_resource_element_dialog.ui
-  src/widgets/tileset_editor.ui
+  src/widgets/new_string_dialog.ui
+  src/widgets/quest_properties_editor.ui
+  src/widgets/settings_dialog.ui
   src/widgets/sprite_editor.ui
   src/widgets/sprite_previewer.ui
-  src/widgets/change_source_image_dialog.ui
-  src/widgets/quest_properties_editor.ui
   src/widgets/strings_editor.ui
-  src/widgets/new_string_dialog.ui
-  src/widgets/change_string_key_dialog.ui
-  src/widgets/dialogs_editor.ui
-  src/widgets/change_dialog_id_dialog.ui
-  src/widgets/settings_dialog.ui
+  src/widgets/tileset_editor.ui
 )
 
 # Generate .h from .ui.

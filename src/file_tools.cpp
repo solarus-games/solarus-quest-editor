@@ -18,7 +18,9 @@
 #include "file_tools.h"
 #include <QApplication>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
+#include <QTextStream>
 
 namespace SolarusEditor {
 
@@ -117,6 +119,47 @@ void delete_recursive(const QString& path) {
   }
 }
 
+/**
+ * @brief Replaces all occurences of the given pattern in a file.
+ * @param path Path of the file to modify.
+ * @param regexp The pattern to replace.
+ * @param replacement The string to put instead of the pattern.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool replace_in_file(
+    const QString& path,
+    const QRegularExpression& regex,
+    const QString& replacement
+) {
+  QFile file(path);
+
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    throw EditorException(QApplication::tr("Cannot open file '%1'").arg(file.fileName()));
+  }
+  QTextStream in(&file);
+  in.setCodec("UTF-8");
+  QString content = in.readAll();
+  file.close();
+
+  QString old_content = content;
+  content.replace(regex, replacement);
+
+  if (content == old_content) {
+    // No change.
+    return false;
+  }
+
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    throw EditorException(QApplication::tr("Cannot open file '%1' for writing").arg(file.fileName()));
+  }
+  QTextStream out(&file);
+  out.setCodec("UTF-8");
+  out << content;
+  file.close();
+  return true;
 }
 
-}
+}  // namespace FileTools
+
+}  // namespace SolarusEditor

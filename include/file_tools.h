@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_FILE_TOOLS_H
 #define SOLARUSEDITOR_FILE_TOOLS_H
 
+class QRegularExpression;
 class QString;
 
 namespace SolarusEditor {
@@ -31,6 +32,12 @@ namespace FileTools {
 
 void copy_recursive(const QString& src, const QString& dst);
 void delete_recursive(const QString& path);
+
+bool replace_in_file(
+    const QString& path,
+    const QRegularExpression& regex,
+    const QString& replacement
+);
 
 }
 

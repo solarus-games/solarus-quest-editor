@@ -14,31 +14,30 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef CHANGE_PATTERN_ID_DIALOG_H
-#define CHANGE_PATTERN_ID_DIALOG_H
+#ifndef SOLARUSEDITOR_CHANGE_RESOURCE_ID_DIALOG_H
+#define SOLARUSEDITOR_CHANGE_RESOURCE_ID_DIALOG_H
 
-#include "ui_change_pattern_id_dialog.h"
+#include "quest_resources.h"
+#include "ui_change_resource_id_dialog.h"
 #include <QDialog>
 
 namespace SolarusEditor {
 
-/**
- * @brief A dialog to rename a pattern in the tileset editor.
- *
- * This dialog is similar to a standard QInputDialog with a line edit,
- * but has an additional checkbox to let the user choose if she wants
- * to update references in existing maps.
- */
-class ChangePatternIdDialog : public QDialog {
+class Quest;
+
+class ChangeResourceIdDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  ChangePatternIdDialog(
-      const QString& initial_pattern_id, QWidget* parent = 0);
+  explicit ChangeResourceIdDialog(
+      Quest& quest,
+      ResourceType resource_type,
+      const QString& old_id,
+      QWidget* parent = nullptr);
 
-  QString get_pattern_id() const;
-  void set_pattern_id(const QString& pattern_id);
+  QString get_element_id();
+  void set_element_id(const QString& element_id);
 
   bool get_update_references() const;
   void set_update_references(bool update_references);
@@ -49,10 +48,11 @@ public slots:
 
 private:
 
-  Ui::ChangePatternIdDialog ui;   /**< The widgets. */
+  Ui::ChangeResourceIdDialog ui;   /**< The widgets. */
 
 };
 
-}
+
+} // namespace SolarusEditor
 
 #endif

@@ -27,9 +27,9 @@ namespace SolarusEditor {
  * @param allow_prefix Allows to change the prefix value.
  * @param parent Parent object or nullptr.
  */
-ChangeDialogIdDialog::ChangeDialogIdDialog (
-    DialogsModel *model, const QString &initial_id,
-    bool is_prefix, bool allow_prefix, QWidget *parent) :
+ChangeDialogIdDialog::ChangeDialogIdDialog(
+    DialogsModel* model, const QString &initial_id,
+    bool is_prefix, bool allow_prefix, QWidget* parent) :
   QDialog(parent),
   initial_id(initial_id),
   model(model) {

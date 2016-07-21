@@ -126,6 +126,13 @@ private:
   bool is_console_visible() const;
   void set_console_visible(bool console_visible);
 
+  void refactor_map_id(const QString& map_id_before, const QString& map_id_after);
+  bool update_destination_map_in_map(
+      const QString& map_id,
+      const QString& map_id_before,
+      const QString& map_id_after
+  );
+
   Ui::MainWindow ui;              /**< The main window widgets. */
   Quest quest;                    /**< The current quest open if any. */
   SolarusGui::QuestRunner

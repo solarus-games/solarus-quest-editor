@@ -20,9 +20,10 @@
 #include "widgets/gui_tools.h"
 #include "widgets/map_editor.h"
 #include "widgets/map_scene.h"
+#include "audio.h"
 #include "editor_exception.h"
 #include "editor_settings.h"
-#include "audio.h"
+#include "file_tools.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
@@ -30,11 +31,9 @@
 #include "refactoring.h"
 #include "tileset_model.h"
 #include "view_settings.h"
-#include <QFile>
 #include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QStatusBar>
-#include <QTextStream>
 #include <QToolBar>
 #include <QUndoStack>
 #include <memory>
@@ -1854,21 +1853,12 @@ bool MapEditor::update_destination_name_in_map(
   // Instead, we just find and replace the appropriate text in the map
   // data file.
 
-  QFile file(get_quest().get_map_data_file_path(map_id));
-
-  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    throw EditorException(tr("Cannot open map file '%1'").arg(file.fileName()));
-  }
-  QTextStream in(&file);
-  in.setCodec("UTF-8");
-  QString content = in.readAll();
-  file.close();
+  QString path = get_quest().get_map_data_file_path(map_id);
 
   QString pattern = QString(
         "\n  destination_map = \"?%1\"?,\n"
         "  destination = \"%2\",\n").arg(
         QRegularExpression::escape(this->map_id), QRegularExpression::escape(name_before));
-  QRegularExpression regex(pattern);
 
   QString replacement;
   if (name_after.isEmpty()) {
@@ -1881,22 +1871,8 @@ bool MapEditor::update_destination_name_in_map(
         "  destination = \"%2\",\n").arg(
               this->map_id, name_after);
   }
-  QString old_content = content;
-  content.replace(regex, replacement);
 
-  if (content == old_content) {
-    // No change.
-    return false;
-  }
-
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    throw EditorException(tr("Cannot open map file '%1' for writing").arg(file.fileName()));
-  }
-  QTextStream out(&file);
-  out.setCodec("UTF-8");
-  out << content;
-  file.close();
-  return true;
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
 }
 
 /**
