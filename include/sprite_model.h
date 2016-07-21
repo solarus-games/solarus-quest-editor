@@ -131,6 +131,7 @@ public:
   int get_animation_loop_on_frame(const Index& index) const;
   void set_animation_loop_on_frame(const Index& index, int loop_on_frame);
   int get_animation_num_directions(const Index& index) const;
+  int get_animation_max_num_frames(const Index& index) const;
 
   // Direction.
   bool direction_exists(const Index& index) const;

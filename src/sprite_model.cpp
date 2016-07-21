@@ -788,6 +788,10 @@ void SpriteModel::set_animation_loop_on_frame(
     return;
   }
 
+  if (loop_on_frame >= get_animation_max_num_frames(index)) {
+    return;
+  }
+
   SpriteAnimationData& animation = get_animation(index);
   if (animation.get_loop_on_frame() == loop_on_frame) {
     return;
@@ -808,6 +812,21 @@ int SpriteModel::get_animation_num_directions(const Index& index) const {
     return 0;
   }
   return get_animation(index).get_num_directions();
+}
+
+/**
+ * @brief Returns the biggest number of frames in directions of this animation.
+ * @param index An animation index.
+ * @return The biggest number of frames.
+ */
+int SpriteModel::get_animation_max_num_frames(const Index& index) const {
+
+  int max_num_frames = 0;
+  Index direction_index = index;
+  for (int i = 0; i < get_animation_num_directions(index); ++i) {
+    max_num_frames = qMax(max_num_frames, get_direction_num_frames(direction_index));
+  }
+  return max_num_frames;
 }
 
 /**

@@ -1227,6 +1227,9 @@ void SpriteEditor::update_animation_loop_on_frame_field() {
   ui.loop_on_frame_check_box->setChecked(enable);
   ui.loop_on_frame_field->setEnabled(enable);
   ui.loop_on_frame_field->setValue(loop_on_frame);
+
+  int num_frames = model->get_animation_max_num_frames(model->get_selected_index());
+  ui.loop_on_frame_field->setMaximum(num_frames - 1);
 }
 
 /**
@@ -1394,6 +1397,7 @@ void SpriteEditor::update_direction_num_frames_field() {
 
   int num_frames = model->get_direction_num_frames(model->get_selected_index());
   ui.num_frames_field->setValue(num_frames);
+  update_animation_loop_on_frame_field();
 }
 
 /**
