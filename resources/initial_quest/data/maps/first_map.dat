@@ -6,6 +6,7 @@ properties{
   min_layer = 0,
   max_layer = 2,
   tileset = "castle",
+  music = "cave",
 }
 
 tile{
