@@ -46,15 +46,17 @@ ChangeResourceIdDialog::ChangeResourceIdDialog(
         tr("New id for %1 '%2':").arg(resource_friendly_type_name_for_id, old_id));
 
   set_element_id(old_id);
-  set_update_references(true);
 
   if (resource_type == ResourceType::MAP) {
+    set_update_references(true);
     ui.update_references_checkbox->setText(tr("Update existing teletransporters leading to this map"));
   }
   else if (resource_type == ResourceType::TILESET) {
+    set_update_references(true);
     ui.update_references_checkbox->setText(tr("Update existing maps using this tileset"));
   }
   else {
+    set_update_references(false);
     ui.update_references_checkbox->hide();
     layout()->removeWidget(ui.update_references_checkbox);
     adjustSize();
