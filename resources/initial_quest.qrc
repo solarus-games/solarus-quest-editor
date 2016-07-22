@@ -104,5 +104,26 @@
         <file>initial_quest/data/sounds/wrong.ogg</file>
         <file>initial_quest/data/sounds/wrong2.ogg</file>
         <file>initial_quest/data/sounds/wrong3.ogg</file>
+        <file>initial_quest/data/musics/boss_intro.ogg</file>
+        <file>initial_quest/data/musics/boss.ogg</file>
+        <file>initial_quest/data/musics/carrousel.ogg</file>
+        <file>initial_quest/data/musics/cave.ogg</file>
+        <file>initial_quest/data/musics/dungeon_finished.ogg</file>
+        <file>initial_quest/data/musics/fairy_intro.ogg</file>
+        <file>initial_quest/data/musics/fanfare.ogg</file>
+        <file>initial_quest/data/musics/game_over.ogg</file>
+        <file>initial_quest/data/musics/great_fairy.ogg</file>
+        <file>initial_quest/data/musics/lunarius.ogg</file>
+        <file>initial_quest/data/musics/mini_game.ogg</file>
+        <file>initial_quest/data/musics/mountains.ogg</file>
+        <file>initial_quest/data/musics/neptune_battle.ogg</file>
+        <file>initial_quest/data/musics/overworld_intro.ogg</file>
+        <file>initial_quest/data/musics/overworld.ogg</file>
+        <file>initial_quest/data/musics/soldiers_intro.ogg</file>
+        <file>initial_quest/data/musics/soldiers.ogg</file>
+        <file>initial_quest/data/musics/sword_fanfare.ogg</file>
+        <file>initial_quest/data/musics/title_screen.ogg</file>
+        <file>initial_quest/data/musics/village.ogg</file>
+        <file>initial_quest/data/musics/witch_hut.ogg</file>
     </qresource>
 </RCC>
