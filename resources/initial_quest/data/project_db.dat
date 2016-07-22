@@ -1,3 +1,4 @@
+map{ id = "first_map", description = "First map" }
 
 tileset{ id = "castle", description = "Castle" }
 
