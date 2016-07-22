@@ -2,20 +2,43 @@ map{ id = "first_map", description = "First map" }
 
 tileset{ id = "castle", description = "Castle" }
 
+sprite{ id = "animals/bird_red", description = "Red Bird" }
+sprite{ id = "animals/cat_green", description = "Green Cat" }
+sprite{ id = "animals/cat_red", description = "Red Cat" }
+sprite{ id = "animals/cat_yellow", description = "Yellow Cat" }
+sprite{ id = "animals/chameleon", description = "Chameleon" }
+sprite{ id = "animals/mouse", description = "Mouse" }
+sprite{ id = "animals/phoenix", description = "Phoenix" }
+sprite{ id = "citizens/old_man", description = "Old man" }
+sprite{ id = "citizens/old_woman", description = "Old Woman" }
+sprite{ id = "citizens/witch", description = "witch" }
+sprite{ id = "dialogs/dialog_edgar", description = "Edgar Dialog" }
+sprite{ id = "dialogs/dialog_old_man", description = "Old man Dialog" }
+sprite{ id = "dialogs/dialog_old_woman", description = "Old woman Dialog" }
+sprite{ id = "dialogs/dialog_robyne", description = "Robyne Dialog" }
 sprite{ id = "enemies/enemy_killed", description = "Enemy killed" }
+sprite{ id = "enemies/slime_green", description = "Green Slime" }
 sprite{ id = "entities/arrow", description = "Arrow" }
+sprite{ id = "entities/big_chest", description = "Big chest" }
 sprite{ id = "entities/block", description = "Block" }
 sprite{ id = "entities/bomb", description = "Bomb" }
+sprite{ id = "entities/bomb_flower", description = "Bomb flower" }
+sprite{ id = "entities/bush", description = "Bush" }
 sprite{ id = "entities/chest", description = "Chest" }
+sprite{ id = "entities/conveyor_belt", description = "Conveyor belt" }
 sprite{ id = "entities/crystal", description = "Crystal" }
-sprite{ id = "entities/crystal_block", description = "Crystal block" }
 sprite{ id = "entities/explosion", description = "Explosion" }
 sprite{ id = "entities/fire", description = "Fire" }
+sprite{ id = "entities/grass", description = "Grass" }
 sprite{ id = "entities/hookshot", description = "Hookshot" }
 sprite{ id = "entities/items", description = "Items" }
+sprite{ id = "entities/pot", description = "Pot" }
 sprite{ id = "entities/shadow", description = "Shadow" }
+sprite{ id = "entities/sign", description = "Sign" }
 sprite{ id = "entities/solid_switch", description = "Solid switch" }
 sprite{ id = "entities/star", description = "Star" }
+sprite{ id = "entities/stone_small_black", description = "Stone (black)" }
+sprite{ id = "entities/stone_small_white", description = "Stone (white)" }
 sprite{ id = "entities/switch", description = "Switch" }
 sprite{ id = "hero/ground1", description = "Grass under hero" }
 sprite{ id = "hero/ground2", description = "Shallow water under hero" }
@@ -24,29 +47,46 @@ sprite{ id = "hero/sword1", description = "Hero sword 1" }
 sprite{ id = "hero/sword_stars1", description = "Hero sword stars 1" }
 sprite{ id = "hero/trail", description = "Hero trail" }
 sprite{ id = "hero/tunic1", description = "Hero tunic 1" }
+sprite{ id = "main_heroes/edgar", description = "Edgar" }
+sprite{ id = "main_heroes/robyne", description = "Robyne" }
+sprite{ id = "main_heroes/sword", description = "sword" }
+sprite{ id = "main_heroes/sword_electricity", description = "sword electricity" }
+sprite{ id = "main_heroes/trail", description = "trail" }
 sprite{ id = "menus/solarus_logo", description = "Solarus logo" }
+sprite{ id = "shadows/shadow_big", description = "shadow big" }
+sprite{ id = "shadows/shadow_big_dynamic", description = "shadow big dynamic" }
+sprite{ id = "shadows/shadow_small", description = "shadow small" }
+sprite{ id = "things/broom", description = "broom witch" }
+sprite{ id = "things/fall_on_hole_effect", description = "fall on hole" }
+sprite{ id = "things/grass_effect", description = "grass effect" }
+sprite{ id = "things/lava_splash_effect", description = "lava splash" }
+sprite{ id = "things/long_chair", description = "long chair witch" }
+sprite{ id = "things/marmite_witch", description = "marmite witch" }
+sprite{ id = "things/steam", description = "steam" }
+sprite{ id = "things/switch_aureole", description = "switch aureole" }
+sprite{ id = "things/water_splash_effect", description = "water splash" }
 
-music{ id = "boss", description = "boss" }
-music{ id = "boss_intro", description = "boss_intro" }
-music{ id = "carrousel", description = "carrousel" }
-music{ id = "cave", description = "cave" }
-music{ id = "dungeon_finished", description = "dungeon_finished" }
-music{ id = "fairy_intro", description = "fairy_intro" }
-music{ id = "fanfare", description = "fanfare" }
-music{ id = "game_over", description = "game_over" }
-music{ id = "great_fairy", description = "great_fairy" }
-music{ id = "lunarius", description = "lunarius" }
-music{ id = "mini_game", description = "mini_game" }
-music{ id = "mountains", description = "mountains" }
-music{ id = "neptune_battle", description = "neptune_battle" }
-music{ id = "overworld", description = "overworld" }
-music{ id = "overworld_intro", description = "overworld_intro" }
-music{ id = "soldiers", description = "soldiers" }
-music{ id = "soldiers_intro", description = "soldiers_intro" }
-music{ id = "sword_fanfare", description = "sword_fanfare" }
-music{ id = "title_screen", description = "title_screen" }
-music{ id = "village", description = "village" }
-music{ id = "witch_hut", description = "witch_hut" }
+music{ id = "boss", description = "Boss" }
+music{ id = "boss_intro", description = "Boss (intro)" }
+music{ id = "carrousel", description = "Carrousel" }
+music{ id = "cave", description = "Cave" }
+music{ id = "dungeon_finished", description = "Dungeon inished" }
+music{ id = "fairy", description = "Fairy" }
+music{ id = "fairy_intro", description = "Fairy (intro)" }
+music{ id = "fanfare", description = "Fanfare" }
+music{ id = "game_over", description = "Game over" }
+music{ id = "lunarius", description = "Lunarius" }
+music{ id = "mini_game", description = "Mini-game" }
+music{ id = "mountains", description = "Mountains" }
+music{ id = "neptune_battle", description = "Neptune battle" }
+music{ id = "overworld", description = "Overworld" }
+music{ id = "overworld_intro", description = "Overworld (intro)" }
+music{ id = "soldiers", description = "Soldiers" }
+music{ id = "soldiers_intro", description = "Soldiers (intro)" }
+music{ id = "sword_fanfare", description = "Sword fanfare" }
+music{ id = "title_screen", description = "Title screen" }
+music{ id = "village", description = "Village" }
+music{ id = "witch_hut", description = "Witch hut" }
 
 sound{ id = "arrow_hit", description = "arrow_hit" }
 sound{ id = "bird_chirp", description = "bird_chirp" }
@@ -149,6 +189,7 @@ sound{ id = "wrong2", description = "wrong2" }
 sound{ id = "wrong3", description = "wrong3" }
 
 
+enemy{ id = "slime_green", description = "Green Slime" }
 
 
 language{ id = "en", description = "English" }
