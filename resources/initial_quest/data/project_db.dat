@@ -1,4 +1,5 @@
 
+tileset{ id = "castle", description = "Castle" }
 
 sprite{ id = "enemies/enemy_killed", description = "Enemy killed" }
 sprite{ id = "entities/arrow", description = "Arrow" }
