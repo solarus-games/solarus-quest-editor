@@ -78,6 +78,7 @@
     <addaction name="action_close_all"/>
     <addaction name="action_save"/>
     <addaction name="action_save_all"/>
+    <addaction name="action_open_quest_properties"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
    </widget>
@@ -436,6 +437,14 @@
    </property>
    <property name="text">
     <string>Show obstacle entities</string>
+   </property>
+  </action>
+  <action name="action_open_quest_properties">
+   <property name="text">
+    <string>Quest properties</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

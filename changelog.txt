@@ -19,6 +19,7 @@ New features
 * Add a recent quests menu (#89).
 * Creating a new quest now provides a lot of initial resources (#201).
 * The shortcut to load a quest is now Ctrl+L.
+* Add a menu item to open quest properties (#206).
 * Allow to update teletransporters when changing the id of a map (#56).
 * Allow to update teletransporters when renaming a destination (#58).
 * Allow to update maps when changing the id of a tileset (#57).

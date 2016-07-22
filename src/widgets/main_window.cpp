@@ -172,33 +172,32 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_find->setShortcut(QKeySequence::Find);
 
   // Workaround for broken window shortcuts with appmenu-qt on Ubuntu.
-  addAction(ui.action_close);
-  addAction(ui.action_run_quest);
   addAction(ui.action_new_quest);
   addAction(ui.action_load_quest);
+  addAction(ui.action_close_quest);
   addAction(ui.action_exit);
-  addAction(ui.action_run_quest);
+  addAction(ui.action_close);
+  addAction(ui.action_save);
   addAction(ui.action_cut);
   addAction(ui.action_copy);
   addAction(ui.action_paste);
-  addAction(ui.action_close);
-  addAction(ui.action_save);
+  addAction(ui.action_select_all);
+  addAction(ui.action_unselect_all);
+  addAction(ui.action_find);
+  addAction(ui.action_save_all);
+  addAction(ui.action_close_all);
+  addAction(ui.action_open_quest_properties);
+  addAction(ui.action_run_quest);
+  addAction(ui.action_stop_music);
+  addAction(ui.action_pause_music);
+  addAction(ui.action_show_console);
   addAction(ui.action_show_grid);
   addAction(ui.action_show_layer_0);
   addAction(ui.action_show_layer_1);
   addAction(ui.action_show_layer_2);
+  addAction(ui.action_settings);
   addAction(ui.action_doc);
   addAction(ui.action_website);
-  addAction(ui.action_find);
-  addAction(ui.action_settings);
-  addAction(ui.action_select_all);
-  addAction(ui.action_save_all);
-  addAction(ui.action_close_all);
-  addAction(ui.action_show_console);
-  addAction(ui.action_unselect_all);
-  addAction(ui.action_close_quest);
-  addAction(ui.action_pause_music);
-  addAction(ui.action_stop_music);
 
   // Connect children.
   connect(ui.quest_tree_view, SIGNAL(open_file_requested(Quest&, QString)),
@@ -777,6 +776,14 @@ void MainWindow::on_action_close_triggered() {
 void MainWindow::on_action_close_all_triggered() {
 
   ui.tab_widget->close_all_files_requested();
+}
+
+/**
+ * @brief Slot called when the user triggers the "Quest properties" action.
+ */
+void MainWindow::on_action_open_quest_properties_triggered() {
+
+  ui.tab_widget->open_quest_properties_editor(quest);
 }
 
 /**
