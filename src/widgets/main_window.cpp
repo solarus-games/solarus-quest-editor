@@ -1592,7 +1592,7 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
   try {
     QString element_id;
     if (quest.is_resource_element(path, resource_type, element_id)) {
-      // Change the filename (and thereforce the id) of a resource element.
+      // Change the filename (and therefore the id) of a resource element.
 
       ChangeResourceIdDialog dialog(quest, resource_type, element_id);
       int result = dialog.exec();
