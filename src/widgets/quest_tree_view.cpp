@@ -71,6 +71,8 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
           this, SLOT(delete_action_triggered()));
   addAction(delete_action);
 
+  connect(this, SIGNAL(activated(QModelIndex)),
+          this, SLOT(default_action_triggered()));
 }
 
 /**
@@ -141,18 +143,6 @@ void QuestTreeView::set_selected_path(const QString& path) {
   if (index.isValid()) {
     selectionModel()->select(index, QItemSelectionModel::Select);
     expand(index.parent());
-  }
-}
-
-/**
- * @brief Receives a key press event.
- * @param event The event to handle.
- */
-void QuestTreeView::keyPressEvent(QKeyEvent* event) {
-
-  if (event->key() == Qt::Key_Enter ||
-      event->key() == Qt::Key_Return) {
-    default_action_triggered();
   }
 }
 

@@ -63,7 +63,6 @@ public slots:
 
 protected:
 
-  void keyPressEvent(QKeyEvent* event) override;
   void contextMenuEvent(QContextMenuEvent* event) override;
   void mouseDoubleClickEvent(QMouseEvent* event) override;
 
