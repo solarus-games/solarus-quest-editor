@@ -17,6 +17,7 @@ New features
 * Allow to automatically save files before running the quest (#90).
 * Allow to restore open tabs at startup (#131).
 * Add a recent quests menu (#89).
+* Creating a new quest now provides a lot of initial resources (#201).
 * The shortcut to load a quest is now Ctrl+L.
 * Allow to update teletransporters when changing the id of a map (#56).
 * Allow to update teletransporters when renaming a destination (#58).
