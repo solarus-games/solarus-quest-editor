@@ -32,6 +32,11 @@ endif()
 # In debug, set strict warnings for developers.
 set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
 
+# Add defines for the install path and the build path to help guess the assets
+# location at runtime.
+add_definitions(-DSOLARUSEDITOR_INSTALL_PATH=${CMAKE_INSTALL_PREFIX})
+add_definitions(-DSOLARUSEDITOR_BUILD_PATH=${CMAKE_BINARY_DIR})
+
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
 option(SOLARUS_USE_LUAJIT "Use LuaJIT instead of default Lua (recommended)" ON)
