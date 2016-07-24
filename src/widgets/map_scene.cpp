@@ -655,6 +655,31 @@ void MapScene::unselect_all() {
 }
 
 /**
+ * @brief Redraws the given entity.
+ * @param index Index of the entity to redraw.
+ */
+void MapScene::redraw_entity(const EntityIndex& index) {
+
+  EntityItem* item = get_entity_item(index);
+  if (item == nullptr) {
+    return;
+  }
+  item->update();
+}
+
+/**
+ * @brief Redraws some entities.
+ * @param indexes Indexes of the entities to redraw.
+ */
+void MapScene::redraw_entities(const EntityIndexes& indexes) {
+
+  Q_FOREACH(const EntityIndex& index, indexes) {
+    redraw_entity(index);
+  }
+}
+
+
+/**
  * @brief Returns the highest layer where a specified rectangle overlaps an
  * existing visible entity.
  * @param rectangle A rectangle in map coordinates.

@@ -56,6 +56,9 @@ public:
   void select_all();
   void unselect_all();
 
+  void redraw_entity(const EntityIndex& index);
+  void redraw_entities(const EntityIndexes& indexes);
+
   int get_layer_in_rectangle(
       const QRect& rectangle
   ) const;

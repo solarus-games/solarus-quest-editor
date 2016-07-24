@@ -599,6 +599,7 @@ public:
       ++i;
     }
     get_map_view().set_selected_entities(indexes);
+    get_map_view().get_scene()->redraw_entities(indexes);
   }
 
   void redo() override {
@@ -628,6 +629,9 @@ public:
 
     // Select impacted entities.
     get_map_view().set_selected_entities(indexes);
+
+    // Tell the scene to redraw the entities.
+    get_map_view().get_scene()->redraw_entities(indexes);
   }
 
 private:
