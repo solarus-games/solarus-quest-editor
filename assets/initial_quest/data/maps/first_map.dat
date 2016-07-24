@@ -103,6 +103,6 @@ destination{
   layer = 0,
   x = 160,
   y = 173,
-  direction = 1,
+  direction = 3,
 }
 
