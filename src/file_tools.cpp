@@ -16,7 +16,9 @@
  */
 #include "editor_exception.h"
 #include "file_tools.h"
+#include <solarus/Common.h>
 #include <QApplication>
+#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -25,6 +27,66 @@
 namespace SolarusEditor {
 
 namespace FileTools {
+
+namespace {
+  bool assets_path_initialized = false;
+  QString assets_path;
+}
+
+/**
+ * @brief Determines the path to the Solarus Quest Editor assets directory.
+ *
+ * The directory "assets" is searched in the following paths in this order:
+ * - The directory containing the executable.
+ * - The source path (macro SOLARUSEDITOR_SOURCE_PATH)
+ *   (useful for developer builds).
+ * - The install path (macro SOLARUSEDITOR_INSTALL_PATH)
+ *   followed by "share/solarus-quest-editor/".
+ */
+void initialize_assets() {
+
+  const QString& executable_path = QCoreApplication::applicationDirPath();
+  QStringList potential_paths;
+
+  // Try the current directory first.
+  potential_paths << executable_path + "/assets";
+
+  // Try the source path if we are not running the installed executable.
+  bool running_installed_executable = (executable_path == SOLARUSEDITOR_INSTALL_PATH "/bin");
+#ifdef SOLARUSEDITOR_SOURCE_PATH
+  if (!running_installed_executable) {
+    potential_paths << SOLARUSEDITOR_SOURCE_PATH "/assets";
+  }
+#endif
+
+  // Try the install path if we are running the installed executable.
+#ifdef SOLARUSEDITOR_INSTALL_PATH
+  if (running_installed_executable) {
+    potential_paths << SOLARUSEDITOR_INSTALL_PATH "/share/solarus-quest-editor/assets";
+  }
+#endif
+
+  assets_path_initialized = true;
+  for (const QString& potential_path : potential_paths) {
+    if (QFile(potential_path).exists()) {
+      qDebug() << "Assets path" << potential_path;
+      assets_path = potential_path;
+      return;
+    }
+  }
+}
+
+/**
+ * @brief Returns the path to the Solarus Quest Editor assets directrory.
+ * @return The assets path or an empty string if assets could not be found.
+ */
+QString get_assets_path() {
+
+  if (!assets_path_initialized) {
+    initialize_assets();
+  }
+  return assets_path;
+}
 
 /**
  * @brief Utility function to copy a file or directory with its content.

@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "editor_exception.h"
 #include "file_tools.h"
 #include "new_quest_builder.h"
 #include "quest.h"
+#include <QApplication>
 
 namespace SolarusEditor {
 
@@ -30,8 +32,12 @@ namespace NewQuestBuilder {
  */
 void create_initial_quest_files(const QString& quest_path) {
 
-  // Create files from resources.
-  FileTools::copy_recursive(":/initial_quest/data", quest_path + "/data");
+  // Create files from the assets directory.
+  const QString& assets_path = FileTools::get_assets_path();
+  if (assets_path.isEmpty()) {
+    throw EditorException(QApplication::tr("Could not find assets directory.\nMake sure that Solarus Quest Editor is properly installed."));
+  }
+  FileTools::copy_recursive(assets_path + "/initial_quest/data", quest_path + "/data");
 
   // Make sure all resource directories exist.
   Quest quest(quest_path);

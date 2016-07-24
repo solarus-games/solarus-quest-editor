@@ -39,6 +39,9 @@ bool replace_in_file(
     const QString& replacement
 );
 
+void initialize_assets();
+QString get_assets_path();
+
 }
 
 }

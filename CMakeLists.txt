@@ -34,8 +34,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEB
 
 # Add defines for the install path and the build path to help guess the assets
 # location at runtime.
-add_definitions(-DSOLARUSEDITOR_INSTALL_PATH=${CMAKE_INSTALL_PREFIX})
-add_definitions(-DSOLARUSEDITOR_BUILD_PATH=${CMAKE_BINARY_DIR})
+add_definitions(-DSOLARUSEDITOR_INSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
+add_definitions(-DSOLARUSEDITOR_SOURCE_PATH="${CMAKE_SOURCE_DIR}")
 
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
@@ -392,6 +392,9 @@ target_link_libraries(solarus-quest-editor
 # Set files to install
 install(TARGETS solarus-quest-editor
   RUNTIME DESTINATION bin
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets/"
+  DESTINATION "share/solarus-quest-editor/assets"
 )
 
 # Platform specific.
