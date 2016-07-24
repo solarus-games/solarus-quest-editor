@@ -18,6 +18,7 @@ New features
 * Allow to restore open tabs at startup (#131).
 * Add a recent quests menu (#89).
 * Creating a new quest now provides a lot of initial resources (#201).
+* Creating a new quest now sets the write directoy to a unique id (#207).
 * The shortcut to load a quest is now Ctrl+L.
 * Add a menu item to open quest properties (#206).
 * Allow to update teletransporters when changing the id of a map (#56).

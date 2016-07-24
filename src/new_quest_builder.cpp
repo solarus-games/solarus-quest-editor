@@ -18,7 +18,9 @@
 #include "file_tools.h"
 #include "new_quest_builder.h"
 #include "quest.h"
+#include "quest_properties.h"
 #include <QApplication>
+#include <QUuid>
 
 namespace SolarusEditor {
 
@@ -44,6 +46,13 @@ void create_initial_quest_files(const QString& quest_path) {
   Q_FOREACH (ResourceType resource_type, Solarus::EnumInfo<ResourceType>::enums()) {
     quest.create_dir_if_not_exists(quest.get_resource_path(resource_type));
   }
+
+  // Initialize the write directory to a unique id so that the game is directly playable.
+  QuestProperties properties(quest);
+  QString uid_string = QUuid::createUuid().toString();
+  uid_string = uid_string.mid(1, uid_string.size() - 2);
+  properties.set_write_dir(uid_string);
+  properties.save();
 }
 
 }
