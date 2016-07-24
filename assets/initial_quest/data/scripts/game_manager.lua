@@ -22,9 +22,9 @@ function game_manager:start_game()
   end
   game:start()
 
-  -- Use Edgar's sprite for the hero.
+  -- Use Eldran's sprite for the hero.
   local hero = game:get_hero()
-  hero:set_tunic_sprite_id("main_heroes/edgar")
+  hero:set_tunic_sprite_id("main_heroes/eldran")
 end
 
 return game_manager
