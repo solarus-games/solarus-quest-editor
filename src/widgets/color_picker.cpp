@@ -20,7 +20,7 @@
 namespace SolarusEditor {
 
 const QString ColorPicker::style_sheet =
-  ".ColorPicker {\n"
+  "SolarusEditor--ColorPicker {\n"
   "    background-color: %1;\n"
   "    border-style: inset;\n"
   "    border-width: 2px;\n"
