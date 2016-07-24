@@ -69,7 +69,6 @@ void initialize_assets() {
   assets_path_initialized = true;
   for (const QString& potential_path : potential_paths) {
     if (QFile(potential_path).exists()) {
-      qDebug() << "Assets path" << potential_path;
       assets_path = potential_path;
       return;
     }

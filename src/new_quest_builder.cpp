@@ -35,7 +35,7 @@ void create_initial_quest_files(const QString& quest_path) {
   // Create files from the assets directory.
   const QString& assets_path = FileTools::get_assets_path();
   if (assets_path.isEmpty()) {
-    throw EditorException(QApplication::tr("Could not find assets directory.\nMake sure that Solarus Quest Editor is properly installed."));
+    throw EditorException(QApplication::tr("Could not find the assets directory.\nMake sure that Solarus Quest Editor is properly installed."));
   }
   FileTools::copy_recursive(assets_path + "/initial_quest/data", quest_path + "/data");
 

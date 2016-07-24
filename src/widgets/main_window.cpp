@@ -234,6 +234,14 @@ MainWindow::MainWindow(QWidget* parent) :
 
   // No editor initially.
   current_editor_changed(-1);
+
+  // Check that we can find the assets directory.
+  FileTools::initialize_assets();
+  if (FileTools::get_assets_path().isEmpty()) {
+    GuiTools::warning_dialog(tr("Could not locate the assets directory.\n"
+                              "Some features like creating a new quest will not be available.\n"
+                              "Please make sure that Solarus Quest Editor is correctly installed."));
+  }
 }
 
 /**
@@ -663,6 +671,11 @@ void MainWindow::add_quest_to_recent_list() {
  * @brief Slot called when the user triggers the "New quest" action.
  */
 void MainWindow::on_action_new_quest_triggered() {
+
+  if (FileTools::get_assets_path().isEmpty()) {
+    GuiTools::error_dialog(tr("Could not find the assets directory.\nMake sure that Solarus Quest Editor is properly installed."));
+    return;
+  }
 
   // Check unsaved files but don't close them yet
   // in case the user cancels.
