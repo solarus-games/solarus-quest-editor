@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget* parent) :
   // Icon.
   QStringList icon_sizes = { "16", "32", "48", "256" };
   QIcon icon;
-  Q_FOREACH (const QString size, icon_sizes) {
+  Q_FOREACH (const QString& size, icon_sizes) {
     icon.addPixmap(":/images/icon_quest_editor_" + size + ".png");
   }
   setWindowIcon(icon);
