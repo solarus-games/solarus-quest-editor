@@ -102,6 +102,18 @@ public slots:
   void update_sprite_origin_color();
   void change_sprite_origin_color();
 
+  // Tileset editor.
+  void update_tileset_background();
+  void change_tileset_background();
+  void update_tileset_grid_show_at_opening();
+  void change_tileset_grid_show_at_opening();
+  void update_tileset_grid_size();
+  void change_tileset_grid_size();
+  void update_tileset_grid_style();
+  void change_tileset_grid_style();
+  void update_tileset_grid_color();
+  void change_tileset_grid_color();
+
 signals:
 
   void settings_changed();

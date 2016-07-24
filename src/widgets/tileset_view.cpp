@@ -143,6 +143,14 @@ void TilesetView::set_model(TilesetModel* model) {
 }
 
 /**
+ * @brief Returns the tileset scene represented in this view.
+ * @return The scene or nullptr if no tileset was set.
+ */
+TilesetScene* TilesetView::get_scene() {
+  return scene;
+}
+
+/**
  * @brief Sets the view settings for this view.
  *
  * When they change, the view is updated accordingly.

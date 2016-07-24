@@ -66,6 +66,14 @@ const QString EditorSettings::sprite_origin_show_at_opening =
   "sprite_editor/origin_show_at_opening";
 const QString EditorSettings::sprite_origin_color = "sprite_editor/origin_color";
 
+// Tileset editor keys.
+const QString EditorSettings::tileset_background = "tileset_editor/background";
+const QString EditorSettings::tileset_grid_show_at_opening =
+  "tileset_editor/grid_show_at_opening";
+const QString EditorSettings::tileset_grid_size = "tileset_editor/grid_size";
+const QString EditorSettings::tileset_grid_style = "tileset_editor/grid_style";
+const QString EditorSettings::tileset_grid_color = "tileset_editor/grid_color";
+
 QMap<QString, QVariant> EditorSettings::default_values = {
 
   // General.
@@ -104,7 +112,14 @@ QMap<QString, QVariant> EditorSettings::default_values = {
   { EditorSettings::sprite_auto_detect_grid, false },
   { EditorSettings::sprite_previewer_background, "#888888" },
   { EditorSettings::sprite_origin_show_at_opening, false },
-  { EditorSettings::sprite_origin_color, "#0000ff" }
+  { EditorSettings::sprite_origin_color, "#0000ff" },
+
+  // Tileset editor.
+  { EditorSettings::tileset_background, "#888888" },
+  { EditorSettings::tileset_grid_show_at_opening, false },
+  { EditorSettings::tileset_grid_size, QSize(16, 16) },
+  { EditorSettings::tileset_grid_style, static_cast<int>(GridStyle::DASHED) },
+  { EditorSettings::tileset_grid_color, "#000000" }
 };
 
 /**
@@ -129,6 +144,9 @@ void EditorSettings::load_default_application_settings() {
   // Sprite editor.
   default_values[sprite_main_background] = base_color;
   default_values[sprite_previewer_background] = base_color;
+
+  // Tileset editor.
+  default_values[tileset_background] = base_color;
 }
 
 /**

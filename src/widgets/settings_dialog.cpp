@@ -35,6 +35,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui.quest_size_field->config("x", 0, 99999, 80);
   ui.map_grid_size_field->config("x", 8, 99999, 8);
   ui.sprite_grid_size_field->config("x", 8, 99999, 8);
+  ui.tileset_grid_size_field->config("x", 8, 99999, 8);
 
   reset();
 
@@ -104,6 +105,18 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_sprite_origin_show_at_opening()));
   connect(ui.sprite_origin_color_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_sprite_origin_color()));
+
+  // Tileset editor.
+  connect(ui.tileset_background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_tileset_background()));
+  connect(ui.tileset_grid_show_at_opening_field, SIGNAL(clicked()),
+          this, SLOT(change_tileset_grid_show_at_opening()));
+  connect(ui.tileset_grid_size_field, SIGNAL(value_changed(int,int)),
+          this, SLOT(change_tileset_grid_size()));
+  connect(ui.tileset_grid_style_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_tileset_grid_style()));
+  connect(ui.tileset_grid_color_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_tileset_grid_color()));
 }
 
 /**
@@ -196,6 +209,13 @@ void SettingsDialog::update() {
   update_sprite_previewer_background();
   update_sprite_origin_show_at_opening();
   update_sprite_origin_color();
+
+  // Tileset editor.
+  update_tileset_background();
+  update_tileset_grid_show_at_opening();
+  update_tileset_grid_size();
+  update_tileset_grid_style();
+  update_tileset_grid_color();
 }
 
 /**
@@ -718,6 +738,101 @@ void SettingsDialog::change_sprite_origin_color() {
 
   edited_settings[EditorSettings::sprite_origin_color] =
     ui.sprite_origin_color_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset background field.
+ */
+void SettingsDialog::update_tileset_background() {
+
+  ui.tileset_background_field->set_color(
+    settings.get_value_color(EditorSettings::tileset_background));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset background.
+ */
+void SettingsDialog::change_tileset_background() {
+
+  edited_settings[EditorSettings::tileset_background] =
+    ui.tileset_background_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset grid show at opening field.
+ */
+void SettingsDialog::update_tileset_grid_show_at_opening() {
+
+  ui.tileset_grid_show_at_opening_field->setChecked(
+    settings.get_value_bool(EditorSettings::tileset_grid_show_at_opening));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset grid show at opening.
+ */
+void SettingsDialog::change_tileset_grid_show_at_opening() {
+
+  edited_settings[EditorSettings::tileset_grid_show_at_opening] =
+    ui.tileset_grid_show_at_opening_field->isChecked();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset grid size field.
+ */
+void SettingsDialog::update_tileset_grid_size() {
+
+  ui.tileset_grid_size_field->set_size(
+    settings.get_value_size(EditorSettings::tileset_grid_size));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset grid size.
+ */
+void SettingsDialog::change_tileset_grid_size() {
+
+  edited_settings[EditorSettings::tileset_grid_size] =
+    ui.tileset_grid_size_field->get_size();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset grid style field.
+ */
+void SettingsDialog::update_tileset_grid_style() {
+
+  ui.tileset_grid_style_field->set_selected_value(static_cast<GridStyle>(
+    settings.get_value_int(EditorSettings::tileset_grid_style)));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset grid style.
+ */
+void SettingsDialog::change_tileset_grid_style() {
+
+  edited_settings[EditorSettings::tileset_grid_style] =
+    static_cast<int>(ui.tileset_grid_style_field->get_selected_value());
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset grid color field.
+ */
+void SettingsDialog::update_tileset_grid_color() {
+
+  ui.tileset_grid_color_field->set_color(
+    settings.get_value_color(EditorSettings::tileset_grid_color));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset grid color.
+ */
+void SettingsDialog::change_tileset_grid_color() {
+
+  edited_settings[EditorSettings::tileset_grid_color] =
+    ui.tileset_grid_color_field->get_color().name();
   update_buttons();
 }
 

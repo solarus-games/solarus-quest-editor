@@ -66,6 +66,13 @@ public:
   static const QString sprite_origin_show_at_opening;
   static const QString sprite_origin_color;
 
+  // Tileset editor keys.
+  static const QString tileset_background;
+  static const QString tileset_grid_show_at_opening;
+  static const QString tileset_grid_size;
+  static const QString tileset_grid_style;
+  static const QString tileset_grid_color;
+
   EditorSettings();
 
   static void load_default_application_settings();
