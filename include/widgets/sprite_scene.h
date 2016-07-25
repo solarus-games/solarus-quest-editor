@@ -67,6 +67,9 @@ private:
       direction_items;                /**< Each direction item in the scene,
                                        * ordered as in the model. */
 
+  QGraphicsTextItem* missing_text;    /**< Text displayed when the
+                                       * source image is missing. */
+
 };
 
 }
