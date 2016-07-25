@@ -133,6 +133,7 @@ private:
   MapModel* map;                            /**< Map model being edited. */
   QToolBar* entity_creation_toolbar;        /**< Toolbar allowing to add each type of entity. */
   QStatusBar* status_bar;                   /**< Status bar with information about the map view. */
+  ViewSettings tileset_view_settings;       /**< What is shown and how in the tileset view. */
 
 };
 

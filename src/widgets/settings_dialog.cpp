@@ -37,6 +37,12 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui.sprite_grid_size_field->config("x", 8, 99999, 8);
   ui.tileset_grid_size_field->config("x", 8, 99999, 8);
 
+  initialize_zoom_field(ui.map_main_zoom_field);
+  initialize_zoom_field(ui.map_tileset_zoom_field);
+  initialize_zoom_field(ui.sprite_main_zoom_field);
+  initialize_zoom_field(ui.sprite_previewer_zoom_field);
+  initialize_zoom_field(ui.tileset_zoom_field);
+
   reset();
 
   connect(ui.button_box->button(QDialogButtonBox::Reset), SIGNAL(clicked()),
@@ -77,6 +83,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   // Map editor.
   connect(ui.map_main_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_main_background()));
+  connect(ui.map_main_zoom_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_map_main_zoom()));
   connect(ui.map_grid_show_at_opening_field, SIGNAL(clicked()),
           this, SLOT(change_map_grid_show_at_opening()));
   connect(ui.map_grid_size_field, SIGNAL(value_changed(int,int)),
@@ -87,10 +95,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_map_grid_color()));
   connect(ui.map_tileset_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_tileset_background()));
+  connect(ui.map_tileset_zoom_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_map_tileset_zoom()));
 
   // Sprite editor.
   connect(ui.sprite_main_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_sprite_main_background()));
+  connect(ui.sprite_main_zoom_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_sprite_main_zoom()));
   connect(ui.sprite_grid_show_at_opening_field, SIGNAL(clicked()),
           this, SLOT(change_sprite_grid_show_at_opening()));
   connect(ui.sprite_grid_size_field, SIGNAL(value_changed(int,int)),
@@ -103,6 +115,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_sprite_auto_detect_grid()));
   connect(ui.sprite_previewer_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_sprite_previewer_background()));
+  connect(ui.sprite_previewer_zoom_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_sprite_previewer_zoom()));
   connect(ui.sprite_origin_show_at_opening_field, SIGNAL(clicked()),
           this, SLOT(change_sprite_origin_show_at_opening()));
   connect(ui.sprite_origin_color_field, SIGNAL(color_changed(QColor)),
@@ -111,6 +125,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   // Tileset editor.
   connect(ui.tileset_background_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_tileset_background()));
+  connect(ui.tileset_zoom_field, SIGNAL(currentIndexChanged(int)),
+          this, SLOT(change_tileset_zoom()));
   connect(ui.tileset_grid_show_at_opening_field, SIGNAL(clicked()),
           this, SLOT(change_tileset_grid_show_at_opening()));
   connect(ui.tileset_grid_size_field, SIGNAL(value_changed(int,int)),
@@ -196,25 +212,30 @@ void SettingsDialog::update() {
 
   // Map editor.
   update_map_main_background();
+  update_map_main_zoom();
   update_map_grid_show_at_opening();
   update_map_grid_size();
   update_map_grid_style();
   update_map_grid_color();
   update_map_tileset_background();
+  update_map_tileset_zoom();
 
   // Sprite editor.
   update_sprite_main_background();
+  update_sprite_main_zoom();
   update_sprite_grid_show_at_opening();
   update_sprite_grid_size();
   update_sprite_grid_style();
   update_sprite_grid_color();
   update_sprite_auto_detect_grid();
   update_sprite_previewer_background();
+  update_sprite_previewer_zoom();
   update_sprite_origin_show_at_opening();
   update_sprite_origin_color();
 
   // Tileset editor.
   update_tileset_background();
+  update_tileset_zoom();
   update_tileset_grid_show_at_opening();
   update_tileset_grid_size();
   update_tileset_grid_style();
@@ -499,6 +520,25 @@ void SettingsDialog::change_map_main_background() {
 }
 
 /**
+ * @brief Updates the map main zoom field.
+ */
+void SettingsDialog::update_map_main_zoom() {
+
+  ui.map_main_zoom_field->setCurrentIndex(ui.map_main_zoom_field->findData(
+    settings.get_value_double(EditorSettings::map_main_zoom)));
+}
+
+/**
+ * @brief Slot called when the user changes the map main zoom.
+ */
+void SettingsDialog::change_map_main_zoom() {
+
+  edited_settings[EditorSettings::map_main_zoom] =
+    ui.map_main_zoom_field->currentData().toDouble();
+  update_buttons();
+}
+
+/**
  * @brief Updates the map grid show at opening field.
  */
 void SettingsDialog::update_map_grid_show_at_opening() {
@@ -593,6 +633,26 @@ void SettingsDialog::change_map_tileset_background() {
 }
 
 /**
+ * @brief Updates the map tileset zoom field.
+ */
+void SettingsDialog::update_map_tileset_zoom() {
+
+  ui.map_tileset_zoom_field->setCurrentIndex(
+    ui.map_tileset_zoom_field->findData(
+      settings.get_value_double(EditorSettings::map_tileset_zoom)));
+}
+
+/**
+ * @brief Slot called when the user changes the map tileset zoom.
+ */
+void SettingsDialog::change_map_tileset_zoom() {
+
+  edited_settings[EditorSettings::map_tileset_zoom] =
+    ui.map_tileset_zoom_field->currentData().toDouble();
+  update_buttons();
+}
+
+/**
  * @brief Updates the sprite main background field.
  */
 void SettingsDialog::update_sprite_main_background() {
@@ -608,6 +668,26 @@ void SettingsDialog::change_sprite_main_background() {
 
   edited_settings[EditorSettings::sprite_main_background] =
     ui.sprite_main_background_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the sprite main zoom field.
+ */
+void SettingsDialog::update_sprite_main_zoom() {
+
+  ui.sprite_main_zoom_field->setCurrentIndex(
+    ui.sprite_main_zoom_field->findData(
+      settings.get_value_double(EditorSettings::sprite_main_zoom)));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite main zoom.
+ */
+void SettingsDialog::change_sprite_main_zoom() {
+
+  edited_settings[EditorSettings::sprite_main_zoom] =
+    ui.sprite_main_zoom_field->currentData().toDouble();
   update_buttons();
 }
 
@@ -726,6 +806,26 @@ void SettingsDialog::change_sprite_previewer_background() {
 }
 
 /**
+ * @brief Updates the sprite previewer zoom field.
+ */
+void SettingsDialog::update_sprite_previewer_zoom() {
+
+  ui.sprite_previewer_zoom_field->setCurrentIndex(
+    ui.sprite_previewer_zoom_field->findData(
+      settings.get_value_double(EditorSettings::sprite_previewer_zoom)));
+}
+
+/**
+ * @brief Slot called when the user changes the sprite previewer zoom.
+ */
+void SettingsDialog::change_sprite_previewer_zoom() {
+
+  edited_settings[EditorSettings::sprite_previewer_zoom] =
+    ui.sprite_previewer_zoom_field->currentData().toDouble();
+  update_buttons();
+}
+
+/**
  * @brief Updates the sprite origin show at opening field.
  */
 void SettingsDialog::update_sprite_origin_show_at_opening() {
@@ -779,6 +879,25 @@ void SettingsDialog::change_tileset_background() {
 
   edited_settings[EditorSettings::tileset_background] =
     ui.tileset_background_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the tileset zoom field.
+ */
+void SettingsDialog::update_tileset_zoom() {
+
+  ui.tileset_zoom_field->setCurrentIndex(ui.tileset_zoom_field->findData(
+    settings.get_value_double(EditorSettings::tileset_zoom)));
+}
+
+/**
+ * @brief Slot called when the user changes the tileset zoom.
+ */
+void SettingsDialog::change_tileset_zoom() {
+
+  edited_settings[EditorSettings::tileset_zoom] =
+    ui.tileset_zoom_field->currentData().toDouble();
   update_buttons();
 }
 
@@ -856,6 +975,19 @@ void SettingsDialog::change_tileset_grid_color() {
   edited_settings[EditorSettings::tileset_grid_color] =
     ui.tileset_grid_color_field->get_color().name();
   update_buttons();
+}
+
+/**
+ * @brief Initialize a zoom field.
+ * @param zoom_field Zoom field to initialize.
+ */
+void SettingsDialog::initialize_zoom_field(QComboBox* zoom_field) {
+
+  zoom_field->addItem(tr("25 %"), 0.25);
+  zoom_field->addItem(tr("50 %"), 0.5);
+  zoom_field->addItem(tr("100 %"), 1.0);
+  zoom_field->addItem(tr("200 %"), 2.0);
+  zoom_field->addItem(tr("400 %"), 4.0);
 }
 
 }

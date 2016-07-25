@@ -315,7 +315,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <layout class="QHBoxLayout" name="map_main_background_layout">
+           <layout class="QHBoxLayout" name="map_main_layout">
             <item>
              <widget class="QLabel" name="map_main_background_label">
               <property name="text">
@@ -335,6 +335,29 @@
             </item>
             <item>
              <spacer name="map_main_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="map_main_zoom_label">
+              <property name="text">
+               <string>Default zoom:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="map_main_zoom_field"/>
+            </item>
+            <item>
+             <spacer name="map_main_zoom_spacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -485,7 +508,30 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>398</width>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="map_tileset_zoom_label">
+            <property name="text">
+             <string>Default zoom:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="map_tileset_zoom_field"/>
+          </item>
+          <item>
+           <spacer name="map_tileset_zoom_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
               <height>20</height>
              </size>
             </property>
@@ -541,6 +587,29 @@
             </item>
             <item>
              <spacer name="sprite_main_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="sprite_main_zoom_label">
+              <property name="text">
+               <string>Default zoom:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="sprite_main_zoom_field"/>
+            </item>
+            <item>
+             <spacer name="sprite_main_zoom_spacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -673,8 +742,72 @@
          <property name="title">
           <string>Previewer graphics view</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="2" column="0" colspan="2">
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <layout class="QHBoxLayout" name="sprite_previewer_layout">
+            <item>
+             <widget class="QLabel" name="sprite_previewer_background_label">
+              <property name="text">
+               <string>Background color:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="SolarusEditor::ColorPicker" name="sprite_previewer_background_field">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="sprite_previewer_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="sprite_previewer_zoom_label">
+              <property name="text">
+               <string>Default zoom:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="sprite_previewer_zoom_field"/>
+            </item>
+            <item>
+             <spacer name="sprite_previewer_zoom_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="sprite_origin_label">
+            <property name="text">
+             <string>Origin:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="sprite_origin_layout">
             <item>
              <spacer name="sprite_origin_spacer">
@@ -751,47 +884,6 @@
             </item>
            </layout>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="sprite_previewer_background_label">
-            <property name="text">
-             <string>Background color:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="sprite_previewer_background_layout">
-            <item>
-             <widget class="SolarusEditor::ColorPicker" name="sprite_previewer_background_field">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="sprite_previewer_background_spacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="sprite_origin_label">
-            <property name="text">
-             <string>Origin:</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -822,7 +914,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
-           <layout class="QHBoxLayout" name="tileset_background_layout">
+           <layout class="QHBoxLayout" name="tileset_layout">
             <item>
              <widget class="QLabel" name="tileset_background_label">
               <property name="text">
@@ -842,6 +934,29 @@
             </item>
             <item>
              <spacer name="tileset_background_spacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="tileset_zoom_label">
+              <property name="text">
+               <string>Default zoom:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="tileset_zoom_field"/>
+            </item>
+            <item>
+             <spacer name="tileset_zoom_spacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>

@@ -45,6 +45,7 @@ const QString EditorSettings::replace_tab_by_spaces =
 // Map editor keys.
 const QString EditorSettings::map_main_background =
   "map_editor/main_background";
+const QString EditorSettings::map_main_zoom = "map_editor/main_zoom";
 const QString EditorSettings::map_grid_show_at_opening =
   "map_editor/grid_show_at_opening";
 const QString EditorSettings::map_grid_size = "map_editor/grid_size";
@@ -52,10 +53,12 @@ const QString EditorSettings::map_grid_style = "map_editor/grid_style";
 const QString EditorSettings::map_grid_color = "map_editor/grid_color";
 const QString EditorSettings::map_tileset_background =
   "map_editor/tileset_background";
+const QString EditorSettings::map_tileset_zoom = "map_editor/tileset_zoom";
 
 // Sprite editor keys.
 const QString EditorSettings::sprite_main_background =
   "sprite_editor/main_background";
+const QString EditorSettings::sprite_main_zoom = "sprite_editor/main_zoom";
 const QString EditorSettings::sprite_grid_show_at_opening =
   "sprite_editor/grid_show_at_opening";
 const QString EditorSettings::sprite_grid_size = "sprite_editor/grid_size";
@@ -65,12 +68,15 @@ const QString EditorSettings::sprite_auto_detect_grid =
   "sprite_editor/auto_detect_grid";
 const QString EditorSettings::sprite_previewer_background =
   "sprite_editor/previewer_background";
+const QString EditorSettings::sprite_previewer_zoom =
+  "sprite_editor/previewer_zoom";
 const QString EditorSettings::sprite_origin_show_at_opening =
   "sprite_editor/origin_show_at_opening";
 const QString EditorSettings::sprite_origin_color = "sprite_editor/origin_color";
 
 // Tileset editor keys.
 const QString EditorSettings::tileset_background = "tileset_editor/background";
+const QString EditorSettings::tileset_zoom = "tileset_editor/zoom";
 const QString EditorSettings::tileset_grid_show_at_opening =
   "tileset_editor/grid_show_at_opening";
 const QString EditorSettings::tileset_grid_size = "tileset_editor/grid_size";
@@ -101,25 +107,30 @@ QMap<QString, QVariant> EditorSettings::default_values = {
 
   // Map editor.
   { EditorSettings::map_main_background, "#888888" },
+  { EditorSettings::map_main_zoom, 2.0 },
   { EditorSettings::map_grid_show_at_opening, false },
   { EditorSettings::map_grid_size, QSize(16, 16) },
   { EditorSettings::map_grid_style, static_cast<int>(GridStyle::DASHED) },
   { EditorSettings::map_grid_color, "#000000" },
   { EditorSettings::map_tileset_background, "#888888" },
+  { EditorSettings::map_tileset_zoom, 2.0 },
 
   // Sprite editor.
   { EditorSettings::sprite_main_background, "#888888" },
+  { EditorSettings::sprite_main_zoom, 2.0 },
   { EditorSettings::sprite_grid_show_at_opening, false },
   { EditorSettings::sprite_grid_size, QSize(16, 16) },
   { EditorSettings::sprite_grid_style, static_cast<int>(GridStyle::DASHED) },
   { EditorSettings::sprite_grid_color, "#000000" },
   { EditorSettings::sprite_auto_detect_grid, false },
   { EditorSettings::sprite_previewer_background, "#888888" },
+  { EditorSettings::sprite_previewer_zoom, 2.0 },
   { EditorSettings::sprite_origin_show_at_opening, false },
   { EditorSettings::sprite_origin_color, "#0000ff" },
 
   // Tileset editor.
   { EditorSettings::tileset_background, "#888888" },
+  { EditorSettings::tileset_zoom, 2.0 },
   { EditorSettings::tileset_grid_show_at_opening, false },
   { EditorSettings::tileset_grid_size, QSize(16, 16) },
   { EditorSettings::tileset_grid_style, static_cast<int>(GridStyle::DASHED) },
@@ -185,6 +196,16 @@ bool EditorSettings::get_value_bool(const QString& key) {
 int EditorSettings::get_value_int(const QString& key) {
 
   return get_value(key).toInt();
+}
+
+/**
+ * @brief Returns a settings double value.
+ * @param key The key of the setting.
+ * @return The double value of the setting.
+ */
+double EditorSettings::get_value_double(const QString& key) {
+
+  return get_value(key).toDouble();
 }
 
 /**
@@ -258,6 +279,16 @@ bool EditorSettings::get_default_bool(const QString& key) {
 int EditorSettings::get_default_int(const QString& key) {
 
   return get_default(key).toInt();
+}
+
+/**
+ * @brief Returns a settings default double value.
+ * @param key The key of the setting.
+ * @return The default double value of the setting.
+ */
+double EditorSettings::get_default_double(const QString& key) {
+
+  return get_default(key).toDouble();
 }
 
 /**

@@ -517,7 +517,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_select_all_supported(true);
   set_zoom_supported(true);
   ViewSettings& view_settings = get_view_settings();
-  view_settings.set_zoom(2.0);
   set_grid_supported(true);
 
   // Open the file.
@@ -1283,6 +1282,7 @@ void TilesetEditor::load_settings() {
   ViewSettings& view = get_view_settings();
   EditorSettings settings;
 
+  view.set_zoom(settings.get_value_double(EditorSettings::tileset_zoom));
   view.set_grid_visible(
     settings.get_value_bool(EditorSettings::tileset_grid_show_at_opening));
   view.set_grid_size(

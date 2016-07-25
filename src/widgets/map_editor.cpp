@@ -977,7 +977,6 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
   set_select_all_supported(true);
   set_zoom_supported(true);
-  get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
   set_traversables_visibility_supported(true);
   set_obstacles_visibility_supported(true);
@@ -1009,6 +1008,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.map_view->set_map(map);
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
+
+  ui.tileset_view->set_view_settings(tileset_view_settings);
 
   ui.size_field->config("x", 0, 99999, 8);
   ui.size_field->set_tooltips(
@@ -2199,9 +2200,13 @@ void MapEditor::load_settings() {
   ViewSettings& view = get_view_settings();
   EditorSettings settings;
 
+  view.set_zoom(settings.get_value_double(EditorSettings::map_main_zoom));
   view.set_grid_visible(
     settings.get_value_bool(EditorSettings::map_grid_show_at_opening));
   view.set_grid_size(settings.get_value_size(EditorSettings::map_grid_size));
+
+  tileset_view_settings.set_zoom(
+    settings.get_value_double(EditorSettings::map_tileset_zoom));
 
   reload_settings();
 }
