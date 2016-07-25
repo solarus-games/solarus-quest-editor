@@ -71,8 +71,8 @@ public slots:
   void change_replace_tab_by_spaces();
 
   // Map editor.
-  void update_map_background();
-  void change_map_background();
+  void update_map_main_background();
+  void change_map_main_background();
   void update_map_grid_show_at_opening();
   void change_map_grid_show_at_opening();
   void update_map_grid_size();
@@ -81,6 +81,8 @@ public slots:
   void change_map_grid_style();
   void update_map_grid_color();
   void change_map_grid_color();
+  void update_map_tileset_background();
+  void change_map_tileset_background();
 
   // Sprite editor.
   void update_sprite_main_background();

@@ -49,11 +49,12 @@ public:
   static const QString replace_tab_by_spaces;
 
   // Map editor keys.
-  static const QString map_background;
+  static const QString map_main_background;
   static const QString map_grid_show_at_opening;
   static const QString map_grid_size;
   static const QString map_grid_style;
   static const QString map_grid_color;
+  static const QString map_tileset_background;
 
   // Sprite editor keys.
   static const QString sprite_main_background;

@@ -20,6 +20,7 @@
 #include "widgets/gui_tools.h"
 #include "widgets/map_editor.h"
 #include "widgets/map_scene.h"
+#include "widgets/tileset_scene.h"
 #include "audio.h"
 #include "editor_exception.h"
 #include "editor_settings.h"
@@ -1021,8 +1022,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   set_layers_supported(map->get_min_layer(), map->get_max_layer());
 
-  load_settings();
   update();
+  load_settings();
 
   // Make connections.
   connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
@@ -1280,10 +1281,17 @@ void MapEditor::reload_settings() {
 
   EditorSettings settings;
 
-  MapScene* scene = ui.map_view->get_scene();
-  if (scene != nullptr) {
-    QBrush brush(settings.get_value_color(EditorSettings::map_background));
-    scene->setBackgroundBrush(brush);
+  MapScene* main_scene = ui.map_view->get_scene();
+  if (main_scene != nullptr) {
+    QBrush brush(settings.get_value_color(EditorSettings::map_main_background));
+    main_scene->setBackgroundBrush(brush);
+  }
+
+  TilesetScene* tileset_scene = ui.tileset_view->get_scene();
+  if (tileset_scene != nullptr) {
+    QBrush brush(
+      settings.get_value_color(EditorSettings::map_tileset_background));
+    tileset_scene->setBackgroundBrush(brush);
   }
 
   get_view_settings().set_grid_style(static_cast<GridStyle>(

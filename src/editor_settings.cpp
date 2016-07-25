@@ -43,12 +43,15 @@ const QString EditorSettings::replace_tab_by_spaces =
   "text_editor/replace_tab_by_spaces";
 
 // Map editor keys.
-const QString EditorSettings::map_background = "map_editor/background";
+const QString EditorSettings::map_main_background =
+  "map_editor/main_background";
 const QString EditorSettings::map_grid_show_at_opening =
   "map_editor/grid_show_at_opening";
 const QString EditorSettings::map_grid_size = "map_editor/grid_size";
 const QString EditorSettings::map_grid_style = "map_editor/grid_style";
 const QString EditorSettings::map_grid_color = "map_editor/grid_color";
+const QString EditorSettings::map_tileset_background =
+  "map_editor/tileset_background";
 
 // Sprite editor keys.
 const QString EditorSettings::sprite_main_background =
@@ -97,11 +100,12 @@ QMap<QString, QVariant> EditorSettings::default_values = {
   { EditorSettings::replace_tab_by_spaces, true },
 
   // Map editor.
-  { EditorSettings::map_background, "#888888" },
+  { EditorSettings::map_main_background, "#888888" },
   { EditorSettings::map_grid_show_at_opening, false },
   { EditorSettings::map_grid_size, QSize(16, 16) },
   { EditorSettings::map_grid_style, static_cast<int>(GridStyle::DASHED) },
   { EditorSettings::map_grid_color, "#000000" },
+  { EditorSettings::map_tileset_background, "#888888" },
 
   // Sprite editor.
   { EditorSettings::sprite_main_background, "#888888" },
@@ -139,7 +143,8 @@ void EditorSettings::load_default_application_settings() {
   QString base_color = palette.base().color().name();
 
   // Map editor.
-  default_values[map_background] = alternate_color;
+  default_values[map_main_background] = alternate_color;
+  default_values[map_tileset_background] = base_color;
 
   // Sprite editor.
   default_values[sprite_main_background] = base_color;

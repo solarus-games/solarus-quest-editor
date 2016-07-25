@@ -75,8 +75,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_replace_tab_by_spaces()));
 
   // Map editor.
-  connect(ui.map_background_field, SIGNAL(color_changed(QColor)),
-          this, SLOT(change_map_background()));
+  connect(ui.map_main_background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_map_main_background()));
   connect(ui.map_grid_show_at_opening_field, SIGNAL(clicked()),
           this, SLOT(change_map_grid_show_at_opening()));
   connect(ui.map_grid_size_field, SIGNAL(value_changed(int,int)),
@@ -85,6 +85,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_map_grid_style()));
   connect(ui.map_grid_color_field, SIGNAL(color_changed(QColor)),
           this, SLOT(change_map_grid_color()));
+  connect(ui.map_tileset_background_field, SIGNAL(color_changed(QColor)),
+          this, SLOT(change_map_tileset_background()));
 
   // Sprite editor.
   connect(ui.sprite_main_background_field, SIGNAL(color_changed(QColor)),
@@ -193,11 +195,12 @@ void SettingsDialog::update() {
   update_replace_tab_by_spaces();
 
   // Map editor.
-  update_map_background();
+  update_map_main_background();
   update_map_grid_show_at_opening();
   update_map_grid_size();
   update_map_grid_style();
   update_map_grid_color();
+  update_map_tileset_background();
 
   // Sprite editor.
   update_sprite_main_background();
@@ -477,21 +480,21 @@ void SettingsDialog::change_replace_tab_by_spaces() {
 }
 
 /**
- * @brief Updates the map background field.
+ * @brief Updates the map main background field.
  */
-void SettingsDialog::update_map_background() {
+void SettingsDialog::update_map_main_background() {
 
-  ui.map_background_field->set_color(
-    settings.get_value_color(EditorSettings::map_background));
+  ui.map_main_background_field->set_color(
+    settings.get_value_color(EditorSettings::map_main_background));
 }
 
 /**
- * @brief Slot called when the user changes the map background.
+ * @brief Slot called when the user changes the map main background.
  */
-void SettingsDialog::change_map_background() {
+void SettingsDialog::change_map_main_background() {
 
-  edited_settings[EditorSettings::map_background] =
-    ui.map_background_field->get_color().name();
+  edited_settings[EditorSettings::map_main_background] =
+    ui.map_main_background_field->get_color().name();
   update_buttons();
 }
 
@@ -567,6 +570,25 @@ void SettingsDialog::change_map_grid_color() {
 
   edited_settings[EditorSettings::map_grid_color] =
     ui.map_grid_color_field->get_color().name();
+  update_buttons();
+}
+
+/**
+ * @brief Updates the map tileset background field.
+ */
+void SettingsDialog::update_map_tileset_background() {
+
+  ui.map_tileset_background_field->set_color(
+    settings.get_value_color(EditorSettings::map_tileset_background));
+}
+
+/**
+ * @brief Slot called when the user changes the map tileset background.
+ */
+void SettingsDialog::change_map_tileset_background() {
+
+  edited_settings[EditorSettings::map_tileset_background] =
+    ui.map_tileset_background_field->get_color().name();
   update_buttons();
 }
 
