@@ -641,7 +641,6 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_close_confirm_message(
         tr("Sprite '%1' has been modified. Save changes?").arg(sprite_id));
   set_zoom_supported(true);
-  get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
 
   // Open the file.
@@ -1461,10 +1460,13 @@ void SpriteEditor::load_settings() {
   ViewSettings& view = get_view_settings();
   EditorSettings settings;
 
+  view.set_zoom(settings.get_value_double(EditorSettings::sprite_main_zoom));
   view.set_grid_visible(
     settings.get_value_bool(EditorSettings::sprite_grid_show_at_opening));
   view.set_grid_size(settings.get_value_size(EditorSettings::sprite_grid_size));
 
+  ui.sprite_previewer->set_zoom(
+    settings.get_value_double(EditorSettings::sprite_previewer_zoom));
   ui.sprite_previewer->set_show_origin(
     settings.get_value_bool(EditorSettings::sprite_origin_show_at_opening));
 

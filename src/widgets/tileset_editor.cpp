@@ -17,7 +17,9 @@
 #include "widgets/change_pattern_id_dialog.h"
 #include "widgets/gui_tools.h"
 #include "widgets/tileset_editor.h"
+#include "widgets/tileset_scene.h"
 #include "editor_exception.h"
+#include "editor_settings.h"
 #include "quest.h"
 #include "quest_resources.h"
 #include "refactoring.h"
@@ -515,7 +517,6 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   set_select_all_supported(true);
   set_zoom_supported(true);
   ViewSettings& view_settings = get_view_settings();
-  view_settings.set_zoom(2.0);
   set_grid_supported(true);
 
   // Open the file.
@@ -528,6 +529,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   ui.patterns_list_view->set_model(*model);
   ui.tileset_view->set_model(model);
   ui.tileset_view->set_view_settings(get_view_settings());
+
+  load_settings();
   update();
 
   // Make connections.
@@ -650,6 +653,25 @@ void TilesetEditor::unselect_all() {
     return;
   }
   ui.tileset_view->unselect_all();
+}
+
+/**
+ * @copydoc Editor::reload_settings
+ */
+void TilesetEditor::reload_settings() {
+
+  EditorSettings settings;
+
+  TilesetScene* scene = ui.tileset_view->get_scene();
+  if (scene != nullptr) {
+    QBrush brush(settings.get_value_color(EditorSettings::tileset_background));
+    scene->setBackgroundBrush(brush);
+  }
+
+  get_view_settings().set_grid_style(static_cast<GridStyle>(
+    settings.get_value_int(EditorSettings::tileset_grid_style)));
+  get_view_settings().set_grid_color(
+    settings.get_value_color(EditorSettings::tileset_grid_color));
 }
 
 /**
@@ -1250,6 +1272,23 @@ void TilesetEditor::editor_made_visible() {
 
     delete old_model;
   }
+}
+
+/**
+ * @brief Loads settings.
+ */
+void TilesetEditor::load_settings() {
+
+  ViewSettings& view = get_view_settings();
+  EditorSettings settings;
+
+  view.set_zoom(settings.get_value_double(EditorSettings::tileset_zoom));
+  view.set_grid_visible(
+    settings.get_value_bool(EditorSettings::tileset_grid_show_at_opening));
+  view.set_grid_size(
+    settings.get_value_size(EditorSettings::tileset_grid_size));
+
+  reload_settings();
 }
 
 }

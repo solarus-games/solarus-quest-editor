@@ -364,6 +364,7 @@ void SpritePreviewer::set_zoom(double zoom) {
   double scale_factor = zoom / this->zoom;
   ui.frame_view->scale(scale_factor, scale_factor);
   this->zoom = zoom;
+  update_zoom();
 }
 
 /**
@@ -374,6 +375,7 @@ QMenu* SpritePreviewer::create_zoom_menu() {
 
   QMenu* zoom_menu = new QMenu(tr("Zoom"));
   std::vector<std::pair<QString, double>> zooms = {
+    { tr("25 %"), 0.25 },
     { tr("50 %"), 0.5 },
     { tr("100 %"), 1.0 },
     { tr("200 %"), 2.0 },

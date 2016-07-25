@@ -39,6 +39,7 @@ public:
   void save() override;
   void select_all() override;
   void unselect_all() override;
+  void reload_settings() override;
 
 public slots:
 
@@ -86,6 +87,7 @@ private:
       const QString& old_pattern_id, const QString& new_pattern_id);
   bool change_pattern_id_in_map(
       const QString& map_id, const QString& old_pattern_id, const QString& new_pattern_id);
+  void load_settings();
 
 private:
 

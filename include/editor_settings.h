@@ -49,22 +49,35 @@ public:
   static const QString replace_tab_by_spaces;
 
   // Map editor keys.
-  static const QString map_background;
+  static const QString map_main_background;
+  static const QString map_main_zoom;
   static const QString map_grid_show_at_opening;
   static const QString map_grid_size;
   static const QString map_grid_style;
   static const QString map_grid_color;
+  static const QString map_tileset_background;
+  static const QString map_tileset_zoom;
 
   // Sprite editor keys.
   static const QString sprite_main_background;
+  static const QString sprite_main_zoom;
   static const QString sprite_grid_show_at_opening;
   static const QString sprite_grid_size;
   static const QString sprite_grid_style;
   static const QString sprite_grid_color;
   static const QString sprite_auto_detect_grid;
   static const QString sprite_previewer_background;
+  static const QString sprite_previewer_zoom;
   static const QString sprite_origin_show_at_opening;
   static const QString sprite_origin_color;
+
+  // Tileset editor keys.
+  static const QString tileset_background;
+  static const QString tileset_zoom;
+  static const QString tileset_grid_show_at_opening;
+  static const QString tileset_grid_size;
+  static const QString tileset_grid_style;
+  static const QString tileset_grid_color;
 
   EditorSettings();
 
@@ -73,6 +86,7 @@ public:
   QVariant get_value(const QString& key);
   bool get_value_bool(const QString& key);
   int get_value_int(const QString& key);
+  double get_value_double(const QString& key);
   QString get_value_string(const QString& key);
   QStringList get_value_string_list(const QString& key);
   QSize get_value_size(const QString& key);
@@ -81,6 +95,7 @@ public:
   QVariant get_default(const QString& key);
   bool get_default_bool(const QString& key);
   int get_default_int(const QString& key);
+  double get_default_double(const QString& key);
   QString get_default_string(const QString& key);
   QSize get_default_size(const QString& key);
   QColor get_default_color(const QString& key);

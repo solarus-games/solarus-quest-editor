@@ -71,8 +71,10 @@ public slots:
   void change_replace_tab_by_spaces();
 
   // Map editor.
-  void update_map_background();
-  void change_map_background();
+  void update_map_main_background();
+  void change_map_main_background();
+  void update_map_main_zoom();
+  void change_map_main_zoom();
   void update_map_grid_show_at_opening();
   void change_map_grid_show_at_opening();
   void update_map_grid_size();
@@ -81,10 +83,16 @@ public slots:
   void change_map_grid_style();
   void update_map_grid_color();
   void change_map_grid_color();
+  void update_map_tileset_background();
+  void change_map_tileset_background();
+  void update_map_tileset_zoom();
+  void change_map_tileset_zoom();
 
   // Sprite editor.
   void update_sprite_main_background();
   void change_sprite_main_background();
+  void update_sprite_main_zoom();
+  void change_sprite_main_zoom();
   void update_sprite_grid_show_at_opening();
   void change_sprite_grid_show_at_opening();
   void update_sprite_grid_size();
@@ -97,16 +105,34 @@ public slots:
   void change_sprite_auto_detect_grid();
   void update_sprite_previewer_background();
   void change_sprite_previewer_background();
+  void update_sprite_previewer_zoom();
+  void change_sprite_previewer_zoom();
   void update_sprite_origin_show_at_opening();
   void change_sprite_origin_show_at_opening();
   void update_sprite_origin_color();
   void change_sprite_origin_color();
+
+  // Tileset editor.
+  void update_tileset_background();
+  void change_tileset_background();
+  void update_tileset_zoom();
+  void change_tileset_zoom();
+  void update_tileset_grid_show_at_opening();
+  void change_tileset_grid_show_at_opening();
+  void update_tileset_grid_size();
+  void change_tileset_grid_size();
+  void update_tileset_grid_style();
+  void change_tileset_grid_style();
+  void update_tileset_grid_color();
+  void change_tileset_grid_color();
 
 signals:
 
   void settings_changed();
 
 private:
+
+  void initialize_zoom_field(QComboBox* zoom_field);
 
   Ui::SettingsDialog ui;                    /**< The settings dialog widgets. */
 

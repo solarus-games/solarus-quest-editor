@@ -20,6 +20,7 @@
 #include "widgets/gui_tools.h"
 #include "widgets/map_editor.h"
 #include "widgets/map_scene.h"
+#include "widgets/tileset_scene.h"
 #include "audio.h"
 #include "editor_exception.h"
 #include "editor_settings.h"
@@ -976,7 +977,6 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
         tr("Map '%1' has been modified. Save changes?").arg(map_id));
   set_select_all_supported(true);
   set_zoom_supported(true);
-  get_view_settings().set_zoom(2.0);
   set_grid_supported(true);
   set_traversables_visibility_supported(true);
   set_obstacles_visibility_supported(true);
@@ -1009,6 +1009,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   ui.map_view->set_view_settings(get_view_settings());
   ui.map_view->set_common_actions(&get_common_actions());
 
+  ui.tileset_view->set_view_settings(tileset_view_settings);
+
   ui.size_field->config("x", 0, 99999, 8);
   ui.size_field->set_tooltips(
     tr("Width of the map in pixels"),
@@ -1021,8 +1023,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
 
   set_layers_supported(map->get_min_layer(), map->get_max_layer());
 
-  load_settings();
   update();
+  load_settings();
 
   // Make connections.
   connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
@@ -1280,10 +1282,17 @@ void MapEditor::reload_settings() {
 
   EditorSettings settings;
 
-  MapScene* scene = ui.map_view->get_scene();
-  if (scene != nullptr) {
-    QBrush brush(settings.get_value_color(EditorSettings::map_background));
-    scene->setBackgroundBrush(brush);
+  MapScene* main_scene = ui.map_view->get_scene();
+  if (main_scene != nullptr) {
+    QBrush brush(settings.get_value_color(EditorSettings::map_main_background));
+    main_scene->setBackgroundBrush(brush);
+  }
+
+  TilesetScene* tileset_scene = ui.tileset_view->get_scene();
+  if (tileset_scene != nullptr) {
+    QBrush brush(
+      settings.get_value_color(EditorSettings::map_tileset_background));
+    tileset_scene->setBackgroundBrush(brush);
   }
 
   get_view_settings().set_grid_style(static_cast<GridStyle>(
@@ -2191,9 +2200,13 @@ void MapEditor::load_settings() {
   ViewSettings& view = get_view_settings();
   EditorSettings settings;
 
+  view.set_zoom(settings.get_value_double(EditorSettings::map_main_zoom));
   view.set_grid_visible(
     settings.get_value_bool(EditorSettings::map_grid_show_at_opening));
   view.set_grid_size(settings.get_value_size(EditorSettings::map_grid_size));
+
+  tileset_view_settings.set_zoom(
+    settings.get_value_double(EditorSettings::map_tileset_zoom));
 
   reload_settings();
 }
