@@ -537,6 +537,11 @@ bool MainWindow::open_quest(const QString& quest_path) {
     }
     quest.check_version();
 
+    // Make sure all resource directories exist.
+    Q_FOREACH (ResourceType resource_type, Solarus::EnumInfo<ResourceType>::enums()) {
+      quest.create_dir_if_not_exists(quest.get_resource_path(resource_type));
+    }
+
     connect(&quest, SIGNAL(file_renamed(QString, QString)),
             ui.tab_widget, SLOT(file_renamed(QString, QString)));
     connect(&quest, SIGNAL(file_deleted(QString)),
