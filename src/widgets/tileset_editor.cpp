@@ -528,7 +528,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
   ui.tileset_view->set_model(model);
-  ui.tileset_view->set_view_settings(get_view_settings());
+  ui.tileset_view->set_view_settings(view_settings);
 
   load_settings();
   update();
