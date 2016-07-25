@@ -1842,7 +1842,7 @@ Make sure that Solarus Quest Editor is properly installed.</source>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="195"/>
-        <location filename="../src/widgets/main_window.cpp" line="1430"/>
+        <location filename="../src/widgets/main_window.cpp" line="1435"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
@@ -1931,14 +1931,14 @@ Make sure that Solarus Quest Editor is properly installed.</source>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="406"/>
-        <location filename="../src/widgets/main_window.cpp" line="1479"/>
-        <location filename="../src/widgets/main_window.cpp" line="1486"/>
+        <location filename="../src/widgets/main_window.cpp" line="1484"/>
+        <location filename="../src/widgets/main_window.cpp" line="1491"/>
         <source>Pause music</source>
         <translation>Mettre la musique en pause</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="415"/>
-        <location filename="../src/widgets/main_window.cpp" line="1475"/>
+        <location filename="../src/widgets/main_window.cpp" line="1480"/>
         <source>Stop music</source>
         <translation>Arrêter la musique</translation>
     </message>
@@ -2051,8 +2051,8 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Site web</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="690"/>
-        <location filename="../src/widgets/main_window.cpp" line="728"/>
+        <location filename="../src/widgets/main_window.cpp" line="695"/>
+        <location filename="../src/widgets/main_window.cpp" line="733"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
@@ -2167,57 +2167,57 @@ Please make sure that Solarus Quest Editor is correctly installed.</source>
         <translation>Cacher toutes les entités</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="558"/>
+        <location filename="../src/widgets/main_window.cpp" line="563"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="559"/>
+        <location filename="../src/widgets/main_window.cpp" line="564"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="611"/>
+        <location filename="../src/widgets/main_window.cpp" line="616"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="628"/>
+        <location filename="../src/widgets/main_window.cpp" line="633"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="676"/>
+        <location filename="../src/widgets/main_window.cpp" line="681"/>
         <source>Could not find the assets directory.
 Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Impossible de trouver le dossier &quot;assets&quot;.\nVérifiez que Solarus Quest Editor est correctement installé.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="900"/>
+        <location filename="../src/widgets/main_window.cpp" line="905"/>
         <source>Files are modified</source>
         <translation>Modifications non sauvegardées</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="901"/>
+        <location filename="../src/widgets/main_window.cpp" line="906"/>
         <source>Do you want to save modifications before running the quest?</source>
         <translation>Enregistrer les modifications avant de lancer la quête ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1427"/>
+        <location filename="../src/widgets/main_window.cpp" line="1432"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1683"/>
+        <location filename="../src/widgets/main_window.cpp" line="1688"/>
         <source>Unsaved changes</source>
         <translation>Changements non sauvegardés</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1684"/>
+        <location filename="../src/widgets/main_window.cpp" line="1689"/>
         <source>All files must be saved before this operation.
 Do you want to save them now?</source>
         <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.\nVoulez-vous les sauvegarder maintenant ?</translation>
@@ -2227,12 +2227,12 @@ Do you want to save them now?</source>
         <translation type="vanished">La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1599"/>
+        <location filename="../src/widgets/main_window.cpp" line="1604"/>
         <source>File modified</source>
         <translation>Fichier en cours de modification</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1600"/>
+        <location filename="../src/widgets/main_window.cpp" line="1605"/>
         <source>This file is open and has unsaved changes.
 Please save it or close it before renaming.</source>
         <translation>Ce fichier est ouvert et a été modifié.\nVeuillez le sauvegarder ou le fermer avant de le renommer.</translation>
@@ -2246,12 +2246,12 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1646"/>
+        <location filename="../src/widgets/main_window.cpp" line="1651"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1647"/>
+        <location filename="../src/widgets/main_window.cpp" line="1652"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
@@ -2260,17 +2260,17 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1410"/>
+        <location filename="../src/widgets/main_window.cpp" line="1415"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1483"/>
+        <location filename="../src/widgets/main_window.cpp" line="1488"/>
         <source>Play selected music</source>
         <translation>Jouer la musique sélectionnée</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1518"/>
+        <location filename="../src/widgets/main_window.cpp" line="1523"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -4764,12 +4764,12 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SolarusEditor::SpriteScene</name>
     <message>
-        <location filename="../src/widgets/sprite_scene.cpp" line="200"/>
+        <location filename="../src/widgets/sprite_scene.cpp" line="203"/>
         <source>Missing source image &apos;%1&apos;</source>
         <translation>Image source manquante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_scene.cpp" line="338"/>
+        <location filename="../src/widgets/sprite_scene.cpp" line="342"/>
         <source>No such direction index: %1</source>
         <translation>Direction inexistante : %1</translation>
     </message>
@@ -5333,7 +5333,8 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <location filename="../src/widgets/tileset_editor.cpp" line="1258"/>
         <source>The tileset image was modified.
 Do you want to refresh the tileset?</source>
-        <translation>L&apos;image du tileset a été modifée.\nVoulez-vous recharger l&apos;image ?</translation>
+        <translation type="unfinished">L&apos;image du tileset a été modifée.
+Voulez-vous recharger l&apos;image ?</translation>
     </message>
 </context>
 <context>
