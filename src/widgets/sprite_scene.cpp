@@ -73,6 +73,8 @@ SpriteScene::SpriteScene(SpriteModel& model, QObject* parent) :
   QGraphicsScene(parent),
   model(model) {
 
+  missing_text = addText("");
+  missing_text->setZValue(10);
   rebuild();
 
   // Synchronize the scene selection with the sprite selection model.
@@ -192,12 +194,14 @@ void SpriteScene::update_image() {
 
   const QImage& image = model.get_animation_image(animation_name);
 
+  missing_text->setVisible(false);
   if (image.isNull()) {
     QString src_image = model.get_animation_source_image(animation_name);
     if (!src_image.isEmpty()) {
       QString path = get_quest().get_sprite_image_path(src_image);
       path = path.right(path.length() - get_quest().get_data_path().length() - 1);
-      addText(tr("Missing source image '%1'").arg(path));
+      missing_text->setPlainText(tr("Missing source image '%1'").arg(path));
+      missing_text->setVisible(true);
     }
   }
 
