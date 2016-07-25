@@ -42,6 +42,7 @@ New features
 * Map editor: show the real variant of pickables (#109).
 * Tileset editor: propose to refresh the image when it has changed (#86).
 * Tileset editor: don't force the user to close maps before renaming patterns.
+* Tileset editor: add settings (#178).
 * Sprite editor: check the value of frame to loop on (#203).
 * Sprite editor: auto-detect the grid size (#13).
 * Settings: add sprite editor options.
