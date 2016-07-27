@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #include "obsolete_editor_exception.h"
 #include <solarus/Common.h>
 #include <QApplication>
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates an obsolete editor exception.
@@ -39,4 +41,6 @@ ObsoleteEditorException::ObsoleteEditorException(const QString& quest_format) :
  */
 QString ObsoleteEditorException::get_quest_format() const {
   return quest_format;
+}
+
 }

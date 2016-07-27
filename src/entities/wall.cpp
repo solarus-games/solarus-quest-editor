@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/wall.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -49,4 +51,19 @@ void Wall::set_initial_values() {
   set_field("stops_enemies", true);
   set_field("stops_blocks", true);
   set_field("stops_projectiles", true);
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Wall::notify_field_changed(const QString& key, const QVariant& value) {
+
+  EntityModel::notify_field_changed(key, value);
+
+  if (key == "stops_hero") {
+    bool stops_hero = value.toBool();
+    set_traversable(!stops_hero);
+  }
+}
+
 }

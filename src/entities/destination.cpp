@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,16 @@
 #include "entities/destination.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
  * @param index Index of the entity in the map.
  */
 Destination::Destination(MapModel& map, const EntityIndex& index) :
-  EntityModel(map, index, EntityType::DESTINATION) {
+  EntityModel(map, index, EntityType::DESTINATION),
+  update_teletransporters(true) {
 
   set_origin(QPoint(8, 13));
 
@@ -44,4 +47,37 @@ Destination::Destination(MapModel& map, const EntityIndex& index) :
     info.images_by_direction.append(sub_image);
   }
   set_draw_image_info(info);
+}
+
+/**
+ * @copydoc EntityModel::set_initial_values
+ */
+void Destination::set_initial_values() {
+
+  EntityModel::set_initial_values();
+
+  // Set a default name to avoid surprises with destinations that save
+  // the starting location.
+  // (Its uniqueness will be ensured later by appending a suffix.)
+  set_name("destination");
+}
+
+/**
+ * @brief Returns whether existing teletransporters should be updated when
+ * the name of this destination changes.
+ * @return @c true if teletransporters should be updated.
+ */
+bool Destination::get_update_teletransporters() const {
+  return update_teletransporters;
+}
+
+/**
+ * @brief Sets whether existing teletransporters should be updated when
+ * the name of this destination changes.
+ * @param update_teletransporters @c true if teletransporters should be updated.
+ */
+void Destination::set_update_teletransporters(bool update_teletransporters) {
+  this->update_teletransporters = update_teletransporters;
+}
+
 }

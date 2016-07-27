@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,16 @@
 #include <solarus/lowlevel/Rectangle.h>
 #include <QRect>
 
+namespace SolarusEditor {
+
 namespace Rectangle {
 
 QRect to_qrect(const Solarus::Rectangle& solarus_rect);
 Solarus::Rectangle to_solarus_rect(const QRect& qt_rect);
 
 QRect from_two_points(const QPoint& p1, const QPoint& p2);
+
+}
 
 }
 

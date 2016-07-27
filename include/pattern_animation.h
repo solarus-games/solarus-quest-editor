@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #ifndef SOLARUSEDITOR_PATTERN_ANIMATION_H
 #define SOLARUSEDITOR_PATTERN_ANIMATION_H
 
+namespace SolarusEditor {
+
 /**
  * \brief The possible kinds of animations for a pattern in a tileset.
  */
@@ -31,5 +33,7 @@ enum class PatternAnimation {
   SEQUENCE_0121_PARALLAX
 
 };
+
+}
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "grid_style.h"
 #include <QApplication>
+
+namespace SolarusEditor {
 
 /**
  * @brief Returns all values.
@@ -63,4 +65,6 @@ QString GridStyleTraits::get_friendly_name(GridStyle value) {
 QIcon GridStyleTraits::get_icon(GridStyle /*value*/) {
 
   return QIcon();
+}
+
 }

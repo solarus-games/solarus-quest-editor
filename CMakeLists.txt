@@ -22,8 +22,20 @@ else()
   set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 endif()
 
+# Compile in release mode by default.
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+      FORCE)
+endif()
+
 # In debug, set strict warnings for developers.
 set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEBUG}")
+
+# Add defines for the install path and the build path to help guess the assets
+# location at runtime.
+add_definitions(-DSOLARUSEDITOR_INSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
+add_definitions(-DSOLARUSEDITOR_SOURCE_PATH="${CMAKE_SOURCE_DIR}")
 
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
@@ -32,6 +44,7 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 find_package(Solarus REQUIRED)
+find_package(SolarusGui REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -54,11 +67,13 @@ endif()
 
 # Include directories.
 include_directories(
+  "${CMAKE_BINARY_DIR}"
   "${CMAKE_SOURCE_DIR}/include"
 )
 
 include_directories(SYSTEM
   "${SOLARUS_INCLUDE_DIR}"
+  "${SOLARUS_GUI_INCLUDE_DIR}"
   "${MODPLUG_INCLUDE_DIR}"  # Before SDL2 because we want the sndfile.h of ModPlug.
   "${SDL2_INCLUDE_DIR}"
   "${SDL2_TTF_INCLUDE_DIR}"
@@ -96,62 +111,66 @@ set(solarus_quest_editor_SOURCES
   include/entities/teletransporter.h
   include/entities/tile.h
   include/entities/wall.h
-  include/gui/change_pattern_id_dialog.h
-  include/gui/change_source_image_dialog.h
-  include/gui/closable_tab_bar.h
-  include/gui/edit_entity_dialog.h
-  include/gui/editor.h
-  include/gui/editor_tabs.h
-  include/gui/entity_item.h
-  include/gui/entity_selector.h
-  include/gui/enum_menus.h
-  include/gui/enum_menus.inl
-  include/gui/enum_selector.h
-  include/gui/enum_selector.inl
-  include/gui/external_script_dialog.h
-  include/gui/find_text_dialog.h
-  include/gui/get_animation_name_dialog.h
-  include/gui/gui_tools.h
-  include/gui/layer_selector.h
-  include/gui/lua_syntax_highlighter.h
-  include/gui/map_editor.h
-  include/gui/map_view.h
-  include/gui/map_scene.h
-  include/gui/main_window.h
-  include/gui/mouse_coordinates_tracking_tool.h
-  include/gui/new_resource_element_dialog.h
-  include/gui/pan_tool.h
-  include/gui/quest_properties_editor.h
-  include/gui/quest_tree_view.h
-  include/gui/resource_model.h
-  include/gui/resource_selector.h
-  include/gui/sprite_editor.h
-  include/gui/sprite_tree_view.h
-  include/gui/sprite_scene.h
-  include/gui/sprite_view.h
-  include/gui/sprite_previewer.h
-  include/gui/text_editor.h
-  include/gui/text_editor_widget.h
-  include/gui/tile_patterns_list_view.h
-  include/gui/tileset_editor.h
-  include/gui/tileset_scene.h
-  include/gui/tileset_view.h
-  include/gui/zoom_tool.h
-  include/gui/strings_editor.h
-  include/gui/strings_tree_view.h
-  include/gui/new_string_dialog.h
-  include/gui/change_string_key_dialog.h
-  include/gui/dialogs_editor.h
-  include/gui/dialogs_tree_view.h
-  include/gui/dialog_properties_table.h
-  include/gui/plain_text_edit.h
-  include/gui/change_dialog_id_dialog.h
-  include/gui/settings_dialog.h
-  include/gui/color_picker.h
-  include/gui/pair_spin_box.h
+  include/widgets/change_dialog_id_dialog.h
+  include/widgets/change_pattern_id_dialog.h
+  include/widgets/change_resource_id_dialog.h
+  include/widgets/change_source_image_dialog.h
+  include/widgets/change_string_key_dialog.h
+  include/widgets/closable_tab_bar.h
+  include/widgets/color_picker.h
+  include/widgets/dialog_properties_table.h
+  include/widgets/dialogs_editor.h
+  include/widgets/dialogs_tree_view.h
+  include/widgets/edit_entity_dialog.h
+  include/widgets/editor.h
+  include/widgets/editor_tabs.h
+  include/widgets/entity_item.h
+  include/widgets/entity_selector.h
+  include/widgets/enum_menus.h
+  include/widgets/enum_menus.inl
+  include/widgets/enum_selector.h
+  include/widgets/enum_selector.inl
+  include/widgets/external_script_dialog.h
+  include/widgets/find_text_dialog.h
+  include/widgets/get_animation_name_dialog.h
+  include/widgets/gui_tools.h
+  include/widgets/lua_syntax_highlighter.h
+  include/widgets/map_editor.h
+  include/widgets/map_view.h
+  include/widgets/map_scene.h
+  include/widgets/main_window.h
+  include/widgets/mouse_coordinates_tracking_tool.h
+  include/widgets/music_chooser.h
+  include/widgets/new_resource_element_dialog.h
+  include/widgets/new_string_dialog.h
+  include/widgets/pair_spin_box.h
+  include/widgets/pan_tool.h
+  include/widgets/plain_text_edit.h
+  include/widgets/quest_properties_editor.h
+  include/widgets/quest_tree_view.h
+  include/widgets/resource_model.h
+  include/widgets/resource_selector.h
+  include/widgets/settings_dialog.h
+  include/widgets/sound_chooser.h
+  include/widgets/sprite_editor.h
+  include/widgets/sprite_tree_view.h
+  include/widgets/sprite_scene.h
+  include/widgets/sprite_view.h
+  include/widgets/sprite_previewer.h
+  include/widgets/strings_editor.h
+  include/widgets/strings_tree_view.h
+  include/widgets/text_editor.h
+  include/widgets/text_editor_widget.h
+  include/widgets/tile_patterns_list_view.h
+  include/widgets/tileset_editor.h
+  include/widgets/tileset_scene.h
+  include/widgets/tileset_view.h
+  include/widgets/zoom_tool.h
+  include/audio.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
+  include/editor_settings.h
   include/enum_traits.h
   include/file_tools.h
   include/grid_style.h
@@ -172,12 +191,12 @@ set(solarus_quest_editor_SOURCES
   include/quest_files_model.h
   include/quest_properties.h
   include/quest_resources.h
-  include/quest_runner.h
   include/rectangle.h
+  include/refactoring.h
   include/resize_mode.h
-  include/settings.h
   include/size.h
   include/sprite_model.h
+  include/starting_location_mode_traits.h
   include/strings_model.h
   include/tileset_model.h
   include/transition_traits.h
@@ -207,57 +226,61 @@ set(solarus_quest_editor_SOURCES
   src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
-  src/gui/change_pattern_id_dialog.cpp
-  src/gui/change_source_image_dialog.cpp
-  src/gui/closable_tab_bar.cpp
-  src/gui/edit_entity_dialog.cpp
-  src/gui/editor.cpp
-  src/gui/editor_tabs.cpp
-  src/gui/entity_item.cpp
-  src/gui/entity_selector.cpp
-  src/gui/external_script_dialog.cpp
-  src/gui/find_text_dialog.cpp
-  src/gui/get_animation_name_dialog.cpp
-  src/gui/gui_tools.cpp
-  src/gui/layer_selector.cpp
-  src/gui/lua_syntax_highlighter.cpp
-  src/gui/main_window.cpp
-  src/gui/map_editor.cpp
-  src/gui/map_view.cpp
-  src/gui/map_scene.cpp
-  src/gui/mouse_coordinates_tracking_tool.cpp
-  src/gui/new_resource_element_dialog.cpp
-  src/gui/pan_tool.cpp
-  src/gui/quest_properties_editor.cpp
-  src/gui/quest_tree_view.cpp
-  src/gui/resource_model.cpp
-  src/gui/resource_selector.cpp
-  src/gui/sprite_editor.cpp
-  src/gui/sprite_tree_view.cpp
-  src/gui/sprite_scene.cpp
-  src/gui/sprite_view.cpp
-  src/gui/sprite_previewer.cpp
-  src/gui/text_editor.cpp
-  src/gui/text_editor_widget.cpp
-  src/gui/tile_patterns_list_view.cpp
-  src/gui/tileset_editor.cpp
-  src/gui/tileset_scene.cpp
-  src/gui/tileset_view.cpp
-  src/gui/zoom_tool.cpp
-  src/gui/strings_editor.cpp
-  src/gui/strings_tree_view.cpp
-  src/gui/new_string_dialog.cpp
-  src/gui/change_string_key_dialog.cpp
-  src/gui/dialogs_editor.cpp
-  src/gui/dialogs_tree_view.cpp
-  src/gui/dialog_properties_table.cpp
-  src/gui/change_dialog_id_dialog.cpp
-  src/gui/settings_dialog.cpp
-  src/gui/color_picker.cpp
-  src/gui/pair_spin_box.cpp
+  src/widgets/change_dialog_id_dialog.cpp
+  src/widgets/change_pattern_id_dialog.cpp
+  src/widgets/change_resource_id_dialog.cpp
+  src/widgets/change_source_image_dialog.cpp
+  src/widgets/change_string_key_dialog.cpp
+  src/widgets/closable_tab_bar.cpp
+  src/widgets/color_picker.cpp
+  src/widgets/dialog_properties_table.cpp
+  src/widgets/dialogs_editor.cpp
+  src/widgets/dialogs_tree_view.cpp
+  src/widgets/edit_entity_dialog.cpp
+  src/widgets/editor.cpp
+  src/widgets/editor_tabs.cpp
+  src/widgets/entity_item.cpp
+  src/widgets/entity_selector.cpp
+  src/widgets/external_script_dialog.cpp
+  src/widgets/find_text_dialog.cpp
+  src/widgets/get_animation_name_dialog.cpp
+  src/widgets/gui_tools.cpp
+  src/widgets/lua_syntax_highlighter.cpp
+  src/widgets/main_window.cpp
+  src/widgets/map_editor.cpp
+  src/widgets/map_view.cpp
+  src/widgets/map_scene.cpp
+  src/widgets/mouse_coordinates_tracking_tool.cpp
+  src/widgets/music_chooser.cpp
+  src/widgets/new_resource_element_dialog.cpp
+  src/widgets/new_string_dialog.cpp
+  src/widgets/pair_spin_box.cpp
+  src/widgets/pan_tool.cpp
+  src/widgets/quest_properties_editor.cpp
+  src/widgets/quest_tree_view.cpp
+  src/widgets/resource_model.cpp
+  src/widgets/resource_selector.cpp
+  src/widgets/settings_dialog.cpp
+  src/widgets/sound_chooser.cpp
+  src/widgets/sprite_editor.cpp
+  src/widgets/sprite_tree_view.cpp
+  src/widgets/sprite_scene.cpp
+  src/widgets/sprite_view.cpp
+  src/widgets/sprite_previewer.cpp
+  src/widgets/strings_editor.cpp
+  src/widgets/strings_tree_view.cpp
+  src/widgets/text_editor.cpp
+  src/widgets/text_editor_widget.cpp
+  src/widgets/tile_patterns_list_view.cpp
+  src/widgets/tileset_editor.cpp
+  src/widgets/tileset_scene.cpp
+  src/widgets/tileset_view.cpp
+  src/widgets/zoom_tool.cpp
+  src/audio.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
+  src/editor_settings.cpp
   src/file_tools.cpp
   src/grid_style.cpp
   src/ground_traits.cpp
@@ -275,11 +298,11 @@ set(solarus_quest_editor_SOURCES
   src/quest_files_model.cpp
   src/quest_properties.cpp
   src/quest_resources.cpp
-  src/quest_runner.cpp
   src/rectangle.cpp
-  src/settings.cpp
+  src/refactoring.cpp
   src/size.cpp
   src/sprite_model.cpp
+  src/starting_location_mode_traits.cpp
   src/strings_model.cpp
   src/tileset_model.cpp
   src/transition_traits.cpp
@@ -296,24 +319,25 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
-  src/gui/change_pattern_id_dialog.ui
-  src/gui/edit_entity_dialog.ui
-  src/gui/external_script_dialog.ui
-  src/gui/find_text_dialog.ui
-  src/gui/main_window.ui
-  src/gui/map_editor.ui
-  src/gui/new_resource_element_dialog.ui
-  src/gui/tileset_editor.ui
-  src/gui/sprite_editor.ui
-  src/gui/sprite_previewer.ui
-  src/gui/change_source_image_dialog.ui
-  src/gui/quest_properties_editor.ui
-  src/gui/strings_editor.ui
-  src/gui/new_string_dialog.ui
-  src/gui/change_string_key_dialog.ui
-  src/gui/dialogs_editor.ui
-  src/gui/change_dialog_id_dialog.ui
-  src/gui/settings_dialog.ui
+  src/widgets/change_dialog_id_dialog.ui
+  src/widgets/change_pattern_id_dialog.ui
+  src/widgets/change_resource_id_dialog.ui
+  src/widgets/change_source_image_dialog.ui
+  src/widgets/change_string_key_dialog.ui
+  src/widgets/dialogs_editor.ui
+  src/widgets/edit_entity_dialog.ui
+  src/widgets/external_script_dialog.ui
+  src/widgets/find_text_dialog.ui
+  src/widgets/main_window.ui
+  src/widgets/map_editor.ui
+  src/widgets/new_resource_element_dialog.ui
+  src/widgets/new_string_dialog.ui
+  src/widgets/quest_properties_editor.ui
+  src/widgets/settings_dialog.ui
+  src/widgets/sprite_editor.ui
+  src/widgets/sprite_previewer.ui
+  src/widgets/strings_editor.ui
+  src/widgets/tileset_editor.ui
 )
 
 # Generate .h from .ui.
@@ -324,7 +348,7 @@ qt5_wrap_ui(solarus_quest_editor_FORMS_HEADERS
 # Resources.
 set(solarus_quest_editor_RESOURCES
   resources/images.qrc
-  resources/initial_quest.qrc
+  resources/initial_files.qrc
   resources/quest_converter.qrc
 )
 
@@ -352,6 +376,7 @@ add_executable(solarus-quest-editor
 target_link_libraries(solarus-quest-editor
   Qt5::Widgets
   "${SOLARUS_LIBRARIES}"
+  "${SOLARUS_GUI_LIBRARIES}"
   "${SDL2_LIBRARY}"
   "${SDL2_IMAGE_LIBRARY}"
   "${SDL2_TTF_LIBRARY}"
@@ -367,6 +392,9 @@ target_link_libraries(solarus-quest-editor
 # Set files to install
 install(TARGETS solarus-quest-editor
   RUNTIME DESTINATION bin
+)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets/"
+  DESTINATION "share/solarus-quest-editor/assets"
 )
 
 # Platform specific.

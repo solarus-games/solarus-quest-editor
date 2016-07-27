@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,11 @@
 #include <QSortFilterProxyModel>
 #include <array>
 
-class Quest;
 class QFileSystemModel;
+
+namespace SolarusEditor {
+
+class Quest;
 
 /**
  * @brief A hierarchical model of files, resources and scripts of a quest.
@@ -151,5 +154,7 @@ private:
                                         * (redundant info for performance). */
 
 };
+
+}
 
 #endif

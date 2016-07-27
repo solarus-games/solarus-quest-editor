@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 #include "quest_resources.h"
 #include <QFile>
 #include <QTextStream>
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates an empty resource list for the specified quest.
@@ -318,4 +320,6 @@ QString QuestResources::get_directory_friendly_name(ResourceType resource_type) 
  */
 QString QuestResources::get_create_friendly_name(ResourceType resource_type) const {
   return resource_type_create_friendly_names[resource_type];
+}
+
 }

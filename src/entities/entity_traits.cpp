@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #include "entities/entity_traits.h"
 #include <solarus/entities/EntityTypeInfo.h>
 #include <QApplication>
+
+namespace SolarusEditor {
 
 /**
  * @brief Returns all values.
@@ -55,7 +57,7 @@ QString EnumTraits<EntityType>::get_friendly_name(EntityType value) {
   case EntityType::CAMERA:
     return QApplication::tr("Camera");
 
-  case EntityType::CARRIED_ITEM:
+  case EntityType::CARRIED_OBJECT:
     return QApplication::tr("Carried object");
 
   case EntityType::CHEST:
@@ -164,4 +166,99 @@ QString EnumTraits<EntityType>::get_lua_name(EntityType value) {
 bool EnumTraits<EntityType>::can_be_stored_in_map_file(EntityType type) {
 
   return Solarus::EntityTypeInfo::can_be_stored_in_map_file(type);
+}
+
+/**
+ * @brief Returns the keyboard shortcut to show or hide entities to a type.
+ * @param type A type of entity.
+ * @return The keyboard shortcut to use.
+ */
+QString EnumTraits<EntityType>::get_show_hide_shortcut(EntityType type) {
+
+  // Use a switch to ensure we don't forget a value,
+  // and also to translate names dynamically.
+  switch (type) {
+
+  case EntityType::ARROW:
+  case EntityType::BOMB:
+  case EntityType::BOOMERANG:
+  case EntityType::CAMERA:
+  case EntityType::CARRIED_OBJECT:
+  case EntityType::EXPLOSION:
+  case EntityType::HERO:
+  case EntityType::HOOKSHOT:
+  case EntityType::FIRE:
+    return QString();
+
+  case EntityType::BLOCK:
+    return QApplication::tr("Ctrl+E,Ctrl+B");
+
+  case EntityType::CHEST:
+    return QApplication::tr("Ctrl+E,Ctrl+C");
+
+  case EntityType::CRYSTAL:
+    return QApplication::tr("Ctrl+E,Ctrl+L");
+
+  case EntityType::CRYSTAL_BLOCK:
+    return QApplication::tr("Ctrl+E,Ctrl+K");
+
+  case EntityType::CUSTOM:
+    return QApplication::tr("Ctrl+E,Ctrl+Y");
+
+  case EntityType::DESTINATION:
+    return QApplication::tr("Ctrl+E,Ctrl+I");
+
+  case EntityType::DESTRUCTIBLE:
+    return QApplication::tr("Ctrl+E,Ctrl+D");
+
+  case EntityType::DOOR:
+    return QApplication::tr("Ctrl+E,Ctrl+O");
+
+  case EntityType::DYNAMIC_TILE:
+    return QApplication::tr("Ctrl+E,Ctrl+2");
+
+  case EntityType::ENEMY:
+    return QApplication::tr("Ctrl+E,Ctrl+E");
+
+  case EntityType::JUMPER:
+    return QApplication::tr("Ctrl+E,Ctrl+J");
+
+  case EntityType::NPC:
+    return QApplication::tr("Ctrl+E,Ctrl+N");
+
+  case EntityType::PICKABLE:
+    return QApplication::tr("Ctrl+E,Ctrl+P");
+
+  case EntityType::SENSOR:
+    return QApplication::tr("Ctrl+E,Ctrl+S");
+
+  case EntityType::SEPARATOR:
+    return QApplication::tr("Ctrl+E,Ctrl+A");
+
+  case EntityType::SHOP_TREASURE:
+    return QApplication::tr("Ctrl+E,Ctrl+U");
+
+  case EntityType::STAIRS:
+    return QApplication::tr("Ctrl+E,Ctrl+R");
+
+  case EntityType::STREAM:
+    return QApplication::tr("Ctrl+E,Ctrl+M");
+
+  case EntityType::SWITCH:
+    return QApplication::tr("Ctrl+E,Ctrl+H");
+
+  case EntityType::TELETRANSPORTER:
+    return QApplication::tr("Ctrl+E,Ctrl+T");
+
+  case EntityType::TILE:
+    return QApplication::tr("Ctrl+E,Ctrl+1");
+
+  case EntityType::WALL:
+    return QApplication::tr("Ctrl+E,Ctrl+W");
+
+  }
+
+  return "";
+}
+
 }

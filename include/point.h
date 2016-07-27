@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 #include <solarus/lowlevel/Point.h>
 #include <QPoint>
 
+class QSize;
+
+namespace SolarusEditor {
+
 namespace Point {
 
 QPoint to_qpoint(const Solarus::Point& solarus_point);
@@ -31,8 +35,16 @@ QPoint round_8(const QPointF& point);
 QPoint floor_8(const QPoint& point);
 QPoint floor_8(const QPointF& point);
 
-QPoint round_down(const QPoint& point, int step_x, int step_y);
-QPoint round_down(const QPointF& point, int step_x, int step_y);
+QPoint floor(const QPoint& point, const QSize& size);
+QPoint floor(const QPointF& point, const QSize& size);
+
+QPoint ceil(const QPoint& point, const QSize& size);
+QPoint ceil(const QPointF& point, const QSize& size);
+
+QPoint round_down(const QPoint& point, const QSize& size);
+QPoint round_down(const QPointF& point, const QSize& size);
+
+}
 
 }
 

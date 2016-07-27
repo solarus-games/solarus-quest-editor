@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include "sprite_model.h"
 #include <array>
 #include <memory>
+
+namespace SolarusEditor {
 
 struct AddableEntity;
 class Quest;
@@ -54,8 +56,11 @@ public:
   // Map properties.
   QSize get_size() const;
   void set_size(const QSize& size);
-  int get_num_layers() const;
-  AddableEntities set_num_layers(int num_layers);
+  int get_min_layer() const;
+  AddableEntities set_min_layer(int min_layer);
+  int get_max_layer() const;
+  AddableEntities set_max_layer(int max_layer);
+  bool is_valid_layer(int layer) const;
   bool has_world() const;
   QString get_world() const;
   void set_world(const QString& world);
@@ -67,6 +72,7 @@ public:
   TilesetModel* get_tileset_model() const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
+  void reload_tileset();
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
 
@@ -89,7 +95,7 @@ public:
   int get_entity_layer(const EntityIndex& index) const;
   EntityIndex set_entity_layer(const EntityIndex& index_before, int layer_after);
   bool is_common_layer(const EntityIndexes& indexes, int& layer) const;
-  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, int layer_after);
+  EntityIndexes set_entities_layer(const EntityIndexes& indexes_before, const QList<int>& layer_after);
   void undo_set_entities_layer(const EntityIndexes& indexes_after, const EntityIndexes& indexes_before);
   void set_entity_order(const EntityIndex& index_before, int order_after);
   EntityIndex bring_entity_to_front(const EntityIndex& index_before);
@@ -130,11 +136,12 @@ public:
 signals:
 
   void size_changed(const QSize& size);
-  void num_layers_changed(int num_layers);
+  void layer_range_changed(int min_layer, int max_layer);
   void world_changed(const QString& world);
   void floor_changed(int floor);
   void location_changed(const QPoint& location);
   void tileset_id_changed(const QString& tileset_id);
+  void tileset_reloaded();
   void music_id_changed(const QString& music_id);
 
   void entities_about_to_be_added(const EntityIndexes& indexes);
@@ -152,7 +159,6 @@ signals:
 public slots:
 
   void save() const;
-  void tileset_modified();
 
 private:
 
@@ -162,8 +168,8 @@ private:
   const QString map_id;           /**< Id of the map. */
   Solarus::MapData map;           /**< Map data wrapped by this model. */
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
-  std::vector<EntityModels>
-      entities;                   /**< All entities. */
+  std::map<int, EntityModels>
+      entities;                   /**< All entities by layer. */
 
 };
 
@@ -189,5 +195,7 @@ public:
   EntityIndex index;
 
 };
+
+}
 
 #endif

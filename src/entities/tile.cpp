@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/tile.h"
+#include "ground_traits.h"
 #include "map_model.h"
 #include "tileset_model.h"
 #include <QPainter>
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates a normal tile.
@@ -105,6 +108,10 @@ void Tile::update_pattern() {
 
       // Update the preferred initial layer.
       set_preferred_layer(tileset->get_pattern_default_layer(pattern_index));
+
+      // Update the traversable property.
+      Ground ground = tileset->get_pattern_ground(pattern_index);
+      set_traversable(GroundTraits::is_traversable(ground));
     }
   }
 
@@ -177,4 +184,6 @@ void Tile::notify_tileset_changed(const QString& tileset_id) {
 
   EntityModel::notify_tileset_changed(tileset_id);
   update_pattern();
+}
+
 }

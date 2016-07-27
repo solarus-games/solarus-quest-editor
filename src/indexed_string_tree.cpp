@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "indexed_string_tree.h"
 #include "editor_exception.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates an indexed string tree.
@@ -447,4 +449,6 @@ void IndexedStringTree::clear_children(Node* node) {
     it++;
   }
   node->children.clear();
+}
+
 }

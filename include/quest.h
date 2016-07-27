@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
 #include <solarus/ResourceType.h>
 #include <QObject>
 #include <QSet>
+
+class QRegularExpression;
+
+namespace SolarusEditor {
 
 /**
  * @brief A Solarus project that can be open with the editor.
@@ -94,6 +98,7 @@ public:
   void check_not_is_dir(const QString& path) const;
   bool is_script(const QString& path) const;
   void check_is_script(const QString& path) const;
+  bool is_properties_path(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_potential_resource_element(
@@ -108,11 +113,25 @@ public:
 
   // Create, rename and delete paths.
   void create_file(const QString& path);
+  void create_file_from_template(
+      const QString& output_file_path,
+      const QString& template_file_path,
+      const QRegularExpression& pattern,
+      const QString& replacement
+  );
   bool create_file_if_not_exists(const QString& path);
   void create_script(const QString& path);
   bool create_script_if_not_exists(const QString& path);
   void create_map_data_file(const QString& map_id);
   bool create_map_data_file_if_not_exists(const QString& map_id);
+  void create_map_script(const QString& map_id);
+  bool create_map_script_if_not_exists(const QString& map_id);
+  void create_item_script(const QString& item_id);
+  bool create_item_script_if_not_exists(const QString& item_id);
+  void create_enemy_script(const QString& enemy_id);
+  bool create_enemy_script_if_not_exists(const QString& enemy_id);
+  void create_entity_script(const QString& entity_id);
+  bool create_entity_script_if_not_exists(const QString& entity_id);
 
   void create_dir(const QString& path);
   bool create_dir_if_not_exists(const QString& path);
@@ -133,13 +152,8 @@ public:
   void delete_resource_element(ResourceType resource_type,
                                const QString& element_id);
 
-  // Tracking which files are currently open for edition by the user.
-  QSet<QString> get_open_paths() const;
-  bool is_path_open(const QString& path) const;
-  void set_path_open(const QString& path, bool open);
-  bool is_resource_element_open(
-      ResourceType resource_type, const QString& element_id) const;
-  bool is_resource_element_open(ResourceType resource_type) const;
+  QString get_current_music_id() const;
+  void set_current_music_id(const QString& music_id);
 
 signals:
 
@@ -147,6 +161,7 @@ signals:
   void file_created(const QString& path);
   void file_renamed(const QString& old_path, const QString& new_path);
   void file_deleted(const QString& path);
+  void current_music_changed(const QString& music_id);
 
 private:
 
@@ -155,8 +170,10 @@ private:
 
   QuestProperties properties;      /**< Properties given in quest.dat. */
   QuestResources resources;        /**< Resources declared in project_db.dat. */
-  QSet<QString> open_paths;        /**< Files currently edited by the user. */
+  QString current_music_id;        /**< Id of the music currently playing if any. */
 
 };
+
+}
 
 #endif

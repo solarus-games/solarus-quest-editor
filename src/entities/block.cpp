@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #include "entities/block.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -30,4 +32,7 @@ Block::Block(MapModel& map, const EntityIndex& index) :
   set_num_directions(4);
   set_no_direction_allowed(true);
   set_no_direction_text(MapModel::tr("Any"));
+  set_traversable(false);
+}
+
 }

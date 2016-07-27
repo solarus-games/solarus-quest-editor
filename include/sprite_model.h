@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,13 @@
 
 #include <solarus/SpriteData.h>
 #include <QAbstractItemModel>
+#include <QImage>
 #include <QItemSelectionModel>
 #include <QPixmap>
-#include <QImage>
-#include <memory>
 #include <map>
+#include <memory>
+
+namespace SolarusEditor {
 
 class Quest;
 
@@ -129,6 +131,7 @@ public:
   int get_animation_loop_on_frame(const Index& index) const;
   void set_animation_loop_on_frame(const Index& index, int loop_on_frame);
   int get_animation_num_directions(const Index& index) const;
+  int get_animation_max_num_frames(const Index& index) const;
 
   // Direction.
   bool direction_exists(const Index& index) const;
@@ -290,5 +293,7 @@ private:
   QItemSelectionModel
       selection_model;            /**< Animations currently selected. */
 };
+
+}
 
 #endif

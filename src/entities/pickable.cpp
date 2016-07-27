@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/pickable.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -34,7 +36,8 @@ void Pickable::notify_field_changed(const QString& key, const QVariant& value) {
 
   EntityModel::notify_field_changed(key, value);
 
-  if (key == "treasure_name") {
+  if (key == "treasure_name" ||
+      key == "treasure_variant") {
     update_treasure();
   }
 }
@@ -47,10 +50,14 @@ void Pickable::notify_field_changed(const QString& key, const QVariant& value) {
 void Pickable::update_treasure() {
 
   QString treasure_name = get_field("treasure_name").toString();
+  int treasure_variant = get_field("treasure_variant").toInt();
   if (!treasure_name.isEmpty()) {
     DrawSpriteInfo info;
     info.sprite_id = "entities/items";
     info.animation = treasure_name;
+    info.direction = treasure_variant - 1;
     set_draw_sprite_info(info);
   }
+}
+
 }

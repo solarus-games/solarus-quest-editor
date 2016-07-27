@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,9 +24,7 @@
 #include <QIcon>
 #include <QSet>
 
-namespace {
-  constexpr int max_layers = 1000;  /**< Maximum number of layers for the editor. */
-}
+namespace SolarusEditor {
 
 /**
  * @brief Creates a map model.
@@ -43,7 +41,7 @@ MapModel::MapModel(
   quest(quest),
   map_id(map_id),
   tileset_model(nullptr),
-  entities(max_layers) {
+  entities() {
 
   // Load the map data file.
   QString path = quest.get_map_data_file_path(map_id);
@@ -58,9 +56,8 @@ MapModel::MapModel(
     tileset_model = new TilesetModel(quest, tileset_id, this);
   }
 
-  const int num_layers = get_num_layers();
-  Q_ASSERT((size_t) num_layers <= entities.size());
-  for (int layer = 0; layer < num_layers; ++layer) {
+  // Create entities.
+  for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
     for (int i = 0; i < get_num_entities(layer); ++i) {
       EntityIndex index = { layer, i };
       entities[layer].emplace_back(EntityModel::create(*this, index));
@@ -133,38 +130,37 @@ void MapModel::set_size(const QSize& size) {
 }
 
 /**
- * @brief Returns the number of layers of the map.
- * @return The number of layers.
+ * @brief Returns the lowest layer of the map.
+ * @return The lowest layer (0 or less).
  */
-int MapModel::get_num_layers() const {
+int MapModel::get_min_layer() const {
 
-  return map.get_num_layers();
+  return map.get_min_layer();
 }
 
 /**
- * @brief Sets the number of layers of the map.
+ * @brief Sets the lowest layer of the map.
  *
  * Entities that are on removed layers are removed from the map.
  *
- * Emits num_layers_changed() if there is a change.
+ * Emits max_layer_changed() if there is a change.
  *
- * @param num_layers The new number of layers.
+ * @param min_layer The new lowest layer.
  * @return The entities that were on removed layers.
  */
-AddableEntities MapModel::set_num_layers(int num_layers) {
+AddableEntities MapModel::set_min_layer(int min_layer) {
 
-  Q_ASSERT(num_layers > 0);
-  Q_ASSERT(num_layers <= max_layers);
+  Q_ASSERT(min_layer <= 0);
 
-  if (num_layers == get_num_layers()) {
+  if (min_layer == get_min_layer()) {
     return AddableEntities();
   }
 
   // Delete entities on removed layers.
   AddableEntities removed_entities;
-  if (num_layers < get_num_layers()) {
+  if (min_layer > get_min_layer()) {
     EntityIndexes indexes_to_remove;
-    for (int layer = num_layers; layer < get_num_layers(); ++layer) {
+    for (int layer = get_min_layer(); layer < min_layer; ++layer) {
       for (int i = 0; i < get_num_entities(layer); ++i) {
         indexes_to_remove.append({ layer, i });
       }
@@ -172,11 +168,66 @@ AddableEntities MapModel::set_num_layers(int num_layers) {
     removed_entities = remove_entities(indexes_to_remove);
   }
 
-  map.set_num_layers(num_layers);
+  map.set_min_layer(min_layer);
 
-  emit num_layers_changed(num_layers);
+  emit layer_range_changed(min_layer, get_max_layer());
 
   return removed_entities;
+}
+
+/**
+ * @brief Returns the highest layer of the map.
+ * @return The highest layer (0 or more).
+ */
+int MapModel::get_max_layer() const {
+
+  return map.get_max_layer();
+}
+
+/**
+ * @brief Sets the highest layer of the map.
+ *
+ * Entities that are on removed layers are removed from the map.
+ *
+ * Emits max_layer_changed() if there is a change.
+ *
+ * @param max_layer The new highest layer.
+ * @return The entities that were on removed layers.
+ */
+AddableEntities MapModel::set_max_layer(int max_layer) {
+
+  Q_ASSERT(max_layer >= 0);
+
+  if (max_layer == get_max_layer()) {
+    return AddableEntities();
+  }
+
+  // Delete entities on removed layers.
+  AddableEntities removed_entities;
+  if (max_layer < get_max_layer()) {
+    EntityIndexes indexes_to_remove;
+    for (int layer = max_layer + 1; layer <= get_max_layer(); ++layer) {
+      for (int i = 0; i < get_num_entities(layer); ++i) {
+        indexes_to_remove.append({ layer, i });
+      }
+    }
+    removed_entities = remove_entities(indexes_to_remove);
+  }
+
+  map.set_max_layer(max_layer);
+
+  emit layer_range_changed(get_min_layer(), max_layer);
+
+  return removed_entities;
+}
+
+/**
+ * @brief Returns whether a layer exists on this map.
+ * @param layer A layer value to check.
+ * @return @c true if there is a layer with this index.
+ */
+bool MapModel::is_valid_layer(int layer) const {
+  return map.is_valid_layer(layer);
 }
 
 /**
@@ -300,27 +351,38 @@ void MapModel::set_tileset_id(const QString& tileset_id) {
   }
   map.set_tileset_id(std_tileset_id);
 
-  if (!tileset_id.isEmpty()) {
-    tileset_model = new TilesetModel(quest, tileset_id, this);
-  }
-
-  // Notify children.
-  for (EntityModels& layer_entities : entities) {
-    for (EntityModelPtr& entity : layer_entities) {
-      entity->notify_tileset_changed(tileset_id);
-    }
-  }
+  reload_tileset();
 
   emit tileset_id_changed(tileset_id);
 }
 
 /**
- * @brief Slot called when the tileset file is modified.
+ * @brief Notifies this map that its tileset files may have changed.
+ *
+ * The tileset is refreshed.
+ *
+ * Emis tileset_reloaded().
  */
-void MapModel::tileset_modified() {
-  QString tileset_id = get_tileset_id();
-  set_tileset_id("");
-  set_tileset_id(tileset_id);
+void MapModel::reload_tileset() {
+
+  const QString& tileset_id = get_tileset_id();
+
+  if (tileset_id.isEmpty()) {
+    tileset_model = nullptr;
+  }
+  else {
+    tileset_model = new TilesetModel(quest, tileset_id, this);
+  }
+
+  // Notify children.
+  for (auto& kvp : entities) {
+    EntityModels& layer_entities = kvp.second;
+    for (EntityModelPtr& entity : layer_entities) {
+      entity->notify_tileset_changed(tileset_id);
+    }
+  }
+
+  emit tileset_reloaded();
 }
 
 /**
@@ -403,7 +465,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
   }
 
   bool exists_in_solarus = map.entity_exists(index);
-  bool exists_in_model = (index.order >= 0 && index.order < (int) entities[index.layer].size());
+  bool exists_in_model = (index.order >= 0 && index.order < (int) entities.at(index.layer).size());
   Q_UNUSED(exists_in_solarus);
   Q_ASSERT(exists_in_model == exists_in_solarus);
 
@@ -416,7 +478,7 @@ bool MapModel::entity_exists(const EntityIndex& index) const {
  * @return The corresponding entity model.
  */
 const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
-  return *entities[index.layer].at(index.order);
+  return *entities.at(index.layer).at(index.order);
 }
 
 /**
@@ -425,7 +487,7 @@ const EntityModel& MapModel::get_entity(const EntityIndex& index) const {
  * Non-const version.
  */
 EntityModel& MapModel::get_entity(const EntityIndex& index) {
-  return *entities[index.layer].at(index.order);
+  return *entities.at(index.layer).at(index.order);
 }
 
 /**
@@ -495,7 +557,7 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
   }
 
   type = get_entity_type(indexes.first());
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     if (get_entity_type(index) != type) {
       return false;
     }
@@ -511,7 +573,8 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
 EntityIndexes MapModel::find_entities_of_type(EntityType type) const {
 
   EntityIndexes result;
-  for (const EntityModels& layer_entities : entities) {
+  for (const auto& kvp : entities) {
+    const EntityModels& layer_entities = kvp.second;
     for (const EntityModelPtr& entity : layer_entities) {
       if (entity->get_type() == type) {
         result << entity->get_index();
@@ -528,7 +591,7 @@ EntityIndexes MapModel::find_entities_of_type(EntityType type) const {
 EntityIndex MapModel::find_default_destination_index() const {
 
   EntityIndexes destination_indexes = find_entities_of_type(EntityType::DESTINATION);
-  for (const EntityIndex& index : destination_indexes) {
+  Q_FOREACH (const EntityIndex& index, destination_indexes) {
     if (get_entity_field(index, "default").toBool()) {
       return index;
     }
@@ -556,7 +619,7 @@ QString MapModel::get_entity_name(const EntityIndex& index) const {
 /**
  * @brief Sets the name of an entity.
  *
- * Emits entity_name_changed() if there is a change.
+ * Emits entity_name_changed().
  *
  * @param index Index of a map entity.
  * @param name The new name or an empty string to set no name.
@@ -697,7 +760,7 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, int& layer) const {
   }
 
   layer = indexes.first().layer;
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     if (index.layer != layer) {
       return false;
     }
@@ -711,31 +774,36 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, int& layer) const {
  * Emits entity_layer_changed() for each change.
  *
  * @param indexes_before Sorted indexes of the entities to change.
- * @param layer The new layer. Each entity will be placed on top of other entities
- * of that layer.
+ * @param layers_after The new layer for each entity.
+ * Each entity will be placed on top of other entities of that layer.
  * @return The new indexes of the entities.
  */
-EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, int layer_after) {
+EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, const QList<int>& layers_after) {
 
   // TODO possible improvement: entities whose layer do not change should also
   // be moved to keep the relative order of the whole group.
 
+  Q_ASSERT(layers_after.size() == indexes_before.size());
+
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
-  for (const EntityIndex& index_before : indexes_before) {
+  Q_FOREACH (const EntityIndex& index_before, indexes_before) {
     entities.append(&get_entity(index_before));
   }
 
-  for (const EntityModel* entity : entities) {
+  int i = 0;
+  Q_FOREACH (const EntityModel* entity, entities) {
     Q_ASSERT(entity != nullptr);
+    const int layer_after = layers_after[i];
     if (entity->get_layer() != layer_after) {
       set_entity_layer(entity->get_index(), layer_after);
     }
+    ++i;
   }
 
   // Now all indexes have finished their changes.
   EntityIndexes indexes_after;
-  for (const EntityModel* entity : entities) {
+  Q_FOREACH (const EntityModel* entity, entities) {
     indexes_after.append(entity->get_index());
   }
 
@@ -757,7 +825,7 @@ void MapModel::undo_set_entities_layer(const EntityIndexes& indexes_after, const
 
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
-  for (const EntityIndex& index_after : indexes_after) {
+  Q_FOREACH (const EntityIndex& index_after, indexes_after) {
     entities.append(&get_entity(index_after));
   }
 
@@ -1193,7 +1261,7 @@ bool MapModel::is_common_direction_rules(
   bool no_direction_allowed = is_entity_no_direction_allowed(first);
   no_direction_text = get_entity_no_direction_text(first);
 
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     if (get_entity_num_directions(index) != num_directions ||
         is_entity_no_direction_allowed(index) != no_direction_allowed ||
         get_entity_no_direction_text(index) != no_direction_text) {
@@ -1275,7 +1343,7 @@ bool MapModel::is_common_direction(const EntityIndexes& indexes, int& direction)
   const EntityIndex& first = indexes.first();
   direction = get_entity_direction(first);
 
-  for (const EntityIndex& index : indexes) {
+  Q_FOREACH (const EntityIndex& index, indexes) {
     if (get_entity_direction(index) != direction) {
       return false;
     }
@@ -1385,7 +1453,7 @@ void MapModel::add_entities(AddableEntities&& entities) {
     Q_ASSERT(index.is_valid());
 
     // Check the name uniqueness.
-    entity->ensure_name_unique();
+    entity->ensure_valid_on_map();
     const std::string& std_name = entity->get_entity().get_name();
     Q_UNUSED(std_name);
     Q_ASSERT(entity->get_name().toStdString() == std_name);
@@ -1472,7 +1540,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
   }
 
   // Each entity stores its own index, so they might get shifted.
-  for (int layer : layers_with_dirty_indexes) {
+  Q_FOREACH (int layer, layers_with_dirty_indexes) {
     rebuild_entity_indexes(layer);
   }
 
@@ -1505,4 +1573,6 @@ void MapModel::rebuild_entity_indexes(int layer) {
     entity->index_changed(index);
     ++i;
   }
+}
+
 }

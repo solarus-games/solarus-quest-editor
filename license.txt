@@ -67,6 +67,8 @@ resources/images/icon_property.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 
+resources/images/icon_dialog_missing.png
+resources/images/icon_dialogs_missing.png
 resources/images/icon_file_unkown.png
 resources/images/icon_folder_open_enemy.png
 resources/images/icon_folder_open_entity.png
@@ -74,35 +76,42 @@ resources/images/icon_folder_open_font.png
 resources/images/icon_folder_open_item.png
 resources/images/icon_folder_open_language.png
 resources/images/icon_folder_open_map.png
+resources/images/icon_folder_open_missing.png
 resources/images/icon_folder_open_sound.png
 resources/images/icon_folder_open_sprite.png
 resources/images/icon_folder_open_tileset.png
 resources/images/icon_layer_0.png
 resources/images/icon_layer_1.png
 resources/images/icon_layer_2.png
-resources/images/icon_resource_language.png
 resources/images/icon_missing.png
+resources/images/icon_pause_music.png
+resources/images/icon_play_music.png
+resources/images/icon_property_missing.png
 resources/images/icon_resource_enemy_missing.png
 resources/images/icon_resource_entity_missing.png
 resources/images/icon_resource_font_missing.png
 resources/images/icon_resource_item_missing.png
+resources/images/icon_resource_language.png
 resources/images/icon_resource_language_missing.png
 resources/images/icon_resource_map_missing.png
 resources/images/icon_resource_music_missing.png
 resources/images/icon_resource_sound_missing.png
 resources/images/icon_resource_sprite_missing.png
 resources/images/icon_resource_tileset_missing.png
+resources/images/icon_stop_music.png
 resources/images/icon_string_missing.png
 resources/images/icon_strings_missing.png
-resources/images/icon_dialog_missing.png
-resources/images/icon_dialogs_missing.png
-resources/images/icon_property_missing.png
-resources/images/icon_folder_open_missing.png
-
-- By Andrew Tyler:
-http://www.andrewtyler.net
-
-resources/initial_quest/data/text/minecraftia.ttf
 
 - Other images were made by the Solarus team.
+
+Initial quest
+-------------
+
+Solarus Quest Editor provides assets (images, sounds and scripts) when
+creating a new quest (File > New quest).
+These assets all come from the Solarus sample quest.
+See the sample_quest/license.txt file of the Solarus engine to know their
+license.
+
+assets/initial_quest
 

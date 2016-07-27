@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gui/gui_tools.h"
+#include "widgets/gui_tools.h"
 #include "editor_exception.h"
 #include <iostream>
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates a quest editor exception.
@@ -61,4 +63,6 @@ void EditorException::print_message() const {
 void EditorException::show_dialog() const {
 
   GuiTools::error_dialog(message);
+}
+
 }

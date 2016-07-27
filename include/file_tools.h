@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,10 @@
 #ifndef SOLARUSEDITOR_FILE_TOOLS_H
 #define SOLARUSEDITOR_FILE_TOOLS_H
 
+class QRegularExpression;
 class QString;
+
+namespace SolarusEditor {
 
 /**
  * \brief Utility functions on files and directories.
@@ -29,6 +32,17 @@ namespace FileTools {
 
 void copy_recursive(const QString& src, const QString& dst);
 void delete_recursive(const QString& path);
+
+bool replace_in_file(
+    const QString& path,
+    const QRegularExpression& regex,
+    const QString& replacement
+);
+
+void initialize_assets();
+QString get_assets_path();
+
+}
 
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/sensor.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -35,4 +37,6 @@ Sensor::Sensor(MapModel& map, const EntityIndex& index) :
   info.between_border_color = QColor(184, 200, 96);
   info.pixmap = QPixmap(":/images/entity_sensor_resizable.png");
   set_draw_shape_info(info);
+}
+
 }

@@ -140,5 +140,8 @@
         <file>images/icon_folder_open_missing.png</file>
         <file>images/icon_select.png</file>
         <file>images/icon_layer_more.png</file>
+        <file>images/icon_stop_music.png</file>
+        <file>images/icon_start_music.png</file>
+        <file>images/icon_pause_music.png</file>
     </qresource>
 </RCC>

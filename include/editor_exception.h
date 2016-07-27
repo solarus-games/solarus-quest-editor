@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 
 #include <QString>
 #include <exception>
+
+namespace SolarusEditor {
 
 /**
  * @brief Exception thrown if something wrong happens in the quest editor.
@@ -42,5 +44,7 @@ private:
   mutable QByteArray message_utf8;     /**< The error message in UTF-8. */
 
 };
+
+}
 
 #endif

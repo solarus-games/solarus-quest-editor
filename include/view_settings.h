@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include "grid_style.h"
 #include <QObject>
 #include <set>
+
+namespace SolarusEditor {
 
 /**
  * @brief Stores the view settings of an editor.
@@ -50,12 +52,17 @@ public:
   QColor get_grid_color() const;
   void set_grid_color(const QColor& color);
 
-  int get_num_layers() const;
-  void set_num_layers(int num_layers);
+  void get_layer_range(int& min_layer, int& max_layer) const;
+  void set_layer_range(int min_layer, int max_layer);
   void set_layer_visible(int layer, bool visible);
   bool is_layer_visible(int layer) const;
   void show_all_layers();
   void hide_all_layers();
+
+  bool are_traversables_visible() const;
+  void set_traversables_visible(bool traversables_visible);
+  bool are_obstacles_visible() const;
+  void set_obstacles_visible(bool obstacles_visible);
 
   bool is_entity_type_visible(EntityType entity_type) const;
   void set_entity_type_visible(EntityType entity_type, bool visible);
@@ -69,23 +76,31 @@ signals:
   void grid_size_changed(const QSize& size);
   void grid_style_changed(GridStyle style);
   void grid_color_changed(const QColor& color);
-  void num_layers_changed(int num_layers);
+  void layer_range_changed(int min_layer, int max_layer);
   void layer_visibility_changed(int layer, bool visible);
+  void traversables_visibility_changed(bool traversables_visible);
+  void obstacles_visibility_changed(bool obstacles_visible);
   void entity_type_visibility_changed(EntityType entity_type, bool visible);
 
 private:
 
   double zoom;                              /**< If supported, the current zoom factor. */
-  bool grid_visible;                        /**< If supported, whether the grid is currently shown.*/
+  bool grid_visible;                        /**< If supported, whether the grid is currently shown. */
   QSize grid_size;                          /**< If supported, the current grid size. */
   GridStyle grid_style;                     /**< If supported, the current grid style. */
   QColor grid_color;                        /**< If supported, the current grid color. */
-  int num_layers;                           /**< Number of layers in the editor
+  int min_layer;                            /**< Lowest layer in the editor
                                              * (0 if showing/hiding layers is not supported). */
+  int max_layer;                            /**< Highest layer in the editor
+                                             * (-1 if showing/hiding layers is not supported). */
   std::set<int> visible_layers;             /**< Layers currently shown, if supported. */
+  bool traversables_visible;                /**< If supported, whether traversables are currently shown. */
+  bool obstacles_visible;                   /**< If supported, whether obstacles are currently shown. */
   std::set<EntityType>
       visible_entity_types;                 /**< Types of entities currently shown, if supported. */
 
 };
+
+}
 
 #endif

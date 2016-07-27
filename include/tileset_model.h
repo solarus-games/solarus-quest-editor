@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,8 @@
 #include <QList>
 #include <QPixmap>
 #include <map>
+
+namespace SolarusEditor {
 
 class Quest;
 
@@ -70,6 +72,7 @@ public:
   QString index_to_id(int index) const;
   int create_pattern(const QString& pattern_id, const QRect& frame);
   void delete_pattern(int index);
+  void delete_patterns(const QList<int>& indexes);
   int set_pattern_id(int index, const QString& new_id);
   static bool is_valid_pattern_id(const QString& pattern_id);
 
@@ -187,5 +190,7 @@ private:
       selection_model;            /**< Patterns currently selected. */
 
 };
+
+}
 
 #endif

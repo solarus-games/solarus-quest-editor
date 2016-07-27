@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "entities/crystal.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -29,4 +31,7 @@ Crystal::Crystal(MapModel& map, const EntityIndex& index) :
   DrawSpriteInfo info;
   info.sprite_id = "entities/crystal";
   set_draw_sprite_info(info);
+  set_traversable(false);
+}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,14 @@
 #include <solarus/lowlevel/Size.h>
 #include <QSize>
 
+namespace SolarusEditor {
+
 namespace Size {
 
 QSize to_qsize(const Solarus::Size& solarus_size);
 Solarus::Size to_solarus_size(const QSize& qt_size);
+
+}
 
 }
 

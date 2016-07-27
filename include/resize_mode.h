@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #ifndef SOLARUSEDITOR_RESIZE_MODE_H
 #define SOLARUSEDITOR_RESIZE_MODE_H
 
+namespace SolarusEditor {
+
 /**
  * @brief How an entity can be resized.
  */
@@ -32,5 +34,7 @@ enum class ResizeMode {
   MULTI_DIMENSION_ALL        /**< Can be resized horizontally, vertically
                               * or both even at the same time. */
 };
+
+}
 
 #endif

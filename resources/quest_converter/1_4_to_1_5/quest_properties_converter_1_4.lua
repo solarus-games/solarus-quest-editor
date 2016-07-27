@@ -1,7 +1,10 @@
 -- This module reads a quest properties file with the format of Solarus 1.4
 -- (quest.dat) and converts it into the format of Solarus 1.5.
 
--- The only difference is that the value of solarus_version changes.
+-- Differences:
+-- - The value of solarus_version changes.
+-- - title_bar no longer exists, there is now a mandatory title property.
+-- - There are new descriptive properties, all optional.
 
 local converter = {}
 
@@ -26,11 +29,31 @@ function converter.convert(quest_path)
 
   output_file:write("quest{\n")
   output_file:write("  solarus_version = \"1.5\",\n")
+
+  -- Initialize the quest title from the obsolete title_bar value.
+  local title = properties.title_bar or properties.title or "Untitled quest"
+
   if properties.write_dir ~= nil then
     output_file:write("  write_dir = \"" .. properties.write_dir .. "\",\n")
   end
-  if properties.title_bar ~= nil then
-    output_file:write("  title_bar = \"" .. properties.title_bar .. "\",\n")
+  output_file:write("  title = \"" .. title .. "\",\n")
+  if properties.short_description ~= nil then
+    output_file:write("  short_description = \"" .. properties.short_description .. "\",\n")
+  end
+  if properties.long_description ~= nil then
+    output_file:write("  long_description = [[\n" .. properties.long_description .. "]],\n")
+  end
+  if properties.author ~= nil then
+    output_file:write("  author = \"" .. properties.author .. "\",\n")
+  end
+  if properties.quest_version ~= nil then
+    output_file:write("  quest_version = \"" .. properties.quest_version .. "\",\n")
+  end
+  if properties.release_date ~= nil then
+    output_file:write("  release_date = \"" .. properties.release_date .. "\",\n")
+  end
+  if properties.website ~= nil then
+    output_file:write("  website = \"" .. properties.website .. "\",\n")
   end
   if properties.normal_quest_size ~= nil then
     output_file:write("  normal_quest_size = \"" .. properties.normal_quest_size .. "\",\n")

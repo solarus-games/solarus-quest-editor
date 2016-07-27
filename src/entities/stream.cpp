@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/stream.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -37,4 +39,6 @@ Stream::Stream(MapModel& map, const EntityIndex& index) :
     info.images_by_direction.append(sub_image);
   }
   set_draw_image_info(info);
+}
+
 }

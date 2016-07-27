@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@
 #include "entities/teletransporter.h"
 #include "entities/tile.h"
 #include "entities/wall.h"
-#include "gui/gui_tools.h"
+#include "widgets/gui_tools.h"
+#include "editor_exception.h"
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
@@ -45,6 +46,8 @@
 #include "sprite_model.h"
 #include <QDebug>
 #include <QPainter>
+
+namespace SolarusEditor {
 
 using EntityData = Solarus::EntityData;
 
@@ -73,6 +76,7 @@ EntityModel::EntityModel(
   num_directions(1),
   no_direction_allowed(false),
   no_direction_text(MapModel::tr("No direction")),
+  traversable(true),
   draw_sprite_info(),
   sprite_model(nullptr),
   sprite_image(),
@@ -270,7 +274,7 @@ EntityModelPtr EntityModel::create(
   case EntityType::BOMB:
   case EntityType::BOOMERANG:
   case EntityType::CAMERA:
-  case EntityType::CARRIED_ITEM:
+  case EntityType::CARRIED_OBJECT:
   case EntityType::EXPLOSION:
   case EntityType::FIRE:
   case EntityType::HERO:
@@ -513,6 +517,19 @@ void EntityModel::set_name(const QString& name) {
 
   this->name = name;
   get_entity().set_name(name.toStdString());
+  notify_name_changed(name);
+}
+
+/**
+ * @brief Ensures that this entity does not conflict with existing entities of
+ * the map.
+ *
+ * Renames it or changes some other properties if necessary.
+ */
+void EntityModel::ensure_valid_on_map() {
+
+  ensure_name_unique();
+  ensure_default_destination_unique();
 }
 
 /**
@@ -555,7 +572,7 @@ void EntityModel::ensure_name_unique() {
     else {
       words.removeLast();
       name = "";
-      for (QString word : words) {
+      Q_FOREACH (const QString& word, words) {
         name = name + word + "_";
       }
     }
@@ -568,6 +585,36 @@ void EntityModel::ensure_name_unique() {
   }
   name = name + counter_string;
   set_name(name);
+}
+
+/**
+ * @brief Ensures that this entity is not a second default destination.
+ *
+ * Does nothing if the entity is not a destination.
+ * If this is a default destination and there is already a default destination
+ * on the map, set the "default" property of this one to false.
+ */
+void EntityModel::ensure_default_destination_unique() {
+
+  if (get_type() != EntityType::DESTINATION) {
+    // Not a destination: nothing to do.
+    return;
+  }
+
+  if (!get_field("default").toBool()) {
+    // Property "default" is not set to true: nothing to do.
+    return;
+  }
+
+  // Check if there is already a default destination.
+  const EntityIndex& index = get_map().find_default_destination_index();
+  if (!index.is_valid()) {
+    // No other default destination: we are okay.
+    return;
+  }
+
+  // Unset property default.
+  set_field("default", false);
 }
 
 /**
@@ -1044,6 +1091,30 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
 }
 
 /**
+ * @brief Returns whether this entity is assumed to be traversable.
+ *
+ * This property is just a hint for the editor, it is not always
+ * accurate because for some entities it can change at runtime.
+ *
+ * @return @c true if the entity is traversable.
+ */
+bool EntityModel::is_traversable() const {
+  return traversable;
+}
+
+/**
+ * @brief Sets whether this entity is assumed to be traversable.
+ *
+ * This property is just a hint for the editor, it is not always
+ * accurate because for some entities it can change at runtime.
+ *
+ * @param traversable @c true if the entity is traversable.
+ */
+void EntityModel::set_traversable(bool traversable) {
+  this->traversable = traversable;
+}
+
+/**
  * @brief Returns the string representing this entity in map files or scripts.
  * @return The string form of this entity.
  * Returns an empty string in case of error.
@@ -1204,6 +1275,21 @@ QSize EntityModel::get_valid_size() const {
 }
 
 /**
+ * @brief This function is called when the name of this entity was just changed.
+ *
+ * This function is also called at initialization time when creating an entity
+ * model from data.
+ * Subclasses can reimplement it to react to the change.
+ *
+ * @param name The new name.
+ */
+void EntityModel::notify_name_changed(const QString& name) {
+
+  // Nothing done by default.
+  Q_UNUSED(name);
+}
+
+/**
  * @brief This function is called when a field of this entity was just set.
  *
  * This function is also called at initialization time when creating an entity
@@ -1340,7 +1426,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
 
   // Try to draw the sprite from the sprite field if any.
   const QString& sprite_field_value = get_field("sprite").toString();
-  if (draw_as_sprite(painter, sprite_field_value, "", 0)) {
+  if (draw_as_sprite(painter, sprite_field_value, "", 0, 0)) {
     return true;
   }
 
@@ -1348,6 +1434,7 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
   return draw_as_sprite(painter,
                         draw_sprite_info.sprite_id,
                         draw_sprite_info.animation,
+                        draw_sprite_info.direction,
                         draw_sprite_info.frame);
 }
 
@@ -1357,6 +1444,8 @@ bool EntityModel::draw_as_sprite(QPainter& painter) const {
  * @param sprite_id Sprite to use.
  * @param animation Animation to use in this sprite.
  * If it does not exists, the default animation will be used.
+ * @param direction Direction to show.
+ * Only used if there is no direction field.
  * @param frame Frame to show. If negative, we count from the end
  * (-1 is the last frame).
  * @return @c true if the sprite was successfully drawn.
@@ -1365,7 +1454,10 @@ bool EntityModel::draw_as_sprite(
     QPainter& painter,
     const QString& sprite_id,
     const QString& animation,
+    int direction,
     int frame) const {
+
+  const Quest& quest = get_quest();
 
   if (sprite_id.isEmpty()) {
     // No sprite sheet.
@@ -1373,61 +1465,70 @@ bool EntityModel::draw_as_sprite(
   }
 
   if (!get_resources().exists(ResourceType::SPRITE, sprite_id)) {
-    // The sprite does not exist in the quest.
+    // The sprite is not declared in the quest.
     return false;
   }
 
-  if (sprite_model == nullptr ||
-      sprite_model->get_sprite_id() != sprite_id) {
-    sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(get_quest(), sprite_id));
-    sprite_model->set_tileset_id(get_tileset_id());
+  if (!quest.exists(quest.get_sprite_path(sprite_id))) {
+    // The sprite file does not exist.
+    return false;
   }
 
-  SpriteModel::Index index(animation, 0);
-  if (!sprite_model->animation_exists(index)) {
-    // Try the default animation.
-    index.animation_name = sprite_model->get_default_animation_name();
+  try {
+    if (sprite_model == nullptr ||
+        sprite_model->get_sprite_id() != sprite_id) {
+      sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(quest, sprite_id));
+      sprite_model->set_tileset_id(get_tileset_id());
+    }
+
+    SpriteModel::Index index(animation, 0);
     if (!sprite_model->animation_exists(index)) {
-      // No animation.
+      // Try the default animation.
+      index.animation_name = sprite_model->get_default_animation_name();
+      if (!sprite_model->animation_exists(index)) {
+        // No animation.
+        return false;
+      }
+    }
+
+    if (has_field("direction")) {
+      direction = get_field("direction").toInt();
+    }
+    index.direction_nb = direction;
+
+    if (!sprite_model->direction_exists(index)) {
+      index.direction_nb = 0;
+    }
+    if (!sprite_model->direction_exists(index)) {
+      // No direction.
       return false;
     }
-  }
 
-  bool has_direction_field;
-  int direction = get_field("direction").toInt(&has_direction_field);
-  if (!has_direction_field) {
-    direction = 0;
-  }
-  index.direction_nb = direction;
+    // Lazily create the image.
+    if (sprite_image.isNull()) {
+      int frame_positive_number = frame;
+      if (frame_positive_number < 0) {
+        frame_positive_number = sprite_model->get_direction_num_frames(index) + frame_positive_number;
+      }
+      sprite_image = sprite_model->get_direction_frame(index, frame_positive_number);
+      if (sprite_image.isNull()) {
+        // The sprite model did not give a valid image.
+        return false;
+      }
+    }
 
-  if (!sprite_model->direction_exists(index)) {
-    index.direction_nb = 0;
+    QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
+    if (draw_sprite_info.tiled) {
+      painter.drawTiledPixmap(QRect(dst_top_left, get_size()), sprite_image);
+    }
+    else {
+      painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
+    }
   }
-  if (!sprite_model->direction_exists(index)) {
-    // No direction.
+  catch (const EditorException&) {
     return false;
   }
 
-  // Lazily create the image.
-  if (sprite_image.isNull()) {
-    int frame_positive_number = frame;
-    if (frame_positive_number < 0) {
-      frame_positive_number = sprite_model->get_direction_num_frames(index) + frame_positive_number;
-    }
-    sprite_image = sprite_model->get_direction_frame(index, frame_positive_number);
-    if (sprite_image.isNull()) {
-      // The sprite model did not give a valid image.
-      return false;
-    }
-  }
-
-  QPoint dst_top_left = get_origin() - sprite_model->get_direction_origin(index);
-  if (draw_sprite_info.tiled) {
-    painter.drawTiledPixmap(QRect(dst_top_left, get_size()), sprite_image);
-  }
-  else {
-    painter.drawPixmap(QRect(dst_top_left, sprite_image.size()), sprite_image);
-  }
   return true;
 }
 
@@ -1557,7 +1658,8 @@ bool EntityModel::draw_as_icon(QPainter& painter) const {
 }
 
 /**
- * @brief Notifies this entity that the tileset of the map has changed.
+ * @brief Notifies this entity that the tileset of the map has been modified or
+ * changed to another one.
  *
  * Entities whose displaying depends on the tileset may reimplement this function.
  *
@@ -1577,4 +1679,6 @@ void EntityModel::notify_tileset_changed(const QString& tileset_id) {
 void EntityModel::reload_sprite() {
 
   sprite_image = QPixmap();
+}
+
 }

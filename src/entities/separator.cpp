@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "entities/separator.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -34,4 +36,6 @@ Separator::Separator(MapModel& map, const EntityIndex& index) :
   info.pixmap = QPixmap(":/images/entity_separator_resizable.png");
   info.tiled_pixmap = true;
   set_draw_shape_info(info);
+}
+
 }

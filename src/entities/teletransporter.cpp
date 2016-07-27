@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "entities/teletransporter.h"
 #include "map_model.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -45,4 +47,6 @@ void Teletransporter::set_initial_values() {
 
   // Initially propose to stay on the same map.
   set_field("destination_map", get_map().get_map_id());
+}
+
 }

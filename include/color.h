@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,14 @@
 #include <solarus/lowlevel/Color.h>
 #include <QColor>
 
+namespace SolarusEditor {
+
 namespace Color {
 
 QColor to_qcolor(const Solarus::Color& solarus_color);
 Solarus::Color to_solarus_color(const QColor& qt_color);
+
+}
 
 }
 

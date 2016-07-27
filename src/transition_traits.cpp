@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Sorus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Sorus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "transition_traits.h"
 #include <QApplication>
+
+namespace SolarusEditor {
 
 /**
  * @brief Returns all values.
@@ -81,4 +83,6 @@ QString EnumTraits<TransitionStyle>::get_lua_name(TransitionStyle value) {
 TransitionStyle EnumTraits<TransitionStyle>::get_by_lua_name(
     const QString& name) {
   return Solarus::name_to_enum<TransitionStyle>(name.toStdString());
+}
+
 }

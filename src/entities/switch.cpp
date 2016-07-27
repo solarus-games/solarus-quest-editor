@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,8 @@
 #include "entities/switch.h"
 #include "map_model.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Constructor.
  * @param map The map containing the entity.
@@ -31,4 +33,29 @@ Switch::Switch(MapModel& map, const EntityIndex& index) :
     { "solid", MapModel::tr("Solid") }
   };
   set_existing_subtypes(subtypes);
+}
+
+/**
+ * @copydoc EntityModel::notify_field_changed
+ */
+void Switch::notify_field_changed(const QString& key, const QVariant& value) {
+
+  EntityModel::notify_field_changed(key, value);
+
+  if (key == "subtype") {
+    update_subtype();
+  }
+}
+
+/**
+ * @brief Updates the representation of the crystal block.
+ *
+ * This function should be called when the subtype changes.
+ */
+void Switch::update_subtype() {
+
+  bool solid = get_subtype() == "solid";
+  set_traversable(!solid);
+}
+
 }

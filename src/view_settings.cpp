@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "view_settings.h"
 
+namespace SolarusEditor {
+
 /**
  * @brief Creates default view settings.
  * @param parent The parent object or nullptr.
@@ -27,12 +29,15 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_size(16, 16),
   grid_style(GridStyle::DASHED),
   grid_color(Qt::black),
-  num_layers(0),
+  min_layer(0),
+  max_layer(-1),
   visible_layers(),
+  traversables_visible(true),
+  obstacles_visible(true),
   visible_entity_types() {
 
   // Default settings.
-  for (EntityType entity_type : EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     visible_entity_types.insert(entity_type);
   }
 }
@@ -177,31 +182,44 @@ void ViewSettings::set_grid_color(const QColor& color) {
 }
 
 /**
- * @brief Returns the number of layers supported for visibility.
- * @return The number of layers, or 0 if layer visibility is not supported.
+ * @brief Returns the range of layers supported for visibility.
+ *
+ * Returns an empty range if layer visibility is not supported.
+ *
+ * @param[ou] min_layer The lowest layer.
+ * @param[ou] max_layer The highest layer.
  */
-int ViewSettings::get_num_layers() const {
+void ViewSettings::get_layer_range(int& min_layer, int& max_layer) const {
 
-  return num_layers;
+  min_layer = this->min_layer;
+  max_layer = this->max_layer;
 }
 
 /**
- * @brief Sets the number of layers supported for visibility.
+ * @brief Sets the range of layers supported for visibility.
  *
- * Emits num_layers_changed() if there is a change.
+ * Emits layer_range_changed().
  * Calling this function resets all layers to visible.
  *
- * @param num_layers The number of layers, or if layer visibility is not supported.
+ * @param min_layer The lowest layer.
+ * @param max_layer The lowest layer.
  */
-void ViewSettings::set_num_layers(int num_layers) {
+void ViewSettings::set_layer_range(int min_layer, int max_layer) {
 
-  if (num_layers == this->num_layers) {
+  if (min_layer == this->min_layer && max_layer == this->max_layer) {
     return;
   }
 
-  this->num_layers = num_layers;
+  if (max_layer < min_layer) {
+    // Empty range: layer visibility is not supported.
+    min_layer = 0;
+    max_layer = -1;
+  }
 
-  emit num_layers_changed(num_layers);
+  this->min_layer = min_layer;
+  this->max_layer = max_layer;
+
+  emit layer_range_changed(min_layer, max_layer);
 
   visible_layers.clear();
   show_all_layers();
@@ -227,7 +245,7 @@ bool ViewSettings::is_layer_visible(int layer) const {
  */
 void ViewSettings::set_layer_visible(int layer, bool visible) {
 
-  Q_ASSERT(layer >= 0 && layer < get_num_layers());
+  Q_ASSERT(layer >= min_layer && layer <= max_layer);
 
   if (visible == is_layer_visible(layer)) {
     return;
@@ -249,7 +267,7 @@ void ViewSettings::set_layer_visible(int layer, bool visible) {
  */
 void ViewSettings::show_all_layers() {
 
-  for (int i = 0; i < get_num_layers(); ++i) {
+  for (int i = min_layer; i <= max_layer; ++i) {
     set_layer_visible(i, true);
   }
 }
@@ -261,11 +279,62 @@ void ViewSettings::show_all_layers() {
  */
 void ViewSettings::hide_all_layers() {
 
-  for (int i = 0; i < get_num_layers(); ++i) {
+  for (int i = min_layer; i <= max_layer; ++i) {
     set_layer_visible(i, false);
   }
 }
 
+/**
+ * @brief Returns whether traversable entities are currently shown.
+ * @return @c true if traversablers are shown.
+ */
+bool ViewSettings::are_traversables_visible() const {
+  return traversables_visible;
+}
+
+/**
+ * @brief Shows or hide traversable entities.
+ *
+ * Emits traversables_visbility_changed() if there is a change.
+ *
+ * @param traversable_visible @c true to show traversables.
+ */
+void ViewSettings::set_traversables_visible(bool traversables_visible) {
+
+  if (traversables_visible == this->traversables_visible) {
+    return;
+  }
+
+  this->traversables_visible = traversables_visible;
+
+  emit traversables_visibility_changed(traversables_visible);
+}
+
+/**
+ * @brief Returns whether obstacle entities are currently shown.
+ * @return @c true if obstaclers are shown.
+ */
+bool ViewSettings::are_obstacles_visible() const {
+  return obstacles_visible;
+}
+
+/**
+ * @brief Shows or hide obstacle entities.
+ *
+ * Emits obstacles_visbility_changed() if there is a change.
+ *
+ * @param obstacle_visible @c true to show obstacles.
+ */
+void ViewSettings::set_obstacles_visible(bool obstacles_visible) {
+
+  if (obstacles_visible == this->obstacles_visible) {
+    return;
+  }
+
+  this->obstacles_visible = obstacles_visible;
+
+  emit obstacles_visibility_changed(obstacles_visible);
+}
 /**
  * @brief Returns whether a entity type is currently visible.
  * @param entity_type The entity type to test.
@@ -306,7 +375,7 @@ void ViewSettings::set_entity_type_visible(EntityType entity_type, bool visible)
  */
 void ViewSettings::show_all_entity_types() {
 
-  for (EntityType entity_type: EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     set_entity_type_visible(entity_type, true);
   }
 }
@@ -318,7 +387,9 @@ void ViewSettings::show_all_entity_types() {
  */
 void ViewSettings::hide_all_entity_types() {
 
-  for (EntityType entity_type: EntityTraits::get_values()) {
+  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
     set_entity_type_visible(entity_type, false);
   }
+}
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 #include "quest.h"
 #include "strings_model.h"
 #include <QIcon>
+
+namespace SolarusEditor {
 
 using StringResources = Solarus::StringResources;
 
@@ -430,7 +432,7 @@ void StringsModel::create_string(const QString& key, const QString& value) {
 bool StringsModel::can_duplicate_strings(
   const QString& prefix, const QString& new_prefix, QString& key) {
 
-  for (QString prefixed_key : get_keys(prefix)) {
+  Q_FOREACH (QString prefixed_key, get_keys(prefix)) {
 
     prefixed_key.replace(QRegExp(QString("^") + prefix), new_prefix);
     if (string_exists(prefixed_key)) {
@@ -457,7 +459,7 @@ void StringsModel::duplicate_strings(
   }
 
   // Duplicate strings.
-  for (QString key : get_keys(prefix)) {
+  Q_FOREACH (QString key, get_keys(prefix)) {
     QString value = get_string(key);
     key.replace(QRegExp(QString("^") + prefix), new_prefix);
     create_string(key, value);
@@ -573,7 +575,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
 bool StringsModel::can_set_string_key_prefix(
     const QString& old_prefix, const QString& new_prefix, QString& key) {
 
-  for (QString prefixed_key : get_keys(old_prefix)) {
+  Q_FOREACH (QString prefixed_key, get_keys(old_prefix)) {
 
     prefixed_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
     if (string_exists(prefixed_key)) {
@@ -602,7 +604,7 @@ QList<QPair<QString, QString>> StringsModel::set_string_key_prefix(
 
   // change the string keys.
   QList<QPair<QString, QString>> list;
-  for (QString old_key : get_keys(old_prefix)) {
+  Q_FOREACH (const QString& old_key, get_keys(old_prefix)) {
 
     QString new_key = old_key;
     new_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
@@ -676,7 +678,7 @@ void StringsModel::delete_string(const QString& key) {
 QList<QPair<QString, QString>> StringsModel::delete_prefix(const QString& prefix) {
 
   QList<QPair<QString, QString>> list;
-  for (QString key : get_keys(prefix)) {
+  Q_FOREACH (const QString& key, get_keys(prefix)) {
     list.push_back(QPair<QString, QString>(key, get_string(key)));
     delete_string(key);
   }
@@ -838,7 +840,7 @@ bool StringsModel::has_missing_translation(const QString& key) const {
     return true;
   }
 
-  for (QString sub_key : get_translated_keys(key + ".")) {
+  Q_FOREACH (const QString& sub_key, get_translated_keys(key + ".")) {
     if (!string_exists(sub_key)) {
       return true;
     }
@@ -896,4 +898,6 @@ void StringsModel::clear_translation_from_tree() {
       dataChanged(model_index, model_index);
     }
   }
+}
+
 }

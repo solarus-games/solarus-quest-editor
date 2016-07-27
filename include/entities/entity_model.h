@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include "resize_mode.h"
 #include "sprite_model.h"
 #include <QPointer>
+
+namespace SolarusEditor {
 
 class MapModel;
 class Quest;
@@ -80,7 +82,9 @@ public:
   bool has_name() const;
   QString get_name() const;
   void set_name(const QString& name);
+  void ensure_valid_on_map();
   void ensure_name_unique();
+  void ensure_default_destination_unique();
   int get_layer() const;
   void set_layer(int layer);
   QPoint get_xy() const;
@@ -118,6 +122,7 @@ public:
   bool is_field_unset(const QString& key) const;
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
+  bool is_traversable() const;
   QString to_string() const;
 
   // Resizing from the editor.
@@ -144,6 +149,8 @@ protected:
     bool enabled = true;  // false means not drawn as a sprite.
     QString sprite_id;    // Only used if there is no "sprite" field.
     QString animation;    // Animation for sprite_id (empty means default).
+    int direction = 0;    // Direction of the sprite.
+                          // Only used if there is no "direction" field.
     int frame = 0;        // Index of the frame to show. If negative,
                           // we count from the end (-1 is the last frame).
     bool tiled = false;   // Tiled or only once at origin point.
@@ -200,8 +207,11 @@ protected:
   void set_no_direction_allowed(bool no_direction_allowed);
   void set_no_direction_text(const QString& no_direction_text);
 
+  void set_traversable(bool traversable);
+
   void set_existing_subtypes(const SubtypeList& subtypes);
 
+  virtual void notify_name_changed(const QString& name);
   virtual void notify_field_changed(const QString& key, const QVariant& value);
   virtual void set_initial_values();
 
@@ -216,6 +226,7 @@ protected:
   bool draw_as_sprite(QPainter& painter,
                       const QString& sprite_id,
                       const QString& animation,
+                      int direction,
                       int frame) const;
   bool draw_as_shape(QPainter& painter) const;
   bool draw_as_image(QPainter& painter) const;
@@ -243,6 +254,7 @@ private:
   int num_directions;             /**< Number of possible directions (except the possible special one -1). */
   bool no_direction_allowed;      /**< Whether the special no-value -1 is an allowed direction. */
   QString no_direction_text;      /**< The text to show in a GUI for the special no-value -1 (if allowed). */
+  bool traversable;               /**< Whether this entity is assumed to be traversable. */
   SubtypeList subtypes;           /**< Existing subtypes of this entity type. */
 
   // Displaying.
@@ -260,5 +272,7 @@ private:
   mutable QPixmap icon;           /**< Icon to use when the entity is drawn as
                                    * an icon. */
 };
+
+}
 
 #endif

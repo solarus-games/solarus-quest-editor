@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include "natural_comparator.h"
 #include <QString>
 #include <map>
+
+namespace SolarusEditor {
 
 /**
  * @brief Tree of indexed string keys.
@@ -100,5 +102,7 @@ private:
   Node* root;         /**< The root node of the tree. */
 
 };
+
+}
 
 #endif

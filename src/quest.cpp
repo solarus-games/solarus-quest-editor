@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,10 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QMap>
+
+namespace SolarusEditor {
 
 namespace {
 
@@ -385,7 +388,7 @@ QString Quest::get_font_path(
   QString prefix = get_data_path() + "/fonts/" + font_id;
   QStringList extensions;
   extensions << ".png" << ".ttf" << ".ttc" << ".fon";
-  for (const QString& extension: extensions) {
+  Q_FOREACH (const QString& extension, extensions) {
     QString path = prefix + extension;
     if (QFileInfo(path).exists()) {
       return path;
@@ -485,7 +488,7 @@ QString Quest::get_music_path(
   QString prefix = get_data_path() + "/musics/" + music_id;
   QStringList extensions;
   extensions << ".ogg" << ".it" << ".spc";
-  for (const QString& extension: extensions) {
+  Q_FOREACH (const QString& extension, extensions) {
     QString path = prefix + extension;
     if (QFileInfo(path).exists()) {
       return path;
@@ -568,6 +571,16 @@ QString Quest::get_tileset_entities_image_path(
     const QString& tileset_id) const {
 
   return get_data_path() + "/tilesets/" + tileset_id + ".entities.png";
+}
+
+/**
+ * @brief Returns whether a path is the quest properties file quest.dat.
+ * @param path The path to test.
+ * @return @c true if this is the quest properties file.
+ */
+bool Quest::is_properties_path(const QString& path) const {
+
+  return path == get_properties_path();
 }
 
 /**
@@ -671,7 +684,7 @@ bool Quest::is_potential_resource_element(
     element_id = path_from_resource;
   }
   else {
-    for (const QString& extension: extensions) {
+    Q_FOREACH (const QString& extension, extensions) {
       if (path_from_resource.endsWith(extension)) {
         // Remove the extension.
         element_id = path_from_resource.section('.', 0, -2);
@@ -1056,6 +1069,44 @@ void Quest::create_file(const QString& path) {
 }
 
 /**
+ * @brief Attempts to create a file in this quest from a template file.
+ * @param output_file_path Path of the file to create. It must not exist.
+ * @param template_file_path Path of the template file to use.
+ * @param pattern Regular expression to replace in the template file.
+ * @param replacement Value to put instead of the pattern.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_file_from_template(
+    const QString& output_file_path,
+    const QString& template_file_path,
+    const QRegularExpression& pattern,
+    const QString& replacement
+) {
+
+  check_is_in_root_path(output_file_path);
+  check_not_exists(output_file_path);
+
+  QFile template_file(template_file_path);
+  if (!template_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    throw EditorException(tr("Cannot read file '%1'").arg(template_file_path));
+  }
+  QString content = QString::fromUtf8(template_file.readAll());
+  template_file.close();
+  content = content.replace(QRegularExpression(pattern), replacement);
+
+  QFile output_file(output_file_path);
+  if (!output_file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    throw EditorException(tr("Cannot write file '%1'").arg(output_file_path));
+  }
+  QTextStream out(&output_file);
+  out.setCodec("UTF-8");
+  out << content;
+  output_file.close();
+
+  emit file_created(output_file_path);
+}
+
+/**
  * @brief Attempts to create a file in this quest if it does not exist yet.
  * @param path Path of the file to create. If it already exists, it must not
  * be a directory.
@@ -1123,6 +1174,8 @@ void Quest::create_map_data_file(const QString& map_id) {
     map.set_tileset_id(tileset_ids.first());
   }
   map.set_size(get_properties().get_normal_quest_size());
+  map.set_min_layer(0);
+  map.set_max_layer(2);
   map.save();
 }
 
@@ -1142,6 +1195,150 @@ bool Quest::create_map_data_file_if_not_exists(const QString& map_id) {
   }
 
   create_map_data_file(map_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a map script file in this quest.
+ * @param map_id Id of the map to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_map_script(const QString& map_id) {
+
+  QString path = get_map_script_path(map_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/map_script_template.lua",
+        QRegularExpression("\\$map_id"),
+        map_id
+  );
+}
+
+/**
+ * @brief Attempts to create a map script file in this quest if it does not
+ * exist yet.
+ * @param map_id Id of the map to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_map_script_if_not_exists(const QString& map_id) {
+
+  QString path = get_map_script_path(map_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_map_script(map_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a item script file in this quest.
+ * @param item_id Id of the item to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_item_script(const QString& item_id) {
+
+  QString path = get_item_script_path(item_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/item_script_template.lua",
+        QRegularExpression("\\$item_id"),
+        item_id
+  );
+}
+
+/**
+ * @brief Attempts to create a item script file in this quest if it does not
+ * exist yet.
+ * @param item_id Id of the item to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_item_script_if_not_exists(const QString& item_id) {
+
+  QString path = get_item_script_path(item_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_item_script(item_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a enemy script file in this quest.
+ * @param enemy_id Id of the enemy to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_enemy_script(const QString& enemy_id) {
+
+  QString path = get_enemy_script_path(enemy_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/enemy_script_template.lua",
+        QRegularExpression("\\$enemy_id"),
+        enemy_id
+  );
+}
+
+/**
+ * @brief Attempts to create a enemy script file in this quest if it does not
+ * exist yet.
+ * @param enemy_id Id of the enemy to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_enemy_script_if_not_exists(const QString& enemy_id) {
+
+  QString path = get_enemy_script_path(enemy_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_enemy_script(enemy_id);
+  return true;
+}
+
+/**
+ * @brief Attempts to create a entity script file in this quest.
+ * @param entity_id Id of the entity to create.
+ * @throws EditorException In case of error.
+ */
+void Quest::create_entity_script(const QString& entity_id) {
+
+  QString path = get_entity_script_path(entity_id);
+  check_is_script(path);
+  create_file_from_template(
+        path,
+        ":/initial_files/entity_script_template.lua",
+        QRegularExpression("\\$entity_id"),
+        entity_id
+  );
+}
+
+/**
+ * @brief Attempts to create a entity script file in this quest if it does not
+ * exist yet.
+ * @param entity_id Id of the entity to create.
+ * @throws EditorException In case of error.
+ * @return @c true if the file was created, @c false if it already existed.
+ */
+bool Quest::create_entity_script_if_not_exists(const QString& entity_id) {
+
+  QString path = get_entity_script_path(entity_id);
+  if (exists(path)) {
+    check_not_is_dir(path);
+    return false;
+  }
+
+  create_entity_script(entity_id);
   return true;
 }
 
@@ -1261,15 +1458,24 @@ void Quest::create_resource_element(ResourceType resource_type,
   case ResourceType::MAP:
     // Create the map data file and the map script.
     create_map_data_file_if_not_exists(element_id);
-    create_script_if_not_exists(get_map_script_path(element_id));
+    create_map_script_if_not_exists(element_id);
     break;
 
   case ResourceType::ITEM:
-  case ResourceType::SPRITE:
+    create_item_script_if_not_exists(element_id);
+    break;
+
   case ResourceType::ENEMY:
+    create_enemy_script_if_not_exists(element_id);
+    break;
+
   case ResourceType::ENTITY:
-    // For these type of resources, files to create are simply blank text files.
-    for (QString path: paths) {
+    create_entity_script_if_not_exists(element_id);
+    break;
+
+  case ResourceType::SPRITE:
+    // For this type of resources, files to create are simply blank text files.
+    Q_FOREACH (const QString& path, paths) {
       done_on_filesystem |= create_file_if_not_exists(path);
     }
     break;
@@ -1541,7 +1747,7 @@ void Quest::delete_resource_element(
   // Delete files from the filesystem.
   bool found_in_filesystem = false;
   QStringList paths = get_resource_element_paths(resource_type, element_id);
-  for (const QString& path: paths) {
+  Q_FOREACH (const QString& path, paths) {
     if (is_dir(path)) {
       found_in_filesystem = true;
       delete_dir_recursive(path);
@@ -1567,71 +1773,28 @@ void Quest::delete_resource_element(
 }
 
 /**
- * @brief Returns the list of files currently opened in this quest.
- * @return Paths of the tiles currently edited.
+ * @brief Returns the id of the music currently playing if any.
+ * @return The current music id or an empty string.
  */
-QSet<QString> Quest::get_open_paths() const {
-
-  return open_paths;
+QString Quest::get_current_music_id() const {
+  return current_music_id;
 }
 
 /**
- * @brief Returns whether a file of this quest is currently open.
- * @param path A file of this quest.
- * @return @c true if the file is currently edited.
- */
-bool Quest::is_path_open(const QString& path) const {
-
-  return open_paths.contains(path);
-}
-
-/**
- * @brief Indicates whether a file of this quest is currently open.
+ * @brief Sets the music currently playing.
  *
- * This function should be called whenever a file starts or ends being edited
- * by the user.
+ * Emits current_music_changed() if there is a change.
  *
- * @param path A file of this quest.
- * @return @c true if the file is currently edited.
+ * @param music_id The current music id or an empty string.
  */
-void Quest::set_path_open(const QString& path, bool open) {
+void Quest::set_current_music_id(const QString& music_id) {
 
-  if (open) {
-    open_paths.insert(path);
+  if (music_id == this->current_music_id) {
+    return;
   }
-  else {
-    open_paths.remove(path);
-  }
+
+  this->current_music_id = music_id;
+  emit current_music_changed(music_id);
 }
 
-/**
- * @brief Returns whether a resource element of this quest is currently open.
- * @param resource_type A type of resource.
- * @param element_id Id of the element to check
- * @return @c true if a file of this element is currently edited.
- */
-bool Quest::is_resource_element_open(ResourceType resource_type, const QString& element_id) const {
-
-  for (QString path : get_resource_element_paths(resource_type, element_id)) {
-    if (is_path_open(path)) {
-      return true;
-    }
-  }
-  return false;
 }
-
-/**
- * @brief Returns whether any resource element of a particular type is currently open.
- * @param resource_type A type of resource.
- * @return @c true if any file of this type is currently edited.
- */
-bool Quest::is_resource_element_open(ResourceType resource_type) const {
-
-  for (QString element_id : resources.get_elements(resource_type)) {
-    if (is_resource_element_open(resource_type, element_id)) {
-      return true;
-    }
-  }
-  return false;
-}
-

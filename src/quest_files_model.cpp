@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 #include "quest_files_model.h"
 #include <QFileSystemModel>
 #include <QItemSelection>
+
+namespace SolarusEditor {
 
 /**
  * @brief Creates a quest files model.
@@ -269,7 +271,7 @@ QItemSelection QuestFilesModel::mapSelectionToSource(const QItemSelection& proxy
   QItemSelection source_selection;
 
   const QModelIndexList& indexes = proxy_selection.indexes();
-  for (const QModelIndex& index : indexes) {
+  Q_FOREACH (const QModelIndex& index, indexes) {
     const QModelIndex& source_index = mapToSource(index);
     if (!index.isValid()) {
       // Selected item that does not exist in the source model.
@@ -888,8 +890,7 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
   // Get all declared elements of this resource type that are directly in
   // the directory.
   QStringList element_ids = quest.get_resources().get_elements(resource_type);
-  int i = 0;
-  for (const QString& element_id : element_ids) {
+  Q_FOREACH (const QString& element_id, element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
     if (!current_path.startsWith(parent_path)) {
       // The current element is not under our directory.
@@ -916,10 +917,9 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
         all_extra_paths.insert(path_internal_ptr);
       }
       extra_paths.paths.append(columns);
-      extra_paths.path_indexes[current_path] = i;
+      extra_paths.path_indexes[current_path] = extra_paths.paths.size() - 1;
       extra_paths.element_ids.append(element_id);
     }
-    ++i;
   }
 }
 
@@ -1162,7 +1162,7 @@ void QuestFilesModel::remove_extra_path(const QModelIndex& parent, const QString
 
   beginRemoveRows(parent, row, row);
 
-  for (QString* path_internal_ptr : extra_paths->paths.at(index_in_extra)) {
+  Q_FOREACH (QString* path_internal_ptr, extra_paths->paths.at(index_in_extra)) {
     all_extra_paths.remove(path_internal_ptr);
   }
 
@@ -1197,9 +1197,11 @@ void QuestFilesModel::ExtraPaths::rebuild_index_cache() {
 
   path_indexes.clear();
   int i = 0;
-  for (const ExtraPathColumnPtrs& columns : paths) {
+  Q_FOREACH (const ExtraPathColumnPtrs& columns, paths) {
     const QString& current_path = *columns[0];
     path_indexes.insert(current_path, i);
     ++i;
   }
+}
+
 }

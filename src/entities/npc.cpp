@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  */
 #include "entities/npc.h"
 #include "map_model.h"
+
+namespace SolarusEditor {
 
 /**
  * @brief Constructor.
@@ -36,4 +38,7 @@ Npc::Npc(MapModel& map, const EntityIndex& index) :
     { "1", MapModel::tr("Usual NPC (somebody)") }
   };
   set_existing_subtypes(subtypes);
+  set_traversable(false);
+}
+
 }
