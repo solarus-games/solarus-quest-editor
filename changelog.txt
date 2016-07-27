@@ -1,3 +1,13 @@
+______________________________________
+
+Solarus Quest Editor 1.? (in progress)
+______________________________________
+
+New features
+------------
+
+* Add an open dialog to quickly find and open quest files (by Maxs) (#154).
+
 _______________________________________
 
 Solarus Quest Editor 1.5.0 (2016-07-27)
