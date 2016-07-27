@@ -19,7 +19,7 @@
 
 #include "ui_open_quest_file_dialog.h"
 #include <QStyledItemDelegate>
-#include <QWidget>
+#include <QDialog>
 
 namespace SolarusEditor {
 
