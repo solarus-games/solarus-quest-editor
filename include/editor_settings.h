@@ -38,6 +38,7 @@ public:
   static const QString no_audio;
   static const QString video_acceleration;
   static const QString quest_size;
+  static const QString open_quest_file_history;
 
   // Console keys.
   static const QString console_history;
@@ -91,6 +92,7 @@ public:
   QStringList get_value_string_list(const QString& key);
   QSize get_value_size(const QString& key);
   QColor get_value_color(const QString& key);
+  QMap<QString, QVariant> get_value_map(const QString& key);
 
   QVariant get_default(const QString& key);
   bool get_default_bool(const QString& key);
@@ -99,6 +101,7 @@ public:
   QString get_default_string(const QString& key);
   QSize get_default_size(const QString& key);
   QColor get_default_color(const QString& key);
+  QMap<QString, QVariant> get_default_map(const QString& key);
 
   void set_value(const QString& key, const QVariant& value);
   void set_value_color(const QString& key, const QColor& value);

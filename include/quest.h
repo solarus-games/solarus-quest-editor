@@ -84,6 +84,8 @@ public:
   QString get_tileset_tiles_image_path(const QString& tileset_id) const;
   QString get_tileset_entities_image_path(const QString& tileset_id) const;
 
+  QIcon get_file_icon(const QString& file_path) const;
+
   // Check path properties.
   static bool is_valid_file_name(const QString& file_name);
   static void check_valid_file_name(const QString& file_name);

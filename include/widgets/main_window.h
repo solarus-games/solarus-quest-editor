@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_MAIN_WINDOW_H
 #define SOLARUSEDITOR_MAIN_WINDOW_H
 
+#include "widgets/open_quest_file_dialog.h"
 #include "widgets/settings_dialog.h"
 #include "quest.h"
 #include "ui_main_window.h"
@@ -62,6 +63,7 @@ private slots:
   void on_action_save_all_triggered();
   void on_action_close_triggered();
   void on_action_close_all_triggered();
+  void on_action_open_quest_file_triggered();
   void on_action_open_quest_properties_triggered();
   void on_action_exit_triggered();
   void on_action_cut_triggered();
@@ -177,6 +179,8 @@ private:
       common_actions;             /**< Actions available to all editors. */
 
   SettingsDialog settings_dialog; /**< The settings dialog. */
+  OpenQuestFileDialog
+      open_quest_file_dialog;     /**< The open quest file dialog. */
 
 };
 

@@ -134,6 +134,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/find_text_dialog.h
   include/widgets/get_animation_name_dialog.h
   include/widgets/gui_tools.h
+  include/widgets/line_edit.h
   include/widgets/lua_syntax_highlighter.h
   include/widgets/map_editor.h
   include/widgets/map_view.h
@@ -143,6 +144,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/music_chooser.h
   include/widgets/new_resource_element_dialog.h
   include/widgets/new_string_dialog.h
+  include/widgets/open_quest_file_dialog.h
   include/widgets/pair_spin_box.h
   include/widgets/pan_tool.h
   include/widgets/plain_text_edit.h
@@ -254,6 +256,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/music_chooser.cpp
   src/widgets/new_resource_element_dialog.cpp
   src/widgets/new_string_dialog.cpp
+  src/widgets/open_quest_file_dialog.cpp
   src/widgets/pair_spin_box.cpp
   src/widgets/pan_tool.cpp
   src/widgets/quest_properties_editor.cpp
@@ -332,6 +335,7 @@ set(solarus_quest_editor_FORMS
   src/widgets/map_editor.ui
   src/widgets/new_resource_element_dialog.ui
   src/widgets/new_string_dialog.ui
+  src/widgets/open_quest_file_dialog.ui
   src/widgets/quest_properties_editor.ui
   src/widgets/settings_dialog.ui
   src/widgets/sprite_editor.ui

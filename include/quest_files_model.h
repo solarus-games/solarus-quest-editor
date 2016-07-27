@@ -130,7 +130,6 @@ private:
     void rebuild_index_cache();
   };
 
-  QIcon get_quest_file_icon(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 

@@ -66,7 +66,8 @@ MainWindow::MainWindow(QWidget* parent) :
   show_entities_button(nullptr),
   show_entities_subactions(),
   common_actions(),
-  settings_dialog(this) {
+  settings_dialog(this),
+  open_quest_file_dialog(this) {
 
   // Set up widgets.
   ui.setupUi(this);
@@ -162,6 +163,7 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_close->setShortcut(QKeySequence::Close);
   ui.action_save->setShortcut(QKeySequence::Save);
   ui.action_exit->setShortcut(QKeySequence::Quit);
+  ui.action_open_quest_file->setShortcut(QKeySequence::Open);
   undo_action->setShortcut(QKeySequence::Undo);
   redo_action->setShortcut(QKeySequence::Redo);
   ui.action_cut->setShortcut(QKeySequence::Cut);
@@ -176,6 +178,7 @@ MainWindow::MainWindow(QWidget* parent) :
   addAction(ui.action_load_quest);
   addAction(ui.action_close_quest);
   addAction(ui.action_exit);
+  addAction(ui.action_open_quest_file);
   addAction(ui.action_close);
   addAction(ui.action_save);
   addAction(ui.action_cut);
@@ -231,6 +234,8 @@ MainWindow::MainWindow(QWidget* parent) :
 
   connect(&settings_dialog, SIGNAL(settings_changed()),
           this, SLOT(reload_settings()));
+  connect(&open_quest_file_dialog, SIGNAL(open_file_requested(Quest&,QString)),
+          ui.tab_widget, SLOT(open_file_requested(Quest&,QString)));
 
   // No editor initially.
   current_editor_changed(-1);
@@ -794,6 +799,16 @@ void MainWindow::on_action_close_triggered() {
 void MainWindow::on_action_close_all_triggered() {
 
   ui.tab_widget->close_all_files_requested();
+}
+
+/**
+ * @brief Slot called when the user triggers the "Open quest file" action.
+ */
+void MainWindow::on_action_open_quest_file_triggered() {
+
+  int x = width() / 2;
+  int y = ui.tool_bar->geometry().bottom();
+  open_quest_file_dialog.open_quest_file(&quest, mapToGlobal(QPoint(x, y)));
 }
 
 /**

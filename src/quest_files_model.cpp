@@ -438,7 +438,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   case Qt::DecorationRole:
     // Icon.
     if (index.column() == FILE_COLUMN) {
-      return get_quest_file_icon(index);
+      return quest.get_file_icon(path);
     }
     return QVariant();  // No icon in other columns.
 
@@ -500,66 +500,6 @@ bool QuestFilesModel::setData(
     ex.print_message();
     return false;
   }
-}
-
-/**
- * @brief Returns an appropriate icon for the specified quest file.
- * @param index Index of a file item in the model.
- * @return An appropriate icon name to represent this file.
- */
-QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
-
-  QString icon_file_name;  // Relative to the icons directory.
-  QString file_path = get_file_path(index);
-  ResourceType resource_type;
-  QString element_id;
-
-  // Quest data directory.
-  if (is_quest_data_index(index)) {
-    icon_file_name = "icon_solarus.png";
-  }
-
-  // Resource element (possibly a directory for languages).
-  else if (quest.is_resource_element(file_path, resource_type, element_id)) {
-
-    QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
-    if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
-      // Resource declared and present on the filesystem.
-      icon_file_name = "icon_resource_" + resource_type_name + ".png";
-    }
-    else {
-      // Resource declared but whose file is missing.
-      icon_file_name = "icon_resource_" + resource_type_name + "_missing.png";
-    }
-  }
-
-  // Directory icon.
-  else if (quest.is_dir(file_path)) {
-
-    if (quest.is_resource_path(file_path, resource_type)) {
-      QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
-      icon_file_name = "icon_folder_open_" + resource_type_name + ".png";
-    }
-    else {
-      icon_file_name = "icon_folder_open.png";
-    }
-  }
-
-  // Lua script icon.
-  else if (quest.is_script(file_path)) {
-    icon_file_name = "icon_script.png";
-  }
-
-  // Generic icon for a file not known by the quest.
-  else {
-    icon_file_name = "icon_file_unknown.png";
-  }
-
-  if (icon_file_name.isEmpty()) {
-    return QIcon();
-  }
-
-  return QIcon(":/images/" + icon_file_name);
 }
 
 /**
