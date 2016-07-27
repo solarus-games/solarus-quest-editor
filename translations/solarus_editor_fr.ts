@@ -1791,184 +1791,189 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Fichier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="87"/>
+        <location filename="../src/widgets/main_window.ui" line="88"/>
         <source>Edit</source>
         <translation>Édition</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="101"/>
+        <location filename="../src/widgets/main_window.ui" line="102"/>
         <source>Run</source>
         <translation>Exécuter</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="107"/>
+        <location filename="../src/widgets/main_window.ui" line="108"/>
         <source>View</source>
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="120"/>
+        <location filename="../src/widgets/main_window.ui" line="121"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="127"/>
+        <location filename="../src/widgets/main_window.ui" line="128"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="133"/>
+        <location filename="../src/widgets/main_window.ui" line="134"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="173"/>
+        <location filename="../src/widgets/main_window.ui" line="174"/>
         <source>New quest...</source>
         <translation>Nouvelle quête...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="178"/>
+        <location filename="../src/widgets/main_window.ui" line="179"/>
         <source>Load quest...</source>
         <translation>Ouvrir une quête...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="181"/>
+        <location filename="../src/widgets/main_window.ui" line="182"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="186"/>
+        <location filename="../src/widgets/main_window.ui" line="187"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="195"/>
-        <location filename="../src/widgets/main_window.cpp" line="1435"/>
+        <location filename="../src/widgets/main_window.ui" line="196"/>
+        <location filename="../src/widgets/main_window.cpp" line="1450"/>
         <source>Run quest</source>
         <translation>Exécuter la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="198"/>
+        <location filename="../src/widgets/main_window.ui" line="199"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="269"/>
-        <location filename="../src/widgets/main_window.ui" line="272"/>
+        <location filename="../src/widgets/main_window.ui" line="270"/>
+        <location filename="../src/widgets/main_window.ui" line="273"/>
         <source>Show layer 0</source>
         <translation>Afficher la couche 0</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="275"/>
+        <location filename="../src/widgets/main_window.ui" line="276"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="290"/>
-        <location filename="../src/widgets/main_window.ui" line="293"/>
+        <location filename="../src/widgets/main_window.ui" line="291"/>
+        <location filename="../src/widgets/main_window.ui" line="294"/>
         <source>Show layer 1</source>
         <translation>Afficher la couche 1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="296"/>
+        <location filename="../src/widgets/main_window.ui" line="297"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="311"/>
-        <location filename="../src/widgets/main_window.ui" line="314"/>
+        <location filename="../src/widgets/main_window.ui" line="312"/>
+        <location filename="../src/widgets/main_window.ui" line="315"/>
         <source>Show layer 2</source>
         <translation>Afficher la couche 2</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="317"/>
+        <location filename="../src/widgets/main_window.ui" line="318"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="357"/>
+        <location filename="../src/widgets/main_window.ui" line="358"/>
         <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="362"/>
+        <location filename="../src/widgets/main_window.ui" line="363"/>
         <source>Save all</source>
         <translation>Enregistrer tout</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="365"/>
+        <location filename="../src/widgets/main_window.ui" line="366"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="370"/>
+        <location filename="../src/widgets/main_window.ui" line="371"/>
         <source>Close all</source>
         <translation>Fermer tout</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="373"/>
+        <location filename="../src/widgets/main_window.ui" line="374"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="381"/>
+        <location filename="../src/widgets/main_window.ui" line="382"/>
         <source>Show console</source>
         <translation>Afficher la console</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="384"/>
+        <location filename="../src/widgets/main_window.ui" line="385"/>
         <source>F12</source>
         <translation>F12</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="392"/>
+        <location filename="../src/widgets/main_window.ui" line="393"/>
         <source>Unselect all</source>
         <translation>Déselectionner tout</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="397"/>
+        <location filename="../src/widgets/main_window.ui" line="398"/>
         <source>Close quest</source>
         <translation>Fermer la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="406"/>
-        <location filename="../src/widgets/main_window.cpp" line="1484"/>
-        <location filename="../src/widgets/main_window.cpp" line="1491"/>
+        <location filename="../src/widgets/main_window.ui" line="407"/>
+        <location filename="../src/widgets/main_window.cpp" line="1499"/>
+        <location filename="../src/widgets/main_window.cpp" line="1506"/>
         <source>Pause music</source>
         <translation>Mettre la musique en pause</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="415"/>
-        <location filename="../src/widgets/main_window.cpp" line="1480"/>
+        <location filename="../src/widgets/main_window.ui" line="416"/>
+        <location filename="../src/widgets/main_window.cpp" line="1495"/>
         <source>Stop music</source>
         <translation>Arrêter la musique</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="427"/>
+        <location filename="../src/widgets/main_window.ui" line="428"/>
         <source>Show traversable entities</source>
         <translation>Afficher les entités traversables</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="439"/>
+        <location filename="../src/widgets/main_window.ui" line="440"/>
         <source>Show obstacle entities</source>
         <translation>Afficher les entités obstacles</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="444"/>
+        <location filename="../src/widgets/main_window.ui" line="445"/>
         <source>Quest properties</source>
         <translation>Propriétés de la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="447"/>
+        <location filename="../src/widgets/main_window.ui" line="448"/>
         <source>Ctrl+P</source>
         <translation>Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="343"/>
+        <location filename="../src/widgets/main_window.ui" line="453"/>
+        <source>Open quest file</source>
+        <translation>Ouvrir un fichier de quête</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/main_window.ui" line="344"/>
         <source>Find...</source>
         <translation>Rechercher...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="348"/>
+        <location filename="../src/widgets/main_window.ui" line="349"/>
         <source>Options</source>
         <translation>Options</translation>
     </message>
@@ -1977,37 +1982,37 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation type="vanished">Paramètres</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="207"/>
+        <location filename="../src/widgets/main_window.ui" line="208"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="216"/>
+        <location filename="../src/widgets/main_window.ui" line="217"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="225"/>
+        <location filename="../src/widgets/main_window.ui" line="226"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="230"/>
+        <location filename="../src/widgets/main_window.ui" line="231"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="239"/>
+        <location filename="../src/widgets/main_window.ui" line="240"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="251"/>
+        <location filename="../src/widgets/main_window.ui" line="252"/>
         <source>Show grid</source>
         <translation>Afficher la grille</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="254"/>
+        <location filename="../src/widgets/main_window.ui" line="255"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
@@ -2036,23 +2041,23 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation type="vanished">Ctrl+3</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="326"/>
+        <location filename="../src/widgets/main_window.ui" line="327"/>
         <source>Documentation</source>
         <translation>Documentation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="329"/>
+        <location filename="../src/widgets/main_window.ui" line="330"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.ui" line="338"/>
+        <location filename="../src/widgets/main_window.ui" line="339"/>
         <source>Website</source>
         <translation>Site web</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="695"/>
-        <location filename="../src/widgets/main_window.cpp" line="733"/>
+        <location filename="../src/widgets/main_window.cpp" line="700"/>
+        <location filename="../src/widgets/main_window.cpp" line="738"/>
         <source>Select quest directory</source>
         <translation>Choisir le dossier de la quête</translation>
     </message>
@@ -2070,14 +2075,14 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
 (désolé, l&apos;éditeur ne sait pas encore le faire interactivement).</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="536"/>
+        <location filename="../src/widgets/main_window.cpp" line="541"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
         <translation>Aucune quête n&apos;a été trouvée dans le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="117"/>
-        <location filename="../src/widgets/main_window.cpp" line="307"/>
+        <location filename="../src/widgets/main_window.cpp" line="118"/>
+        <location filename="../src/widgets/main_window.cpp" line="312"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
@@ -2086,27 +2091,27 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation type="vanished">Afficher les types d&apos;entités</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="309"/>
+        <location filename="../src/widgets/main_window.cpp" line="314"/>
         <source>25 %</source>
         <translation>25 %</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="310"/>
+        <location filename="../src/widgets/main_window.cpp" line="315"/>
         <source>50 %</source>
         <translation>50 %</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="311"/>
+        <location filename="../src/widgets/main_window.cpp" line="316"/>
         <source>100 %</source>
         <translation>100 %</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="312"/>
+        <location filename="../src/widgets/main_window.cpp" line="317"/>
         <source>200 %</source>
         <translation>200 %</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="313"/>
+        <location filename="../src/widgets/main_window.cpp" line="318"/>
         <source>400 %</source>
         <translation>400 %</translation>
     </message>
@@ -2119,105 +2124,105 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <translation type="vanished">Cacher tout</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="96"/>
+        <location filename="../src/widgets/main_window.cpp" line="97"/>
         <source>Recent quests</source>
         <translation>Quêtes récentes</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="137"/>
+        <location filename="../src/widgets/main_window.cpp" line="138"/>
         <source>Show/hide more layers</source>
         <translation>Afficher/cacher plus de couches</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="147"/>
-        <location filename="../src/widgets/main_window.cpp" line="409"/>
+        <location filename="../src/widgets/main_window.cpp" line="148"/>
+        <location filename="../src/widgets/main_window.cpp" line="414"/>
         <source>Show/hide entity types</source>
         <translation>Afficher/cacher des types d&apos;entités</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="241"/>
+        <location filename="../src/widgets/main_window.cpp" line="246"/>
         <source>Could not locate the assets directory.
 Some features like creating a new quest will not be available.
 Please make sure that Solarus Quest Editor is correctly installed.</source>
         <translation>Impossible de trouver le dossier &quot;assets&quot;.\nCertaines fonctionnalité commes créer une nouvelle quête ne seront pas disponibles.\nVérifiez que Solarus Quest Editor est correctement installé.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="349"/>
+        <location filename="../src/widgets/main_window.cpp" line="354"/>
         <source>Show all layers</source>
         <translation>Afficher toutes les couches</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="359"/>
+        <location filename="../src/widgets/main_window.cpp" line="364"/>
         <source>Hide all layers</source>
         <translation>Cacher toutes les couches</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="378"/>
+        <location filename="../src/widgets/main_window.cpp" line="383"/>
         <source>Show layer %1</source>
         <translation>Afficher la couche %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="438"/>
+        <location filename="../src/widgets/main_window.cpp" line="443"/>
         <source>Show all entities</source>
         <translation>Afficher toutes les entités</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="448"/>
+        <location filename="../src/widgets/main_window.cpp" line="453"/>
         <source>Hide all entities</source>
         <translation>Cacher toutes les entités</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="563"/>
+        <location filename="../src/widgets/main_window.cpp" line="568"/>
         <source>Obsolete quest</source>
         <translation>Quête obsolète</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="564"/>
+        <location filename="../src/widgets/main_window.cpp" line="569"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
         <translation>Le format de cette quête (%1) is obsolète.
 Vos fichiers de données vont être automatiquement mis à jour vers Solarus %2.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="616"/>
+        <location filename="../src/widgets/main_window.cpp" line="621"/>
         <source>Upgrading quest data files</source>
         <translation>Mise à jour des données de la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="633"/>
+        <location filename="../src/widgets/main_window.cpp" line="638"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
         <translation>Une erreur s&apos;est produite lors de la mise à jour de la quête.
 Votre quête a été conservée inchangée au format %1.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="681"/>
+        <location filename="../src/widgets/main_window.cpp" line="686"/>
         <source>Could not find the assets directory.
 Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Impossible de trouver le dossier &quot;assets&quot;.\nVérifiez que Solarus Quest Editor est correctement installé.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="905"/>
+        <location filename="../src/widgets/main_window.cpp" line="920"/>
         <source>Files are modified</source>
         <translation>Modifications non sauvegardées</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="906"/>
+        <location filename="../src/widgets/main_window.cpp" line="921"/>
         <source>Do you want to save modifications before running the quest?</source>
         <translation>Enregistrer les modifications avant de lancer la quête ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1432"/>
+        <location filename="../src/widgets/main_window.cpp" line="1447"/>
         <source>Stop quest</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1688"/>
+        <location filename="../src/widgets/main_window.cpp" line="1703"/>
         <source>Unsaved changes</source>
         <translation>Changements non sauvegardés</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1689"/>
+        <location filename="../src/widgets/main_window.cpp" line="1704"/>
         <source>All files must be saved before this operation.
 Do you want to save them now?</source>
         <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.\nVoulez-vous les sauvegarder maintenant ?</translation>
@@ -2227,12 +2232,12 @@ Do you want to save them now?</source>
         <translation type="vanished">La quête s&apos;est terminée avec une erreur : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1604"/>
+        <location filename="../src/widgets/main_window.cpp" line="1619"/>
         <source>File modified</source>
         <translation>Fichier en cours de modification</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1605"/>
+        <location filename="../src/widgets/main_window.cpp" line="1620"/>
         <source>This file is open and has unsaved changes.
 Please save it or close it before renaming.</source>
         <translation>Ce fichier est ouvert et a été modifié.\nVeuillez le sauvegarder ou le fermer avant de le renommer.</translation>
@@ -2246,12 +2251,12 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">Nouvel id pour %1 &apos;%2&apos; :</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1651"/>
+        <location filename="../src/widgets/main_window.cpp" line="1666"/>
         <source>Rename file</source>
         <translation>Renommer le fichier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1652"/>
+        <location filename="../src/widgets/main_window.cpp" line="1667"/>
         <source>New name for file &apos;%1&apos;:</source>
         <translation>Nouveau nom pour le fichier &apos;%1&apos; :</translation>
     </message>
@@ -2260,17 +2265,17 @@ Please save it or close it before renaming.</source>
         <translation type="vanished">Couche invalide : %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1415"/>
+        <location filename="../src/widgets/main_window.cpp" line="1430"/>
         <source>Missing show entity type action</source>
         <translation>Action d&apos;affichage d&apos;entité introuvable</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1488"/>
+        <location filename="../src/widgets/main_window.cpp" line="1503"/>
         <source>Play selected music</source>
         <translation>Jouer la musique sélectionnée</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1523"/>
+        <location filename="../src/widgets/main_window.cpp" line="1538"/>
         <source>Solarus Quest Editor %1</source>
         <translation>Solarus Quest Editor %1</translation>
     </message>
@@ -3153,6 +3158,14 @@ Please save it or close it before renaming.</source>
     </message>
 </context>
 <context>
+    <name>SolarusEditor::OpenQuestFileDialog</name>
+    <message>
+        <location filename="../src/widgets/open_quest_file_dialog.ui" line="14"/>
+        <source>Open quest file</source>
+        <translation>Ouvrir un fichier de quête</translation>
+    </message>
+</context>
+<context>
     <name>SolarusEditor::Quest</name>
     <message>
         <location filename="../src/quest.cpp" line="266"/>
@@ -3160,32 +3173,32 @@ Please save it or close it before renaming.</source>
         <translation>Type de ressource inconnu</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="919"/>
+        <location filename="../src/quest.cpp" line="978"/>
         <source>Invalid file name: &apos;%1&apos;</source>
         <translation>Nom de fichier invalide : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="977"/>
+        <location filename="../src/quest.cpp" line="1036"/>
         <source>File &apos;%1&apos; does not exist</source>
         <translation>Le fichier &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="990"/>
+        <location filename="../src/quest.cpp" line="1049"/>
         <source>File &apos;%1&apos; already exists</source>
         <translation>Le fichier &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1051"/>
+        <location filename="../src/quest.cpp" line="1110"/>
         <source>Wrong script name: &apos;%1&apos; (should end with &apos;.lua&apos;)</source>
         <translation>Nom de script incorrect : &apos;%1&apos; (extension &apos;.lua&apos; attendue)</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1066"/>
+        <location filename="../src/quest.cpp" line="1125"/>
         <source>Cannot create file &apos;%1&apos;</source>
         <translation>Impossible de créer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="916"/>
+        <location filename="../src/quest.cpp" line="975"/>
         <source>Empty file name</source>
         <translation>Nom de fichier vide</translation>
     </message>
@@ -3195,76 +3208,76 @@ Please save it or close it before renaming.</source>
         <translation>Pas de quête</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1013"/>
+        <location filename="../src/quest.cpp" line="1072"/>
         <source>File &apos;%1&apos; is not a folder</source>
         <translation>Le fichier &apos;%1&apos; n&apos;est pas un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1026"/>
+        <location filename="../src/quest.cpp" line="1085"/>
         <source>File &apos;%1&apos; is a folder</source>
         <translation>Le fichier &apos;%1&apos; est un dossier</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1091"/>
+        <location filename="../src/quest.cpp" line="1150"/>
         <source>Cannot read file &apos;%1&apos;</source>
         <translation>Impossible de lire le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1099"/>
+        <location filename="../src/quest.cpp" line="1158"/>
         <source>Cannot write file &apos;%1&apos;</source>
         <translation>Impossible d&apos;écrire le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1357"/>
+        <location filename="../src/quest.cpp" line="1416"/>
         <source>Cannot create folder &apos;%1&apos;: parent folder does not exist</source>
         <translation>Impossible de créer le dossier &apos;%1&apos; : le dossier parent n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1363"/>
-        <location filename="../src/quest.cpp" line="1400"/>
+        <location filename="../src/quest.cpp" line="1422"/>
+        <location filename="../src/quest.cpp" line="1459"/>
         <source>Cannot create folder &apos;%1&apos;</source>
         <translation>Impossible de créer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1516"/>
+        <location filename="../src/quest.cpp" line="1575"/>
         <source>Resource &apos;%1&apos; already exists</source>
         <translation>La ressource &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1532"/>
+        <location filename="../src/quest.cpp" line="1591"/>
         <source>Cannot rename file &apos;%1&apos;</source>
         <translation>Impossible de renommer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1643"/>
+        <location filename="../src/quest.cpp" line="1702"/>
         <source>Cannot delete file &apos;%1&apos;</source>
         <translation>Impossible de supprimer le fichier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1677"/>
-        <location filename="../src/quest.cpp" line="1708"/>
+        <location filename="../src/quest.cpp" line="1736"/>
+        <location filename="../src/quest.cpp" line="1767"/>
         <source>Cannot delete folder &apos;%1&apos;</source>
         <translation>Impossible de supprimer le dossier &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1578"/>
+        <location filename="../src/quest.cpp" line="1637"/>
         <source>Same source and destination id</source>
         <translation>Id source et destination identiques</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1585"/>
+        <location filename="../src/quest.cpp" line="1644"/>
         <source>A resource with id &apos;%1&apos; already exists</source>
         <translation>Une ressource avec l&apos;id &apos;%1&apos; existe déjà</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="1590"/>
-        <location filename="../src/quest.cpp" line="1629"/>
-        <location filename="../src/quest.cpp" line="1771"/>
+        <location filename="../src/quest.cpp" line="1649"/>
+        <location filename="../src/quest.cpp" line="1688"/>
+        <location filename="../src/quest.cpp" line="1830"/>
         <source>No such resource: &apos;%1&apos;</source>
         <translation>Ressource inexistante : &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/quest.cpp" line="954"/>
+        <location filename="../src/quest.cpp" line="1013"/>
         <source>File &apos;%1&apos; is not in this quest</source>
         <translation>Le fichier &apos;%1&apos; ne fait pas partie de cette quête</translation>
     </message>
@@ -3302,12 +3315,12 @@ Please save it or close it before renaming.</source>
         <translation>Script Lua</translation>
     </message>
     <message>
-        <location filename="../src/quest_files_model.cpp" line="589"/>
+        <location filename="../src/quest_files_model.cpp" line="529"/>
         <source>%1 (file not found)</source>
         <translation>%1 (fichier introuvable)</translation>
     </message>
     <message>
-        <location filename="../src/quest_files_model.cpp" line="594"/>
+        <location filename="../src/quest_files_model.cpp" line="534"/>
         <source>%1 (not in the quest)</source>
         <translation>%1 (non inclus dans la quête)</translation>
     </message>
@@ -5333,7 +5346,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <location filename="../src/widgets/tileset_editor.cpp" line="1258"/>
         <source>The tileset image was modified.
 Do you want to refresh the tileset?</source>
-        <translation type="unfinished">L&apos;image du tileset a été modifée.
+        <translation>L&apos;image du tileset a été modifée.
 Voulez-vous recharger l&apos;image ?</translation>
     </message>
 </context>
