@@ -430,10 +430,9 @@ void SpriteView::show_context_menu(const QPoint& where) {
   QMenu* menu = new QMenu(this);
 
   // Delete direction.
-  menu->addAction(delete_direction_action);
   menu->addAction(duplicate_direction_action);
   menu->addSeparator();
-  menu->addAction(tr("Cancel"));
+  menu->addAction(delete_direction_action);
 
   // Create the menu at 1,1 to avoid the cursor being already in the first item.
   menu->popup(viewport()->mapToGlobal(where) + QPoint(1, 1));
