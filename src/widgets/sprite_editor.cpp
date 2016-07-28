@@ -650,7 +650,8 @@ public:
 
   SetDirectionNumColumnsCommand(
       SpriteEditor& editor, const SpriteModel::Index& index, int num_columns) :
-    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction num frames")),
+    SpriteEditorCommand(
+      editor, SpriteEditor::tr("Change direction num columns")),
     index(index),
     num_columns_before(get_model().get_direction_num_columns(index)),
     num_columns_after(num_columns) {
@@ -671,6 +672,48 @@ public:
 private:
 
   SpriteModel::Index index;
+  int num_columns_before;
+  int num_columns_after;
+};
+
+/**
+ * @brief Change direction num frames/columns.
+ */
+class SetDirectionNumFramesColumnsCommand : public SpriteEditorCommand {
+
+public:
+
+  SetDirectionNumFramesColumnsCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index,
+      int num_frames, int num_columns) :
+    SpriteEditorCommand(
+      editor, SpriteEditor::tr("Change direction num frames/columns")),
+    index(index),
+    num_frames_before(get_model().get_direction_num_frames(index)),
+    num_frames_after(num_frames),
+    num_columns_before(get_model().get_direction_num_columns(index)),
+    num_columns_after(num_columns) {
+  }
+
+  virtual void undo() override {
+
+    get_model().set_direction_num_frames(index, num_frames_before);
+    get_model().set_direction_num_columns(index, num_columns_before);
+    get_model().set_selected_index(index);
+  }
+
+  virtual void redo() override {
+
+    get_model().set_direction_num_frames(index, num_frames_after);
+    get_model().set_direction_num_columns(index, num_columns_after);
+    get_model().set_selected_index(index);
+  }
+
+private:
+
+  SpriteModel::Index index;
+  int num_frames_before;
+  int num_frames_after;
   int num_columns_before;
   int num_columns_after;
 };
@@ -829,6 +872,9 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(add_direction_requested(QRect)));
   connect(ui.sprite_view, SIGNAL(duplicate_selected_direction_requested(QPoint)),
           this, SLOT(duplicate_selected_direction_requested(QPoint)));
+  connect(ui.sprite_view,
+          SIGNAL(change_direction_num_frames_columns_requested(int,int)),
+          this, SLOT(change_direction_num_frames_columns_requested(int,int)));
   connect(ui.rename_button, SIGNAL(clicked()),
           this, SLOT(rename_animation_requested()));
   connect(ui.duplicate_button, SIGNAL(clicked()),
@@ -1568,6 +1614,38 @@ void SpriteEditor::change_direction_num_columns_requested() {
   }
 
   try_command(new SetDirectionNumColumnsCommand(*this, index, num_columns));
+}
+
+/**
+ * @brief Slot called when the user wants to change the num frames/columns.
+ * @param num_frames The new direction num frames.
+ * @param num_columns The new direction num columns.
+ */
+void SpriteEditor::change_direction_num_frames_columns_requested(
+  int num_frames, int num_columns) {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  int old_num_frames = model->get_direction_num_frames(index);
+  int old_num_columns = model->get_direction_num_columns(index);
+
+  if (num_frames == old_num_frames && num_columns == old_num_columns) {
+    // No change.
+    return;
+  }
+
+  if (num_frames == old_num_frames) {
+    try_command(new SetDirectionNumColumnsCommand(*this, index, num_columns));
+  } else if (num_columns == old_num_columns) {
+    try_command(new SetDirectionNumFramesCommand(*this, index, num_frames));
+  } else {
+    try_command(new SetDirectionNumFramesColumnsCommand(
+                  *this, index, num_frames, num_columns));
+  }
 }
 
 /**

@@ -50,6 +50,8 @@ signals:
   void add_direction_requested(const QRect& frame);
   void change_selected_direction_position_requested(const QPoint& position);
   void duplicate_selected_direction_requested(const QPoint& position);
+  void change_direction_num_frames_columns_requested(
+    int num_frames, int num_columns);
 
 public slots:
 
@@ -61,11 +63,16 @@ public slots:
 private slots:
 
   void duplicate_selected_direction_requested();
+  void change_num_frames_columns_requested();
+  void change_num_columns_requested();
+  void change_num_frames_requested();
 
 protected:
 
   void paintEvent(QPaintEvent* event) override;
 
+  virtual void focusOutEvent(QFocusEvent* event) override;
+  virtual void keyPressEvent(QKeyEvent* event) override;
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;
   virtual void mouseMoveEvent(QMouseEvent* event) override;
@@ -77,19 +84,42 @@ private:
    * @brief Possible operation the user is doing on this view.
    */
   enum class State {
-      NORMAL,                   /**< Can click on directions. */
-      DRAWING_RECTANGLE,        /**< Drawing a rectangle for a new direction. */
-      MOVING_DIRECTION          /**< Moving an existing direcion to another
-                                 * place in the PNG image. */
+    NORMAL,                       /**< Can click on directions. */
+    DRAWING_RECTANGLE,            /**< Drawing a rectangle for a new
+                                   * direction. */
+    MOVING_DIRECTION,             /**< Moving an existing direcion to another
+                                   * place in the PNG image. */
+    CHANGING_NUM_FRAMES_COLUMNS   /**< Changing the number of frames and
+                                   * columns. */
+  };
+
+  /**
+   * @brief Mode of changing the number of frames and columns operation.
+   */
+  enum class ChangingNumFramesColumnsMode {
+    CHANGE_BOTH,          /**< Changing the number of frames and columns with
+                             * the number of frames fixed to a multiple of the
+                             * number of columns. */
+    CHANGE_NUM_FRAMES,    /**< Changing the number of frames with the number
+                             * of columns fixed. */
+    CHANGE_NUM_COLUMNS    /**< Changing the number of columns with the number
+                             * of frames fixed. */
   };
 
   void show_context_menu(const QPoint& where);
+
+  void change_num_frames_columns(const ChangingNumFramesColumnsMode& mode);
 
   void start_state_normal();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void end_state_drawing_rectangle();
   void start_state_moving_direction(const QPoint& initial_point);
   void end_state_moving_direction();
+  void start_state_changing_num_frames_columns(const QPoint& initial_point,
+    const ChangingNumFramesColumnsMode& mode);
+  void update_state_changing_num_frames_columns(const QPoint& current_point);
+  void end_state_changing_num_frames_columns();
+  void cancel_state_changing_num_frames_columns();
   void set_current_area(const QRect& area);
 
   QPointer<SpriteModel> model;         /**< The sprite model. */
@@ -98,7 +128,18 @@ private:
                                         * direction. */
   QAction* duplicate_direction_action; /**< Action of duplicate the selected
                                         * direction. */
+  QAction*
+    change_num_frames_columns_action;  /**< Action of change the number of
+                                        * frames and columns of the selected
+                                        * direction. */
+  QAction* change_num_frames_action;   /**< Action of change the number of
+                                        * frames of the selected direction. */
+  QAction* change_num_columns_action;  /**< Action of change the number of
+                                        * columns of the selected direction. */
   State state;                         /**< Current operation done by user. */
+  ChangingNumFramesColumnsMode
+      changing_mode;                   /**< Current mode for changing the number
+                                        * of frames and columns operation. */
   QPoint dragging_start_point;         /**< In states DRAWING_RECTANGLE and
                                         * MOVING_DIRECTION: point where the
                                         * dragging started, in scene
