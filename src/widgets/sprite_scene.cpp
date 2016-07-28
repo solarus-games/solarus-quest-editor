@@ -49,6 +49,8 @@ public:
   SpriteModel::Index get_index() const;
   void set_index(const SpriteModel::Index& index);
 
+  void update_rect();
+
   QRectF boundingRect() const override;
 
 protected:
@@ -61,6 +63,7 @@ private:
 
   SpriteModel& model;            /**< The sprite this direction belongs to. */
   SpriteModel::Index index;      /**< Index of the direction in the sprite. */
+  QRect bounding_rect;           /**< The current bounding rect. */
 
 };
 
@@ -87,11 +90,11 @@ SpriteScene::SpriteScene(SpriteModel& model, QObject* parent) :
   connect(&model, SIGNAL(direction_position_changed(Index,QPoint)),
           this, SLOT(update_direction_position(Index,QPoint)));
   connect(&model, SIGNAL(direction_size_changed(Index,QSize)),
-          this, SLOT(invalidate()));
+          this, SLOT(update_direction_rect(Index)));
   connect(&model, SIGNAL(direction_num_frames_changed(Index,int)),
-          this, SLOT(invalidate()));
+          this, SLOT(update_direction_rect(Index)));
   connect(&model, SIGNAL(direction_num_columns_changed(Index,int)),
-          this, SLOT(invalidate()));
+          this, SLOT(update_direction_rect(Index)));
   connect(&model, SIGNAL(animation_image_changed(Index,QString)),
           this, SLOT(update_image()));
 }
@@ -282,6 +285,24 @@ void SpriteScene::update_direction_position(
 }
 
 /**
+ * @brief Slot called when the rect of a direction changes.
+ * @param index Index of the direction changed.
+ */
+void SpriteScene::update_direction_rect(const Index &index) {
+
+  if (index.animation_name != animation_name ||
+      index.direction_nb >= direction_items.size()) {
+    return;
+  }
+
+  DirectionItem* direction_item =
+      qgraphicsitem_cast<DirectionItem*>(direction_items[index.direction_nb]);
+  if (direction_item != nullptr) {
+    direction_item->update_rect();
+  }
+}
+
+/**
  * @brief Creates a direction item.
  * @param model The sprite.
  * @param index Index of the direction in the sprite.
@@ -294,6 +315,7 @@ DirectionItem::DirectionItem(
   QRect frame = model.get_direction_first_frame_rect(index);
   setPos(frame.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
+  update_rect();
 }
 
 /**
@@ -313,15 +335,22 @@ void DirectionItem::set_index(const SpriteModel::Index& index) {
 }
 
 /**
+ * @brief Updates the bounding rect.
+ */
+void DirectionItem::update_rect() {
+
+  prepareGeometryChange();
+  bounding_rect = model.get_direction_all_frames_rect(index);
+  bounding_rect.translate(-bounding_rect.topLeft());
+}
+
+/**
  * @brief Returns the bounding rect of this direction item.
  * @return The bounding rect.
  */
 QRectF DirectionItem::boundingRect() const {
 
-  QRect rect = model.get_direction_all_frames_rect(index);
-  QPoint top_left = rect.topLeft();
-  rect.translate(-top_left);
-  return rect;
+  return bounding_rect;
 }
 
 /**

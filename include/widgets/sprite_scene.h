@@ -55,6 +55,7 @@ private slots:
       const QItemSelection& selected, const QItemSelection& deselected);
   void set_selection_from_scene();
   void update_direction_position(const Index& index, const QPoint& pos);
+  void update_direction_rect(const Index& index);
 
 private:
 
