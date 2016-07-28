@@ -10,7 +10,7 @@ function sol.main:on_started()
   -- Setting a language is useful to display text and dialogs.
   sol.language.set_language("en")
 
-  local solarus_logo = require("menus/solarus_logo")
+  local solarus_logo = require("scripts/menus/solarus_logo")
 
   -- Show the Solarus logo initially.
   sol.menu.start(self, solarus_logo)
