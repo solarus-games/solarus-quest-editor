@@ -64,6 +64,8 @@ resources/images/icon_strings.png
 resources/images/icon_dialog.png
 resources/images/icon_dialogs.png
 resources/images/icon_property.png
+resources/images/icon_up.png
+resources/images/icon_down.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 

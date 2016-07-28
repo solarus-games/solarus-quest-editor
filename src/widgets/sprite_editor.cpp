@@ -406,6 +406,72 @@ private:
 };
 
 /**
+ * @brief Move up a direction.
+ */
+class MoveUpDirectionCommand : public SpriteEditorCommand {
+
+public:
+
+  MoveUpDirectionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Move up direction")),
+    index_before(index),
+    index_after(index) {
+    index_after.direction_nb--;
+  }
+
+  virtual void undo() override {
+
+    get_model().move_direction(index_after, index_before.direction_nb);
+    get_model().set_selected_index(index_before);
+  }
+
+  virtual void redo() override {
+
+    get_model().move_direction(index_before, index_after.direction_nb);
+    get_model().set_selected_index(index_after);
+  }
+
+private:
+
+  SpriteModel::Index index_before;
+  SpriteModel::Index index_after;
+};
+
+/**
+ * @brief Move down a direction.
+ */
+class MoveDownDirectionCommand : public SpriteEditorCommand {
+
+public:
+
+  MoveDownDirectionCommand(
+      SpriteEditor& editor, const SpriteModel::Index& index) :
+    SpriteEditorCommand(editor, SpriteEditor::tr("Move down direction")),
+    index_before(index),
+    index_after(index) {
+    index_after.direction_nb++;
+  }
+
+  virtual void undo() override {
+
+    get_model().move_direction(index_after, index_before.direction_nb);
+    get_model().set_selected_index(index_before);
+  }
+
+  virtual void redo() override {
+
+    get_model().move_direction(index_before, index_after.direction_nb);
+    get_model().set_selected_index(index_after);
+  }
+
+private:
+
+  SpriteModel::Index index_before;
+  SpriteModel::Index index_after;
+};
+
+/**
  * @brief Delete a direction.
  */
 class DeleteDirectionCommand : public SpriteEditorCommand {
@@ -767,6 +833,10 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(rename_animation_requested()));
   connect(ui.duplicate_button, SIGNAL(clicked()),
           this, SLOT(duplicate_requested()));
+  connect(ui.up_button, SIGNAL(clicked(bool)),
+          this, SLOT(move_up_requested()));
+  connect(ui.down_button, SIGNAL(clicked(bool)),
+          this, SLOT(move_down_requested()));
   connect(ui.delete_button, SIGNAL(clicked()), this, SLOT(delete_requested()));
   connect(ui.sprite_view, SIGNAL(delete_selected_direction_requested()),
           this, SLOT(delete_direction_requested()));
@@ -1036,6 +1106,44 @@ void SpriteEditor::duplicate_selected_direction_requested(const QPoint& position
 }
 
 /**
+ * @brief Slot called when the user wants to move up a direction.
+ */
+void SpriteEditor::move_up_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  if (index.direction_nb <= 0) {
+    // Cannot move.
+    return;
+  }
+
+  try_command(new MoveUpDirectionCommand(*this, index));
+}
+
+/**
+ * @brief Slot called when the user wants to move down a direction.
+ */
+void SpriteEditor::move_down_requested() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (!index.is_direction_index()) {
+    // No direction selected.
+    return;
+  }
+
+  if (index.direction_nb >= model->get_animation_num_directions(index) - 1) {
+    // Cannot move.
+    return;
+  }
+
+  try_command(new MoveDownDirectionCommand(*this, index));
+}
+
+/**
  * @brief Slot called when the user wants to delete an animation or a direction.
  */
 void SpriteEditor::delete_requested() {
@@ -1275,10 +1383,15 @@ void SpriteEditor::update_direction_view() {
   update_direction_num_frames_field();
   update_direction_num_columns_field();
 
-  // If no directin is selected, disable the direction view.
+  // If no direction is selected, disable the direction view.
   SpriteModel::Index index = model->get_selected_index();
   bool enable = index.is_direction_index();
   ui.direction_properties_group_box->setEnabled(enable);
+
+  // Enable move up/down buttons.
+  int num_directions = model->get_animation_num_directions(index);
+  ui.up_button->setEnabled(enable && index.direction_nb > 0);
+  ui.down_button->setEnabled(enable && index.direction_nb < num_directions - 1);
 
   // expand the selected animation item
   if (enable) {
