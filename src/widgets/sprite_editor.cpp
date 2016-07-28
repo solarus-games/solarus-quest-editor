@@ -848,6 +848,10 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(rename_animation_requested()));
   connect(ui.sprite_tree_view, SIGNAL(duplicate_requested()),
           this, SLOT(duplicate_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(move_up_requested()),
+          this, SLOT(move_up_requested()));
+  connect(ui.sprite_tree_view, SIGNAL(move_down_requested()),
+          this, SLOT(move_down_requested()));
   connect(ui.sprite_tree_view, SIGNAL(delete_requested()),
           this, SLOT(delete_requested()));
 

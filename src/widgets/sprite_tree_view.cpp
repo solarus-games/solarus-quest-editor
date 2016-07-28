@@ -61,6 +61,18 @@ SpriteTreeView::SpriteTreeView(QWidget* parent) :
           this, SIGNAL(duplicate_requested()));
   addAction(duplicate_action);
 
+  move_up_action = new QAction(
+        QIcon(":/images/icon_up.png"), tr("Move up..."), this);
+  connect(move_up_action, SIGNAL(triggered()),
+          this, SIGNAL(move_up_requested()));
+  addAction(move_up_action);
+
+  move_down_action = new QAction(
+        QIcon(":/images/icon_down.png"), tr("Move down..."), this);
+  connect(move_down_action, SIGNAL(triggered()),
+          this, SIGNAL(move_down_requested()));
+  addAction(move_down_action);
+
   delete_action = new QAction(
         QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
   delete_action->setShortcut(QKeySequence::Delete);
@@ -89,6 +101,17 @@ void SpriteTreeView::contextMenuEvent(QContextMenuEvent *event) {
     menu->addSeparator();
     menu->addAction(rename_animation_action);
     menu->addAction(duplicate_action);
+
+    if (index.is_direction_index()) {
+      menu->addSeparator();
+      menu->addAction(move_up_action);
+      menu->addAction(move_down_action);
+
+      int num_directions = model->get_animation_num_directions(index);
+      move_up_action->setEnabled(index.direction_nb > 0);
+      move_down_action->setEnabled(index.direction_nb < num_directions - 1);
+    }
+
     menu->addSeparator();
     menu->addAction(delete_action);
   }
