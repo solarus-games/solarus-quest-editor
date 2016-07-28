@@ -31,6 +31,8 @@ const QString EditorSettings::save_files_before_running = "save_files_before_run
 const QString EditorSettings::no_audio = "no_audio";
 const QString EditorSettings::video_acceleration = "video_acceleration";
 const QString EditorSettings::quest_size = "quest_size";
+const QString EditorSettings::open_quest_file_history =
+  "open_quest_file_history";
 
 // Console keys.
 const QString EditorSettings::console_history = "console_history";
@@ -95,6 +97,7 @@ QMap<QString, QVariant> EditorSettings::default_values = {
   { EditorSettings::no_audio, false },
   { EditorSettings::video_acceleration, true },
   { EditorSettings::quest_size, QSize() },
+  { EditorSettings::open_quest_file_history, QMap<QString, QVariant>() },
 
   // Console.
   { EditorSettings::console_history, QStringList() },
@@ -249,6 +252,16 @@ QColor EditorSettings::get_value_color(const QString& key) {
 }
 
 /**
+ * @brief Returns a settings map value.
+ * @param key The key of the setting.
+ * @return The map value of the setting.
+ */
+QMap<QString, QVariant> EditorSettings::get_value_map(const QString& key) {
+
+  return get_value(key).toMap();
+}
+
+/**
  * @brief Returns a settings default value.
  * @param key The key of the setting.
  * @return The default value of the setting.
@@ -319,6 +332,16 @@ QSize EditorSettings::get_default_size(const QString& key) {
 QColor EditorSettings::get_default_color(const QString& key) {
 
   return QColor(get_default(key).toString());
+}
+
+/**
+ * @brief Returns a settings default map value.
+ * @param key The key of the setting.
+ * @return The default map value of the setting.
+ */
+QMap<QString, QVariant> EditorSettings::get_default_map(const QString& key) {
+
+  return get_default(key).toMap();
 }
 
 /**

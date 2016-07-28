@@ -574,6 +574,65 @@ QString Quest::get_tileset_entities_image_path(
 }
 
 /**
+ * @brief Returns an appropriate icon for the specified quest file.
+ * @param file_path Path of the file.
+ * @return An appropriate icon name to represent this file.
+ */
+QIcon Quest::get_file_icon(const QString& file_path) const {
+
+  QString icon_file_name;  // Relative to the icons directory.
+  ResourceType resource_type;
+  QString element_id;
+
+  // Quest data directory or quest properties.
+  if (is_data_path(file_path) || is_properties_path(file_path)) {
+    icon_file_name = "icon_solarus.png";
+  }
+
+  // Resource element (possibly a directory for languages).
+  else if (is_resource_element(file_path, resource_type, element_id)) {
+
+    QString resource_type_name = get_resources().get_lua_name(resource_type);
+    if (exists(get_resource_element_path(resource_type, element_id))) {
+      // Resource declared and present on the filesystem.
+      icon_file_name = "icon_resource_" + resource_type_name + ".png";
+    }
+    else {
+      // Resource declared but whose file is missing.
+      icon_file_name = "icon_resource_" + resource_type_name + "_missing.png";
+    }
+  }
+
+  // Directory icon.
+  else if (is_dir(file_path)) {
+
+    if (is_resource_path(file_path, resource_type)) {
+      QString resource_type_name = get_resources().get_lua_name(resource_type);
+      icon_file_name = "icon_folder_open_" + resource_type_name + ".png";
+    }
+    else {
+      icon_file_name = "icon_folder_open.png";
+    }
+  }
+
+  // Lua script icon.
+  else if (is_script(file_path)) {
+    icon_file_name = "icon_script.png";
+  }
+
+  // Generic icon for a file not known by the quest.
+  else {
+    icon_file_name = "icon_file_unknown.png";
+  }
+
+  if (icon_file_name.isEmpty()) {
+    return QIcon();
+  }
+
+  return QIcon(":/images/" + icon_file_name);
+}
+
+/**
  * @brief Returns whether a path is the quest properties file quest.dat.
  * @param path The path to test.
  * @return @c true if this is the quest properties file.
