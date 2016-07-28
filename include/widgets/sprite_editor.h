@@ -58,6 +58,8 @@ public slots:
   void add_direction_requested(const QRect& frame);
   void duplicate_requested();
   void duplicate_selected_direction_requested(const QPoint &position);
+  void move_up_requested();
+  void move_down_requested();
   void delete_requested();
   void delete_direction_requested();
 
