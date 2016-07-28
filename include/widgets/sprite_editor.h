@@ -87,6 +87,8 @@ public slots:
   void change_direction_num_frames_requested();
   void update_direction_num_columns_field();
   void change_direction_num_columns_requested();
+  void change_direction_num_frames_columns_requested(
+    int num_frames, int num_columns);
 
 private:
 
