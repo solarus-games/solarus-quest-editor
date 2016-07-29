@@ -475,7 +475,21 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       scene->invalidate(previous_rect);
     }
   } else if (state == State::CHANGING_NUM_FRAMES_COLUMNS) {
-    update_state_changing_num_frames_columns(event->pos());
+
+    SpriteModel::Index index = model->get_selected_index();
+    if (!index.is_direction_index()) {
+      cancel_state_changing_num_frames_columns();
+    }
+    else {
+      int num_frames = 1;
+      int num_columns = 1;
+
+      dragging_current_point = mapToScene(event->pos()).toPoint();
+      compute_num_frames_columns(num_frames, num_columns);
+
+      current_area_item.set_num_frames(num_frames);
+      current_area_item.set_num_columns(num_columns);
+    }
   }
 
   // The parent class tracks mouse movements for internal needs
@@ -671,23 +685,46 @@ void SpriteView::start_state_changing_num_frames_columns(
 }
 
 /**
- * @brief Updates the state of changing the number of frames and columns.
- * @param current_point Where the user dragging the direction,
- * in view coordinates.
+ * @brief Finishes changing the number of frames and columns.
  */
-void SpriteView::update_state_changing_num_frames_columns(
-  const QPoint& current_point) {
+void SpriteView::end_state_changing_num_frames_columns() {
+
+  SpriteModel::Index index = model->get_selected_index();
+  if (index.is_direction_index()) {
+
+    int num_frames = 1;
+    int num_columns = 1;
+
+    compute_num_frames_columns(num_frames, num_columns);
+
+    emit change_direction_num_frames_columns_requested(num_frames, num_columns);
+  }
+
+  cancel_state_changing_num_frames_columns();
+}
+
+/**
+ * @brief Cancels changing the number of frames and columns.
+ */
+void SpriteView::cancel_state_changing_num_frames_columns() {
+
+  scene->removeItem(&current_area_item);
+  start_state_normal();
+}
+
+/**
+ * @brief Computes the current number of frames and columns for changing state.
+ * @param[ou] num_frames The number of frame.
+ * @param[ou] num_columns The number of columns.
+ */
+void SpriteView::compute_num_frames_columns(int& num_frames, int& num_columns) {
 
   SpriteModel::Index index = model->get_selected_index();
   if (!index.is_direction_index()) {
-    cancel_state_changing_num_frames_columns();
     return;
   }
 
   QRect rect = model->get_direction_first_frame_rect(index);
-  int num_frames = 1;
-  int num_columns = 1;
-  dragging_current_point = mapToScene(current_point).toPoint();
 
   if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_BOTH) {
 
@@ -708,56 +745,6 @@ void SpriteView::update_state_changing_num_frames_columns(
   else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_COLUMNS) {
     // TODO: implement this mode.
   }
-
-  current_area_item.set_num_frames(num_frames);
-  current_area_item.set_num_columns(num_columns);
-}
-
-/**
- * @brief Finishes changing the number of frames and columns.
- */
-void SpriteView::end_state_changing_num_frames_columns() {
-
-  SpriteModel::Index index = model->get_selected_index();
-  if (index.is_direction_index()) {
-
-    QRect rect = model->get_direction_first_frame_rect(index);
-    int num_frames = 1;
-    int num_columns = 1;
-
-    if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_BOTH) {
-
-      int x = dragging_current_point.x() + rect.width() - rect.x();
-      x = (x / rect.width()) * rect.width();
-      x = qMax(x, rect.width());
-
-      int y = dragging_current_point.y() + rect.height() - rect.y();
-      y = (y / rect.height()) * rect.height();
-      y = qMax(y, rect.height());
-
-      num_columns = x / rect.width();
-      num_frames = (y / rect.height()) * num_columns;
-    }
-    else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_FRAMES) {
-      // TODO: implement this mode.
-    }
-    else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_COLUMNS) {
-      // TODO: implement this mode.
-    }
-
-    emit change_direction_num_frames_columns_requested(num_frames, num_columns);
-  }
-
-  cancel_state_changing_num_frames_columns();
-}
-
-/**
- * @brief Cancels changing the number of frames and columns.
- */
-void SpriteView::cancel_state_changing_num_frames_columns() {
-
-  scene->removeItem(&current_area_item);
-  start_state_normal();
 }
 
 /**
