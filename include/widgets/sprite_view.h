@@ -152,9 +152,9 @@ private:
   void end_state_moving_direction();
   void start_state_changing_num_frames_columns(
     const ChangingNumFramesColumnsMode& mode);
-  void update_state_changing_num_frames_columns(const QPoint& current_point);
   void end_state_changing_num_frames_columns();
   void cancel_state_changing_num_frames_columns();
+  void compute_num_frames_columns(int& num_frames, int& num_columns);
 
   QPointer<SpriteModel> model;         /**< The sprite model. */
   SpriteScene* scene;                  /**< The scene viewed. */
