@@ -117,6 +117,7 @@ private:
 
     DirectionAreaItem();
 
+    QSize get_frame_size() const;
     int get_num_frames() const;
     int get_num_columns() const;
 
@@ -160,6 +161,7 @@ private:
   void end_state_moving_direction();
   void start_state_changing_num_frames_columns(
     const ChangingNumFramesColumnsMode& mode);
+  void start_state_creating_multiframe_direction();
   void end_state_changing_num_frames_columns();
   void cancel_state_changing_num_frames_columns();
   void compute_num_frames_columns(int& num_frames, int& num_columns);
@@ -182,6 +184,9 @@ private:
   ChangingNumFramesColumnsMode
       changing_mode;                   /**< Current mode for changing the number
                                         * of frames and columns operation. */
+  bool create_multiframe_direction;    /**< Whether a new direction must be
+                                        * created in the
+                                        * CHANGING_NUM_FRAMES_COLUMNS state. */
   QPoint dragging_start_point;         /**< In states DRAWING_RECTANGLE and
                                         * MOVING_DIRECTION: point where the
                                         * dragging started, in scene
