@@ -61,7 +61,9 @@ SpriteView::SpriteView(QWidget* parent) :
 
   change_num_frames_columns_action = new QAction(
         tr("Change the number of frames/columns"), this);
-  // TODO: set a shortcut to changing the number of frames and columns
+  change_num_frames_columns_action->setShortcut(tr("R"));
+  change_num_frames_columns_action->setShortcutContext(
+    Qt::WidgetWithChildrenShortcut);
   connect(change_num_frames_columns_action, SIGNAL(triggered()),
           this, SLOT(change_num_frames_columns_requested()));
   addAction(change_num_frames_columns_action);
@@ -499,14 +501,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
     }
     else {
       dragging_current_point = map_to_scene(event->pos(), false);
-
-      int num_frames = current_area_item.get_num_frames();
-      int num_columns = current_area_item.get_num_columns();
-      compute_num_frames_columns(num_frames, num_columns);
-
-      current_area_item.set_num_frames(num_frames);
-      current_area_item.set_num_columns(num_columns);
-      update_selection_validity = true;
+      update_state_changing_num_frames_columns();
     }
   }
 
@@ -622,7 +617,8 @@ void SpriteView::end_state_drawing_rectangle() {
     QAction* new_multiframe_direction_action =
       new QAction(tr("New multiframe direction"), this);
     connect(new_multiframe_direction_action, &QAction::triggered, [this] {
-      start_state_creating_multiframe_direction();
+      start_state_changing_num_frames_columns(
+        ChangingNumFramesColumnsMode::CHANGE_BOTH, true);
     });
     menu.addAction(new_direction_action);
     menu.addAction(new_multiframe_direction_action);
@@ -700,36 +696,35 @@ void SpriteView::end_state_moving_direction() {
  * @param mode The changing mode.
  */
 void SpriteView::start_state_changing_num_frames_columns(
-  const ChangingNumFramesColumnsMode& mode) {
+  const ChangingNumFramesColumnsMode& mode, bool create) {
 
-  SpriteModel::Index index = model->get_selected_index();
-  if (!index.is_direction_index()) {
-    return;
+  if (!create) {
+    SpriteModel::Index index = model->get_selected_index();
+    if (!index.is_direction_index()) {
+      return;
+    }
+
+    current_area_item.setPos(model->get_direction_position(index));
+    current_area_item.set_frame_size(model->get_direction_size(index));
+    current_area_item.set_num_frames(model->get_direction_num_frames(index));
+    current_area_item.set_num_columns(model->get_direction_num_columns(index));
+    scene->addItem(&current_area_item);
   }
 
   state = State::CHANGING_NUM_FRAMES_COLUMNS;
   changing_mode = mode;
 
-  current_area_item.setPos(model->get_direction_position(index));
-  current_area_item.set_frame_size(model->get_direction_size(index));
-  current_area_item.set_num_frames(model->get_direction_num_frames(index));
-  current_area_item.set_num_columns(model->get_direction_num_columns(index));
+  create_multiframe_direction = create;
   current_area_item.set_valid(true);
-  create_multiframe_direction = false;
-  scene->addItem(&current_area_item);
+
+  dragging_current_point = map_to_scene(mapFromGlobal(QCursor::pos()), false);
+  update_state_changing_num_frames_columns();
 }
 
 /**
- * @brief Moves to the state of creating a new multiframe direction.
+ * @brief Updates to the state of changing the number of frames and columns.
  */
-void SpriteView::start_state_creating_multiframe_direction() {
-
-  state = State::CHANGING_NUM_FRAMES_COLUMNS;
-  changing_mode = ChangingNumFramesColumnsMode::CHANGE_BOTH;
-  create_multiframe_direction = true;
-
-  // Update the area.
-  dragging_current_point = map_to_scene(mapFromGlobal(QCursor::pos()));
+void SpriteView::update_state_changing_num_frames_columns() {
 
   int num_frames = current_area_item.get_num_frames();
   int num_columns = current_area_item.get_num_columns();
