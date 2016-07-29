@@ -116,12 +116,15 @@ private:
 
     DirectionAreaItem();
 
+    int get_num_frames() const;
+    int get_num_columns() const;
+
     void set_frame_size(const QSize& frame_size);
     void set_num_frames(int num_frames);
     void set_num_columns(int num_columns);
     void set_valid(bool valid);
 
-    QRect get_direction_all_frames_rect();
+    QRect get_direction_all_frames_rect() const;
 
     virtual QRectF boundingRect() const override;
 

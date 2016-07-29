@@ -497,10 +497,10 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       cancel_state_changing_num_frames_columns();
     }
     else {
-      int num_frames = 1;
-      int num_columns = 1;
-
       dragging_current_point = map_to_scene(event->pos(), false);
+
+      int num_frames = current_area_item.get_num_frames();
+      int num_columns = current_area_item.get_num_columns();
       compute_num_frames_columns(num_frames, num_columns);
 
       current_area_item.set_num_frames(num_frames);
@@ -715,11 +715,12 @@ void SpriteView::start_state_changing_num_frames_columns(
 void SpriteView::end_state_changing_num_frames_columns() {
 
   SpriteModel::Index index = model->get_selected_index();
-  if (index.is_direction_index()) {
+  QRect rect = current_area_item.get_direction_all_frames_rect();
+  if (index.is_direction_index() &&
+      !rect.isEmpty() && sceneRect().contains(rect)) {
 
-    int num_frames = 1;
-    int num_columns = 1;
-
+    int num_frames = current_area_item.get_num_frames();
+    int num_columns = current_area_item.get_num_columns();
     compute_num_frames_columns(num_frames, num_columns);
 
     emit change_direction_num_frames_columns_requested(num_frames, num_columns);
@@ -739,8 +740,8 @@ void SpriteView::cancel_state_changing_num_frames_columns() {
 
 /**
  * @brief Computes the current number of frames and columns for changing state.
- * @param[ou] num_frames The number of frame.
- * @param[ou] num_columns The number of columns.
+ * @param[out] num_frames The number of frames.
+ * @param[out] num_columns The number of columns.
  */
 void SpriteView::compute_num_frames_columns(int& num_frames, int& num_columns) {
 
@@ -750,25 +751,27 @@ void SpriteView::compute_num_frames_columns(int& num_frames, int& num_columns) {
   }
 
   QRect rect = model->get_direction_first_frame_rect(index);
+  int direction_num_frames = model->get_direction_num_frames(index);
+  int direction_num_columns = model->get_direction_num_columns(index);
 
-  if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_BOTH) {
+  int column = dragging_current_point.x() + rect.width() - rect.x();
+  column = qMax(column, rect.width()) / rect.width();
 
-    int x = dragging_current_point.x() + rect.width() - rect.x();
-    x = (x / rect.width()) * rect.width();
-    x = qMax(x, rect.width());
+  if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_COLUMNS) {
+    num_columns = qMin(direction_num_frames, column);
+  } else {
 
-    int y = dragging_current_point.y() + rect.height() - rect.y();
-    y = (y / rect.height()) * rect.height();
-    y = qMax(y, rect.height());
+    int row = dragging_current_point.y() + rect.height() - rect.y();
+    row = qMax(row, rect.height()) / rect.height();
 
-    num_columns = x / rect.width();
-    num_frames = (y / rect.height()) * num_columns;
-  }
-  else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_FRAMES) {
-    // TODO: implement this mode.
-  }
-  else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_COLUMNS) {
-    // TODO: implement this mode.
+    if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_FRAMES) {
+      num_frames = qMin(direction_num_columns, column);
+      num_frames += (row - 1) * direction_num_columns;
+    }
+    else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_BOTH) {
+      num_columns = column;
+      num_frames = row * num_columns;
+    }
   }
 }
 
@@ -781,6 +784,22 @@ SpriteView::DirectionAreaItem::DirectionAreaItem() :
   num_columns(1),
   is_valid(true) {
   update_bouding_rect();
+}
+
+/**
+ * @brief Returns the number of frames.
+ * @return The number of frames.
+ */
+int SpriteView::DirectionAreaItem::get_num_frames() const {
+  return num_frames;
+}
+
+/**
+ * @brief Returns the number of columns.
+ * @return The number of columns.
+ */
+int SpriteView::DirectionAreaItem::get_num_columns() const {
+  return num_columns;
 }
 
 /**
@@ -826,7 +845,7 @@ void SpriteView::DirectionAreaItem::set_valid(bool valid) {
  * @brief Returns a rect that contains all frames of a direction.
  * @return The direction's frames rect.
  */
-QRect SpriteView::DirectionAreaItem::get_direction_all_frames_rect() {
+QRect SpriteView::DirectionAreaItem::get_direction_all_frames_rect() const {
 
   QRectF rectf = boundingRect();
   rectf.translate(pos());
