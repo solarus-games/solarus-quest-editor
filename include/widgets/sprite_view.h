@@ -119,6 +119,7 @@ private:
     void set_frame_size(const QSize& frame_size);
     void set_num_frames(int num_frames);
     void set_num_columns(int num_columns);
+    void set_valid(bool valid);
 
     QRect get_direction_all_frames_rect();
 
@@ -138,6 +139,7 @@ private:
     QRect bounding_rect;  /**< The current bounding rect. */
     int num_frames;       /**< The number of frames. */
     int num_columns;      /**< The number of columns. */
+    bool is_valid;        /**< Whether the area is valid. */
 
   };
 

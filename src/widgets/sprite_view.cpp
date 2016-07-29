@@ -441,6 +441,8 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
     return;
   }
 
+  bool update_selection_validity = false;
+
   if (state == State::DRAWING_RECTANGLE) {
 
     // Compute the selected area.
@@ -465,6 +467,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
 
       current_area_item.setPos(QPoint(x, y));
       current_area_item.set_frame_size(QSize(width, height));
+      update_selection_validity = true;
     }
   }
   else if (state == State::MOVING_DIRECTION) {
@@ -482,6 +485,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       current_area_item.setPos(QPoint(
         position.x() + dragging_current_point.x() - dragging_start_point.x(),
         position.y() + dragging_current_point.y() - dragging_start_point.y()));
+      update_selection_validity = true;
 
       // To ensure that the previous area is clean.
       scene->invalidate(previous_rect);
@@ -501,7 +505,13 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
 
       current_area_item.set_num_frames(num_frames);
       current_area_item.set_num_columns(num_columns);
+      update_selection_validity = true;
     }
+  }
+
+  if (update_selection_validity) {
+    QRect rect = current_area_item.get_direction_all_frames_rect();
+    current_area_item.set_valid(!rect.isEmpty() && sceneRect().contains(rect));
   }
 
   // The parent class tracks mouse movements for internal needs
@@ -588,6 +598,7 @@ void SpriteView::start_state_drawing_rectangle(const QPoint& initial_point) {
   current_area_item.set_frame_size(QSize(8, 8));
   current_area_item.set_num_frames(1);
   current_area_item.set_num_columns(1);
+  current_area_item.set_valid(true);
   scene->addItem(&current_area_item);
 }
 
@@ -637,6 +648,7 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
   current_area_item.set_frame_size(model->get_direction_size(index));
   current_area_item.set_num_frames(model->get_direction_num_frames(index));
   current_area_item.set_num_columns(model->get_direction_num_columns(index));
+  current_area_item.set_valid(true);
   scene->addItem(&current_area_item);
 }
 
@@ -693,6 +705,7 @@ void SpriteView::start_state_changing_num_frames_columns(
   current_area_item.set_frame_size(model->get_direction_size(index));
   current_area_item.set_num_frames(model->get_direction_num_frames(index));
   current_area_item.set_num_columns(model->get_direction_num_columns(index));
+  current_area_item.set_valid(true);
   scene->addItem(&current_area_item);
 }
 
@@ -765,7 +778,8 @@ void SpriteView::compute_num_frames_columns(int& num_frames, int& num_columns) {
 SpriteView::DirectionAreaItem::DirectionAreaItem() :
   frame_size(8, 8),
   num_frames(1),
-  num_columns(1) {
+  num_columns(1),
+  is_valid(true) {
   update_bouding_rect();
 }
 
@@ -800,6 +814,15 @@ void SpriteView::DirectionAreaItem::set_num_columns(int num_columns) {
 }
 
 /**
+ * @brief Changes whether the area is valid.
+ * @param valid Whether the area is valid.
+ */
+void SpriteView::DirectionAreaItem::set_valid(bool valid) {
+
+  is_valid = valid;
+}
+
+/**
  * @brief Returns a rect that contains all frames of a direction.
  * @return The direction's frames rect.
  */
@@ -829,7 +852,7 @@ void SpriteView::DirectionAreaItem::paint(
   QSize draw_size = frame_size - QSize(1, 1);
 
   painter->save();
-  painter->setPen(Qt::yellow);
+  painter->setPen(is_valid ? Qt::yellow : Qt::red);
 
   for (int i = 0; i < num_frames; ++i) {
     int row = qFloor(i / num_columns);
