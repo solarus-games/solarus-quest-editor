@@ -38,6 +38,7 @@ SpriteView::SpriteView(QWidget* parent) :
   scene(nullptr),
   delete_direction_action(nullptr),
   state(State::NORMAL),
+  create_multiframe_direction(false),
   view_settings(nullptr),
   zoom(1.0) {
 
@@ -493,7 +494,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
   } else if (state == State::CHANGING_NUM_FRAMES_COLUMNS) {
 
     SpriteModel::Index index = model->get_selected_index();
-    if (!index.is_direction_index()) {
+    if (!index.is_direction_index() && !create_multiframe_direction) {
       cancel_state_changing_num_frames_columns();
     }
     else {
@@ -618,14 +619,22 @@ void SpriteView::end_state_drawing_rectangle() {
     connect(new_direction_action, &QAction::triggered, [this, rectangle] {
       emit add_direction_requested(rectangle, 1, 1);
     });
+    QAction* new_multiframe_direction_action =
+      new QAction(tr("New multiframe direction"), this);
+    connect(new_multiframe_direction_action, &QAction::triggered, [this] {
+      start_state_creating_multiframe_direction();
+    });
     menu.addAction(new_direction_action);
+    menu.addAction(new_multiframe_direction_action);
     menu.addSeparator();
     menu.addAction(tr("Cancel"));
     menu.exec(cursor().pos() + QPoint(1, 1));
   }
 
-  scene->removeItem(&current_area_item);
-  start_state_normal();
+  if (state != State::CHANGING_NUM_FRAMES_COLUMNS) {
+    scene->removeItem(&current_area_item);
+    start_state_normal();
+  }
 }
 
 /**
@@ -706,7 +715,32 @@ void SpriteView::start_state_changing_num_frames_columns(
   current_area_item.set_num_frames(model->get_direction_num_frames(index));
   current_area_item.set_num_columns(model->get_direction_num_columns(index));
   current_area_item.set_valid(true);
+  create_multiframe_direction = false;
   scene->addItem(&current_area_item);
+}
+
+/**
+ * @brief Moves to the state of creating a new multiframe direction.
+ */
+void SpriteView::start_state_creating_multiframe_direction() {
+
+  state = State::CHANGING_NUM_FRAMES_COLUMNS;
+  changing_mode = ChangingNumFramesColumnsMode::CHANGE_BOTH;
+  create_multiframe_direction = true;
+
+  // Update the area.
+  dragging_current_point = map_to_scene(mapFromGlobal(QCursor::pos()));
+
+  int num_frames = current_area_item.get_num_frames();
+  int num_columns = current_area_item.get_num_columns();
+  compute_num_frames_columns(num_frames, num_columns);
+
+  current_area_item.set_num_frames(num_frames);
+  current_area_item.set_num_columns(num_columns);
+
+  // Check validity.
+  QRect rect = current_area_item.get_direction_all_frames_rect();
+  current_area_item.set_valid(!rect.isEmpty() && sceneRect().contains(rect));
 }
 
 /**
@@ -714,16 +748,22 @@ void SpriteView::start_state_changing_num_frames_columns(
  */
 void SpriteView::end_state_changing_num_frames_columns() {
 
-  SpriteModel::Index index = model->get_selected_index();
   QRect rect = current_area_item.get_direction_all_frames_rect();
-  if (index.is_direction_index() &&
-      !rect.isEmpty() && sceneRect().contains(rect)) {
+  if (sceneRect().contains(rect)) {
 
     int num_frames = current_area_item.get_num_frames();
     int num_columns = current_area_item.get_num_columns();
     compute_num_frames_columns(num_frames, num_columns);
 
-    emit change_direction_num_frames_columns_requested(num_frames, num_columns);
+    if (create_multiframe_direction) {
+      QRect frame = QRect(
+        current_area_item.pos().toPoint(), current_area_item.get_frame_size());
+      emit add_direction_requested(frame, num_frames, num_columns);
+    }
+    else {
+      emit change_direction_num_frames_columns_requested(
+        num_frames, num_columns);
+    }
   }
 
   cancel_state_changing_num_frames_columns();
@@ -745,24 +785,20 @@ void SpriteView::cancel_state_changing_num_frames_columns() {
  */
 void SpriteView::compute_num_frames_columns(int& num_frames, int& num_columns) {
 
-  SpriteModel::Index index = model->get_selected_index();
-  if (!index.is_direction_index()) {
-    return;
-  }
+  QPoint pos = current_area_item.pos().toPoint();
+  QSize size = current_area_item.get_frame_size();
+  int direction_num_frames = current_area_item.get_num_frames();
+  int direction_num_columns = current_area_item.get_num_columns();
 
-  QRect rect = model->get_direction_first_frame_rect(index);
-  int direction_num_frames = model->get_direction_num_frames(index);
-  int direction_num_columns = model->get_direction_num_columns(index);
-
-  int column = dragging_current_point.x() + rect.width() - rect.x();
-  column = qMax(column, rect.width()) / rect.width();
+  int column = dragging_current_point.x() + size.width() - pos.x();
+  column = qMax(column, size.width()) / size.width();
 
   if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_COLUMNS) {
     num_columns = qMin(direction_num_frames, column);
   } else {
 
-    int row = dragging_current_point.y() + rect.height() - rect.y();
-    row = qMax(row, rect.height()) / rect.height();
+    int row = dragging_current_point.y() + size.height() - pos.y();
+    row = qMax(row, size.height()) / size.height();
 
     if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_FRAMES) {
       num_frames = qMin(direction_num_columns, column);
@@ -784,6 +820,14 @@ SpriteView::DirectionAreaItem::DirectionAreaItem() :
   num_columns(1),
   is_valid(true) {
   update_bouding_rect();
+}
+
+/**
+ * @brief Returns the size of frames.
+ * @return The size of frames.
+ */
+QSize SpriteView::DirectionAreaItem::get_frame_size() const {
+  return frame_size;
 }
 
 /**
