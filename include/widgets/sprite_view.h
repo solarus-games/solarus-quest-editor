@@ -160,8 +160,8 @@ private:
   void start_state_moving_direction(const QPoint& initial_point);
   void end_state_moving_direction();
   void start_state_changing_num_frames_columns(
-    const ChangingNumFramesColumnsMode& mode);
-  void start_state_creating_multiframe_direction();
+    const ChangingNumFramesColumnsMode& mode, bool create = false);
+  void update_state_changing_num_frames_columns();
   void end_state_changing_num_frames_columns();
   void cancel_state_changing_num_frames_columns();
   void compute_num_frames_columns(int& num_frames, int& num_columns);
