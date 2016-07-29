@@ -251,6 +251,25 @@ void SpriteView::duplicate_selected_direction_requested() {
 }
 
 /**
+ * @brief Maps a mouse event position to a scene position.
+ * @param point The mouse position.
+ * @param snap_to_grid Set to @c true to snap the position to the grid.
+ * @return The scene position.
+ */
+QPoint SpriteView::map_to_scene(const QPoint& point, bool snap_to_grid) {
+
+  QPoint mapped_point = mapToScene(point).toPoint();
+
+  if (snap_to_grid) {
+    // TODO: use the grid size (settings).
+    mapped_point.setX(qFloor(mapped_point.x() / 8) * 8);
+    mapped_point.setY(qFloor(mapped_point.y() / 8) * 8);
+  }
+
+  return mapped_point;
+}
+
+/**
  * @brief Change the number of frames and columns of the selected direction.
  * @param mode The changing mode.
  */
@@ -426,33 +445,26 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
 
     // Compute the selected area.
     QPoint dragging_previous_point = dragging_current_point;
-    dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
+    dragging_current_point = map_to_scene(event->pos());
 
     if (dragging_current_point != dragging_previous_point) {
 
-      QRect new_direction_area;
+      int x = qMin(dragging_current_point.x(), dragging_start_point.x());
+      int y = qMin(dragging_current_point.y(), dragging_start_point.y());
+      int width = qAbs(dragging_current_point.x() - dragging_start_point.x());
+      int height = qAbs(dragging_current_point.y() - dragging_start_point.y());
 
-      // The area has changed: recalculate the rectangle.
-      if (dragging_start_point.x() < dragging_current_point.x()) {
-        new_direction_area.setX(dragging_start_point.x());
-        new_direction_area.setWidth(dragging_current_point.x() - dragging_start_point.x());
-      }
-      else {
-        new_direction_area.setX(dragging_current_point.x());
-        new_direction_area.setWidth(dragging_start_point.x() - dragging_current_point.x());
+      // TODO: use the grid size (settings).
+      if (x == dragging_start_point.x()) {
+        width += 8;
       }
 
-      if (dragging_start_point.y() < dragging_current_point.y()) {
-        new_direction_area.setY(dragging_start_point.y());
-        new_direction_area.setHeight(dragging_current_point.y() - dragging_start_point.y());
-      }
-      else {
-        new_direction_area.setY(dragging_current_point.y());
-        new_direction_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
+      if (y == dragging_start_point.y()) {
+        height += 8;
       }
 
-      current_area_item.setPos(new_direction_area.topLeft());
-      current_area_item.set_frame_size(new_direction_area.size());
+      current_area_item.setPos(QPoint(x, y));
+      current_area_item.set_frame_size(QSize(width, height));
     }
   }
   else if (state == State::MOVING_DIRECTION) {
@@ -466,7 +478,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       QPoint position = model->get_direction_position(index);
       QRect previous_rect = current_area_item.get_direction_all_frames_rect();
 
-      dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
+      dragging_current_point = map_to_scene(event->pos());
       current_area_item.setPos(QPoint(
         position.x() + dragging_current_point.x() - dragging_start_point.x(),
         position.y() + dragging_current_point.y() - dragging_start_point.y()));
@@ -484,7 +496,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       int num_frames = 1;
       int num_columns = 1;
 
-      dragging_current_point = mapToScene(event->pos()).toPoint();
+      dragging_current_point = map_to_scene(event->pos(), false);
       compute_num_frames_columns(num_frames, num_columns);
 
       current_area_item.set_num_frames(num_frames);
@@ -569,7 +581,7 @@ void SpriteView::start_state_normal() {
 void SpriteView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   state = State::DRAWING_RECTANGLE;
-  dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
+  dragging_start_point = map_to_scene(initial_point);
   dragging_current_point = dragging_start_point;
 
   current_area_item.setPos(dragging_current_point);
@@ -618,7 +630,7 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
   }
 
   state = State::MOVING_DIRECTION;
-  dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
+  dragging_start_point = map_to_scene(initial_point);
   dragging_current_point = dragging_start_point;
 
   current_area_item.setPos(model->get_direction_position(index));

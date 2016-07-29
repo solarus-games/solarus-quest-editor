@@ -143,6 +143,8 @@ private:
 
   void show_context_menu(const QPoint& where);
 
+  QPoint map_to_scene(const QPoint& point, bool snap_to_grid = true);
+
   void change_num_frames_columns(const ChangingNumFramesColumnsMode& mode);
 
   void start_state_normal();
