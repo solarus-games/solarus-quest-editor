@@ -22,10 +22,10 @@
 #include "view_settings.h"
 #include <QAction>
 #include <QApplication>
-#include <QGraphicsItem>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QtMath>
 
 namespace SolarusEditor {
 
@@ -38,11 +38,11 @@ SpriteView::SpriteView(QWidget* parent) :
   scene(nullptr),
   delete_direction_action(nullptr),
   state(State::NORMAL),
-  current_area_item(nullptr),
   view_settings(nullptr),
   zoom(1.0) {
 
   setAlignment(Qt::AlignTop | Qt::AlignLeft);
+  current_area_item.setZValue(2);
 
   delete_direction_action = new QAction(
         QIcon(":/images/icon_delete.png"), tr("Delete..."), this);
@@ -266,7 +266,7 @@ void SpriteView::change_num_frames_columns(
     return;
   }
 
-  start_state_changing_num_frames_columns(QCursor::pos(), mode);
+  start_state_changing_num_frames_columns(mode);
 }
 
 /**
@@ -451,7 +451,8 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
         new_direction_area.setHeight(dragging_start_point.y() - dragging_current_point.y());
       }
 
-      set_current_area(new_direction_area);
+      current_area_item.setPos(new_direction_area.topLeft());
+      current_area_item.set_frame_size(new_direction_area.size());
     }
   }
   else if (state == State::MOVING_DIRECTION) {
@@ -462,15 +463,16 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       end_state_moving_direction();
     }
     else {
+      QPoint position = model->get_direction_position(index);
+      QRect previous_rect = current_area_item.get_direction_all_frames_rect();
+
       dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
+      current_area_item.setPos(QPoint(
+        position.x() + dragging_current_point.x() - dragging_start_point.x(),
+        position.y() + dragging_current_point.y() - dragging_start_point.y()));
 
-      QRect new_direction_area = current_area_item->rect().toRect();
-      QRect old_direction_area = model->get_direction_all_frames_rect(index);
-      new_direction_area.moveTopLeft(QPoint(
-            old_direction_area.x() + dragging_current_point.x() - dragging_start_point.x(),
-            old_direction_area.y() + dragging_current_point.y() - dragging_start_point.y()));
-
-      set_current_area(new_direction_area);
+      // To ensure that the previous area is clean.
+      scene->invalidate(previous_rect);
     }
   } else if (state == State::CHANGING_NUM_FRAMES_COLUMNS) {
     update_state_changing_num_frames_columns(event->pos());
@@ -556,10 +558,11 @@ void SpriteView::start_state_drawing_rectangle(const QPoint& initial_point) {
   dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
   dragging_current_point = dragging_start_point;
 
-  current_area_item = new QGraphicsRectItem();
-  current_area_item->setZValue(2);
-  current_area_item->setPen(QPen(Qt::yellow));
-  scene->addItem(current_area_item);
+  current_area_item.setPos(dragging_current_point);
+  current_area_item.set_frame_size(QSize(8, 8));
+  current_area_item.set_num_frames(1);
+  current_area_item.set_num_columns(1);
+  scene->addItem(&current_area_item);
 }
 
 /**
@@ -567,7 +570,7 @@ void SpriteView::start_state_drawing_rectangle(const QPoint& initial_point) {
  */
 void SpriteView::end_state_drawing_rectangle() {
 
-  QRect rectangle = current_area_item->rect().toRect();
+  QRect rectangle = current_area_item.get_direction_all_frames_rect();
   if (!rectangle.isEmpty() &&
       sceneRect().contains(rectangle) &&
       !model->get_selected_index().is_direction_index()) {
@@ -584,10 +587,7 @@ void SpriteView::end_state_drawing_rectangle() {
     menu.exec(cursor().pos() + QPoint(1, 1));
   }
 
-  scene->removeItem(current_area_item);
-  delete current_area_item;
-  current_area_item = nullptr;
-
+  scene->removeItem(&current_area_item);
   start_state_normal();
 }
 
@@ -607,11 +607,11 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
   dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
   dragging_current_point = dragging_start_point;
 
-  const QRect& box = model->get_direction_all_frames_rect(index);
-  current_area_item = new QGraphicsRectItem(box);
-  current_area_item->setZValue(2);
-  current_area_item->setPen(QPen(Qt::yellow));
-  scene->addItem(current_area_item);
+  current_area_item.setPos(model->get_direction_position(index));
+  current_area_item.set_frame_size(model->get_direction_size(index));
+  current_area_item.set_num_frames(model->get_direction_num_frames(index));
+  current_area_item.set_num_columns(model->get_direction_num_columns(index));
+  scene->addItem(&current_area_item);
 }
 
 /**
@@ -620,7 +620,7 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
 void SpriteView::end_state_moving_direction() {
 
   SpriteModel::Index index = model->get_selected_index();
-  QRect box = current_area_item->rect().toRect();
+  QRect box = current_area_item.get_direction_all_frames_rect();
   if (!box.isEmpty() &&
       sceneRect().contains(box) &&
       index.is_direction_index() &&
@@ -644,21 +644,16 @@ void SpriteView::end_state_moving_direction() {
     menu.exec(cursor().pos() + QPoint(1, 1));
   }
 
-  scene->removeItem(current_area_item);
-  delete current_area_item;
-  current_area_item = nullptr;
-
+  scene->removeItem(&current_area_item);
   start_state_normal();
 }
 
 /**
  * @brief Moves to the state of changing the number of frames and columns.
- * @param initial_point Where the user starts dragging the direction,
- * in view coordinates.
  * @param mode The changing mode.
  */
 void SpriteView::start_state_changing_num_frames_columns(
-  const QPoint& initial_point, const ChangingNumFramesColumnsMode& mode) {
+  const ChangingNumFramesColumnsMode& mode) {
 
   SpriteModel::Index index = model->get_selected_index();
   if (!index.is_direction_index()) {
@@ -667,13 +662,12 @@ void SpriteView::start_state_changing_num_frames_columns(
 
   state = State::CHANGING_NUM_FRAMES_COLUMNS;
   changing_mode = mode;
-  dragging_current_point = mapToScene(initial_point).toPoint();
 
-  const QRect& box = model->get_direction_all_frames_rect(index);
-  current_area_item = new QGraphicsRectItem(box);
-  current_area_item->setZValue(2);
-  current_area_item->setPen(QPen(Qt::yellow));
-  scene->addItem(current_area_item);
+  current_area_item.setPos(model->get_direction_position(index));
+  current_area_item.set_frame_size(model->get_direction_size(index));
+  current_area_item.set_num_frames(model->get_direction_num_frames(index));
+  current_area_item.set_num_columns(model->get_direction_num_columns(index));
+  scene->addItem(&current_area_item);
 }
 
 /**
@@ -691,20 +685,22 @@ void SpriteView::update_state_changing_num_frames_columns(
   }
 
   QRect rect = model->get_direction_first_frame_rect(index);
-  QRect new_direction_area = rect;
+  int num_frames = 1;
+  int num_columns = 1;
   dragging_current_point = mapToScene(current_point).toPoint();
 
   if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_BOTH) {
 
     int x = dragging_current_point.x() + rect.width() - rect.x();
-    x = ((x / rect.width()) * rect.width()) + rect.x();
-    x = qMax(x, rect.x() + rect.width());
+    x = (x / rect.width()) * rect.width();
+    x = qMax(x, rect.width());
 
     int y = dragging_current_point.y() + rect.height() - rect.y();
-    y = ((y / rect.height()) * rect.height()) + rect.y();
-    y = qMax(y, rect.y() + rect.height());
+    y = (y / rect.height()) * rect.height();
+    y = qMax(y, rect.height());
 
-    new_direction_area.setBottomRight(QPoint(x - 1, y - 1));
+    num_columns = x / rect.width();
+    num_frames = (y / rect.height()) * num_columns;
   }
   else if (changing_mode == ChangingNumFramesColumnsMode::CHANGE_NUM_FRAMES) {
     // TODO: implement this mode.
@@ -713,7 +709,8 @@ void SpriteView::update_state_changing_num_frames_columns(
     // TODO: implement this mode.
   }
 
-  set_current_area(new_direction_area);
+  current_area_item.set_num_frames(num_frames);
+  current_area_item.set_num_columns(num_columns);
 }
 
 /**
@@ -759,28 +756,103 @@ void SpriteView::end_state_changing_num_frames_columns() {
  */
 void SpriteView::cancel_state_changing_num_frames_columns() {
 
-  scene->removeItem(current_area_item);
-  delete current_area_item;
-  current_area_item = nullptr;
-
+  scene->removeItem(&current_area_item);
   start_state_normal();
 }
 
 /**
- * @brief Changes the position of the direction the user is creating or moving.
- *
- * If the specified area is the same as before, nothing is done.
- *
- * @param new_area new position of the direction.
+ * @brief Creates a selection item.
  */
-void SpriteView::set_current_area(const QRect& area) {
+SpriteView::DirectionAreaItem::DirectionAreaItem() :
+  frame_size(8, 8),
+  num_frames(1),
+  num_columns(1) {
+  update_bouding_rect();
+}
 
-  if (current_area_item->rect().toRect() == area) {
-    // No change.
-    return;
+/**
+ * @brief Changes the size of the frames.
+ * @param size The size.
+ */
+void SpriteView::DirectionAreaItem::set_frame_size(const QSize& size) {
+
+  frame_size = size;
+  update_bouding_rect();
+}
+
+/**
+ * @brief Change the number of frames.
+ * @param num_frames The number of frames.
+ */
+void SpriteView::DirectionAreaItem::set_num_frames(int num_frames) {
+
+  this->num_frames = qMax(num_frames, 1);
+  update_bouding_rect();
+}
+
+/**
+ * @brief Changes the number of columns.
+ * @param num_columns The number of columns.
+ */
+void SpriteView::DirectionAreaItem::set_num_columns(int num_columns) {
+
+  this->num_columns = qMax(num_columns, 1);
+  update_bouding_rect();
+}
+
+/**
+ * @brief Returns a rect that contains all frames of a direction.
+ * @return The direction's frames rect.
+ */
+QRect SpriteView::DirectionAreaItem::get_direction_all_frames_rect() {
+
+  QRectF rectf = boundingRect();
+  rectf.translate(pos());
+  return rectf.toRect();
+}
+
+/**
+ * @brief Returns the bounding rect.
+ * @return The bouding rect.
+ */
+QRectF SpriteView::DirectionAreaItem::boundingRect() const {
+
+  return bounding_rect;
+}
+
+/**
+ * @brief The paint event.
+ */
+void SpriteView::DirectionAreaItem::paint(
+  QPainter* painter, const QStyleOptionGraphicsItem* /* option */,
+  QWidget* /* widget */) {
+
+  QSize draw_size = frame_size - QSize(1, 1);
+
+  painter->save();
+  painter->setPen(Qt::yellow);
+
+  for (int i = 0; i < num_frames; ++i) {
+    int row = qFloor(i / num_columns);
+    int column = i % num_columns;
+    QPoint pos = QPoint(frame_size.width() * column, frame_size.height() * row);
+    painter->drawRect(QRect(pos, draw_size));
   }
 
-  current_area_item->setRect(area);
+  painter->restore();
+}
+
+/**
+ * @brief Updates the bounding rect.
+ */
+void SpriteView::DirectionAreaItem::update_bouding_rect() {
+
+  int num_columns = qMin(this->num_columns, num_frames);
+  int num_rows = qFloor((num_frames - 1) / num_columns) + 1;
+
+  prepareGeometryChange();
+  bounding_rect = QRect(
+    0, 0, frame_size.width() * num_columns, frame_size.height() * num_rows);
 }
 
 }
