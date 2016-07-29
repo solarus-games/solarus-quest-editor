@@ -618,6 +618,7 @@ void SpriteView::end_state_drawing_rectangle() {
       new QAction(tr("New multiframe direction"), this);
     connect(new_multiframe_direction_action, &QAction::triggered, [this] {
       start_state_changing_num_frames_columns(
+        // TODO: add settings to change the default mode.
         ChangingNumFramesColumnsMode::CHANGE_BOTH, true);
     });
     menu.addAction(new_direction_action);
@@ -694,6 +695,7 @@ void SpriteView::end_state_moving_direction() {
 /**
  * @brief Moves to the state of changing the number of frames and columns.
  * @param mode The changing mode.
+ * @param create Whether the state change a new direction or the selected one.
  */
 void SpriteView::start_state_changing_num_frames_columns(
   const ChangingNumFramesColumnsMode& mode, bool create) {
