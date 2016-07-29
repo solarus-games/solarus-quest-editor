@@ -48,7 +48,8 @@ public:
 signals:
 
   void delete_selected_direction_requested();
-  void add_direction_requested(const QRect& frame);
+  void add_direction_requested(
+    const QRect& frame, int num_frames, int num_columns);
   void change_selected_direction_position_requested(const QPoint& position);
   void duplicate_selected_direction_requested(const QPoint& position);
   void change_direction_num_frames_columns_requested(

@@ -135,7 +135,9 @@ public:
 
   // Direction.
   bool direction_exists(const Index& index) const;
-  int add_direction(const Index& index, const QRect &frame);
+  int add_direction(
+    const Index& index, const QRect &frame,
+    int num_frames = 1, int num_columns = 1);
   int insert_direction(
       const Index& index, const Solarus::SpriteAnimationDirectionData &data);
   void delete_direction(const Index& index);
