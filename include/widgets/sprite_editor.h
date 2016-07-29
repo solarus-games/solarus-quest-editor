@@ -55,7 +55,8 @@ public slots:
   void create_animation_requested();
   void rename_animation_requested();
   void create_direction_requested();
-  void add_direction_requested(const QRect& frame);
+  void add_direction_requested(
+    const QRect& frame, int num_frames, int num_columns);
   void duplicate_requested();
   void duplicate_selected_direction_requested(const QPoint &position);
   void move_up_requested();

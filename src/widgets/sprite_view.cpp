@@ -616,7 +616,7 @@ void SpriteView::end_state_drawing_rectangle() {
     QMenu menu;
     QAction* new_direction_action = new QAction(tr("New direction"), this);
     connect(new_direction_action, &QAction::triggered, [this, rectangle] {
-      emit add_direction_requested(rectangle);
+      emit add_direction_requested(rectangle, 1, 1);
     });
     menu.addAction(new_direction_action);
     menu.addSeparator();

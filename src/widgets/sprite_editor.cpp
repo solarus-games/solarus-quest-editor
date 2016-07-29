@@ -345,10 +345,12 @@ public:
 
   CreateDirectionCommand(
       SpriteEditor& editor, const SpriteModel::Index& index,
-      const QRect& frame) :
+      const QRect& frame, int num_frames, int num_columns) :
     SpriteEditorCommand(editor, SpriteEditor::tr("Add direction")),
     index(index),
-    frame(frame) {
+    frame(frame),
+    num_frames(num_frames),
+    num_columns(num_columns) {
   }
 
   virtual void undo() override {
@@ -358,7 +360,8 @@ public:
 
   virtual void redo() override {
 
-    index.direction_nb = get_model().add_direction(index, frame);
+    index.direction_nb =
+      get_model().add_direction(index, frame, num_frames, num_columns);
     get_model().set_selected_index(index);
   }
 
@@ -366,6 +369,8 @@ private:
 
   SpriteModel::Index index;
   QRect frame;
+  int num_frames;
+  int num_columns;
 };
 
 /**
@@ -867,8 +872,8 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(create_direction, SIGNAL(triggered()),
           this, SLOT(create_direction_requested()));
 
-  connect(ui.sprite_view, SIGNAL(add_direction_requested(QRect)),
-          this, SLOT(add_direction_requested(QRect)));
+  connect(ui.sprite_view, SIGNAL(add_direction_requested(QRect,int,int)),
+          this, SLOT(add_direction_requested(QRect,int,int)));
   connect(ui.sprite_view, SIGNAL(duplicate_selected_direction_requested(QPoint)),
           this, SLOT(duplicate_selected_direction_requested(QPoint)));
   connect(ui.sprite_view,
@@ -1105,13 +1110,14 @@ void SpriteEditor::rename_animation_requested() {
  */
 void SpriteEditor::create_direction_requested() {
 
-  add_direction_requested(QRect(0, 0, 16, 16));
+  add_direction_requested(QRect(0, 0, 16, 16), 1, 1);
 }
 
 /**
  * @brief Slot called when the user wants to add a new direction.
  */
-void SpriteEditor::add_direction_requested(const QRect& frame) {
+void SpriteEditor::add_direction_requested(
+  const QRect& frame, int num_frames, int num_columns) {
 
   SpriteModel::Index index = model->get_selected_index();
   if (!index.is_valid()) {
@@ -1119,7 +1125,8 @@ void SpriteEditor::add_direction_requested(const QRect& frame) {
     return;
   }
 
-  try_command(new CreateDirectionCommand(*this, index, frame));
+  try_command(
+    new CreateDirectionCommand(*this, index, frame, num_frames, num_columns));
 }
 
 /**
