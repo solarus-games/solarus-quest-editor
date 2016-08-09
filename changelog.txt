@@ -6,6 +6,7 @@ ________________________________________
 Bug fixes
 ---------
 
+* Fix resizing the console when a sprite editor is open (#215).
 * Initial quest: put the solarus logo script in scripts/menus/ (#216).
 
 _______________________________________
