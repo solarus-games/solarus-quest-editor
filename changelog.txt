@@ -8,6 +8,7 @@ Bug fixes
 
 * Fix resizing the console when a sprite editor is open (#215).
 * Initial quest: put the solarus logo script in scripts/menus/ (#216).
+* Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
 
 _______________________________________
 

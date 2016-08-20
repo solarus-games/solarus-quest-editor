@@ -934,6 +934,10 @@ void EditEntityDialog::apply_model() {
  */
 void EditEntityDialog::initialize_name() {
 
+  if (entity_before.get_type() != EntityType::DESTINATION) {
+    ui.name_update_teletransporters_checkbox->setVisible(false);
+  }
+
   if (!entity_before.is_dynamic()) {
     remove_field(ui.name_label, ui.name_field);
     return;
@@ -941,10 +945,6 @@ void EditEntityDialog::initialize_name() {
 
   ui.name_field->setText(entity_before.get_name());
   ui.name_field->setValidator(create_name_validator());
-
-  if (entity_before.get_type() != EntityType::DESTINATION) {
-    ui.name_update_teletransporters_checkbox->setVisible(false);
-  }
 }
 
 /**
