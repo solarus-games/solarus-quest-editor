@@ -3,6 +3,11 @@ ________________________________________
 Solarus Quest Editor 1.5.1 (in progress)
 ________________________________________
 
+New features
+------------
+
+* Spanish translation (thanks Diarandor!).
+
 Bug fixes
 ---------
 
