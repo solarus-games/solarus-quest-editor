@@ -445,15 +445,15 @@ Asegúrate de que Solarus Quest Editor está bien instalado.</translation>
         <location filename="../src/obsolete_editor_exception.cpp" line="29"/>
         <source>The format of this quest (%1) is not supported by this version of the quest editor (%2).
 Please download the latest version of the editor on www.solarus-games.org.</source>
-        <translation>El formato de este juego (%1) no es compatible con esta versión del Quest Editor (%2).
+        <translation>El formato de este proyecto (%1) no es compatible con esta versión del Quest Editor (%2).
 Por favor, descarga la última versión del editor en www.solarus-games.org.</translation>
     </message>
     <message>
         <location filename="../src/obsolete_quest_exception.cpp" line="29"/>
         <source>The format of this quest (%1) is obsolete.
 Please upgrade your quest  data files to Solarus %2.</source>
-        <translation>El formato de este juego (%1) está obsoleto.
-Por favor, actualiza los archivos de datos del juego para Solarus %2.</translation>
+        <translation>El formato de este proyecto (%1) está obsoleto.
+Por favor, actualiza los archivos de datos del proyecto para Solarus %2.</translation>
     </message>
     <message>
         <location filename="../src/pattern_animation_traits.cpp" line="50"/>
@@ -1707,12 +1707,12 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
     <message>
         <location filename="../src/widgets/main_window.ui" line="173"/>
         <source>New quest...</source>
-        <translation>Nuevo juego...</translation>
+        <translation>Nuevo proyecto...</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="178"/>
         <source>Load quest...</source>
-        <translation>Cargar juego...</translation>
+        <translation>Cargar proyecto...</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="181"/>
@@ -1728,7 +1728,7 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
         <location filename="../src/widgets/main_window.ui" line="195"/>
         <location filename="../src/widgets/main_window.cpp" line="1435"/>
         <source>Run quest</source>
-        <translation>Ejecutar juego</translation>
+        <translation>Ejecutar proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="198"/>
@@ -1871,7 +1871,7 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
     <message>
         <location filename="../src/widgets/main_window.ui" line="397"/>
         <source>Close quest</source>
-        <translation>Cerrar juego</translation>
+        <translation>Cerrar proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="406"/>
@@ -1899,7 +1899,7 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
     <message>
         <location filename="../src/widgets/main_window.ui" line="444"/>
         <source>Quest properties</source>
-        <translation>Propiedades del juego</translation>
+        <translation>Propiedades del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.ui" line="447"/>
@@ -1909,7 +1909,7 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
     <message>
         <location filename="../src/widgets/main_window.cpp" line="96"/>
         <source>Recent quests</source>
-        <translation>Juegos recientes</translation>
+        <translation>Proyectos recientes</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="117"/>
@@ -1934,7 +1934,7 @@ Por favor, actualiza los archivos de datos del juego para Solarus %2.</translati
 Some features like creating a new quest will not be available.
 Please make sure that Solarus Quest Editor is correctly installed.</source>
         <translation>No se pudo localizar el directorio &quot;assets&quot;.
-Algunas características como crear un nuevo juego no estarán disponibles.
+Algunas características como crear un nuevo proyecto no estarán disponibles.
 Por favor, asegúrate de que Solarus Quest Editor está bien instalado.</translation>
     </message>
     <message>
@@ -1991,32 +1991,32 @@ Por favor, asegúrate de que Solarus Quest Editor está bien instalado.</transla
         <location filename="../src/widgets/main_window.cpp" line="536"/>
         <source>No quest was found in directory
 &apos;%1&apos;</source>
-        <translation>No se encontraron juegos en el directorio
+        <translation>No se encontraron proyectos en el directorio
 &apos;%1&apos;</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="563"/>
         <source>Obsolete quest</source>
-        <translation>Juego obsoleto</translation>
+        <translation>Proyecto obsoleto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="564"/>
         <source>The format of this quest (%1) is outdated.
 Your data files will be automatically updated to Solarus %2.</source>
-        <translation>El formato de este juego (%1) está obsoleto.
+        <translation>El formato de este proyecto (%1) está obsoleto.
 Tus archivos de datos serán actualizados automáticamente a Solarus %2.</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="616"/>
         <source>Upgrading quest data files</source>
-        <translation>Actualizar archivos del juego</translation>
+        <translation>Actualizar archivos del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="633"/>
         <source>An error occured while upgrading the quest.
 Your quest was kept unchanged in format %1.</source>
-        <translation>Ha ocurrido un error al actualizar el juego.
-Tu juego se ha guardado sin cambios en formato %1.</translation>
+        <translation>Ha ocurrido un error al actualizar el proyecto.
+Tu proyecto se ha guardado sin cambios en formato %1.</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="681"/>
@@ -2029,7 +2029,7 @@ Asegúrate de que Solarus Quest Editor está bien instalado.</translation>
         <location filename="../src/widgets/main_window.cpp" line="695"/>
         <location filename="../src/widgets/main_window.cpp" line="733"/>
         <source>Select quest directory</source>
-        <translation>Seleccionar directorio del juego</translation>
+        <translation>Seleccionar directorio del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="905"/>
@@ -2039,7 +2039,7 @@ Asegúrate de que Solarus Quest Editor está bien instalado.</translation>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="906"/>
         <source>Do you want to save modifications before running the quest?</source>
-        <translation>¿Quieres guardar las modificaciones antes de ejecutar el juego?</translation>
+        <translation>¿Quieres guardar las modificaciones antes de ejecutar el proyecto?</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="1415"/>
@@ -2049,7 +2049,7 @@ Asegúrate de que Solarus Quest Editor está bien instalado.</translation>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="1432"/>
         <source>Stop quest</source>
-        <translation>Detener juego</translation>
+        <translation>Detener proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/main_window.cpp" line="1488"/>
@@ -2863,7 +2863,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/quest.cpp" line="133"/>
         <source>No quest</source>
-        <translation>No hay juego</translation>
+        <translation>No hay proyecto</translation>
     </message>
     <message>
         <location filename="../src/quest.cpp" line="266"/>
@@ -2883,7 +2883,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/quest.cpp" line="954"/>
         <source>File &apos;%1&apos; is not in this quest</source>
-        <translation>El archivo &apos;%1&apos; no está en este juego</translation>
+        <translation>El archivo &apos;%1&apos; no está en este proyecto</translation>
     </message>
     <message>
         <location filename="../src/quest.cpp" line="977"/>
@@ -2995,7 +2995,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/quest_files_model.cpp" line="396"/>
         <source>Quest</source>
-        <translation>Juego</translation>
+        <translation>Proyecto</translation>
     </message>
     <message>
         <location filename="../src/quest_files_model.cpp" line="401"/>
@@ -3015,7 +3015,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/quest_files_model.cpp" line="594"/>
         <source>%1 (not in the quest)</source>
-        <translation>%1 (no está en el juego)</translation>
+        <translation>%1 (no está en el proyecto)</translation>
     </message>
 </context>
 <context>
@@ -3028,7 +3028,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/quest_properties.cpp" line="58"/>
         <source>No quest</source>
-        <translation>No hay juego</translation>
+        <translation>No hay proyecto</translation>
     </message>
     <message>
         <location filename="../src/quest_properties.cpp" line="63"/>
@@ -3041,7 +3041,7 @@ Do you want to save them now?</source>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="62"/>
         <source>Quest information</source>
-        <translation>Información del juego</translation>
+        <translation>Información del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="82"/>
@@ -3063,17 +3063,17 @@ Do you want to save them now?</source>
         <source>Folder where to write savegames, relative to &quot;$HOME/.solarus/&quot;.
 Must identify your quest to avoid confusion with other quests.</source>
         <translation>Carpeta donde se guardan las partidas, relativo a &quot;$HOME/.solarus/&quot;.
-Debe identificar tu juego para evitar confusión con otros juegos.</translation>
+Debe identificar tu proyecto para evitar confusión con otros proyectos.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="136"/>
         <source>Quest title</source>
-        <translation>Título del juego</translation>
+        <translation>Título del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="148"/>
         <source>The name of your quest.</source>
-        <translation>El nombre de tu juego.</translation>
+        <translation>El nombre de tu proyecto.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="163"/>
@@ -3083,7 +3083,7 @@ Debe identificar tu juego para evitar confusión con otros juegos.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="175"/>
         <source>One line describing your quest.</source>
-        <translation>Describe tu juego en una línea.</translation>
+        <translation>Describe tu proyecto en una línea.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="190"/>
@@ -3098,17 +3098,17 @@ Debe identificar tu juego para evitar confusión con otros juegos.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="215"/>
         <source>People who develop this quest.</source>
-        <translation>Gente que desarrolla este juego.</translation>
+        <translation>Gente que desarrolla este proyecto.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="230"/>
         <source>Quest version</source>
-        <translation>Versión del juego</translation>
+        <translation>Versión del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="242"/>
         <source>Current release of your quest.</source>
-        <translation>Versión actual de tu juego.</translation>
+        <translation>Versión actual de tu proyecto.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="257"/>
@@ -3138,22 +3138,22 @@ Debe identificar tu juego para evitar confusión con otros juegos.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="337"/>
         <source>Official website of the quest.</source>
-        <translation>Sitio web oficial del juego.</translation>
+        <translation>Sitio web oficial del proyecto.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="364"/>
         <source>A more detailed description of your quest.</source>
-        <translation>Una descripción más detallada de tu juego.</translation>
+        <translation>Una descripción más detallada de tu proyecto.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="384"/>
         <source>Quest size</source>
-        <translation>Tamaño del juego</translation>
+        <translation>Tamaño del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="401"/>
         <source>Normal quest size</source>
-        <translation>Tamaño normal del juego</translation>
+        <translation>Tamaño normal del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="431"/>
@@ -3166,13 +3166,13 @@ Debe identificar tu juego para evitar confusión con otros juegos.</translation>
         <location filename="../src/widgets/quest_properties_editor.ui" line="472"/>
         <source>Size of the logical game area (before any scaling).
 This will be the visible space of the current map.</source>
-        <translation>Tamaño del área de juego (antes de cualquier aumento).
+        <translation>Tamaño del área de proyecto (antes de cualquier aumento).
 Esto será el espacio visible del mapa actual.</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="491"/>
         <source>Minimum quest size</source>
-        <translation>Tamaño mínimo del juego</translation>
+        <translation>Tamaño mínimo del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="562"/>
@@ -3183,7 +3183,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.ui" line="577"/>
         <source>Maximum quest size</source>
-        <translation>Tamaño máximo del juego</translation>
+        <translation>Tamaño máximo del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.cpp" line="63"/>
@@ -3213,7 +3213,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.cpp" line="200"/>
         <source>Change quest version</source>
-        <translation>Cambiar versión del juego</translation>
+        <translation>Cambiar versión del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.cpp" line="226"/>
@@ -3243,12 +3243,12 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/quest_properties_editor.cpp" line="409"/>
         <source>Quest properties</source>
-        <translation>Propiedades del juego</translation>
+        <translation>Propiedades del proyecto</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_properties_editor.cpp" line="412"/>
         <source>Quest properties have been modified. Save changes?</source>
-        <translation>Las propiedades del juego han sido modificadas. ¿Guardar cambios?</translation>
+        <translation>Las propiedades del proyecto han sido modificadas. ¿Guardar cambios?</translation>
     </message>
 </context>
 <context>
@@ -3478,7 +3478,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/quest_resources.cpp" line="113"/>
         <source>No quest</source>
-        <translation>No hay juego</translation>
+        <translation>No hay proyecto</translation>
     </message>
     <message>
         <location filename="../src/quest_resources.cpp" line="118"/>
@@ -3519,7 +3519,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/quest_tree_view.cpp" line="242"/>
         <source>Add to quest as %1...</source>
-        <translation>Añadir al juego como %1...</translation>
+        <translation>Añadir al proyecto como %1...</translation>
     </message>
     <message>
         <location filename="../src/widgets/quest_tree_view.cpp" line="271"/>
@@ -3654,7 +3654,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/settings_dialog.ui" line="67"/>
         <source>Running</source>
-        <translation>Ejecutando</translation>
+        <translation>Al ejecutar</translation>
     </message>
     <message>
         <location filename="../src/widgets/settings_dialog.ui" line="75"/>
@@ -3689,12 +3689,12 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/settings_dialog.ui" line="132"/>
         <source>Quest size:</source>
-        <translation>Tamaño de juego:</translation>
+        <translation>Tamaño de proyecto:</translation>
     </message>
     <message>
         <location filename="../src/widgets/settings_dialog.ui" line="161"/>
         <source>Text editor</source>
-        <translation>Editor de texto</translation>
+        <translation>Editor de textos</translation>
     </message>
     <message>
         <location filename="../src/widgets/settings_dialog.ui" line="167"/>
@@ -4062,7 +4062,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/widgets/sprite_editor.cpp" line="119"/>
         <source> (copy)</source>
-        <translation>(copia)</translation>
+        <translation> (copia)</translation>
     </message>
     <message>
         <location filename="../src/widgets/sprite_editor.cpp" line="141"/>
@@ -4201,7 +4201,7 @@ Esto será el espacio visible del mapa actual.</translation>
     <message>
         <location filename="../src/sprite_model.cpp" line="324"/>
         <source> (default)</source>
-        <translation>(por defecto)</translation>
+        <translation> (por defecto)</translation>
     </message>
     <message>
         <location filename="../src/sprite_model.cpp" line="347"/>
