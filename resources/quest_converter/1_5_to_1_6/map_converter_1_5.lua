@@ -1,4 +1,4 @@
--- Solarus 1.4 to 1.5.
+-- Solarus 1.5 to 1.6.
 -- Changes in the map syntax:
 -- - Blocks now have a different
 
@@ -15,7 +15,9 @@ function converter.convert(quest_path, map_id, default_font_id)
   local text = input_file:read("*a")  -- Read the whole file.
   
   text = text:gsub(
-      "block{*maximum_moves = 2,\n}", "block{*maximum_moves = -1,\n}")
+      "\n maximum_moves = 2, ",
+      ""
+  )
 
   input_file:close()
 
