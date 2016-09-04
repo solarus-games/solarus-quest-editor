@@ -2232,7 +2232,8 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <location filename="../src/widgets/main_window.cpp" line="1689"/>
         <source>All files must be saved before this operation.
 Do you want to save them now?</source>
-        <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.\nVoulez-vous les sauvegarder maintenant ?</translation>
+        <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.
+Voulez-vous les sauvegarder maintenant ?</translation>
     </message>
     <message>
         <source>Quest terminated unexpectedly: %1</source>
