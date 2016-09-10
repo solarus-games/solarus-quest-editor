@@ -15,7 +15,7 @@ function converter.convert(quest_path, map_id, default_font_id)
   local text = input_file:read("*a")  -- Read the whole file.
   
   text = text:gsub(
-      "\n maximum_moves = 2, ",
+      "\n maximum_moves = 2,",
       ""
   )
 
