@@ -16,6 +16,7 @@ Bug fixes
 * Fix typos in the dialogs and strings editors (#231).
 * Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
 * Map editor: save all only if necessary when renaming a destination (#219).
+* Map editor: fix tileset view scrollbar position lost sometimes (#229).
 
 _______________________________________
 
