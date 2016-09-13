@@ -1681,7 +1681,8 @@ void MainWindow::refactoring_requested(const Refactoring& refactoring) {
   try {
 
     // Make sure that all open files are saved before doing the refactoring.
-    if (ui.tab_widget->has_unsaved_files()) {
+    const QSet<QString> files_unsaved_allowed = refactoring.get_files_unsaved_allowed();
+    if (ui.tab_widget->has_unsaved_files_other_than(files_unsaved_allowed)) {
 
       QMessageBox::StandardButton answer = QMessageBox::question(
             nullptr,

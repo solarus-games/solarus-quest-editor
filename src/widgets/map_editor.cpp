@@ -1822,6 +1822,8 @@ void MapEditor::refactor_destination_name(
     return update_destination_name_in_other_maps(name_before, name_after);
   });
 
+  refactoring.set_file_unsaved_allowed(get_file_path(), true);
+
   emit refactoring_requested(refactoring);
 }
 

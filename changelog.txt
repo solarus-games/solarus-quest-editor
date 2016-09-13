@@ -15,6 +15,7 @@ Bug fixes
 * Initial quest: put the solarus logo script in scripts/menus/ (#216).
 * Fix typos in the dialogs and strings editors (#231).
 * Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
+* Map editor: save all only if necessary when renaming a destination (#219).
 
 _______________________________________
 
