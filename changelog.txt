@@ -18,6 +18,8 @@ Bug fixes
 * Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
 * Map editor: save all only if necessary when renaming a destination (#219).
 * Map editor: fix tileset view scrollbar position lost sometimes (#229).
+* Text editor: fix freeze when indenting selected lines sometimes.
+* Text editor: don't indent empty lines.
 
 _______________________________________
 
