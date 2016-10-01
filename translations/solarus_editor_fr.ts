@@ -2224,12 +2224,12 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1688"/>
+        <location filename="../src/widgets/main_window.cpp" line="1689"/>
         <source>Unsaved changes</source>
         <translation>Changements non sauvegardés</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1689"/>
+        <location filename="../src/widgets/main_window.cpp" line="1690"/>
         <source>All files must be saved before this operation.
 Do you want to save them now?</source>
         <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.
@@ -2676,17 +2676,17 @@ Please save it or close it before renaming.</source>
         <translation>Cette couche n&apos;est pas vide : %1 entités vont être détruites.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1909"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1911"/>
         <source>%1,%2 </source>
         <translation>%1,%2 </translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1918"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1920"/>
         <source> - %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1920"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1922"/>
         <source>: %1</source>
         <translation> : %1</translation>
     </message>
@@ -5033,8 +5033,14 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
     <message>
         <location filename="../src/strings_model.cpp" line="392"/>
+        <location filename="../src/strings_model.cpp" line="527"/>
+        <location filename="../src/strings_model.cpp" line="638"/>
+        <source>Invalid string id: &apos;%1&apos;</source>
+        <translation>Id de texte invalide : &apos;%1&apos;</translation>
+    </message>
+    <message>
         <source>Invalid string Key: %1</source>
-        <translation>Clé de texte invalide: %1</translation>
+        <translation type="vanished">Clé de texte invalide: %1</translation>
     </message>
     <message>
         <location filename="../src/strings_model.cpp" line="396"/>
@@ -5050,18 +5056,12 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Le texte &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="527"/>
-        <source>Invalid string Key: &apos;%1&apos;</source>
-        <translation>Clé de texte invalide: &apos;%1&apos;</translation>
-    </message>
-    <message>
         <source>String &apos;%1&apos; no exists</source>
         <translation type="vanished">Le texte &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="638"/>
         <source>Invalid string key: %1</source>
-        <translation>Clé de texte invalide: %1</translation>
+        <translation type="vanished">Clé de texte invalide: %1</translation>
     </message>
 </context>
 <context>
@@ -5113,22 +5113,22 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SolarusEditor::TextEditorWidget</name>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="347"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="348"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="358"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="359"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="369"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="370"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="382"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="383"/>
         <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
@@ -5453,43 +5453,43 @@ Voulez-vous recharger l&apos;image ?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="575"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="581"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="581"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="587"/>
         <source>Repeatable</source>
         <translation>Répétable</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="587"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="593"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="658"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="664"/>
         <source>Layer %1</source>
         <translation>Couche %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="805"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="811"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="811"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="817"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="822"/>
-        <location filename="../src/widgets/tileset_view.cpp" line="876"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="828"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="882"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="870"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="876"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>
