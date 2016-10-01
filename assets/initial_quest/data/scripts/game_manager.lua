@@ -20,11 +20,14 @@ function game_manager:start_game()
     -- Initialize a new savegame.
     initialize_new_savegame(game)
   end
-  game:start()
 
-  -- Use Eldran's sprite for the hero.
-  local hero = game:get_hero()
-  hero:set_tunic_sprite_id("main_heroes/eldran")
+  function game:on_started()
+    -- Use Eldran's sprite for the hero.
+    local hero = game:get_hero()
+    hero:set_tunic_sprite_id("main_heroes/eldran")
+  end
+
+  game:start()
 end
 
 return game_manager
