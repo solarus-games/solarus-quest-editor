@@ -13,8 +13,7 @@ Bug fixes
 
 * Fix resizing the console when a sprite editor is open (#215).
 * Fix quest reopened even if it was closed in previous session (#220).
-* Initial quest: put the solarus logo script in scripts/menus/ (#216).
-* Initial quest: fix wrong hero sprite after game-over.
+* Fix renaming .it and .spc musics.
 * Fix typos in the dialogs and strings editors (#231).
 * Fix typo in French translation (#240).
 * Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
@@ -22,6 +21,8 @@ Bug fixes
 * Map editor: fix tileset view scrollbar position lost sometimes (#229).
 * Text editor: fix freeze when indenting selected lines sometimes.
 * Text editor: don't indent empty lines.
+* Initial quest: put the solarus logo script in scripts/menus/ (#216)
+* Initial quest: fix wrong hero sprite after game-over.
 
 _______________________________________
 
