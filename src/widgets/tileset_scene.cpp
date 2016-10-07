@@ -49,6 +49,8 @@ public:
   int get_index() const;
   void set_index(int index);
 
+  void rebuild_pixmap();
+
 protected:
 
   virtual void paint(QPainter* painter,
@@ -94,6 +96,8 @@ TilesetScene::TilesetScene(TilesetModel& model, QObject* parent) :
           this, SLOT(pattern_deleted(int, QString)));
   connect(&model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(pattern_id_changed(int, QString, int, QString)));
+  connect(&model, SIGNAL(image_changed()),
+          this, SLOT(image_changed()));
 }
 
 /**
@@ -367,18 +371,29 @@ void TilesetScene::pattern_id_changed(
 }
 
 /**
+ * @brief Slot called when the PNG image of the tileset has changed.
+ */
+void TilesetScene::image_changed() {
+
+  for (int i = 0; i < pattern_items.size(); ++i) {
+    pattern_items[i]->rebuild_pixmap();
+  }
+}
+
+/**
  * @brief Creates a pattern item.
  * @param model The tileset.
  * @param index Index of the pattern in the tileset.
  */
 PatternItem::PatternItem(TilesetModel& model, int index) :
-  QGraphicsPixmapItem(model.get_pattern_image_all_frames(index)),
+  QGraphicsPixmapItem(),
   model(model),
   index(index) {
 
   QRect frame = model.get_pattern_frames_bounding_box(index);
   setPos(frame.topLeft());
   setFlags(ItemIsSelectable | ItemIsFocusable);
+  rebuild_pixmap();
 }
 
 /**
@@ -395,6 +410,16 @@ int PatternItem::get_index() const {
  */
 void PatternItem::set_index(int index) {
   this->index = index;
+}
+
+/**
+ * @brief Creates or recreates the pixmap of this item.
+ *
+ * This function should be called when the PNG image of the tileset has changed.
+ */
+void PatternItem::rebuild_pixmap() {
+
+  setPixmap(model.get_pattern_image_all_frames(index));
 }
 
 /**

@@ -102,6 +102,7 @@ public:
   QPixmap get_pattern_image_all_frames(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
+  void reload_patterns_image();
 
   // Selected patterns.
   QItemSelectionModel& get_selection_model();
@@ -121,6 +122,8 @@ public:
 signals:
 
   void background_color_changed(const QColor& background_color);
+  void image_changed();
+
   void pattern_created(int new_index, const QString& new_id);
   void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
