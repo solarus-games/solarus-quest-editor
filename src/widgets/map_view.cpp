@@ -94,6 +94,8 @@ class MovingEntitiesState : public MapView::State {
 public:
   MovingEntitiesState(MapView& view, const QPoint& initial_point);
 
+  void cancel() override;
+
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
 
@@ -111,6 +113,8 @@ class ResizingEntitiesState : public MapView::State {
 public:
   ResizingEntitiesState(MapView& view, const EntityIndexes& entities);
   void start() override;
+  void cancel() override;
+
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
 
@@ -1359,7 +1363,17 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
  */
 void MapView::cancel_state_requested() {
 
+  if (state != nullptr) {
+    state->cancel();
+  }
   start_state_doing_nothing();
+}
+
+/**
+ * @brief Undoes the last command in the undo/redo history.
+ */
+void MapView::undo_last_command() {
+  emit undo_requested();
 }
 
 /**
@@ -1516,6 +1530,14 @@ void MapView::State::start() {
  * Subclasses can reimplement this function to clean data.
  */
 void MapView::State::stop() {
+}
+
+/**
+ * @brief Called when the user cancels this state.
+ *
+ * Any ongoing action the state has should be undone here.
+ */
+void MapView::State::cancel() {
 }
 
 /**
@@ -1842,6 +1864,14 @@ MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_po
 }
 
 /**
+ * @copydoc MapView::State::cancel
+ */
+void MovingEntitiesState::cancel() {
+
+  get_view().undo_last_command();
+}
+
+/**
  * @copydoc MapView::State::mouse_moved
  */
 void MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
@@ -1889,6 +1919,14 @@ ResizingEntitiesState::ResizingEntitiesState(
   center(),
   first_resize_done(false),
   num_free_entities(0) {
+}
+
+/**
+ * @copydoc MapView::State::cancel
+ */
+void ResizingEntitiesState::cancel() {
+
+  get_view().undo_last_command();
 }
 
 /**
