@@ -60,6 +60,7 @@ private slots:
   void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
                           int new_index, const QString& new_id);
+  void image_changed();
 
 private:
 

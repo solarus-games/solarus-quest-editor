@@ -55,8 +55,7 @@ TilesetModel::TilesetModel(
     patterns.append(PatternModel(pattern_id));
   }
 
-  // Load the tileset image.
-  patterns_image = QImage(quest.get_tileset_tiles_image_path(tileset_id));
+  reload_patterns_image();
 }
 
 /**
@@ -1263,6 +1262,20 @@ QPixmap TilesetModel::get_pattern_icon(int index) const {
  */
 QImage TilesetModel::get_patterns_image() const {
   return patterns_image;
+}
+
+/**
+ * @brief Loads the tileset image from its PNG file.
+ */
+void TilesetModel::reload_patterns_image() {
+
+  patterns_image = QImage(quest.get_tileset_tiles_image_path(tileset_id));
+
+  for (PatternModel& pattern : patterns) {
+    pattern.set_image_dirty();
+  }
+
+  emit image_changed();
 }
 
 /**
