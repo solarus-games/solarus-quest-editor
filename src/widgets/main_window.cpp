@@ -514,6 +514,9 @@ void MainWindow::close_quest() {
   update_title();
   ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
+
+  EditorSettings settings;
+  settings.set_value(EditorSettings::current_quest, "");
 }
 
 /**
@@ -550,6 +553,8 @@ bool MainWindow::open_quest(const QString& quest_path) {
     ui.action_run_quest->setEnabled(true);
 
     add_quest_to_recent_list();
+    EditorSettings settings;
+    settings.set_value(EditorSettings::current_quest, quest_path);
 
     success = true;
   }

@@ -12,6 +12,7 @@ Bug fixes
 ---------
 
 * Fix resizing the console when a sprite editor is open (#215).
+* Fix quest reopened even if it was closed in previous session (#220).
 * Initial quest: put the solarus logo script in scripts/menus/ (#216).
 * Initial quest: fix wrong hero sprite after game-over.
 * Fix typos in the dialogs and strings editors (#231).
