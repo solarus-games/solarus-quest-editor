@@ -1106,6 +1106,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(remove_entities_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(stopped_state()),
           this, SLOT(uncheck_entity_creation_buttons()));
+  connect(ui.map_view, SIGNAL(undo_requested()),
+          this, SLOT(undo()));
 
   connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
           this, SLOT(map_selection_changed()));

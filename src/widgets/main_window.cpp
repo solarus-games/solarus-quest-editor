@@ -514,6 +514,9 @@ void MainWindow::close_quest() {
   update_title();
   ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
+
+  EditorSettings settings;
+  settings.set_value(EditorSettings::current_quest, "");
 }
 
 /**
@@ -550,6 +553,8 @@ bool MainWindow::open_quest(const QString& quest_path) {
     ui.action_run_quest->setEnabled(true);
 
     add_quest_to_recent_list();
+    EditorSettings settings;
+    settings.set_value(EditorSettings::current_quest, quest_path);
 
     success = true;
   }
@@ -1638,6 +1643,18 @@ void MainWindow::rename_file_requested(Quest& quest, const QString& path) {
               // Update maps using this tileset.
               refactor_tileset_id(element_id, new_element_id);
             }
+            else if (resource_type == ResourceType::MUSIC) {
+              // Update maps using this music.
+              refactor_music_id(element_id, new_element_id);
+            }
+            else if (resource_type == ResourceType::ENEMY) {
+              // Update maps using this enemy model.
+              refactor_enemy_id(element_id, new_element_id);
+            }
+            else if (resource_type == ResourceType::ENTITY) {
+              // Update maps using this custom entity model.
+              refactor_custom_entity_id(element_id, new_element_id);
+            }
           }
         }
       }
@@ -1728,7 +1745,7 @@ void MainWindow::refactoring_requested(const Refactoring& refactoring) {
 }
 
 /**
- * @brief Changes the id of the map and updates teletransporters leading to it.
+ * @brief Changes the id of a map and updates teletransporters leading to it.
  * @param map_id_before Current map id.
  * @param map_id_after New map id.
  */
@@ -1780,7 +1797,7 @@ bool MainWindow::update_destination_map_in_map(
 }
 
 /**
- * @brief Changes the id of the tileset and updates maps using it.
+ * @brief Changes the id of a tileset and updates maps using it.
  * @param tileset_id_before Current tileset id.
  * @param tileset_id_after New tileset id.
  */
@@ -1827,6 +1844,162 @@ bool MainWindow::update_tileset_in_map(
         QRegularExpression::escape(tileset_id_before));
 
   QString replacement = QString("\n  tileset = \"%1\",\n").arg(tileset_id_after);
+
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
+}
+
+/**
+ * @brief Changes the id of a music and updates maps using it.
+ * @param music_id_before Current music id.
+ * @param music_id_after New music id.
+ */
+void MainWindow::refactor_music_id(const QString& music_id_before, const QString& music_id_after) {
+
+  Refactoring refactoring([=]() {
+
+    // Change the id.
+    quest.rename_resource_element(ResourceType::MUSIC, music_id_before, music_id_after);
+
+    // Update all maps.
+    QStringList modified_paths;
+    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+      if (update_music_in_map(map_id, music_id_before, music_id_after)) {
+        modified_paths << quest.get_map_data_file_path(map_id);
+      }
+    }
+    return modified_paths;
+  });
+
+  refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates the music id in a map file.
+ * @param map_id Id of the map to update.
+ * @param music_id_before Id of the music that has changed.
+ * @param music_id_after New id of the changed music.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MainWindow::update_music_in_map(
+    const QString& map_id,
+    const QString& music_id_before,
+    const QString& music_id_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QString path = get_quest().get_map_data_file_path(map_id);
+
+  QString pattern = QString("\n  music = \"?%1\"?,\n").arg(
+        QRegularExpression::escape(music_id_before));
+
+  QString replacement = QString("\n  music = \"%1\",\n").arg(music_id_after);
+
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
+}
+
+/**
+ * @brief Changes the id of an enemy breed and updates enemies having it.
+ * @param enemy_id_before Current enemy breed.
+ * @param enemy_id_after New enemy breed.
+ */
+void MainWindow::refactor_enemy_id(const QString& enemy_id_before, const QString& enemy_id_after) {
+
+  Refactoring refactoring([=]() {
+
+    // Change the id.
+    quest.rename_resource_element(ResourceType::ENEMY, enemy_id_before, enemy_id_after);
+
+    // Update enemies in all maps.
+    QStringList modified_paths;
+    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+      if (update_enemy_breed_in_map(map_id, enemy_id_before, enemy_id_after)) {
+        modified_paths << quest.get_map_data_file_path(map_id);
+      }
+    }
+    return modified_paths;
+  });
+
+  refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates existing enemies in a map when an enemy breed id was changed.
+ * @param map_id Id of the map to update.
+ * @param enemy_id_before Id of the enemy breed that has changed.
+ * @param enemy_id_after New id of the enemy breed.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MainWindow::update_enemy_breed_in_map(
+    const QString& map_id,
+    const QString& enemy_id_before,
+    const QString& enemy_id_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QString path = get_quest().get_map_data_file_path(map_id);
+
+  QString pattern = QString("\n  breed = \"?%1\"?,\n").arg(
+        QRegularExpression::escape(enemy_id_before));
+
+  QString replacement = QString("\n  breed = \"%1\",\n").arg(enemy_id_after);
+
+  return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
+}
+
+/**
+ * @brief Changes the id of an custom entity model and updates enemies having it.
+ * @param entity_id_before Current custom entity model.
+ * @param entity_id_after New custom entity model.
+ */
+void MainWindow::refactor_custom_entity_id(const QString& entity_id_before, const QString& entity_id_after) {
+
+  Refactoring refactoring([=]() {
+
+    // Change the id.
+    quest.rename_resource_element(ResourceType::ENTITY, entity_id_before, entity_id_after);
+
+    // Update enemies in all maps.
+    QStringList modified_paths;
+    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+      if (update_custom_entity_model_in_map(map_id, entity_id_before, entity_id_after)) {
+        modified_paths << quest.get_map_data_file_path(map_id);
+      }
+    }
+    return modified_paths;
+  });
+
+  refactoring_requested(refactoring);
+}
+
+/**
+ * @brief Updates existing enemies in a map when an custom entity model id was changed.
+ * @param map_id Id of the map to update.
+ * @param entity_id_before Id of the custom entity model that has changed.
+ * @param entity_id_after New id of the custom entity model.
+ * @return @c true if there was a change.
+ * @throws EditorException In case of error.
+ */
+bool MainWindow::update_custom_entity_model_in_map(
+    const QString& map_id,
+    const QString& entity_id_before,
+    const QString& entity_id_after
+) {
+  // We don't load the entire map with all its entities for performance.
+  // Instead, we just find and replace the appropriate text in the map
+  // data file.
+
+  QString path = get_quest().get_map_data_file_path(map_id);
+
+  QString pattern = QString("\n  model = \"?%1\"?,\n").arg(
+        QRegularExpression::escape(entity_id_before));
+
+  QString replacement = QString("\n  model = \"%1\",\n").arg(entity_id_after);
 
   return FileTools::replace_in_file(path, QRegularExpression(pattern), replacement);
 }

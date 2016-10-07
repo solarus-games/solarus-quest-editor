@@ -91,6 +91,10 @@ signals:
   void open_file_requested(Quest& quest, const QString& path);
   void refactoring_requested(const Refactoring& refactoring);
 
+public slots:
+
+  void undo();
+
 protected:
 
   void set_title(const QString& title);

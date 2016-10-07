@@ -23,6 +23,7 @@ namespace SolarusEditor {
 
 // General keys.
 const QString EditorSettings::working_directory = "working_directory";
+const QString EditorSettings::current_quest = "current_quest";
 const QString EditorSettings::last_quests = "last_quests";
 const QString EditorSettings::last_files = "last_files";
 const QString EditorSettings::last_file = "last_file";
