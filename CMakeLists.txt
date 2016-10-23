@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(solarus-quest-editor)
 
+set(SOLARUS_INSTALL_DATAROOTDIR "share" CACHE PATH "dataroot dir")
+set(SOLARUS_INSTALL_DATADIR "${SOLARUS_INSTALL_DATAROOTDIR}/solarus-quest-editor" CACHE PATH "data dir")
+set(SOLARUS_INSTALL_BINDIR "bin" CACHE PATH "bin dir")
+
 # As Qt generates ui header files, the build directory needs to be an include
 # directory too.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -392,10 +396,10 @@ target_link_libraries(solarus-quest-editor
 
 # Set files to install
 install(TARGETS solarus-quest-editor
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${SOLARUS_INSTALL_BINDIR}
 )
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets/"
-  DESTINATION "share/solarus-quest-editor/assets"
+  DESTINATION "${SOLARUS_INSTALL_DATADIR}/assets"
 )
 
 # Platform specific.
