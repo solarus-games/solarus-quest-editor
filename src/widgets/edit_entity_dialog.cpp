@@ -640,13 +640,13 @@ void EditEntityDialog::initialize_damage_on_enemies() {
   ui.damage_on_enemies_field->setValue(damage_on_enemies);
 
   if (damage_on_enemies == 0) {
-    ui.damage_on_enemies_field->setEnabled(false);
+    ui.damage_on_enemies_layout->setEnabled(false);
   }
   else {
     ui.damage_on_enemies_checkbox->setChecked(true);
   }
   connect(ui.damage_on_enemies_checkbox, SIGNAL(toggled(bool)),
-          ui.damage_on_enemies_field, SLOT(setEnabled(bool)));
+          ui.damage_on_enemies_layout, SLOT(setEnabled(bool)));
 }
 
 /**
@@ -1477,13 +1477,19 @@ void EditEntityDialog::initialize_weight() {
     return;
   }
 
-  initialize_possibly_optional_field(
-        weight_field_name,
-        nullptr,
-        nullptr,
-        ui.weight_checkbox,
-        ui.weight_field);
-  ui.weight_field->setValue(entity_before.get_field(weight_field_name).toInt());
+  int weight = entity_before.get_field(weight_field_name).toInt();
+  if (weight == -1) {
+    ui.weight_layout->setEnabled(false);
+    ui.weight_checkbox->setChecked(false);
+  }
+  else {
+    ui.weight_layout->setEnabled(true);
+    ui.weight_checkbox->setChecked(true);
+    ui.weight_field->setValue(weight);
+  }
+
+  connect(ui.weight_checkbox, SIGNAL(toggled(bool)),
+          ui.weight_layout, SLOT(setEnabled(bool)));
 }
 
 /**
@@ -1493,7 +1499,7 @@ void EditEntityDialog::apply_weight() {
 
   if (entity_after->has_field(weight_field_name)) {
     entity_after->set_field(weight_field_name, ui.weight_checkbox->isChecked() ?
-                              ui.weight_field->value() : 0);
+                              ui.weight_field->value() : -1);
   }
 }
 
