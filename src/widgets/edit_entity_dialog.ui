@@ -423,7 +423,7 @@
      <item row="17" column="0">
       <widget class="QCheckBox" name="weight_checkbox">
        <property name="text">
-        <string>Weight</string>
+        <string>Can be lifted</string>
        </property>
       </widget>
      </item>
@@ -443,6 +443,13 @@
          <number>0</number>
         </property>
         <item>
+         <widget class="QLabel" name="weight_label">
+          <property name="text">
+           <string>Weight</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QSpinBox" name="weight_field">
           <property name="maximumSize">
            <size>
@@ -451,7 +458,7 @@
            </size>
           </property>
           <property name="minimum">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="maximum">
            <number>999999</number>
@@ -477,7 +484,7 @@
      <item row="18" column="0">
       <widget class="QCheckBox" name="damage_on_enemies_checkbox">
        <property name="text">
-        <string>Damage on enemies</string>
+        <string>Can hurt enemies</string>
        </property>
       </widget>
      </item>
@@ -496,6 +503,13 @@
         <property name="bottomMargin">
          <number>0</number>
         </property>
+        <item>
+         <widget class="QLabel" name="damage_on_enemies_label">
+          <property name="text">
+           <string>Damage</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QSpinBox" name="damage_on_enemies_field">
           <property name="maximumSize">

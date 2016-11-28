@@ -18,6 +18,7 @@ Bug fixes
 * Fix typos in the dialogs and strings editors (#231).
 * Fix typo in French translation (#240).
 * Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
+* Map editor: fix setting destructible objects non liftable (#247).
 * Map editor: save all only if necessary when renaming a destination (#219).
 * Map editor: fix tileset view scrollbar position lost sometimes (#229).
 * Map editor: fix escape accepting resize/move instead of cancelling it (#217).
