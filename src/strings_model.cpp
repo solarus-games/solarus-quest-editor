@@ -355,7 +355,7 @@ QStringList StringsModel::get_keys(const QString& prefix) const {
 /**
  * @brief Returns the value of a string with the specified key.
  * @param key The key to test.
- * @return the value of the specified string or an empty string if no exists.
+ * @return The value of the specified string or an empty string if it does not exist.
  */
 QString StringsModel::get_string(const QString& key) const {
 
@@ -389,7 +389,7 @@ void StringsModel::create_string(const QString& key, const QString& value) {
 
   // Make some checks first.
   if (!is_valid_key(key)) {
-      throw EditorException(tr("Invalid string Key: %1").arg(key));
+      throw EditorException(tr("Invalid string id: '%1'").arg(key));
   }
 
   if (string_exists(key)) {
@@ -516,7 +516,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
 
   // Make some checks first.
   if (!string_exists(key)) {
-    throw EditorException(tr("String '%1' no exists").arg(key));
+    throw EditorException(tr("String '%1' does not exist").arg(key));
   }
 
   if (string_exists(new_key)) {
@@ -524,7 +524,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
   }
 
   if (!is_valid_key(new_key)) {
-    throw EditorException(tr("Invalid string Key: %1").arg(new_key));
+    throw EditorException(tr("Invalid string id: '%1'").arg(new_key));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -635,7 +635,7 @@ void StringsModel::delete_string(const QString& key) {
 
   // Make some checks first.
   if (!string_exists(key)) {
-    throw EditorException(tr("Invalid string key: %1").arg(key));
+    throw EditorException(tr("Invalid string id: '%1'").arg(key));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -852,7 +852,7 @@ bool StringsModel::has_missing_translation(const QString& key) const {
 /**
  * @brief Returns a translated string.
  * @param key The key of the string.
- * @return The translated string or an empty string if no exists.
+ * @return The translated string or an empty string if it does not exist.
  */
 QString StringsModel::get_translated_string(const QString& key) const {
 

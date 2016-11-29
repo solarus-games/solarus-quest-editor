@@ -378,6 +378,15 @@ bool Editor::try_command(QUndoCommand* command) {
 }
 
 /**
+ * @brief Undoes the last command from the undo/redo history.
+ */
+void Editor::undo() {
+
+  get_undo_stack().undo();
+}
+
+
+/**
  * @fn Editor::save
  * @brief Saves the file.
  *

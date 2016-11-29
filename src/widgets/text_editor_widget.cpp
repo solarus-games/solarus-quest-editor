@@ -16,6 +16,7 @@
  */
 #include "widgets/text_editor.h"
 #include "widgets/text_editor_widget.h"
+#include <QDebug>
 #include <QMenu>
 #include <QPainter>
 #include <QTextBlock>
@@ -444,7 +445,7 @@ void TextEditorWidget::keyPressEvent(QKeyEvent* event) {
 /**
  * @brief Inserts tabulation(s) at the cursor position.
  */
-void TextEditorWidget::insert_tab () {
+void TextEditorWidget::insert_tab() {
 
   QTextCursor cursor = textCursor();
 
@@ -464,17 +465,25 @@ void TextEditorWidget::insert_tab () {
   // Insert tab for all selected lines.
   if (cursor.hasSelection()) {
 
-    // Get the end block number dans set position to start.
+    // Get the end block number.
     int start_pos = cursor.selectionStart();
     cursor.setPosition(cursor.selectionEnd());
-    int block_number = cursor.blockNumber();
+    cursor.clearSelection();
+    cursor.movePosition(QTextCursor::EndOfLine);
+    int end_pos = cursor.position();
     cursor.setPosition(start_pos);
+    cursor.movePosition(QTextCursor::StartOfLine);
 
-    // Loop on each blocks.
-    while (cursor.blockNumber() <= block_number) {
+    // Loop on blocks.
+    while (!cursor.atEnd() && cursor.position() <= end_pos) {
+
+      if (!cursor.atBlockEnd()) {
+        // Insert a tab if the line is not empty.
+        cursor.insertText(tab);
+        end_pos += tab.size();
+      }
       cursor.movePosition(QTextCursor::StartOfLine);
-      cursor.insertText(tab);
-      cursor.movePosition(QTextCursor::NextBlock);
+      cursor.movePosition(QTextCursor::Down);
     }
   }
   // Insert tab before the cursor.
@@ -488,7 +497,7 @@ void TextEditorWidget::insert_tab () {
 /**
  * @brief Removes tabulation(s) at the cursor position.
  */
-void TextEditorWidget::remove_tab () {
+void TextEditorWidget::remove_tab() {
 
   QTextCursor cursor = textCursor();
 
@@ -497,14 +506,14 @@ void TextEditorWidget::remove_tab () {
   // Check all selected lines.
   if (cursor.hasSelection()) {
 
-    // Get the end block number dans set position to start.
+    // Get the end block number.
     int start_pos = cursor.selectionStart();
     cursor.setPosition(cursor.selectionEnd());
-    int block_number = cursor.blockNumber();
+    int end_pos = cursor.position();
     cursor.setPosition(start_pos);
 
-    // Loop on each blocks.
-    while (cursor.blockNumber() <= block_number) {
+    // Loop on blocks.
+    while (!cursor.atEnd() && cursor.position() <= end_pos) {
 
       cursor.movePosition(QTextCursor::StartOfLine);
       int last_pos = cursor.position();
@@ -516,7 +525,8 @@ void TextEditorWidget::remove_tab () {
         do {
           cursor.movePosition(
             QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-        } while (cursor.selectedText().endsWith(" ") && !cursor.atBlockEnd() &&
+        } while (cursor.selectedText().endsWith(" ") &&
+                 !cursor.atBlockEnd() &&
                  cursor.selectedText().length() <= tab_length);
         int length = cursor.selectedText().length() - 1;
 
@@ -527,6 +537,7 @@ void TextEditorWidget::remove_tab () {
             QTextCursor::NextCharacter, QTextCursor::KeepAnchor, length);
           cursor.removeSelectedText();
         }
+        end_pos -= length;
       }
       // Remove the first tab character of this line.
       else {
@@ -535,10 +546,12 @@ void TextEditorWidget::remove_tab () {
         if (cursor.selectedText() == "\t") {
           cursor.removeSelectedText();
         }
+        --end_pos;
       }
 
       cursor.setPosition(last_pos);
-      cursor.movePosition(QTextCursor::NextBlock);
+      cursor.movePosition(QTextCursor::StartOfLine);
+      cursor.movePosition(QTextCursor::Down);
     }
   }
   else {

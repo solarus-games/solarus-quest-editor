@@ -129,11 +129,17 @@ void TilesetView::set_model(TilesetModel* model) {
       return;
     }
 
-    // Enable useful features if there is an image.
+    // Restore the previous zoom and scrollbar positions.
     if (view_settings != nullptr) {
-      view_settings->set_zoom(zoom);  // Initial zoom: x2.
+      view_settings->set_zoom(zoom);
     }
+
+    horizontalScrollBar()->setValue(0);  // To force an actual change (refresh bug).
+    horizontalScrollBar()->setValue(10);
     horizontalScrollBar()->setValue(horizontal_scrollbar_value);
+
+    verticalScrollBar()->setValue(0);
+    verticalScrollBar()->setValue(10);
     verticalScrollBar()->setValue(vertical_scrollbar_value);
 
     // Install panning and zooming helpers.

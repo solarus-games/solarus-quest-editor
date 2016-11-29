@@ -30,6 +30,7 @@ public:
 
   // General keys.
   static const QString working_directory;
+  static const QString current_quest;
   static const QString last_quests;
   static const QString last_files;
   static const QString last_file;

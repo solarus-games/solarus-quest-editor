@@ -88,9 +88,9 @@ int run_editor_gui(int argc, char* argv[]) {
   }
   else if (settings.get_value_bool(EditorSettings::restore_last_files)) {
     // Restore the default quest if any.
-    QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
-    if (!last_quests.isEmpty()) {
-      quest_path = last_quests.first();
+    const QString& current_quest = settings.get_value_string(EditorSettings::current_quest);
+    if (!current_quest.isEmpty()) {
+      quest_path = current_quest;
       file_paths = settings.get_value_string_list(EditorSettings::last_files);
       active_file_path = settings.get_value_string(EditorSettings::last_file);
     }

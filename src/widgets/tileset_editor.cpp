@@ -1264,13 +1264,11 @@ void TilesetEditor::editor_made_visible() {
       return;
     }
 
-    TilesetModel* old_model = model;
+    model->reload_patterns_image();
 
-    model = new TilesetModel(get_quest(), tileset_id, this);
-    ui.tileset_view->set_model(model);
-    ui.patterns_list_view->set_model(*model);
-
-    delete old_model;
+    // Refresh both views.
+    ui.tileset_view->update();
+    // TODO ui.patterns_list_view->
   }
 }
 

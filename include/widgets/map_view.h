@@ -55,6 +55,7 @@ public:
 
     virtual void start();
     virtual void stop();
+    virtual void cancel();
 
     virtual void mouse_pressed(const QMouseEvent& event);
     virtual void mouse_released(const QMouseEvent& event);
@@ -158,6 +159,7 @@ public slots:
   void tileset_reloaded();
 
   void cancel_state_requested();
+  void undo_last_command();
   void edit_selected_entity();
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
   void resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous);

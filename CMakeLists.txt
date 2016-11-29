@@ -359,6 +359,7 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
 
 # Translations.
 set(solarus_quest_editor_TRANSLATIONS
+  translations/solarus_editor_es.ts
   translations/solarus_editor_fr.ts
 )
 qt5_add_translation(solarus_quest_editor_TRANSLATIONS_QM

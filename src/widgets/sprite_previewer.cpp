@@ -214,7 +214,7 @@ void SpritePreviewer::update_frame() {
   item->setPixmap(pixmap);
 
   QString size_str = QString::number(nb_frames > 0 ? nb_frames - 1 : 0);
-  ui.frame_label->setText(QString::number(current_frame) + " / " + size_str);
+  ui.frame_label->setText(QString("%1 / %2").arg(QString::number(current_frame), size_str));
 }
 
 /**

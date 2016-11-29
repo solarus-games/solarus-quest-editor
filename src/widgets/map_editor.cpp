@@ -1106,6 +1106,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(remove_entities_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(stopped_state()),
           this, SLOT(uncheck_entity_creation_buttons()));
+  connect(ui.map_view, SIGNAL(undo_requested()),
+          this, SLOT(undo()));
 
   connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
           this, SLOT(map_selection_changed()));
@@ -1821,6 +1823,8 @@ void MapEditor::refactor_destination_name(
     // Update teletransporters in all other maps.
     return update_destination_name_in_other_maps(name_before, name_after);
   });
+
+  refactoring.set_file_unsaved_allowed(get_file_path(), true);
 
   emit refactoring_requested(refactoring);
 }

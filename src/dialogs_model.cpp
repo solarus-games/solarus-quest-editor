@@ -319,7 +319,7 @@ DialogData DialogsModel::get_dialog_data(const QString& id) const {
 /**
  * @brief Returns the text of a dialog with the specified id.
  * @param id The id to test.
- * @return the text of the specified dialog or an empty string if no exists.
+ * @return The text of the specified dialog or an empty string if it does not exist.
  */
 QString DialogsModel::get_dialog_text(const QString& id) const {
 
@@ -355,7 +355,7 @@ QMap<QString, QString> DialogsModel::get_dialog_properties(
  * @brief Returns a property of a dialog with the specified id.
  * @param id The id to test.
  * @param key The key of the property to test.
- * @return the property value or an empty string if no exists.
+ * @return The property value or an empty string if it does not exist.
  */
 QString DialogsModel::get_dialog_property(
     const QString& id, const QString& key) const {
@@ -579,7 +579,7 @@ QString DialogsModel::set_dialog_id(const QString& id, const QString& new_id) {
 
   // Make some checks first.
   if (!dialog_exists(id)) {
-    throw EditorException(tr("Dialog '%1' no exists").arg(id));
+    throw EditorException(tr("Dialog '%1' does not exist").arg(id));
   }
 
   if (dialog_exists(new_id)) {
@@ -587,7 +587,7 @@ QString DialogsModel::set_dialog_id(const QString& id, const QString& new_id) {
   }
 
   if (!is_valid_id(new_id)) {
-    throw EditorException(tr("Invalid dialog id: %1").arg(new_id));
+    throw EditorException(tr("Invalid dialog id: '%1'").arg(new_id));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -896,7 +896,7 @@ bool DialogsModel::translated_dialog_exists(const QString& id) const {
 /**
  * @brief Returns a translated dialog text.
  * @param id The id of the dialog.
- * @return The translated dialog text or an empty string if no exists.
+ * @return The translated dialog text or an empty string if it does not exist.
  */
 QString DialogsModel::get_translated_dialog_text(const QString& id) const {
 
@@ -934,7 +934,7 @@ QMap<QString, QString> DialogsModel::get_translated_dialog_properties(
  * @brief Returns a property of a dialog with the specified id.
  * @param id The id to test.
  * @param key The key of the property to test.
- * @return the property value or an empty string if no exists.
+ * @return The property value or an empty string if it does not exist.
  */
 QString DialogsModel::get_translated_dialog_property(
     const QString& id, const QString& key) const {

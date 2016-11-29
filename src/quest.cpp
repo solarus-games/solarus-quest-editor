@@ -1607,7 +1607,7 @@ void Quest::rename_resource_element(
       // and the new path was initialized by default with
       // /some/quest/data/musics/dungeon.ogg
       new_path = new_path_info.path() + '/' +
-          new_path_info.completeBaseName() + '/' + extension;
+          new_path_info.completeBaseName() + '.' + extension;
     }
 
     if (exists(old_path)) {
