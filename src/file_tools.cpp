@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QTextStream>
 
+#include <QDebug>
+
 namespace SolarusEditor {
 
 namespace FileTools {
@@ -113,12 +115,19 @@ void copy_recursive(const QString& src, const QString& dst) {
   }
 
   if (src_info.isDir()) {
-    QDir dst_dir(dst);
 
+    QDir dst_dir(dst);
     dst_dir.cdUp();
 
     if (!dst_dir.exists()) {
       throw EditorException(QApplication::tr("No such directory: '%1'").arg(dst_dir.path()));
+    }
+
+    QString src_canonical_path = src_info.canonicalPath();
+    QString dst_canonical_path = dst_dir.canonicalPath();
+
+    if (dst_canonical_path.startsWith(src_canonical_path)) {
+      throw EditorException(QApplication::tr("Cannot copy directory '%1' to one of its own subdirectories: '%2'").arg(src, dst));
     }
 
     if (!dst_dir.mkdir(dst_info.fileName())) {
