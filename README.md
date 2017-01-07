@@ -36,7 +36,7 @@ To build Solarus Quest Editor, you need:
   - openal
   - vorbisfile
   - modplug (0.8.8.4 or greater)
-  - lua5.1 (LuaJIT is recommended)
+  - lua5.1 or luajit (LuaJIT is recommended)
   - physfs
 
 We always keep branch dev of Solarus Quest Editor compatible with branch
@@ -46,8 +46,10 @@ dev of Solarus.
 
 In Qt Creator, you can load the Solarus Quest Editor project by opening the
 CMakeLists.txt file.
-You will need to tell Qt Creator the path to the CMake binary.
-You might need to set CMake variables, like the location of the Solarus library
+You might need to tell Qt Creator the path to the CMake binary.
+If Solarus is installed in a standard paths known by CMake, it should directly
+work. Otherwise, you need to set CMake variables indicating the location of the
+Solarus includes and libraries.
 (see the example in the command-line section below).
 
 ### With the command line
@@ -55,18 +57,24 @@ You might need to set CMake variables, like the location of the Solarus library
 If you don't want to use Qt Creator, you can build the project from the
 command line using CMake.
 
-Configure:
+#### Configure:
 
     $ cd solarus-quest-editor
     $ mkdir build
     $ cd build
-    $ cmake -DSOLARUS_INCLUDE_DIR=/path/to/solarus/include -DSOLARUS_LIBRARY=/path/to/solarus/libsolarus.so ..
+    $ cmake ..
 
-Build:
+If CMake fails to find Solarus include directories or libraries,
+for example because they are not properly installed in standard paths,
+you can explictly indicate their location instead:
+
+    $ cmake -DSOLARUS_INCLUDE_DIR=/path/to/solarus/include -DSOLARUS_GUI_INCLUDE_DIR=/path/to/solarus/include -DSOLARUS_LIBRARY=/path/to/solarus/libsolarus.so -DSOLARUS_GUI_LIBRARY=/path/to/solarus/libsolarus-gui.so ..
+
+#### Build:
 
     $ make
 
-Run:
+#### Run:
 
     $ ./solarus-quest-editor
 
