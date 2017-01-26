@@ -441,3 +441,9 @@ if(UNIX AND NOT APPLE)
   install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/../images/icon/sqe-icon-png-1024px.png
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/1024x1024/apps RENAME solarus-quest-editor.png)
 endif(UNIX AND NOT APPLE)
+
+# FreeDesktop compatible start menu launcher
+if(UNIX AND NOT APPLE)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/../resources/solarus-quest-editor.desktop
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+endif(UNIX AND NOT APPLE)
