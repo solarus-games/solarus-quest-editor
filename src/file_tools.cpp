@@ -99,6 +99,10 @@ QString get_assets_path() {
  */
 void copy_recursive(const QString& src, const QString& dst) {
 
+  if (src == dst) {
+    throw EditorException(QApplication::tr("Source and destination are the same: '%1'").arg(src));
+  }
+
   QFileInfo src_info(src);
   QFileInfo dst_info(dst);
 
@@ -123,10 +127,10 @@ void copy_recursive(const QString& src, const QString& dst) {
       throw EditorException(QApplication::tr("No such directory: '%1'").arg(dst_dir.path()));
     }
 
-    QString src_canonical_path = src_info.canonicalPath();
-    QString dst_canonical_path = dst_dir.canonicalPath();
+    QString src_canonical_path = src_info.canonicalFilePath();
+    QString dst_parent_canonical_path = dst_dir.canonicalPath();
 
-    if (dst_canonical_path.startsWith(src_canonical_path)) {
+    if (dst_parent_canonical_path.startsWith(src_canonical_path)) {
       throw EditorException(QApplication::tr("Cannot copy directory '%1' to one of its own subdirectories: '%2'").arg(src, dst));
     }
 
