@@ -26,5 +26,7 @@
         <file>quest_converter/1_4_to_1_5/quest_properties_converter_1_4.lua</file>
         <file>quest_converter/1_4_to_1_5/map_converter_1_4.lua</file>
         <file>quest_converter/1_4_to_1_5/quest_db_converter_1_4.lua</file>
+        <file>quest_converter/converter_1_5_to_1_6.lua</file>
+        <file>quest_converter/1_5_to_1_6/quest_properties_converter_1_5.lua</file>
     </qresource>
 </RCC>
