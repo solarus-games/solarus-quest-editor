@@ -1,3 +1,10 @@
+______________________________________
+
+Solarus Quest Editor 1.6 (in progress)
+______________________________________
+
+* Initial quest: fix the source image of the bomb sprite.
+
 _______________________________________
 
 Solarus Quest Editor 1.5.2 (2016-12-06)
