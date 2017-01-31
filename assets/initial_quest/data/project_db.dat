@@ -79,7 +79,6 @@ music{ id = "mountains", description = "Mountains" }
 music{ id = "neptune_battle", description = "Neptune battle" }
 music{ id = "overworld", description = "Overworld" }
 music{ id = "soldiers", description = "Soldiers" }
-music{ id = "soldiers_intro", description = "Soldiers (intro)" }
 music{ id = "sword_fanfare", description = "Sword fanfare" }
 music{ id = "title_screen", description = "Title screen" }
 music{ id = "village", description = "Village" }
