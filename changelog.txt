@@ -5,6 +5,7 @@ ______________________________________
 
 * Initial quest: add enemy killed animation from Diarandor.
 * Initial quest: fix the source image of the bomb sprite.
+* Initial quest: make musics loop without separate file for their intro (#267).
 * Fix error message when converting from older formats to 1.5.2.
 
 _______________________________________
