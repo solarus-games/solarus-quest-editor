@@ -78,7 +78,6 @@ music{ id = "mini_game", description = "Mini-game" }
 music{ id = "mountains", description = "Mountains" }
 music{ id = "neptune_battle", description = "Neptune battle" }
 music{ id = "overworld", description = "Overworld" }
-music{ id = "overworld_intro", description = "Overworld (intro)" }
 music{ id = "soldiers", description = "Soldiers" }
 music{ id = "soldiers_intro", description = "Soldiers (intro)" }
 music{ id = "sword_fanfare", description = "Sword fanfare" }
