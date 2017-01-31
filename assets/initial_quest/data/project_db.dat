@@ -67,12 +67,10 @@ sprite{ id = "things/switch_aureole", description = "switch aureole" }
 sprite{ id = "things/water_splash_effect", description = "water splash" }
 
 music{ id = "boss", description = "Boss" }
-music{ id = "boss_intro", description = "Boss (intro)" }
 music{ id = "carrousel", description = "Carrousel" }
 music{ id = "cave", description = "Cave" }
 music{ id = "dungeon_finished", description = "Dungeon inished" }
 music{ id = "fairy", description = "Fairy" }
-music{ id = "fairy_intro", description = "Fairy (intro)" }
 music{ id = "fanfare", description = "Fanfare" }
 music{ id = "game_over", description = "Game over" }
 music{ id = "lunarius", description = "Lunarius" }
