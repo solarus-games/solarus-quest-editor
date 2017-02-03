@@ -66,23 +66,22 @@ sprite{ id = "things/steam", description = "steam" }
 sprite{ id = "things/switch_aureole", description = "switch aureole" }
 sprite{ id = "things/water_splash_effect", description = "water splash" }
 
-music{ id = "boss", description = "Boss" }
-music{ id = "carrousel", description = "Carrousel" }
-music{ id = "cave", description = "Cave" }
-music{ id = "dungeon_finished", description = "Dungeon inished" }
-music{ id = "fairy", description = "Fairy" }
-music{ id = "fanfare", description = "Fanfare" }
-music{ id = "game_over", description = "Game over" }
-music{ id = "lunarius", description = "Lunarius" }
-music{ id = "mini_game", description = "Mini-game" }
-music{ id = "mountains", description = "Mountains" }
-music{ id = "neptune_battle", description = "Neptune battle" }
-music{ id = "overworld", description = "Overworld" }
-music{ id = "soldiers", description = "Soldiers" }
-music{ id = "sword_fanfare", description = "Sword fanfare" }
-music{ id = "title_screen", description = "Title screen" }
-music{ id = "village", description = "Village" }
-music{ id = "witch_hut", description = "Witch hut" }
+music{ id = "eduardo/boss", description = "Boss" }
+music{ id = "eduardo/cave", description = "Cave" }
+music{ id = "eduardo/dungeon_finished", description = "Dungeon finished" }
+music{ id = "eduardo/fairy", description = "Fairy" }
+music{ id = "eduardo/fanfare", description = "Fanfare" }
+music{ id = "eduardo/game_over", description = "Game Over" }
+music{ id = "eduardo/lunarius", description = "Lunarius theme" }
+music{ id = "eduardo/mini_game", description = "Mini game" }
+music{ id = "eduardo/mountains", description = "Mountains" }
+music{ id = "eduardo/neptune_battle", description = "Neptune battle" }
+music{ id = "eduardo/overworld", description = "Overworld" }
+music{ id = "eduardo/soldiers", description = "Soldiers" }
+music{ id = "eduardo/sword_fanfare", description = "Sword fanfare" }
+music{ id = "eduardo/title_screen", description = "Title screen" }
+music{ id = "eduardo/village", description = "Village" }
+music{ id = "eduardo/witch_hut", description = "Witch" }
 
 sound{ id = "arrow_hit", description = "arrow_hit" }
 sound{ id = "bird_chirp", description = "bird_chirp" }
