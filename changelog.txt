@@ -7,6 +7,7 @@ ________________________________________
 * Initial quest: fix the source image of the bomb sprite.
 * Initial quest: make musics loop without separate file for their intro (#267).
 * Initial quest: add sounds from the Solarus Free Resource Pack
+* Initial quest: play a sound with the Solarus logo.
 * Fix error message when converting from older formats to 1.5.2.
 
 _______________________________________
