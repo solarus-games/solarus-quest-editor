@@ -135,7 +135,7 @@ void Quest::check_version() const {
 
   QString quest_version = properties.get_solarus_version();
   if (quest_version.isEmpty()) {
-      throw EditorException("Missing Solarus version is quest.dat");
+      throw EditorException(tr("Missing Solarus version in quest.dat"));
   }
 
   int quest_major = quest_version.section('.', 0, 0).toInt();

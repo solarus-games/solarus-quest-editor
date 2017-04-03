@@ -76,7 +76,7 @@ TilesetView::TilesetView(QWidget* parent) :
     emit change_selected_patterns_repeat_mode_requested(repeat_mode);
   });
   // TODO add shortcut support to EnumMenus
-  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::ALL)]->setShortcut(tr("R"));
+  set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::ALL)]->setShortcut(tr("A"));
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::HORIZONTAL)]->setShortcut(tr("H"));
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::VERTICAL)]->setShortcut(tr("V"));
   set_repeat_mode_actions[static_cast<int>(TilePatternRepeatMode::NONE)]->setShortcut(tr("N"));

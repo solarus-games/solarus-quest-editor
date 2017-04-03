@@ -111,7 +111,7 @@ EntityModelPtr EditEntityDialog::get_entity_after() {
 }
 
 /**
- * @brief Slot called when the user change the width value.
+ * @brief Slot called when the user changes the width value.
  * @param width The new width value.
  */
 void EditEntityDialog::width_changed(int width) {
@@ -129,7 +129,7 @@ void EditEntityDialog::width_changed(int width) {
 }
 
 /**
- * @brief Slot called when the user change the height value.
+ * @brief Slot called when the user changes the height value.
  * @param width The new height value.
  */
 void EditEntityDialog::height_changed(int height) {
@@ -147,7 +147,7 @@ void EditEntityDialog::height_changed(int height) {
 }
 
 /**
- * @brief Slot called when the user change the direction value.
+ * @brief Slot called when the user changes the direction value.
  */
 void EditEntityDialog::direction_changed() {
 
