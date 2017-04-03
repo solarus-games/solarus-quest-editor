@@ -1,7 +1,7 @@
-________________________________________
+_______________________________________
 
-Solarus Quest Editor 1.5.3 (in progress)
-________________________________________
+Solarus Quest Editor 1.5.3 (2017-04-01)
+_______________________________________
 
 * Initial quest: add enemy killed animation from Diarandor.
 * Initial quest: fix the source image of the bomb sprite.
