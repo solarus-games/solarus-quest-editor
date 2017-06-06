@@ -50,7 +50,7 @@ public:
    * @param undo_stack The undo stack.
    * @param wrapped_command The undo command to wrap.
    */
-  UndoCommandSkipFirst(std::unique_ptr<QUndoCommand> wrapped_command):
+  explicit UndoCommandSkipFirst(std::unique_ptr<QUndoCommand> wrapped_command):
     QUndoCommand(wrapped_command->text()),
     wrapped_command(std::move(wrapped_command)),
     first_time(true) {

@@ -51,7 +51,7 @@ namespace {
 class DoingNothingState : public MapView::State {
 
 public:
-  DoingNothingState(MapView& view);
+  explicit DoingNothingState(MapView& view);
 
   void mouse_pressed(const QMouseEvent& event) override;
   void mouse_moved(const QMouseEvent& event) override;

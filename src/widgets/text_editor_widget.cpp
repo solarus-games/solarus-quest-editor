@@ -41,7 +41,7 @@ public:
    * @param text_editor_widget The text editor widget to forward undo/redo
    * commands to.
    */
-  UndoCommandProxy(TextEditorWidget& text_editor_widget):
+  explicit UndoCommandProxy(TextEditorWidget& text_editor_widget):
     QUndoCommand("text"),
     text_editor_widget(text_editor_widget),
     first_time(true) {
@@ -92,7 +92,7 @@ public:
    * @brief Constructor.
    * @param text_editor_widget The text editor to show line numbers of.
    */
-  LineNumberArea(TextEditorWidget& text_editor_widget) :
+  explicit LineNumberArea(TextEditorWidget& text_editor_widget) :
     QWidget(&text_editor_widget),
     text_editor_widget(text_editor_widget) {
   }
