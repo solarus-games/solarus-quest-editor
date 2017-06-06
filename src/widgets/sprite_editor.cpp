@@ -174,7 +174,8 @@ public:
 
   DeleteAnimationCommand(SpriteEditor& editor, const SpriteModel::Index& index) :
     SpriteEditorCommand(editor, SpriteEditor::tr("Delete animation")),
-    index(index) {
+    index(index),
+    is_default(false) {
   }
 
   virtual void undo() override {
