@@ -809,7 +809,6 @@ void TilesetView::end_state_drawing_rectangle() {
 
     // Put most actions in a submenu to make the context menu smaller.
     QMenu sub_menu(tr("New pattern (more options)"));
-    int i = 0;
     Q_FOREACH (QAction* action, menu.actions()) {
       Ground ground = static_cast<Ground>(action->data().toInt());
       if (ground == Ground::TRAVERSABLE ||
@@ -820,7 +819,6 @@ void TilesetView::end_state_drawing_rectangle() {
         menu.removeAction(action);
         sub_menu.addAction(action);
       }
-      ++i;
     }
     menu.addMenu(&sub_menu);
 
