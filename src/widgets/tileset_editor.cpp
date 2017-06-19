@@ -129,6 +129,44 @@ private:
 };
 
 /**
+ * @brief Moving several tile patterns.
+ */
+class SetPatternsPositionCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternsPositionCommand(
+      TilesetEditor& editor, QList<int> indexes, const QPoint& delta) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Move patterns")),
+    indexes(indexes),
+    delta(delta) {
+  }
+
+  virtual void undo() override {
+
+    Q_FOREACH (int index, indexes) {
+      QPoint position = get_model().get_pattern_frame(index).topLeft();
+      get_model().set_pattern_position(index, position - delta);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+  virtual void redo() override {
+
+    Q_FOREACH (int index, indexes) {
+      QPoint position = get_model().get_pattern_frame(index).topLeft();
+      get_model().set_pattern_position(index, position + delta);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+private:
+
+  QList<int> indexes;
+  QPoint delta;
+};
+
+/**
  * @brief Changing the ground of tile patterns.
  */
 class SetPatternsGroundCommand : public TilesetEditorCommand {
@@ -553,8 +591,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(update_pattern_id_field()));
 
-  connect(ui.tileset_view, SIGNAL(change_selected_pattern_position_requested(QPoint)),
-          this, SLOT(change_selected_pattern_position_requested(QPoint)));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_position_requested(QPoint)),
+          this, SLOT(change_selected_patterns_position_requested(QPoint)));
 
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
@@ -797,17 +835,21 @@ void TilesetEditor::tileset_image_changed() {
 }
 
 /**
- * @brief Slot called when the user wants to move a tile pattern.
+ * @brief Slot called when the user wants to move tile pattern(s).
  */
-void TilesetEditor::change_selected_pattern_position_requested(const QPoint& position) {
+void TilesetEditor::change_selected_patterns_position_requested(const QPoint& delta) {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected or several patterns selected.
+  QList<int> indexes = model->get_selected_indexes();
+  if (indexes.empty()) {
+    // No pattern selected.
     return;
+  } else if (indexes.length() == 1) {
+    int index = indexes.first();
+    QPoint position = model->get_pattern_frame(index).topLeft() + delta;
+    try_command(new SetPatternPositionCommand(*this, index, position));
+  } else {
+    try_command(new SetPatternsPositionCommand(*this, indexes, delta));
   }
-
-  try_command(new SetPatternPositionCommand(*this, index, position));
 }
 
 /**

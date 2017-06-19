@@ -54,7 +54,7 @@ signals:
       const QString& pattern_id, const QRect& frame, Ground ground);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
-  void change_selected_pattern_position_requested(const QPoint& position);
+  void change_selected_patterns_position_requested(const QPoint& delta);
   void change_selected_patterns_ground_requested(Ground ground);
   void change_selected_patterns_default_layer_requested(int layer);
   void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
@@ -108,6 +108,7 @@ private:
   void end_state_moving_pattern();
   void set_current_area(const QRect& area);
   QList<QGraphicsItem*> get_items_intersecting_current_area() const;
+  QRect get_selection_bounding_box() const;
 
   QPointer<TilesetModel> model;        /**< The tileset model. */
   TilesetScene* scene;                 /**< The scene viewed. */

@@ -367,7 +367,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
       if (item != nullptr &&
           item->isSelected() &&
-          model->get_selection_count() == 1 &&
+          !model->is_selection_empty() &&
           !is_read_only()) {
         // Clicking on an already selected item: allow to move it.
         start_state_moving_pattern(event->pos());
@@ -505,8 +505,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
   }
   else if (state == State::MOVING_PATTERN) {
 
-    int index = model->get_selected_index();
-    if (index == -1) {
+    if (model->is_selection_empty()) {
       // Tile was deselected: cancel the movement.
       end_state_moving_pattern();
     }
@@ -514,7 +513,7 @@ void TilesetView::mouseMoveEvent(QMouseEvent* event) {
       dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
 
       QRect new_pattern_area = current_area_item->rect().toRect();
-      QRect old_pattern_area = model->get_pattern_frame(index);
+      QRect old_pattern_area = get_selection_bounding_box();
       new_pattern_area.moveTopLeft(QPoint(
             old_pattern_area.x() + dragging_current_point.x() - dragging_start_point.x(),
             old_pattern_area.y() + dragging_current_point.y() - dragging_start_point.y()));
@@ -842,15 +841,14 @@ void TilesetView::end_state_drawing_rectangle() {
  */
 void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
+  if (model->is_selection_empty()) {
     return;
   }
 
   state = State::MOVING_PATTERN;
   dragging_start_point = mapToScene(initial_point).toPoint()/ 8 * 8;
   dragging_current_point = dragging_start_point;
-  const QRect& box = model->get_pattern_frames_bounding_box(index);
+  const QRect& box = get_selection_bounding_box();
   current_area_item = new QGraphicsRectItem(box);
   current_area_item->setPen(QPen(Qt::yellow));
   scene->addItem(current_area_item);
@@ -865,15 +863,16 @@ void TilesetView::end_state_moving_pattern() {
   if (!box.isEmpty() &&
       sceneRect().contains(box) &&
       get_items_intersecting_current_area().isEmpty() &&
-      model->get_selection_count() == 1 &&
+      !model->is_selection_empty() &&
       !is_read_only() &&
       dragging_current_point != dragging_start_point) {
 
     // Context menu to move the pattern.
     QMenu menu;
+    QPoint delta = box.topLeft() - get_selection_bounding_box().topLeft();
     QAction* move_pattern_action = new QAction(tr("Move here"), this);
-    connect(move_pattern_action, &QAction::triggered, [this, box] {
-      emit change_selected_pattern_position_requested(box.topLeft());
+    connect(move_pattern_action, &QAction::triggered, [this, delta] {
+      emit change_selected_patterns_position_requested(delta);
     });
     menu.addAction(move_pattern_action);
     menu.addSeparator();
@@ -923,7 +922,7 @@ void TilesetView::set_current_area(const QRect& area) {
     if (!area.isEmpty() &&
         sceneRect().contains(area) &&
         get_items_intersecting_current_area().isEmpty() &&
-        model->get_selection_count() == 1 &&
+        !model->is_selection_empty() &&
         !is_read_only()) {
       current_area_item->setPen(QPen(Qt::yellow));
     } else {
@@ -952,6 +951,20 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   }
 
   return items;
+}
+
+/**
+ * @brief Returns the bounding box corresponding to all selected tile patterns.
+ * @return The bounding box of all the selected tile patterns.
+ */
+QRect TilesetView::get_selection_bounding_box() const {
+
+  QRect bounding_box;
+  Q_FOREACH (int index, model->get_selected_indexes()) {
+    bounding_box = bounding_box.united(
+      model->get_pattern_frames_bounding_box(index));
+  }
+  return bounding_box;
 }
 
 }
