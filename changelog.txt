@@ -1,3 +1,10 @@
+________________________________________
+
+Solarus Quest Editor 1.6.0 (in progress)
+________________________________________
+
+* Tileset editor: allow to move several patterns at once (#171).
+
 _______________________________________
 
 Solarus Quest Editor 1.5.3 (2017-04-01)
