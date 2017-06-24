@@ -368,6 +368,7 @@ void TilesetView::mousePressEvent(QMouseEvent* event) {
       if (item != nullptr &&
           item->isSelected() &&
           !model->is_selection_empty() &&
+          !control_or_shift &&
           !is_read_only()) {
         // Clicking on an already selected item: allow to move it.
         start_state_moving_pattern(event->pos());
