@@ -3,6 +3,7 @@ ________________________________________
 Solarus Quest Editor 1.6.0 (in progress)
 ________________________________________
 
+* Tileset editor: allow to duplicate tile patterns (#188).
 * Tileset editor: allow to move several patterns at once (#171).
 
 _______________________________________

@@ -422,6 +422,74 @@ private:
 };
 
 /**
+ * @brief Duplicate tile patterns.
+ */
+class DuplicatePatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DuplicatePatternsCommand(
+      TilesetEditor& editor, const QList<int>& indexes, const QPoint& delta) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Duplicate")),
+    delta(delta) {
+    Q_FOREACH (int index, indexes) {
+      ids.append(get_model().index_to_id(index));
+    }
+  }
+
+  virtual void undo() override {
+
+    Q_FOREACH (QString new_id, new_ids) {
+      get_model().delete_pattern(get_model().id_to_index(new_id));
+    }
+  }
+
+  virtual void redo() override {
+
+    get_model().clear_selection();
+    new_ids.clear();
+
+    Q_FOREACH (QString id, ids) {
+
+      int index = get_model().id_to_index(id);
+
+      QString suffix = QObject::tr(" (copy%1)");
+      QString new_id = id + suffix.arg("");
+
+      int integer_id = 2;
+      while (get_model().id_to_index(new_id) != -1) {
+        new_id = id + suffix.arg(integer_id++);
+      }
+
+      QRect frames = get_model().get_pattern_frames_bounding_box(index);
+      frames.translate(delta);
+
+      int new_index = get_model().create_pattern(new_id, frames);
+      get_model().set_pattern_animation(
+        new_index, get_model().get_pattern_animation(index));
+      get_model().set_pattern_default_layer(
+        new_index, get_model().get_pattern_default_layer(index));
+      get_model().set_pattern_ground(
+        new_index, get_model().get_pattern_ground(index));
+      get_model().set_pattern_repeat_mode(
+        new_index, get_model().get_pattern_repeat_mode(index));
+      get_model().set_pattern_separation(
+        new_index, get_model().get_pattern_separation(index));
+
+      new_ids.append(new_id);
+      get_model().add_to_selected(new_index);
+    }
+  }
+
+private:
+
+  QList<QString> ids;
+  QList<QString> new_ids;
+  QPoint delta;
+
+};
+
+/**
  * @brief Deleting tile patterns.
  */
 class DeletePatternsCommand : public TilesetEditorCommand {
@@ -635,6 +703,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(update_num_patterns_field()));
   connect(ui.tileset_view, SIGNAL(create_pattern_requested(QString, QRect, Ground)),
           this, SLOT(create_pattern_requested(QString, QRect, Ground)));
+
+  connect(ui.tileset_view, SIGNAL(duplicate_selected_patterns_requested(QPoint)),
+          this, SLOT(duplicate_selected_patterns_requested(QPoint)));
 
   connect(model, SIGNAL(pattern_deleted(int, QString)),
           this, SLOT(update_num_patterns_field()));
@@ -1248,6 +1319,21 @@ void TilesetEditor::create_pattern_requested(
     const QString& pattern_id, const QRect& frame, Ground ground) {
 
   try_command(new CreatePatternCommand(*this, pattern_id, frame, ground));
+}
+
+/**
+ * @brief Slot called when the user wants to duplicate the selected tile patterns.
+ * @param delta Translation to apply on duplicate tile patterns.
+ */
+void TilesetEditor::duplicate_selected_patterns_requested(const QPoint& delta) {
+
+  QList<int> indexes = model->get_selected_indexes();
+  if (indexes.empty()) {
+    // No pattern selected.
+    return;
+  }
+
+  try_command(new DuplicatePatternsCommand(*this, indexes, delta));
 }
 
 /**

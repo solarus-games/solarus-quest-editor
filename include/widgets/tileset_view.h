@@ -60,6 +60,7 @@ signals:
   void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
+  void duplicate_selected_patterns_requested(const QPoint& delta);
   void selection_changed_by_user();
 
 public slots:
@@ -107,7 +108,8 @@ private:
   void start_state_moving_pattern(const QPoint& initial_point);
   void end_state_moving_pattern();
   void set_current_area(const QRect& area);
-  QList<QGraphicsItem*> get_items_intersecting_current_area() const;
+  QList<QGraphicsItem*> get_items_intersecting_current_area(
+      bool ignore_selected = true) const;
   QRect get_selection_bounding_box() const;
 
   QPointer<TilesetModel> model;        /**< The tileset model. */

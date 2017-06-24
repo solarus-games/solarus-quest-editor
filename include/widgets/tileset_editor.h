@@ -74,6 +74,7 @@ public slots:
 
   void create_pattern_requested(
       const QString& pattern_id, const QRect& frame, Ground ground);
+  void duplicate_selected_patterns_requested(const QPoint& delta);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
 

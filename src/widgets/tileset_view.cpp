@@ -875,6 +875,14 @@ void TilesetView::end_state_moving_pattern() {
       emit change_selected_patterns_position_requested(delta);
     });
     menu.addAction(move_pattern_action);
+    QAction* duplicate_pattern_action = new QAction(
+      QIcon(":/images/icon_copy.png"), tr("Duplicate here"), this);
+    duplicate_pattern_action->setEnabled(
+      get_items_intersecting_current_area(false).isEmpty());
+    connect(duplicate_pattern_action, &QAction::triggered, [this, delta] {
+      emit duplicate_selected_patterns_requested(delta);
+    });
+    menu.addAction(duplicate_pattern_action);
     menu.addSeparator();
     menu.addAction(tr("Cancel"));
     menu.exec(cursor().pos() + QPoint(1, 1));
@@ -934,9 +942,11 @@ void TilesetView::set_current_area(const QRect& area) {
 /**
  * @brief Returns all items that intersect the rectangle drawn by the user
  * except selected items.
+ * @param ignore_selected @c true if the selection should be ignored.
  * @return The items that intersect the drawn rectangle.
  */
-QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
+QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area(
+    bool ignore_selected) const {
 
   QRect area = current_area_item->rect().toRect();
   area = QRect(
@@ -946,8 +956,10 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_area() const {
   items.removeAll(current_area_item);  // Ignore the drawn rectangle itself.
 
   // Ignore selected items.
-  Q_FOREACH (QGraphicsItem* item, scene->selectedItems()) {
-    items.removeAll(item);
+  if (ignore_selected) {
+    Q_FOREACH (QGraphicsItem* item, scene->selectedItems()) {
+      items.removeAll(item);
+    }
   }
 
   return items;
