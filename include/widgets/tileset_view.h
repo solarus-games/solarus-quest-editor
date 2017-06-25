@@ -107,8 +107,9 @@ private:
   void end_state_drawing_rectangle();
   void start_state_moving_pattern(const QPoint& initial_point);
   void end_state_moving_pattern();
-  void set_current_area(const QRect& area);
-  QList<QGraphicsItem*> get_items_intersecting_current_area(
+  void update_current_areas(const QPoint& start_point, const QPoint& current_point);
+  void clear_current_areas();
+  QList<QGraphicsItem*> get_items_intersecting_current_areas(
       bool ignore_selected = true) const;
   QRect get_selection_bounding_box() const;
 
@@ -128,10 +129,10 @@ private:
   QPoint dragging_current_point;       /**< In states DRAWING_RECTANGLE and
                                         * MOVING_PATTERN: point where the
                                         * dragging is currently, in scene coordinates. */
-  QGraphicsRectItem*
-      current_area_item;               /**< In states DRAWING_RECTANGLE and
-                                        * MOVING_PATTERN: graphic item of the
-                                        * rectangle the user is drawing. */
+  QList<QGraphicsRectItem*>
+      current_area_items;              /**< In states DRAWING_RECTANGLE and
+                                        * MOVING_PATTERN: graphic item(s) of the
+                                        * rectangle(s) the user is drawing. */
   QList<QGraphicsItem*>
       initially_selected_items;        /**< In state DRAWING_RECTANGLE: items
                                         * to keep selected if Ctrl or Shift was pressed. */
