@@ -540,7 +540,7 @@ void MapView::build_context_menu_actions() {
 
   add_border_action = new QAction(
         tr("Add border tiles"), this);
-  add_border_action->setShortcut(tr("B"));
+  add_border_action->setShortcut(tr("Ctrl+B"));
   add_border_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   connect(add_border_action, SIGNAL(triggered()),
           this, SLOT(add_border_to_selection()));
@@ -1429,23 +1429,42 @@ void MapView::convert_selected_tiles() {
  */
 void MapView::add_border_to_selection() {
 
+  // Test floor borders.
   QStringList border_pattern_ids = {
-    "wall_border.1-2",  // Up.
-    "wall_border.3-2",  // Left.
-    "wall_border.2-2",  // Down.
-    "wall_border.4-2",  // Right.
-    "wall_border.corner.1-2",  // Up-left convex corner.
-    "wall_border.corner.3-2",
-    "wall_border.corner.4-2",
-    "wall_border.corner.2-2",
+    "wall_border.1-4",  // Up.
+    "wall_border.3-4",  // Left.
+    "wall_border.2-4",  // Down.
+    "wall_border.4-4",  // Right.
+    "wall_border.corner.2-4",  // Up-left convex corner.
+    "wall_border.corner.1-4",
+    "wall_border.corner.3-4",
+    "wall_border.corner.4-4",
+    "wall_border.corner_reverse.2-4",
     "wall_border.corner_reverse.1-4",
     "wall_border.corner_reverse.3-4",
     "wall_border.corner_reverse.4-4",
-    "wall_border.corner_reverse.2-4",
   };
 
+  /*
+  // Test walls.
+  QStringList border_pattern_ids = {
+    "wall.1-2",  // Up.
+    "wall.3-2",  // Left.
+    "wall.2-2",  // Down.
+    "wall.4-2",  // Right.
+    "wall.corner.2-2",  // Up-left convex corner.
+    "wall.corner.1-2",
+    "wall.corner.3-2",
+    "wall.corner.4-2",
+    "wall.corner_reverse.2-2",
+    "wall.corner_reverse.1-2",
+    "wall.corner_reverse.3-2",
+    "wall.corner_reverse.4-2",
+  };
+  */
+
   const EntityIndexes& selected_entities = get_selected_entities();
-  if (selected_entities.size() != 1) {
+  if (selected_entities.empty()) {
     return;
   }
 
@@ -1453,26 +1472,107 @@ void MapView::add_border_to_selection() {
   const TilesetModel& tileset = *map.get_tileset_model();
 
   const EntityIndex& first_entity_index = selected_entities.first();
-  const QRect& box = map.get_entity_bounding_box(first_entity_index);
   int layer = first_entity_index.layer;
+
+  QRect box;
+  for (const EntityIndex& index : selected_entities) {
+    box |= map.get_entity_bounding_box(index);
+  }
 
   EntityModels tiles;
 
-  QString pattern_id = border_pattern_ids[0];
-  const QRect& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id));
+  EntityModelPtr tile;
 
-  EntityModelPtr tile = EntityModel::create(map, EntityType::TILE);
-  tile->set_field("pattern", pattern_id);
-  tile->set_xy(box.topLeft());
-  tile->set_size(QSize(box.width(), pattern_size.height()));
+  QString up_pattern_id = border_pattern_ids[0];
+  QRect up_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(up_pattern_id));
+  QString left_pattern_id = border_pattern_ids[1];
+  QRect left_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(left_pattern_id));
+  QString down_pattern_id = border_pattern_ids[2];
+  QRect down_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(down_pattern_id));
+  QString right_pattern_id = border_pattern_ids[3];
+  QRect right_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(right_pattern_id));
+
+  QString up_right_pattern_id = border_pattern_ids[4];
+  QSize up_right_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(up_right_pattern_id)).size();
+  QString up_left_pattern_id = border_pattern_ids[5];
+  QSize up_left_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(up_left_pattern_id)).size();
+  QString down_left_pattern_id = border_pattern_ids[6];
+  QSize down_left_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(down_left_pattern_id)).size();
+  QString down_right_pattern_id = border_pattern_ids[7];
+  QSize down_right_pattern_size = tileset.get_pattern_frame(tileset.id_to_index(down_right_pattern_id)).size();
+
+  // Up.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", up_pattern_id);
+  tile->set_xy(QPoint(box.left() + left_pattern_size.width(), box.top()));
+  tile->set_size(QSize(box.width() - 2 * left_pattern_size.width(), up_pattern_size.height()));
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Left.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", left_pattern_id);
+  tile->set_xy(QPoint(box.left(), box.top() + up_pattern_size.height()));
+  tile->set_size(QSize(left_pattern_size.width(), box.height() - 2 * up_pattern_size.height()));
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Down.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", down_pattern_id);
+  tile->set_xy(QPoint(box.left() + left_pattern_size.width(), box.top() + box.height() - down_pattern_size.height()));
+  tile->set_size(QSize(box.width() - 2 * left_pattern_size.width(), down_pattern_size.height()));
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Right.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", right_pattern_id);
+  tile->set_xy(QPoint(box.left() + box.width() - right_pattern_size.width(), box.top() + up_pattern_size.height()));
+  tile->set_size(QSize(right_pattern_size.width(), box.height() - 2 * up_pattern_size.height()));
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Up-right corner.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", up_right_pattern_id);
+  tile->set_xy(QPoint(box.left() + box.width() - up_right_pattern_size.width(), box.top()));
+  tile->set_size(up_right_pattern_size);
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Up-left corner.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", up_left_pattern_id);
+  tile->set_xy(QPoint(box.left(), box.top()));
+  tile->set_size(up_left_pattern_size);
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Down-left corner.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", down_left_pattern_id);
+  tile->set_xy(QPoint(box.left(), box.top() + box.height() - down_left_pattern_size.height()));
+  tile->set_size(down_left_pattern_size);
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  // Down-right corner.
+  tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", down_right_pattern_id);
+  tile->set_xy(QPoint(
+      box.left() + box.width() - down_right_pattern_size.width(),
+      box.top() + box.height() - down_right_pattern_size.height()));
+  tile->set_size(down_right_pattern_size);
   tile->set_layer(layer);
   tiles.emplace_back(std::move(tile));
 
   int order = map.get_num_tiles(layer);
-  EntityIndex index = { layer, order };
   AddableEntities addable_tiles;
   for (EntityModelPtr& tile : tiles) {
+    EntityIndex index = { layer, order };
     addable_tiles.emplace_back(std::move(tile), index);
+    ++order;
   }
   add_entities_requested(addable_tiles);
 }
