@@ -538,6 +538,14 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
+  add_border_action = new QAction(
+        tr("Add border tiles"), this);
+  add_border_action->setShortcut(tr("B"));
+  add_border_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(add_border_action, SIGNAL(triggered()),
+          this, SLOT(add_border_to_selection()));
+  addAction(add_border_action);
+
   up_one_layer_action = new QAction(
         tr("One layer up"), this);
   up_one_layer_action->setShortcut(tr("+"));
@@ -631,6 +639,7 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
+  // Borders
   // Layers, One layer up, One layer down
   // Bring to front, Bring to back
   // Delete
@@ -685,6 +694,10 @@ QMenu* MapView::create_context_menu() {
   }
 
   if (!is_selection_empty()) {
+
+    // Borders.
+    menu->addAction(add_border_action);
+    menu->addSeparator();
 
     // Layer.
     int common_layer = -1;
@@ -1409,6 +1422,59 @@ void MapView::edit_selected_entity() {
 void MapView::convert_selected_tiles() {
 
   emit convert_tiles_requested(get_selected_entities());
+}
+
+/**
+ * @brief Creates border tiles arounds the selected entities.
+ */
+void MapView::add_border_to_selection() {
+
+  QStringList border_pattern_ids = {
+    "wall_border.1-2",  // Up.
+    "wall_border.3-2",  // Left.
+    "wall_border.2-2",  // Down.
+    "wall_border.4-2",  // Right.
+    "wall_border.corner.1-2",  // Up-left convex corner.
+    "wall_border.corner.3-2",
+    "wall_border.corner.4-2",
+    "wall_border.corner.2-2",
+    "wall_border.corner_reverse.1-4",
+    "wall_border.corner_reverse.3-4",
+    "wall_border.corner_reverse.4-4",
+    "wall_border.corner_reverse.2-4",
+  };
+
+  const EntityIndexes& selected_entities = get_selected_entities();
+  if (selected_entities.size() != 1) {
+    return;
+  }
+
+  MapModel& map = *get_map();
+  const TilesetModel& tileset = *map.get_tileset_model();
+
+  const EntityIndex& first_entity_index = selected_entities.first();
+  const QRect& box = map.get_entity_bounding_box(first_entity_index);
+  int layer = first_entity_index.layer;
+
+  EntityModels tiles;
+
+  QString pattern_id = border_pattern_ids[0];
+  const QRect& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id));
+
+  EntityModelPtr tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", pattern_id);
+  tile->set_xy(box.topLeft());
+  tile->set_size(QSize(box.width(), pattern_size.height()));
+  tile->set_layer(layer);
+  tiles.emplace_back(std::move(tile));
+
+  int order = map.get_num_tiles(layer);
+  EntityIndex index = { layer, order };
+  AddableEntities addable_tiles;
+  for (EntityModelPtr& tile : tiles) {
+    addable_tiles.emplace_back(std::move(tile), index);
+  }
+  add_entities_requested(addable_tiles);
 }
 
 /**

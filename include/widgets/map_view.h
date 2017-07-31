@@ -164,6 +164,7 @@ public slots:
   void move_selected_entities(const QPoint& translation, bool allow_merge_to_previous);
   void resize_entities(const QMap<EntityIndex, QRect>& boxes, bool allow_merge_to_previous);
   void convert_selected_tiles();
+  void add_border_to_selection();
   void remove_selected_entities();
 
 protected:
@@ -197,6 +198,7 @@ private:
   QAction* edit_action;            /**< Action of editing the selected entity. */
   QAction* resize_action;          /**< Action of resizing the selected entities. */
   QAction* convert_tiles_action;   /**< Action of converting tiles to/from dynamic ones. */
+  QAction* add_border_action;      /**< Action of adding border tiles to the selection. */
   QList<QAction*>
       set_layer_actions;           /**< Actions of changing the layer of the selected entities. */
   QActionGroup*
