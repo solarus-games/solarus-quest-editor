@@ -171,6 +171,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/tileset_view.h
   include/widgets/zoom_tool.h
   include/audio.h
+  include/auto_tiler.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
@@ -281,6 +282,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/tileset_view.cpp
   src/widgets/zoom_tool.cpp
   src/audio.cpp
+  src/auto_tiler.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
