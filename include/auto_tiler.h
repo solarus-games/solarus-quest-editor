@@ -42,10 +42,14 @@ private:
   struct BorderInfo {
     int grid_index;    /**< Index in the grid where to put a border tile. */
     int which_border;  /**< Which border to put (0 to 11). */
+    int tile_size;     /**< Width (for top/bottom borders) or height
+                        * (for left/right borders) of the border tile. */
   };
 
   int get_num_cells() const;
   int to_grid_index(int x, int y) const;
+  bool is_cell_occupied(int grid_index) const;
+  int get_4_cells_mask(int cell_0) const;
 
   void compute_bounding_box();
   void compute_occupied_squares();

@@ -57,6 +57,40 @@ int AutoTiler::to_grid_index(int x, int y) const {
 }
 
 /**
+ * @brief Returns whether a cell of the 8x8 grid is occupied by an entity.
+ * @param grid_index An index in the 8x8 grid.
+ * @return @c true if this cell is occupied.
+ */
+bool AutoTiler::is_cell_occupied(int grid_index) const {
+
+  Q_ASSERT(grid_index >= 0);
+  Q_ASSERT(grid_index < get_num_cells());
+
+  return occupied_squares[grid_index];
+}
+
+/**
+ * @brief Returns a bit field indicating the occupied state of 4 cells.
+ * @param cell_0 the top-left cell of the 4 cells.
+ * @return The occupied state of the 4 cells.
+ */
+int AutoTiler::get_4_cells_mask(int cell_0) const {
+
+  int cell_1 = cell_0 + 1;
+  int cell_2 = cell_0 + grid_size.width();
+  int cell_3 = cell_2 + 1;
+
+  int bit_0 = is_cell_occupied(cell_0) ? 1 : 0;
+  int bit_1 = is_cell_occupied(cell_1) ? 1 : 0;
+  int bit_2 = is_cell_occupied(cell_2) ? 1 : 0;
+  int bit_3 = is_cell_occupied(cell_3) ? 1 : 0;
+
+  qDebug() << is_cell_occupied(cell_0) << is_cell_occupied(cell_1) << is_cell_occupied(cell_2) << is_cell_occupied(cell_3);
+
+  return bit_3 | (bit_2 << 1) | (bit_1 << 2) | (bit_0 << 3);
+}
+
+/**
  * @brief Determines the bounding box of the entities and extends it of 8 pixels.
  */
 void AutoTiler::compute_bounding_box() {
@@ -97,11 +131,28 @@ void AutoTiler::compute_occupied_squares() {
  */
 void AutoTiler::compute_borders() {
 
+  QMap<int, BorderInfo> borders_by_square;
+
+  for (const QRect& rectangle : entity_rectangles) {
+
+    int num_cells_x = rectangle.width() / 8;
+    int num_cells_y = rectangle.height() / 8;
+    int rectangle_top_left_cell = to_grid_index(rectangle.x(), rectangle.y());
+    int initial_position = rectangle_top_left_cell - 1 - grid_size.width();  // 1 cell above and to the left.
+
+    qDebug() << "Rect: " << rectangle << ", num cells " << num_cells_x << num_cells_y;
+    for (int i = 0; i < num_cells_x + 1; ++i) {
+
+      int mask = get_4_cells_mask(initial_position + i);
+
+      qDebug() << " -> " << mask;
+    }
+  }
 }
 
 /**
  * @brief Creates border tiles around the given entities.
- * @return The border tiles ready to be added to the map.
+ * @return The border tiles ready to be added to the map.  1 1
  */
 AddableEntities AutoTiler::generate_border_tiles() {
 
