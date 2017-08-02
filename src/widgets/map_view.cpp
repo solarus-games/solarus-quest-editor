@@ -24,6 +24,7 @@
 #include "widgets/mouse_coordinates_tracking_tool.h"
 #include "widgets/pan_tool.h"
 #include "widgets/zoom_tool.h"
+#include "auto_tiler.h"
 #include "point.h"
 #include "rectangle.h"
 #include "tileset_model.h"
@@ -538,6 +539,14 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
+  add_border_action = new QAction(
+        tr("Add border tiles"), this);
+  add_border_action->setShortcut(tr("Ctrl+B"));
+  add_border_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  connect(add_border_action, SIGNAL(triggered()),
+          this, SLOT(add_border_to_selection()));
+  addAction(add_border_action);
+
   up_one_layer_action = new QAction(
         tr("One layer up"), this);
   up_one_layer_action->setShortcut(tr("+"));
@@ -631,6 +640,7 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
+  // Borders
   // Layers, One layer up, One layer down
   // Bring to front, Bring to back
   // Delete
@@ -685,6 +695,10 @@ QMenu* MapView::create_context_menu() {
   }
 
   if (!is_selection_empty()) {
+
+    // Borders.
+    menu->addAction(add_border_action);
+    menu->addSeparator();
 
     // Layer.
     int common_layer = -1;
@@ -1409,6 +1423,16 @@ void MapView::edit_selected_entity() {
 void MapView::convert_selected_tiles() {
 
   emit convert_tiles_requested(get_selected_entities());
+}
+
+/**
+ * @brief Creates border tiles arounds the selected entities.
+ */
+void MapView::add_border_to_selection() {
+
+  AutoTiler auto_tiler(*get_map(), get_selected_entities());
+  AddableEntities addable_tiles = auto_tiler.generate_border_tiles();
+  add_entities_requested(addable_tiles);
 }
 
 /**
