@@ -404,7 +404,7 @@ void AutoTiler::compute_borders() {
     int cell_0 = initial_position;
 
     int num_cells_of_side = 0;
-    for (int i = 0; i < num_cells_x + 1; ++i) {
+    for (int i = 0; i < num_cells_x; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
@@ -428,11 +428,13 @@ void AutoTiler::compute_borders() {
       }
       ++cell_0;
     }
-    --cell_0;
+    if (num_cells_of_side > 0) {
+      make_tile(1, cell_0 - num_cells_of_side, num_cells_of_side + 1);
+      num_cells_of_side = 0;
+    }
 
     // Right side.
-    num_cells_of_side = 0;
-    for (int i = 0; i < num_cells_y + 1; ++i) {
+    for (int i = 0; i < num_cells_y; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
@@ -457,11 +459,13 @@ void AutoTiler::compute_borders() {
 
       cell_0 += grid_size.width();
     }
-    cell_0 -= grid_size.width();
+    if (num_cells_of_side > 0) {
+      make_tile(0, cell_0 - num_cells_of_side * grid_size.width(), num_cells_of_side + 1);
+      num_cells_of_side = 0;
+    }
 
     // Bottom side.
-    num_cells_of_side = 0;
-    for (int i = 0; i < num_cells_x + 1; ++i) {
+    for (int i = 0; i < num_cells_x; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
@@ -486,11 +490,13 @@ void AutoTiler::compute_borders() {
 
       --cell_0;
     }
-    ++cell_0;
+    if (num_cells_of_side > 0) {
+      make_tile(3, cell_0 + 1, num_cells_of_side + 1);
+      num_cells_of_side = 0;
+    }
 
     // Left side.
-    num_cells_of_side = 0;
-    for (int i = 0; i < num_cells_y + 1; ++i) {
+    for (int i = 0; i < num_cells_y; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
@@ -514,6 +520,10 @@ void AutoTiler::compute_borders() {
       }
 
       cell_0 -= grid_size.width();
+    }
+    if (num_cells_of_side > 0) {
+      make_tile(2, cell_0 + grid_size.width(), num_cells_of_side + 1);
+      num_cells_of_side = 0;
     }
   }
 }
