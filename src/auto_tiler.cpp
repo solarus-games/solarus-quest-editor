@@ -280,7 +280,11 @@ int AutoTiler::get_which_border(int grid_index) const {
   Q_ASSERT(grid_index >= 0);
   Q_ASSERT(grid_index < get_num_cells());
 
-  return which_borders.value(grid_index, -1);
+  const auto& it = which_borders.find(grid_index);
+  if (it == which_borders.end()) {
+    return -1;
+  }
+  return it->second;
 }
 
 /**
@@ -294,10 +298,6 @@ void AutoTiler::set_which_border(int grid_index, int which_border) {
   Q_ASSERT(grid_index < get_num_cells());
   Q_ASSERT(which_border >= -1);
   Q_ASSERT(which_border < 12);
-
-  if (which_border == -1) {
-    which_borders.remove(grid_index);
-  }
 
   which_borders[grid_index] = which_border;
 }
@@ -393,14 +393,13 @@ void AutoTiler::detect_border_info(int cell_0) {
 }
 
 /**
- * @brief Creates a tile depending on its border type and the
- * current position in the grid.
+ * @brief Creates a tile with the given position in the 8x8 grid.
  * @param which_border Kind of border to create.
- * @param cell_0 Top-left cell of the current 8 cells being analyzed.
+ * @param grid_index Index in the 8x8 grid of the first cell occupied by the tile.
  * @param num_cells_repeat On how many cells of the 8x8 grid the pattern should be repeated
  * (ignored for corners).
  */
-void AutoTiler::make_tile(int which_border, int cell_0, int num_cells_repeat) {
+void AutoTiler::make_tile(int which_border, int grid_index, int num_cells_repeat) {
 
   if (which_border == -1) {
     return;
@@ -409,11 +408,7 @@ void AutoTiler::make_tile(int which_border, int cell_0, int num_cells_repeat) {
   Q_ASSERT(which_border < 12);
   Q_ASSERT(num_cells_repeat > 0);
 
-  int cell_1 = cell_0 + 1;
-  int cell_2 = cell_0 + grid_size.width();
-  int cell_3 = cell_2 + 1;
-
-  QPoint xy;
+  QPoint xy = to_map_xy(grid_index);
   QSize size;
   const QString& pattern_id = border_pattern_ids[which_border];
 
@@ -426,46 +421,32 @@ void AutoTiler::make_tile(int which_border, int cell_0, int num_cells_repeat) {
   switch (which_border) {
 
   case 0:  // Right side.
+  case 2:  // Left side.
     size = { pattern_size.width(), size_repeated };
-    xy = to_map_xy(cell_0);
     break;
 
   case 1:  // Top side.
-    size = { size_repeated, pattern_size.height() };
-    xy = to_map_xy(cell_2);
-    break;
-
-  case 2:  // Left side.
-    size = { pattern_size.width(), size_repeated };
-    xy = to_map_xy(cell_1);
-    break;
-
   case 3:  // Bottom side.
     size = { size_repeated, pattern_size.height() };
-    xy = to_map_xy(cell_0);
     break;
 
   case 4:  // Top-right convex corner.
   case 8:  // Top-right concave corner.
-    xy = to_map_xy(cell_2);
     size = pattern_size;
     break;
 
   case 5:  // Top-left convex corner.
   case 9:  // Top-left concave corner.
-    xy = to_map_xy(cell_3);
     size = pattern_size;
     break;
 
   case 6:  // Bottom-left convex corner.
   case 10:  // Bottom-left concave corner.
-    xy = to_map_xy(cell_1);
     size = pattern_size;
     break;
 
   case 7:  // Bottom-right convex corner.
   case 11:  // Bottom-right concave corner.
-    xy = to_map_xy(cell_0);
     size = pattern_size;
     break;
   }
@@ -590,7 +571,67 @@ void AutoTiler::print_which_borders() const {
  */
 void AutoTiler::compute_tiles() {
 
-  //print_which_borders();
+  // Generate sides first.
+  for (const auto& it : which_borders) {
+
+    int start_index = it.first;
+    int which_border = it.second;
+
+    int grid_x = start_index % grid_size.width();
+    int grid_y = start_index / grid_size.width();
+    int num_cells_repeat = 1;
+    int current_index = start_index;
+
+    if (which_border == -1) {
+      continue;
+    }
+
+    if (!is_side_border(which_border)) {
+      continue;
+    }
+
+    set_which_border(start_index, -1);  // Mark visited.
+
+    switch (which_border) {
+
+    case 0:
+    case 2:
+      // Left or right border.
+      for (int i = grid_y + 1; i < grid_size.height(); ++i) {
+        current_index += grid_size.width();
+        if (get_which_border(current_index) != which_border) {
+          break;
+        }
+        ++num_cells_repeat;
+        set_which_border(current_index, -1);
+      }
+      make_tile(which_border, start_index, num_cells_repeat);
+      break;
+
+    case 1:
+    case 3:
+      // Top or bottom border.
+      for (int j = grid_x + 1; j < grid_size.width(); ++j) {
+        ++current_index;
+        if (get_which_border(current_index) != which_border) {
+          break;
+        }
+        ++num_cells_repeat;
+        set_which_border(current_index, -1);
+      }
+      make_tile(which_border, start_index, num_cells_repeat);
+      break;
+    }
+  }
+
+  // Generate corners.
+  for (const auto& it : which_borders) {
+    int start_index = it.first;
+    int which_border = it.second;
+    make_tile(which_border, start_index, 1);
+  }
+
+  which_borders.clear();
 }
 
 /**

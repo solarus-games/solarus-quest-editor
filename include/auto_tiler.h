@@ -20,7 +20,7 @@
 #include "entities/entity_traits.h"
 #include "map_model.h"
 #include <QList>
-#include <QMap>
+#include <map>
 #include <set>
 
 namespace SolarusEditor {
@@ -52,7 +52,7 @@ private:
   void set_which_border(int grid_index, int which_border);
   void detect_border_info(int cell_0);
   void print_which_borders() const;
-  void make_tile(int which_border, int cell_0, int num_cells_repeat);
+  void make_tile(int which_border, int grid_index, int num_cells_repeat);
 
   void compute_bounding_box();
   void compute_occupied_squares();
@@ -65,7 +65,7 @@ private:
   QRect bounding_box;                  /**< Rectangle containing the entities plus 8 pixels of margin. */
   QSize grid_size;                     /**< Number of cells in the 8x8 grid in X and Y. */
   std::vector<bool> occupied_squares;  /**< Squares of the 8x8 grid that are occupied by an entity. */
-  QMap<int, int> which_borders;        /**< Which kind of border to create in each square of the 8x8 grid. */
+  std::map<int, int> which_borders;        /**< Which kind of border to create in each square of the 8x8 grid. */
   EntityModels tiles;                  /**< Border tiles created. */
 };
 
