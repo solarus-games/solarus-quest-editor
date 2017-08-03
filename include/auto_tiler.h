@@ -39,43 +39,18 @@ public:
 
 private:
 
-  /**
-   * @brief Tells where to create a border tile.
-   */
-  struct BorderInfo {
-
-    BorderInfo():
-      xy(),
-      which_border(-1),
-      tile_size() {
-
-    }
-
-    BorderInfo(const QPoint& xy, int which_border, int tile_size = 0):
-      xy(xy),
-      which_border(which_border),
-      tile_size(tile_size) {
-
-    }
-
-    QPoint xy;         /**< Where to put the border tile in map coordinates. */
-    int which_border;  /**< Which border to put (0 to 11). */
-    int tile_size;     /**< Width (for top/bottom borders) or height
-                        * (for left/right borders) of the border tile. */
-  };
-
   int get_num_cells() const;
   int to_grid_index(const QPoint& xy) const;
   QPoint to_map_xy(int grid_index) const;
   bool is_cell_occupied(int grid_index) const;
   int get_four_cells_mask(int cell_0) const;
   int get_which_border(int four_cells_mask) const;
-  BorderInfo determine_border_info(int cell_0, int which_border);
+  bool is_side_border(int which_border) const;
+  void make_tile(int which_border, int cell_0, int num_cells_repeat);
 
   void compute_bounding_box();
   void compute_occupied_squares();
   void compute_borders();
-  void compute_tiles();
 
   MapModel& map;                       /**< The map that will be modified. */
   EntityIndexes entity_indexes;        /**< Entities where to create a border. */
@@ -83,7 +58,6 @@ private:
   QRect bounding_box;                  /**< Rectangle containing the entities plus 8 pixels of margin. */
   QSize grid_size;                     /**< Number of cells in the 8x8 grid in X and Y. */
   std::vector<bool> occupied_squares;  /**< Squares of the 8x8 grid that are occupied by an entity. */
-  QList<BorderInfo> borders;           /**< Where to create border tiles. */
   EntityModels tiles;                  /**< Border tiles created. */
 };
 

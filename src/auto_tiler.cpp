@@ -24,10 +24,10 @@ namespace {
 
 // Test floor borders.
 QStringList border_pattern_ids = {
+  "wall_border.4-4",  // Right.
   "wall_border.1-4",  // Up.
   "wall_border.3-4",  // Left.
   "wall_border.2-4",  // Down.
-  "wall_border.4-4",  // Right.
   "wall_border.corner.2-4",  // Up-left convex corner.
   "wall_border.corner.1-4",
   "wall_border.corner.3-4",
@@ -41,10 +41,10 @@ QStringList border_pattern_ids = {
 /*
 // Test walls.
 QStringList border_pattern_ids = {
+  "wall.4-2",  // Right.
   "wall.1-2",  // Up.
   "wall.3-2",  // Left.
   "wall.2-2",  // Down.
-  "wall.4-2",  // Right.
   "wall.corner.2-2",  // Up-left convex corner.
   "wall.corner.1-2",
   "wall.corner.3-2",
@@ -134,8 +134,6 @@ int AutoTiler::get_four_cells_mask(int cell_0) const {
   int bit_2 = is_cell_occupied(cell_2) ? 1 : 0;
   int bit_3 = is_cell_occupied(cell_3) ? 1 : 0;
 
-  qDebug() << is_cell_occupied(cell_0) << is_cell_occupied(cell_1) << is_cell_occupied(cell_2) << is_cell_occupied(cell_3);
-
   return bit_3 | (bit_2 << 1) | (bit_1 << 2) | (bit_0 << 3);
 }
 
@@ -146,10 +144,10 @@ int AutoTiler::get_four_cells_mask(int cell_0) const {
  * @return The corresponding kind of border (0 to 11) or -1
  * if there is no border to create here.
  *
- * 0: Top side.
- * 1: Left side.
- * 2: Bottom side.
- * 3: Right side.
+ * 0: Right side.
+ * 1: Top side.
+ * 2: Left side.
+ * 3: Bottom side.
  *
  * 4: Top-right convex corner.
  * 5: Top-left convex corner.
@@ -183,7 +181,7 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
   // 0 0
   // 1 1
   case 3:
-  return 0;
+  return 1;
 
   // 0 1
   // 0 0
@@ -193,7 +191,7 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
   // 0 1
   // 0 1
   case 5:
-  return 1;
+  return 2;
 
   // 0 1
   // 1 0
@@ -218,7 +216,7 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
   // 1 0
   // 1 0
   case 10:
-  return 3;
+  return 0;
 
   // 1 0
   // 1 1
@@ -228,7 +226,7 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
   // 1 1
   // 0 0
   case 12:
-  return 2;
+  return 3;
 
   // 1 1
   // 0 1
@@ -251,79 +249,105 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
 }
 
 /**
- * @brief Determines how to create a border depending on its type
- * and the current position in the grid.
- * @param cell_0 Top-left cell of the current 8 cells being analyzed.
- * @param which_border Kind of border to create.
- * @return The full border info.
+ * @brief Returns whether a border type is a side or a corner.
+ * @param which_border A border type between 0 and 11 or -1.
+ * @return @c true if this is a side.
  */
-AutoTiler::BorderInfo AutoTiler::determine_border_info(int cell_0, int which_border) {
+bool AutoTiler::is_side_border(int which_border) const {
+
+  return which_border < 4;
+}
+
+/**
+ * @brief Creates a tile depending on its border type and the
+ * current position in the grid.
+ * @param which_border Kind of border to create.
+ * @param cell_0 Top-left cell of the current 8 cells being analyzed.
+ * @param num_cells_repeat On how many cells of the 8x8 grid the pattern should be repeated
+ * (ignored for corners).
+ */
+void AutoTiler::make_tile(int which_border, int cell_0, int num_cells_repeat) {
+
+  if (which_border == -1) {
+    return;
+  }
+  Q_ASSERT(which_border >= 0);
+  Q_ASSERT(which_border < 12);
+  Q_ASSERT(num_cells_repeat > 0);
 
   int cell_1 = cell_0 + 1;
   int cell_2 = cell_0 + grid_size.width();
   int cell_3 = cell_2 + 1;
 
+  QPoint xy;
+  QSize size;
+  const QString& pattern_id = border_pattern_ids[which_border];
+
+  const TilesetModel& tileset = *map.get_tileset_model();
+  const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
+  Q_ASSERT(!pattern_size.isEmpty());
+
+  int size_repeated = num_cells_repeat * 8;
+
   switch (which_border) {
 
-  case 0:  // Top side.
-    return {
-      to_map_xy(cell_2),
-      which_border,
-      8  // TODO
-    };
+  case 0:  // Right side.
+    size = { pattern_size.width(), size_repeated };
+    xy = to_map_xy(cell_0);
+    break;
 
-  case 1:  // Left side.
-    return {
-      to_map_xy(cell_1),
-      which_border,
-      8  // TODO
-    };
+  case 1:  // Top side.
+    size = { size_repeated, pattern_size.height() };
+    xy = to_map_xy(cell_2);
+    break;
 
-  case 2:  // Bottom side.
-    return {
-      to_map_xy(cell_0),
-      which_border,
-      8  // TODO
-    };
+  case 2:  // Left side.
+    size = { pattern_size.width(), size_repeated };
+    xy = to_map_xy(cell_1);
+    break;
 
-  case 3:  // Right side.
-    return {
-      to_map_xy(cell_0),
-      which_border,
-      8  // TODO
-    };
+  case 3:  // Bottom side.
+    size = { size_repeated, pattern_size.height() };
+    xy = to_map_xy(cell_0);
+    break;
 
-  case 4:  // Top-right convex corner
-  case 8:  // Top-right concave corner
-  return {
-    to_map_xy(cell_2),
-    which_border
-  };
+  case 4:  // Top-right convex corner.
+  case 8:  // Top-right concave corner.
+    xy = to_map_xy(cell_2);
+    size = pattern_size;
+    break;
 
-  case 5:  // Top-left convex corner
-  case 9:  // Top-left concave corner
-  return {
-    to_map_xy(cell_3),
-    which_border
-  };
+  case 5:  // Top-left convex corner.
+  case 9:  // Top-left concave corner.
+    xy = to_map_xy(cell_3);
+    size = pattern_size;
+    break;
 
-  case 6:  // Bottom-left convex corner
-  case 10:  // Bottom-left concave corner
-  return {
-    to_map_xy(cell_1),
-    which_border
-  };
+  case 6:  // Bottom-left convex corner.
+  case 10:  // Bottom-left concave corner.
+    xy = to_map_xy(cell_1);
+    size = pattern_size;
+    break;
 
-  case 7:  // Bottom-right convex corner
-  case 11:  // Bottom-right concave corner
-  return {
-    to_map_xy(cell_0),
-    which_border
-  };
-
+  case 7:  // Bottom-right convex corner.
+  case 11:  // Bottom-right concave corner.
+    xy = to_map_xy(cell_0);
+    size = pattern_size;
+    break;
   }
 
-  return BorderInfo();
+  Q_ASSERT(!size.isEmpty());
+
+  const EntityIndex& first_entity_index = entity_indexes.first();
+  int layer = first_entity_index.layer;  // TODO choose the lowest layer.
+
+  EntityModelPtr tile = EntityModel::create(map, EntityType::TILE);
+  tile->set_field("pattern", pattern_id);
+  tile->set_xy(xy);
+  tile->set_size(size);
+  tile->set_layer(layer);
+
+  tiles.emplace_back(std::move(tile));
 }
 
 /**
@@ -363,110 +387,135 @@ void AutoTiler::compute_occupied_squares() {
 }
 
 /**
- * @brief Determines the border tiles to create.
+ * @brief Creates the border tiles.
  */
 void AutoTiler::compute_borders() {
 
-  borders.clear();
+  tiles.clear();
 
   for (const QRect& rectangle : entity_rectangles) {
 
     int num_cells_x = rectangle.width() / 8;
     int num_cells_y = rectangle.height() / 8;
 
-    qDebug() << "Rect: " << rectangle << ", num cells " << num_cells_x << num_cells_y;
-
     // Top side.
     int rectangle_top_left_cell = to_grid_index(rectangle.topLeft());
     int initial_position = rectangle_top_left_cell - 1 - grid_size.width();  // 1 cell above and to the left.
     int cell_0 = initial_position;
+
+    int num_cells_of_side = 0;
     for (int i = 0; i < num_cells_x + 1; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
 
       if (which_border != -1) {
+        if (is_side_border(which_border)) {
+          // This is a side border: count how many there are.
+          ++num_cells_of_side;
+        }
+        else {
+          // This is a corner.
+          if (num_cells_of_side > 0) {
+            // First, generate the side tile now that we know its final size.
+            make_tile(1, cell_0 - num_cells_of_side, num_cells_of_side + 1);
+            num_cells_of_side = 0;
+          }
 
-        qDebug() << " -> " << mask << ", border pattern " << which_border;
-
-        BorderInfo border_info = determine_border_info(cell_0, which_border);
-        qDebug() << "Will create tile at " << border_info.xy;
-
-        borders.append(border_info);
+          // Now generate the corner.
+          make_tile(which_border, cell_0, 1);
+        }
       }
       ++cell_0;
     }
+    --cell_0;
 
     // Right side.
-    --cell_0;
+    num_cells_of_side = 0;
     for (int i = 0; i < num_cells_y + 1; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
 
       if (which_border != -1) {
-        BorderInfo border_info = determine_border_info(cell_0, which_border);
-        borders.append(border_info);
+        if (is_side_border(which_border)) {
+          // This is a side border: count how many there are.
+          ++num_cells_of_side;
+        }
+        else {
+          // This is a corner.
+          // First, generate the side tile now that we know its final size.
+          if (num_cells_of_side > 0) {
+            make_tile(0, cell_0 - num_cells_of_side * grid_size.width(), num_cells_of_side + 1);
+            num_cells_of_side = 0;
+          }
+
+          // Now generate the corner.
+          make_tile(which_border, cell_0, 1);
+        }
       }
 
       cell_0 += grid_size.width();
     }
+    cell_0 -= grid_size.width();
 
     // Bottom side.
-    cell_0 -= grid_size.width();
+    num_cells_of_side = 0;
     for (int i = 0; i < num_cells_x + 1; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
 
       if (which_border != -1) {
-        BorderInfo border_info = determine_border_info(cell_0, which_border);
-        borders.append(border_info);
+        if (is_side_border(which_border)) {
+          // This is a side border: count how many there are.
+          ++num_cells_of_side;
+        }
+        else {
+          // This is a corner.
+          // First, generate the side tile now that we know its final size.
+          if (num_cells_of_side > 0) {
+            make_tile(3, cell_0 + 1, num_cells_of_side + 1);
+            num_cells_of_side = 0;
+          }
+
+          // Now generate the corner.
+          make_tile(which_border, cell_0, 1);
+        }
       }
 
       --cell_0;
     }
+    ++cell_0;
 
     // Left side.
-    ++cell_0;
+    num_cells_of_side = 0;
     for (int i = 0; i < num_cells_y + 1; ++i) {
 
       int mask = get_four_cells_mask(cell_0);
       int which_border = get_which_border(mask);
 
       if (which_border != -1) {
-        BorderInfo border_info = determine_border_info(cell_0, which_border);
-        borders.append(border_info);
+        if (is_side_border(which_border)) {
+          // This is a side border: count how many there are.
+          ++num_cells_of_side;
+        }
+        else {
+          // This is a corner.
+          // First, generate the side tile now that we know its final size.
+          if (num_cells_of_side > 0) {
+            make_tile(2, cell_0 + grid_size.width(), num_cells_of_side + 1);
+            num_cells_of_side = 0;
+          }
+
+          // Now generate the corner.
+          make_tile(which_border, cell_0, 1);
+        }
       }
 
       cell_0 -= grid_size.width();
     }
   }
-}
-
-/**
- * @brief Create tiles from the border info previously detected.
- */
-void AutoTiler::compute_tiles() {
-
-  tiles.clear();
-  const EntityIndex& first_entity_index = entity_indexes.first();
-  int layer = first_entity_index.layer;  // TODO choose the lowest layer.
-
-  for (const BorderInfo& border : borders) {
-
-    if (border.which_border == -1) {
-      continue;
-    }
-
-    EntityModelPtr tile = EntityModel::create(map, EntityType::TILE);
-    tile->set_field("pattern", border_pattern_ids[border.which_border]);
-    tile->set_xy(border.xy);
-    tile->set_size(QSize(8, 8));
-    tile->set_layer(layer);
-    tiles.emplace_back(std::move(tile));
-  }
-
 }
 
 /**
@@ -486,19 +535,9 @@ AddableEntities AutoTiler::generate_border_tiles() {
 
   // Create a list indicating which 8x8 squares are inside the selection.
   compute_occupied_squares();
-  for (size_t i = 0; i < occupied_squares.size(); ++i) {
-    if (occupied_squares[i]) {
-      qDebug() << " " << i;
-    }
-  }
 
   // Detects the borders to make.
   compute_borders();
-  qDebug() << "Detected " << borders.size() << " border tiles to create";
-
-  // Create tiles from the borders detected.
-  compute_tiles();
-
   qDebug() << "Created " << tiles.size() << " tiles";
   if (tiles.empty()) {
     return AddableEntities();
