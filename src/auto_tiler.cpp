@@ -17,6 +17,8 @@
 #include "auto_tiler.h"
 #include "tileset_model.h"
 #include <QDebug>
+#include <iostream>  // TODO remove
+#include <iomanip>
 
 namespace SolarusEditor {
 
@@ -159,7 +161,7 @@ int AutoTiler::get_four_cells_mask(int cell_0) const {
  * 10: Bottom-left concave corner.
  * 11: Bottom-right concave corner.
  */
-int AutoTiler::get_which_border(int four_cells_mask) const {
+int AutoTiler::get_which_border_from_mask(int four_cells_mask) const {
 
   switch (four_cells_mask) {
 
@@ -256,6 +258,38 @@ int AutoTiler::get_which_border(int four_cells_mask) const {
 bool AutoTiler::is_side_border(int which_border) const {
 
   return which_border < 4;
+}
+
+/**
+ * @brief Returns the kind of border in a cell of the 8x8 grid.
+ * @param grid_index An index in the 8x8 grid.
+ * @return The kind of border in this cell (-1 means none).
+ */
+int AutoTiler::get_which_border(int grid_index) const {
+
+  Q_ASSERT(grid_index >= 0);
+  Q_ASSERT(grid_index < get_num_cells());
+
+  return which_borders.value(grid_index, -1);
+}
+
+/**
+ * @brief Marks a square of the 8x8 grid as having the given kind of border.
+ * @param grid_index An index in the 8x8 grid.
+ * @param which_border The kind of border to set.
+ *
+ * When there is already a border value in the cell, corners are prioritary.
+ */
+void AutoTiler::add_which_border(int grid_index, int which_border) {
+
+  if (get_which_border(grid_index) != -1 && is_side_border(which_border)) {
+    // There is already something in this square.
+    return;
+  }
+
+  std::cout << "Set cell " << grid_index << " to border " << which_border << std::endl;
+  which_borders[grid_index] = which_border;
+  print_which_borders();
 }
 
 /**
@@ -387,11 +421,11 @@ void AutoTiler::compute_occupied_squares() {
 }
 
 /**
- * @brief Creates the border tiles.
+ * @brief Detect the borders.
  */
 void AutoTiler::compute_borders() {
 
-  tiles.clear();
+  which_borders.clear();
 
   for (const QRect& rectangle : entity_rectangles) {
 
@@ -402,130 +436,144 @@ void AutoTiler::compute_borders() {
     int rectangle_top_left_cell = to_grid_index(rectangle.topLeft());
     int initial_position = rectangle_top_left_cell - 1 - grid_size.width();  // 1 cell above and to the left.
     int cell_0 = initial_position;
+    int cell_1 = 0;
+    int cell_2 = 0;
+    int cell_3 = 0;
+    Q_UNUSED(cell_1);  // TODO remove
+    Q_UNUSED(cell_2);
+    Q_UNUSED(cell_3);
 
-    int num_cells_of_side = 0;
     for (int i = 0; i < num_cells_x; ++i) {
 
+      cell_1 = cell_0 + 1;
+      cell_2 = cell_0 + grid_size.width();
+      cell_3 = cell_2 + 1;
+
       int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border(mask);
+      int which_border = get_which_border_from_mask(mask);
 
       if (which_border != -1) {
         if (is_side_border(which_border)) {
-          // This is a side border: count how many there are.
-          ++num_cells_of_side;
+          // This is a side border.
+          add_which_border(cell_2, which_border);
+          add_which_border(cell_3, which_border);
         }
         else {
           // This is a corner.
-          if (num_cells_of_side > 0) {
-            // First, generate the side tile now that we know its final size.
-            make_tile(1, cell_0 - num_cells_of_side, num_cells_of_side + 1);
-            num_cells_of_side = 0;
-          }
-
-          // Now generate the corner.
-          make_tile(which_border, cell_0, 1);
+          add_which_border(cell_3, which_border);
         }
       }
       ++cell_0;
-    }
-    if (num_cells_of_side > 0) {
-      make_tile(1, cell_0 - num_cells_of_side, num_cells_of_side + 1);
-      num_cells_of_side = 0;
     }
 
     // Right side.
     for (int i = 0; i < num_cells_y; ++i) {
 
+      cell_1 = cell_0 + 1;
+      cell_2 = cell_0 + grid_size.width();
+      cell_3 = cell_2 + 1;
+
       int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border(mask);
+      int which_border = get_which_border_from_mask(mask);
 
       if (which_border != -1) {
         if (is_side_border(which_border)) {
-          // This is a side border: count how many there are.
-          ++num_cells_of_side;
+          // This is a side border.
+          add_which_border(cell_0, which_border);
+          add_which_border(cell_2, which_border);
         }
         else {
           // This is a corner.
-          // First, generate the side tile now that we know its final size.
-          if (num_cells_of_side > 0) {
-            make_tile(0, cell_0 - num_cells_of_side * grid_size.width(), num_cells_of_side + 1);
-            num_cells_of_side = 0;
-          }
-
-          // Now generate the corner.
-          make_tile(which_border, cell_0, 1);
+          add_which_border(cell_2, which_border);
         }
       }
-
       cell_0 += grid_size.width();
     }
-    if (num_cells_of_side > 0) {
-      make_tile(0, cell_0 - num_cells_of_side * grid_size.width(), num_cells_of_side + 1);
-      num_cells_of_side = 0;
-    }
+    std::cout << "Right side done\n";
 
     // Bottom side.
     for (int i = 0; i < num_cells_x; ++i) {
 
-      int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border(mask);
+      cell_1 = cell_0 + 1;
+      cell_2 = cell_0 + grid_size.width();
+      cell_3 = cell_2 + 1;
 
+      int mask = get_four_cells_mask(cell_0);
+      int which_border = get_which_border_from_mask(mask);
+
+      std::cout << "cell_0 " << cell_0 << std::endl;
+      std::cout << "cell_1 " << cell_1 << std::endl;
+      std::cout << "mask " << mask << std::endl;
+      std::cout << "which_border " << which_border << std::endl;
       if (which_border != -1) {
         if (is_side_border(which_border)) {
-          // This is a side border: count how many there are.
-          ++num_cells_of_side;
+          // This is a side border.
+          add_which_border(cell_0, which_border);
+          add_which_border(cell_1, which_border);
         }
         else {
           // This is a corner.
-          // First, generate the side tile now that we know its final size.
-          if (num_cells_of_side > 0) {
-            make_tile(3, cell_0 + 1, num_cells_of_side + 1);
-            num_cells_of_side = 0;
-          }
-
-          // Now generate the corner.
-          make_tile(which_border, cell_0, 1);
+          add_which_border(cell_0, which_border);
         }
       }
-
       --cell_0;
-    }
-    if (num_cells_of_side > 0) {
-      make_tile(3, cell_0 + 1, num_cells_of_side + 1);
-      num_cells_of_side = 0;
     }
 
     // Left side.
     for (int i = 0; i < num_cells_y; ++i) {
 
+      cell_1 = cell_0 + 1;
+      cell_2 = cell_0 + grid_size.width();
+      cell_3 = cell_2 + 1;
+
       int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border(mask);
+      int which_border = get_which_border_from_mask(mask);
 
       if (which_border != -1) {
         if (is_side_border(which_border)) {
-          // This is a side border: count how many there are.
-          ++num_cells_of_side;
+          // This is a side border.
+          add_which_border(cell_1, which_border);
+          add_which_border(cell_3, which_border);
         }
         else {
           // This is a corner.
-          // First, generate the side tile now that we know its final size.
-          if (num_cells_of_side > 0) {
-            make_tile(2, cell_0 + grid_size.width(), num_cells_of_side + 1);
-            num_cells_of_side = 0;
-          }
-
-          // Now generate the corner.
-          make_tile(which_border, cell_0, 1);
+          add_which_border(cell_1, which_border);
         }
       }
-
       cell_0 -= grid_size.width();
     }
-    if (num_cells_of_side > 0) {
-      make_tile(2, cell_0 + grid_size.width(), num_cells_of_side + 1);
-      num_cells_of_side = 0;
-    }
+
   }
+}
+
+/**
+ * @brief Outputs the grid of border types for debugging.
+ */
+void AutoTiler::print_which_borders() const {
+
+  int index = 0;
+  for (int i = 0; i < grid_size.height(); ++i) {
+    for (int j = 0; j < grid_size.width(); ++j) {
+      int which_border = get_which_border(index);
+      if (which_border != -1) {
+        std::cout << std::setw(2) << which_border << " ";
+      }
+      else {
+        std::cout << "   ";
+      }
+      ++index;
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+}
+
+/**
+ * @brief Creates the border tiles from the border info previously detected.
+ */
+void AutoTiler::compute_tiles() {
+
+  print_which_borders();
 }
 
 /**
@@ -546,8 +594,12 @@ AddableEntities AutoTiler::generate_border_tiles() {
   // Create a list indicating which 8x8 squares are inside the selection.
   compute_occupied_squares();
 
-  // Detects the borders to make.
+  // Detect the borders.
   compute_borders();
+  qDebug() << "Detected borders";
+
+  // Create the corresponding tiles.
+  compute_tiles();
   qDebug() << "Created " << tiles.size() << " tiles";
   if (tiles.empty()) {
     return AddableEntities();

@@ -20,6 +20,7 @@
 #include "entities/entity_traits.h"
 #include "map_model.h"
 #include <QList>
+#include <QMap>
 #include <set>
 
 namespace SolarusEditor {
@@ -44,13 +45,17 @@ private:
   QPoint to_map_xy(int grid_index) const;
   bool is_cell_occupied(int grid_index) const;
   int get_four_cells_mask(int cell_0) const;
-  int get_which_border(int four_cells_mask) const;
+  int get_which_border_from_mask(int four_cells_mask) const;
   bool is_side_border(int which_border) const;
+  int get_which_border(int grid_index) const;
+  void add_which_border(int grid_index, int which_border);
+  void print_which_borders() const;
   void make_tile(int which_border, int cell_0, int num_cells_repeat);
 
   void compute_bounding_box();
   void compute_occupied_squares();
   void compute_borders();
+  void compute_tiles();
 
   MapModel& map;                       /**< The map that will be modified. */
   EntityIndexes entity_indexes;        /**< Entities where to create a border. */
@@ -58,6 +63,7 @@ private:
   QRect bounding_box;                  /**< Rectangle containing the entities plus 8 pixels of margin. */
   QSize grid_size;                     /**< Number of cells in the 8x8 grid in X and Y. */
   std::vector<bool> occupied_squares;  /**< Squares of the 8x8 grid that are occupied by an entity. */
+  QMap<int, int> which_borders;        /**< Which kind of border to create in each square of the 8x8 grid. */
   EntityModels tiles;                  /**< Border tiles created. */
 };
 
