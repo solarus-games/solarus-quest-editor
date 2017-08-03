@@ -47,8 +47,10 @@ private:
   int get_four_cells_mask(int cell_0) const;
   int get_which_border_from_mask(int four_cells_mask) const;
   bool is_side_border(int which_border) const;
+  bool has_border(int grid_index) const;
   int get_which_border(int grid_index) const;
-  void add_which_border(int grid_index, int which_border);
+  void set_which_border(int grid_index, int which_border);
+  void detect_border_info(int cell_0);
   void print_which_borders() const;
   void make_tile(int which_border, int cell_0, int num_cells_repeat);
 

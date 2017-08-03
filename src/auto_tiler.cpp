@@ -261,6 +261,16 @@ bool AutoTiler::is_side_border(int which_border) const {
 }
 
 /**
+ * @brief Returns whether a square of the 8x8 grid is marked with a border value.
+ * @param grid_index An index in the 8x8 grid.
+ * @return @c true if there is a border.
+ */
+bool AutoTiler::has_border(int grid_index) const {
+
+  return get_which_border(grid_index) != -1;
+}
+
+/**
  * @brief Returns the kind of border in a cell of the 8x8 grid.
  * @param grid_index An index in the 8x8 grid.
  * @return The kind of border in this cell (-1 means none).
@@ -274,22 +284,112 @@ int AutoTiler::get_which_border(int grid_index) const {
 }
 
 /**
- * @brief Marks a square of the 8x8 grid as having the given kind of border.
+ * @brief Sets the kind of border in a cell of the 8x8 grid.
  * @param grid_index An index in the 8x8 grid.
- * @param which_border The kind of border to set.
- *
- * When there is already a border value in the cell, corners are prioritary.
+ * @param which_border The kind of border in this cell (-1 means none).
  */
-void AutoTiler::add_which_border(int grid_index, int which_border) {
+void AutoTiler::set_which_border(int grid_index, int which_border) {
 
-  if (get_which_border(grid_index) != -1 && is_side_border(which_border)) {
-    // There is already something in this square.
+  Q_ASSERT(grid_index >= 0);
+  Q_ASSERT(grid_index < get_num_cells());
+  Q_ASSERT(which_border >= -1);
+  Q_ASSERT(which_border < 12);
+
+  if (which_border == -1) {
+    which_borders.remove(grid_index);
+  }
+
+  which_borders[grid_index] = which_border;
+}
+
+/**
+ * @brief Marks squares of the 8x8 grid with their border info.
+ * @param cell_0 Index of the top-left cell of a four square mask in the 8x8 grid.
+ *
+ * When there is already a border value in a cell, corners are prioritary.
+ */
+void AutoTiler::detect_border_info(int cell_0) {
+
+  int cell_1 = cell_0 + 1;
+  int cell_2 = cell_0 + grid_size.width();
+  int cell_3 = cell_2 + 1;
+
+  int mask = get_four_cells_mask(cell_0);
+  int which_border = get_which_border_from_mask(mask); // TODO remove this function
+
+  if (which_border == -1) {
+    // No border here.
     return;
   }
 
-  std::cout << "Set cell " << grid_index << " to border " << which_border << std::endl;
-  which_borders[grid_index] = which_border;
-  print_which_borders();
+  switch (which_border) {
+
+  case 0:
+    // Right border.
+    if (!has_border(cell_0)) {
+      set_which_border(cell_0, which_border);
+    }
+    if (!has_border(cell_2)) {
+      set_which_border(cell_2, which_border);
+    }
+    break;
+
+  case 1:
+    // Top border.
+    if (!has_border(cell_2)) {
+      set_which_border(cell_2, which_border);
+    }
+    if (!has_border(cell_3)) {
+      set_which_border(cell_3, which_border);
+    }
+    break;
+
+  case 2:
+    // Left border.
+    if (!has_border(cell_1)) {
+      set_which_border(cell_1, which_border);
+    }
+    if (!has_border(cell_3)) {
+      set_which_border(cell_3, which_border);
+    }
+    break;
+
+  case 3:
+    // Bottom border.
+    if (!has_border(cell_0)) {
+      set_which_border(cell_0, which_border);
+    }
+    if (!has_border(cell_1)) {
+      set_which_border(cell_1, which_border);
+    }
+    break;
+
+  case 4:
+  case 8:
+    // Top-right corner.
+    set_which_border(cell_2, which_border);
+    break;
+
+  case 5:
+  case 9:
+    // Top-left corner.
+    set_which_border(cell_3, which_border);
+    break;
+
+  case 6:
+  case 10:
+    // Bottom-left corner.
+    set_which_border(cell_1, which_border);
+    break;
+
+  case 7:
+  case 11:
+    // Bottom-right corner.
+    set_which_border(cell_0, which_border);
+    break;
+
+  }
+
 }
 
 /**
@@ -436,110 +536,27 @@ void AutoTiler::compute_borders() {
     int rectangle_top_left_cell = to_grid_index(rectangle.topLeft());
     int initial_position = rectangle_top_left_cell - 1 - grid_size.width();  // 1 cell above and to the left.
     int cell_0 = initial_position;
-    int cell_1 = 0;
-    int cell_2 = 0;
-    int cell_3 = 0;
-    Q_UNUSED(cell_1);  // TODO remove
-    Q_UNUSED(cell_2);
-    Q_UNUSED(cell_3);
 
     for (int i = 0; i < num_cells_x; ++i) {
-
-      cell_1 = cell_0 + 1;
-      cell_2 = cell_0 + grid_size.width();
-      cell_3 = cell_2 + 1;
-
-      int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border_from_mask(mask);
-
-      if (which_border != -1) {
-        if (is_side_border(which_border)) {
-          // This is a side border.
-          add_which_border(cell_2, which_border);
-          add_which_border(cell_3, which_border);
-        }
-        else {
-          // This is a corner.
-          add_which_border(cell_3, which_border);
-        }
-      }
+      detect_border_info(cell_0);
       ++cell_0;
     }
 
     // Right side.
     for (int i = 0; i < num_cells_y; ++i) {
-
-      cell_1 = cell_0 + 1;
-      cell_2 = cell_0 + grid_size.width();
-      cell_3 = cell_2 + 1;
-
-      int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border_from_mask(mask);
-
-      if (which_border != -1) {
-        if (is_side_border(which_border)) {
-          // This is a side border.
-          add_which_border(cell_0, which_border);
-          add_which_border(cell_2, which_border);
-        }
-        else {
-          // This is a corner.
-          add_which_border(cell_2, which_border);
-        }
-      }
+      detect_border_info(cell_0);
       cell_0 += grid_size.width();
     }
-    std::cout << "Right side done\n";
 
     // Bottom side.
     for (int i = 0; i < num_cells_x; ++i) {
-
-      cell_1 = cell_0 + 1;
-      cell_2 = cell_0 + grid_size.width();
-      cell_3 = cell_2 + 1;
-
-      int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border_from_mask(mask);
-
-      std::cout << "cell_0 " << cell_0 << std::endl;
-      std::cout << "cell_1 " << cell_1 << std::endl;
-      std::cout << "mask " << mask << std::endl;
-      std::cout << "which_border " << which_border << std::endl;
-      if (which_border != -1) {
-        if (is_side_border(which_border)) {
-          // This is a side border.
-          add_which_border(cell_0, which_border);
-          add_which_border(cell_1, which_border);
-        }
-        else {
-          // This is a corner.
-          add_which_border(cell_0, which_border);
-        }
-      }
+      detect_border_info(cell_0);
       --cell_0;
     }
 
     // Left side.
     for (int i = 0; i < num_cells_y; ++i) {
-
-      cell_1 = cell_0 + 1;
-      cell_2 = cell_0 + grid_size.width();
-      cell_3 = cell_2 + 1;
-
-      int mask = get_four_cells_mask(cell_0);
-      int which_border = get_which_border_from_mask(mask);
-
-      if (which_border != -1) {
-        if (is_side_border(which_border)) {
-          // This is a side border.
-          add_which_border(cell_1, which_border);
-          add_which_border(cell_3, which_border);
-        }
-        else {
-          // This is a corner.
-          add_which_border(cell_1, which_border);
-        }
-      }
+      detect_border_info(cell_0);
       cell_0 -= grid_size.width();
     }
 
@@ -573,7 +590,7 @@ void AutoTiler::print_which_borders() const {
  */
 void AutoTiler::compute_tiles() {
 
-  print_which_borders();
+  //print_which_borders();
 }
 
 /**
