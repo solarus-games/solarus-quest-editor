@@ -61,7 +61,6 @@ private:
   QPoint to_map_xy(int grid_index) const;
   bool is_cell_occupied(int grid_index) const;
   int get_four_cells_mask(int cell_0) const;
-  WhichBorder get_which_border_from_mask(int four_cells_mask) const;
   bool is_side_border(WhichBorder which_border) const;
   bool has_border(int grid_index) const;
   WhichBorder get_which_border(int grid_index) const;

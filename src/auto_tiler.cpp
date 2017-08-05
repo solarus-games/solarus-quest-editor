@@ -140,116 +140,6 @@ int AutoTiler::get_four_cells_mask(int cell_0) const {
 }
 
 /**
- * @brief Returns the which border side or corner to create
- * given a mask of 4 cells in the 8x8 grid.
- * @param four_cells_mask A 4 cells mask representing occupied cells.
- * @return The corresponding kind of border.
- *
- * 0: Right side.
- * 1: Top side.
- * 2: Left side.
- * 3: Bottom side.
- *
- * 4: Top-right convex corner.
- * 5: Top-left convex corner.
- * 6: Bottom-left convex corner.
- * 7: Bottom-right convex corner.
- *
- * 8: Top-right concave corner.
- * 9: Top-left concave corner.
- * 10: Bottom-left concave corner.
- * 11: Bottom-right concave corner.
- */
-AutoTiler::WhichBorder AutoTiler::get_which_border_from_mask(int four_cells_mask) const {
-
-  switch (four_cells_mask) {
-
-  // 0 0
-  // 0 0
-  case 0:
-  return WhichBorder::NONE;
-
-  // 0 0
-  // 0 1
-  case 1:
-  return WhichBorder::TOP_LEFT_CONVEX;
-
-  // 0 0
-  // 1 0
-  case 2:
-  return WhichBorder::TOP_RIGHT_CONVEX;
-
-  // 0 0
-  // 1 1
-  case 3:
-  return WhichBorder::TOP;
-
-  // 0 1
-  // 0 0
-  case 4:
-  return WhichBorder::BOTTOM_LEFT_CONVEX;
-
-  // 0 1
-  // 0 1
-  case 5:
-  return WhichBorder::LEFT;
-
-  // 0 1
-  // 1 0
-  case 6:
-  return WhichBorder::TOP_RIGHT_CONVEX;  // TODO
-
-  // 0 1
-  // 1 1
-  case 7:
-  return WhichBorder::TOP_LEFT_CONCAVE;
-
-  // 1 0
-  // 0 0
-  case 8:
-  return WhichBorder::BOTTOM_RIGHT_CONVEX;
-
-  // 1 0
-  // 0 1
-  case 9:
-  return WhichBorder::BOTTOM_RIGHT_CONVEX;  // TODO
-
-  // 1 0
-  // 1 0
-  case 10:
-  return WhichBorder::RIGHT;
-
-  // 1 0
-  // 1 1
-  case 11:
-  return WhichBorder::TOP_RIGHT_CONCAVE;
-
-  // 1 1
-  // 0 0
-  case 12:
-  return WhichBorder::BOTTOM;
-
-  // 1 1
-  // 0 1
-  case 13:
-  return WhichBorder::BOTTOM_LEFT_CONCAVE;
-
-  // 1 1
-  // 1 0
-  case 14:
-  return WhichBorder::BOTTOM_RIGHT_CONCAVE;
-
-  // 1 1
-  // 1 1
-  case 15:
-  return WhichBorder::NONE;
-
-  }
-
-  return WhichBorder::NONE;
-}
-
-/**
  * @brief Returns whether a border type is a side or a corner.
  * @param which_border A border type.
  * @return @c true if this is a side.
@@ -315,69 +205,123 @@ void AutoTiler::detect_border_info(int cell_0) {
   int cell_3 = cell_2 + 1;
 
   int mask = get_four_cells_mask(cell_0);
-  WhichBorder which_border = get_which_border_from_mask(mask); // TODO remove this function
 
-  if (which_border == WhichBorder::NONE) {
-    // No border here.
-    return;
-  }
+  switch (mask) {
 
-  switch (which_border) {
-
-  case WhichBorder::RIGHT:
-    if (!has_border(cell_0)) {
-      set_which_border(cell_0, which_border);
-    }
-    if (!has_border(cell_2)) {
-      set_which_border(cell_2, which_border);
-    }
+  // 0 0
+  // 0 0
+  case 0:
     break;
 
-  case WhichBorder::TOP:
+  // 0 0
+  // 0 1
+  case 1:
+    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONVEX);
+    break;
+
+  // 0 0
+  // 1 0
+  case 2:
+    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONVEX);
+    break;
+
+  // 0 0
+  // 1 1
+  case 3:
     if (!has_border(cell_2)) {
-      set_which_border(cell_2, which_border);
+      set_which_border(cell_2, WhichBorder::TOP);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, which_border);
+      set_which_border(cell_3, WhichBorder::TOP);
     }
     break;
 
-  case WhichBorder::LEFT:
+  // 0 1
+  // 0 0
+  case 4:
+    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONVEX);
+    break;
+
+  // 0 1
+  // 0 1
+  case 5:
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, which_border);
+      set_which_border(cell_1, WhichBorder::LEFT);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, which_border);
+      set_which_border(cell_3, WhichBorder::LEFT);
     }
     break;
 
-  case WhichBorder::BOTTOM:
+  // 0 1
+  // 1 0
+  case 6:
+    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONVEX);
+    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONVEX);
+    break;
+
+  // 0 1
+  // 1 1
+  case 7:
+    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONCAVE);
+    break;
+
+  // 1 0
+  // 0 0
+  case 8:
+    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONVEX);
+    break;
+
+  // 1 0
+  // 0 1
+  case 9:
+    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONVEX);
+    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONVEX);
+    break;
+
+  // 1 0
+  // 1 0
+  case 10:
     if (!has_border(cell_0)) {
-      set_which_border(cell_0, which_border);
+      set_which_border(cell_0, WhichBorder::RIGHT);
+    }
+    if (!has_border(cell_2)) {
+      set_which_border(cell_2, WhichBorder::RIGHT);
+    }
+    break;
+
+  // 1 0
+  // 1 1
+  case 11:
+    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONCAVE);
+    break;
+
+  // 1 1
+  // 0 0
+  case 12:
+    if (!has_border(cell_0)) {
+      set_which_border(cell_0, WhichBorder::BOTTOM);
     }
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, which_border);
+      set_which_border(cell_1, WhichBorder::BOTTOM);
     }
     break;
 
-  case WhichBorder::TOP_RIGHT_CONVEX:
-  case WhichBorder::TOP_RIGHT_CONCAVE:
-    set_which_border(cell_2, which_border);
+  // 1 1
+  // 0 1
+  case 13:
+    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONCAVE);
     break;
 
-  case WhichBorder::TOP_LEFT_CONVEX:
-  case WhichBorder::TOP_LEFT_CONCAVE:
-    set_which_border(cell_3, which_border);
+  // 1 1
+  // 1 0
+  case 14:
+    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONCAVE);
     break;
 
-  case WhichBorder::BOTTOM_LEFT_CONVEX:
-  case WhichBorder::BOTTOM_LEFT_CONCAVE:
-    set_which_border(cell_1, which_border);
-    break;
-
-  case WhichBorder::BOTTOM_RIGHT_CONVEX:
-  case WhichBorder::BOTTOM_RIGHT_CONCAVE:
-    set_which_border(cell_0, which_border);
+  // 1 1
+  // 1 1
+  case 15:
     break;
 
   }
@@ -410,13 +354,13 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
 
   switch (which_border) {
 
-  case WhichBorder::RIGHT:  // Right side.
-  case WhichBorder::LEFT:  // Left side.
+  case WhichBorder::RIGHT:
+  case WhichBorder::LEFT:
     size = { pattern_size.width(), size_repeated };
     break;
 
-  case WhichBorder::TOP:  // Top side.
-  case WhichBorder::BOTTOM:  // Bottom side.
+  case WhichBorder::TOP:
+  case WhichBorder::BOTTOM:
     size = { size_repeated, pattern_size.height() };
     break;
 
