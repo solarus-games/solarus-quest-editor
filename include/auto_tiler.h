@@ -34,6 +34,22 @@ class AutoTiler {
 
 public:
 
+  enum class WhichBorder {
+    NONE = -1,
+    RIGHT,
+    TOP,
+    LEFT,
+    BOTTOM,
+    TOP_RIGHT_CONVEX,
+    TOP_LEFT_CONVEX,
+    BOTTOM_LEFT_CONVEX,
+    BOTTOM_RIGHT_CONVEX,
+    TOP_RIGHT_CONCAVE,
+    TOP_LEFT_CONCAVE,
+    BOTTOM_LEFT_CONCAVE,
+    BOTTOM_RIGHT_CONCAVE,
+  };
+
   AutoTiler(MapModel& map, const EntityIndexes& entity_indexes);
 
   AddableEntities generate_border_tiles();
@@ -45,14 +61,14 @@ private:
   QPoint to_map_xy(int grid_index) const;
   bool is_cell_occupied(int grid_index) const;
   int get_four_cells_mask(int cell_0) const;
-  int get_which_border_from_mask(int four_cells_mask) const;
-  bool is_side_border(int which_border) const;
+  WhichBorder get_which_border_from_mask(int four_cells_mask) const;
+  bool is_side_border(WhichBorder which_border) const;
   bool has_border(int grid_index) const;
-  int get_which_border(int grid_index) const;
-  void set_which_border(int grid_index, int which_border);
+  WhichBorder get_which_border(int grid_index) const;
+  void set_which_border(int grid_index, WhichBorder which_border);
   void detect_border_info(int cell_0);
   void print_which_borders() const;
-  void make_tile(int which_border, int grid_index, int num_cells_repeat);
+  void make_tile(WhichBorder which_border, int grid_index, int num_cells_repeat);
 
   void compute_bounding_box();
   void compute_occupied_squares();
@@ -65,7 +81,8 @@ private:
   QRect bounding_box;                  /**< Rectangle containing the entities plus 8 pixels of margin. */
   QSize grid_size;                     /**< Number of cells in the 8x8 grid in X and Y. */
   std::vector<bool> occupied_squares;  /**< Squares of the 8x8 grid that are occupied by an entity. */
-  std::map<int, int> which_borders;        /**< Which kind of border to create in each square of the 8x8 grid. */
+  std::map<int, WhichBorder>
+      which_borders;                   /**< Which kind of border to create in each square of the 8x8 grid. */
   EntityModels tiles;                  /**< Border tiles created. */
 };
 
