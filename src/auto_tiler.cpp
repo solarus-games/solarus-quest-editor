@@ -42,6 +42,7 @@ QStringList border_pattern_ids = {
 };
 */
 
+/*
 // Test walls.
 QStringList border_pattern_ids = {
   "wall.4-2",  // Right.
@@ -56,6 +57,57 @@ QStringList border_pattern_ids = {
   "wall.corner_reverse.1-2",
   "wall.corner_reverse.3-2",
   "wall.corner_reverse.4-2",
+};
+*/
+/*
+// Test outside paths.
+QStringList border_pattern_ids = {
+  "grass.soil.3",  // Right.
+  "grass.soil.2",  // Up.
+  "grass.soil.4",  // Left.
+  "grass.soil.1",  // Down.
+  "grass.soil.diag.3b",  // Up-left convex corner.
+  "grass.soil.diag.4b",
+  "grass.soil.diag.2b",
+  "grass.soil.diag.1b",
+  "grass.soil.diag.3",
+  "grass.soil.diag.4",
+  "grass.soil.diag.2",
+  "grass.soil.diag.1",
+};
+*/
+/*
+// Test deep water on shallow water.
+QStringList border_pattern_ids = {
+  "water_shallow.to_water.3",  // Right.
+  "water_shallow.to_water.2",  // Up.
+  "water_shallow.to_water.4",  // Left.
+  "water_shallow.to_water.1",  // Down.
+  "water_shallow.to_water.diag.3",  // Up-left convex corner.
+  "water_shallow.to_water.diag.4",
+  "water_shallow.to_water.diag.2",
+  "water_shallow.to_water.diag.1",
+  "water_shallow.to_water.diag.3",
+  "water_shallow.to_water.diag.4",
+  "water_shallow.to_water.diag.2",
+  "water_shallow.to_water.diag.1",
+};
+*/
+
+// Test shallow water on deep water.
+QStringList border_pattern_ids = {
+  "water_shallow.to_water.4",  // Right.
+  "water_shallow.to_water.1",  // Up.
+  "water_shallow.to_water.3",  // Left.
+  "water_shallow.to_water.2",  // Down.
+  "water_shallow.to_water.diag.2",  // Up-left convex corner.
+  "water_shallow.to_water.diag.1",
+  "water_shallow.to_water.diag.3",
+  "water_shallow.to_water.diag.4",
+  "water_shallow",
+  "water_shallow",
+  "water_shallow",
+  "water_shallow",
 };
 
 }
@@ -577,13 +629,16 @@ void AutoTiler::compute_tiles() {
     if (which_border == WhichBorder::RIGHT ||
         which_border == WhichBorder::LEFT) {
 
+      // Right or left vertical border.
       WhichBorder corner_1 = get_which_border(start_index - grid_size.width());
 
       if (which_border == WhichBorder::RIGHT) {
+        // Right border: translate to the left because of the thickness.
         int width = get_pattern_size(which_border).width();
         start_index -= width / 8 - 1;
       }
 
+      // Count how many cells the border occupies vertically.
       for (int i = grid_y + 1; i < grid_size.height(); ++i) {
         current_index += grid_size.width();
         if (get_which_border(current_index) != which_border) {
@@ -597,6 +652,7 @@ void AutoTiler::compute_tiles() {
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
 
+      // Remove from the cell count the thickness of corners.
       if (is_convex_corner_border(corner_1)) {
         const QSize& corner_size = get_pattern_size(corner_1);
         int corner_additional_num_cells = corner_size.height() / 8 - 1;
@@ -609,20 +665,35 @@ void AutoTiler::compute_tiles() {
         num_cells_repeat -= corner_additional_num_cells;
       }
 
+      // Finally create the tile.
       if (num_cells_repeat > 0) {
+        // Check that the tile size is a multiple of the pattern base size.
+        int base_height = get_pattern_size(which_border).height() / 8;
+        int rest = num_cells_repeat % base_height;
+        if (rest != 0) {
+          // Illegal size! Round it to a multiple of the pattern size.
+          int num_cells_fixed = base_height - rest;
+          num_cells_repeat += base_height - rest;
+          if (is_concave_corner_border(corner_1)) {
+            start_index -= num_cells_fixed * grid_size.width();
+          }
+        }
+
         make_tile(which_border, start_index, num_cells_repeat);
       }
     }
 
     else {
+      // Top or bottom horizontal border.
       WhichBorder corner_1 = get_which_border(start_index - 1);
 
-      // Top or bottom border.
       if (which_border == WhichBorder::BOTTOM) {
+        // Bottom border: translate to the top because of the thickness.
         int height = get_pattern_size(which_border).height();
         start_index -= (height / 8 - 1) * grid_size.width();
       }
 
+      // Count how many cells the border occupies horizontally.
       for (int j = grid_x + 1; j < grid_size.width(); ++j) {
         ++current_index;
         if (get_which_border(current_index) != which_border) {
@@ -636,6 +707,7 @@ void AutoTiler::compute_tiles() {
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
 
+      // Remove from the cell count the thickness of corners.
       if (is_convex_corner_border(corner_1)) {
         const QSize& corner_size = get_pattern_size(corner_1);
         int corner_additional_num_cells = corner_size.width() / 8 - 1;
@@ -648,7 +720,20 @@ void AutoTiler::compute_tiles() {
         num_cells_repeat -= corner_additional_num_cells;
       }
 
+      // Finally create the tile.
       if (num_cells_repeat > 0) {
+        // Check that the tile size is a multiple of the pattern base size.
+        int base_width = get_pattern_size(which_border).width() / 8;
+        int rest = num_cells_repeat % base_width;
+        if (rest != 0) {
+          // Illegal size! Round it to a multiple of the pattern size.
+          int num_cells_fixed = base_width - rest;
+          num_cells_repeat += base_width - rest;
+          if (is_concave_corner_border(corner_1)) {
+            start_index -= num_cells_fixed;
+          }
+        }
+
         make_tile(which_border, start_index, num_cells_repeat);
       }
     }
