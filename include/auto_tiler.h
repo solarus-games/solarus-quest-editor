@@ -62,16 +62,21 @@ private:
   bool is_cell_occupied(int grid_index) const;
   int get_four_cells_mask(int cell_0) const;
   bool is_side_border(WhichBorder which_border) const;
+  bool is_corner_border(WhichBorder which_border) const;
+  bool is_convex_corner_border(WhichBorder which_border) const;
+  bool is_concave_corner_border(WhichBorder which_border) const;
   bool has_border(int grid_index) const;
   WhichBorder get_which_border(int grid_index) const;
   void set_which_border(int grid_index, WhichBorder which_border);
   void detect_border_info(int cell_0);
   void print_which_borders() const;
+  const QSize& get_pattern_size(WhichBorder which_border) const;
   void make_tile(WhichBorder which_border, int grid_index, int num_cells_repeat);
 
   void compute_bounding_box();
   void compute_occupied_squares();
   void compute_borders();
+  void compute_pattern_sizes();
   void compute_tiles();
 
   MapModel& map;                       /**< The map that will be modified. */
@@ -82,6 +87,7 @@ private:
   std::vector<bool> occupied_squares;  /**< Squares of the 8x8 grid that are occupied by an entity. */
   std::map<int, WhichBorder>
       which_borders;                   /**< Which kind of border to create in each square of the 8x8 grid. */
+  QList<QSize> pattern_sizes;          /**< Size of each border pattern in pixels. */
   EntityModels tiles;                  /**< Border tiles created. */
 };
 
