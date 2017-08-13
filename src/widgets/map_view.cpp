@@ -102,11 +102,12 @@ BorderSet deep_water_border_set(QStringList({
   "water_shallow.to_water.diag.4",
   "water_shallow.to_water.diag.2",
   "water_shallow.to_water.diag.1",
-  "water_shallow.to_water.diag.3",
-  "water_shallow.to_water.diag.4",
-  "water_shallow.to_water.diag.2",
-  "water_shallow.to_water.diag.1",
-}));
+  "",
+  "",
+  "",
+  "",
+}), true);
+
 
 // Test shallow water on deep water.
 BorderSet shallow_water_border_set(QStringList({
@@ -123,6 +124,8 @@ BorderSet shallow_water_border_set(QStringList({
   "water_shallow",
   "water_shallow",
 }));
+
+const BorderSet& border_set = deep_water_border_set;
 
 /**
  * @brief State of the map view corresponding to the user doing nothing special.
@@ -1509,8 +1512,6 @@ void MapView::convert_selected_tiles() {
  * @brief Creates border tiles arounds the selected entities.
  */
 void MapView::add_border_to_selection() {
-
-  const BorderSet& border_set = floor_border_set;
 
   AutoTiler auto_tiler(*get_map(), get_selected_entities(), border_set);
   AddableEntities addable_tiles = auto_tiler.generate_border_tiles();

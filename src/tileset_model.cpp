@@ -159,13 +159,23 @@ int TilesetModel::get_num_patterns() const {
 }
 
 /**
- * @brief Returns whether there exists a pattern with the specified id.
+ * @brief Returns whether there exists a pattern with the specified index.
  * @param index A pattern index.
  * @return @c true if such a pattern exists in the tileset.
  */
 bool TilesetModel::pattern_exists(int index) const {
 
   return index >= 0 && index < patterns.size();
+}
+
+/**
+ * @brief Returns whether there exists a pattern with the specified id.
+ * @param pattern_id A pattern id.
+ * @return @c true if such a pattern exists in the tileset.
+ */
+bool TilesetModel::pattern_exists(const QString& pattern_id) const {
+
+  return id_to_index(pattern_id) != -1;
 }
 
 /**

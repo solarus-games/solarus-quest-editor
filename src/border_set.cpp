@@ -32,11 +32,13 @@ BorderSet::BorderSet() :
 }
 
 /**
- * @brief Creates a border set with the given tile patterns.
+ * @brief Creates a border set with the given properties.
  * @param patterns The 12 pattern ids to set.
+ * @param inner Whether the tiles should be generated inside or outside the countour.
  */
-BorderSet::BorderSet(const QStringList& patterns):
-  patterns(patterns) {
+BorderSet::BorderSet(const QStringList& patterns, bool inner):
+  patterns(patterns),
+  inner(inner) {
 
   Q_ASSERT(patterns.size() == 12);
 }

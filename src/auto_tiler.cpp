@@ -503,6 +503,10 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
   const QString& pattern_id = border_set.get_pattern(which_border);
 
   const TilesetModel& tileset = *map.get_tileset_model();
+  if (!tileset.pattern_exists(pattern_id)) {
+    // No tile to create for this border.
+    return;
+  }
   const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
   Q_ASSERT(!pattern_size.isEmpty());
 
@@ -561,7 +565,10 @@ void AutoTiler::compute_pattern_sizes() {
 
   for (int i = 0; i < 12; ++i) {
     const QString& pattern_id = border_set.get_pattern(static_cast<WhichBorder>(i));
-    const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
+    QSize pattern_size;
+    if (tileset.pattern_exists(pattern_id)) {
+      pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
+    }
     pattern_sizes.append(pattern_size);
   }
 }

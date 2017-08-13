@@ -30,7 +30,7 @@ class BorderSet {
 public:
 
   BorderSet();
-  explicit BorderSet(const QStringList& patterns);
+  explicit BorderSet(const QStringList& patterns, bool inner = false);
 
   QStringList get_patterns() const;
   void set_patterns(const QStringList& patterns);

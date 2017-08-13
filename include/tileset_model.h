@@ -68,6 +68,7 @@ public:
 
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
+  bool pattern_exists(const QString& pattern_id) const;
   int id_to_index(const QString& pattern_id) const;
   QString index_to_id(int index) const;
   int create_pattern(const QString& pattern_id, const QRect& frame);
