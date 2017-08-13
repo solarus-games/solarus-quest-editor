@@ -282,11 +282,29 @@ void AutoTiler::set_which_border(int grid_index, WhichBorder which_border) {
 
 /**
  * @brief Marks squares of the 8x8 grid with their border info.
- * @param cell_0 Index of the top-left cell of a four square mask in the 8x8 grid.
  *
  * When there is already a border value in a cell, corners are prioritary.
+ *
+ * @param cell_0 Index of the top-left cell of a four square mask in the 8x8 grid.
  */
 void AutoTiler::detect_border_info(int cell_0) {
+
+  if (border_set.is_inner()) {
+    detect_border_info_inner(cell_0);
+  }
+  else {
+    detect_border_info_outer(cell_0);
+  }
+}
+
+/**
+ * @brief Marks squares of the 8x8 grid with their border info (inner border case).
+ *
+ * When there is already a border value in a cell, corners are prioritary.
+ *
+ * @param cell_0 Index of the top-left cell of a four square mask in the 8x8 grid.
+ */
+void AutoTiler::detect_border_info_inner(int cell_0) {
 
   int cell_1 = cell_0 + 1;
   int cell_2 = cell_0 + grid_size.width();
@@ -417,6 +435,143 @@ void AutoTiler::detect_border_info(int cell_0) {
 }
 
 /**
+ * @brief Marks squares of the 8x8 grid with their border info (outer border case).
+ *
+ * When there is already a border value in a cell, corners are prioritary.
+ *
+ * @param cell_0 Index of the top-left cell of a four square mask in the 8x8 grid.
+ */
+void AutoTiler::detect_border_info_outer(int cell_0) {
+
+  int cell_1 = cell_0 + 1;
+  int cell_2 = cell_0 + grid_size.width();
+  int cell_3 = cell_2 + 1;
+
+  int mask = get_four_cells_mask(cell_0);
+
+  switch (mask) {
+
+  // 0 0
+  // 0 0
+  case 0:
+    break;
+
+  // 0 0
+  // 0 1
+  case 1:
+    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONVEX);
+    break;
+
+  // 0 0
+  // 1 0
+  case 2:
+    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONVEX);
+    break;
+
+  // 0 0
+  // 1 1
+  case 3:
+    if (!has_border(cell_0)) {
+      set_which_border(cell_0, WhichBorder::TOP);
+    }
+    if (!has_border(cell_1)) {
+      set_which_border(cell_1, WhichBorder::TOP);
+    }
+    break;
+
+  // 0 1
+  // 0 0
+  case 4:
+    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONVEX);
+    break;
+
+  // 0 1
+  // 0 1
+  case 5:
+    if (!has_border(cell_0)) {
+      set_which_border(cell_0, WhichBorder::LEFT);
+    }
+    if (!has_border(cell_2)) {
+      set_which_border(cell_2, WhichBorder::LEFT);
+    }
+    break;
+
+  // 0 1
+  // 1 0
+  case 6:
+    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONCAVE);
+    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONCAVE);
+    break;
+
+  // 0 1
+  // 1 1
+  case 7:
+    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONCAVE);
+    break;
+
+  // 1 0
+  // 0 0
+  case 8:
+    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONVEX);
+    break;
+
+  // 1 0
+  // 0 1
+  case 9:
+    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONCAVE);
+    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONCAVE);
+    break;
+
+  // 1 0
+  // 1 0
+  case 10:
+    if (!has_border(cell_1)) {
+      set_which_border(cell_1, WhichBorder::RIGHT);
+    }
+    if (!has_border(cell_3)) {
+      set_which_border(cell_3, WhichBorder::RIGHT);
+    }
+    break;
+
+  // 1 0
+  // 1 1
+  case 11:
+    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONCAVE);
+    break;
+
+  // 1 1
+  // 0 0
+  case 12:
+    if (!has_border(cell_2)) {
+      set_which_border(cell_2, WhichBorder::BOTTOM);
+    }
+    if (!has_border(cell_3)) {
+      set_which_border(cell_3, WhichBorder::BOTTOM);
+    }
+    break;
+
+  // 1 1
+  // 0 1
+  case 13:
+    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONCAVE);
+    break;
+
+  // 1 1
+  // 1 0
+  case 14:
+    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONCAVE);
+    break;
+
+  // 1 1
+  // 1 1
+  case 15:
+    break;
+
+  }
+
+}
+
+/**
  * @brief Creates a tile with the given position in the 8x8 grid.
  * @param which_border Kind of border to create.
  * @param grid_index Index in the 8x8 grid of the first cell occupied by the tile.
@@ -473,6 +628,32 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
 }
 
 /**
+ * @brief Returns the base size of a border pattern.
+ * @param which_border A type of border.
+ * @return The corresponding size.
+ */
+const QSize& AutoTiler::get_pattern_size(WhichBorder which_border) const {
+
+  return pattern_sizes[static_cast<int>(which_border)];
+}
+
+/**
+ * @brief Determines the base size of border patterns.
+ */
+void AutoTiler::compute_pattern_sizes() {
+
+  pattern_sizes.clear();
+
+  const TilesetModel& tileset = *map.get_tileset_model();
+
+  for (int i = 0; i < 12; ++i) {
+    const QString& pattern_id = border_set.get_pattern(static_cast<WhichBorder>(i));
+    const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
+    pattern_sizes.append(pattern_size);
+  }
+}
+
+/**
  * @brief Determines the bounding box of the entities and extends it of 8 pixels.
  */
 void AutoTiler::compute_bounding_box() {
@@ -482,9 +663,14 @@ void AutoTiler::compute_bounding_box() {
     bounding_box |= rectangle;
   }
 
-  // Add a margin of 8 pixels.
-  bounding_box.translate(-8, -8);
-  bounding_box.setSize(bounding_box.size() + QSize(16, 16));
+  QSize max_pattern_size;
+  for (const QSize& pattern_size : pattern_sizes) {
+    max_pattern_size = max_pattern_size.expandedTo(pattern_size);
+  }
+
+  // Add a margin.
+  bounding_box.translate(-max_pattern_size.width(), -max_pattern_size.height());
+  bounding_box.setSize(bounding_box.size() + max_pattern_size * 2);
 
   grid_size = bounding_box.size() / 8;
 }
@@ -574,35 +760,24 @@ void AutoTiler::print_which_borders() const {
 }
 
 /**
- * @brief Returns the base size of a border pattern.
- * @param which_border A type of border.
- * @return The corresponding size.
+ * @brief Creates the border tiles from the border info previously detected.
  */
-const QSize& AutoTiler::get_pattern_size(WhichBorder which_border) const {
+void AutoTiler::compute_tiles() {
 
-  return pattern_sizes[static_cast<int>(which_border)];
-}
-
-/**
- * @brief Determines the base size of border patterns.
- */
-void AutoTiler::compute_pattern_sizes() {
-
-  pattern_sizes.clear();
-
-  const TilesetModel& tileset = *map.get_tileset_model();
-
-  for (int i = 0; i < 12; ++i) {
-    const QString& pattern_id = border_set.get_pattern(static_cast<WhichBorder>(i));
-    const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
-    pattern_sizes.append(pattern_size);
+  if (border_set.is_inner()) {
+    compute_tiles_inner();
+  }
+  else {
+    compute_tiles_outer();
   }
 }
 
 /**
  * @brief Creates the border tiles from the border info previously detected.
+ *
+ * Inner border case.
  */
-void AutoTiler::compute_tiles() {
+void AutoTiler::compute_tiles_inner() {
 
   print_which_borders();
 
@@ -653,7 +828,7 @@ void AutoTiler::compute_tiles() {
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
 
-      // Remove from the cell count the thickness of corners.
+      // Remove from the cell count the thickness of convex corners.
       if (is_convex_corner_border(corner_1)) {
         const QSize& corner_size = get_pattern_size(corner_1);
         int corner_additional_num_cells = corner_size.height() / 8 - 1;
@@ -708,7 +883,7 @@ void AutoTiler::compute_tiles() {
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
 
-      // Remove from the cell count the thickness of corners.
+      // Remove from the cell count the thickness of convex corners.
       if (is_convex_corner_border(corner_1)) {
         const QSize& corner_size = get_pattern_size(corner_1);
         int corner_additional_num_cells = corner_size.width() / 8 - 1;
@@ -772,6 +947,179 @@ void AutoTiler::compute_tiles() {
 }
 
 /**
+ * @brief Creates the border tiles from the border info previously detected.
+ *
+ * Outer border case.
+ */
+void AutoTiler::compute_tiles_outer() {
+
+  print_which_borders();
+
+  // Generate sides first.
+  for (const auto& it : which_borders) {
+
+    int start_index = it.first;
+    WhichBorder which_border = it.second;
+
+    int grid_x = start_index % grid_size.width();
+    int grid_y = start_index / grid_size.width();
+    int num_cells_repeat = 1;
+    int current_index = start_index;
+
+    if (which_border == WhichBorder::NONE) {
+      continue;
+    }
+
+    if (!is_side_border(which_border)) {
+      continue;
+    }
+
+    set_which_border(start_index, WhichBorder::NONE);  // Mark visited.
+
+    if (which_border == WhichBorder::RIGHT ||
+        which_border == WhichBorder::LEFT) {
+
+      // Right or left vertical border.
+      WhichBorder corner_1 = get_which_border(start_index - grid_size.width());
+
+      if (which_border == WhichBorder::LEFT) {
+        // Left border: translate to the left because of the thickness.
+        int width = get_pattern_size(which_border).width();
+        start_index -= width / 8 - 1;
+      }
+
+      // Count how many cells the border occupies vertically.
+      for (int i = grid_y + 1; i < grid_size.height(); ++i) {
+        current_index += grid_size.width();
+        if (get_which_border(current_index) != which_border) {
+          break;
+        }
+        ++num_cells_repeat;
+        set_which_border(current_index, WhichBorder::NONE);
+      }
+      WhichBorder corner_2 = get_which_border(current_index);
+
+      Q_ASSERT(is_corner_border(corner_1));
+      Q_ASSERT(is_corner_border(corner_2));
+
+      // Remove from the cell count the thickness of concave corners.
+      if (is_concave_corner_border(corner_1)) {
+        const QSize& corner_size = get_pattern_size(corner_1);
+        int corner_additional_num_cells = corner_size.height() / 8 - 1;
+        num_cells_repeat -= corner_additional_num_cells;
+        start_index += corner_additional_num_cells * grid_size.width();
+      }
+      if (is_concave_corner_border(corner_2)) {
+        const QSize& corner_size = get_pattern_size(corner_2);
+        int corner_additional_num_cells = corner_size.height() / 8 - 1;
+        num_cells_repeat -= corner_additional_num_cells;
+      }
+
+      // Finally create the tile.
+      if (num_cells_repeat > 0) {
+        // Check that the tile size is a multiple of the pattern base size.
+        int base_height = get_pattern_size(which_border).height() / 8;
+        int rest = num_cells_repeat % base_height;
+        if (rest != 0) {
+          // Illegal size! Round it to a multiple of the pattern size.
+          int num_cells_fixed = base_height - rest;
+          num_cells_repeat += base_height - rest;
+          if (is_concave_corner_border(corner_1)) {
+            start_index -= num_cells_fixed * grid_size.width();
+          }
+        }
+
+        make_tile(which_border, start_index, num_cells_repeat);
+      }
+    }
+
+    else {
+      // Top or bottom horizontal border.
+      WhichBorder corner_1 = get_which_border(start_index - 1);
+
+      if (which_border == WhichBorder::TOP) {
+        // Top border: translate to the top because of the thickness.
+        int height = get_pattern_size(which_border).height();
+        start_index -= (height / 8 - 1) * grid_size.width();
+      }
+
+      // Count how many cells the border occupies horizontally.
+      for (int j = grid_x + 1; j < grid_size.width(); ++j) {
+        ++current_index;
+        if (get_which_border(current_index) != which_border) {
+          break;
+        }
+        ++num_cells_repeat;
+        set_which_border(current_index, WhichBorder::NONE);
+      }
+      WhichBorder corner_2 = get_which_border(current_index);
+
+      Q_ASSERT(is_corner_border(corner_1));
+      Q_ASSERT(is_corner_border(corner_2));
+
+      // Remove from the cell count the thickness of concave corners.
+      if (is_concave_corner_border(corner_1)) {
+        const QSize& corner_size = get_pattern_size(corner_1);
+        int corner_additional_num_cells = corner_size.width() / 8 - 1;
+        num_cells_repeat -= corner_additional_num_cells;
+        start_index += corner_additional_num_cells;
+      }
+      if (is_concave_corner_border(corner_2)) {
+        const QSize& corner_size = get_pattern_size(corner_2);
+        int corner_additional_num_cells = corner_size.width() / 8 - 1;
+        num_cells_repeat -= corner_additional_num_cells;
+      }
+
+      // Finally create the tile.
+      if (num_cells_repeat > 0) {
+        // Check that the tile size is a multiple of the pattern base size.
+        int base_width = get_pattern_size(which_border).width() / 8;
+        int rest = num_cells_repeat % base_width;
+        if (rest != 0) {
+          // Illegal size! Round it to a multiple of the pattern size.
+          int num_cells_fixed = base_width - rest;
+          num_cells_repeat += base_width - rest;
+          if (is_concave_corner_border(corner_1)) {
+            start_index -= num_cells_fixed;
+          }
+        }
+
+        make_tile(which_border, start_index, num_cells_repeat);
+      }
+    }
+  }
+
+  // Generate corners.
+  for (const auto& it : which_borders) {
+    int start_index = it.first;
+    WhichBorder which_border = it.second;
+
+    if (
+        which_border == WhichBorder::TOP_LEFT_CONVEX ||
+        which_border == WhichBorder::TOP_LEFT_CONCAVE ||
+        which_border == WhichBorder::BOTTOM_LEFT_CONVEX ||
+        which_border == WhichBorder::BOTTOM_LEFT_CONCAVE
+    ) {
+      int width = get_pattern_size(which_border).width();
+      start_index -= width / 8 - 1;
+    }
+    if (
+        which_border == WhichBorder::TOP_RIGHT_CONVEX ||
+        which_border == WhichBorder::TOP_RIGHT_CONCAVE ||
+        which_border == WhichBorder::TOP_LEFT_CONVEX ||
+        which_border == WhichBorder::TOP_LEFT_CONCAVE
+    ) {
+      int height = get_pattern_size(which_border).height();
+      start_index -= (height / 8 - 1) * grid_size.width();
+    }
+
+    make_tile(which_border, start_index, 1);
+  }
+
+  which_borders.clear();
+}
+
+/**
  * @brief Creates border tiles around the given entities.
  * @return The border tiles ready to be added to the map.  1 1
  */
@@ -782,6 +1130,7 @@ AddableEntities AutoTiler::generate_border_tiles() {
   }
 
   // Determine the 8x8 grid.
+  compute_pattern_sizes();
   compute_bounding_box();
   qDebug() << bounding_box;
   qDebug() << "Grid: " << grid_size << ", cells: " << get_num_cells();
@@ -794,7 +1143,6 @@ AddableEntities AutoTiler::generate_border_tiles() {
   qDebug() << "Detected borders";
 
   // Create the corresponding tiles.
-  compute_pattern_sizes();
   compute_tiles();
   qDebug() << "Created " << tiles.size() << " tiles";
   if (tiles.empty()) {

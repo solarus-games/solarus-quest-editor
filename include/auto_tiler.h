@@ -54,15 +54,19 @@ private:
   WhichBorder get_which_border(int grid_index) const;
   void set_which_border(int grid_index, WhichBorder which_border);
   void detect_border_info(int cell_0);
+  void detect_border_info_inner(int cell_0);
+  void detect_border_info_outer(int cell_0);
   void print_which_borders() const;
   const QSize& get_pattern_size(WhichBorder which_border) const;
   void make_tile(WhichBorder which_border, int grid_index, int num_cells_repeat);
 
+  void compute_pattern_sizes();
   void compute_bounding_box();
   void compute_occupied_squares();
   void compute_borders();
-  void compute_pattern_sizes();
   void compute_tiles();
+  void compute_tiles_inner();
+  void compute_tiles_outer();
 
   MapModel& map;                       /**< The map that will be modified. */
   EntityIndexes entity_indexes;        /**< Entities where to create a border. */
