@@ -15,7 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "auto_tiler.h"
-#include "border_set.h"
 #include "tileset_model.h"
 #include <QDebug>
 #include <iostream>
@@ -23,104 +22,18 @@
 
 namespace SolarusEditor {
 
-namespace {
-
-/*
-// Test floor borders.
-BorderSet border_set(QStringList({
-  "wall_border.4-4",  // Right.
-  "wall_border.1-4",  // Up.
-  "wall_border.3-4",  // Left.
-  "wall_border.2-4",  // Down.
-  "wall_border.corner.2-4",  // Up-left convex corner.
-  "wall_border.corner.1-4",
-  "wall_border.corner.3-4",
-  "wall_border.corner.4-4",
-  "wall_border.corner_reverse.2-4",
-  "wall_border.corner_reverse.1-4",
-  "wall_border.corner_reverse.3-4",
-  "wall_border.corner_reverse.4-4",
-}));
-*/
-
-// Test walls.
-BorderSet border_set(QStringList({
-  "wall.4-2",  // Right.
-  "wall.1-2",  // Up.
-  "wall.3-2",  // Left.
-  "wall.2-2",  // Down.
-  "wall.corner.2-2",  // Up-left convex corner.
-  "wall.corner.1-2",
-  "wall.corner.3-2",
-  "wall.corner.4-2",
-  "wall.corner_reverse.2-2",
-  "wall.corner_reverse.1-2",
-  "wall.corner_reverse.3-2",
-  "wall.corner_reverse.4-2",
-}));
-
-/*
-// Test outside paths.
-BorderSet border_set(QStringList({
-  "grass.soil.3",  // Right.
-  "grass.soil.2",  // Up.
-  "grass.soil.4",  // Left.
-  "grass.soil.1",  // Down.
-  "grass.soil.diag.3b",  // Up-left convex corner.
-  "grass.soil.diag.4b",
-  "grass.soil.diag.2b",
-  "grass.soil.diag.1b",
-  "grass.soil.diag.3",
-  "grass.soil.diag.4",
-  "grass.soil.diag.2",
-  "grass.soil.diag.1",
-}));
-*/
-/*
-// Test deep water on shallow water.
-BorderSet border_set(QStringList({
-  "water_shallow.to_water.3",  // Right.
-  "water_shallow.to_water.2",  // Up.
-  "water_shallow.to_water.4",  // Left.
-  "water_shallow.to_water.1",  // Down.
-  "water_shallow.to_water.diag.3",  // Up-left convex corner.
-  "water_shallow.to_water.diag.4",
-  "water_shallow.to_water.diag.2",
-  "water_shallow.to_water.diag.1",
-  "water_shallow.to_water.diag.3",
-  "water_shallow.to_water.diag.4",
-  "water_shallow.to_water.diag.2",
-  "water_shallow.to_water.diag.1",
-}));
-*/
-/*
-// Test shallow water on deep water.
-BorderSet border_set(QStringList({
-  "water_shallow.to_water.4",  // Right.
-  "water_shallow.to_water.1",  // Up.
-  "water_shallow.to_water.3",  // Left.
-  "water_shallow.to_water.2",  // Down.
-  "water_shallow.to_water.diag.2",  // Up-left convex corner.
-  "water_shallow.to_water.diag.1",
-  "water_shallow.to_water.diag.3",
-  "water_shallow.to_water.diag.4",
-  "water_shallow",
-  "water_shallow",
-  "water_shallow",
-  "water_shallow",
-}));
-*/
-
-}
-
 /**
  * @brief Creates an autotiler.
  * @param map The map.
  * @param entity_indexes Indexes of entities where to create a border.
  */
-AutoTiler::AutoTiler(MapModel& map, const EntityIndexes& entity_indexes) :
+AutoTiler::AutoTiler(
+    MapModel& map,
+    const EntityIndexes& entity_indexes,
+    const BorderSet& border_set) :
   map(map),
-  entity_indexes(entity_indexes) {
+  entity_indexes(entity_indexes),
+  border_set(border_set) {
 
   for (const EntityIndex& index : entity_indexes) {
     entity_rectangles.append(map.get_entity_bounding_box(index));

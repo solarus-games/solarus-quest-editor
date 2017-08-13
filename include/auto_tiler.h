@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_AUTO_TILER_H
 
 #include "entities/entity_traits.h"
+#include "border_set.h"
 #include "which_border.h"
 #include "map_model.h"
 #include <QList>
@@ -35,7 +36,7 @@ class AutoTiler {
 
 public:
 
-  AutoTiler(MapModel& map, const EntityIndexes& entity_indexes);
+  AutoTiler(MapModel& map, const EntityIndexes& entity_indexes, const BorderSet& border_set);
 
   AddableEntities generate_border_tiles();
 
@@ -70,6 +71,7 @@ private:
 
   MapModel& map;                       /**< The map that will be modified. */
   EntityIndexes entity_indexes;        /**< Entities where to create a border. */
+  BorderSet border_set;                /**< Border patterns to generate and how. */
   QList<QRect> entity_rectangles;      /**< Rectangles of entities where to create a border. */
   QRect bounding_box;                  /**< Rectangle containing the entities plus 8 pixels of margin. */
   QSize grid_size;                     /**< Number of cells in the 8x8 grid in X and Y. */
