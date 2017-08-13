@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_AUTO_TILER_H
 
 #include "entities/entity_traits.h"
+#include "which_border.h"
 #include "map_model.h"
 #include <QList>
 #include <map>
@@ -33,22 +34,6 @@ class MapModel;
 class AutoTiler {
 
 public:
-
-  enum class WhichBorder {
-    NONE = -1,
-    RIGHT,
-    TOP,
-    LEFT,
-    BOTTOM,
-    TOP_RIGHT_CONVEX,
-    TOP_LEFT_CONVEX,
-    BOTTOM_LEFT_CONVEX,
-    BOTTOM_RIGHT_CONVEX,
-    TOP_RIGHT_CONCAVE,
-    TOP_LEFT_CONCAVE,
-    BOTTOM_LEFT_CONCAVE,
-    BOTTOM_RIGHT_CONCAVE,
-  };
 
   AutoTiler(MapModel& map, const EntityIndexes& entity_indexes);
 

@@ -15,9 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "auto_tiler.h"
+#include "border_set.h"
 #include "tileset_model.h"
 #include <QDebug>
-#include <iostream>  // TODO remove
+#include <iostream>
 #include <iomanip>
 
 namespace SolarusEditor {
@@ -26,7 +27,7 @@ namespace {
 
 /*
 // Test floor borders.
-QStringList border_pattern_ids = {
+BorderSet border_set(QStringList({
   "wall_border.4-4",  // Right.
   "wall_border.1-4",  // Up.
   "wall_border.3-4",  // Left.
@@ -39,12 +40,11 @@ QStringList border_pattern_ids = {
   "wall_border.corner_reverse.1-4",
   "wall_border.corner_reverse.3-4",
   "wall_border.corner_reverse.4-4",
-};
+}));
 */
 
-/*
 // Test walls.
-QStringList border_pattern_ids = {
+BorderSet border_set(QStringList({
   "wall.4-2",  // Right.
   "wall.1-2",  // Up.
   "wall.3-2",  // Left.
@@ -57,11 +57,11 @@ QStringList border_pattern_ids = {
   "wall.corner_reverse.1-2",
   "wall.corner_reverse.3-2",
   "wall.corner_reverse.4-2",
-};
-*/
+}));
+
 /*
 // Test outside paths.
-QStringList border_pattern_ids = {
+BorderSet border_set(QStringList({
   "grass.soil.3",  // Right.
   "grass.soil.2",  // Up.
   "grass.soil.4",  // Left.
@@ -74,11 +74,11 @@ QStringList border_pattern_ids = {
   "grass.soil.diag.4",
   "grass.soil.diag.2",
   "grass.soil.diag.1",
-};
+}));
 */
 /*
 // Test deep water on shallow water.
-QStringList border_pattern_ids = {
+BorderSet border_set(QStringList({
   "water_shallow.to_water.3",  // Right.
   "water_shallow.to_water.2",  // Up.
   "water_shallow.to_water.4",  // Left.
@@ -91,11 +91,11 @@ QStringList border_pattern_ids = {
   "water_shallow.to_water.diag.4",
   "water_shallow.to_water.diag.2",
   "water_shallow.to_water.diag.1",
-};
+}));
 */
-
+/*
 // Test shallow water on deep water.
-QStringList border_pattern_ids = {
+BorderSet border_set(QStringList({
   "water_shallow.to_water.4",  // Right.
   "water_shallow.to_water.1",  // Up.
   "water_shallow.to_water.3",  // Left.
@@ -108,7 +108,8 @@ QStringList border_pattern_ids = {
   "water_shallow",
   "water_shallow",
   "water_shallow",
-};
+}));
+*/
 
 }
 
@@ -254,7 +255,7 @@ bool AutoTiler::has_border(int grid_index) const {
  * @param grid_index An index in the 8x8 grid.
  * @return The kind of border in this cell (-1 means none).
  */
-AutoTiler::WhichBorder AutoTiler::get_which_border(int grid_index) const {
+WhichBorder AutoTiler::get_which_border(int grid_index) const {
 
   Q_ASSERT(grid_index >= 0);
   Q_ASSERT(grid_index < get_num_cells());
@@ -431,7 +432,7 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
 
   QPoint xy = to_map_xy(grid_index);
   QSize size;
-  const QString& pattern_id = border_pattern_ids[static_cast<int>(which_border)];
+  const QString& pattern_id = border_set.get_pattern(which_border);
 
   const TilesetModel& tileset = *map.get_tileset_model();
   const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
@@ -592,7 +593,7 @@ void AutoTiler::compute_pattern_sizes() {
   const TilesetModel& tileset = *map.get_tileset_model();
 
   for (int i = 0; i < 12; ++i) {
-    const QString& pattern_id = border_pattern_ids[i];
+    const QString& pattern_id = border_set.get_pattern(static_cast<WhichBorder>(i));
     const QSize& pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
     pattern_sizes.append(pattern_size);
   }

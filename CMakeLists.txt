@@ -172,6 +172,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/zoom_tool.h
   include/audio.h
   include/auto_tiler.h
+  include/border_set.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
@@ -207,6 +208,7 @@ set(solarus_quest_editor_SOURCES
   include/transition_traits.h
   include/version.h
   include/view_settings.h
+  include/which_border.h
   src/entities/block.cpp
   src/entities/chest.cpp
   src/entities/crystal.cpp
@@ -283,6 +285,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/zoom_tool.cpp
   src/audio.cpp
   src/auto_tiler.cpp
+  src/border_set.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
