@@ -40,7 +40,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>495</width>
+         <width>515</width>
          <height>692</height>
         </rect>
        </property>
@@ -74,6 +74,18 @@
           <layout class="QFormLayout" name="formLayout">
            <property name="fieldGrowthPolicy">
             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="tileset_id_label">
@@ -147,7 +159,7 @@
         <item>
          <widget class="QTabWidget" name="patterns_border_sets_tab_widget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="patterns_view">
            <property name="sizePolicy">
@@ -161,16 +173,16 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="leftMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>9</number>
             </property>
             <item>
              <widget class="SolarusEditor::TilePatternsListView" name="patterns_list_view"/>
@@ -412,6 +424,108 @@
            <attribute name="title">
             <string>Borders</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="leftMargin">
+             <number>9</number>
+            </property>
+            <property name="topMargin">
+             <number>9</number>
+            </property>
+            <property name="rightMargin">
+             <number>9</number>
+            </property>
+            <property name="bottomMargin">
+             <number>9</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="border_sets_layout">
+              <item>
+               <widget class="QTreeView" name="border_sets_tree_view"/>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="border_sets_buttons_layout">
+                <item>
+                 <widget class="QPushButton" name="create_border_set_button">
+                  <property name="maximumSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Create border set</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../../resources/images.qrc">
+                    <normaloff>:/images/icon_add.png</normaloff>:/images/icon_add.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="delete_border_set_button">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>32</width>
+                    <height>32</height>
+                   </size>
+                  </property>
+                  <property name="toolTip">
+                   <string>Delete border set</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../../resources/images.qrc">
+                    <normaloff>:/images/icon_cross.png</normaloff>:/images/icon_cross.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="border_sets_buttons_spacer">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
