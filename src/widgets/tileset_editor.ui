@@ -40,7 +40,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>494</width>
+         <width>495</width>
          <height>692</height>
         </rect>
        </property>
@@ -141,26 +141,6 @@
              </property>
              <property name="toolTip">
               <string>Background color applied to maps using this tileset</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="num_tiles_label">
-             <property name="toolTip">
-              <string/>
-             </property>
-             <property name="text">
-              <string>Patterns</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QLabel" name="num_tiles_field">
-             <property name="toolTip">
-              <string>Number of existing tile patterns in the tileset</string>
-             </property>
-             <property name="text">
-              <string/>
              </property>
             </widget>
            </item>

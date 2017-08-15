@@ -46,7 +46,6 @@ public slots:
   void update();
 
   void update_tileset_id_field();
-  void update_num_patterns_field();
   void update_background_color();
   void change_background_color();
 

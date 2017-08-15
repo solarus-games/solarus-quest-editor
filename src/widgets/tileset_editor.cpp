@@ -699,16 +699,12 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_separation_changed(int, PatternSeparation)),
           this, SLOT(update_animation_separation_field()));
 
-  connect(model, SIGNAL(pattern_created(int, QString)),
-          this, SLOT(update_num_patterns_field()));
   connect(ui.tileset_view, SIGNAL(create_pattern_requested(QString, QRect, Ground)),
           this, SLOT(create_pattern_requested(QString, QRect, Ground)));
 
   connect(ui.tileset_view, SIGNAL(duplicate_selected_patterns_requested(QPoint)),
           this, SLOT(duplicate_selected_patterns_requested(QPoint)));
 
-  connect(model, SIGNAL(pattern_deleted(int, QString)),
-          this, SLOT(update_num_patterns_field()));
   connect(ui.patterns_list_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
@@ -791,7 +787,6 @@ void TilesetEditor::update() {
   update_tileset_id_field();
   update_description_to_gui();
   update_background_color();
-  update_num_patterns_field();
   update_pattern_view();
 }
 
@@ -801,14 +796,6 @@ void TilesetEditor::update() {
 void TilesetEditor::update_tileset_id_field() {
 
   ui.tileset_id_field->setText(tileset_id);
-}
-
-/**
- * @brief Updates the pattern count displaying from the model.
- */
-void TilesetEditor::update_num_patterns_field() {
-
-  ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
 }
 
 /**
