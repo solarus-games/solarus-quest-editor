@@ -18,6 +18,7 @@
 #define SOLARUSEDITOR_BORDER_SET_MODEL_H
 
 #include <QAbstractItemModel>
+#include <memory>
 
 namespace SolarusEditor {
 
@@ -40,9 +41,28 @@ public:
   QModelIndex parent(const QModelIndex& model_index) const override;
   QVariant data(const QModelIndex& model_index, int role) const override;
 
+  QString get_border_set_id(int row) const;
+
 private:
 
-  TilesetModel& tileset;          /**< The tileset represented by this model. */
+  /**
+   * @brief Data of a specific border set.
+   */
+  struct BorderSetId {
+
+    /**
+     * @brief Creates a border set id.
+     * @param id Name of the border set.
+     */
+    explicit BorderSetId(const QString& id) :
+      id(new QString(id)) {
+    }
+
+    std::shared_ptr<QString> id;
+  };
+
+  TilesetModel& tileset;             /**< The tileset represented by this model. */
+  QList<BorderSetId> border_set_ids; /**< Ids of the border sets in the model. */
 };
 
 }

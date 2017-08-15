@@ -173,6 +173,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/zoom_tool.h
   include/audio.h
   include/auto_tiler.h
+  include/border_kind_traits.h
   include/border_set_model.h
   include/color.h
   include/dialogs_model.h
@@ -286,6 +287,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/zoom_tool.cpp
   src/audio.cpp
   src/auto_tiler.cpp
+  src/border_kind_traits.cpp
   src/border_set_model.cpp
   src/color.cpp
   src/dialogs_model.cpp

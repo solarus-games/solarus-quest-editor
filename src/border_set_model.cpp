@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "border_kind_traits.h"
 #include "border_set_model.h"
 #include "tileset_model.h"
 
@@ -28,6 +29,9 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
   QAbstractItemModel(parent),
   tileset(tileset) {
 
+  Q_FOREACH(const QString& border_set_id, tileset.get_border_set_ids()) {
+    border_set_ids << BorderSetId(border_set_id);
+  }
 }
 
 /**
@@ -37,7 +41,7 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
  */
 int BorderSetModel::columnCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
-  return 1;
+  return 2;
 }
 
 /**
@@ -53,7 +57,13 @@ int BorderSetModel::rowCount(const QModelIndex& parent) const {
     return num_rows;
   }
 
-  // TODO
+  const QModelIndex& grand_parent = parent.parent();
+  if (!grand_parent.isValid()) {
+    // Border set item.
+    return 12;
+  }
+
+  // Pattern item.
   return 0;
 }
 
@@ -69,12 +79,12 @@ QModelIndex BorderSetModel::index(int row, int column, const QModelIndex& parent
 
   Q_UNUSED(parent);
   if (!parent.isValid()) {
-    // Root item.
+    // Root item: create a border set index.
     return createIndex(row, column);
   }
 
-  // TODO
-  return QModelIndex();
+  // Pattern item.
+  return createIndex(row, column, border_set_ids[parent.row()].id.get());
 }
 
 /**
@@ -84,8 +94,24 @@ QModelIndex BorderSetModel::index(int row, int column, const QModelIndex& parent
  */
 QModelIndex BorderSetModel::parent(const QModelIndex& model_index) const {
 
-  Q_UNUSED(model_index);
-  // TODO
+  if (!model_index.isValid()) {
+    // Root item.
+    return QModelIndex();
+  }
+
+  void* internal_pointer = model_index.internalPointer();
+  if (internal_pointer == nullptr) {
+    // Border set item: parent is root.
+    return QModelIndex();
+  }
+
+  const QString& border_set_id = *static_cast<QString*>(internal_pointer);
+  // TODO store a QString -> int cache
+  for (int row = 0; row < rowCount(); ++row) {
+    if (get_border_set_id(row) == border_set_id) {
+      return index(row, 0);
+    }
+  }
   return QModelIndex();
 }
 
@@ -102,14 +128,71 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
   }
 
   int row = model_index.row();
+  int column = model_index.column();
 
-  switch (role) {
-      case Qt::DisplayRole:
-    return tileset.get_border_set_ids()[row];
+  if (column < 0 || column >= columnCount()) {
+    return QVariant();
+  }
 
+  const QModelIndex& parent = model_index.parent();
+  if (!parent.isValid()) {
+    // Border set item.
+
+    if (row < 0 || row >= tileset.get_num_border_sets()) {
+      return QVariant();
+    }
+
+    switch (role) {
+        case Qt::DisplayRole:
+
+      if (column == 0) {
+        return *border_set_ids[row].id;
+      }
+
+    }
+
+  }
+  else {
+    // Pattern item.
+
+    if (row < 0 || row >= 12) {
+      return QVariant();
+    }
+
+    const QModelIndex& border_set_item = model_index.parent();
+    const QString& border_set_id = get_border_set_id(border_set_item.row());
+
+    switch (role) {
+
+    case Qt::DisplayRole:
+    {
+      BorderKind border_kind = static_cast<BorderKind>(row);
+      if (column == 1) {
+        // Name of the pattern.
+        return tileset.get_border_set_pattern(border_set_id, border_kind);
+      }
+      else if (column == 0) {
+        // Name of the border kind.
+        // TODO *only* show the icon instead.
+        return BorderKindTraits::get_friendly_name(border_kind);
+      }
+    }
+
+    }  // switch
   }
 
   return QVariant();
+}
+
+/**
+ * @brief Returns the border set id of the given row.
+ * @param row A row from the root item.
+ * @return The corresponding border set id.
+ */
+QString BorderSetModel::get_border_set_id(int row) const {
+
+  Q_ASSERT(row >= 0 && row < border_set_ids.size());
+  return *border_set_ids[row].id.get();
 }
 
 }

@@ -14,37 +14,31 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "widgets/border_set_tree_view.h"
-#include "border_set_model.h"
-#include "tileset_model.h"
+#ifndef SOLARUSEDITOR_BORDER_KIND_TRAITS_H
+#define SOLARUSEDITOR_BORDER_KIND_TRAITS_H
+
+#include "enum_traits.h"
+#include <solarus/entities/BorderKind.h>
 
 namespace SolarusEditor {
 
-/**
- * @brief Creates an empty border set tree view.
- * @param parent The parent object or nullptr.
- */
-BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
-  QTreeView(parent),
-  tileset(nullptr) {
-
-  setIconSize(QSize(32, 32));
-  setSelectionMode(QAbstractItemView::SingleSelection);
-  setHeaderHidden(true);
-
-}
+using BorderKind = Solarus::BorderKind;
+using BorderKindTraits = EnumTraits<BorderKind>;
 
 /**
- * @brief Sets the tileset to represent in this view.
- * @param tileset The tileset model.
+ * \brief Provides useful properties of border kind enum values.
  */
-void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
+template<>
+class EnumTraits<BorderKind> {
 
-  this->tileset = &tileset;
+public:
 
-  setModel(new BorderSetModel(tileset));
-  expandAll();
-  resizeColumnToContents(0);
+  static QList<BorderKind> get_values();
+  static QString get_friendly_name(BorderKind value);
+  static QIcon get_icon(BorderKind value);
+
+};
+
 }
 
-}
+#endif
