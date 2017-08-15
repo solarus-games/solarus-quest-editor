@@ -33,7 +33,7 @@ class DialogsTreeView : public QTreeView {
 
 public:
 
-  DialogsTreeView(QWidget* parent = nullptr);
+  explicit DialogsTreeView(QWidget* parent = nullptr);
 
   void set_model(DialogsModel *model);
 

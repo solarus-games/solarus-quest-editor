@@ -33,7 +33,7 @@ class StringsTreeView : public QTreeView {
 
 public:
 
-  StringsTreeView(QWidget* parent = nullptr);
+  explicit StringsTreeView(QWidget* parent = nullptr);
 
   void set_model(StringsModel *model);
 

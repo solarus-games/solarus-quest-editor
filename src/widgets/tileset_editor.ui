@@ -40,7 +40,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>515</width>
+         <width>563</width>
          <height>692</height>
         </rect>
        </property>
@@ -440,7 +440,7 @@
             <item>
              <layout class="QHBoxLayout" name="border_sets_layout">
               <item>
-               <widget class="QTreeView" name="border_sets_tree_view"/>
+               <widget class="SolarusEditor::BorderSetTreeView" name="border_sets_tree_view"/>
               </item>
               <item>
                <layout class="QVBoxLayout" name="border_sets_buttons_layout">
@@ -572,6 +572,11 @@
    <class>SolarusEditor::EnumSelector&lt;SolarusEditor::TilePatternRepeatMode&gt;</class>
    <extends>QComboBox</extends>
    <header>pattern_repeat_mode_traits.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SolarusEditor::BorderSetTreeView</class>
+   <extends>QTreeView</extends>
+   <header>widgets/border_set_tree_view.h</header>
   </customwidget>
  </customwidgets>
  <resources>

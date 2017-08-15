@@ -115,6 +115,7 @@ set(solarus_quest_editor_SOURCES
   include/entities/teletransporter.h
   include/entities/tile.h
   include/entities/wall.h
+  include/widgets/border_set_tree_view.h
   include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
   include/widgets/change_resource_id_dialog.h
@@ -172,6 +173,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/zoom_tool.h
   include/audio.h
   include/auto_tiler.h
+  include/border_set_model.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
@@ -231,6 +233,7 @@ set(solarus_quest_editor_SOURCES
   src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
+  src/widgets/border_set_tree_view.cpp
   src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp
   src/widgets/change_resource_id_dialog.cpp
@@ -283,6 +286,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/zoom_tool.cpp
   src/audio.cpp
   src/auto_tiler.cpp
+  src/border_set_model.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp

@@ -633,6 +633,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
+  ui.border_sets_tree_view->set_tileset(*model);
   ui.tileset_view->set_model(model);
   ui.tileset_view->set_view_settings(view_settings);
 

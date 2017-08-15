@@ -1655,7 +1655,7 @@ void SpriteModel::set_direction_image_dirty(const Index& index) {
  * @param index An animation index.
  * @return Reference of the animation.
  */
-const Solarus::SpriteAnimationData &SpriteModel::get_animation(
+const Solarus::SpriteAnimationData& SpriteModel::get_animation(
     const Index& index) const {
 
   return sprite.get_animation(index.animation_name.toStdString());
@@ -1671,7 +1671,7 @@ const Solarus::SpriteAnimationData &SpriteModel::get_animation(
  * @param index An animation index.
  * @return Reference of the animation.
  */
-Solarus::SpriteAnimationData &SpriteModel::get_animation(const Index& index) {
+Solarus::SpriteAnimationData& SpriteModel::get_animation(const Index& index) {
 
   return sprite.get_animation(index.animation_name.toStdString());
 }
@@ -1684,7 +1684,7 @@ Solarus::SpriteAnimationData &SpriteModel::get_animation(const Index& index) {
  * @param index A direction index.
  * @return Reference of the direction.
  */
-const Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
+const Solarus::SpriteAnimationDirectionData& SpriteModel::get_direction(
     const Index& index) const {
 
   return get_animation(index).get_direction(index.direction_nb);
@@ -1700,7 +1700,7 @@ const Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
  * @param index A direction index.
  * @return Reference of the direction.
  */
-Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
+Solarus::SpriteAnimationDirectionData& SpriteModel::get_direction(
     const Index& index) {
 
   return get_animation(index).get_direction(index.direction_nb);

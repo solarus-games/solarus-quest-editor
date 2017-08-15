@@ -33,7 +33,7 @@ class SpriteTreeView : public QTreeView {
 
 public:
 
-  SpriteTreeView(QWidget* parent = nullptr);
+  explicit SpriteTreeView(QWidget* parent = nullptr);
 
   void set_model(SpriteModel* sprite);
 
