@@ -1436,4 +1436,267 @@ void TilesetModel::clear_selection() {
   selection_model.clear();
 }
 
+/**
+ * @brief Returns the number of border sets in this tileset.
+ * @return The number of border sets.
+ */
+int TilesetModel::get_num_border_sets() const {
+
+  return static_cast<int>(tileset.get_border_sets().size());
+}
+
+/**
+ * @brief Returns the ids of all border sets in this tileset.
+ * @return The border set ids in alphabetical order.
+ */
+QStringList TilesetModel::get_border_set_ids() const {
+
+  const std::map<std::string, Solarus::BorderSet>& border_sets = tileset.get_border_sets();
+  QStringList border_set_ids;
+  for (const auto& kvp : border_sets) {
+    border_set_ids << QString::fromStdString(kvp.first);
+  }
+  return border_set_ids;
+}
+
+/**
+ * @brief Returns whether a border set exists with the given id.
+ * @param border_set_id A border set id.
+ * @return @c true if the tileset contains such a border set.
+ */
+bool TilesetModel::border_set_exists(const QString& border_set_id) const {
+
+  return tileset.border_set_exists(border_set_id.toStdString());
+}
+
+/**
+ * @brief Creates an empty border set with the given id.
+ *
+ * Emits border_set_created().
+ *
+ * @param border_set_id A border set id.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::create_border_set(const QString& border_set_id) {
+
+  if (border_set_exists(border_set_id)) {
+    throw EditorException(tr("Border set already exists: '%1'").arg(border_set_id));
+  }
+
+  if (!is_valid_border_set_id(border_set_id)) {
+      throw EditorException(tr("Invalid border set id: '%1'").arg(border_set_id));
+  }
+
+  bool success = tileset.add_border_set(border_set_id.toStdString(), Solarus::BorderSet());
+
+  if (!success) {
+    throw EditorException(tr("Failed to create border set '%1'").arg(border_set_id));
+  }
+
+  emit border_set_created(border_set_id);
+}
+
+/**
+ * @brief Deletes a border set.
+ *
+ * Emits border_set_deleted().
+ *
+ * @param border_set_id Id of the border set to delete.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::delete_border_set(const QString& border_set_id) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  bool success = tileset.remove_border_set(border_set_id.toStdString());
+
+  if (!success) {
+    throw EditorException(tr("Failed to delete border set '%1'").arg(border_set_id));
+  }
+
+  emit border_set_deleted(border_set_id);
+}
+
+/**
+ * @brief Renames a border set.
+ *
+ * Emits border_set_id_changed().
+ *
+ * @param old_id Id of an existing border set.
+ * @param new_id New id to set.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_id(const QString& old_id, const QString& new_id) {
+
+  if (!border_set_exists(old_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(old_id));
+  }
+
+  if (!is_valid_border_set_id(new_id)) {
+      throw EditorException(tr("Invalid border set id: '%1'").arg(new_id));
+  }
+
+  if (border_set_exists(new_id)) {
+    throw EditorException(tr("Border set id already in use: '%1'").arg(new_id));
+  }
+
+  bool success = tileset.set_border_set_id(old_id.toStdString(), new_id.toStdString());
+
+  if (!success) {
+    throw EditorException(tr("Failed to rename border set '%1'").arg(old_id));
+  }
+
+  emit border_set_id_changed(old_id, new_id);
+}
+
+/**
+ * @brief Returns the pattern id of a border for the given border set.
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to get in this border set.
+ * @return The pattern id of this border,
+ * or an empty string if no pattern is set for this border kind.
+ * @throws EditorException in case of error.
+ */
+QString TilesetModel::get_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  const Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  return QString::fromStdString(border_set.get_pattern(border_kind));
+}
+
+/**
+ * @brief Sets a pattern to a border for the given border set.
+ *
+ * Emits border_set_pattern_changed() if there is a change.
+ *
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to set in this border set.
+ * @param pattern_id The pattern id to set for this border,
+ * or an empty string to unset it.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_pattern(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  if (pattern_id == get_border_set_pattern(border_set_id, border_kind)) {
+    // No change.
+    return;
+  }
+
+  Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  border_set.set_pattern(border_kind, pattern_id.toStdString());
+
+  emit border_set_pattern_changed(border_set_id, border_kind, pattern_id);
+}
+
+/**
+ * @brief Returns whether a pattern is defined for a border in the given border set.
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to get in this border set.
+ * @return @c true if a pattern is defined for this border.
+ * @throws EditorException in case of error.
+ */
+bool TilesetModel::has_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  return tileset.get_border_set(border_set_id.toStdString()).has_pattern(border_kind);
+}
+
+/**
+ * @brief Returns the list of border patterns for the given border set.
+ * @param border_set_id A border set id.
+ * @return The pattern ids in the order of the BorderKind enum.
+ * @throws EditorException in case of error.
+ */
+QStringList TilesetModel::get_border_set_patterns(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  const Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  QStringList patterns;
+  for (int i = 0; i < 12; ++i) {
+    BorderKind border_kind = static_cast<BorderKind>(i);
+    patterns << QString::fromStdString(border_set.get_pattern(border_kind));
+  }
+
+  return patterns;
+}
+
+/**
+ * @brief Returns whether a border set generates tiles inside or outside the countours.
+ * @param border_set_id A border set id.
+ * @return @c true if this is an inner border set.
+ * @throws EditorException in case of error.
+ */
+bool TilesetModel::is_border_set_inner(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  return tileset.get_border_set(border_set_id.toStdString()).is_inner();
+}
+
+/**
+ * @brief Sets whether a border set generates tiles inside or outside the countours.
+ *
+ * Emits border_set_inner_changed() if there is a change.
+ *
+ * @param border_set_id A border set id.
+ * @param inner @c true to make this border set an inner one.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_inner(const QString& border_set_id, bool inner) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  if (inner == is_border_set_inner(border_set_id)) {
+    // No change.
+    return;
+  }
+
+  tileset.get_border_set(border_set_id.toStdString()).set_inner(inner);
+
+  emit border_set_inner_changed(border_set_id, inner);
+}
+
+/**
+ * @brief Returns whether a string is a valid border set id.
+ * @param border_set_id The id to check.
+ * @return @c true if this id is legal.
+ */
+bool TilesetModel::is_valid_border_set_id(const QString& border_set_id) {
+
+  if (border_set_id.isEmpty()) {
+      return false;
+  }
+
+  if (
+      border_set_id.contains('\"') ||
+      border_set_id.contains('\'') ||
+      border_set_id.contains('\\') ||
+      border_set_id.contains('\n') ||
+      border_set_id.contains('\r')
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
 }

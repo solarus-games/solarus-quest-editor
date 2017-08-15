@@ -34,6 +34,7 @@ class Quest;
 
 using Ground = Solarus::Ground;
 using TilePatternRepeatMode = Solarus::TilePatternRepeatMode;
+using BorderKind = Solarus::BorderKind;
 
 /**
  * @brief Model that wraps a tileset.
@@ -66,6 +67,7 @@ public:
   virtual int rowCount(const QModelIndex& parent) const override;
   virtual QVariant data(const QModelIndex& index, int role) const override;
 
+  // Patterns.
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
   bool pattern_exists(const QString& pattern_id) const;
@@ -120,6 +122,21 @@ public:
   void select_all();
   void clear_selection();
 
+  // Border sets.
+  int get_num_border_sets() const;
+  QStringList get_border_set_ids() const;
+  bool border_set_exists(const QString& border_set_id) const;
+  void create_border_set(const QString& border_set_id);
+  void delete_border_set(const QString& border_set_id);
+  void set_border_set_id(const QString& old_id, const QString& new_id);
+  QString get_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const;
+  void set_border_set_pattern(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id);
+  bool has_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const;
+  QStringList get_border_set_patterns(const QString& border_set_id) const;
+  bool is_border_set_inner(const QString& border_set_id) const;
+  void set_border_set_inner(const QString& border_set_id, bool inner);
+  static bool is_valid_border_set_id(const QString& border_set_id);
+
 signals:
 
   void background_color_changed(const QColor& background_color);
@@ -135,6 +152,12 @@ signals:
   void pattern_repeat_mode_changed(int index, TilePatternRepeatMode repeat_mode);
   void pattern_animation_changed(int index, PatternAnimation animation);
   void pattern_separation_changed(int index, PatternSeparation separation);
+
+  void border_set_created(const QString& border_set_id);
+  void border_set_deleted(const QString& border_set_id);
+  void border_set_id_changed(const QString& old_id, const QString& new_id);
+  void border_set_pattern_changed(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id);
+  void border_set_inner_changed(const QString& border_set_id, bool inner);
 
 public slots:
 

@@ -30,10 +30,10 @@ namespace SolarusEditor {
 AutoTiler::AutoTiler(
     MapModel& map,
     const EntityIndexes& entity_indexes,
-    const BorderSet& border_set) :
+    const QString& border_set_id) :
   map(map),
   entity_indexes(entity_indexes),
-  border_set(border_set) {
+  border_set_id(border_set_id) {
 
   for (const EntityIndex& index : entity_indexes) {
     entity_rectangles.append(map.get_entity_bounding_box(index));
@@ -110,12 +110,12 @@ int AutoTiler::get_four_cells_mask(int cell_0) const {
  * @param which_border A border type.
  * @return @c true if this is a side.
  */
-bool AutoTiler::is_side_border(WhichBorder which_border) const {
+bool AutoTiler::is_side_border(BorderKind which_border) const {
 
-  return which_border == WhichBorder::RIGHT ||
-      which_border == WhichBorder::TOP ||
-      which_border == WhichBorder::LEFT||
-      which_border == WhichBorder::BOTTOM;
+  return which_border == BorderKind::RIGHT ||
+      which_border == BorderKind::TOP ||
+      which_border == BorderKind::LEFT||
+      which_border == BorderKind::BOTTOM;
 }
 
 /**
@@ -123,9 +123,9 @@ bool AutoTiler::is_side_border(WhichBorder which_border) const {
  * @param which_border A border type.
  * @return @c true if this is a corner.
  */
-bool AutoTiler::is_corner_border(WhichBorder which_border) const {
+bool AutoTiler::is_corner_border(BorderKind which_border) const {
 
-  return which_border != WhichBorder::NONE && !is_side_border(which_border);
+  return which_border != BorderKind::NONE && !is_side_border(which_border);
 }
 
 /**
@@ -133,12 +133,12 @@ bool AutoTiler::is_corner_border(WhichBorder which_border) const {
  * @param which_border A border type.
  * @return @c true if this is a convex corner.
  */
-bool AutoTiler::is_convex_corner_border(WhichBorder which_border) const {
+bool AutoTiler::is_convex_corner_border(BorderKind which_border) const {
 
-  return which_border == WhichBorder::TOP_RIGHT_CONVEX ||
-      which_border == WhichBorder::TOP_LEFT_CONVEX ||
-      which_border == WhichBorder::BOTTOM_LEFT_CONVEX ||
-      which_border == WhichBorder::BOTTOM_RIGHT_CONVEX;
+  return which_border == BorderKind::TOP_RIGHT_CONVEX ||
+      which_border == BorderKind::TOP_LEFT_CONVEX ||
+      which_border == BorderKind::BOTTOM_LEFT_CONVEX ||
+      which_border == BorderKind::BOTTOM_RIGHT_CONVEX;
 }
 
 /**
@@ -146,12 +146,12 @@ bool AutoTiler::is_convex_corner_border(WhichBorder which_border) const {
  * @param which_border A border type.
  * @return @c true if this is a concave corner.
  */
-bool AutoTiler::is_concave_corner_border(WhichBorder which_border) const {
+bool AutoTiler::is_concave_corner_border(BorderKind which_border) const {
 
-  return which_border == WhichBorder::TOP_RIGHT_CONCAVE ||
-      which_border == WhichBorder::TOP_LEFT_CONCAVE ||
-      which_border == WhichBorder::BOTTOM_LEFT_CONCAVE ||
-      which_border == WhichBorder::BOTTOM_RIGHT_CONCAVE;
+  return which_border == BorderKind::TOP_RIGHT_CONCAVE ||
+      which_border == BorderKind::TOP_LEFT_CONCAVE ||
+      which_border == BorderKind::BOTTOM_LEFT_CONCAVE ||
+      which_border == BorderKind::BOTTOM_RIGHT_CONCAVE;
 }
 /**
  * @brief Returns whether a square of the 8x8 grid is marked with a border value.
@@ -160,7 +160,7 @@ bool AutoTiler::is_concave_corner_border(WhichBorder which_border) const {
  */
 bool AutoTiler::has_border(int grid_index) const {
 
-  return get_which_border(grid_index) != WhichBorder::NONE;
+  return get_which_border(grid_index) != BorderKind::NONE;
 }
 
 /**
@@ -168,14 +168,14 @@ bool AutoTiler::has_border(int grid_index) const {
  * @param grid_index An index in the 8x8 grid.
  * @return The kind of border in this cell (-1 means none).
  */
-WhichBorder AutoTiler::get_which_border(int grid_index) const {
+BorderKind AutoTiler::get_which_border(int grid_index) const {
 
   Q_ASSERT(grid_index >= 0);
   Q_ASSERT(grid_index < get_num_cells());
 
   const auto& it = which_borders.find(grid_index);
   if (it == which_borders.end()) {
-    return WhichBorder::NONE;
+    return BorderKind::NONE;
   }
   return it->second;
 }
@@ -185,7 +185,7 @@ WhichBorder AutoTiler::get_which_border(int grid_index) const {
  * @param grid_index An index in the 8x8 grid.
  * @param which_border The kind of border in this cell.
  */
-void AutoTiler::set_which_border(int grid_index, WhichBorder which_border) {
+void AutoTiler::set_which_border(int grid_index, BorderKind which_border) {
 
   Q_ASSERT(grid_index >= 0);
   Q_ASSERT(grid_index < get_num_cells());
@@ -202,7 +202,7 @@ void AutoTiler::set_which_border(int grid_index, WhichBorder which_border) {
  */
 void AutoTiler::detect_border_info(int cell_0) {
 
-  if (border_set.is_inner()) {
+  if (get_tileset().is_border_set_inner(border_set_id)) {
     detect_border_info_inner(cell_0);
   }
   else {
@@ -235,107 +235,107 @@ void AutoTiler::detect_border_info_inner(int cell_0) {
   // 0 0
   // 0 1
   case 1:
-    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONVEX);
+    set_which_border(cell_3, BorderKind::TOP_LEFT_CONVEX);
     break;
 
   // 0 0
   // 1 0
   case 2:
-    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONVEX);
+    set_which_border(cell_2, BorderKind::TOP_RIGHT_CONVEX);
     break;
 
   // 0 0
   // 1 1
   case 3:
     if (!has_border(cell_2)) {
-      set_which_border(cell_2, WhichBorder::TOP);
+      set_which_border(cell_2, BorderKind::TOP);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, WhichBorder::TOP);
+      set_which_border(cell_3, BorderKind::TOP);
     }
     break;
 
   // 0 1
   // 0 0
   case 4:
-    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONVEX);
+    set_which_border(cell_1, BorderKind::BOTTOM_LEFT_CONVEX);
     break;
 
   // 0 1
   // 0 1
   case 5:
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, WhichBorder::LEFT);
+      set_which_border(cell_1, BorderKind::LEFT);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, WhichBorder::LEFT);
+      set_which_border(cell_3, BorderKind::LEFT);
     }
     break;
 
   // 0 1
   // 1 0
   case 6:
-    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONVEX);
-    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONVEX);
+    set_which_border(cell_1, BorderKind::BOTTOM_LEFT_CONVEX);
+    set_which_border(cell_2, BorderKind::TOP_RIGHT_CONVEX);
     break;
 
   // 0 1
   // 1 1
   case 7:
-    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONCAVE);
+    set_which_border(cell_3, BorderKind::TOP_LEFT_CONCAVE);
     break;
 
   // 1 0
   // 0 0
   case 8:
-    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONVEX);
+    set_which_border(cell_0, BorderKind::BOTTOM_RIGHT_CONVEX);
     break;
 
   // 1 0
   // 0 1
   case 9:
-    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONVEX);
-    set_which_border(cell_3, WhichBorder::TOP_LEFT_CONVEX);
+    set_which_border(cell_0, BorderKind::BOTTOM_RIGHT_CONVEX);
+    set_which_border(cell_3, BorderKind::TOP_LEFT_CONVEX);
     break;
 
   // 1 0
   // 1 0
   case 10:
     if (!has_border(cell_0)) {
-      set_which_border(cell_0, WhichBorder::RIGHT);
+      set_which_border(cell_0, BorderKind::RIGHT);
     }
     if (!has_border(cell_2)) {
-      set_which_border(cell_2, WhichBorder::RIGHT);
+      set_which_border(cell_2, BorderKind::RIGHT);
     }
     break;
 
   // 1 0
   // 1 1
   case 11:
-    set_which_border(cell_2, WhichBorder::TOP_RIGHT_CONCAVE);
+    set_which_border(cell_2, BorderKind::TOP_RIGHT_CONCAVE);
     break;
 
   // 1 1
   // 0 0
   case 12:
     if (!has_border(cell_0)) {
-      set_which_border(cell_0, WhichBorder::BOTTOM);
+      set_which_border(cell_0, BorderKind::BOTTOM);
     }
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, WhichBorder::BOTTOM);
+      set_which_border(cell_1, BorderKind::BOTTOM);
     }
     break;
 
   // 1 1
   // 0 1
   case 13:
-    set_which_border(cell_1, WhichBorder::BOTTOM_LEFT_CONCAVE);
+    set_which_border(cell_1, BorderKind::BOTTOM_LEFT_CONCAVE);
     break;
 
   // 1 1
   // 1 0
   case 14:
-    set_which_border(cell_0, WhichBorder::BOTTOM_RIGHT_CONCAVE);
+    set_which_border(cell_0, BorderKind::BOTTOM_RIGHT_CONCAVE);
     break;
 
   // 1 1
@@ -372,107 +372,107 @@ void AutoTiler::detect_border_info_outer(int cell_0) {
   // 0 0
   // 0 1
   case 1:
-    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONVEX);
+    set_which_border(cell_0, BorderKind::TOP_LEFT_CONVEX);
     break;
 
   // 0 0
   // 1 0
   case 2:
-    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONVEX);
+    set_which_border(cell_1, BorderKind::TOP_RIGHT_CONVEX);
     break;
 
   // 0 0
   // 1 1
   case 3:
     if (!has_border(cell_0)) {
-      set_which_border(cell_0, WhichBorder::TOP);
+      set_which_border(cell_0, BorderKind::TOP);
     }
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, WhichBorder::TOP);
+      set_which_border(cell_1, BorderKind::TOP);
     }
     break;
 
   // 0 1
   // 0 0
   case 4:
-    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONVEX);
+    set_which_border(cell_2, BorderKind::BOTTOM_LEFT_CONVEX);
     break;
 
   // 0 1
   // 0 1
   case 5:
     if (!has_border(cell_0)) {
-      set_which_border(cell_0, WhichBorder::LEFT);
+      set_which_border(cell_0, BorderKind::LEFT);
     }
     if (!has_border(cell_2)) {
-      set_which_border(cell_2, WhichBorder::LEFT);
+      set_which_border(cell_2, BorderKind::LEFT);
     }
     break;
 
   // 0 1
   // 1 0
   case 6:
-    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONCAVE);
-    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONCAVE);
+    set_which_border(cell_0, BorderKind::TOP_LEFT_CONCAVE);
+    set_which_border(cell_3, BorderKind::BOTTOM_RIGHT_CONCAVE);
     break;
 
   // 0 1
   // 1 1
   case 7:
-    set_which_border(cell_0, WhichBorder::TOP_LEFT_CONCAVE);
+    set_which_border(cell_0, BorderKind::TOP_LEFT_CONCAVE);
     break;
 
   // 1 0
   // 0 0
   case 8:
-    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONVEX);
+    set_which_border(cell_3, BorderKind::BOTTOM_RIGHT_CONVEX);
     break;
 
   // 1 0
   // 0 1
   case 9:
-    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONCAVE);
-    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONCAVE);
+    set_which_border(cell_1, BorderKind::TOP_RIGHT_CONCAVE);
+    set_which_border(cell_2, BorderKind::BOTTOM_LEFT_CONCAVE);
     break;
 
   // 1 0
   // 1 0
   case 10:
     if (!has_border(cell_1)) {
-      set_which_border(cell_1, WhichBorder::RIGHT);
+      set_which_border(cell_1, BorderKind::RIGHT);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, WhichBorder::RIGHT);
+      set_which_border(cell_3, BorderKind::RIGHT);
     }
     break;
 
   // 1 0
   // 1 1
   case 11:
-    set_which_border(cell_1, WhichBorder::TOP_RIGHT_CONCAVE);
+    set_which_border(cell_1, BorderKind::TOP_RIGHT_CONCAVE);
     break;
 
   // 1 1
   // 0 0
   case 12:
     if (!has_border(cell_2)) {
-      set_which_border(cell_2, WhichBorder::BOTTOM);
+      set_which_border(cell_2, BorderKind::BOTTOM);
     }
     if (!has_border(cell_3)) {
-      set_which_border(cell_3, WhichBorder::BOTTOM);
+      set_which_border(cell_3, BorderKind::BOTTOM);
     }
     break;
 
   // 1 1
   // 0 1
   case 13:
-    set_which_border(cell_2, WhichBorder::BOTTOM_LEFT_CONCAVE);
+    set_which_border(cell_2, BorderKind::BOTTOM_LEFT_CONCAVE);
     break;
 
   // 1 1
   // 1 0
   case 14:
-    set_which_border(cell_3, WhichBorder::BOTTOM_RIGHT_CONCAVE);
+    set_which_border(cell_3, BorderKind::BOTTOM_RIGHT_CONCAVE);
     break;
 
   // 1 1
@@ -491,18 +491,18 @@ void AutoTiler::detect_border_info_outer(int cell_0) {
  * @param num_cells_repeat On how many cells of the 8x8 grid the pattern should be repeated
  * (ignored for corners).
  */
-void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cells_repeat) {
+void AutoTiler::make_tile(BorderKind which_border, int grid_index, int num_cells_repeat) {
 
-  if (which_border == WhichBorder::NONE) {
+  if (which_border == BorderKind::NONE) {
     return;
   }
   Q_ASSERT(num_cells_repeat > 0);
 
   QPoint xy = to_map_xy(grid_index);
   QSize size;
-  const QString& pattern_id = border_set.get_pattern(which_border);
+  const TilesetModel& tileset = get_tileset();
+  const QString& pattern_id = tileset.get_border_set_pattern(border_set_id, which_border);
 
-  const TilesetModel& tileset = *map.get_tileset_model();
   if (!tileset.pattern_exists(pattern_id)) {
     // No tile to create for this border.
     return;
@@ -514,13 +514,13 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
 
   switch (which_border) {
 
-  case WhichBorder::RIGHT:
-  case WhichBorder::LEFT:
+  case BorderKind::RIGHT:
+  case BorderKind::LEFT:
     size = { pattern_size.width(), size_repeated };
     break;
 
-  case WhichBorder::TOP:
-  case WhichBorder::BOTTOM:
+  case BorderKind::TOP:
+  case BorderKind::BOTTOM:
     size = { size_repeated, pattern_size.height() };
     break;
 
@@ -545,11 +545,20 @@ void AutoTiler::make_tile(WhichBorder which_border, int grid_index, int num_cell
 }
 
 /**
+ * @brief Returns the current tileset.
+ * @return The tileset.
+ */
+const TilesetModel& AutoTiler::get_tileset() const {
+
+  return *map.get_tileset_model();
+}
+
+/**
  * @brief Returns the base size of a border pattern.
  * @param which_border A type of border.
  * @return The corresponding size.
  */
-const QSize& AutoTiler::get_pattern_size(WhichBorder which_border) const {
+const QSize& AutoTiler::get_pattern_size(BorderKind which_border) const {
 
   return pattern_sizes[static_cast<int>(which_border)];
 }
@@ -561,10 +570,10 @@ void AutoTiler::compute_pattern_sizes() {
 
   pattern_sizes.clear();
 
-  const TilesetModel& tileset = *map.get_tileset_model();
+  const TilesetModel& tileset = get_tileset();
 
   for (int i = 0; i < 12; ++i) {
-    const QString& pattern_id = border_set.get_pattern(static_cast<WhichBorder>(i));
+    const QString& pattern_id = tileset.get_border_set_pattern(border_set_id, static_cast<BorderKind>(i));
     QSize pattern_size;
     if (tileset.pattern_exists(pattern_id)) {
       pattern_size = tileset.get_pattern_frame(tileset.id_to_index(pattern_id)).size();
@@ -665,8 +674,8 @@ void AutoTiler::print_which_borders() const {
   int index = 0;
   for (int i = 0; i < grid_size.height(); ++i) {
     for (int j = 0; j < grid_size.width(); ++j) {
-      WhichBorder which_border = get_which_border(index);
-      if (which_border != WhichBorder::NONE) {
+      BorderKind which_border = get_which_border(index);
+      if (which_border != BorderKind::NONE) {
         std::cout << std::setw(2) << static_cast<int>(which_border) << " ";
       }
       else {
@@ -684,7 +693,7 @@ void AutoTiler::print_which_borders() const {
  */
 void AutoTiler::compute_tiles() {
 
-  if (border_set.is_inner()) {
+  if (get_tileset().is_border_set_inner(border_set_id)) {
     compute_tiles_inner();
   }
   else {
@@ -705,14 +714,14 @@ void AutoTiler::compute_tiles_inner() {
   for (const auto& it : which_borders) {
 
     int start_index = it.first;
-    WhichBorder which_border = it.second;
+    BorderKind which_border = it.second;
 
     int grid_x = start_index % grid_size.width();
     int grid_y = start_index / grid_size.width();
     int num_cells_repeat = 1;
     int current_index = start_index;
 
-    if (which_border == WhichBorder::NONE) {
+    if (which_border == BorderKind::NONE) {
       continue;
     }
 
@@ -720,15 +729,19 @@ void AutoTiler::compute_tiles_inner() {
       continue;
     }
 
-    set_which_border(start_index, WhichBorder::NONE);  // Mark visited.
+    set_which_border(start_index, BorderKind::NONE);  // Mark visited.
 
-    if (which_border == WhichBorder::RIGHT ||
-        which_border == WhichBorder::LEFT) {
+    if (!get_tileset().has_border_set_pattern(border_set_id, which_border)) {
+      continue;
+    }
+
+    if (which_border == BorderKind::RIGHT ||
+        which_border == BorderKind::LEFT) {
 
       // Right or left vertical border.
-      WhichBorder corner_1 = get_which_border(start_index - grid_size.width());
+      BorderKind corner_1 = get_which_border(start_index - grid_size.width());
 
-      if (which_border == WhichBorder::RIGHT) {
+      if (which_border == BorderKind::RIGHT) {
         // Right border: translate to the left because of the thickness.
         int width = get_pattern_size(which_border).width();
         start_index -= width / 8 - 1;
@@ -741,9 +754,9 @@ void AutoTiler::compute_tiles_inner() {
           break;
         }
         ++num_cells_repeat;
-        set_which_border(current_index, WhichBorder::NONE);
+        set_which_border(current_index, BorderKind::NONE);
       }
-      WhichBorder corner_2 = get_which_border(current_index);
+      BorderKind corner_2 = get_which_border(current_index);
 
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
@@ -781,9 +794,9 @@ void AutoTiler::compute_tiles_inner() {
 
     else {
       // Top or bottom horizontal border.
-      WhichBorder corner_1 = get_which_border(start_index - 1);
+      BorderKind corner_1 = get_which_border(start_index - 1);
 
-      if (which_border == WhichBorder::BOTTOM) {
+      if (which_border == BorderKind::BOTTOM) {
         // Bottom border: translate to the top because of the thickness.
         int height = get_pattern_size(which_border).height();
         start_index -= (height / 8 - 1) * grid_size.width();
@@ -796,9 +809,9 @@ void AutoTiler::compute_tiles_inner() {
           break;
         }
         ++num_cells_repeat;
-        set_which_border(current_index, WhichBorder::NONE);
+        set_which_border(current_index, BorderKind::NONE);
       }
-      WhichBorder corner_2 = get_which_border(current_index);
+      BorderKind corner_2 = get_which_border(current_index);
 
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
@@ -838,23 +851,27 @@ void AutoTiler::compute_tiles_inner() {
   // Generate corners.
   for (const auto& it : which_borders) {
     int start_index = it.first;
-    WhichBorder which_border = it.second;
+    BorderKind which_border = it.second;
+
+    if (!get_tileset().has_border_set_pattern(border_set_id, which_border)) {
+      continue;
+    }
 
     if (
-        which_border == WhichBorder::TOP_RIGHT_CONVEX ||
-        which_border == WhichBorder::TOP_RIGHT_CONCAVE ||
-        which_border == WhichBorder::BOTTOM_RIGHT_CONVEX ||
-        which_border == WhichBorder::BOTTOM_RIGHT_CONCAVE
+        which_border == BorderKind::TOP_RIGHT_CONVEX ||
+        which_border == BorderKind::TOP_RIGHT_CONCAVE ||
+        which_border == BorderKind::BOTTOM_RIGHT_CONVEX ||
+        which_border == BorderKind::BOTTOM_RIGHT_CONCAVE
     ) {
       int width = get_pattern_size(which_border).width();
       start_index -= width / 8 - 1;
     }
 
     if (
-        which_border == WhichBorder::BOTTOM_RIGHT_CONVEX ||
-        which_border == WhichBorder::BOTTOM_RIGHT_CONCAVE ||
-        which_border == WhichBorder::BOTTOM_LEFT_CONVEX ||
-        which_border == WhichBorder::BOTTOM_LEFT_CONCAVE
+        which_border == BorderKind::BOTTOM_RIGHT_CONVEX ||
+        which_border == BorderKind::BOTTOM_RIGHT_CONCAVE ||
+        which_border == BorderKind::BOTTOM_LEFT_CONVEX ||
+        which_border == BorderKind::BOTTOM_LEFT_CONCAVE
     ) {
       int height = get_pattern_size(which_border).height();
       start_index -= (height / 8 - 1) * grid_size.width();
@@ -879,14 +896,14 @@ void AutoTiler::compute_tiles_outer() {
   for (const auto& it : which_borders) {
 
     int start_index = it.first;
-    WhichBorder which_border = it.second;
+    BorderKind which_border = it.second;
 
     int grid_x = start_index % grid_size.width();
     int grid_y = start_index / grid_size.width();
     int num_cells_repeat = 1;
     int current_index = start_index;
 
-    if (which_border == WhichBorder::NONE) {
+    if (which_border == BorderKind::NONE) {
       continue;
     }
 
@@ -894,15 +911,19 @@ void AutoTiler::compute_tiles_outer() {
       continue;
     }
 
-    set_which_border(start_index, WhichBorder::NONE);  // Mark visited.
+    set_which_border(start_index, BorderKind::NONE);  // Mark visited.
 
-    if (which_border == WhichBorder::RIGHT ||
-        which_border == WhichBorder::LEFT) {
+    if (!get_tileset().has_border_set_pattern(border_set_id, which_border)) {
+      continue;
+    }
+
+    if (which_border == BorderKind::RIGHT ||
+        which_border == BorderKind::LEFT) {
 
       // Right or left vertical border.
-      WhichBorder corner_1 = get_which_border(start_index - grid_size.width());
+      BorderKind corner_1 = get_which_border(start_index - grid_size.width());
 
-      if (which_border == WhichBorder::LEFT) {
+      if (which_border == BorderKind::LEFT) {
         // Left border: translate to the left because of the thickness.
         int width = get_pattern_size(which_border).width();
         start_index -= width / 8 - 1;
@@ -915,9 +936,9 @@ void AutoTiler::compute_tiles_outer() {
           break;
         }
         ++num_cells_repeat;
-        set_which_border(current_index, WhichBorder::NONE);
+        set_which_border(current_index, BorderKind::NONE);
       }
-      WhichBorder corner_2 = get_which_border(current_index);
+      BorderKind corner_2 = get_which_border(current_index);
 
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
@@ -955,9 +976,9 @@ void AutoTiler::compute_tiles_outer() {
 
     else {
       // Top or bottom horizontal border.
-      WhichBorder corner_1 = get_which_border(start_index - 1);
+      BorderKind corner_1 = get_which_border(start_index - 1);
 
-      if (which_border == WhichBorder::TOP) {
+      if (which_border == BorderKind::TOP) {
         // Top border: translate to the top because of the thickness.
         int height = get_pattern_size(which_border).height();
         start_index -= (height / 8 - 1) * grid_size.width();
@@ -970,9 +991,9 @@ void AutoTiler::compute_tiles_outer() {
           break;
         }
         ++num_cells_repeat;
-        set_which_border(current_index, WhichBorder::NONE);
+        set_which_border(current_index, BorderKind::NONE);
       }
-      WhichBorder corner_2 = get_which_border(current_index);
+      BorderKind corner_2 = get_which_border(current_index);
 
       Q_ASSERT(is_corner_border(corner_1));
       Q_ASSERT(is_corner_border(corner_2));
@@ -1012,22 +1033,26 @@ void AutoTiler::compute_tiles_outer() {
   // Generate corners.
   for (const auto& it : which_borders) {
     int start_index = it.first;
-    WhichBorder which_border = it.second;
+    BorderKind which_border = it.second;
+
+    if (!get_tileset().has_border_set_pattern(border_set_id, which_border)) {
+      continue;
+    }
 
     if (
-        which_border == WhichBorder::TOP_LEFT_CONVEX ||
-        which_border == WhichBorder::TOP_LEFT_CONCAVE ||
-        which_border == WhichBorder::BOTTOM_LEFT_CONVEX ||
-        which_border == WhichBorder::BOTTOM_LEFT_CONCAVE
+        which_border == BorderKind::TOP_LEFT_CONVEX ||
+        which_border == BorderKind::TOP_LEFT_CONCAVE ||
+        which_border == BorderKind::BOTTOM_LEFT_CONVEX ||
+        which_border == BorderKind::BOTTOM_LEFT_CONCAVE
     ) {
       int width = get_pattern_size(which_border).width();
       start_index -= width / 8 - 1;
     }
     if (
-        which_border == WhichBorder::TOP_RIGHT_CONVEX ||
-        which_border == WhichBorder::TOP_RIGHT_CONCAVE ||
-        which_border == WhichBorder::TOP_LEFT_CONVEX ||
-        which_border == WhichBorder::TOP_LEFT_CONCAVE
+        which_border == BorderKind::TOP_RIGHT_CONVEX ||
+        which_border == BorderKind::TOP_RIGHT_CONCAVE ||
+        which_border == BorderKind::TOP_LEFT_CONVEX ||
+        which_border == BorderKind::TOP_LEFT_CONCAVE
     ) {
       int height = get_pattern_size(which_border).height();
       start_index -= (height / 8 - 1) * grid_size.width();
