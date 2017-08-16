@@ -40,7 +40,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>563</width>
+         <width>562</width>
          <height>692</height>
         </rect>
        </property>
@@ -159,7 +159,7 @@
         <item>
          <widget class="QTabWidget" name="patterns_border_sets_tab_widget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="patterns_view">
            <property name="sizePolicy">

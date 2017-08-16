@@ -61,40 +61,40 @@ QString EnumTraits<BorderKind>::get_friendly_name(BorderKind value) {
     return QApplication::tr("None");
 
   case BorderKind::RIGHT:
-    return QApplication::tr("Right");
+    return QApplication::tr("Right side");
 
   case BorderKind::TOP:
-    return QApplication::tr("Top");
+    return QApplication::tr("Top side");
 
   case BorderKind::LEFT:
-    return QApplication::tr("Left");
+    return QApplication::tr("Left side");
 
   case BorderKind::BOTTOM:
-    return QApplication::tr("Bottom");
+    return QApplication::tr("Bottom side");
 
   case BorderKind::TOP_RIGHT_CONVEX:
-    return QApplication::tr("Top-right (convex)");
+    return QApplication::tr("Top-right corner (convex)");
 
   case BorderKind::TOP_LEFT_CONVEX:
-    return QApplication::tr("Top-left (convex)");
+    return QApplication::tr("Top-left corner (convex)");
 
   case BorderKind::BOTTOM_LEFT_CONVEX:
-    return QApplication::tr("Bottom-left (convex)");
+    return QApplication::tr("Bottom-left corner (convex)");
 
   case BorderKind::BOTTOM_RIGHT_CONVEX:
-    return QApplication::tr("Bottom-right (convex)");
+    return QApplication::tr("Bottom-right corner (convex)");
 
   case BorderKind::TOP_RIGHT_CONCAVE:
-    return QApplication::tr("Top-right (concave)");
+    return QApplication::tr("Top-right corner (concave)");
 
   case BorderKind::TOP_LEFT_CONCAVE:
-    return QApplication::tr("Top-left (concave)");
+    return QApplication::tr("Top-left corner (concave)");
 
   case BorderKind::BOTTOM_LEFT_CONCAVE:
-    return QApplication::tr("Bottom-left (concave)");
+    return QApplication::tr("Bottom-left corner (concave)");
 
   case BorderKind::BOTTOM_RIGHT_CONCAVE:
-    return QApplication::tr("Bottom-right (concave)");
+    return QApplication::tr("Bottom-right corner (concave)");
 
   }
 

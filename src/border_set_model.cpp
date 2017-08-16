@@ -141,13 +141,16 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
     if (row < 0 || row >= tileset.get_num_border_sets()) {
       return QVariant();
     }
+    const QString& border_set_id = get_border_set_id(row);
 
     switch (role) {
-        case Qt::DisplayRole:
+
+    case Qt::DisplayRole:
 
       if (column == 0) {
-        return *border_set_ids[row].id;
+        return border_set_id;
       }
+      break;
 
     }
 
@@ -161,24 +164,35 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
 
     const QModelIndex& border_set_item = model_index.parent();
     const QString& border_set_id = get_border_set_id(border_set_item.row());
+    BorderKind border_kind = static_cast<BorderKind>(row);
+    const QString& pattern_id = tileset.get_border_set_pattern(border_set_id, border_kind);
 
-    switch (role) {
+    if (column == 0) {
+      switch (role) {
 
-    case Qt::DisplayRole:
-    {
-      BorderKind border_kind = static_cast<BorderKind>(row);
-      if (column == 1) {
-        // Name of the pattern.
-        return tileset.get_border_set_pattern(border_set_id, border_kind);
-      }
-      else if (column == 0) {
+      case Qt::DisplayRole:
         // Name of the border kind.
         // TODO *only* show the icon instead.
         return BorderKindTraits::get_friendly_name(border_kind);
+
+      case Qt::ToolTipRole:
+        // Name of the border kind.
+        return BorderKindTraits::get_friendly_name(border_kind);
       }
     }
+    else if (column == 1) {
 
-    }  // switch
+      switch (role) {
+
+      case Qt::DecorationRole:
+        // Pattern icon.
+        return tileset.get_pattern_icon(tileset.id_to_index(pattern_id));
+
+      case Qt::DisplayRole:
+        // Name of the pattern.
+        return pattern_id;
+      }
+    }
   }
 
   return QVariant();
