@@ -170,10 +170,9 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
     if (column == 0) {
       switch (role) {
 
-      case Qt::DisplayRole:
-        // Name of the border kind.
-        // TODO *only* show the icon instead.
-        return BorderKindTraits::get_friendly_name(border_kind);
+      case Qt::DecorationRole:
+        // Icon representing the border kind.
+        return QIcon(QString(":/images/border_kind_%1.png").arg(row));
 
       case Qt::ToolTipRole:
         // Name of the border kind.
