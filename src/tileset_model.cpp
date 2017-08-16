@@ -1249,7 +1249,7 @@ QPixmap TilesetModel::get_pattern_icon(int index) const {
   // Make sure we have an alpha channel.
   image = image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
 
-  if (image.height() <= 16) {
+  if (image.height() <= 16 && image.width() <= 16) {
     image = image.scaledToHeight(image.height() * 2);
   }
   else if (image.height() > 32) {
