@@ -28,8 +28,10 @@
 #include "view_settings.h"
 #include <QAction>
 #include <QApplication>
+#include <QDrag>
 #include <QGraphicsItem>
 #include <QMenu>
+#include <QMimeData>
 #include <QMouseEvent>
 #include <QScrollBar>
 
@@ -845,6 +847,14 @@ void TilesetView::start_state_moving_pattern(const QPoint& initial_point) {
     scene->addItem(item);
     current_area_items.append(item);
   }
+
+  /* Test standard drag-and-drop.
+  QMimeData* data = new QMimeData();
+  QDrag* drag = new QDrag(this);
+  drag->setMimeData(data);
+  drag->setPixmap(model->get_pattern_icon(model->get_selected_indexes().first()));
+  drag->start();
+  */
 }
 
 /**
