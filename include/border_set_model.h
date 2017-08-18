@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_BORDER_SET_MODEL_H
 #define SOLARUSEDITOR_BORDER_SET_MODEL_H
 
+#include "border_kind_traits.h"
 #include <QAbstractItemModel>
 #include <memory>
 
@@ -38,8 +39,8 @@ public:
   int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-  QModelIndex parent(const QModelIndex& model_index) const override;
-  QVariant data(const QModelIndex& model_index, int role) const override;
+  QModelIndex parent(const QModelIndex& index) const override;
+  QVariant data(const QModelIndex& index, int role) const override;
   Qt::ItemFlags flags(const QModelIndex& index) const override;
 
   QStringList mimeTypes() const override;
@@ -60,28 +61,33 @@ public:
       const QModelIndex& parent
   ) override;
 
-  QString get_border_set_id(int row) const;
+  bool is_border_set_index(const QModelIndex& index) const;
+  bool is_pattern_index(const QModelIndex& index) const;
+  QString get_border_set_id(const QModelIndex& index) const;
+  QString get_pattern_id(const QModelIndex& index) const;
+  BorderKind get_border_kind(const QModelIndex& index) const;
+  QPair<QString, QString> get_pattern_info(const QModelIndex& index) const;
 
 private:
 
   /**
    * @brief Data of a specific border set.
    */
-  struct BorderSetId {
+  struct BorderSetIndex {
 
     /**
      * @brief Creates a border set id.
      * @param id Name of the border set.
      */
-    explicit BorderSetId(const QString& id) :
-      id(new QString(id)) {
+    explicit BorderSetIndex(const QString& border_set_id) :
+      border_set_id(new QString(border_set_id)) {
     }
 
-    std::shared_ptr<QString> id;
+    std::shared_ptr<QString> border_set_id;
   };
 
-  TilesetModel& tileset;             /**< The tileset represented by this model. */
-  QList<BorderSetId> border_set_ids; /**< Ids of the border sets in the model. */
+  TilesetModel& tileset;                     /**< The tileset represented by this model. */
+  QList<BorderSetIndex> border_set_indexes;  /**< Ids of the border sets in the model. */
 };
 
 }

@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "border_kind_traits.h"
 #include "border_set_model.h"
 #include "tileset_model.h"
 #include <QMimeData>
@@ -31,7 +30,7 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
   tileset(tileset) {
 
   Q_FOREACH(const QString& border_set_id, tileset.get_border_set_ids()) {
-    border_set_ids << BorderSetId(border_set_id);
+    border_set_indexes << BorderSetIndex(border_set_id);
   }
 }
 
@@ -58,8 +57,7 @@ int BorderSetModel::rowCount(const QModelIndex& parent) const {
     return num_rows;
   }
 
-  const QModelIndex& grand_parent = parent.parent();
-  if (!grand_parent.isValid()) {
+  if (is_border_set_index(parent)) {
     // Border set item.
     return 12;
   }
@@ -85,7 +83,7 @@ QModelIndex BorderSetModel::index(int row, int column, const QModelIndex& parent
   }
 
   // Pattern item.
-  return createIndex(row, column, border_set_ids[parent.row()].id.get());
+  return createIndex(row, column, border_set_indexes[parent.row()].border_set_id.get());
 }
 
 /**
@@ -93,24 +91,24 @@ QModelIndex BorderSetModel::index(int row, int column, const QModelIndex& parent
  * @param index Index to get the parent of.
  * @return The parent index, or an invalid index if the item has no parent.
  */
-QModelIndex BorderSetModel::parent(const QModelIndex& model_index) const {
+QModelIndex BorderSetModel::parent(const QModelIndex& index) const {
 
-  if (!model_index.isValid()) {
+  if (!index.isValid()) {
     // Root item.
     return QModelIndex();
   }
 
-  void* internal_pointer = model_index.internalPointer();
-  if (internal_pointer == nullptr) {
+  if (is_border_set_index(index)) {
     // Border set item: parent is root.
     return QModelIndex();
   }
 
-  const QString& border_set_id = *static_cast<QString*>(internal_pointer);
+  const QString& border_set_id = get_border_set_id(index);
   // TODO store a QString -> int cache
   for (int row = 0; row < rowCount(); ++row) {
-    if (get_border_set_id(row) == border_set_id) {
-      return index(row, 0);
+    QModelIndex row_index = this->index(row, 0);
+    if (get_border_set_id(row_index) == border_set_id) {
+      return row_index;
     }
   }
   return QModelIndex();
@@ -122,27 +120,29 @@ QModelIndex BorderSetModel::parent(const QModelIndex& model_index) const {
  * @param role The wanted role.
  * @return The data.
  */
-QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
+QVariant BorderSetModel::data(const QModelIndex& index, int role) const {
 
-  if (!model_index.isValid()) {
+  if (!index.isValid()) {
     return QVariant();
   }
 
-  int row = model_index.row();
-  int column = model_index.column();
+  int row = index.row();
+  int column = index.column();
 
   if (column < 0 || column >= columnCount()) {
     return QVariant();
   }
 
-  const QModelIndex& parent = model_index.parent();
-  if (!parent.isValid()) {
+  const QString border_set_id = get_border_set_id(index);
+  const QString pattern_id = get_pattern_id(index);
+  BorderKind border_kind = get_border_kind(index);
+
+  if (is_border_set_index(index)) {
     // Border set item.
 
     if (row < 0 || row >= tileset.get_num_border_sets()) {
       return QVariant();
     }
-    const QString& border_set_id = get_border_set_id(row);
 
     switch (role) {
 
@@ -156,17 +156,12 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
     }
 
   }
-  else {
+  else if (is_pattern_index(index)) {
     // Pattern item.
 
     if (row < 0 || row >= 12) {
       return QVariant();
     }
-
-    const QModelIndex& border_set_item = model_index.parent();
-    const QString& border_set_id = get_border_set_id(border_set_item.row());
-    BorderKind border_kind = static_cast<BorderKind>(row);
-    const QString& pattern_id = tileset.get_border_set_pattern(border_set_id, border_kind);
 
     if (column == 0) {
       switch (role) {
@@ -199,9 +194,9 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
 }
 
 /**
- * \brief Returns the flags of the given index.
- * \param index A model index.
- * \return The corresponding flags.
+ * @brief Returns the flags of the given index.
+ * @param index A model index.
+ * @return The corresponding flags.
  */
 Qt::ItemFlags BorderSetModel::flags(const QModelIndex& index) const {
 
@@ -219,17 +214,17 @@ Qt::ItemFlags BorderSetModel::flags(const QModelIndex& index) const {
 }
 
 /**
- * \brief Returns the MIME types supported by drag and drop operations.
- * \return The plain text mime type.
+ * @brief Returns the MIME types supported by drag and drop operations.
+ * @return The plain text mime type.
  */
 QStringList BorderSetModel::mimeTypes() const {
   return QStringList() << "text/plain";
 }
 
 /**
- * \brief Returns serialized data corresponding to the given indexes.
- * \param indexes A list of indexes.
- * \return The corresponding MIME data.
+ * @brief Returns serialized data corresponding to the given indexes.
+ * @param indexes A list of indexes.
+ * @return The corresponding MIME data.
  */
 QMimeData* BorderSetModel::mimeData(const QModelIndexList& indexes) const {
 
@@ -245,8 +240,8 @@ QMimeData* BorderSetModel::mimeData(const QModelIndexList& indexes) const {
 }
 
 /**
- * \brief Returns the drop actions supported by this model.
- * \return The drop actions.
+ * @brief Returns the drop actions supported by this model.
+ * @return The drop actions.
  */
 Qt::DropActions BorderSetModel::supportedDropActions() const {
 
@@ -255,13 +250,13 @@ Qt::DropActions BorderSetModel::supportedDropActions() const {
 
 
 /**
- * \brief Handles dropping serialized data at the given place.
- * \param data The data to drop.
- * \param action The drop action.
- * \param row Row just after the drop.
- * \param column Column of the drop.
- * \param parent Parent index where the drop occurs.
- * \return \c true if the drop is possible there.
+ * @brief Handles dropping serialized data at the given place.
+ * @param data The data to drop.
+ * @param action The drop action.
+ * @param row Row just after the drop.
+ * @param column Column of the drop.
+ * @param parent Parent index where the drop occurs.
+ * @return @c true if the drop is possible there.
  */
 bool BorderSetModel::canDropMimeData(
     const QMimeData* data,
@@ -271,23 +266,22 @@ bool BorderSetModel::canDropMimeData(
     const QModelIndex& parent
 ) const {
 
-  Q_UNUSED(data);
   Q_UNUSED(action);
   Q_UNUSED(row);
   Q_UNUSED(column);
   Q_UNUSED(parent);
-  // TODO
-  return true;
+
+  return data->hasText();
 }
 
 /**
- * \brief Handles dropping serialized data at the given place.
- * \param data The data dropped.
- * \param action The drop action.
- * \param row Row just after the drop.
- * \param column Column of the drop.
- * \param parent Parent index where the drop occurs.
- * \return \c true if the drop was handled.
+ * @brief Handles dropping serialized data at the given place.
+ * @param data The data dropped.
+ * @param action The drop action.
+ * @param row Row just after the drop.
+ * @param column Column of the drop.
+ * @param parent Parent index where the drop occurs.
+ * @return @c true if the drop was handled.
  */
 bool BorderSetModel::dropMimeData(
     const QMimeData* data,
@@ -307,14 +301,119 @@ bool BorderSetModel::dropMimeData(
 }
 
 /**
- * @brief Returns the border set id of the given row.
- * @param row A row from the root item.
- * @return The corresponding border set id.
+ * @brief Returns whether a model index corresponds to a border set item.
+ * @param index A model index.
+ * @return @c true if this is a border set index.
  */
-QString BorderSetModel::get_border_set_id(int row) const {
+bool BorderSetModel::is_border_set_index(const QModelIndex& index) const {
 
-  Q_ASSERT(row >= 0 && row < border_set_ids.size());
-  return *border_set_ids[row].id.get();
+  if (!index.isValid()) {
+    // Root item.
+    return false;
+  }
+
+  void* internal_pointer = index.internalPointer();
+  if (internal_pointer == nullptr) {
+    // Border set index.
+    return true;
+  }
+
+  // Pattern index.
+  return false;
+}
+
+/**
+ * @brief Returns whether a model index corresponds to a pattern item.
+ * @param index A model index.
+ * @return @c true if this is a pattern index.
+ */
+bool BorderSetModel::is_pattern_index(const QModelIndex& index) const {
+
+  if (!index.isValid()) {
+    // Root item.
+    return false;
+  }
+
+  void* internal_pointer = index.internalPointer();
+  if (internal_pointer == nullptr) {
+    // Border set index.
+    return false;
+  }
+
+  // Pattern index.
+  return true;
+}
+
+/**
+ * @brief Returns the border set id of the given index.
+ * @param index An item index.
+ * @return The corresponding border set id if this is a border set item
+ * or a pattern item, or an empty string otherwise.
+ */
+QString BorderSetModel::get_border_set_id(const QModelIndex& index) const {
+
+  if (is_border_set_index(index)) {
+
+    int row = index.row();
+    if (row < 0 || row >= tileset.get_num_border_sets()) {
+      return QString();
+    }
+
+    return *border_set_indexes[row].border_set_id.get();
+  }
+
+  if (is_pattern_index(index)) {
+    void* internal_pointer = index.internalPointer();
+    return *static_cast<QString*>(internal_pointer);
+  }
+
+  return QString();
+}
+
+/**
+ * @brief Returns the pattern id of the given index.
+ * @param index An item index.
+ * @return The corresponding pattern id if this is a pattern item,
+ * or an empty string otherwise.
+ */
+QString BorderSetModel::get_pattern_id(const QModelIndex& index) const {
+
+  if (!is_pattern_index(index)) {
+    return QString();
+  }
+
+  if (index.row() < 0 || index.row() >= 12) {
+    return QString();
+  }
+
+  BorderKind border_kind = get_border_kind(index);
+  const QString& border_set_id = get_border_set_id(index);
+  return tileset.get_border_set_pattern(border_set_id, border_kind);
+}
+
+/**
+ * @brief Returns the border kind of the pattern at the given index.
+ * @param index An item index.
+ * @return The corresponding border kind if this is a pattern item,
+ * or @c BorderKind::NONE otherwise.
+ */
+BorderKind BorderSetModel::get_border_kind(const QModelIndex& index) const {
+
+  if (!is_pattern_index(index)) {
+    return BorderKind::NONE;
+  }
+
+  return static_cast<BorderKind>(index.row());
+}
+
+/**
+ * @brief Returns the border set id and pattern id of the given index.
+ * @param index An item index.
+ * @return The corresponding border set id and pattern id if any.
+ */
+QPair<QString, QString> BorderSetModel::get_pattern_info(const QModelIndex& index) const {
+
+  return qMakePair(get_border_set_id(index), get_pattern_id(index));
 }
 
 }
