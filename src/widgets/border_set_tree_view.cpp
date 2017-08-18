@@ -49,7 +49,9 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
   model = new BorderSetModel(tileset);
   setModel(model);
   expandAll();
-  resizeColumnToContents(0);
+  if (tileset.get_num_border_sets() > 0) {
+    resizeColumnToContents(0);
+  }
 
   connect(model, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SIGNAL(change_border_set_patterns_requested(QString, QStringList)));
@@ -58,8 +60,14 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
           [this](const QString& border_set_id) {
     QModelIndex index = this->model->get_border_set_index(border_set_id);
     expand(index);
+    resizeColumnToContents(0);
     selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
     scrollTo(index, ScrollHint::PositionAtTop);
+  });
+
+  connect(&tileset, &TilesetModel::border_set_deleted,
+          [this](const QString&) {
+    resizeColumnToContents(0);
   });
 
 }
