@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_BORDER_SET_TREE_VIEW_H
 #define SOLARUSEDITOR_BORDER_SET_TREE_VIEW_H
 
+#include "border_kind_traits.h"
 #include <QTreeView>
 
 namespace SolarusEditor {
@@ -41,6 +42,7 @@ public:
 signals:
 
   void delete_border_sets_requested(const QStringList& border_set_ids);
+  void delete_border_set_patterns_requested(const QList<QPair<QString, BorderKind>>& patterns);
   void change_border_set_patterns_requested(
       const QString& border_set_id,
       const QStringList& pattern_ids

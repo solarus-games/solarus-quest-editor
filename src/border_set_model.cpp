@@ -204,18 +204,17 @@ Qt::ItemFlags BorderSetModel::flags(const QModelIndex& index) const {
 
   Qt::ItemFlags flags = QAbstractItemModel::flags(index);
 
-  flags = flags | Qt::ItemIsDropEnabled;
+  flags = flags | Qt::ItemIsDropEnabled | Qt::ItemIsSelectable;
 
   if (is_pattern_index(index)) {
     if (index.column() == 0) {
       flags = flags & ~Qt::ItemIsDragEnabled & ~Qt::ItemIsSelectable;
     }
     else if (index.column() == 1) {
-      flags = flags | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+      if (!get_pattern_id(index).isEmpty()) {
+        flags = flags | Qt::ItemIsDragEnabled;
+      }
     }
-  }
-  else if (is_border_set_index(index)) {
-    flags = flags | Qt::ItemIsSelectable;
   }
 
   return flags;
@@ -522,6 +521,7 @@ void BorderSetModel::border_set_created(const QString& border_set_id) {
     return;
   }
 
+  // TODO only works if only one was created
   const QStringList& border_set_ids = tileset.get_border_set_ids();
   int row = border_set_ids.indexOf(border_set_id);
 

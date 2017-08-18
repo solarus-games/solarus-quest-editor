@@ -667,6 +667,44 @@ private:
   QList<BorderSet> border_sets;
 };
 
+/**
+ * @brief Deleting patterns in border sets.
+ */
+class DeleteBorderSetPatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DeleteBorderSetPatternsCommand(TilesetEditor& editor, const QList<QPair<QString, BorderKind>>& patterns) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete border set pattern")),
+    patterns_deleted(patterns) {
+
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      pattern_ids_before << get_model().get_border_set_pattern(pattern.first, pattern.second);
+    }
+  }
+
+  virtual void undo() override {
+
+    int i = 0;
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      get_model().set_border_set_pattern(pattern.first, pattern.second, pattern_ids_before[i]);
+      ++i;
+    }
+  }
+
+  virtual void redo() override {
+
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      get_model().set_border_set_pattern(pattern.first, pattern.second, "");
+    }
+  }
+
+private:
+
+  QList<QPair<QString, BorderKind>> patterns_deleted;
+  QStringList pattern_ids_before;
+};
+
 }  // Anonymous namespace.
 
 /**
@@ -793,6 +831,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(delete_border_set_selection_requested()));
   connect(ui.border_sets_tree_view, SIGNAL(delete_border_sets_requested(QStringList)),
           this, SLOT(delete_border_sets_requested(QStringList)));
+  connect(ui.border_sets_tree_view, SIGNAL(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)),
+          this, SLOT(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)));
   connect(ui.border_sets_tree_view, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SLOT(change_border_set_patterns_requested(QString, QStringList)));
 
@@ -1476,6 +1516,19 @@ void TilesetEditor::delete_border_sets_requested(const QStringList& border_set_i
   }
 
   try_command(new DeleteBorderSetsCommand(*this, border_set_ids));
+}
+
+/**
+ * @brief Slot called when the user wants to delete some patterns in border sets.
+ * @param patterns The border patterns to delete and their border sets.
+ */
+void TilesetEditor::delete_border_set_patterns_requested(const QList<QPair<QString, BorderKind>>& patterns) {
+
+  if (patterns.isEmpty()) {
+    return;
+  }
+
+  try_command(new DeleteBorderSetPatternsCommand(*this, patterns));
 }
 
 /**

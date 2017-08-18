@@ -62,10 +62,17 @@ void BorderSetTreeView::delete_border_set_selection_requested() {
 
   const QModelIndexList& selected_indexes = selectionModel()->selectedIndexes();
   QStringList border_sets_to_delete;
+  QList<QPair<QString, BorderKind>> patterns_to_delete;
   Q_FOREACH(const QModelIndex& index, selected_indexes) {
+    const QString& border_set_id = model->get_border_set_id(index);
     if (model->is_border_set_index(index)) {
       // Delete a full border set.
-      border_sets_to_delete << model->get_border_set_id(index);
+      border_sets_to_delete << border_set_id;
+    }
+    else if (model->is_pattern_index(index)) {
+      if (!border_sets_to_delete.contains(border_set_id)) {
+        patterns_to_delete << qMakePair(border_set_id, model->get_border_kind(index));
+      }
     }
   }
 
@@ -73,7 +80,9 @@ void BorderSetTreeView::delete_border_set_selection_requested() {
     emit delete_border_sets_requested(border_sets_to_delete);
   }
 
-  // TODO also delete pattern items
+  if (!patterns_to_delete.isEmpty()) {
+    emit delete_border_set_patterns_requested(patterns_to_delete);
+  }
 }
 
 }
