@@ -133,6 +133,7 @@ public:
   void set_border_set_pattern(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id);
   bool has_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const;
   QStringList get_border_set_patterns(const QString& border_set_id) const;
+  void set_border_set_patterns(const QString& border_set_id, const QStringList& patterns);
   bool is_border_set_inner(const QString& border_set_id) const;
   void set_border_set_inner(const QString& border_set_id, bool inner);
   static bool is_valid_border_set_id(const QString& border_set_id);
@@ -156,7 +157,11 @@ signals:
   void border_set_created(const QString& border_set_id);
   void border_set_deleted(const QString& border_set_id);
   void border_set_id_changed(const QString& old_id, const QString& new_id);
-  void border_set_pattern_changed(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id);
+  void border_set_pattern_changed(
+      const QString& border_set_id,
+      BorderKind border_kind,
+      const QString& pattern_id
+  );
   void border_set_inner_changed(const QString& border_set_id, bool inner);
 
 public slots:

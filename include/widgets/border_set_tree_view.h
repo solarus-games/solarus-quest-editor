@@ -35,6 +35,13 @@ public:
 
   void set_tileset(TilesetModel& tileset);
 
+signals:
+
+  void change_border_set_patterns_requested(
+      const QString& border_set_id,
+      const QStringList& pattern_ids
+  );
+
 private:
 
   TilesetModel* tileset;              /**< The tileset model. */

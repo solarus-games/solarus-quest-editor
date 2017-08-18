@@ -35,7 +35,7 @@ BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
   setDragDropMode(DragDrop);
   setDragEnabled(true);
   setAcceptDrops(true);
-}
+  }
 
 /**
  * @brief Sets the tileset to represent in this view.
@@ -45,9 +45,13 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
 
   this->tileset = &tileset;
 
-  setModel(new BorderSetModel(tileset));
+  BorderSetModel* model = new BorderSetModel(tileset);
+  setModel(model);
   expandAll();
   resizeColumnToContents(0);
+
+  connect(model, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
+          this, SIGNAL(change_border_set_patterns_requested(QString, QStringList)));
 }
 
 }

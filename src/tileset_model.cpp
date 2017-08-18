@@ -1636,6 +1636,33 @@ QStringList TilesetModel::get_border_set_patterns(const QString& border_set_id) 
 }
 
 /**
+ * @brief Sets the list of border patterns for the given border set.
+ *
+ * Emits border_set_pattern_changed() for each pattern that changes.
+ *
+ * @param border_set_id A border set id.
+ * @param patterns The pattern ids in the order of the BorderKind enum.
+ * It must have 12 elements.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_patterns(
+    const QString& border_set_id,
+    const QStringList& patterns
+) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  Q_ASSERT(patterns.size() == 12);
+
+  for (int i = 0; i < 12; ++i) {
+    BorderKind border_kind = static_cast<BorderKind>(i);
+    set_border_set_pattern(border_set_id, border_kind, patterns[i]);
+  }
+}
+
+/**
  * @brief Returns whether a border set generates tiles inside or outside the countours.
  * @param border_set_id A border set id.
  * @return @c true if this is an inner border set.

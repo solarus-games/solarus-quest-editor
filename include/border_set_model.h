@@ -67,6 +67,26 @@ public:
   QString get_pattern_id(const QModelIndex& index) const;
   BorderKind get_border_kind(const QModelIndex& index) const;
   QPair<QString, QString> get_pattern_info(const QModelIndex& index) const;
+  QModelIndex get_border_set_index(const QString& border_set_id) const;
+  QModelIndex get_pattern_index(const QString& border_set_id, BorderKind border_kind) const;
+
+signals:
+
+  void change_border_set_patterns_requested(
+      const QString& border_set_id,
+      const QStringList& pattern_ids
+  );
+
+public slots:
+
+  void border_set_created(const QString& border_set_id);
+  void border_set_deleted(const QString& border_set_id);
+  void border_set_id_changed(const QString& old_id, const QString& new_id);
+  void border_set_pattern_changed(
+      const QString& border_set_id,
+      BorderKind border_kind,
+      const QString& pattern_id
+  );
 
 private:
 

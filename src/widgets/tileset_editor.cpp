@@ -589,7 +589,39 @@ private:
 
 };
 
-}
+/**
+ * @brief Changing the patterns of a border set.
+ */
+class SetBorderSetPatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  SetBorderSetPatternsCommand(
+      TilesetEditor& editor,
+      const QString& border_set_id,
+      const QStringList& pattern_ids) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Border set patterns")),
+    border_set_id(border_set_id),
+    pattern_ids_before(get_model().get_border_set_patterns(border_set_id)),
+    pattern_ids_after(pattern_ids) {
+  }
+
+  virtual void undo() override {
+    get_model().set_border_set_patterns(border_set_id, pattern_ids_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_border_set_patterns(border_set_id, pattern_ids_after);
+  }
+
+private:
+
+  QString border_set_id;
+  QStringList pattern_ids_before;
+  QStringList pattern_ids_after;
+};
+
+}  // Anonymous namespace.
 
 /**
  * @brief Creates a tileset editor.
@@ -710,6 +742,9 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(delete_selected_patterns_requested()));
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
+
+  connect(ui.border_sets_tree_view, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
+          this, SLOT(change_border_set_patterns_requested(QString, QStringList)));
 
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
@@ -1043,6 +1078,19 @@ bool TilesetEditor::change_pattern_id_in_map(
   out << content;
   file.close();
   return true;
+}
+
+/**
+ * @brief Slot called when the user wants to change a pattern in border set.
+ * @param border_set_id Id of the border set to change.
+ * @param pattern_ids New pattern id to set.
+ */
+void TilesetEditor::change_border_set_patterns_requested(
+    const QString& border_set_id,
+    const QStringList& pattern_ids
+) {
+
+  try_command(new SetBorderSetPatternsCommand(*this, border_set_id, pattern_ids));
 }
 
 /**

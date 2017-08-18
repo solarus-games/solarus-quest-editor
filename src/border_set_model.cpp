@@ -32,6 +32,15 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
   Q_FOREACH(const QString& border_set_id, tileset.get_border_set_ids()) {
     border_set_indexes << BorderSetIndex(border_set_id);
   }
+
+  connect(&tileset, SIGNAL(border_set_created(QString)),
+          this, SLOT(border_set_created(QString)));
+  connect(&tileset, SIGNAL(border_set_deleted(QString)),
+          this, SLOT(border_set_deleted(QString)));
+  connect(&tileset, SIGNAL(border_set_id_changed(QString, QString)),
+          this, SLOT(border_set_id_changed(QString, QString)));
+  connect(&tileset, SIGNAL(border_set_pattern_changed(QString, BorderKind, QString)),
+          this, SLOT(border_set_pattern_changed(QString, BorderKind, QString)));
 }
 
 /**
@@ -103,15 +112,9 @@ QModelIndex BorderSetModel::parent(const QModelIndex& index) const {
     return QModelIndex();
   }
 
+  // Pattern item: parent is a border set.
   const QString& border_set_id = get_border_set_id(index);
-  // TODO store a QString -> int cache
-  for (int row = 0; row < rowCount(); ++row) {
-    QModelIndex row_index = this->index(row, 0);
-    if (get_border_set_id(row_index) == border_set_id) {
-      return row_index;
-    }
-  }
-  return QModelIndex();
+  return get_border_set_index(border_set_id);
 }
 
 /**
@@ -311,13 +314,21 @@ bool BorderSetModel::dropMimeData(
     return false;
   }
 
-  const QString& pattern_id = pattern_ids.first();  // TODO support multiple patterns.
-
   if (is_pattern_index(parent)) {
     // Drop onto a pattern item.
     const QString& border_set_id = get_border_set_id(parent);
     BorderKind border_kind = get_border_kind(parent);
-    tileset.set_border_set_pattern(border_set_id, border_kind, pattern_id);
+
+    if (border_kind == BorderKind::NONE) {
+      return false;
+    }
+
+    pattern_ids = tileset.get_border_set_patterns(border_set_id);
+    const QString& pattern_id = pattern_ids.first();  // TODO support multiple patterns.
+    pattern_ids[static_cast<int>(border_kind)] = pattern_id;
+
+    emit change_border_set_patterns_requested(border_set_id, pattern_ids);
+    return true;
   }
 
   return false;
@@ -437,6 +448,73 @@ BorderKind BorderSetModel::get_border_kind(const QModelIndex& index) const {
 QPair<QString, QString> BorderSetModel::get_pattern_info(const QModelIndex& index) const {
 
   return qMakePair(get_border_set_id(index), get_pattern_id(index));
+}
+
+/**
+ * @brief Returns the model index of the given border set id.
+ * @param border_set_id A border set id.
+ * @return The model index, or an invalid one if there is no such border set.
+ */
+QModelIndex BorderSetModel::get_border_set_index(const QString& border_set_id) const {\
+
+  // TODO store a QString -> int cache
+  for (int row = 0; row < rowCount(); ++row) {
+
+    if (border_set_indexes[row].border_set_id.get() == border_set_id) {
+      return this->index(row, 0);
+    }
+  }
+
+  return QModelIndex();
+}
+
+/**
+ * @brief Returns the model index of the given border.
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to get.
+ * @return The model index, or an invalid one if there is no such border set.
+ */
+QModelIndex BorderSetModel::get_pattern_index(const QString& border_set_id, BorderKind border_kind) const {
+
+  if (border_kind == BorderKind::NONE) {
+    return QModelIndex();
+  }
+
+  int row = static_cast<int>(border_kind);
+  return this->index(row, 1, get_border_set_index(border_set_id));
+}
+
+
+void BorderSetModel::border_set_created(const QString& border_set_id) {
+  Q_UNUSED(border_set_id);
+}
+
+void BorderSetModel::border_set_deleted(const QString& border_set_id) {
+  Q_UNUSED(border_set_id);
+}
+
+void BorderSetModel::border_set_id_changed(const QString& old_id, const QString& new_id) {
+
+  Q_UNUSED(old_id);
+  Q_UNUSED(new_id);
+}
+
+/**
+ * @brief Slot called when a pattern id has changed in a border set.
+ * @param border_set_id Id of the border set that has changed.
+ * @param border_kind Kind of border changed.
+ * @param pattern_id The new pattern id or an empty string.
+ */
+void BorderSetModel::border_set_pattern_changed(
+    const QString& border_set_id,
+    BorderKind border_kind,
+    const QString& pattern_id
+) {
+
+  Q_UNUSED(pattern_id);
+  Q_ASSERT(border_kind != BorderKind::NONE);
+  QModelIndex top_left_index = get_pattern_index(border_set_id, border_kind);
+  emit dataChanged(top_left_index, top_left_index);
 }
 
 }

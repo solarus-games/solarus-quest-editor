@@ -77,6 +77,11 @@ public slots:
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
 
+  void change_border_set_patterns_requested(
+      const QString& border_set_id,
+      const QStringList& pattern_ids
+  );
+
 protected:
 
   void editor_made_visible() override;
