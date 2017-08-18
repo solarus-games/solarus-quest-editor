@@ -40,7 +40,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>562</width>
+         <width>563</width>
          <height>692</height>
         </rect>
        </property>
@@ -159,7 +159,7 @@
         <item>
          <widget class="QTabWidget" name="patterns_border_sets_tab_widget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="patterns_view">
            <property name="sizePolicy">
@@ -440,7 +440,16 @@
             <item>
              <layout class="QHBoxLayout" name="border_sets_layout">
               <item>
-               <widget class="SolarusEditor::BorderSetTreeView" name="border_sets_tree_view"/>
+               <widget class="SolarusEditor::BorderSetTreeView" name="border_sets_tree_view">
+                <property name="styleSheet">
+                 <string notr="true">QTreeView::item
+{
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+</string>
+                </property>
+               </widget>
               </item>
               <item>
                <layout class="QVBoxLayout" name="border_sets_buttons_layout">
