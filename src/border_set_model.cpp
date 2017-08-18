@@ -308,9 +308,9 @@ bool BorderSetModel::dropMimeData(
   }
 
   QString text = data->text();
-  QStringList pattern_ids_dropped = text.split("\n");
+  QStringList dropped_pattern_ids = text.split("\n");
 
-  if (pattern_ids_dropped.isEmpty()) {
+  if (dropped_pattern_ids.isEmpty()) {
     return false;
   }
 
@@ -324,8 +324,14 @@ bool BorderSetModel::dropMimeData(
     }
 
     QStringList pattern_ids = tileset.get_border_set_patterns(border_set_id);
-    const QString& pattern_id = pattern_ids_dropped.first();  // TODO support multiple patterns.
-    pattern_ids[static_cast<int>(border_kind)] = pattern_id;
+    int row = static_cast<int>(border_kind);
+    Q_FOREACH(const QString& dropped_pattern_id, dropped_pattern_ids) {
+      pattern_ids[row] = dropped_pattern_id;
+      ++row;
+      if (row >= 12) {
+        break;
+      }
+    }
 
     emit change_border_set_patterns_requested(border_set_id, pattern_ids);
     return true;

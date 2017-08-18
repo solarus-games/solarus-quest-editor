@@ -857,6 +857,7 @@ void TilesetView::start_state_moving_patterns(const QPoint& initial_point) {
   Q_FOREACH(int index, selected_indexes) {
     pattern_ids << model->index_to_id(index);
   }
+  std::sort(pattern_ids.begin(), pattern_ids.end());
   QString text_data = pattern_ids.join("\n");
 
   QMimeData* data = new QMimeData();
