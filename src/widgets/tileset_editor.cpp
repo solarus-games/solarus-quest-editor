@@ -668,6 +668,34 @@ private:
 };
 
 /**
+ * @brief Creating a border set.
+ */
+class CreateBorderSetCommand : public TilesetEditorCommand {
+
+public:
+
+  CreateBorderSetCommand(TilesetEditor& editor, const QString& border_set_id) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Create border set")),
+    border_set_id(border_set_id) {
+
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_border_set(border_set_id);
+  }
+
+  virtual void redo() override {
+
+    get_model().create_border_set(border_set_id);
+  }
+
+private:
+
+  QString border_set_id;
+};
+
+/**
  * @brief Deleting patterns in border sets.
  */
 class DeleteBorderSetPatternsCommand : public TilesetEditorCommand {
@@ -833,6 +861,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(delete_border_sets_requested(QStringList)));
   connect(ui.border_sets_tree_view, SIGNAL(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)),
           this, SLOT(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)));
+  connect(ui.create_border_set_button, SIGNAL(clicked(bool)),
+          this, SLOT(create_border_set_requested()));
   connect(ui.border_sets_tree_view, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SLOT(change_border_set_patterns_requested(QString, QStringList)));
 
@@ -1495,6 +1525,27 @@ void TilesetEditor::delete_selected_patterns_requested() {
   }
 
   try_command(new DeletePatternsCommand(*this, indexes));
+}
+
+/**
+ * @brief Slot called when the user wants to create a border set.
+ */
+void TilesetEditor::create_border_set_requested() {
+
+  bool ok = false;
+  QString border_set_id = QInputDialog::getText(
+        this,
+        tr("Border set name"),
+        tr("Border set name:"),
+        QLineEdit::Normal,
+        "",
+        &ok);
+
+  if (!ok) {
+    return;
+  }
+
+  try_command(new CreateBorderSetCommand(*this, border_set_id));
 }
 
 /**

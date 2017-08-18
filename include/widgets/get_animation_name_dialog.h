@@ -45,7 +45,7 @@ public slots:
 
 private:
 
-  void setup_ui ();
+  void setup_ui();
 
   const SpriteModel& model;
   QString animation_name;
