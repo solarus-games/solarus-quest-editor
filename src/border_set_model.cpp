@@ -232,8 +232,14 @@ QMimeData* BorderSetModel::mimeData(const QModelIndexList& indexes) const {
     return nullptr;
   }
 
-  QStringList lines;  // TODO
-  lines << "TODO";
+  QStringList lines;
+  Q_FOREACH(const QModelIndex& index, indexes) {
+    const QString& pattern_id = get_pattern_id(index);
+    if (!pattern_id.isEmpty()) {
+      lines << pattern_id;
+    }
+  }
+
   QMimeData* data = new QMimeData();
   data->setText(lines.join("\n"));
   return data;
@@ -290,14 +296,31 @@ bool BorderSetModel::dropMimeData(
     int column,
     const QModelIndex& parent
 ) {
-
-  Q_UNUSED(data);
   Q_UNUSED(action);
   Q_UNUSED(row);
   Q_UNUSED(column);
-  Q_UNUSED(parent);
-  // TODO
-  return true;
+
+  if (!data->hasText()) {
+    return false;
+  }
+
+  QString text = data->text();
+  QStringList pattern_ids = text.split("\n");
+
+  if (pattern_ids.isEmpty()) {
+    return false;
+  }
+
+  const QString& pattern_id = pattern_ids.first();  // TODO support multiple patterns.
+
+  if (is_pattern_index(parent)) {
+    // Drop onto a pattern item.
+    const QString& border_set_id = get_border_set_id(parent);
+    BorderKind border_kind = get_border_kind(parent);
+    tileset.set_border_set_pattern(border_set_id, border_kind, pattern_id);
+  }
+
+  return false;
 }
 
 /**
