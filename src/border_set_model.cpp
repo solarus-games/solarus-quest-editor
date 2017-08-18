@@ -62,8 +62,7 @@ int BorderSetModel::rowCount(const QModelIndex& parent) const {
 
   if (!parent.isValid()) {
     // Root item.
-    int num_rows = tileset.get_num_border_sets();
-    return num_rows;
+    return border_set_indexes.size();
   }
 
   if (is_border_set_index(parent)) {
@@ -206,11 +205,17 @@ Qt::ItemFlags BorderSetModel::flags(const QModelIndex& index) const {
   Qt::ItemFlags flags = QAbstractItemModel::flags(index);
 
   flags = flags | Qt::ItemIsDropEnabled;
-  if (index.column() == 1) {
-    flags = flags | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+
+  if (is_pattern_index(index)) {
+    if (index.column() == 0) {
+      flags = flags & ~Qt::ItemIsDragEnabled & ~Qt::ItemIsSelectable;
+    }
+    else if (index.column() == 1) {
+      flags = flags | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+    }
   }
-  else {
-    flags = flags & ~Qt::ItemIsDragEnabled & ~Qt::ItemIsSelectable;
+  else if (is_border_set_index(index)) {
+    flags = flags | Qt::ItemIsSelectable;
   }
 
   return flags;
@@ -506,13 +511,45 @@ QModelIndex BorderSetModel::get_pattern_index(const QString& border_set_id, Bord
   return this->index(row, 1, get_border_set_index(border_set_id));
 }
 
-
+/**
+ * @brief Slot called when a border set has been created in the tileset.
+ * @param border_set_id Id of the border set created.
+ */
 void BorderSetModel::border_set_created(const QString& border_set_id) {
-  Q_UNUSED(border_set_id);
+
+  const QModelIndex& index = get_border_set_index(border_set_id);
+  if (index.isValid()) {
+    return;
+  }
+
+  const QStringList& border_set_ids = tileset.get_border_set_ids();
+  int row = border_set_ids.indexOf(border_set_id);
+
+  Q_ASSERT(row != -1);
+
+  beginInsertRows(QModelIndex(), row, row);
+
+  border_set_indexes.insert(row, BorderSetIndex(border_set_id));
+
+  endInsertRows();
 }
 
+/**
+ * @brief Slot called when a border set has been deleted from the tileset.
+ * @param border_set_id Id of the border set deleted.
+ */
 void BorderSetModel::border_set_deleted(const QString& border_set_id) {
-  Q_UNUSED(border_set_id);
+
+  const QModelIndex& index = get_border_set_index(border_set_id);
+  if (!index.isValid()) {
+    return;
+  }
+
+  beginRemoveRows(QModelIndex(), index.row(), index.row());
+
+  border_set_indexes.removeAt(index.row());
+
+  endRemoveRows();
 }
 
 void BorderSetModel::border_set_id_changed(const QString& old_id, const QString& new_id) {

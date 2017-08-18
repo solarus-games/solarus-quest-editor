@@ -26,7 +26,8 @@ namespace SolarusEditor {
  */
 BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
   QTreeView(parent),
-  tileset(nullptr) {
+  tileset(nullptr),
+  model(nullptr) {
 
   setIconSize(QSize(32, 32));
   setSelectionBehavior(SelectItems);
@@ -35,7 +36,7 @@ BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
   setDragDropMode(DragDrop);
   setDragEnabled(true);
   setAcceptDrops(true);
-  }
+}
 
 /**
  * @brief Sets the tileset to represent in this view.
@@ -45,13 +46,34 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
 
   this->tileset = &tileset;
 
-  BorderSetModel* model = new BorderSetModel(tileset);
+  model = new BorderSetModel(tileset);
   setModel(model);
   expandAll();
   resizeColumnToContents(0);
 
   connect(model, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SIGNAL(change_border_set_patterns_requested(QString, QStringList)));
+}
+
+/**
+ * @brief Deletes the selected border sets or patterns.
+ */
+void BorderSetTreeView::delete_border_set_selection_requested() {
+
+  const QModelIndexList& selected_indexes = selectionModel()->selectedIndexes();
+  QStringList border_sets_to_delete;
+  Q_FOREACH(const QModelIndex& index, selected_indexes) {
+    if (model->is_border_set_index(index)) {
+      // Delete a full border set.
+      border_sets_to_delete << model->get_border_set_id(index);
+    }
+  }
+
+  if (!border_sets_to_delete.isEmpty()) {
+    emit delete_border_sets_requested(border_sets_to_delete);
+  }
+
+  // TODO also delete pattern items
 }
 
 }

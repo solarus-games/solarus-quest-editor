@@ -21,6 +21,7 @@
 
 namespace SolarusEditor {
 
+class BorderSetModel;
 class TilesetModel;
 
 /**
@@ -35,16 +36,24 @@ public:
 
   void set_tileset(TilesetModel& tileset);
 
+  QStringList get_selection() const;
+
 signals:
 
+  void delete_border_sets_requested(const QStringList& border_set_ids);
   void change_border_set_patterns_requested(
       const QString& border_set_id,
       const QStringList& pattern_ids
   );
 
+public slots:
+
+  void delete_border_set_selection_requested();
+
 private:
 
-  TilesetModel* tileset;              /**< The tileset model. */
+  TilesetModel* tileset;              /**< The tileset. */
+  BorderSetModel* model;              /**< The item model of this view. */
 
 };
 
