@@ -35,7 +35,7 @@ BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
 
   setDragDropMode(DragDrop);
   setDragEnabled(true);
-  setAcceptDrops(true);
+  setAcceptDrops(true);  
 }
 
 /**
@@ -53,6 +53,15 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
 
   connect(model, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SIGNAL(change_border_set_patterns_requested(QString, QStringList)));
+
+  connect(&tileset, &TilesetModel::border_set_created,
+          [this](const QString& border_set_id) {
+    QModelIndex index = this->model->get_border_set_index(border_set_id);
+    expand(index);
+    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    scrollTo(index, ScrollHint::PositionAtTop);
+  });
+
 }
 
 /**
