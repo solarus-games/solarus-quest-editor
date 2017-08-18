@@ -92,7 +92,7 @@ private:
       NORMAL,                   /**< Can click on patterns. */
       DRAWING_RECTANGLE,        /**< Drawing a rectangle for a selection or
                                  * a new pattern. */
-      MOVING_PATTERN            /**< Moving an existing pattern to another
+      MOVING_PATTERNS           /**< Moving existing patterns to another
                                  * place in the PNG image. */
   };
 
@@ -105,13 +105,18 @@ private:
   void start_state_normal();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void end_state_drawing_rectangle();
-  void start_state_moving_pattern(const QPoint& initial_point);
-  void end_state_moving_pattern();
+  void start_state_moving_patterns(const QPoint& initial_point);
+  void end_state_moving_patterns();
   void update_current_areas(const QPoint& start_point, const QPoint& current_point);
   void clear_current_areas();
   QList<QGraphicsItem*> get_items_intersecting_current_areas(
       bool ignore_selected = true) const;
   QRect get_selection_bounding_box() const;
+
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragMoveEvent(QDragMoveEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
   QPointer<TilesetModel> model;        /**< The tileset model. */
   TilesetScene* scene;                 /**< The scene viewed. */

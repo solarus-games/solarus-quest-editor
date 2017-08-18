@@ -28,6 +28,7 @@ BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
   QTreeView(parent),
   tileset(nullptr) {
 
+  setAcceptDrops(true);
   setIconSize(QSize(32, 32));
   setSelectionMode(QAbstractItemView::SingleSelection);
   setHeaderHidden(true);
