@@ -324,12 +324,28 @@ bool BorderSetModel::dropMimeData(
     }
 
     QStringList pattern_ids = tileset.get_border_set_patterns(border_set_id);
+    Q_ASSERT(pattern_ids.size() == 12);
     int row = static_cast<int>(border_kind);
-    Q_FOREACH(const QString& dropped_pattern_id, dropped_pattern_ids) {
-      pattern_ids[row] = dropped_pattern_id;
-      ++row;
-      if (row >= 12) {
-        break;
+
+    if (dropped_pattern_ids.size() == 1) {
+      // Switch the value with its previous place if any.
+      QString previous_pattern_id = pattern_ids[row];
+      auto it = std::find(pattern_ids.begin(), pattern_ids.end(), dropped_pattern_ids.first());
+      pattern_ids[row] = dropped_pattern_ids.first();
+      if (it != pattern_ids.end()) {
+        int other_row = it - pattern_ids.begin();
+        Q_ASSERT(other_row >= 0 && other_row < 12);
+        pattern_ids[other_row] = previous_pattern_id;
+      }
+    }
+    else {
+      // Multiple patterns dropped.
+      Q_FOREACH(const QString& dropped_pattern_id, dropped_pattern_ids) {
+        pattern_ids[row] = dropped_pattern_id;
+        ++row;
+        if (row >= 12) {
+          break;
+        }
       }
     }
 
