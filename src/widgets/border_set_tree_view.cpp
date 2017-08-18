@@ -28,11 +28,13 @@ BorderSetTreeView::BorderSetTreeView(QWidget* parent) :
   QTreeView(parent),
   tileset(nullptr) {
 
-  setAcceptDrops(true);
   setIconSize(QSize(32, 32));
-  setSelectionMode(QAbstractItemView::SingleSelection);
+  setSelectionBehavior(SelectItems);
   setHeaderHidden(true);
 
+  setDragDropMode(DragDrop);
+  setDragEnabled(true);
+  setAcceptDrops(true);
 }
 
 /**

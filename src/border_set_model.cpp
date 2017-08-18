@@ -17,6 +17,7 @@
 #include "border_kind_traits.h"
 #include "border_set_model.h"
 #include "tileset_model.h"
+#include <QMimeData>
 
 namespace SolarusEditor {
 
@@ -195,6 +196,114 @@ QVariant BorderSetModel::data(const QModelIndex& model_index, int role) const {
   }
 
   return QVariant();
+}
+
+/**
+ * \brief Returns the flags of the given index.
+ * \param index A model index.
+ * \return The corresponding flags.
+ */
+Qt::ItemFlags BorderSetModel::flags(const QModelIndex& index) const {
+
+  Qt::ItemFlags flags = QAbstractItemModel::flags(index);
+
+  flags = flags | Qt::ItemIsDropEnabled;
+  if (index.column() == 1) {
+    flags = flags | Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+  }
+  else {
+    flags = flags & ~Qt::ItemIsDragEnabled & ~Qt::ItemIsSelectable;
+  }
+
+  return flags;
+}
+
+/**
+ * \brief Returns the MIME types supported by drag and drop operations.
+ * \return The plain text mime type.
+ */
+QStringList BorderSetModel::mimeTypes() const {
+  return QStringList() << "text/plain";
+}
+
+/**
+ * \brief Returns serialized data corresponding to the given indexes.
+ * \param indexes A list of indexes.
+ * \return The corresponding MIME data.
+ */
+QMimeData* BorderSetModel::mimeData(const QModelIndexList& indexes) const {
+
+  if (indexes.isEmpty()) {
+    return nullptr;
+  }
+
+  QStringList lines;  // TODO
+  lines << "TODO";
+  QMimeData* data = new QMimeData();
+  data->setText(lines.join("\n"));
+  return data;
+}
+
+/**
+ * \brief Returns the drop actions supported by this model.
+ * \return The drop actions.
+ */
+Qt::DropActions BorderSetModel::supportedDropActions() const {
+
+  return Qt::CopyAction | Qt::MoveAction;
+}
+
+
+/**
+ * \brief Handles dropping serialized data at the given place.
+ * \param data The data to drop.
+ * \param action The drop action.
+ * \param row Row just after the drop.
+ * \param column Column of the drop.
+ * \param parent Parent index where the drop occurs.
+ * \return \c true if the drop is possible there.
+ */
+bool BorderSetModel::canDropMimeData(
+    const QMimeData* data,
+    Qt::DropAction action,
+    int row,
+    int column,
+    const QModelIndex& parent
+) const {
+
+  Q_UNUSED(data);
+  Q_UNUSED(action);
+  Q_UNUSED(row);
+  Q_UNUSED(column);
+  Q_UNUSED(parent);
+  // TODO
+  return true;
+}
+
+/**
+ * \brief Handles dropping serialized data at the given place.
+ * \param data The data dropped.
+ * \param action The drop action.
+ * \param row Row just after the drop.
+ * \param column Column of the drop.
+ * \param parent Parent index where the drop occurs.
+ * \return \c true if the drop was handled.
+ */
+bool BorderSetModel::dropMimeData(
+    const QMimeData* data,
+    Qt::DropAction action,
+    int row,
+    int column,
+    const QModelIndex& parent
+) {
+
+  Q_UNUSED(data);
+  Q_UNUSED(action);
+  Q_UNUSED(row);
+  Q_UNUSED(column);
+  Q_UNUSED(parent);
+  // TODO
+  return true;
 }
 
 /**

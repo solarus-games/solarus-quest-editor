@@ -40,6 +40,25 @@ public:
   QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
   QModelIndex parent(const QModelIndex& model_index) const override;
   QVariant data(const QModelIndex& model_index, int role) const override;
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+  QStringList mimeTypes() const override;
+  QMimeData* mimeData(const QModelIndexList& indexes) const override;
+  Qt::DropActions supportedDropActions() const override;
+  bool canDropMimeData(
+      const QMimeData* data,
+      Qt::DropAction action,
+      int row,
+      int column,
+      const QModelIndex& parent
+  ) const override;
+  bool dropMimeData(
+      const QMimeData* data,
+      Qt::DropAction action,
+      int row,
+      int column,
+      const QModelIndex& parent
+  ) override;
 
   QString get_border_set_id(int row) const;
 
