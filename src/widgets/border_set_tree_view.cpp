@@ -87,6 +87,7 @@ void BorderSetTreeView::delete_border_set_selection_requested() {
       border_sets_to_delete << border_set_id;
     }
     else if (model->is_pattern_index(index)) {
+      // Delete a pattern.
       if (!border_sets_to_delete.contains(border_set_id)) {
         patterns_to_delete << qMakePair(border_set_id, model->get_border_kind(index));
       }
