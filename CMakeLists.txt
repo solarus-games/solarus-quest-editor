@@ -115,6 +115,7 @@ set(solarus_quest_editor_SOURCES
   include/entities/teletransporter.h
   include/entities/tile.h
   include/entities/wall.h
+  include/widgets/border_set_selector.h
   include/widgets/border_set_tree_view.h
   include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
@@ -234,6 +235,7 @@ set(solarus_quest_editor_SOURCES
   src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
+  src/widgets/border_set_selector.cpp
   src/widgets/border_set_tree_view.cpp
   src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp

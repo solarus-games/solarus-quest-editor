@@ -38,7 +38,7 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -65,8 +65,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>792</width>
-             <height>426</height>
+             <width>817</width>
+             <height>387</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -351,13 +351,60 @@
            </layout>
           </widget>
          </widget>
-         <widget class="SolarusEditor::TilesetView" name="tileset_view">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QTabWidget" name="tileset_tab_widget">
+          <property name="currentIndex">
+           <number>1</number>
           </property>
+          <widget class="QWidget" name="patterns_tab">
+           <attribute name="title">
+            <string>Tiles</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="SolarusEditor::TilesetView" name="tileset_view">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="border_sets_tab">
+           <attribute name="title">
+            <string>Autotiles</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <layout class="QFormLayout" name="border_sets_layout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="current_border_set_label">
+                <property name="text">
+                 <string>Current border set</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="SolarusEditor::BorderSetSelector" name="current_border_set_combo_box"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </widget>
        </item>
@@ -376,6 +423,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>SolarusEditor::TilesetView</class>
+   <extends>QGraphicsView</extends>
+   <header>widgets/tileset_view.h</header>
+  </customwidget>
+  <customwidget>
    <class>SolarusEditor::ResourceSelector</class>
    <extends>QComboBox</extends>
    <header>widgets/resource_selector.h</header>
@@ -387,11 +439,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SolarusEditor::TilesetView</class>
-   <extends>QGraphicsView</extends>
-   <header>widgets/tileset_view.h</header>
-  </customwidget>
-  <customwidget>
    <class>SolarusEditor::MapView</class>
    <extends>QGraphicsView</extends>
    <header>widgets/map_view.h</header>
@@ -401,6 +448,11 @@
    <extends>QWidget</extends>
    <header>widgets/music_chooser.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SolarusEditor::BorderSetSelector</class>
+   <extends>QComboBox</extends>
+   <header>widgets/border_set_selector.h</header>
   </customwidget>
  </customwidgets>
  <resources>

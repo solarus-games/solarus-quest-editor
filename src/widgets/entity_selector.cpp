@@ -24,7 +24,7 @@ namespace SolarusEditor {
 /**
  * @brief Creates an empty entity selector.
  *
- * Call the setter functions and then build to fill the selector.
+ * Call the setter functions and then build() to fill the selector.
  *
  * @param parent The parent widget or nullptr.
  */
