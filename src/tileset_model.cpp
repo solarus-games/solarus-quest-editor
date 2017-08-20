@@ -1726,4 +1726,41 @@ bool TilesetModel::is_valid_border_set_id(const QString& border_set_id) {
   return true;
 }
 
+/**
+ * @brief Returns an image representing the specified border set.
+ *
+ * The image has the size of the pattern.
+ *
+ * @param border_set_id A border set id.
+ * @return The corresponding image.
+ * Returns a null pixmap if the tileset image is not loaded
+ * or if there is no such border set.
+ */
+QPixmap TilesetModel::get_border_set_image(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    return QPixmap();
+  }
+
+  QString pattern_id = get_border_set_pattern(border_set_id, BorderKind::TOP);
+  return get_pattern_image(id_to_index(pattern_id));
+}
+
+/**
+ * @brief Returns a 32x32 icon representing the specified border set.
+ * @param border_set_id A border set id.
+ * @return The corresponding icon.
+ * Returns a null pixmap if the tileset image is not loaded
+ * or if there is no such border set.
+ */
+QPixmap TilesetModel::get_border_set_icon(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    return QPixmap();
+  }
+
+  QString pattern_id = get_border_set_pattern(border_set_id, BorderKind::TOP);
+  return get_pattern_icon(id_to_index(pattern_id));
+}
+
 }

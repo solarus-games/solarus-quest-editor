@@ -138,6 +138,9 @@ public:
   void set_border_set_inner(const QString& border_set_id, bool inner);
   static bool is_valid_border_set_id(const QString& border_set_id);
 
+  QPixmap get_border_set_image(const QString& border_set_id) const;
+  QPixmap get_border_set_icon(const QString& border_set_id) const;
+
 signals:
 
   void background_color_changed(const QColor& background_color);

@@ -33,6 +33,7 @@ BorderSetSelector::BorderSetSelector(QWidget* parent) :
   quest(nullptr),
   tileset_id() {
 
+  setIconSize(QSize(32, 32));
 }
 
 /**
@@ -94,7 +95,7 @@ void BorderSetSelector::build() {
     // Add border sets.
     const QStringList& border_set_ids = tileset.get_border_set_ids();
     Q_FOREACH(const QString& border_set_id, border_set_ids) {
-      addItem(border_set_id, border_set_id);
+      addItem(tileset.get_border_set_icon(border_set_id), border_set_id, border_set_id);
     }
 
     if (!border_set_ids.isEmpty()) {

@@ -399,7 +399,14 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="SolarusEditor::BorderSetSelector" name="current_border_sets_selector"/>
+               <widget class="SolarusEditor::BorderSetSelector" name="current_border_sets_selector">
+                <property name="iconSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
