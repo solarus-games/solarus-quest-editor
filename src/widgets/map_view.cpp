@@ -1437,7 +1437,7 @@ void MapView::add_border_to_selection() {
 
   AutoTiler auto_tiler(*get_map(), get_selected_entities(), border_set_id);
   AddableEntities addable_tiles = auto_tiler.generate_border_tiles();
-  add_entities_requested(addable_tiles);
+  emit add_entities_requested(addable_tiles, false);
 }
 
 /**
@@ -2728,7 +2728,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   }
 
   // Add them.
-  view.add_entities_requested(addable_entities);
+  view.add_entities_requested(addable_entities, true);
 
   // Decide what to do next: resize them, add new ones or do nothing.
   if (view.are_entities_resizable(view.get_selected_entities())) {

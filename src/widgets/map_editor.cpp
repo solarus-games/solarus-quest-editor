@@ -881,10 +881,11 @@ private:
 class AddEntitiesCommand : public MapEditorCommand {
 
 public:
-  AddEntitiesCommand(MapEditor& editor, AddableEntities&& entities) :
+  AddEntitiesCommand(MapEditor& editor, AddableEntities&& entities, bool replace_selection) :
     MapEditorCommand(editor, MapEditor::tr("Add entities")),
     entities(std::move(entities)),
-    indexes() {
+    indexes(),
+    previous_selected_indexes() {
 
     std::sort(this->entities.begin(), this->entities.end());
 
@@ -892,22 +893,33 @@ public:
     for (const AddableEntity& entity : this->entities) {
       indexes.append(entity.index);
     }
+
+    if (!replace_selection) {
+      previous_selected_indexes = get_map_view().get_selected_entities();
+    }
   }
 
   void undo() override {
     // Remove entities that were added, keep them in this class.
     entities = get_map().remove_entities(indexes);
+    get_map_view().set_selected_entities(previous_selected_indexes);
   }
 
   void redo() override {
     // Add entities and make them selected.
     get_map().add_entities(std::move(entities));
-    get_map_view().set_selected_entities(indexes);
+
+    EntityIndexes selected_indexes = indexes;
+    Q_FOREACH(const EntityIndex& index, previous_selected_indexes) {
+      selected_indexes.append(index);
+    }
+    get_map_view().set_selected_entities(selected_indexes);
   }
 
 private:
   AddableEntities entities;    // Entities to be added and where (sorted).
   EntityIndexes indexes;  // Indexes where they should be added (redundant info).
+  EntityIndexes previous_selected_indexes;  // Selection to keep after adding entities.
 };
 
 /**
@@ -1103,8 +1115,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(bring_entities_to_front_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(bring_entities_to_back_requested(EntityIndexes)),
           this, SLOT(bring_entities_to_back_requested(EntityIndexes)));
-  connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
-          this, SLOT(add_entities_requested(AddableEntities&)));
+  connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&, bool)),
+          this, SLOT(add_entities_requested(AddableEntities&, bool)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
           this, SLOT(remove_entities_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(stopped_state()),
@@ -2167,14 +2179,16 @@ void MapEditor::bring_entities_to_back_requested(const EntityIndexes& indexes) {
 /**
  * @brief Slot called when the user wants to add entities.
  * @param entities Entities ready to be added to the map.
+ * @param replace_selection @c true to clear the previous selection.
+ * Newly created entities will be selected in all cases.
  */
-void MapEditor::add_entities_requested(AddableEntities& entities) {
+void MapEditor::add_entities_requested(AddableEntities& entities, bool replace_selection) {
 
   if (entities.empty()) {
     return;
   }
 
-  try_command(new AddEntitiesCommand(*this, std::move(entities)));
+  try_command(new AddEntitiesCommand(*this, std::move(entities), replace_selection));
 }
 
 /**
