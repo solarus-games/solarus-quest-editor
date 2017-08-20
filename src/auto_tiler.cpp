@@ -708,8 +708,6 @@ void AutoTiler::compute_tiles() {
  */
 void AutoTiler::compute_tiles_inner() {
 
-  print_which_borders();
-
   // Generate sides first.
   for (const auto& it : which_borders) {
 
@@ -889,8 +887,6 @@ void AutoTiler::compute_tiles_inner() {
  * Outer border case.
  */
 void AutoTiler::compute_tiles_outer() {
-
-  print_which_borders();
 
   // Generate sides first.
   for (const auto& it : which_borders) {
@@ -1077,19 +1073,15 @@ AddableEntities AutoTiler::generate_border_tiles() {
   // Determine the 8x8 grid.
   compute_pattern_sizes();
   compute_bounding_box();
-  qDebug() << bounding_box;
-  qDebug() << "Grid: " << grid_size << ", cells: " << get_num_cells();
 
   // Create a list indicating which 8x8 squares are inside the selection.
   compute_occupied_squares();
 
   // Detect the borders.
   compute_borders();
-  qDebug() << "Detected borders";
 
   // Create the corresponding tiles.
   compute_tiles();
-  qDebug() << "Created " << tiles.size() << " tiles";
   if (tiles.empty()) {
     return AddableEntities();
   }
