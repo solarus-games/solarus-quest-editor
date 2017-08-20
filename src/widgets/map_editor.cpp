@@ -1743,6 +1743,12 @@ void MapEditor::update_border_set_view() {
   }
   ui.current_border_sets_selector->set_tileset_id(get_quest(), tileset_id);
   ui.current_border_sets_selector->build();
+
+  ui.current_border_sets_selector->set_selected_border_set_id(map->get_current_border_set_id());
+
+  if (ui.current_border_sets_selector->get_selected_border_set_id() != map->get_current_border_set_id()) {
+    map->set_current_border_set_id(ui.current_border_sets_selector->get_selected_border_set_id());
+  }
 }
 
 /**
