@@ -15,8 +15,9 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/border_set_selector.h"
-#include "tileset_model.h"
+#include "editor_exception.h"
 #include "quest.h"
+#include "tileset_model.h"
 
 namespace SolarusEditor {
 
@@ -80,7 +81,31 @@ void BorderSetSelector::set_selected_border_set_id(const QString& border_set_id)
  * @brief Builds or rebuilds the combobox using the parameters previously set.
  */
 void BorderSetSelector::build() {
-  // TODO
-}
+
+  clear();
+
+  if (quest == nullptr || tileset_id.isEmpty()) {
+    return;
+  }
+
+  try {
+    TilesetModel tileset(*quest, tileset_id);
+
+    // Add border sets.
+    const QStringList& border_set_ids = tileset.get_border_set_ids();
+    Q_FOREACH(const QString& border_set_id, border_set_ids) {
+      addItem(border_set_id, border_set_id);
+    }
+
+    if (!border_set_ids.isEmpty()) {
+      set_selected_border_set_id(border_set_ids.first());
+    }
+  }
+  catch (const EditorException& ex) {
+    // The tileset file could not be opened: the tileset is probably
+    // unset or incorrect.
+    Q_UNUSED(ex);
+  }
+  }
 
 }

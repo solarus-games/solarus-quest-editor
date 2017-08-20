@@ -1077,6 +1077,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
+  connect(ui.current_border_sets_selector, SIGNAL(activated(QString)),
+          this, SLOT(border_set_selector_activated()));
+
   connect(ui.open_script_button, SIGNAL(clicked()),
           this, SLOT(open_script_requested()));
 
@@ -1729,6 +1732,35 @@ void MapEditor::update_tileset_view() {
 }
 
 /**
+ * @brief Updates the content of the border set panel.
+ */
+void MapEditor::update_border_set_view() {
+
+  const QString& tileset_id = map->get_tileset_id();
+  if (ui.current_border_sets_selector->get_tileset_id() == tileset_id) {
+    // No change.
+    return;
+  }
+  ui.current_border_sets_selector->set_tileset_id(get_quest(), tileset_id);
+  ui.current_border_sets_selector->build();
+}
+
+/**
+ * @brief Slot called when the user changes the current border set selected.
+ */
+void MapEditor::border_set_selector_activated() {
+
+  const QString& old_border_set_id = map->get_current_border_set_id();
+  const QString& new_border_set_id = ui.current_border_sets_selector->get_selected_border_set_id();
+  if (new_border_set_id == old_border_set_id) {
+    // No change.
+    return;
+  }
+
+  map->set_current_border_set_id(new_border_set_id);
+}
+
+/**
  * @brief Slot called when another tileset is set on the map.
  * @param tileset_id The new tileset id.
  */
@@ -1742,13 +1774,16 @@ void MapEditor::tileset_id_changed(const QString& tileset_id) {
   // Notify the tileset view.
   update_tileset_view();
 
-  // Watch the selection of the tileset to correctly add new tiles.
+  // Notify the border sets view.
+  update_border_set_view();
+
+  // Watch the pattern selection of the tileset view to correctly add new tiles.
   connect(ui.tileset_view, SIGNAL(selection_changed_by_user()),
           this, SLOT(tileset_selection_changed()));
 }
 
 /**
- * @brief Slot called when the user changes the selection in the tileset view.
+ * @brief Slot called when the user changes the patterns selection in the tileset view.
  */
 void MapEditor::tileset_selection_changed() {
 

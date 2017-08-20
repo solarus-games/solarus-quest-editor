@@ -78,10 +78,12 @@ private slots:
   void tileset_selector_activated();
   void refresh_tileset_requested();
   void open_tileset_requested();
-  void update_tileset_view();
-  void tileset_selection_changed();
   void update_music_field();
   void music_selector_activated();
+  void update_tileset_view();
+  void tileset_selection_changed();
+  void update_border_set_view();
+  void border_set_selector_activated();
   void map_selection_changed();
   void uncheck_entity_creation_buttons();
   void update_status_bar();

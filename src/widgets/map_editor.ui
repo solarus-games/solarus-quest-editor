@@ -390,7 +390,7 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <layout class="QFormLayout" name="border_sets_layout_2">
+             <layout class="QFormLayout" name="border_sets_layout">
               <item row="0" column="0">
                <widget class="QLabel" name="current_border_set_label">
                 <property name="text">
@@ -399,7 +399,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="SolarusEditor::BorderSetSelector" name="current_border_set_combo_box"/>
+               <widget class="SolarusEditor::BorderSetSelector" name="current_border_sets_selector"/>
               </item>
              </layout>
             </item>

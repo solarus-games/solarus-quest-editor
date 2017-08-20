@@ -542,7 +542,7 @@ void MapView::build_context_menu_actions() {
   add_border_action = new QAction(
         tr("Add border tiles"), this);
   add_border_action->setShortcut(tr("Ctrl+B"));
-  add_border_action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+  add_border_action->setShortcutContext(Qt::WindowShortcut);
   connect(add_border_action, SIGNAL(triggered()),
           this, SLOT(add_border_to_selection()));
   addAction(add_border_action);
@@ -1430,7 +1430,10 @@ void MapView::convert_selected_tiles() {
  */
 void MapView::add_border_to_selection() {
 
-  const QString& border_set_id = "wall_border-4";  // Test.
+  const QString& border_set_id = get_map()->get_current_border_set_id();
+  if (border_set_id.isEmpty()) {
+    return;
+  }
 
   AutoTiler auto_tiler(*get_map(), get_selected_entities(), border_set_id);
   AddableEntities addable_tiles = auto_tiler.generate_border_tiles();
