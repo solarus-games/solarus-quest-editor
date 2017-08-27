@@ -38,8 +38,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEB
 
 # Add defines for the install path and the build path to help guess the assets
 # location at runtime.
-add_definitions(-DSOLARUSEDITOR_INSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
 add_definitions(-DSOLARUSEDITOR_SOURCE_PATH="${CMAKE_SOURCE_DIR}")
+add_definitions(-DSOLARUSEDITOR_BINDIR_PATH="${CMAKE_INSTALL_PREFIX}/${SOLARUS_INSTALL_BINDIR}")
+add_definitions(-DSOLARUSEDITOR_DATADIR_PATH="${CMAKE_INSTALL_PREFIX}/${SOLARUS_INSTALL_DATADIR}")
 
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
