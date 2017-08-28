@@ -42,8 +42,7 @@ namespace {
  * - The directory containing the executable.
  * - The source path (macro SOLARUSEDITOR_SOURCE_PATH)
  *   (useful for developer builds).
- * - The install path (macro SOLARUSEDITOR_INSTALL_PATH)
- *   followed by "share/solarus-quest-editor/".
+ * - The install path (macro SOLARUSEDITOR_DATADIR_PATH).
  */
 void initialize_assets() {
 
@@ -54,7 +53,7 @@ void initialize_assets() {
   potential_paths << executable_path + "/assets";
 
   // Try the source path if we are not running the installed executable.
-  bool running_installed_executable = (executable_path == SOLARUSEDITOR_INSTALL_PATH "/bin");
+  bool running_installed_executable = (executable_path == SOLARUSEDITOR_BINDIR_PATH);
 #ifdef SOLARUSEDITOR_SOURCE_PATH
   if (!running_installed_executable) {
     potential_paths << SOLARUSEDITOR_SOURCE_PATH "/assets";
@@ -62,9 +61,9 @@ void initialize_assets() {
 #endif
 
   // Try the install path if we are running the installed executable.
-#ifdef SOLARUSEDITOR_INSTALL_PATH
+#ifdef SOLARUSEDITOR_DATADIR_PATH
   if (running_installed_executable) {
-    potential_paths << SOLARUSEDITOR_INSTALL_PATH "/share/solarus-quest-editor/assets";
+    potential_paths << SOLARUSEDITOR_DATADIR_PATH;
   }
 #endif
 
