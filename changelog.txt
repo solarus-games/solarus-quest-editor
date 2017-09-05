@@ -5,6 +5,7 @@ ________________________________________
 
 * Tileset editor: allow to duplicate tile patterns (#188).
 * Tileset editor: allow to move several patterns at once (#171).
+* The shortcut to exit is now Ctrl+Q.
 
 _______________________________________
 
