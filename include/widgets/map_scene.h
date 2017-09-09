@@ -92,6 +92,7 @@ private:
   void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityItems& get_entity_items(int layer);
+  const ByLayer<EntityItems>& get_entity_items() const;
 
   MapModel& map;                            /**< The map represented. */
   ByLayer<EntityItems> entity_items;        /**< Entities items on each layer,

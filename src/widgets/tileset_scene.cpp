@@ -193,7 +193,8 @@ void TilesetScene::update_selection_to_scene(
 
   // Update the scene with the change.
   bool changed = false;
-  Q_FOREACH (const QModelIndex& model_index, selected.indexes()) {
+  const QModelIndexList& selected_indexes = selected.indexes();
+  for (const QModelIndex& model_index : selected_indexes) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
       if (!pattern_items[index]->isSelected()) {
@@ -203,7 +204,8 @@ void TilesetScene::update_selection_to_scene(
     }
   }
 
-  Q_FOREACH (const QModelIndex& model_index, deselected.indexes()) {
+  const QModelIndexList& deselected_indexes = deselected.indexes();
+  for (const QModelIndex& model_index : deselected_indexes) {
     int index = model_index.row();
     if (model.pattern_exists(index)) {
       if (pattern_items[index]->isSelected()) {
@@ -228,7 +230,8 @@ void TilesetScene::set_selection_from_scene() {
 
   // Forward the change to the tileset.
   QList<int> indexes;
-  Q_FOREACH (QGraphicsItem* item, selectedItems()) {
+  const QList<QGraphicsItem*>& selected_items = selectedItems();
+  for (QGraphicsItem* item : selected_items) {
     PatternItem* pattern_item = qgraphicsitem_cast<PatternItem*>(item);
     if (pattern_item != nullptr) {
       indexes << pattern_item->get_index();
@@ -245,7 +248,7 @@ void TilesetScene::select_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  Q_FOREACH (PatternItem* item, pattern_items) {
+  for (PatternItem* item : pattern_items) {
     if (item == nullptr) {
       continue;
     }
@@ -264,7 +267,7 @@ void TilesetScene::unselect_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  Q_FOREACH (PatternItem* item, pattern_items) {
+  for (PatternItem* item : pattern_items) {
     if (item == nullptr) {
       continue;
     }
@@ -463,9 +466,9 @@ void PatternItem::paint(QPainter* painter,
 
   // Add our selection marker.
   if (selected) {
-    QList<QRect> frames = model.get_pattern_frames(index);
+    const QList<QRect>& frames = model.get_pattern_frames(index);
 
-    Q_FOREACH (QRect frame, frames) {
+    for (QRect frame : frames) {
       frame.translate(-top_left);
       GuiTools::draw_rectangle_border(*painter, frame, Qt::blue, 1);
     }

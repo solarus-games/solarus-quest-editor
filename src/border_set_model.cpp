@@ -29,7 +29,8 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
   QAbstractItemModel(parent),
   tileset(tileset) {
 
-  Q_FOREACH(const QString& border_set_id, tileset.get_border_set_ids()) {
+  const QStringList& border_set_ids = tileset.get_border_set_ids();
+  for (const QString& border_set_id : border_set_ids) {
     border_set_indexes << BorderSetIndex(border_set_id);
   }
 
@@ -240,7 +241,7 @@ QMimeData* BorderSetModel::mimeData(const QModelIndexList& indexes) const {
   }
 
   QStringList lines;
-  Q_FOREACH(const QModelIndex& index, indexes) {
+  for (const QModelIndex& index : indexes) {
     const QString& pattern_id = get_pattern_id(index);
     if (!pattern_id.isEmpty()) {
       lines << pattern_id;
@@ -344,7 +345,7 @@ bool BorderSetModel::dropMimeData(
     }
     else {
       // Multiple patterns dropped.
-      Q_FOREACH(const QString& dropped_pattern_id, dropped_pattern_ids) {
+      for (const QString& dropped_pattern_id : dropped_pattern_ids) {
         pattern_ids[row] = dropped_pattern_id;
         ++row;
         if (row >= 12) {

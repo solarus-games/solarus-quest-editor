@@ -468,7 +468,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
 
   bool has_common_preferred_layer = true;
   int common_preferred_layer = tileset->get_pattern_default_layer(pattern_indexes.first());
-  Q_FOREACH (int pattern_index, pattern_indexes) {
+  for (int pattern_index : pattern_indexes) {
     QString pattern_id = tileset->index_to_id(pattern_index);
     if (pattern_id.isEmpty()) {
       continue;
@@ -503,7 +503,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
  */
 bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (map->get_entity(index).is_resizable()) {
       return true;
     }
@@ -848,7 +848,7 @@ void MapView::copy() {
   std::sort(indexes.begin(), indexes.end());
 
   QStringList entity_strings;
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     Q_ASSERT(map->entity_exists(index));
     const EntityModel& entity = map->get_entity(index);
     QString entity_string = entity.to_string();
@@ -1330,8 +1330,8 @@ void MapView::select_entity(const EntityIndex& index, bool selected) {
 EntityModels MapView::clone_selected_entities() const {
 
   EntityModels clones;
-  EntityIndexes indexes = get_selected_entities();
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  const EntityIndexes& indexes = get_selected_entities();
+  for (const EntityIndex& index : indexes) {
     EntityModelPtr clone = EntityModel::clone(*map, index);
     clones.emplace_back(std::move(clone));
   }
@@ -1966,7 +1966,7 @@ void ResizingEntitiesState::compute_center() {
   // Compute the total bounding box to determine its center.
   MapModel& map = get_map();
   QRect total_box = map.get_entity_bounding_box(entities.first());
-  Q_FOREACH (const EntityIndex& index, entities) {
+  for (const EntityIndex& index : entities) {
     total_box |= map.get_entity_bounding_box(index);
   }
   center = total_box.center();
@@ -2002,7 +2002,7 @@ void ResizingEntitiesState::compute_leader() {
     if (found_leader) {
       min_distance = 0;  // Don't search a leader with this resize mode.
     }
-    Q_FOREACH (const EntityIndex& index, entities) {
+    for (const EntityIndex& index : entities) {
       const EntityModel& entity = map.get_entity(index);
 
       if (entity.get_resize_mode() != wanted_resize_mode) {

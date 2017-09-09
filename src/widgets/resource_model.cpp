@@ -37,8 +37,8 @@ ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QOb
   directory_icon(":/images/icon_folder_open.png"),
   tileset_id() {
 
-  QStringList ids = get_resources().get_elements(this->resource_type);
-  Q_FOREACH (const QString& id, ids) {
+  const QStringList& ids = get_resources().get_elements(this->resource_type);
+  for (const QString& id : ids) {
     add_element(id);
   }
 

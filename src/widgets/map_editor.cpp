@@ -342,7 +342,7 @@ public:
     allow_merge_to_previous(allow_merge_to_previous) { }
 
   void undo() override {
-    Q_FOREACH (const EntityIndex& index, indexes) {
+    for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, -translation);
     }
     // Select impacted entities.
@@ -350,7 +350,7 @@ public:
   }
 
   void redo() override {
-    Q_FOREACH (const EntityIndex& index, indexes) {
+    for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, translation);
     }
     // Select impacted entities.
@@ -487,7 +487,7 @@ public:
     AddableEntities dynamic_tiles;
 
     // Create the dynamic tiles.
-    Q_FOREACH (const EntityIndex& index_before, indexes_before) {
+    for (const EntityIndex& index_before : indexes_before) {
       EntityModelPtr dynamic_tile = DynamicTile::create_from_normal_tile(map, index_before);
       int layer = index_before.layer;
       EntityIndex index_after = { layer, -1 };
@@ -910,7 +910,7 @@ public:
     get_map().add_entities(std::move(entities));
 
     EntityIndexes selected_indexes = indexes;
-    Q_FOREACH(const EntityIndex& index, previous_selected_indexes) {
+    for (const EntityIndex& index : previous_selected_indexes) {
       selected_indexes.append(index);
     }
     get_map_view().set_selected_entities(selected_indexes);
@@ -1825,7 +1825,7 @@ void MapEditor::map_selection_changed() {
     const EntityIndexes& entity_indexes = ui.map_view->get_selected_entities();
     MapModel& map = get_map();
     QList<int> pattern_indexes;
-    Q_FOREACH (const EntityIndex& entity_index, entity_indexes) {
+    for (const EntityIndex& entity_index : entity_indexes) {
       QString pattern_id = map.get_entity_field(entity_index, "pattern").toString();
       if (!pattern_id.isEmpty()) {
         pattern_indexes << tileset->id_to_index(pattern_id);
@@ -1855,9 +1855,9 @@ void MapEditor::refactor_destination_name(
     }
 
     // Update teletransporters in this map.
-    EntityIndexes teletransporter_indexes =
+    const EntityIndexes& teletransporter_indexes =
         map->find_entities_of_type(EntityType::TELETRANSPORTER);
-    Q_FOREACH (const EntityIndex& index, teletransporter_indexes) {
+    for (const EntityIndex& index : teletransporter_indexes) {
       const QString& destination_map_id =
           map->get_entity_field(index, "destination_map").toString();
       const QString& destination_name =
@@ -1895,7 +1895,8 @@ QStringList MapEditor::update_destination_name_in_other_maps(
     const QString& name_after
 ) {
   QStringList modified_paths;
-  Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
+  const QStringList& map_ids = get_resources().get_elements(ResourceType::MAP);
+  for (const QString& map_id : map_ids) {
     if (map_id != this->map_id) {
       if (update_destination_name_in_map(map_id, name_before, name_after)) {
         modified_paths << get_quest().get_map_data_file_path(map_id);
@@ -2062,7 +2063,7 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
 
   const bool dynamic = map->get_entity(indexes.first()).is_dynamic();
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     EntityType current_type = map->get_entity_type(index);
     if (current_type != EntityType::TILE && current_type != EntityType::DYNAMIC_TILE) {
       return;
@@ -2226,7 +2227,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     }
 
     // Uncheck other entity creation buttons.
-    Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
+    const QList<QAction*>& actions = entity_creation_toolbar->actions();
+    for (QAction* action : actions) {
       bool ok = false;
       EntityType action_type = static_cast<EntityType>(action->data().toInt(&ok));
       if (ok) {
@@ -2246,7 +2248,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
  */
 void MapEditor::uncheck_entity_creation_buttons() {
 
-  Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
+  const QList<QAction*>& actions = entity_creation_toolbar->actions();
+  for (QAction* action : actions) {
     action->setChecked(false);
   }
 }

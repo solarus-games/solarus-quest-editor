@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget* parent) :
   // Icon.
   QStringList icon_sizes = { "16", "32", "48", "256" };
   QIcon icon;
-  Q_FOREACH (const QString& size, icon_sizes) {
+  for (const QString& size : icon_sizes) {
     icon.addPixmap(":/images/icon_quest_editor_" + size + ".png");
   }
   setWindowIcon(icon);
@@ -273,7 +273,7 @@ void MainWindow::update_recent_quests_menu() {
 
   // Get the recent quest list.
   EditorSettings settings;
-  QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
+  const QStringList& last_quests = settings.get_value_string_list(EditorSettings::last_quests);
 
   // Clear previous actions.
   recent_quests_menu->clear();
@@ -282,7 +282,7 @@ void MainWindow::update_recent_quests_menu() {
   recent_quests_menu->setEnabled(!last_quests.isEmpty());
 
   // Create new actions.
-  Q_FOREACH (const QString& quest_path, last_quests) {
+  for (const QString& quest_path : last_quests) {
 
     QAction* action = new QAction(quest_path, recent_quests_menu);
     connect(action, &QAction::triggered, [this, quest_path]() {
@@ -339,8 +339,8 @@ void MainWindow::update_show_layers_menu() {
   }
 
   // Clear previous actions.
-  const QList<QAction*> actions = show_layers_menu->actions();
-  Q_FOREACH (QAction* action, actions) {
+  const QList<QAction*>& actions = show_layers_menu->actions();
+  for (QAction* action : actions) {
     delete action;
   }
   show_layers_menu->clear();
@@ -409,7 +409,7 @@ QMenu* MainWindow::create_show_entities_menu() {
   QMenu* menu = new QMenu(tr("Show/hide entity types"));
 
   // Add show entity types actions to the menu.
-  QList<QAction*> entity_actions = EnumMenus<EntityType>::create_actions(
+  const QList<QAction*>& entity_actions = EnumMenus<EntityType>::create_actions(
         *menu,
         EnumMenuCheckableOption::CHECKABLE,
         [this](EntityType type) {
@@ -421,7 +421,7 @@ QMenu* MainWindow::create_show_entities_menu() {
     }
   });
 
-  Q_FOREACH (QAction* action, entity_actions) {
+  for (QAction* action : entity_actions) {
     EntityType type = static_cast<EntityType>(action->data().toInt());
     if (!EntityTraits::can_be_stored_in_map_file(type)) {
       // Only show the ones that can exist in map files.
@@ -541,7 +541,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
     quest.check_version();
 
     // Make sure all resource directories exist.
-    Q_FOREACH (ResourceType resource_type, Solarus::EnumInfo<ResourceType>::enums()) {
+    for (ResourceType resource_type : Solarus::EnumInfo<ResourceType>::enums()) {
       quest.create_dir_if_not_exists(quest.get_resource_path(resource_type));
     }
 
@@ -1415,7 +1415,7 @@ void MainWindow::update_entity_types_visibility() {
   }
 
   ViewSettings& view_settings = editor->get_view_settings();
-  Q_FOREACH (QAction* action, show_entities_subactions) {
+  for (QAction* action : show_entities_subactions) {
     if (action == nullptr) {
       qCritical() << tr("Missing show entity type action");
       return;
@@ -1758,7 +1758,8 @@ void MainWindow::refactor_map_id(const QString& map_id_before, const QString& ma
 
     // Update teletransporters in all maps.
     QStringList modified_paths;
-    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    for (const QString& map_id : map_ids) {
       if (update_destination_map_in_map(map_id, map_id_before, map_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
       }
@@ -1810,7 +1811,8 @@ void MainWindow::refactor_tileset_id(const QString& tileset_id_before, const QSt
 
     // Update all maps.
     QStringList modified_paths;
-    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    for (const QString& map_id : map_ids) {
       if (update_tileset_in_map(map_id, tileset_id_before, tileset_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
       }
@@ -1862,7 +1864,8 @@ void MainWindow::refactor_music_id(const QString& music_id_before, const QString
 
     // Update all maps.
     QStringList modified_paths;
-    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    for (const QString& map_id : map_ids) {
       if (update_music_in_map(map_id, music_id_before, music_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
       }
@@ -1914,7 +1917,8 @@ void MainWindow::refactor_enemy_id(const QString& enemy_id_before, const QString
 
     // Update enemies in all maps.
     QStringList modified_paths;
-    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    for (const QString& map_id : map_ids) {
       if (update_enemy_breed_in_map(map_id, enemy_id_before, enemy_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
       }
@@ -1966,7 +1970,8 @@ void MainWindow::refactor_custom_entity_id(const QString& entity_id_before, cons
 
     // Update enemies in all maps.
     QStringList modified_paths;
-    Q_FOREACH (const QString& map_id, quest.get_resources().get_elements(ResourceType::MAP)) {
+    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    for (const QString& map_id : map_ids) {
       if (update_custom_entity_model_in_map(map_id, entity_id_before, entity_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
       }

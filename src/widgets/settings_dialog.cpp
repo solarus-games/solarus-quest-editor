@@ -184,7 +184,8 @@ void SettingsDialog::restore_default() {
  */
 void SettingsDialog::apply() {
 
-  Q_FOREACH (const QString& key, edited_settings.keys()) {
+  const QStringList& keys = edited_settings.keys();
+  for (const QString& key : keys) {
     settings.set_value(key, edited_settings[key]);
   }
   reset();
@@ -249,7 +250,8 @@ void SettingsDialog::update_buttons() {
 
   // Check if values are changed.
   bool changed = false;
-  Q_FOREACH (const QString& key, edited_settings.keys()) {
+  const QStringList& keys = edited_settings.keys();
+  for (const QString& key : keys) {
 
     QVariant value = edited_settings[key];
     if (value != settings.get_value(key)) {

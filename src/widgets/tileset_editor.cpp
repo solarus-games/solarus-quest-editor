@@ -144,7 +144,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       QPoint position = get_model().get_pattern_frame(index).topLeft();
       get_model().set_pattern_position(index, position - delta);
     }
@@ -153,7 +153,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       QPoint position = get_model().get_pattern_frame(index).topLeft();
       get_model().set_pattern_position(index, position + delta);
     }
@@ -179,7 +179,7 @@ public:
     indexes(indexes),
     ground_after(ground) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       grounds_before << get_model().get_pattern_ground(index);
     }
   }
@@ -187,7 +187,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_ground(index, grounds_before[i]);
       ++i;
     }
@@ -196,7 +196,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_ground(index, ground_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -222,7 +222,7 @@ public:
     indexes(indexes),
     layer_after(layer) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       layers_before << get_model().get_pattern_default_layer(index);
     }
   }
@@ -230,7 +230,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_default_layer(index, layers_before[i]);
       ++i;
     }
@@ -239,7 +239,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_default_layer(index, layer_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -265,7 +265,7 @@ public:
     indexes(indexes),
     repeat_mode_after(repeat_mode) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       repeat_modes_before << get_model().get_pattern_repeat_mode(index);
     }
   }
@@ -273,7 +273,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_repeat_mode(index, repeat_modes_before[i]);
       ++i;
     }
@@ -282,7 +282,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_repeat_mode(index, repeat_mode_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -309,7 +309,7 @@ public:
     indexes(indexes),
     animation_after(animation) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       animations_before << get_model().get_pattern_animation(index);
     }
   }
@@ -317,7 +317,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_animation(index, animations_before[i]);
       ++i;
     }
@@ -327,7 +327,7 @@ public:
   virtual void redo() override {
 
     // TODO don't do anything if one fails.
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_animation(index, animation_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -354,7 +354,7 @@ public:
     indexes(indexes),
     separation_after(separation) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       separations_before << get_model().get_pattern_separation(index);
     }
   }
@@ -362,7 +362,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_separation(index, separations_before[i]);
     }
     get_model().set_selected_indexes(indexes);
@@ -370,7 +370,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_separation(index, separation_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -432,14 +432,14 @@ public:
       TilesetEditor& editor, const QList<int>& indexes, const QPoint& delta) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Duplicate")),
     delta(delta) {
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       ids.append(get_model().index_to_id(index));
     }
   }
 
   virtual void undo() override {
 
-    Q_FOREACH (QString new_id, new_ids) {
+    for (QString new_id : new_ids) {
       get_model().delete_pattern(get_model().id_to_index(new_id));
     }
   }
@@ -449,7 +449,7 @@ public:
     get_model().clear_selection();
     new_ids.clear();
 
-    Q_FOREACH (QString id, ids) {
+    for (QString id : ids) {
 
       int index = get_model().id_to_index(id);
 
@@ -499,7 +499,7 @@ public:
   DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       Pattern pattern;
       pattern.id = get_model().index_to_id(index);
       pattern.frames_bounding_box = get_model().get_pattern_frames_bounding_box(index);
@@ -514,7 +514,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       int index = get_model().create_pattern(pattern.id, pattern.frames_bounding_box);
       get_model().set_pattern_ground(index, pattern.ground);
       get_model().set_pattern_default_layer(index, pattern.default_layer);
@@ -524,7 +524,7 @@ public:
     }
 
     QList<int> indexes;
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       indexes << get_model().id_to_index(pattern.id);
     }
     get_model().set_selected_indexes(indexes);
@@ -533,7 +533,7 @@ public:
   virtual void redo() override {
 
     QList<int> indexes;
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       indexes << get_model().id_to_index(pattern.id);
     }
     get_model().delete_patterns(indexes);
@@ -631,7 +631,7 @@ public:
   DeleteBorderSetsCommand(TilesetEditor& editor, const QStringList& border_set_ids) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Delete border set")) {
 
-    Q_FOREACH (const QString& border_set_id, border_set_ids) {
+    for (const QString& border_set_id : border_set_ids) {
       BorderSet border_set;
       border_set.id = border_set_id;
       border_set.pattern_ids = get_model().get_border_set_patterns(border_set_id);
@@ -642,7 +642,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const BorderSet& border_set, border_sets) {
+    for (const BorderSet& border_set : border_sets) {
       get_model().create_border_set(border_set.id);
       get_model().set_border_set_patterns(border_set.id, border_set.pattern_ids);
       get_model().set_border_set_inner(border_set.id, border_set.inner);
@@ -651,7 +651,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (const BorderSet& border_set, border_sets) {
+    for (const BorderSet& border_set : border_sets) {
       get_model().delete_border_set(border_set.id);
     }
   }
@@ -1141,7 +1141,8 @@ QStringList TilesetEditor::change_pattern_id_in_maps(
     const QString& old_pattern_id, const QString& new_pattern_id) {
 
   QStringList modified_paths;
-  Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
+  const QStringList& map_ids = get_resources().get_elements(ResourceType::MAP);
+  for (const QString& map_id : map_ids) {
     if (change_pattern_id_in_map(map_id, old_pattern_id, new_pattern_id)) {
       modified_paths << get_quest().get_map_data_file_path(map_id);
     }

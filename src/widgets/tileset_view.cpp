@@ -792,7 +792,8 @@ void TilesetView::end_state_drawing_rectangle() {
 
     // Put most actions in a submenu to make the context menu smaller.
     QMenu sub_menu(tr("New pattern (more options)"));
-    Q_FOREACH (QAction* action, menu.actions()) {
+    const QList<QAction*> actions = menu.actions();
+    for (QAction* action : actions) {
       Ground ground = static_cast<Ground>(action->data().toInt());
       if (ground == Ground::TRAVERSABLE ||
           ground == Ground::WALL) {
@@ -830,7 +831,8 @@ void TilesetView::start_state_moving_patterns(const QPoint& initial_point) {
   dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
   dragging_current_point = dragging_start_point;
 
-  Q_FOREACH (int index, model->get_selected_indexes()) {
+  const QList<int>& selected_indexes = model->get_selected_indexes();
+  for (int index : selected_indexes) {
     const QRect& box = model->get_pattern_frames_bounding_box(index);
     QGraphicsRectItem *item = new QGraphicsRectItem(box);
     item->setPen(QPen(Qt::yellow));
@@ -838,7 +840,6 @@ void TilesetView::start_state_moving_patterns(const QPoint& initial_point) {
     current_area_items.append(item);
   }
 
-  const QList<int>& selected_indexes = model->get_selected_indexes();
   const QRect& pattern_frame = model->get_pattern_frame(selected_indexes.first());
   const QPoint& hot_spot = initial_point - mapFromScene(pattern_frame.topLeft());
   QPixmap drag_pixmap = model->get_pattern_image(selected_indexes.first());
@@ -854,7 +855,7 @@ void TilesetView::start_state_moving_patterns(const QPoint& initial_point) {
   drag->setHotSpot(hot_spot);
 
   QStringList pattern_ids;
-  Q_FOREACH(int index, selected_indexes) {
+  for (int index : selected_indexes) {
     pattern_ids << model->index_to_id(index);
   }
   std::sort(pattern_ids.begin(), pattern_ids.end());
@@ -932,7 +933,8 @@ void TilesetView::dragMoveEvent(QDragMoveEvent* event) {
   clear_current_areas();
 
   bool valid_move = true;
-  Q_FOREACH (int index, model->get_selected_indexes()) {
+  const QList<int>& selected_indexes = model->get_selected_indexes();
+  for (int index : selected_indexes) {
 
     QRect area = model->get_pattern_frames_bounding_box(index);
     area.translate(delta);
@@ -1010,7 +1012,7 @@ void TilesetView::update_current_areas(
     scene->setSelectionArea(path, Qt::ContainsItemBoundingRect);
 
     // Re-select items that were already selected if Ctrl or Shift was pressed.
-    Q_FOREACH (QGraphicsItem* item, initially_selected_items) {
+    for (QGraphicsItem* item : initially_selected_items) {
       item->setSelected(true);
     }
   }
@@ -1021,7 +1023,7 @@ void TilesetView::update_current_areas(
  */
 void TilesetView::clear_current_areas() {
 
-  Q_FOREACH (QGraphicsRectItem *item, current_area_items) {
+  for (QGraphicsRectItem* item : current_area_items) {
     scene->removeItem(item);
     delete item;
   }
@@ -1039,7 +1041,7 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_areas(
 
   QList<QGraphicsItem*> items;
 
-  Q_FOREACH (QGraphicsRectItem *item, current_area_items) {
+  for (QGraphicsRectItem* item : current_area_items) {
     QRect area = item->rect().toRect().adjusted(1, 1, -1, -1);
     items.append(scene->items(area, Qt::IntersectsItemBoundingRect));
     items.removeAll(item); // Ignore the drawn rectangle itself.
@@ -1047,7 +1049,8 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_areas(
 
   // Ignore selected items.
   if (ignore_selected) {
-    Q_FOREACH (QGraphicsItem* item, scene->selectedItems()) {
+    const QList<QGraphicsItem*> selected_items = scene->selectedItems();
+    for (QGraphicsItem* item : selected_items) {
       items.removeAll(item);
     }
   }
@@ -1062,7 +1065,8 @@ QList<QGraphicsItem*> TilesetView::get_items_intersecting_current_areas(
 QRect TilesetView::get_selection_bounding_box() const {
 
   QRect bounding_box;
-  Q_FOREACH (int index, model->get_selected_indexes()) {
+  const QList<int> selected_indexes = model->get_selected_indexes();
+  for (int index : selected_indexes) {
     bounding_box = bounding_box.united(
       model->get_pattern_frames_bounding_box(index));
   }

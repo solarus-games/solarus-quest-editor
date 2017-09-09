@@ -160,7 +160,7 @@ void SpriteScene::rebuild() {
 
   // Remove existing direction items
   const bool was_blocked = blockSignals(true);
-  Q_FOREACH (auto& item, direction_items) {
+  for (auto& item : direction_items) {
     removeItem(item);
   }
   direction_items.clear();

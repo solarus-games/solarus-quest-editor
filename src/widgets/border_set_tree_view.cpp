@@ -80,7 +80,7 @@ void BorderSetTreeView::delete_border_set_selection_requested() {
   const QModelIndexList& selected_indexes = selectionModel()->selectedIndexes();
   QStringList border_sets_to_delete;
   QList<QPair<QString, BorderKind>> patterns_to_delete;
-  Q_FOREACH(const QModelIndex& index, selected_indexes) {
+  for (const QModelIndex& index : selected_indexes) {
     const QString& border_set_id = model->get_border_set_id(index);
     if (model->is_border_set_index(index)) {
       // Delete a full border set.

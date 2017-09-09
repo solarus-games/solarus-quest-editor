@@ -94,7 +94,7 @@ void BorderSetSelector::build() {
 
     // Add border sets.
     const QStringList& border_set_ids = tileset.get_border_set_ids();
-    Q_FOREACH(const QString& border_set_id, border_set_ids) {
+    for (const QString& border_set_id : border_set_ids) {
       addItem(tileset.get_border_set_icon(border_set_id), border_set_id, border_set_id);
     }
 

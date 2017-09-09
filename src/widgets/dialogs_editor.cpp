@@ -168,7 +168,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const auto& pair, edited_ids) {
+    for (const auto& pair : edited_ids) {
       get_model().set_dialog_id(pair.second, pair.first);
     }
     if (!edited_ids.isEmpty()) {
@@ -237,7 +237,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const auto& pair, removed_dialogs) {
+    for (const auto& pair : removed_dialogs) {
       get_model().create_dialog(pair.first, pair.second);
     }
     if (!removed_dialogs.isEmpty()) {

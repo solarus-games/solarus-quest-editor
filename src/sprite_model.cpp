@@ -1104,7 +1104,8 @@ QRect SpriteModel::get_direction_all_frames_rect(const Index& index) const {
   }
 
   QRect rect = get_direction_first_frame_rect(index);
-  Q_FOREACH (const QRect& frame, get_direction_frames(index)) {
+  const QList<QRect>& frames = get_direction_frames(index);
+  for (const QRect& frame : frames) {
     rect.setBottom(qMax(frame.bottom(), rect.bottom()));
     rect.setRight(qMax(frame.right(), rect.right()));
   }

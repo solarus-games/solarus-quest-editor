@@ -43,7 +43,7 @@ void create_initial_quest_files(const QString& quest_path) {
 
   // Make sure all resource directories exist.
   Quest quest(quest_path);
-  Q_FOREACH (ResourceType resource_type, Solarus::EnumInfo<ResourceType>::enums()) {
+  for (ResourceType resource_type : Solarus::EnumInfo<ResourceType>::enums()) {
     quest.create_dir_if_not_exists(quest.get_resource_path(resource_type));
   }
 
