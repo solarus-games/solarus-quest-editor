@@ -105,7 +105,7 @@ EntityModel& EditEntityDialog::get_entity_before() const {
  */
 EntityModelPtr EditEntityDialog::get_entity_after() {
 
-  entity_after = std::move(EntityModel::clone(get_map(), entity_before.get_index()));
+  entity_after = EntityModel::clone(get_map(), entity_before.get_index());
   apply();
   return std::move(entity_after);
 }
@@ -151,7 +151,7 @@ void EditEntityDialog::height_changed(int height) {
  */
 void EditEntityDialog::direction_changed() {
 
-  entity_after = std::move(EntityModel::clone(get_map(), entity_before.get_index()));
+  entity_after = EntityModel::clone(get_map(), entity_before.get_index());
   apply_direction();
 
   resize_mode = entity_after->get_resize_mode();
