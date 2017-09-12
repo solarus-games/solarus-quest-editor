@@ -1413,7 +1413,7 @@ void MapView::edit_selected_entity() {
     return;
   }
 
-  EntityModelPtr entity_after = std::move(dialog.get_entity_after());
+  EntityModelPtr entity_after = dialog.get_entity_after();
   emit edit_entity_requested(index, entity_after);
 }
 
