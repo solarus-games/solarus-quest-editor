@@ -37,7 +37,7 @@ install:
 # The Solarus library is also a dependency. A branch of the editor is
 # supposed to compile with the same branch of Solarus.
   - git clone --branch=$TRAVIS_BRANCH https://github.com/christopho/solarus
-  - cd solarus && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && make install && cd ../..
+  - cd solarus && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && sudo make install && cd ../..
 
 script: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make
 
