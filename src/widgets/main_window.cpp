@@ -161,7 +161,6 @@ MainWindow::MainWindow(QWidget* parent) :
   ui.action_new_quest->setShortcut(QKeySequence::New);
   ui.action_close->setShortcut(QKeySequence::Close);
   ui.action_save->setShortcut(QKeySequence::Save);
-  ui.action_exit->setShortcut(QKeySequence::Quit);
   undo_action->setShortcut(QKeySequence::Undo);
   redo_action->setShortcut(QKeySequence::Redo);
   ui.action_cut->setShortcut(QKeySequence::Cut);
