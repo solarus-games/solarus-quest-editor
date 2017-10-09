@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,18 @@ ChangeResourceIdDialog::ChangeResourceIdDialog(
   else if (resource_type == ResourceType::TILESET) {
     set_update_references(true);
     ui.update_references_checkbox->setText(tr("Update existing maps using this tileset"));
+  }
+  else if (resource_type == ResourceType::MUSIC) {
+    set_update_references(true);
+    ui.update_references_checkbox->setText(tr("Update existing maps using this music"));
+  }
+  else if (resource_type == ResourceType::ENEMY) {
+    set_update_references(true);
+    ui.update_references_checkbox->setText(tr("Update existing enemies having this breed"));
+  }
+  else if (resource_type == ResourceType::ENTITY) {
+    set_update_references(true);
+    ui.update_references_checkbox->setText(tr("Update existing custom entities having this model"));
   }
   else {
     set_update_references(false);

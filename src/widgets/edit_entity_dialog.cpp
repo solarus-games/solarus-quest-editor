@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,13 +105,13 @@ EntityModel& EditEntityDialog::get_entity_before() const {
  */
 EntityModelPtr EditEntityDialog::get_entity_after() {
 
-  entity_after = std::move(EntityModel::clone(get_map(), entity_before.get_index()));
+  entity_after = EntityModel::clone(get_map(), entity_before.get_index());
   apply();
   return std::move(entity_after);
 }
 
 /**
- * @brief Slot called when the user change the width value.
+ * @brief Slot called when the user changes the width value.
  * @param width The new width value.
  */
 void EditEntityDialog::width_changed(int width) {
@@ -129,7 +129,7 @@ void EditEntityDialog::width_changed(int width) {
 }
 
 /**
- * @brief Slot called when the user change the height value.
+ * @brief Slot called when the user changes the height value.
  * @param width The new height value.
  */
 void EditEntityDialog::height_changed(int height) {
@@ -147,11 +147,11 @@ void EditEntityDialog::height_changed(int height) {
 }
 
 /**
- * @brief Slot called when the user change the direction value.
+ * @brief Slot called when the user changes the direction value.
  */
 void EditEntityDialog::direction_changed() {
 
-  entity_after = std::move(EntityModel::clone(get_map(), entity_before.get_index()));
+  entity_after = EntityModel::clone(get_map(), entity_before.get_index());
   apply_direction();
 
   resize_mode = entity_after->get_resize_mode();
@@ -391,7 +391,7 @@ void EditEntityDialog::initialize_simple_booleans() {
  */
 void EditEntityDialog::apply_simple_booleans() {
 
-  Q_FOREACH (const SimpleBooleanField& field, simple_boolean_fields) {
+  for (const SimpleBooleanField& field : simple_boolean_fields) {
     if (entity_before.has_field(field.field_name) && field.checkbox != nullptr) {
       entity_after->set_field(field.field_name, field.checkbox->isChecked());
     }
@@ -442,7 +442,7 @@ void EditEntityDialog::initialize_simple_integers() {
  */
 void EditEntityDialog::apply_simple_integers() {
 
-  Q_FOREACH (const SimpleIntegerField& field, simple_integer_fields) {
+  for (const SimpleIntegerField& field : simple_integer_fields) {
     if (entity_before.has_field(field.field_name) && field.spinbox != nullptr) {
       entity_after->set_field(field.field_name, field.spinbox->value());
     }
@@ -507,7 +507,7 @@ void EditEntityDialog::initialize_simple_strings() {
  */
 void EditEntityDialog::apply_simple_strings() {
 
-  Q_FOREACH (const SimpleStringField& field, simple_string_fields) {
+  for (const SimpleStringField& field : simple_string_fields) {
     if (entity_before.has_field(field.field_name) && field.line_edit != nullptr) {
       QString value;
       if (field.checkbox == nullptr || field.checkbox->isChecked()) {
@@ -640,13 +640,13 @@ void EditEntityDialog::initialize_damage_on_enemies() {
   ui.damage_on_enemies_field->setValue(damage_on_enemies);
 
   if (damage_on_enemies == 0) {
-    ui.damage_on_enemies_field->setEnabled(false);
+    ui.damage_on_enemies_layout->setEnabled(false);
   }
   else {
     ui.damage_on_enemies_checkbox->setChecked(true);
   }
   connect(ui.damage_on_enemies_checkbox, SIGNAL(toggled(bool)),
-          ui.damage_on_enemies_field, SLOT(setEnabled(bool)));
+          ui.damage_on_enemies_layout, SLOT(setEnabled(bool)));
 }
 
 /**
@@ -934,6 +934,10 @@ void EditEntityDialog::apply_model() {
  */
 void EditEntityDialog::initialize_name() {
 
+  if (entity_before.get_type() != EntityType::DESTINATION) {
+    ui.name_update_teletransporters_checkbox->setVisible(false);
+  }
+
   if (!entity_before.is_dynamic()) {
     remove_field(ui.name_label, ui.name_field);
     return;
@@ -941,10 +945,6 @@ void EditEntityDialog::initialize_name() {
 
   ui.name_field->setText(entity_before.get_name());
   ui.name_field->setValidator(create_name_validator());
-
-  if (entity_before.get_type() != EntityType::DESTINATION) {
-    ui.name_update_teletransporters_checkbox->setVisible(false);
-  }
 }
 
 /**
@@ -1477,13 +1477,19 @@ void EditEntityDialog::initialize_weight() {
     return;
   }
 
-  initialize_possibly_optional_field(
-        weight_field_name,
-        nullptr,
-        nullptr,
-        ui.weight_checkbox,
-        ui.weight_field);
-  ui.weight_field->setValue(entity_before.get_field(weight_field_name).toInt());
+  int weight = entity_before.get_field(weight_field_name).toInt();
+  if (weight == -1) {
+    ui.weight_layout->setEnabled(false);
+    ui.weight_checkbox->setChecked(false);
+  }
+  else {
+    ui.weight_layout->setEnabled(true);
+    ui.weight_checkbox->setChecked(true);
+    ui.weight_field->setValue(weight);
+  }
+
+  connect(ui.weight_checkbox, SIGNAL(toggled(bool)),
+          ui.weight_layout, SLOT(setEnabled(bool)));
 }
 
 /**
@@ -1493,7 +1499,7 @@ void EditEntityDialog::apply_weight() {
 
   if (entity_after->has_field(weight_field_name)) {
     entity_after->set_field(weight_field_name, ui.weight_checkbox->isChecked() ?
-                              ui.weight_field->value() : 0);
+                              ui.weight_field->value() : -1);
   }
 }
 

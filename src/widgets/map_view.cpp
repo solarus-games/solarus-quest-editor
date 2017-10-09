@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include "widgets/mouse_coordinates_tracking_tool.h"
 #include "widgets/pan_tool.h"
 #include "widgets/zoom_tool.h"
+#include "auto_tiler.h"
 #include "point.h"
 #include "rectangle.h"
 #include "tileset_model.h"
@@ -51,7 +52,7 @@ namespace {
 class DoingNothingState : public MapView::State {
 
 public:
-  DoingNothingState(MapView& view);
+  explicit DoingNothingState(MapView& view);
 
   void mouse_pressed(const QMouseEvent& event) override;
   void mouse_moved(const QMouseEvent& event) override;
@@ -94,6 +95,8 @@ class MovingEntitiesState : public MapView::State {
 public:
   MovingEntitiesState(MapView& view, const QPoint& initial_point);
 
+  void cancel() override;
+
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
 
@@ -111,6 +114,8 @@ class ResizingEntitiesState : public MapView::State {
 public:
   ResizingEntitiesState(MapView& view, const EntityIndexes& entities);
   void start() override;
+  void cancel() override;
+
   void mouse_moved(const QMouseEvent& event) override;
   void mouse_released(const QMouseEvent& event) override;
 
@@ -463,7 +468,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
 
   bool has_common_preferred_layer = true;
   int common_preferred_layer = tileset->get_pattern_default_layer(pattern_indexes.first());
-  Q_FOREACH (int pattern_index, pattern_indexes) {
+  for (int pattern_index : pattern_indexes) {
     QString pattern_id = tileset->index_to_id(pattern_index);
     if (pattern_id.isEmpty()) {
       continue;
@@ -498,7 +503,7 @@ void MapView::start_adding_entities_from_tileset_selection() {
  */
 bool MapView::are_entities_resizable(const EntityIndexes& indexes) const {
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (map->get_entity(index).is_resizable()) {
       return true;
     }
@@ -533,6 +538,14 @@ void MapView::build_context_menu_actions() {
   connect(convert_tiles_action, SIGNAL(triggered()),
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
+
+  add_border_action = new QAction(
+        tr("Add border tiles"), this);
+  add_border_action->setShortcut(tr("Ctrl+B"));
+  add_border_action->setShortcutContext(Qt::WindowShortcut);
+  connect(add_border_action, SIGNAL(triggered()),
+          this, SLOT(add_border_to_selection()));
+  addAction(add_border_action);
 
   up_one_layer_action = new QAction(
         tr("One layer up"), this);
@@ -627,6 +640,7 @@ QMenu* MapView::create_context_menu() {
   // Edit, Resize, Direction
   // Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
+  // Borders
   // Layers, One layer up, One layer down
   // Bring to front, Bring to back
   // Delete
@@ -681,6 +695,10 @@ QMenu* MapView::create_context_menu() {
   }
 
   if (!is_selection_empty()) {
+
+    // Borders.
+    menu->addAction(add_border_action);
+    menu->addSeparator();
 
     // Layer.
     int common_layer = -1;
@@ -830,7 +848,7 @@ void MapView::copy() {
   std::sort(indexes.begin(), indexes.end());
 
   QStringList entity_strings;
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     Q_ASSERT(map->entity_exists(index));
     const EntityModel& entity = map->get_entity(index);
     QString entity_string = entity.to_string();
@@ -1312,8 +1330,8 @@ void MapView::select_entity(const EntityIndex& index, bool selected) {
 EntityModels MapView::clone_selected_entities() const {
 
   EntityModels clones;
-  EntityIndexes indexes = get_selected_entities();
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  const EntityIndexes& indexes = get_selected_entities();
+  for (const EntityIndex& index : indexes) {
     EntityModelPtr clone = EntityModel::clone(*map, index);
     clones.emplace_back(std::move(clone));
   }
@@ -1359,7 +1377,17 @@ EntityIndex MapView::get_entity_index_under_cursor() const {
  */
 void MapView::cancel_state_requested() {
 
+  if (state != nullptr) {
+    state->cancel();
+  }
   start_state_doing_nothing();
+}
+
+/**
+ * @brief Undoes the last command in the undo/redo history.
+ */
+void MapView::undo_last_command() {
+  emit undo_requested();
 }
 
 /**
@@ -1385,7 +1413,7 @@ void MapView::edit_selected_entity() {
     return;
   }
 
-  EntityModelPtr entity_after = std::move(dialog.get_entity_after());
+  EntityModelPtr entity_after = dialog.get_entity_after();
   emit edit_entity_requested(index, entity_after);
 }
 
@@ -1395,6 +1423,21 @@ void MapView::edit_selected_entity() {
 void MapView::convert_selected_tiles() {
 
   emit convert_tiles_requested(get_selected_entities());
+}
+
+/**
+ * @brief Creates border tiles arounds the selected entities.
+ */
+void MapView::add_border_to_selection() {
+
+  const QString& border_set_id = get_map()->get_current_border_set_id();
+  if (border_set_id.isEmpty()) {
+    return;
+  }
+
+  AutoTiler auto_tiler(*get_map(), get_selected_entities(), border_set_id);
+  AddableEntities addable_tiles = auto_tiler.generate_border_tiles();
+  emit add_entities_requested(addable_tiles, false);
 }
 
 /**
@@ -1516,6 +1559,14 @@ void MapView::State::start() {
  * Subclasses can reimplement this function to clean data.
  */
 void MapView::State::stop() {
+}
+
+/**
+ * @brief Called when the user cancels this state.
+ *
+ * Any ongoing action the state has should be undone here.
+ */
+void MapView::State::cancel() {
 }
 
 /**
@@ -1842,6 +1893,14 @@ MovingEntitiesState::MovingEntitiesState(MapView& view, const QPoint& initial_po
 }
 
 /**
+ * @copydoc MapView::State::cancel
+ */
+void MovingEntitiesState::cancel() {
+
+  get_view().undo_last_command();
+}
+
+/**
  * @copydoc MapView::State::mouse_moved
  */
 void MovingEntitiesState::mouse_moved(const QMouseEvent& event) {
@@ -1892,6 +1951,14 @@ ResizingEntitiesState::ResizingEntitiesState(
 }
 
 /**
+ * @copydoc MapView::State::cancel
+ */
+void ResizingEntitiesState::cancel() {
+
+  get_view().undo_last_command();
+}
+
+/**
  * @brief Determines the center of the entities to resize.
  */
 void ResizingEntitiesState::compute_center() {
@@ -1899,7 +1966,7 @@ void ResizingEntitiesState::compute_center() {
   // Compute the total bounding box to determine its center.
   MapModel& map = get_map();
   QRect total_box = map.get_entity_bounding_box(entities.first());
-  Q_FOREACH (const EntityIndex& index, entities) {
+  for (const EntityIndex& index : entities) {
     total_box |= map.get_entity_bounding_box(index);
   }
   center = total_box.center();
@@ -1935,7 +2002,7 @@ void ResizingEntitiesState::compute_leader() {
     if (found_leader) {
       min_distance = 0;  // Don't search a leader with this resize mode.
     }
-    Q_FOREACH (const EntityIndex& index, entities) {
+    for (const EntityIndex& index : entities) {
       const EntityModel& entity = map.get_entity(index);
 
       if (entity.get_resize_mode() != wanted_resize_mode) {
@@ -2661,7 +2728,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   }
 
   // Add them.
-  view.add_entities_requested(addable_entities);
+  view.add_entities_requested(addable_entities, true);
 
   // Decide what to do next: resize them, add new ones or do nothing.
   if (view.are_entities_resizable(view.get_selected_entities())) {

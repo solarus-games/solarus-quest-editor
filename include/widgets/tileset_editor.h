@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@ public slots:
   void update();
 
   void update_tileset_id_field();
-  void update_num_patterns_field();
   void update_background_color();
   void change_background_color();
 
@@ -56,7 +55,7 @@ public slots:
   void update_pattern_view();
   void tileset_image_changed();
   void update_pattern_id_field();
-  void change_selected_pattern_position_requested(const QPoint& position);
+  void change_selected_patterns_position_requested(const QPoint& delta);
   void update_ground_field();
   void ground_selector_activated();
   void change_selected_patterns_ground_requested(Ground ground);
@@ -74,8 +73,18 @@ public slots:
 
   void create_pattern_requested(
       const QString& pattern_id, const QRect& frame, Ground ground);
+  void duplicate_selected_patterns_requested(const QPoint& delta);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
+
+  void create_border_set_requested();
+  void delete_border_set_selection_requested();
+  void delete_border_sets_requested(const QStringList& border_set_ids);
+  void delete_border_set_patterns_requested(const QList<QPair<QString, BorderKind>>& patterns);
+  void change_border_set_patterns_requested(
+      const QString& border_set_id,
+      const QStringList& pattern_ids
+  );
 
 protected:
 
@@ -83,6 +92,7 @@ protected:
 
 private:
 
+  void set_model(TilesetModel* model);
   QStringList change_pattern_id_in_maps(
       const QString& old_pattern_id, const QString& new_pattern_id);
   bool change_pattern_id_in_map(

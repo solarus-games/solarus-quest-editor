@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ MapModel::MapModel(
   quest(quest),
   map_id(map_id),
   tileset_model(nullptr),
-  entities() {
+  entities(),
+  current_border_set_id() {
 
   // Load the map data file.
   QString path = quest.get_map_data_file_path(map_id);
@@ -419,6 +420,22 @@ void MapModel::set_music_id(const QString& music_id) {
 }
 
 /**
+ * @brief Returns the border set id currently selected by the user.
+ * @return The current border set id or an empty string.
+ */
+QString MapModel::get_current_border_set_id() {
+  return current_border_set_id;
+}
+
+/**
+ * @brief Sets the current border set id.
+ * @param current_border_set_id The current border set id or an empty string.
+ */
+void MapModel::set_current_border_set_id(const QString& current_border_set_id) {
+  this->current_border_set_id = current_border_set_id;
+}
+
+/**
  * @brief Returns the total number of entities on the map.
  * @return The number of entities.
  */
@@ -557,7 +574,7 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
   }
 
   type = get_entity_type(indexes.first());
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (get_entity_type(index) != type) {
       return false;
     }
@@ -590,8 +607,8 @@ EntityIndexes MapModel::find_entities_of_type(EntityType type) const {
  */
 EntityIndex MapModel::find_default_destination_index() const {
 
-  EntityIndexes destination_indexes = find_entities_of_type(EntityType::DESTINATION);
-  Q_FOREACH (const EntityIndex& index, destination_indexes) {
+  const EntityIndexes& destination_indexes = find_entities_of_type(EntityType::DESTINATION);
+  for (const EntityIndex& index : destination_indexes) {
     if (get_entity_field(index, "default").toBool()) {
       return index;
     }
@@ -760,7 +777,7 @@ bool MapModel::is_common_layer(const EntityIndexes& indexes, int& layer) const {
   }
 
   layer = indexes.first().layer;
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (index.layer != layer) {
       return false;
     }
@@ -787,12 +804,12 @@ EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, 
 
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
-  Q_FOREACH (const EntityIndex& index_before, indexes_before) {
+  for (const EntityIndex& index_before : indexes_before) {
     entities.append(&get_entity(index_before));
   }
 
   int i = 0;
-  Q_FOREACH (const EntityModel* entity, entities) {
+  for (const EntityModel* entity : entities) {
     Q_ASSERT(entity != nullptr);
     const int layer_after = layers_after[i];
     if (entity->get_layer() != layer_after) {
@@ -803,7 +820,7 @@ EntityIndexes MapModel::set_entities_layer(const EntityIndexes& indexes_before, 
 
   // Now all indexes have finished their changes.
   EntityIndexes indexes_after;
-  Q_FOREACH (const EntityModel* entity, entities) {
+  for (const EntityModel* entity : entities) {
     indexes_after.append(entity->get_index());
   }
 
@@ -825,7 +842,7 @@ void MapModel::undo_set_entities_layer(const EntityIndexes& indexes_after, const
 
   // Work on entities instead of indexes, because indexes change during the traversal.
   QList<EntityModel*> entities;
-  Q_FOREACH (const EntityIndex& index_after, indexes_after) {
+  for (const EntityIndex& index_after : indexes_after) {
     entities.append(&get_entity(index_after));
   }
 
@@ -1261,7 +1278,7 @@ bool MapModel::is_common_direction_rules(
   bool no_direction_allowed = is_entity_no_direction_allowed(first);
   no_direction_text = get_entity_no_direction_text(first);
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (get_entity_num_directions(index) != num_directions ||
         is_entity_no_direction_allowed(index) != no_direction_allowed ||
         get_entity_no_direction_text(index) != no_direction_text) {
@@ -1343,7 +1360,7 @@ bool MapModel::is_common_direction(const EntityIndexes& indexes, int& direction)
   const EntityIndex& first = indexes.first();
   direction = get_entity_direction(first);
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     if (get_entity_direction(index) != direction) {
       return false;
     }
@@ -1540,7 +1557,7 @@ AddableEntities MapModel::remove_entities(const EntityIndexes& indexes) {
   }
 
   // Each entity stores its own index, so they might get shifted.
-  Q_FOREACH (int layer, layers_with_dirty_indexes) {
+  for (int layer : layers_with_dirty_indexes) {
     rebuild_entity_indexes(layer);
   }
 

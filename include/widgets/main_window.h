@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,6 +138,24 @@ private:
       const QString& map_id,
       const QString& tileset_id_before,
       const QString& tileset_id_after
+  );
+  void refactor_music_id(const QString& music_id_before, const QString& music_id_after);
+  bool update_music_in_map(
+      const QString& map_id,
+      const QString& music_id_before,
+      const QString& music_id_after
+  );
+  void refactor_enemy_id(const QString& enemy_id_before, const QString& enemy_id_after);
+  bool update_enemy_breed_in_map(
+      const QString& map_id,
+      const QString& enemy_id_before,
+      const QString& enemy_id_after
+  );
+  void refactor_custom_entity_id(const QString& custom_entity_id_before, const QString& custom_entity_id_after);
+  bool update_custom_entity_model_in_map(
+      const QString& map_id,
+      const QString& custom_entity_id_before,
+      const QString& custom_entity_id_after
   );
 
   Ui::MainWindow ui;              /**< The main window widgets. */

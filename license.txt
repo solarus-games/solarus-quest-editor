@@ -111,9 +111,30 @@ Initial quest
 
 Solarus Quest Editor provides assets (images, sounds and scripts) when
 creating a new quest (File > New quest).
-These assets all come from the Solarus sample quest.
-See the sample_quest/license.txt file of the Solarus engine to know their
-license.
+They are located in the directory assets/initial_quest.
 
-assets/initial_quest
+- Lua scripts are licensed under the terms of the GNU General Public License
+in version 3.
+
+- Most data files other than Lua scripts are licensed under
+Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0).
+http://creativecommons.org/licenses/by-sa/4.0/
+
+- A few data files are in public domain.
+
+All data files of these assets come from the official
+Solarus Free Resource Pack:
+https://github.com/solarus-games/solarus-free-resource-pack
+
+Main contributors:
+- Christopho
+- Diarandor <diarandor at gmail dot com>:
+  - Source URL for images: http://diarandor.deviantart.com/
+  - Source URL for sounds and music: https://soundcloud.com/diarandor/
+- Eduardo Dueñas <duenase@hotmail.com>
+- Bertram
+
+The more detailed license information of the Solarus Free Resource Pack
+can be found here:
+https://github.com/solarus-games/solarus-free-resource-pack/blob/master/license.txt
 

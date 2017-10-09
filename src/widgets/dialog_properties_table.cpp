@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,7 +156,8 @@ void DialogPropertiesTable::update() {
 
   dialog_id = model->get_selected_id();
   QMap<QString, QString> properties = model->get_dialog_properties(dialog_id);
-  Q_FOREACH (const QString& key, properties.keys()) {
+  const QList<QString>& keys = properties.keys();
+  for (const QString& key : keys) {
     dialog_property_created(dialog_id, key, properties[key]);
   }
 
@@ -176,7 +177,8 @@ void DialogPropertiesTable::update() {
   }
 
   properties = model->get_translated_dialog_properties(dialog_id);
-  Q_FOREACH (const QString& key, properties.keys()) {
+  const QList<QString>& translated_keys = properties.keys();
+  for (const QString& key : translated_keys) {
     add_translation_property(key, properties[key]);
   }
 }
@@ -278,7 +280,8 @@ void DialogPropertiesTable::on_item_changed(QTreeWidgetItem *item, int column) {
  */
 void DialogPropertiesTable::clear_table() {
 
-  Q_FOREACH (const QString& key, items.keys()) {
+  const QList<QString>& keys = items.keys();
+  for (const QString& key : keys) {
     takeTopLevelItem(indexOfTopLevelItem(items[key]));
     delete items[key];
     items.remove(key);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ namespace SolarusEditor {
 
 // General keys.
 const QString EditorSettings::working_directory = "working_directory";
+const QString EditorSettings::current_quest = "current_quest";
 const QString EditorSettings::last_quests = "last_quests";
 const QString EditorSettings::last_files = "last_files";
 const QString EditorSettings::last_file = "last_file";
@@ -346,7 +347,8 @@ void EditorSettings::set_value_color(const QString& key, const QColor& value) {
  */
 void EditorSettings::restore_default() {
 
-  Q_FOREACH (const QString& key, default_values.keys()) {
+  const QStringList& keys = default_values.keys();
+  for (const QString& key : keys) {
     settings.setValue(key, default_values[key]);
   }
 }

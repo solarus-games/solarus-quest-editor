@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,6 +75,8 @@ public:
   void reload_tileset();
   QString get_music_id() const;
   void set_music_id(const QString& music_id);
+  QString get_current_border_set_id();
+  void set_current_border_set_id(const QString& current_border_set_id);
 
   // Entities.
   int get_num_entities() const;
@@ -170,6 +172,7 @@ private:
   TilesetModel* tileset_model;    /**< Tileset of this map. nullptr if not set. */
   std::map<int, EntityModels>
       entities;                   /**< All entities by layer. */
+  QString current_border_set_id;  /**< Border set currently selected by the user. */
 
 };
 

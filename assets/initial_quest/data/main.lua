@@ -2,7 +2,9 @@
 -- You will probably make a title screen and then start a game.
 -- See the Lua API! http://www.solarus-games.org/doc/latest
 
+require("scripts/features")
 local game_manager = require("scripts/game_manager")
+local solarus_logo = require("scripts/menus/solarus_logo")
 
 -- This function is called when Solarus starts.
 function sol.main:on_started()
@@ -10,14 +12,13 @@ function sol.main:on_started()
   -- Setting a language is useful to display text and dialogs.
   sol.language.set_language("en")
 
-  local solarus_logo = require("menus/solarus_logo")
-
   -- Show the Solarus logo initially.
   sol.menu.start(self, solarus_logo)
 
   -- Start the game when the Solarus logo menu is finished.
-  solarus_logo.on_finished = function()
-    game_manager:start_game()
+  function solarus_logo:on_finished()
+    local game = game_manager:create("save1.dat")
+    sol.main:start_savegame(game)
   end
 
 end
@@ -46,4 +47,14 @@ function sol.main:on_key_pressed(key, modifiers)
   end
 
   return handled
+end
+
+-- Starts a game.
+function sol.main:start_savegame(game)
+
+  -- Skip initial menus if any.
+  sol.menu.stop(solarus_logo)
+
+  sol.main.game = game
+  game:start()
 end

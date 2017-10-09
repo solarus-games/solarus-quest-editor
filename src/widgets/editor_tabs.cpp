@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "quest.h"
 #include <QFileInfo>
 #include <QKeyEvent>
+#include <QSet>
 #include <QUndoGroup>
 #include <QUndoStack>
 
@@ -640,13 +641,45 @@ bool EditorTabs::confirm_before_closing() {
  */
 bool EditorTabs::has_unsaved_files() {
 
+  return has_unsaved_files_other_than(QSet<QString>());
+}
+
+/**
+ * @brief Returns whether at least one editor has unsaved modifications
+ * and is not in the given list.
+ * @param ignored_paths File paths to ignore in this check.
+ * @return @c true if at least an open file not in the list is unsaved.
+ */
+bool EditorTabs::has_unsaved_files_other_than(const QSet<QString>& ignored_paths) {
+
   for (int i = 0; i < count(); ++i) {
-    if (!get_editor(i)->get_undo_stack().isClean()) {
+    const Editor* editor = get_editor(i);
+    if (ignored_paths.contains(editor->get_file_path())) {
+      continue;
+    }
+    if (!editor->get_undo_stack().isClean()) {
       return true;
     }
   }
 
   return false;
+}
+
+/**
+ * @brief Returns the paths of unsaved files in open editors.
+ * @return The unsaved file paths.
+ */
+QStringList EditorTabs::get_unsaved_files() {
+
+  QStringList unsaved_paths;
+  for (int i = 0; i < count(); ++i) {
+    const Editor* editor = get_editor(i);
+    if (!editor->get_undo_stack().isClean()) {
+      unsaved_paths << editor->get_file_path();
+    }
+  }
+
+  return unsaved_paths;
 }
 
 /**

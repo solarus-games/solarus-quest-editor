@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ namespace SolarusEditor {
 /**
  * @brief Creates an empty entity selector.
  *
- * Call the setter functions and then build to fill the selector.
+ * Call the setter functions and then build() to fill the selector.
  *
  * @param parent The parent widget or nullptr.
  */
@@ -146,7 +146,7 @@ void EntitySelector::build() {
     MapModel map(*quest, map_id);
 
     // Add special value items first.
-    Q_FOREACH (const SpecialValue& special_value, special_values) {
+    for (const SpecialValue& special_value : special_values) {
       addItem(special_value.second, special_value.first);
     }
 

@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 2.8.11)
 
 project(solarus-quest-editor)
 
+set(SOLARUS_INSTALL_DATAROOTDIR "share" CACHE PATH "dataroot dir")
+set(SOLARUS_INSTALL_DATADIR "${SOLARUS_INSTALL_DATAROOTDIR}/solarus-quest-editor" CACHE PATH "data dir")
+set(SOLARUS_INSTALL_BINDIR "bin" CACHE PATH "bin dir")
+
 # As Qt generates ui header files, the build directory needs to be an include
 # directory too.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -34,8 +38,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Werror -Wextra -pedantic ${CMAKE_CXX_FLAGS_DEB
 
 # Add defines for the install path and the build path to help guess the assets
 # location at runtime.
-add_definitions(-DSOLARUSEDITOR_INSTALL_PATH="${CMAKE_INSTALL_PREFIX}")
 add_definitions(-DSOLARUSEDITOR_SOURCE_PATH="${CMAKE_SOURCE_DIR}")
+add_definitions(-DSOLARUSEDITOR_BINDIR_PATH="${CMAKE_INSTALL_PREFIX}/${SOLARUS_INSTALL_BINDIR}")
+add_definitions(-DSOLARUSEDITOR_DATADIR_PATH="${CMAKE_INSTALL_PREFIX}/${SOLARUS_INSTALL_DATADIR}")
 
 # Find dependencies.
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/cmake/modules/")
@@ -111,6 +116,8 @@ set(solarus_quest_editor_SOURCES
   include/entities/teletransporter.h
   include/entities/tile.h
   include/entities/wall.h
+  include/widgets/border_set_selector.h
+  include/widgets/border_set_tree_view.h
   include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
   include/widgets/change_resource_id_dialog.h
@@ -167,6 +174,9 @@ set(solarus_quest_editor_SOURCES
   include/widgets/tileset_view.h
   include/widgets/zoom_tool.h
   include/audio.h
+  include/auto_tiler.h
+  include/border_kind_traits.h
+  include/border_set_model.h
   include/color.h
   include/dialogs_model.h
   include/editor_exception.h
@@ -226,6 +236,8 @@ set(solarus_quest_editor_SOURCES
   src/entities/teletransporter.cpp
   src/entities/tile.cpp
   src/entities/wall.cpp
+  src/widgets/border_set_selector.cpp
+  src/widgets/border_set_tree_view.cpp
   src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp
   src/widgets/change_resource_id_dialog.cpp
@@ -277,6 +289,9 @@ set(solarus_quest_editor_SOURCES
   src/widgets/tileset_view.cpp
   src/widgets/zoom_tool.cpp
   src/audio.cpp
+  src/auto_tiler.cpp
+  src/border_kind_traits.cpp
+  src/border_set_model.cpp
   src/color.cpp
   src/dialogs_model.cpp
   src/editor_exception.cpp
@@ -359,6 +374,7 @@ qt5_add_resources(solarus_quest_editor_RESOURCES_RCC
 
 # Translations.
 set(solarus_quest_editor_TRANSLATIONS
+  translations/solarus_editor_es.ts
   translations/solarus_editor_fr.ts
 )
 qt5_add_translation(solarus_quest_editor_TRANSLATIONS_QM
@@ -391,10 +407,10 @@ target_link_libraries(solarus-quest-editor
 
 # Set files to install
 install(TARGETS solarus-quest-editor
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION ${SOLARUS_INSTALL_BINDIR}
 )
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets/"
-  DESTINATION "share/solarus-quest-editor/assets"
+  DESTINATION "${SOLARUS_INSTALL_DATADIR}/assets"
 )
 
 # Platform specific.
@@ -412,3 +428,35 @@ endif()
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   include(cmake/apple/OSXBuild.cmake)
 endif()
+
+# FreeDesktop compatible icons
+if(UNIX AND NOT APPLE)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-16px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/16x16/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-32px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/32x32/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-48px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/48x48/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-64px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-96px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/96x96/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-128px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-256px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-512px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/512x512/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-768px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/768x768/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/icon/sqe-icon-png-1024px.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/1024x1024/apps RENAME solarus-quest-editor.png)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/images/logo/sqe-logo.png
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/pixmaps RENAME solarus-quest-editor.png)
+endif(UNIX AND NOT APPLE)
+
+# FreeDesktop compatible start menu launcher
+if(UNIX AND NOT APPLE)
+  install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/resources/solarus-quest-editor.desktop
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+endif(UNIX AND NOT APPLE)

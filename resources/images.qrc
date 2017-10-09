@@ -145,5 +145,17 @@
         <file>images/icon_pause_music.png</file>
         <file>images/icon_up.png</file>
         <file>images/icon_down.png</file>
+        <file>images/border_kind_0.png</file>
+        <file>images/border_kind_1.png</file>
+        <file>images/border_kind_2.png</file>
+        <file>images/border_kind_3.png</file>
+        <file>images/border_kind_4.png</file>
+        <file>images/border_kind_5.png</file>
+        <file>images/border_kind_6.png</file>
+        <file>images/border_kind_7.png</file>
+        <file>images/border_kind_8.png</file>
+        <file>images/border_kind_9.png</file>
+        <file>images/border_kind_10.png</file>
+        <file>images/border_kind_11.png</file>
     </qresource>
 </RCC>

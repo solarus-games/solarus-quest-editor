@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -202,6 +202,14 @@ const MapScene::EntityItems& MapScene::get_entity_items(int layer) {
 }
 
 /**
+ * @brief Returns the entity items index by their layer.
+ * @return Items of entities on every layer.
+ */
+const MapScene::ByLayer<MapScene::EntityItems>& MapScene::get_entity_items() const {
+  return entity_items;
+}
+
+/**
  * @brief Shows or hides entities on a layer.
  * @param layer The layer to update.
  * @param view_settings The new view settings to apply.
@@ -215,7 +223,7 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
   // This is possible due to the order of slots.
   layer_range_changed(map.get_min_layer(), map.get_max_layer());
 
-  Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+  for (EntityItem* item : get_entity_items(layer)) {
     item->update_visibility(view_settings);
   }
 }
@@ -228,7 +236,7 @@ void MapScene::update_traversables_visibility(const ViewSettings& view_settings)
 
   this->view_settings = &view_settings;
   for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
-    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+    for (EntityItem* item : get_entity_items(layer)) {
       if (item->get_entity().is_traversable()) {
         item->update_visibility(view_settings);
       }
@@ -244,7 +252,7 @@ void MapScene::update_obstacles_visibility(const ViewSettings& view_settings) {
 
   this->view_settings = &view_settings;
   for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
-    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+    for (EntityItem* item : get_entity_items(layer)) {
       if (!item->get_entity().is_traversable()) {
         item->update_visibility(view_settings);
       }
@@ -261,7 +269,7 @@ void MapScene::update_entity_type_visibility(EntityType type, const ViewSettings
 
   this->view_settings = &view_settings;
   for (int layer = map.get_min_layer(); layer <= map.get_max_layer(); ++layer) {
-    Q_FOREACH (EntityItem* item, get_entity_items(layer)) {
+    for (EntityItem* item : get_entity_items(layer)) {
       if (item->get_entity_type() == type) {
         item->update_visibility(view_settings);
       }
@@ -389,7 +397,7 @@ void MapScene::layer_range_changed(int min_layer, int max_layer) {
  */
 void MapScene::entities_added(const EntityIndexes& indexes) {
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
 
     Q_ASSERT(map.entity_exists(index));
     EntityModel& entity = map.get_entity(index);
@@ -543,7 +551,8 @@ void MapScene::entity_size_changed(const EntityIndex& index, const QSize& size) 
 EntityIndexes MapScene::get_selected_entities() {
 
   EntityIndexes result;
-  Q_FOREACH (QGraphicsItem* item, selectedItems()) {
+  const QList<QGraphicsItem*> selected_items = selectedItems();
+  for (QGraphicsItem* item : selected_items) {
     EntityModel* entity = get_entity_from_item(*item);
     if (entity == nullptr) {
       continue;
@@ -571,7 +580,7 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
     changed = true;
   }
   else {
-    Q_FOREACH (const EntityIndex& index, indexes) {
+    for (const EntityIndex& index : indexes) {
       EntityItem* item = get_entity_item(index);
       Q_ASSERT(item != nullptr);
       if (!item->isSelected()) {
@@ -589,7 +598,7 @@ void MapScene::set_selected_entities(const EntityIndexes& indexes) {
   clearSelection();
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     EntityItem* item = get_entity_item(index);
     Q_ASSERT(item != nullptr);
     if (item == nullptr) {
@@ -621,8 +630,8 @@ void MapScene::select_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  Q_FOREACH (const EntityItems& layer_items, entity_items) {
-    Q_FOREACH (EntityItem* item, layer_items) {
+  for (const EntityItems& layer_items : get_entity_items()) {
+    for (EntityItem* item : layer_items) {
       if (item == nullptr) {
         continue;
       }
@@ -641,8 +650,8 @@ void MapScene::unselect_all() {
 
   const bool was_blocked = signalsBlocked();
   blockSignals(true);
-  Q_FOREACH (const EntityItems& layer_items, entity_items) {
-    Q_FOREACH (EntityItem* item, layer_items) {
+  for (const EntityItems& layer_items : get_entity_items()) {
+    for (EntityItem* item : layer_items) {
       if (item == nullptr) {
         continue;
       }
@@ -673,7 +682,7 @@ void MapScene::redraw_entity(const EntityIndex& index) {
  */
 void MapScene::redraw_entities(const EntityIndexes& indexes) {
 
-  Q_FOREACH(const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     redraw_entity(index);
   }
 }
@@ -696,7 +705,7 @@ int MapScene::get_layer_in_rectangle(const QRect& rectangle) const {
   );
 
   int max_layer = map.get_min_layer();
-  Q_FOREACH (QGraphicsItem* item, items_in_rectangle) {
+  for (QGraphicsItem* item : items_in_rectangle) {
 
     if (item->zValue() > map.get_max_layer()) {
       // This is the case of the selection rectangle and

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,6 +92,7 @@ private:
   void create_entity_item(EntityModel& entity);
   EntityItem* get_entity_item(const EntityIndex& index);
   const EntityItems& get_entity_items(int layer);
+  const ByLayer<EntityItems>& get_entity_items() const;
 
   MapModel& map;                            /**< The map represented. */
   ByLayer<EntityItems> entity_items;        /**< Entities items on each layer,

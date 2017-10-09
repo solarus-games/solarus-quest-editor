@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,12 +54,13 @@ signals:
       const QString& pattern_id, const QRect& frame, Ground ground);
   void delete_selected_patterns_requested();
   void change_selected_pattern_id_requested();
-  void change_selected_pattern_position_requested(const QPoint& position);
+  void change_selected_patterns_position_requested(const QPoint& delta);
   void change_selected_patterns_ground_requested(Ground ground);
   void change_selected_patterns_default_layer_requested(int layer);
   void change_selected_patterns_repeat_mode_requested(TilePatternRepeatMode repeat_mode);
   void change_selected_patterns_animation_requested(PatternAnimation animation);
   void change_selected_patterns_separation_requested(PatternSeparation separation);
+  void duplicate_selected_patterns_requested(const QPoint& delta);
   void selection_changed_by_user();
 
 public slots:
@@ -91,7 +92,7 @@ private:
       NORMAL,                   /**< Can click on patterns. */
       DRAWING_RECTANGLE,        /**< Drawing a rectangle for a selection or
                                  * a new pattern. */
-      MOVING_PATTERN            /**< Moving an existing pattern to another
+      MOVING_PATTERNS           /**< Moving existing patterns to another
                                  * place in the PNG image. */
   };
 
@@ -104,10 +105,18 @@ private:
   void start_state_normal();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void end_state_drawing_rectangle();
-  void start_state_moving_pattern(const QPoint& initial_point);
-  void end_state_moving_pattern();
-  void set_current_area(const QRect& area);
-  QList<QGraphicsItem*> get_items_intersecting_current_area() const;
+  void start_state_moving_patterns(const QPoint& initial_point);
+  void end_state_moving_patterns();
+  void update_current_areas(const QPoint& start_point, const QPoint& current_point);
+  void clear_current_areas();
+  QList<QGraphicsItem*> get_items_intersecting_current_areas(
+      bool ignore_selected = true) const;
+  QRect get_selection_bounding_box() const;
+
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragMoveEvent(QDragMoveEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
   QPointer<TilesetModel> model;        /**< The tileset model. */
   TilesetScene* scene;                 /**< The scene viewed. */
@@ -125,10 +134,10 @@ private:
   QPoint dragging_current_point;       /**< In states DRAWING_RECTANGLE and
                                         * MOVING_PATTERN: point where the
                                         * dragging is currently, in scene coordinates. */
-  QGraphicsRectItem*
-      current_area_item;               /**< In states DRAWING_RECTANGLE and
-                                        * MOVING_PATTERN: graphic item of the
-                                        * rectangle the user is drawing. */
+  QList<QGraphicsRectItem*>
+      current_area_items;              /**< In states DRAWING_RECTANGLE and
+                                        * MOVING_PATTERN: graphic item(s) of the
+                                        * rectangle(s) the user is drawing. */
   QList<QGraphicsItem*>
       initially_selected_items;        /**< In state DRAWING_RECTANGLE: items
                                         * to keep selected if Ctrl or Shift was pressed. */

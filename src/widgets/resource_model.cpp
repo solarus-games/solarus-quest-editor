@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,8 +37,8 @@ ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QOb
   directory_icon(":/images/icon_folder_open.png"),
   tileset_id() {
 
-  QStringList ids = get_resources().get_elements(this->resource_type);
-  Q_FOREACH (const QString& id, ids) {
+  const QStringList& ids = get_resources().get_elements(this->resource_type);
+  for (const QString& id : ids) {
     add_element(id);
   }
 

@@ -1,3 +1,60 @@
+________________________________________
+
+Solarus Quest Editor 1.6.0 (in progress)
+________________________________________
+
+* Tileset editor: allow to duplicate tile patterns (#188).
+* Tileset editor: allow to move several patterns at once (#171).
+
+_______________________________________
+
+Solarus Quest Editor 1.5.3 (2017-04-01)
+_______________________________________
+
+* Initial quest: add enemy killed animation from Diarandor.
+* Initial quest: fix the source image of the bomb sprite.
+* Initial quest: make musics loop without separate file for their intro (#267).
+* Initial quest: add sounds from the Solarus Free Resource Pack.
+* Initial quest: play a sound with the Solarus logo.
+* Fix error message when converting from older formats to 1.5.2.
+
+_______________________________________
+
+Solarus Quest Editor 1.5.2 (2016-12-06)
+_______________________________________
+
+* Fix recursive folders when creating a quest in initial_quest itself (#253).
+
+_______________________________________
+
+Solarus Quest Editor 1.5.1 (2016-11-29)
+_______________________________________
+
+New features
+------------
+
+* Spanish translation (thanks Diarandor!).
+* Update maps when renaming musics, enemies and custom entities (#222).
+
+Bug fixes
+---------
+
+* Fix resizing the console when a sprite editor is open (#215).
+* Fix quest reopened even if it was closed in previous session (#220).
+* Fix renaming .it and .spc musics.
+* Fix typos in the dialogs and strings editors (#231).
+* Fix typo in French translation (#240).
+* Map editor: fix update teletransporters checkbox in tile edit dialog (#221).
+* Map editor: fix setting destructible objects non liftable (#247).
+* Map editor: save all only if necessary when renaming a destination (#219).
+* Map editor: fix tileset view scrollbar position lost sometimes (#229).
+* Map editor: fix escape accepting resize/move instead of cancelling it (#217).
+* Tileset editor: fix selected pattern view after refreshing the image (#218).
+* Text editor: fix freeze when indenting selected lines sometimes.
+* Text editor: don't indent empty lines.
+* Initial quest: put the solarus logo script in scripts/menus/ (#216)
+* Initial quest: fix wrong hero sprite after game-over.
+
 _______________________________________
 
 Solarus Quest Editor 1.5.0 (2016-07-27)

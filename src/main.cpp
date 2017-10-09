@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,9 +88,9 @@ int run_editor_gui(int argc, char* argv[]) {
   }
   else if (settings.get_value_bool(EditorSettings::restore_last_files)) {
     // Restore the default quest if any.
-    QStringList last_quests = settings.get_value_string_list(EditorSettings::last_quests);
-    if (!last_quests.isEmpty()) {
-      quest_path = last_quests.first();
+    const QString& current_quest = settings.get_value_string(EditorSettings::current_quest);
+    if (!current_quest.isEmpty()) {
+      quest_path = current_quest;
       file_paths = settings.get_value_string_list(EditorSettings::last_files);
       active_file_path = settings.get_value_string(EditorSettings::last_file);
     }
@@ -103,7 +103,7 @@ int run_editor_gui(int argc, char* argv[]) {
     if (window.get_quest().is_valid()) {
 
       // Open the tabs.
-      Q_FOREACH (const QString& file_path, file_paths) {
+      for (const QString& file_path : file_paths) {
         window.open_file(window.get_quest(), file_path);
       }
       if (!active_file_path.isEmpty()) {

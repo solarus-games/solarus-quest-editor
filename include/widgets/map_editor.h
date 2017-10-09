@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,10 +78,12 @@ private slots:
   void tileset_selector_activated();
   void refresh_tileset_requested();
   void open_tileset_requested();
-  void update_tileset_view();
-  void tileset_selection_changed();
   void update_music_field();
   void music_selector_activated();
+  void update_tileset_view();
+  void tileset_selection_changed();
+  void update_border_set_view();
+  void border_set_selector_activated();
   void map_selection_changed();
   void uncheck_entity_creation_buttons();
   void update_status_bar();
@@ -102,7 +104,7 @@ private slots:
   void decrease_entities_layer_requested(const EntityIndexes& indexes);
   void bring_entities_to_front_requested(const EntityIndexes& indexes);
   void bring_entities_to_back_requested(const EntityIndexes& indexes);
-  void add_entities_requested(AddableEntities& entities);
+  void add_entities_requested(AddableEntities& entities, bool replace_selection);
   void remove_entities_requested(const EntityIndexes& indexes);
 
 private:

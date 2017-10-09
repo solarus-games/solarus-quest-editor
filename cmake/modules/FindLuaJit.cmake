@@ -1,6 +1,6 @@
 # Locate LuaJIT library
 # This module defines
-#  LUA51_FOUND, if false, do not try to link to Lua 
+#  LUA51_FOUND, if false, do not try to link to Lua
 #  LUA_LIBRARIES
 #  LUA_INCLUDE_DIR, where to find lua.h
 #  LUA_VERSION_STRING, the version of Lua found (since CMake 2.8.8)
@@ -10,7 +10,7 @@
 FIND_PATH(LUA_INCLUDE_DIR luajit.h
   HINTS
   $ENV{LUA_DIR}
-  PATH_SUFFIXES include/luajit-2.0 include
+  PATH_SUFFIXES include/luajit-2.1 include/luajit-2.0 include/luajit-5_1-2.0 include/luajit-5_1-2.1 include
   PATHS
   ~/Library/Frameworks
   /Library/Frameworks
@@ -20,7 +20,7 @@ FIND_PATH(LUA_INCLUDE_DIR luajit.h
   /opt
 )
 
-FIND_LIBRARY(LUA_LIBRARY 
+FIND_LIBRARY(LUA_LIBRARY
   NAMES luajit-5.1
   HINTS
   $ENV{LUA_DIR}
@@ -53,7 +53,7 @@ IF(LUA_INCLUDE_DIR AND EXISTS "${LUA_INCLUDE_DIR}/luajit.h")
 ENDIF()
 
 INCLUDE(FindPackageHandleStandardArgs)
-# handle the QUIETLY and REQUIRED arguments and set LUA_FOUND to TRUE if 
+# handle the QUIETLY and REQUIRED arguments and set LUA_FOUND to TRUE if
 # all listed variables are TRUE
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(LuaJit
                                   REQUIRED_VARS LUA_LIBRARIES LUA_INCLUDE_DIR

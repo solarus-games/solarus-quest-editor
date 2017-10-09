@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,8 +55,7 @@ TilesetModel::TilesetModel(
     patterns.append(PatternModel(pattern_id));
   }
 
-  // Load the tileset image.
-  patterns_image = QImage(quest.get_tileset_tiles_image_path(tileset_id));
+  reload_patterns_image();
 }
 
 /**
@@ -160,13 +159,23 @@ int TilesetModel::get_num_patterns() const {
 }
 
 /**
- * @brief Returns whether there exists a pattern with the specified id.
+ * @brief Returns whether there exists a pattern with the specified index.
  * @param index A pattern index.
  * @return @c true if such a pattern exists in the tileset.
  */
 bool TilesetModel::pattern_exists(int index) const {
 
   return index >= 0 && index < patterns.size();
+}
+
+/**
+ * @brief Returns whether there exists a pattern with the specified id.
+ * @param pattern_id A pattern id.
+ * @return @c true if such a pattern exists in the tileset.
+ */
+bool TilesetModel::pattern_exists(const QString& pattern_id) const {
+
+  return id_to_index(pattern_id) != -1;
 }
 
 /**
@@ -266,9 +275,9 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
   }
 
   // Save and clear the selection since a lot of indexes may change.
-  QModelIndexList old_selected_indexes = selection_model.selection().indexes();
+  const QModelIndexList& old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -293,7 +302,7 @@ int TilesetModel::create_pattern(const QString& pattern_id, const QRect& frame) 
   emit pattern_created(index, pattern_id);
 
   // Restore the selection.
-  Q_FOREACH (QString selected_pattern_id, old_selection_ids) {
+  for (QString selected_pattern_id : old_selection_ids) {
     int new_index = id_to_index(selected_pattern_id);
     add_to_selected(new_index);
   }
@@ -332,9 +341,9 @@ void TilesetModel::delete_pattern(int index) {
   }
 
   // Save and clear the selection since a lot of indexes may change.
-  QModelIndexList old_selected_indexes = selection_model.selection().indexes();
+  const QModelIndexList& old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -357,7 +366,7 @@ void TilesetModel::delete_pattern(int index) {
   emit pattern_deleted(index, pattern_id);
 
   // Restore the selection.
-  Q_FOREACH (const QString& selected_pattern_id, old_selection_ids) {
+  for (const QString& selected_pattern_id : old_selection_ids) {
 
     if (selected_pattern_id == pattern_id) {
       // Exclude the deleted one.
@@ -389,7 +398,7 @@ void TilesetModel::delete_pattern(int index) {
 void TilesetModel::delete_patterns(const QList<int>& indexes) {
 
   QStringList ids_to_delete;
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     QString pattern_id = index_to_id(index);
     if (pattern_id.isEmpty()) {
         throw EditorException(tr("Invalid tile pattern index: %1").arg(index));
@@ -398,15 +407,15 @@ void TilesetModel::delete_patterns(const QList<int>& indexes) {
   }
 
   // Save and clear the selection during the whole operation.
-  QModelIndexList old_selected_indexes = selection_model.selection().indexes();
+  const QModelIndexList old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
 
   // Delete patterns.
-  Q_FOREACH (const QString id, ids_to_delete) {
+  for (const QString id : ids_to_delete) {
     int index = id_to_index(id);
     if (index == -1) {
       throw EditorException(tr("No such tile pattern: %1").arg(id));
@@ -415,7 +424,7 @@ void TilesetModel::delete_patterns(const QList<int>& indexes) {
   }
 
   // Restore the selection.
-  Q_FOREACH (QString selected_pattern_id, old_selection_ids) {
+  for (QString selected_pattern_id : old_selection_ids) {
 
     int new_index = id_to_index(selected_pattern_id);
     if (new_index == -1) {
@@ -467,9 +476,9 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   }
 
   // Save and clear the selection since a lot of indexes may change.
-  QModelIndexList old_selected_indexes = selection_model.selection().indexes();
+  const QModelIndexList& old_selected_indexes = selection_model.selection().indexes();
   QStringList old_selection_ids;
-  Q_FOREACH (const QModelIndex& old_selected_index, old_selected_indexes) {
+  for (const QModelIndex& old_selected_index : old_selected_indexes) {
     old_selection_ids << index_to_id(old_selected_index.row());
   }
   clear_selection();
@@ -505,7 +514,7 @@ int TilesetModel::set_pattern_id(int index, const QString& new_id) {
   emit pattern_id_changed(index, old_id, new_index, new_id);
 
   // Restore the selection.
-  Q_FOREACH (QString pattern_id, old_selection_ids) {
+  for (QString pattern_id : old_selection_ids) {
     if (pattern_id == old_id) {
       pattern_id = new_id;
     }
@@ -684,7 +693,7 @@ bool TilesetModel::is_common_pattern_ground(const QList<int>& indexes, Ground& g
   }
 
   Ground candidate = get_pattern_ground(indexes.first());
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     if (get_pattern_ground(index) != candidate) {
       return false;
     }
@@ -738,7 +747,7 @@ bool TilesetModel::is_common_pattern_default_layer(const QList<int>& indexes, in
   }
 
   int candidate = get_pattern_default_layer(indexes.first());
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     if (get_pattern_default_layer(index) != candidate) {
       return false;
     }
@@ -794,7 +803,7 @@ bool TilesetModel::is_common_pattern_repeat_mode(
   }
 
   TilePatternRepeatMode candidate = get_pattern_repeat_mode(indexes.first());
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     if (get_pattern_repeat_mode(index) != candidate) {
       return false;
     }
@@ -880,7 +889,7 @@ bool TilesetModel::is_common_pattern_animation(const QList<int>& indexes, Patter
   }
 
   PatternAnimation candidate = get_pattern_animation(indexes.first());
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     if (get_pattern_animation(index) != candidate) {
       return false;
     }
@@ -1047,7 +1056,7 @@ bool TilesetModel::is_common_pattern_separation(const QList<int>& indexes, Patte
   }
 
   PatternSeparation candidate = get_pattern_separation(indexes.first());
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     if (get_pattern_separation(index) != candidate) {
       return false;
     }
@@ -1240,7 +1249,7 @@ QPixmap TilesetModel::get_pattern_icon(int index) const {
   // Make sure we have an alpha channel.
   image = image.convertToFormat(QImage::Format_RGBA8888_Premultiplied);
 
-  if (image.height() <= 16) {
+  if (image.height() <= 16 && image.width() <= 16) {
     image = image.scaledToHeight(image.height() * 2);
   }
   else if (image.height() > 32) {
@@ -1263,6 +1272,20 @@ QPixmap TilesetModel::get_pattern_icon(int index) const {
  */
 QImage TilesetModel::get_patterns_image() const {
   return patterns_image;
+}
+
+/**
+ * @brief Loads the tileset image from its PNG file.
+ */
+void TilesetModel::reload_patterns_image() {
+
+  patterns_image = QImage(quest.get_tileset_tiles_image_path(tileset_id));
+
+  for (PatternModel& pattern : patterns) {
+    pattern.set_image_dirty();
+  }
+
+  emit image_changed();
 }
 
 /**
@@ -1312,7 +1335,8 @@ int TilesetModel::get_selected_index() const {
 QList<int> TilesetModel::get_selected_indexes() const {
 
   QList<int> result;
-  Q_FOREACH (const QModelIndex& index, selection_model.selectedIndexes()) {
+  const QModelIndexList& selected_indexes = selection_model.selectedIndexes();
+  for (const QModelIndex& index : selected_indexes) {
     result << index.row();
   }
   return result;
@@ -1336,7 +1360,7 @@ void TilesetModel::set_selected_indexes(const QList<int>& indexes) {
   const QModelIndexList& current_selection = selection_model.selectedIndexes();
 
   QItemSelection selection;
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     QModelIndex model_index = this->index(index);
     selection.select(model_index, model_index);
   }
@@ -1366,7 +1390,7 @@ void TilesetModel::add_to_selected(int index) {
 void TilesetModel::add_to_selected(const QList<int>& indexes) {
 
   QItemSelection selection;
-  Q_FOREACH (int index, indexes) {
+  for (int index : indexes) {
     QModelIndex model_index = this->index(index);
     selection.select(model_index, model_index);
   }
@@ -1411,6 +1435,333 @@ void TilesetModel::select_all() {
 void TilesetModel::clear_selection() {
 
   selection_model.clear();
+}
+
+/**
+ * @brief Returns the number of border sets in this tileset.
+ * @return The number of border sets.
+ */
+int TilesetModel::get_num_border_sets() const {
+
+  return static_cast<int>(tileset.get_border_sets().size());
+}
+
+/**
+ * @brief Returns the ids of all border sets in this tileset.
+ * @return The border set ids in alphabetical order.
+ */
+QStringList TilesetModel::get_border_set_ids() const {
+
+  const std::map<std::string, Solarus::BorderSet>& border_sets = tileset.get_border_sets();
+  QStringList border_set_ids;
+  for (const auto& kvp : border_sets) {
+    border_set_ids << QString::fromStdString(kvp.first);
+  }
+  return border_set_ids;
+}
+
+/**
+ * @brief Returns whether a border set exists with the given id.
+ * @param border_set_id A border set id.
+ * @return @c true if the tileset contains such a border set.
+ */
+bool TilesetModel::border_set_exists(const QString& border_set_id) const {
+
+  return tileset.border_set_exists(border_set_id.toStdString());
+}
+
+/**
+ * @brief Creates an empty border set with the given id.
+ *
+ * Emits border_set_created().
+ *
+ * @param border_set_id A border set id.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::create_border_set(const QString& border_set_id) {
+
+  if (border_set_exists(border_set_id)) {
+    throw EditorException(tr("Border set already exists: '%1'").arg(border_set_id));
+  }
+
+  if (!is_valid_border_set_id(border_set_id)) {
+      throw EditorException(tr("Invalid border set id: '%1'").arg(border_set_id));
+  }
+
+  bool success = tileset.add_border_set(border_set_id.toStdString(), Solarus::BorderSet());
+
+  if (!success) {
+    throw EditorException(tr("Failed to create border set '%1'").arg(border_set_id));
+  }
+
+  emit border_set_created(border_set_id);
+}
+
+/**
+ * @brief Deletes a border set.
+ *
+ * Emits border_set_deleted().
+ *
+ * @param border_set_id Id of the border set to delete.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::delete_border_set(const QString& border_set_id) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  bool success = tileset.remove_border_set(border_set_id.toStdString());
+
+  if (!success) {
+    throw EditorException(tr("Failed to delete border set '%1'").arg(border_set_id));
+  }
+
+  emit border_set_deleted(border_set_id);
+}
+
+/**
+ * @brief Renames a border set.
+ *
+ * Emits border_set_id_changed().
+ *
+ * @param old_id Id of an existing border set.
+ * @param new_id New id to set.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_id(const QString& old_id, const QString& new_id) {
+
+  if (!border_set_exists(old_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(old_id));
+  }
+
+  if (!is_valid_border_set_id(new_id)) {
+      throw EditorException(tr("Invalid border set id: '%1'").arg(new_id));
+  }
+
+  if (border_set_exists(new_id)) {
+    throw EditorException(tr("Border set id already in use: '%1'").arg(new_id));
+  }
+
+  bool success = tileset.set_border_set_id(old_id.toStdString(), new_id.toStdString());
+
+  if (!success) {
+    throw EditorException(tr("Failed to rename border set '%1'").arg(old_id));
+  }
+
+  emit border_set_id_changed(old_id, new_id);
+}
+
+/**
+ * @brief Returns the pattern id of a border for the given border set.
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to get in this border set.
+ * @return The pattern id of this border,
+ * or an empty string if no pattern is set for this border kind.
+ * @throws EditorException in case of error.
+ */
+QString TilesetModel::get_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  const Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  return QString::fromStdString(border_set.get_pattern(border_kind));
+}
+
+/**
+ * @brief Sets a pattern to a border for the given border set.
+ *
+ * Emits border_set_pattern_changed() if there is a change.
+ *
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to set in this border set.
+ * @param pattern_id The pattern id to set for this border,
+ * or an empty string to unset it.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_pattern(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  if (pattern_id == get_border_set_pattern(border_set_id, border_kind)) {
+    // No change.
+    return;
+  }
+
+  Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  border_set.set_pattern(border_kind, pattern_id.toStdString());
+
+  emit border_set_pattern_changed(border_set_id, border_kind, pattern_id);
+}
+
+/**
+ * @brief Returns whether a pattern is defined for a border in the given border set.
+ * @param border_set_id A border set id.
+ * @param border_kind The kind of border to get in this border set.
+ * @return @c true if a pattern is defined for this border.
+ * @throws EditorException in case of error.
+ */
+bool TilesetModel::has_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  return tileset.get_border_set(border_set_id.toStdString()).has_pattern(border_kind);
+}
+
+/**
+ * @brief Returns the list of border patterns for the given border set.
+ * @param border_set_id A border set id.
+ * @return The pattern ids in the order of the BorderKind enum.
+ * @throws EditorException in case of error.
+ */
+QStringList TilesetModel::get_border_set_patterns(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  const Solarus::BorderSet& border_set = tileset.get_border_set(border_set_id.toStdString());
+  QStringList patterns;
+  for (int i = 0; i < 12; ++i) {
+    BorderKind border_kind = static_cast<BorderKind>(i);
+    patterns << QString::fromStdString(border_set.get_pattern(border_kind));
+  }
+
+  return patterns;
+}
+
+/**
+ * @brief Sets the list of border patterns for the given border set.
+ *
+ * Emits border_set_pattern_changed() for each pattern that changes.
+ *
+ * @param border_set_id A border set id.
+ * @param patterns The pattern ids in the order of the BorderKind enum.
+ * It must have 12 elements.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_patterns(
+    const QString& border_set_id,
+    const QStringList& patterns
+) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  Q_ASSERT(patterns.size() == 12);
+
+  for (int i = 0; i < 12; ++i) {
+    BorderKind border_kind = static_cast<BorderKind>(i);
+    set_border_set_pattern(border_set_id, border_kind, patterns[i]);
+  }
+}
+
+/**
+ * @brief Returns whether a border set generates tiles inside or outside the countours.
+ * @param border_set_id A border set id.
+ * @return @c true if this is an inner border set.
+ * @throws EditorException in case of error.
+ */
+bool TilesetModel::is_border_set_inner(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  return tileset.get_border_set(border_set_id.toStdString()).is_inner();
+}
+
+/**
+ * @brief Sets whether a border set generates tiles inside or outside the countours.
+ *
+ * Emits border_set_inner_changed() if there is a change.
+ *
+ * @param border_set_id A border set id.
+ * @param inner @c true to make this border set an inner one.
+ * @throws EditorException in case of error.
+ */
+void TilesetModel::set_border_set_inner(const QString& border_set_id, bool inner) {
+
+  if (!border_set_exists(border_set_id)) {
+    throw EditorException(tr("No such border set: '%1'").arg(border_set_id));
+  }
+
+  if (inner == is_border_set_inner(border_set_id)) {
+    // No change.
+    return;
+  }
+
+  tileset.get_border_set(border_set_id.toStdString()).set_inner(inner);
+
+  emit border_set_inner_changed(border_set_id, inner);
+}
+
+/**
+ * @brief Returns whether a string is a valid border set id.
+ * @param border_set_id The id to check.
+ * @return @c true if this id is legal.
+ */
+bool TilesetModel::is_valid_border_set_id(const QString& border_set_id) {
+
+  if (border_set_id.isEmpty()) {
+      return false;
+  }
+
+  if (
+      border_set_id.contains('\"') ||
+      border_set_id.contains('\'') ||
+      border_set_id.contains('\\') ||
+      border_set_id.contains('\n') ||
+      border_set_id.contains('\r')
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Returns an image representing the specified border set.
+ *
+ * The image has the size of the pattern.
+ *
+ * @param border_set_id A border set id.
+ * @return The corresponding image.
+ * Returns a null pixmap if the tileset image is not loaded
+ * or if there is no such border set.
+ */
+QPixmap TilesetModel::get_border_set_image(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    return QPixmap();
+  }
+
+  QString pattern_id = get_border_set_pattern(border_set_id, BorderKind::TOP);
+  return get_pattern_image(id_to_index(pattern_id));
+}
+
+/**
+ * @brief Returns a 32x32 icon representing the specified border set.
+ * @param border_set_id A border set id.
+ * @return The corresponding icon.
+ * Returns a null pixmap if the tileset image is not loaded
+ * or if there is no such border set.
+ */
+QPixmap TilesetModel::get_border_set_icon(const QString& border_set_id) const {
+
+  if (!border_set_exists(border_set_id)) {
+    return QPixmap();
+  }
+
+  QString pattern_id = get_border_set_pattern(border_set_id, BorderKind::TOP);
+  return get_pattern_icon(id_to_index(pattern_id));
 }
 
 }

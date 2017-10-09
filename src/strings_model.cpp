@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,7 +355,7 @@ QStringList StringsModel::get_keys(const QString& prefix) const {
 /**
  * @brief Returns the value of a string with the specified key.
  * @param key The key to test.
- * @return the value of the specified string or an empty string if no exists.
+ * @return The value of the specified string or an empty string if it does not exist.
  */
 QString StringsModel::get_string(const QString& key) const {
 
@@ -389,7 +389,7 @@ void StringsModel::create_string(const QString& key, const QString& value) {
 
   // Make some checks first.
   if (!is_valid_key(key)) {
-      throw EditorException(tr("Invalid string Key: %1").arg(key));
+      throw EditorException(tr("Invalid string id: '%1'").arg(key));
   }
 
   if (string_exists(key)) {
@@ -432,7 +432,8 @@ void StringsModel::create_string(const QString& key, const QString& value) {
 bool StringsModel::can_duplicate_strings(
   const QString& prefix, const QString& new_prefix, QString& key) {
 
-  Q_FOREACH (QString prefixed_key, get_keys(prefix)) {
+  const QStringList& keys = get_keys(prefix);
+  for (QString prefixed_key : keys) {
 
     prefixed_key.replace(QRegExp(QString("^") + prefix), new_prefix);
     if (string_exists(prefixed_key)) {
@@ -459,7 +460,8 @@ void StringsModel::duplicate_strings(
   }
 
   // Duplicate strings.
-  Q_FOREACH (QString key, get_keys(prefix)) {
+  const QStringList& keys = get_keys(prefix);
+  for (QString key : keys) {
     QString value = get_string(key);
     key.replace(QRegExp(QString("^") + prefix), new_prefix);
     create_string(key, value);
@@ -516,7 +518,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
 
   // Make some checks first.
   if (!string_exists(key)) {
-    throw EditorException(tr("String '%1' no exists").arg(key));
+    throw EditorException(tr("String '%1' does not exist").arg(key));
   }
 
   if (string_exists(new_key)) {
@@ -524,7 +526,7 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
   }
 
   if (!is_valid_key(new_key)) {
-    throw EditorException(tr("Invalid string Key: %1").arg(new_key));
+    throw EditorException(tr("Invalid string id: '%1'").arg(new_key));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -575,7 +577,8 @@ QString StringsModel::set_string_key(const QString& key, const QString& new_key)
 bool StringsModel::can_set_string_key_prefix(
     const QString& old_prefix, const QString& new_prefix, QString& key) {
 
-  Q_FOREACH (QString prefixed_key, get_keys(old_prefix)) {
+  const QStringList& keys = get_keys(old_prefix);
+  for (QString prefixed_key : keys) {
 
     prefixed_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
     if (string_exists(prefixed_key)) {
@@ -604,7 +607,8 @@ QList<QPair<QString, QString>> StringsModel::set_string_key_prefix(
 
   // change the string keys.
   QList<QPair<QString, QString>> list;
-  Q_FOREACH (const QString& old_key, get_keys(old_prefix)) {
+  const QStringList& old_keys = get_keys(old_prefix);
+  for (const QString& old_key : old_keys) {
 
     QString new_key = old_key;
     new_key.replace(QRegExp(QString("^") + old_prefix), new_prefix);
@@ -635,7 +639,7 @@ void StringsModel::delete_string(const QString& key) {
 
   // Make some checks first.
   if (!string_exists(key)) {
-    throw EditorException(tr("Invalid string key: %1").arg(key));
+    throw EditorException(tr("Invalid string id: '%1'").arg(key));
   }
 
   // Save and clear the selection since a lot of indexes may change.
@@ -678,8 +682,9 @@ void StringsModel::delete_string(const QString& key) {
 QList<QPair<QString, QString>> StringsModel::delete_prefix(const QString& prefix) {
 
   QList<QPair<QString, QString>> list;
-  Q_FOREACH (const QString& key, get_keys(prefix)) {
-    list.push_back(QPair<QString, QString>(key, get_string(key)));
+  const QStringList& keys = get_keys(prefix);
+  for (const QString& key : keys) {
+    list.push_back(qMakePair(key, get_string(key)));
     delete_string(key);
   }
   return list;
@@ -840,7 +845,8 @@ bool StringsModel::has_missing_translation(const QString& key) const {
     return true;
   }
 
-  Q_FOREACH (const QString& sub_key, get_translated_keys(key + ".")) {
+  const QStringList& sub_keys = get_translated_keys(key + ".");
+  for (const QString& sub_key : sub_keys) {
     if (!string_exists(sub_key)) {
       return true;
     }
@@ -852,7 +858,7 @@ bool StringsModel::has_missing_translation(const QString& key) const {
 /**
  * @brief Returns a translated string.
  * @param key The key of the string.
- * @return The translated string or an empty string if no exists.
+ * @return The translated string or an empty string if it does not exist.
  */
 QString StringsModel::get_translated_string(const QString& key) const {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <QPointer>
 #include <QTabWidget>
 
+template<typename T> class QSet;
 class QUndoGroup;
 
 namespace SolarusEditor {
@@ -66,6 +67,8 @@ public:
 
   bool confirm_before_closing();
   bool has_unsaved_files();
+  bool has_unsaved_files_other_than(const QSet<QString>& ignored_paths);
+  QStringList get_unsaved_files();
   void close_without_confirmation();
 
   void reload_settings();

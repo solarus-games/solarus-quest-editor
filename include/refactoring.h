@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_REFACTORING_H
 #define SOLARUSEDITOR_REFACTORING_H
 
+#include <QSet>
 #include <QStringList>
 #include <functional>
 
@@ -24,8 +25,6 @@ namespace SolarusEditor {
 
 /**
  * \brief Wraps a refactoring action the user wants to perform.
- *
- * TODO allow to specify which files should be saved before doing the refactoring
  */
 class Refactoring {
 
@@ -35,13 +34,19 @@ public:
 
   explicit Refactoring(const RefactoringFunction& function);
 
+  QSet<QString> get_files_unsaved_allowed() const;
+  bool get_file_unsaved_allowed(const QString& file_name) const;
+  void set_file_unsaved_allowed(const QString& file_name, bool allow_unsaved);
+
   QStringList execute() const;
 
 private:
 
-  RefactoringFunction function;   /**< Function that does the refactoring and
-                                   * returns the list of paths modified. */
-
+  RefactoringFunction function;        /**< Function that does the refactoring and
+                                        * returns the list of paths modified. */
+  QSet<QString>
+      files_unsaved_allowed;           /**< File paths that don't need to be saved
+                                        * before performing this refactoring. */
 };
 
 }

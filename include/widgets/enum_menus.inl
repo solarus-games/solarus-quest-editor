@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ template<typename E>
 QMenu* EnumMenus<E>::create_menu(EnumMenuCheckableOption checkable) {
 
   QMenu* menu = new QMenu();
-  QList<QAction*> actions = create_actions(*menu, checkable);
-  Q_FOREACH (QAction* action, actions) {
+  const QList<QAction*>& actions = create_actions(*menu, checkable);
+  for (QAction* action : actions) {
     menu->addAction(action);
   }
   return menu;
@@ -66,7 +66,8 @@ QList<QAction*> EnumMenus<E>::create_actions(
 
   // Create the actions.
   QList<QAction*> actions;
-  Q_FOREACH (const E& value, EnumTraits<E>::get_values()) {
+  const QList<E>& values = EnumTraits<E>::get_values();
+  for (const E& value : values) {
     const QIcon& icon = EnumTraits<E>::get_icon(value);
     const QString& text = EnumTraits<E>::get_friendly_name(value);
     QAction* action = new QAction(icon, text, action_parent);

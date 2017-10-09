@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ EnumSelector<E>::EnumSelector(QWidget* parent) :
   QComboBox(parent),
   with_none(false) {
 
-  Q_FOREACH (const E& value, EnumTraits<E>::get_values()) {
+  const QList<E>& values = EnumTraits<E>::get_values();
+  for (const E& value : values) {
     addItem(EnumTraits<E>::get_icon(value),
             EnumTraits<E>::get_friendly_name(value));
   }

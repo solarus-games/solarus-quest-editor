@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,6 +129,44 @@ private:
 };
 
 /**
+ * @brief Moving several tile patterns.
+ */
+class SetPatternsPositionCommand : public TilesetEditorCommand {
+
+public:
+
+  SetPatternsPositionCommand(
+      TilesetEditor& editor, QList<int> indexes, const QPoint& delta) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Move patterns")),
+    indexes(indexes),
+    delta(delta) {
+  }
+
+  virtual void undo() override {
+
+    for (int index : indexes) {
+      QPoint position = get_model().get_pattern_frame(index).topLeft();
+      get_model().set_pattern_position(index, position - delta);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+  virtual void redo() override {
+
+    for (int index : indexes) {
+      QPoint position = get_model().get_pattern_frame(index).topLeft();
+      get_model().set_pattern_position(index, position + delta);
+    }
+    get_model().set_selected_indexes(indexes);
+  }
+
+private:
+
+  QList<int> indexes;
+  QPoint delta;
+};
+
+/**
  * @brief Changing the ground of tile patterns.
  */
 class SetPatternsGroundCommand : public TilesetEditorCommand {
@@ -141,7 +179,7 @@ public:
     indexes(indexes),
     ground_after(ground) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       grounds_before << get_model().get_pattern_ground(index);
     }
   }
@@ -149,7 +187,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_ground(index, grounds_before[i]);
       ++i;
     }
@@ -158,7 +196,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_ground(index, ground_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -184,7 +222,7 @@ public:
     indexes(indexes),
     layer_after(layer) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       layers_before << get_model().get_pattern_default_layer(index);
     }
   }
@@ -192,7 +230,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_default_layer(index, layers_before[i]);
       ++i;
     }
@@ -201,7 +239,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_default_layer(index, layer_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -227,7 +265,7 @@ public:
     indexes(indexes),
     repeat_mode_after(repeat_mode) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       repeat_modes_before << get_model().get_pattern_repeat_mode(index);
     }
   }
@@ -235,7 +273,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_repeat_mode(index, repeat_modes_before[i]);
       ++i;
     }
@@ -244,7 +282,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_repeat_mode(index, repeat_mode_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -271,7 +309,7 @@ public:
     indexes(indexes),
     animation_after(animation) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       animations_before << get_model().get_pattern_animation(index);
     }
   }
@@ -279,7 +317,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_animation(index, animations_before[i]);
       ++i;
     }
@@ -289,7 +327,7 @@ public:
   virtual void redo() override {
 
     // TODO don't do anything if one fails.
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_animation(index, animation_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -316,7 +354,7 @@ public:
     indexes(indexes),
     separation_after(separation) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       separations_before << get_model().get_pattern_separation(index);
     }
   }
@@ -324,7 +362,7 @@ public:
   virtual void undo() override {
 
     int i = 0;
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_separation(index, separations_before[i]);
     }
     get_model().set_selected_indexes(indexes);
@@ -332,7 +370,7 @@ public:
 
   virtual void redo() override {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       get_model().set_pattern_separation(index, separation_after);
     }
     get_model().set_selected_indexes(indexes);
@@ -384,6 +422,74 @@ private:
 };
 
 /**
+ * @brief Duplicate tile patterns.
+ */
+class DuplicatePatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DuplicatePatternsCommand(
+      TilesetEditor& editor, const QList<int>& indexes, const QPoint& delta) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Duplicate")),
+    delta(delta) {
+    for (int index : indexes) {
+      ids.append(get_model().index_to_id(index));
+    }
+  }
+
+  virtual void undo() override {
+
+    for (QString new_id : new_ids) {
+      get_model().delete_pattern(get_model().id_to_index(new_id));
+    }
+  }
+
+  virtual void redo() override {
+
+    get_model().clear_selection();
+    new_ids.clear();
+
+    for (QString id : ids) {
+
+      int index = get_model().id_to_index(id);
+
+      QString suffix = QObject::tr(" (copy%1)");
+      QString new_id = id + suffix.arg("");
+
+      int integer_id = 2;
+      while (get_model().id_to_index(new_id) != -1) {
+        new_id = id + suffix.arg(integer_id++);
+      }
+
+      QRect frames = get_model().get_pattern_frames_bounding_box(index);
+      frames.translate(delta);
+
+      int new_index = get_model().create_pattern(new_id, frames);
+      get_model().set_pattern_animation(
+        new_index, get_model().get_pattern_animation(index));
+      get_model().set_pattern_default_layer(
+        new_index, get_model().get_pattern_default_layer(index));
+      get_model().set_pattern_ground(
+        new_index, get_model().get_pattern_ground(index));
+      get_model().set_pattern_repeat_mode(
+        new_index, get_model().get_pattern_repeat_mode(index));
+      get_model().set_pattern_separation(
+        new_index, get_model().get_pattern_separation(index));
+
+      new_ids.append(new_id);
+      get_model().add_to_selected(new_index);
+    }
+  }
+
+private:
+
+  QList<QString> ids;
+  QList<QString> new_ids;
+  QPoint delta;
+
+};
+
+/**
  * @brief Deleting tile patterns.
  */
 class DeletePatternsCommand : public TilesetEditorCommand {
@@ -393,9 +499,9 @@ public:
   DeletePatternsCommand(TilesetEditor& editor, const QList<int>& indexes) :
     TilesetEditorCommand(editor, TilesetEditor::tr("Delete")) {
 
-    Q_FOREACH (int index, indexes) {
+    for (int index : indexes) {
       Pattern pattern;
-      pattern.id =  get_model().index_to_id(index);
+      pattern.id = get_model().index_to_id(index);
       pattern.frames_bounding_box = get_model().get_pattern_frames_bounding_box(index);
       pattern.ground = get_model().get_pattern_ground(index);
       pattern.default_layer = get_model().get_pattern_default_layer(index);
@@ -408,7 +514,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       int index = get_model().create_pattern(pattern.id, pattern.frames_bounding_box);
       get_model().set_pattern_ground(index, pattern.ground);
       get_model().set_pattern_default_layer(index, pattern.default_layer);
@@ -418,7 +524,7 @@ public:
     }
 
     QList<int> indexes;
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       indexes << get_model().id_to_index(pattern.id);
     }
     get_model().set_selected_indexes(indexes);
@@ -427,7 +533,7 @@ public:
   virtual void redo() override {
 
     QList<int> indexes;
-    Q_FOREACH (const Pattern& pattern, patterns) {
+    for (const Pattern& pattern : patterns) {
       indexes << get_model().id_to_index(pattern.id);
     }
     get_model().delete_patterns(indexes);
@@ -483,7 +589,151 @@ private:
 
 };
 
-}
+/**
+ * @brief Changing the patterns of a border set.
+ */
+class SetBorderSetPatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  SetBorderSetPatternsCommand(
+      TilesetEditor& editor,
+      const QString& border_set_id,
+      const QStringList& pattern_ids) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Border set patterns")),
+    border_set_id(border_set_id),
+    pattern_ids_before(get_model().get_border_set_patterns(border_set_id)),
+    pattern_ids_after(pattern_ids) {
+  }
+
+  virtual void undo() override {
+    get_model().set_border_set_patterns(border_set_id, pattern_ids_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_border_set_patterns(border_set_id, pattern_ids_after);
+  }
+
+private:
+
+  QString border_set_id;
+  QStringList pattern_ids_before;
+  QStringList pattern_ids_after;
+};
+
+/**
+ * @brief Deleting border sets.
+ */
+class DeleteBorderSetsCommand : public TilesetEditorCommand {
+
+public:
+
+  DeleteBorderSetsCommand(TilesetEditor& editor, const QStringList& border_set_ids) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete border set")) {
+
+    for (const QString& border_set_id : border_set_ids) {
+      BorderSet border_set;
+      border_set.id = border_set_id;
+      border_set.pattern_ids = get_model().get_border_set_patterns(border_set_id);
+      border_set.inner = get_model().is_border_set_inner(border_set_id);
+      border_sets << border_set;
+    }
+  }
+
+  virtual void undo() override {
+
+    for (const BorderSet& border_set : border_sets) {
+      get_model().create_border_set(border_set.id);
+      get_model().set_border_set_patterns(border_set.id, border_set.pattern_ids);
+      get_model().set_border_set_inner(border_set.id, border_set.inner);
+    }
+  }
+
+  virtual void redo() override {
+
+    for (const BorderSet& border_set : border_sets) {
+      get_model().delete_border_set(border_set.id);
+    }
+  }
+
+private:
+
+  struct BorderSet {
+    QString id;
+    QStringList pattern_ids;
+    bool inner;
+  };
+
+  QList<BorderSet> border_sets;
+};
+
+/**
+ * @brief Creating a border set.
+ */
+class CreateBorderSetCommand : public TilesetEditorCommand {
+
+public:
+
+  CreateBorderSetCommand(TilesetEditor& editor, const QString& border_set_id) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Create border set")),
+    border_set_id(border_set_id) {
+
+  }
+
+  virtual void undo() override {
+
+    get_model().delete_border_set(border_set_id);
+  }
+
+  virtual void redo() override {
+
+    get_model().create_border_set(border_set_id);
+  }
+
+private:
+
+  QString border_set_id;
+};
+
+/**
+ * @brief Deleting patterns in border sets.
+ */
+class DeleteBorderSetPatternsCommand : public TilesetEditorCommand {
+
+public:
+
+  DeleteBorderSetPatternsCommand(TilesetEditor& editor, const QList<QPair<QString, BorderKind>>& patterns) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Delete border set pattern")),
+    patterns_deleted(patterns) {
+
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      pattern_ids_before << get_model().get_border_set_pattern(pattern.first, pattern.second);
+    }
+  }
+
+  virtual void undo() override {
+
+    int i = 0;
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      get_model().set_border_set_pattern(pattern.first, pattern.second, pattern_ids_before[i]);
+      ++i;
+    }
+  }
+
+  virtual void redo() override {
+
+    for (const QPair<QString, BorderKind>& pattern : patterns_deleted) {
+      get_model().set_border_set_pattern(pattern.first, pattern.second, "");
+    }
+  }
+
+private:
+
+  QList<QPair<QString, BorderKind>> patterns_deleted;
+  QStringList pattern_ids_before;
+};
+
+}  // Anonymous namespace.
 
 /**
  * @brief Creates a tileset editor.
@@ -527,6 +777,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   const int side_width = 400;
   ui.splitter->setSizes({ side_width, width() - side_width });
   ui.patterns_list_view->set_model(*model);
+  ui.border_sets_tree_view->set_tileset(*model);
   ui.tileset_view->set_model(model);
   ui.tileset_view->set_view_settings(view_settings);
 
@@ -553,8 +804,8 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_id_changed(int, QString, int, QString)),
           this, SLOT(update_pattern_id_field()));
 
-  connect(ui.tileset_view, SIGNAL(change_selected_pattern_position_requested(QPoint)),
-          this, SLOT(change_selected_pattern_position_requested(QPoint)));
+  connect(ui.tileset_view, SIGNAL(change_selected_patterns_position_requested(QPoint)),
+          this, SLOT(change_selected_patterns_position_requested(QPoint)));
 
   connect(ui.ground_field, SIGNAL(activated(QString)),
           this, SLOT(ground_selector_activated()));
@@ -593,17 +844,27 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   connect(model, SIGNAL(pattern_separation_changed(int, PatternSeparation)),
           this, SLOT(update_animation_separation_field()));
 
-  connect(model, SIGNAL(pattern_created(int, QString)),
-          this, SLOT(update_num_patterns_field()));
   connect(ui.tileset_view, SIGNAL(create_pattern_requested(QString, QRect, Ground)),
           this, SLOT(create_pattern_requested(QString, QRect, Ground)));
 
-  connect(model, SIGNAL(pattern_deleted(int, QString)),
-          this, SLOT(update_num_patterns_field()));
+  connect(ui.tileset_view, SIGNAL(duplicate_selected_patterns_requested(QPoint)),
+          this, SLOT(duplicate_selected_patterns_requested(QPoint)));
+
   connect(ui.patterns_list_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
   connect(ui.tileset_view, SIGNAL(delete_selected_patterns_requested()),
           this, SLOT(delete_selected_patterns_requested()));
+
+  connect(ui.delete_border_set_button, SIGNAL(clicked(bool)),
+          this, SLOT(delete_border_set_selection_requested()));
+  connect(ui.border_sets_tree_view, SIGNAL(delete_border_sets_requested(QStringList)),
+          this, SLOT(delete_border_sets_requested(QStringList)));
+  connect(ui.border_sets_tree_view, SIGNAL(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)),
+          this, SLOT(delete_border_set_patterns_requested(QList<QPair<QString, BorderKind>>)));
+  connect(ui.create_border_set_button, SIGNAL(clicked(bool)),
+          this, SLOT(create_border_set_requested()));
+  connect(ui.border_sets_tree_view, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
+          this, SLOT(change_border_set_patterns_requested(QString, QStringList)));
 
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
@@ -682,7 +943,6 @@ void TilesetEditor::update() {
   update_tileset_id_field();
   update_description_to_gui();
   update_background_color();
-  update_num_patterns_field();
   update_pattern_view();
 }
 
@@ -692,14 +952,6 @@ void TilesetEditor::update() {
 void TilesetEditor::update_tileset_id_field() {
 
   ui.tileset_id_field->setText(tileset_id);
-}
-
-/**
- * @brief Updates the pattern count displaying from the model.
- */
-void TilesetEditor::update_num_patterns_field() {
-
-  ui.num_tiles_field->setText(QString::number(model->get_num_patterns()));
 }
 
 /**
@@ -797,17 +1049,21 @@ void TilesetEditor::tileset_image_changed() {
 }
 
 /**
- * @brief Slot called when the user wants to move a tile pattern.
+ * @brief Slot called when the user wants to move tile pattern(s).
  */
-void TilesetEditor::change_selected_pattern_position_requested(const QPoint& position) {
+void TilesetEditor::change_selected_patterns_position_requested(const QPoint& delta) {
 
-  int index = model->get_selected_index();
-  if (index == -1) {
-    // No pattern selected or several patterns selected.
+  QList<int> indexes = model->get_selected_indexes();
+  if (indexes.empty()) {
+    // No pattern selected.
     return;
+  } else if (indexes.length() == 1) {
+    int index = indexes.first();
+    QPoint position = model->get_pattern_frame(index).topLeft() + delta;
+    try_command(new SetPatternPositionCommand(*this, index, position));
+  } else {
+    try_command(new SetPatternsPositionCommand(*this, indexes, delta));
   }
-
-  try_command(new SetPatternPositionCommand(*this, index, position));
 }
 
 /**
@@ -885,7 +1141,8 @@ QStringList TilesetEditor::change_pattern_id_in_maps(
     const QString& old_pattern_id, const QString& new_pattern_id) {
 
   QStringList modified_paths;
-  Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
+  const QStringList& map_ids = get_resources().get_elements(ResourceType::MAP);
+  for (const QString& map_id : map_ids) {
     if (change_pattern_id_in_map(map_id, old_pattern_id, new_pattern_id)) {
       modified_paths << get_quest().get_map_data_file_path(map_id);
     }
@@ -942,6 +1199,19 @@ bool TilesetEditor::change_pattern_id_in_map(
   out << content;
   file.close();
   return true;
+}
+
+/**
+ * @brief Slot called when the user wants to change a pattern in border set.
+ * @param border_set_id Id of the border set to change.
+ * @param pattern_ids New pattern id to set.
+ */
+void TilesetEditor::change_border_set_patterns_requested(
+    const QString& border_set_id,
+    const QStringList& pattern_ids
+) {
+
+  try_command(new SetBorderSetPatternsCommand(*this, border_set_id, pattern_ids));
 }
 
 /**
@@ -1209,6 +1479,21 @@ void TilesetEditor::create_pattern_requested(
 }
 
 /**
+ * @brief Slot called when the user wants to duplicate the selected tile patterns.
+ * @param delta Translation to apply on duplicate tile patterns.
+ */
+void TilesetEditor::duplicate_selected_patterns_requested(const QPoint& delta) {
+
+  QList<int> indexes = model->get_selected_indexes();
+  if (indexes.empty()) {
+    // No pattern selected.
+    return;
+  }
+
+  try_command(new DuplicatePatternsCommand(*this, indexes, delta));
+}
+
+/**
  * @brief Slot called when the user wants to delete the selected patterns.
  */
 void TilesetEditor::delete_selected_patterns_requested() {
@@ -1244,6 +1529,61 @@ void TilesetEditor::delete_selected_patterns_requested() {
 }
 
 /**
+ * @brief Slot called when the user wants to create a border set.
+ */
+void TilesetEditor::create_border_set_requested() {
+
+  bool ok = false;
+  QString border_set_id = QInputDialog::getText(
+        this,
+        tr("Border set name"),
+        tr("Border set name:"),
+        QLineEdit::Normal,
+        "",
+        &ok);
+
+  if (!ok) {
+    return;
+  }
+
+  try_command(new CreateBorderSetCommand(*this, border_set_id));
+}
+
+/**
+ * @brief Slot called when the user wants to delete something in the border
+ * set editor.
+ */
+void TilesetEditor::delete_border_set_selection_requested() {
+
+  ui.border_sets_tree_view->delete_border_set_selection_requested();
+}
+
+/**
+ * @brief Slot called when the user wants to delete border sets.
+ */
+void TilesetEditor::delete_border_sets_requested(const QStringList& border_set_ids) {
+
+  if (border_set_ids.isEmpty()) {
+    return;
+  }
+
+  try_command(new DeleteBorderSetsCommand(*this, border_set_ids));
+}
+
+/**
+ * @brief Slot called when the user wants to delete some patterns in border sets.
+ * @param patterns The border patterns to delete and their border sets.
+ */
+void TilesetEditor::delete_border_set_patterns_requested(const QList<QPair<QString, BorderKind>>& patterns) {
+
+  if (patterns.isEmpty()) {
+    return;
+  }
+
+  try_command(new DeleteBorderSetPatternsCommand(*this, patterns));
+}
+
+/**
  * @copydoc Editor::editor_made_visible
  */
 void TilesetEditor::editor_made_visible() {
@@ -1264,13 +1604,11 @@ void TilesetEditor::editor_made_visible() {
       return;
     }
 
-    TilesetModel* old_model = model;
+    model->reload_patterns_image();
 
-    model = new TilesetModel(get_quest(), tileset_id, this);
-    ui.tileset_view->set_model(model);
-    ui.patterns_list_view->set_model(*model);
-
-    delete old_model;
+    // Refresh both views.
+    ui.tileset_view->update();
+    // TODO ui.patterns_list_view->
   }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QTextStream>
 
+#include <QDebug>
+
 namespace SolarusEditor {
 
 namespace FileTools {
@@ -40,8 +42,7 @@ namespace {
  * - The directory containing the executable.
  * - The source path (macro SOLARUSEDITOR_SOURCE_PATH)
  *   (useful for developer builds).
- * - The install path (macro SOLARUSEDITOR_INSTALL_PATH)
- *   followed by "share/solarus-quest-editor/".
+ * - The install path (macro SOLARUSEDITOR_DATADIR_PATH).
  */
 void initialize_assets() {
 
@@ -52,7 +53,7 @@ void initialize_assets() {
   potential_paths << executable_path + "/assets";
 
   // Try the source path if we are not running the installed executable.
-  bool running_installed_executable = (executable_path == SOLARUSEDITOR_INSTALL_PATH "/bin");
+  bool running_installed_executable = (executable_path == SOLARUSEDITOR_BINDIR_PATH);
 #ifdef SOLARUSEDITOR_SOURCE_PATH
   if (!running_installed_executable) {
     potential_paths << SOLARUSEDITOR_SOURCE_PATH "/assets";
@@ -60,9 +61,9 @@ void initialize_assets() {
 #endif
 
   // Try the install path if we are running the installed executable.
-#ifdef SOLARUSEDITOR_INSTALL_PATH
+#ifdef SOLARUSEDITOR_DATADIR_PATH
   if (running_installed_executable) {
-    potential_paths << SOLARUSEDITOR_INSTALL_PATH "/share/solarus-quest-editor/assets";
+    potential_paths << SOLARUSEDITOR_DATADIR_PATH;
   }
 #endif
 
@@ -97,6 +98,10 @@ QString get_assets_path() {
  */
 void copy_recursive(const QString& src, const QString& dst) {
 
+  if (src == dst) {
+    throw EditorException(QApplication::tr("Source and destination are the same: '%1'").arg(src));
+  }
+
   QFileInfo src_info(src);
   QFileInfo dst_info(dst);
 
@@ -113,12 +118,19 @@ void copy_recursive(const QString& src, const QString& dst) {
   }
 
   if (src_info.isDir()) {
-    QDir dst_dir(dst);
 
+    QDir dst_dir(dst);
     dst_dir.cdUp();
 
     if (!dst_dir.exists()) {
       throw EditorException(QApplication::tr("No such directory: '%1'").arg(dst_dir.path()));
+    }
+
+    QString src_canonical_path = src_info.canonicalFilePath();
+    QString dst_parent_canonical_path = dst_dir.canonicalPath();
+
+    if (dst_parent_canonical_path.startsWith(src_canonical_path)) {
+      throw EditorException(QApplication::tr("Cannot copy directory '%1' to one of its own subdirectories: '%2'").arg(src, dst));
     }
 
     if (!dst_dir.mkdir(dst_info.fileName())) {
@@ -126,9 +138,9 @@ void copy_recursive(const QString& src, const QString& dst) {
     }
 
     QDir src_dir(src);
-    QStringList file_names = src_dir.entryList(
+    const QStringList& file_names = src_dir.entryList(
           QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
-    Q_FOREACH (const QString& file_name, file_names) {
+    for (const QString& file_name : file_names) {
       QString next_src = src + '/' + file_name;
       QString next_dst = dst + '/' + file_name;
       copy_recursive(next_src, next_dst);

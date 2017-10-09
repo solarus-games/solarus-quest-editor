@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -168,7 +168,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const auto& pair, edited_ids) {
+    for (const auto& pair : edited_ids) {
       get_model().set_dialog_id(pair.second, pair.first);
     }
     if (!edited_ids.isEmpty()) {
@@ -237,7 +237,7 @@ public:
 
   virtual void undo() override {
 
-    Q_FOREACH (const auto& pair, removed_dialogs) {
+    for (const auto& pair : removed_dialogs) {
       get_model().create_dialog(pair.first, pair.second);
     }
     if (!removed_dialogs.isEmpty()) {

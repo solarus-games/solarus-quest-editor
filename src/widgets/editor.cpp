@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ public:
    * @param undo_stack The undo stack.
    * @param wrapped_command The undo command to wrap.
    */
-  UndoCommandSkipFirst(std::unique_ptr<QUndoCommand> wrapped_command):
+  explicit UndoCommandSkipFirst(std::unique_ptr<QUndoCommand> wrapped_command):
     QUndoCommand(wrapped_command->text()),
     wrapped_command(std::move(wrapped_command)),
     first_time(true) {
@@ -376,6 +376,15 @@ bool Editor::try_command(QUndoCommand* command) {
 
   return false;
 }
+
+/**
+ * @brief Undoes the last command from the undo/redo history.
+ */
+void Editor::undo() {
+
+  get_undo_stack().undo();
+}
+
 
 /**
  * @fn Editor::save

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -342,7 +342,7 @@ public:
     allow_merge_to_previous(allow_merge_to_previous) { }
 
   void undo() override {
-    Q_FOREACH (const EntityIndex& index, indexes) {
+    for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, -translation);
     }
     // Select impacted entities.
@@ -350,7 +350,7 @@ public:
   }
 
   void redo() override {
-    Q_FOREACH (const EntityIndex& index, indexes) {
+    for (const EntityIndex& index : indexes) {
       get_map().add_entity_xy(index, translation);
     }
     // Select impacted entities.
@@ -487,7 +487,7 @@ public:
     AddableEntities dynamic_tiles;
 
     // Create the dynamic tiles.
-    Q_FOREACH (const EntityIndex& index_before, indexes_before) {
+    for (const EntityIndex& index_before : indexes_before) {
       EntityModelPtr dynamic_tile = DynamicTile::create_from_normal_tile(map, index_before);
       int layer = index_before.layer;
       EntityIndex index_after = { layer, -1 };
@@ -881,10 +881,11 @@ private:
 class AddEntitiesCommand : public MapEditorCommand {
 
 public:
-  AddEntitiesCommand(MapEditor& editor, AddableEntities&& entities) :
+  AddEntitiesCommand(MapEditor& editor, AddableEntities&& entities, bool replace_selection) :
     MapEditorCommand(editor, MapEditor::tr("Add entities")),
     entities(std::move(entities)),
-    indexes() {
+    indexes(),
+    previous_selected_indexes() {
 
     std::sort(this->entities.begin(), this->entities.end());
 
@@ -892,22 +893,33 @@ public:
     for (const AddableEntity& entity : this->entities) {
       indexes.append(entity.index);
     }
+
+    if (!replace_selection) {
+      previous_selected_indexes = get_map_view().get_selected_entities();
+    }
   }
 
   void undo() override {
     // Remove entities that were added, keep them in this class.
     entities = get_map().remove_entities(indexes);
+    get_map_view().set_selected_entities(previous_selected_indexes);
   }
 
   void redo() override {
     // Add entities and make them selected.
     get_map().add_entities(std::move(entities));
-    get_map_view().set_selected_entities(indexes);
+
+    EntityIndexes selected_indexes = indexes;
+    for (const EntityIndex& index : previous_selected_indexes) {
+      selected_indexes.append(index);
+    }
+    get_map_view().set_selected_entities(selected_indexes);
   }
 
 private:
   AddableEntities entities;    // Entities to be added and where (sorted).
   EntityIndexes indexes;  // Indexes where they should be added (redundant info).
+  EntityIndexes previous_selected_indexes;  // Selection to keep after adding entities.
 };
 
 /**
@@ -1077,6 +1089,9 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   connect(map, SIGNAL(music_id_changed(QString)),
           this, SLOT(update_music_field()));
 
+  connect(ui.current_border_sets_selector, SIGNAL(activated(QString)),
+          this, SLOT(border_set_selector_activated()));
+
   connect(ui.open_script_button, SIGNAL(clicked()),
           this, SLOT(open_script_requested()));
 
@@ -1100,12 +1115,14 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(bring_entities_to_front_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(bring_entities_to_back_requested(EntityIndexes)),
           this, SLOT(bring_entities_to_back_requested(EntityIndexes)));
-  connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&)),
-          this, SLOT(add_entities_requested(AddableEntities&)));
+  connect(ui.map_view, SIGNAL(add_entities_requested(AddableEntities&, bool)),
+          this, SLOT(add_entities_requested(AddableEntities&, bool)));
   connect(ui.map_view, SIGNAL(remove_entities_requested(EntityIndexes)),
           this, SLOT(remove_entities_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(stopped_state()),
           this, SLOT(uncheck_entity_creation_buttons()));
+  connect(ui.map_view, SIGNAL(undo_requested()),
+          this, SLOT(undo()));
 
   connect(ui.map_view->get_scene(), SIGNAL(selectionChanged()),
           this, SLOT(map_selection_changed()));
@@ -1727,6 +1744,41 @@ void MapEditor::update_tileset_view() {
 }
 
 /**
+ * @brief Updates the content of the border set panel.
+ */
+void MapEditor::update_border_set_view() {
+
+  const QString& tileset_id = map->get_tileset_id();
+  if (ui.current_border_sets_selector->get_tileset_id() == tileset_id) {
+    // No change.
+    return;
+  }
+  ui.current_border_sets_selector->set_tileset_id(get_quest(), tileset_id);
+  ui.current_border_sets_selector->build();
+
+  ui.current_border_sets_selector->set_selected_border_set_id(map->get_current_border_set_id());
+
+  if (ui.current_border_sets_selector->get_selected_border_set_id() != map->get_current_border_set_id()) {
+    map->set_current_border_set_id(ui.current_border_sets_selector->get_selected_border_set_id());
+  }
+}
+
+/**
+ * @brief Slot called when the user changes the current border set selected.
+ */
+void MapEditor::border_set_selector_activated() {
+
+  const QString& old_border_set_id = map->get_current_border_set_id();
+  const QString& new_border_set_id = ui.current_border_sets_selector->get_selected_border_set_id();
+  if (new_border_set_id == old_border_set_id) {
+    // No change.
+    return;
+  }
+
+  map->set_current_border_set_id(new_border_set_id);
+}
+
+/**
  * @brief Slot called when another tileset is set on the map.
  * @param tileset_id The new tileset id.
  */
@@ -1740,13 +1792,16 @@ void MapEditor::tileset_id_changed(const QString& tileset_id) {
   // Notify the tileset view.
   update_tileset_view();
 
-  // Watch the selection of the tileset to correctly add new tiles.
+  // Notify the border sets view.
+  update_border_set_view();
+
+  // Watch the pattern selection of the tileset view to correctly add new tiles.
   connect(ui.tileset_view, SIGNAL(selection_changed_by_user()),
           this, SLOT(tileset_selection_changed()));
 }
 
 /**
- * @brief Slot called when the user changes the selection in the tileset view.
+ * @brief Slot called when the user changes the patterns selection in the tileset view.
  */
 void MapEditor::tileset_selection_changed() {
 
@@ -1770,7 +1825,7 @@ void MapEditor::map_selection_changed() {
     const EntityIndexes& entity_indexes = ui.map_view->get_selected_entities();
     MapModel& map = get_map();
     QList<int> pattern_indexes;
-    Q_FOREACH (const EntityIndex& entity_index, entity_indexes) {
+    for (const EntityIndex& entity_index : entity_indexes) {
       QString pattern_id = map.get_entity_field(entity_index, "pattern").toString();
       if (!pattern_id.isEmpty()) {
         pattern_indexes << tileset->id_to_index(pattern_id);
@@ -1800,9 +1855,9 @@ void MapEditor::refactor_destination_name(
     }
 
     // Update teletransporters in this map.
-    EntityIndexes teletransporter_indexes =
+    const EntityIndexes& teletransporter_indexes =
         map->find_entities_of_type(EntityType::TELETRANSPORTER);
-    Q_FOREACH (const EntityIndex& index, teletransporter_indexes) {
+    for (const EntityIndex& index : teletransporter_indexes) {
       const QString& destination_map_id =
           map->get_entity_field(index, "destination_map").toString();
       const QString& destination_name =
@@ -1822,6 +1877,8 @@ void MapEditor::refactor_destination_name(
     return update_destination_name_in_other_maps(name_before, name_after);
   });
 
+  refactoring.set_file_unsaved_allowed(get_file_path(), true);
+
   emit refactoring_requested(refactoring);
 }
 
@@ -1838,7 +1895,8 @@ QStringList MapEditor::update_destination_name_in_other_maps(
     const QString& name_after
 ) {
   QStringList modified_paths;
-  Q_FOREACH (const QString& map_id, get_resources().get_elements(ResourceType::MAP)) {
+  const QStringList& map_ids = get_resources().get_elements(ResourceType::MAP);
+  for (const QString& map_id : map_ids) {
     if (map_id != this->map_id) {
       if (update_destination_name_in_map(map_id, name_before, name_after)) {
         modified_paths << get_quest().get_map_data_file_path(map_id);
@@ -2005,7 +2063,7 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
 
   const bool dynamic = map->get_entity(indexes.first()).is_dynamic();
 
-  Q_FOREACH (const EntityIndex& index, indexes) {
+  for (const EntityIndex& index : indexes) {
     EntityType current_type = map->get_entity_type(index);
     if (current_type != EntityType::TILE && current_type != EntityType::DYNAMIC_TILE) {
       return;
@@ -2122,14 +2180,16 @@ void MapEditor::bring_entities_to_back_requested(const EntityIndexes& indexes) {
 /**
  * @brief Slot called when the user wants to add entities.
  * @param entities Entities ready to be added to the map.
+ * @param replace_selection @c true to clear the previous selection.
+ * Newly created entities will be selected in all cases.
  */
-void MapEditor::add_entities_requested(AddableEntities& entities) {
+void MapEditor::add_entities_requested(AddableEntities& entities, bool replace_selection) {
 
   if (entities.empty()) {
     return;
   }
 
-  try_command(new AddEntitiesCommand(*this, std::move(entities)));
+  try_command(new AddEntitiesCommand(*this, std::move(entities), replace_selection));
 }
 
 /**
@@ -2167,7 +2227,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
     }
 
     // Uncheck other entity creation buttons.
-    Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
+    const QList<QAction*>& actions = entity_creation_toolbar->actions();
+    for (QAction* action : actions) {
       bool ok = false;
       EntityType action_type = static_cast<EntityType>(action->data().toInt(&ok));
       if (ok) {
@@ -2187,7 +2248,8 @@ void MapEditor::entity_creation_button_triggered(EntityType type, bool checked) 
  */
 void MapEditor::uncheck_entity_creation_buttons() {
 
-  Q_FOREACH (QAction* action, entity_creation_toolbar->actions()) {
+  const QList<QAction*>& actions = entity_creation_toolbar->actions();
+  for (QAction* action : actions) {
     action->setChecked(false);
   }
 }

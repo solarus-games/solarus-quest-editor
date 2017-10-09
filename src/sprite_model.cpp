@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1109,7 +1109,8 @@ QRect SpriteModel::get_direction_all_frames_rect(const Index& index) const {
   }
 
   QRect rect = get_direction_first_frame_rect(index);
-  Q_FOREACH (const QRect& frame, get_direction_frames(index)) {
+  const QList<QRect>& frames = get_direction_frames(index);
+  for (const QRect& frame : frames) {
     rect.setBottom(qMax(frame.bottom(), rect.bottom()));
     rect.setRight(qMax(frame.right(), rect.right()));
   }
@@ -1660,7 +1661,7 @@ void SpriteModel::set_direction_image_dirty(const Index& index) {
  * @param index An animation index.
  * @return Reference of the animation.
  */
-const Solarus::SpriteAnimationData &SpriteModel::get_animation(
+const Solarus::SpriteAnimationData& SpriteModel::get_animation(
     const Index& index) const {
 
   return sprite.get_animation(index.animation_name.toStdString());
@@ -1676,7 +1677,7 @@ const Solarus::SpriteAnimationData &SpriteModel::get_animation(
  * @param index An animation index.
  * @return Reference of the animation.
  */
-Solarus::SpriteAnimationData &SpriteModel::get_animation(const Index& index) {
+Solarus::SpriteAnimationData& SpriteModel::get_animation(const Index& index) {
 
   return sprite.get_animation(index.animation_name.toStdString());
 }
@@ -1689,7 +1690,7 @@ Solarus::SpriteAnimationData &SpriteModel::get_animation(const Index& index) {
  * @param index A direction index.
  * @return Reference of the direction.
  */
-const Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
+const Solarus::SpriteAnimationDirectionData& SpriteModel::get_direction(
     const Index& index) const {
 
   return get_animation(index).get_direction(index.direction_nb);
@@ -1705,7 +1706,7 @@ const Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
  * @param index A direction index.
  * @return Reference of the direction.
  */
-Solarus::SpriteAnimationDirectionData &SpriteModel::get_direction(
+Solarus::SpriteAnimationDirectionData& SpriteModel::get_direction(
     const Index& index) {
 
   return get_animation(index).get_direction(index.direction_nb);

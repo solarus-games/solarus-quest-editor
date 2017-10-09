@@ -807,8 +807,12 @@ Make sure that Solarus Quest Editor is properly installed.</source>
 <context>
     <name>SolarusEditor::DialogsEditor</name>
     <message>
-        <location filename="../src/widgets/dialogs_editor.ui" line="14"/>
         <source>Dialogss editor</source>
+        <translation type="vanished">Éditeur de dialogues</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/dialogs_editor.ui" line="14"/>
+        <source>Dialogs editor</source>
         <translation>Éditeur de dialogues</translation>
     </message>
     <message>
@@ -1071,7 +1075,6 @@ Make sure that Solarus Quest Editor is properly installed.</source>
     </message>
     <message>
         <location filename="../src/dialogs_model.cpp" line="394"/>
-        <location filename="../src/dialogs_model.cpp" line="590"/>
         <location filename="../src/dialogs_model.cpp" line="703"/>
         <source>Invalid dialog id: %1</source>
         <translation>Id de dialogue invalide : %1</translation>
@@ -1086,8 +1089,17 @@ Make sure that Solarus Quest Editor is properly installed.</source>
     </message>
     <message>
         <location filename="../src/dialogs_model.cpp" line="582"/>
-        <source>Dialog &apos;%1&apos; no exists</source>
+        <source>Dialog &apos;%1&apos; does not exist</source>
         <translation>Le dialogue &apos;%1&apos; n&apos;existe pas</translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs_model.cpp" line="590"/>
+        <source>Invalid dialog id: &apos;%1&apos;</source>
+        <translation>Id de dialogue invalide : &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <source>Dialog &apos;%1&apos; no exists</source>
+        <translation type="vanished">Le dialogue &apos;%1&apos; n&apos;existe pas</translation>
     </message>
 </context>
 <context>
@@ -2212,15 +2224,16 @@ Make sure that Solarus Quest Editor is properly installed.</source>
         <translation>Arrêter la quête</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1688"/>
+        <location filename="../src/widgets/main_window.cpp" line="1689"/>
         <source>Unsaved changes</source>
         <translation>Changements non sauvegardés</translation>
     </message>
     <message>
-        <location filename="../src/widgets/main_window.cpp" line="1689"/>
+        <location filename="../src/widgets/main_window.cpp" line="1690"/>
         <source>All files must be saved before this operation.
 Do you want to save them now?</source>
-        <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.\nVoulez-vous les sauvegarder maintenant ?</translation>
+        <translation>Tous les fichiers doivent être sauvegardés avant d&apos;effectuer cette opération.
+Voulez-vous les sauvegarder maintenant ?</translation>
     </message>
     <message>
         <source>Quest terminated unexpectedly: %1</source>
@@ -2663,17 +2676,17 @@ Please save it or close it before renaming.</source>
         <translation>Cette couche n&apos;est pas vide : %1 entités vont être détruites.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1909"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1911"/>
         <source>%1,%2 </source>
         <translation>%1,%2 </translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1918"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1920"/>
         <source> - %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/map_editor.cpp" line="1920"/>
+        <location filename="../src/widgets/map_editor.cpp" line="1922"/>
         <source>: %1</source>
         <translation> : %1</translation>
     </message>
@@ -4288,142 +4301,142 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SolarusEditor::SpriteEditor</name>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="14"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="20"/>
         <source>Sprite editor</source>
         <translation>Éditeur de sprite</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="57"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="63"/>
         <source>Sprite properties</source>
         <translation>Propriétés du sprite</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="66"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="72"/>
         <source>Sprite id</source>
         <translation>Id du sprite</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="73"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="79"/>
         <source>Filename of the sprite (without extension)</source>
         <translation>Nom de fichier du sprite (sans extension)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="83"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="89"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="90"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="96"/>
         <source>User-friendly description to show in the editor</source>
         <translation>Description intuitive à utiliser dans l&apos;éditeur</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="113"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="119"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="151"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="157"/>
         <source>Rename</source>
         <translation>Renommer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="189"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="195"/>
         <source>Duplicate</source>
         <translation>Dupliquer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="227"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="233"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="270"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="276"/>
         <source>Animation properties</source>
         <translation>Propriétés de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="282"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="288"/>
         <source>Source image</source>
         <translation>Image source</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="306"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="312"/>
         <source>Source image of the animation</source>
         <translation>Image source de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="316"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="322"/>
         <source>Tileset of the animation</source>
         <translation>Tileset de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="323"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="329"/>
         <source>Refresh image</source>
         <translation>Rafraîchir l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="326"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="332"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="343"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="349"/>
         <source>Change</source>
         <translation>Changer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="381"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="387"/>
         <source>Delay in milliseconds between two frames of the animation</source>
         <translation>Délais en millisecondes entre deux frames de l&apos;animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="384"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="390"/>
         <source> ms</source>
         <translation> ms</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="400"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="406"/>
         <source>Frame delay</source>
         <translation>Délais entre les frames</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="407"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="413"/>
         <source>Loop on frame</source>
         <translation>Boucler sur la frame</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="417"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="423"/>
         <source>Index of the frame where you want the animation to come back when the last frame finishes</source>
         <translation>Index de le frame sur laquelle l&apos;animation doit revenir après la dernière frame</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="433"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="439"/>
         <source>Default animation</source>
         <translation>Animation par défaut</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="440"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="446"/>
         <source>Default animation of the sprite</source>
         <translation>Animation par défaut du sprite</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="443"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="449"/>
         <source>Set as default</source>
         <translation>Définir par défaut</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="548"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="554"/>
         <source>Direction preview</source>
         <translation>Prévisualisation de la direction</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="453"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="459"/>
         <source>Direction properties</source>
         <translation>Propriétés de la direction</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="462"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="468"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
@@ -4442,17 +4455,17 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Coordonnée en Y du coin haut-gauche de la zone contenant les frames dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="469"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="475"/>
         <source>Origin</source>
         <translation>Origine</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="476"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="482"/>
         <source>Number of frames</source>
         <translation>Nombre de frames</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="483"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="489"/>
         <source>Number of columns</source>
         <translation>Nombre de colonnes</translation>
     </message>
@@ -4467,17 +4480,17 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <translation>Coordonnée en Y du point d&apos;origine du sprite</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="490"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="496"/>
         <source>Number of frames of this direction</source>
         <translation>Nombre de frames de la direction</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="503"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="509"/>
         <source>Number of columns of the grid containing the frames of this direction in the image</source>
         <translation>Nombre de colonnes de la grille contenant les frames de cette direction dans l&apos;image</translation>
     </message>
     <message>
-        <location filename="../src/widgets/sprite_editor.ui" line="516"/>
+        <location filename="../src/widgets/sprite_editor.ui" line="522"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
@@ -5021,8 +5034,13 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     <message>
         <location filename="../src/strings_model.cpp" line="392"/>
         <location filename="../src/strings_model.cpp" line="527"/>
+        <location filename="../src/strings_model.cpp" line="638"/>
+        <source>Invalid string id: &apos;%1&apos;</source>
+        <translation>Id de texte invalide : &apos;%1&apos;</translation>
+    </message>
+    <message>
         <source>Invalid string Key: %1</source>
-        <translation>Clé de texte invalide: %1</translation>
+        <translation type="vanished">Clé de texte invalide: %1</translation>
     </message>
     <message>
         <location filename="../src/strings_model.cpp" line="396"/>
@@ -5034,13 +5052,16 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
     </message>
     <message>
         <location filename="../src/strings_model.cpp" line="519"/>
-        <source>String &apos;%1&apos; no exists</source>
+        <source>String &apos;%1&apos; does not exist</source>
         <translation>Le texte &apos;%1&apos; n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/strings_model.cpp" line="638"/>
+        <source>String &apos;%1&apos; no exists</source>
+        <translation type="vanished">Le texte &apos;%1&apos; n&apos;existe pas</translation>
+    </message>
+    <message>
         <source>Invalid string key: %1</source>
-        <translation>Clé de texte invalide: %1</translation>
+        <translation type="vanished">Clé de texte invalide: %1</translation>
     </message>
 </context>
 <context>
@@ -5092,22 +5113,22 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
 <context>
     <name>SolarusEditor::TextEditorWidget</name>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="347"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="348"/>
         <source>Cut</source>
         <translation>Couper</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="358"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="359"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="369"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="370"/>
         <source>Paste</source>
         <translation>Coller</translation>
     </message>
     <message>
-        <location filename="../src/widgets/text_editor_widget.cpp" line="382"/>
+        <location filename="../src/widgets/text_editor_widget.cpp" line="383"/>
         <source>Select all</source>
         <translation>Sélectionner tout</translation>
     </message>
@@ -5333,7 +5354,7 @@ Titre de la fenêtre. Vous devriez probablement mettre le titre de votre jeu ici
         <location filename="../src/widgets/tileset_editor.cpp" line="1258"/>
         <source>The tileset image was modified.
 Do you want to refresh the tileset?</source>
-        <translation type="unfinished">L&apos;image du tileset a été modifée.
+        <translation>L&apos;image du tileset a été modifée.
 Voulez-vous recharger l&apos;image ?</translation>
     </message>
 </context>
@@ -5432,43 +5453,43 @@ Voulez-vous recharger l&apos;image ?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="575"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="581"/>
         <source>Default layer</source>
         <translation>Couche par défaut</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="581"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="587"/>
         <source>Repeatable</source>
         <translation>Répétable</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="587"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="593"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="658"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="664"/>
         <source>Layer %1</source>
         <translation>Couche %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="805"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="811"/>
         <source>New pattern (more options)</source>
         <translation>Nouveau motif (plus d&apos;options)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="811"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="817"/>
         <source>New pattern (%1)</source>
         <translation>Nouveau motif (%1)</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="822"/>
-        <location filename="../src/widgets/tileset_view.cpp" line="876"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="828"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="882"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../src/widgets/tileset_view.cpp" line="870"/>
+        <location filename="../src/widgets/tileset_view.cpp" line="876"/>
         <source>Move here</source>
         <translation>Déplacer ici</translation>
     </message>

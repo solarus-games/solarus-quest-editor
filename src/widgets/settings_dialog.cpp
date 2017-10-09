@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -184,7 +184,8 @@ void SettingsDialog::restore_default() {
  */
 void SettingsDialog::apply() {
 
-  Q_FOREACH (const QString& key, edited_settings.keys()) {
+  const QStringList& keys = edited_settings.keys();
+  for (const QString& key : keys) {
     settings.set_value(key, edited_settings[key]);
   }
   reset();
@@ -249,7 +250,8 @@ void SettingsDialog::update_buttons() {
 
   // Check if values are changed.
   bool changed = false;
-  Q_FOREACH (const QString& key, edited_settings.keys()) {
+  const QStringList& keys = edited_settings.keys();
+  for (const QString& key : keys) {
 
     QVariant value = edited_settings[key];
     if (value != settings.get_value(key)) {

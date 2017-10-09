@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ class Quest;
 
 using Ground = Solarus::Ground;
 using TilePatternRepeatMode = Solarus::TilePatternRepeatMode;
+using BorderKind = Solarus::BorderKind;
 
 /**
  * @brief Model that wraps a tileset.
@@ -66,8 +67,10 @@ public:
   virtual int rowCount(const QModelIndex& parent) const override;
   virtual QVariant data(const QModelIndex& index, int role) const override;
 
+  // Patterns.
   int get_num_patterns() const;
   bool pattern_exists(int index) const;
+  bool pattern_exists(const QString& pattern_id) const;
   int id_to_index(const QString& pattern_id) const;
   QString index_to_id(int index) const;
   int create_pattern(const QString& pattern_id, const QRect& frame);
@@ -102,6 +105,7 @@ public:
   QPixmap get_pattern_image_all_frames(int index) const;
   QPixmap get_pattern_icon(int index) const;
   QImage get_patterns_image() const;
+  void reload_patterns_image();
 
   // Selected patterns.
   QItemSelectionModel& get_selection_model();
@@ -118,9 +122,30 @@ public:
   void select_all();
   void clear_selection();
 
+  // Border sets.
+  int get_num_border_sets() const;
+  QStringList get_border_set_ids() const;
+  bool border_set_exists(const QString& border_set_id) const;
+  void create_border_set(const QString& border_set_id);
+  void delete_border_set(const QString& border_set_id);
+  void set_border_set_id(const QString& old_id, const QString& new_id);
+  QString get_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const;
+  void set_border_set_pattern(const QString& border_set_id, BorderKind border_kind, const QString& pattern_id);
+  bool has_border_set_pattern(const QString& border_set_id, BorderKind border_kind) const;
+  QStringList get_border_set_patterns(const QString& border_set_id) const;
+  void set_border_set_patterns(const QString& border_set_id, const QStringList& patterns);
+  bool is_border_set_inner(const QString& border_set_id) const;
+  void set_border_set_inner(const QString& border_set_id, bool inner);
+  static bool is_valid_border_set_id(const QString& border_set_id);
+
+  QPixmap get_border_set_image(const QString& border_set_id) const;
+  QPixmap get_border_set_icon(const QString& border_set_id) const;
+
 signals:
 
   void background_color_changed(const QColor& background_color);
+  void image_changed();
+
   void pattern_created(int new_index, const QString& new_id);
   void pattern_deleted(int old_index, const QString& old_id);
   void pattern_id_changed(int old_index, const QString& old_id,
@@ -131,6 +156,16 @@ signals:
   void pattern_repeat_mode_changed(int index, TilePatternRepeatMode repeat_mode);
   void pattern_animation_changed(int index, PatternAnimation animation);
   void pattern_separation_changed(int index, PatternSeparation separation);
+
+  void border_set_created(const QString& border_set_id);
+  void border_set_deleted(const QString& border_set_id);
+  void border_set_id_changed(const QString& old_id, const QString& new_id);
+  void border_set_pattern_changed(
+      const QString& border_set_id,
+      BorderKind border_kind,
+      const QString& pattern_id
+  );
+  void border_set_inner_changed(const QString& border_set_id, bool inner);
 
 public slots:
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ ViewSettings::ViewSettings(QObject* parent) :
   visible_entity_types() {
 
   // Default settings.
-  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
+  const QList<EntityType>& entity_types = EntityTraits::get_values();
+  for (EntityType entity_type : entity_types) {
     visible_entity_types.insert(entity_type);
   }
 }
@@ -375,7 +376,8 @@ void ViewSettings::set_entity_type_visible(EntityType entity_type, bool visible)
  */
 void ViewSettings::show_all_entity_types() {
 
-  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
+  const QList<EntityType>& entity_types = EntityTraits::get_values();
+  for (EntityType entity_type : entity_types) {
     set_entity_type_visible(entity_type, true);
   }
 }
@@ -387,7 +389,8 @@ void ViewSettings::show_all_entity_types() {
  */
 void ViewSettings::hide_all_entity_types() {
 
-  Q_FOREACH (EntityType entity_type, EntityTraits::get_values()) {
+  const QList<EntityType>& entity_types = EntityTraits::get_values();
+  for (EntityType entity_type : entity_types) {
     set_entity_type_visible(entity_type, false);
   }
 }

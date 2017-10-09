@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -214,7 +214,7 @@ void SpritePreviewer::update_frame() {
   item->setPixmap(pixmap);
 
   QString size_str = QString::number(nb_frames > 0 ? nb_frames - 1 : 0);
-  ui.frame_label->setText(QString::number(current_frame) + " / " + size_str);
+  ui.frame_label->setText(QString("%1 / %2").arg(QString::number(current_frame), size_str));
 }
 
 /**

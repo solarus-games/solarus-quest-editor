@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Christopho, Solarus - http://www.solarus-games.org
+ * Copyright (C) 2014-2017 Christopho, Solarus - http://www.solarus-games.org
  *
  * Solarus Quest Editor is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ void Quest::check_version() const {
 
   QString quest_version = properties.get_solarus_version();
   if (quest_version.isEmpty()) {
-      throw EditorException("Missing Solarus version is quest.dat");
+      throw EditorException(tr("Missing Solarus version in quest.dat"));
   }
 
   int quest_major = quest_version.section('.', 0, 0).toInt();
@@ -388,7 +388,7 @@ QString Quest::get_font_path(
   QString prefix = get_data_path() + "/fonts/" + font_id;
   QStringList extensions;
   extensions << ".png" << ".ttf" << ".ttc" << ".fon";
-  Q_FOREACH (const QString& extension, extensions) {
+  for (const QString& extension : extensions) {
     QString path = prefix + extension;
     if (QFileInfo(path).exists()) {
       return path;
@@ -488,7 +488,7 @@ QString Quest::get_music_path(
   QString prefix = get_data_path() + "/musics/" + music_id;
   QStringList extensions;
   extensions << ".ogg" << ".it" << ".spc";
-  Q_FOREACH (const QString& extension, extensions) {
+  for (const QString& extension : extensions) {
     QString path = prefix + extension;
     if (QFileInfo(path).exists()) {
       return path;
@@ -684,7 +684,7 @@ bool Quest::is_potential_resource_element(
     element_id = path_from_resource;
   }
   else {
-    Q_FOREACH (const QString& extension, extensions) {
+    for (const QString& extension : extensions) {
       if (path_from_resource.endsWith(extension)) {
         // Remove the extension.
         element_id = path_from_resource.section('.', 0, -2);
@@ -1451,7 +1451,7 @@ void Quest::create_resource_element(ResourceType resource_type,
 
   bool done_on_filesystem = false;
 
-  QStringList paths = get_resource_element_paths(resource_type, element_id);
+  const QStringList& paths = get_resource_element_paths(resource_type, element_id);
 
   switch (resource_type) {
 
@@ -1475,7 +1475,7 @@ void Quest::create_resource_element(ResourceType resource_type,
 
   case ResourceType::SPRITE:
     // For this type of resources, files to create are simply blank text files.
-    Q_FOREACH (const QString& path, paths) {
+    for (const QString& path : paths) {
       done_on_filesystem |= create_file_if_not_exists(path);
     }
     break;
@@ -1607,7 +1607,7 @@ void Quest::rename_resource_element(
       // and the new path was initialized by default with
       // /some/quest/data/musics/dungeon.ogg
       new_path = new_path_info.path() + '/' +
-          new_path_info.completeBaseName() + '/' + extension;
+          new_path_info.completeBaseName() + '.' + extension;
     }
 
     if (exists(old_path)) {
@@ -1746,8 +1746,8 @@ void Quest::delete_resource_element(
 
   // Delete files from the filesystem.
   bool found_in_filesystem = false;
-  QStringList paths = get_resource_element_paths(resource_type, element_id);
-  Q_FOREACH (const QString& path, paths) {
+  const QStringList& paths = get_resource_element_paths(resource_type, element_id);
+  for (const QString& path : paths) {
     if (is_dir(path)) {
       found_in_filesystem = true;
       delete_dir_recursive(path);
