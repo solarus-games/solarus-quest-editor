@@ -846,10 +846,13 @@ bool SpriteModel::direction_exists(const Index& index) const {
  * @brief Adds a direction in an animation of this sprite.
  * @param index Index of the animation to add the direction.
  * @param frame The first frame of the direction to create.
+ * @param num_frames The number of frames of the direction to create.
+ * @param num_columns The number of columns of the direction to create.
  * @return Index of the created direction.
  * @throws EditorException in case of error.
  */
-int SpriteModel::add_direction(const Index& index, const QRect& frame) {
+int SpriteModel::add_direction(
+  const Index& index, const QRect& frame, int num_frames, int num_columns) {
 
   // Make some checks first.
   if (!animation_exists(index)) {
@@ -866,6 +869,8 @@ int SpriteModel::add_direction(const Index& index, const QRect& frame) {
   SpriteAnimationDirectionData direction(
         Point::to_solarus_point(frame.topLeft()),
         Size::to_solarus_size(frame.size()));
+  direction.set_num_frames(num_frames);
+  direction.set_num_columns(num_columns);
 
   animation_data.add_direction(direction);
 

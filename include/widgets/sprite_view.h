@@ -17,6 +17,7 @@
 #ifndef SOLARUSEDITOR_SPRITE_VIEW_H
 #define SOLARUSEDITOR_SPRITE_VIEW_H
 
+#include <QGraphicsItem>
 #include <QGraphicsView>
 #include <QPointer>
 #include "sprite_model.h"
@@ -47,9 +48,12 @@ public:
 signals:
 
   void delete_selected_direction_requested();
-  void add_direction_requested(const QRect& frame);
+  void add_direction_requested(
+    const QRect& frame, int num_frames, int num_columns);
   void change_selected_direction_position_requested(const QPoint& position);
   void duplicate_selected_direction_requested(const QPoint& position);
+  void change_direction_num_frames_columns_requested(
+    int num_frames, int num_columns);
 
 public slots:
 
@@ -61,11 +65,16 @@ public slots:
 private slots:
 
   void duplicate_selected_direction_requested();
+  void change_num_frames_columns_requested();
+  void change_num_columns_requested();
+  void change_num_frames_requested();
 
 protected:
 
   void paintEvent(QPaintEvent* event) override;
 
+  virtual void focusOutEvent(QFocusEvent* event) override;
+  virtual void keyPressEvent(QKeyEvent* event) override;
   virtual void mousePressEvent(QMouseEvent* event) override;
   virtual void mouseReleaseEvent(QMouseEvent* event) override;
   virtual void mouseMoveEvent(QMouseEvent* event) override;
@@ -77,20 +86,85 @@ private:
    * @brief Possible operation the user is doing on this view.
    */
   enum class State {
-      NORMAL,                   /**< Can click on directions. */
-      DRAWING_RECTANGLE,        /**< Drawing a rectangle for a new direction. */
-      MOVING_DIRECTION          /**< Moving an existing direcion to another
-                                 * place in the PNG image. */
+    NORMAL,                       /**< Can click on directions. */
+    DRAWING_RECTANGLE,            /**< Drawing a rectangle for a new
+                                   * direction. */
+    MOVING_DIRECTION,             /**< Moving an existing direcion to another
+                                   * place in the PNG image. */
+    CHANGING_NUM_FRAMES_COLUMNS   /**< Changing the number of frames and
+                                   * columns. */
+  };
+
+  /**
+   * @brief Mode of changing the number of frames and columns operation.
+   */
+  enum class ChangingNumFramesColumnsMode {
+    CHANGE_BOTH,          /**< Changing the number of frames and columns with
+                             * the number of frames fixed to a multiple of the
+                             * number of columns. */
+    CHANGE_NUM_FRAMES,    /**< Changing the number of frames with the number
+                             * of columns fixed. */
+    CHANGE_NUM_COLUMNS    /**< Changing the number of columns with the number
+                             * of frames fixed. */
+  };
+
+  /**
+   * @brief Direction area item to display several frames.
+   */
+  class DirectionAreaItem : public QGraphicsItem {
+
+  public:
+
+    DirectionAreaItem();
+
+    QSize get_frame_size() const;
+    int get_num_frames() const;
+    int get_num_columns() const;
+
+    void set_frame_size(const QSize& frame_size);
+    void set_num_frames(int num_frames);
+    void set_num_columns(int num_columns);
+    void set_valid(bool valid);
+
+    QRect get_direction_all_frames_rect() const;
+
+    virtual QRectF boundingRect() const override;
+
+  protected:
+
+    virtual void paint(
+      QPainter* painter, const QStyleOptionGraphicsItem* option,
+      QWidget* widget = nullptr) override;
+
+  private:
+
+    void update_bouding_rect();
+
+    QSize frame_size;     /**< The size of a frame. */
+    QRect bounding_rect;  /**< The current bounding rect. */
+    int num_frames;       /**< The number of frames. */
+    int num_columns;      /**< The number of columns. */
+    bool is_valid;        /**< Whether the area is valid. */
+
   };
 
   void show_context_menu(const QPoint& where);
+
+  QPoint map_to_scene(const QPoint& point, bool snap_to_grid = true);
+
+  void change_num_frames_columns(const ChangingNumFramesColumnsMode& mode);
 
   void start_state_normal();
   void start_state_drawing_rectangle(const QPoint& initial_point);
   void end_state_drawing_rectangle();
   void start_state_moving_direction(const QPoint& initial_point);
   void end_state_moving_direction();
-  void set_current_area(const QRect& area);
+  void start_state_changing_num_frames_columns(
+    const ChangingNumFramesColumnsMode& mode, bool create = false);
+  void update_state_changing_num_frames_columns();
+  void end_state_changing_num_frames_columns();
+  void cancel_state_changing_num_frames_columns();
+  void compute_num_frames_columns(int& num_frames, int& num_columns);
 
   QPointer<SpriteModel> model;         /**< The sprite model. */
   SpriteScene* scene;                  /**< The scene viewed. */
@@ -98,19 +172,35 @@ private:
                                         * direction. */
   QAction* duplicate_direction_action; /**< Action of duplicate the selected
                                         * direction. */
+  QAction*
+    change_num_frames_columns_action;  /**< Action of change the number of
+                                        * frames and columns of the selected
+                                        * direction. */
+  QAction* change_num_frames_action;   /**< Action of change the number of
+                                        * frames of the selected direction. */
+  QAction* change_num_columns_action;  /**< Action of change the number of
+                                        * columns of the selected direction. */
   State state;                         /**< Current operation done by user. */
+  ChangingNumFramesColumnsMode
+      changing_mode;                   /**< Current mode for changing the number
+                                        * of frames and columns operation. */
+  bool create_multiframe_direction;    /**< Whether a new direction must be
+                                        * created in the
+                                        * CHANGING_NUM_FRAMES_COLUMNS state. */
   QPoint dragging_start_point;         /**< In states DRAWING_RECTANGLE and
                                         * MOVING_DIRECTION: point where the
                                         * dragging started, in scene
                                         * coordinates.*/
-  QPoint dragging_current_point;       /**< In states DRAWING_RECTANGLE and
-                                        * MOVING_DIRECTION: point where the
-                                        * dragging is currently, in scene
-                                        * coordinates. */
-  QGraphicsRectItem*
-      current_area_item;               /**< In states DRAWING_RECTANGLE and
-                                        * MOVING_DIRECTION: graphic item of the
-                                        * rectangle the user is drawing. */
+  QPoint dragging_current_point;       /**< In states DRAWING_RECTANGLE,
+                                        * MOVING_DIRECTION and
+                                        * CHANGING_NUM_FRAMES_COLUMNS: point
+                                        * where the dragging is currently,
+                                        * in scene coordinates. */
+  DirectionAreaItem current_area_item; /**< In states DRAWING_RECTANGLE,
+                                        * MOVING_DIRECTION and
+                                        * CHANGING_NUM_FRAMES_COLUMNS:
+                                        * graphic item of the area drawing
+                                        * by the user. */
   QPointer<ViewSettings>
       view_settings;                   /**< How the view is displayed. */
   double zoom;                         /**< Zoom factor currently applied. */
