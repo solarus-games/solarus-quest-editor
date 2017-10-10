@@ -5,6 +5,8 @@ ________________________________________
 
 * Tileset editor: allow to duplicate tile patterns (#188).
 * Tileset editor: allow to move several patterns at once (#171).
+* Sprite editor: allow to reorder directions by Maxs (#144).
+* Sprite editor: allow to change the frame number graphically by Maxs (#147).
 
 _______________________________________
 
