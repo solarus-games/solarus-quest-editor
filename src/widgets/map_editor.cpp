@@ -1277,7 +1277,7 @@ void MapEditor::select_all() {
 
   MapScene* scene = ui.map_view->get_scene();
   if (scene != nullptr) {
-    scene->select_all();
+    scene->select_all_except_locked();
   }
 }
 

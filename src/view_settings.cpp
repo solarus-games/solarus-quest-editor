@@ -31,6 +31,7 @@ ViewSettings::ViewSettings(QObject* parent) :
   grid_color(Qt::black),
   min_layer(0),
   max_layer(-1),
+  locked_layers(),
   visible_layers(),
   traversables_visible(true),
   obstacles_visible(true),
@@ -222,8 +223,44 @@ void ViewSettings::set_layer_range(int min_layer, int max_layer) {
 
   emit layer_range_changed(min_layer, max_layer);
 
+  locked_layers.clear();
   visible_layers.clear();
   show_all_layers();
+}
+
+/**
+ * @brief Returns whether a layer is currently locked.
+ * @param layer The layer to test.
+ * @return @c true if this layer is locked, @c false if it is unlocked.
+ */
+bool ViewSettings::is_layer_locked(int layer) const {
+
+  return locked_layers.find(layer) != locked_layers.end();
+}
+
+/**
+ * @brief Locks or unlocks a layer.
+ *
+ * Emits layer_locking_changed() if there is a change.
+ *
+ * @param layer The layer to change.
+ * @param locked @c true to lock the layer, @c false to unlock it.
+ */
+void ViewSettings::set_layer_locked(int layer, bool locked) {
+
+  Q_ASSERT(layer >= min_layer && layer <= max_layer);
+
+  if (locked == is_layer_locked(layer)) {
+    return;
+  }
+
+  if (locked) {
+    locked_layers.insert(layer);
+  }
+  else {
+    locked_layers.erase(layer);
+  }
+  emit layer_locking_changed(layer, locked);
 }
 
 /**

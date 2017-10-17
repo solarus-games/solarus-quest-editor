@@ -328,6 +328,8 @@ void MapView::set_view_settings(ViewSettings& view_settings) {
 
   connect(this->view_settings, SIGNAL(layer_visibility_changed(int, bool)),
           this, SLOT(update_layer_visibility(int)));
+  connect(this->view_settings, SIGNAL(layer_locking_changed(int, bool)),
+          this, SLOT(update_layer_locking(int)));
 
   connect(this->view_settings, SIGNAL(traversables_visibility_changed(bool)),
           this, SLOT(update_traversables_visibility()));
@@ -1003,6 +1005,19 @@ void MapView::update_layer_visibility(int layer) {
   }
 
   scene->update_layer_visibility(layer, *view_settings);
+}
+
+/**
+ * @brief Locks or unlock a layer according to the view settings.
+ * @param layer The layer to update.
+ */
+void MapView::update_layer_locking(int layer) {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  scene->update_layer_locking(layer, *view_settings);
 }
 
 /**
@@ -1688,7 +1703,15 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
         if (!item->isSelected()) {
           // Select the item.
           if (entity_item != nullptr) {
-            view.select_entity(entity_item->get_index(), true);
+            const EntityIndex& index = entity_item->get_index();
+            if (!view.get_view_settings()->is_layer_locked(index.layer)) {
+              view.select_entity(index, true);
+            }
+            else {
+              // Left click on a locked layer: trace a selection rectangle.
+              view.start_state_drawing_rectangle(event.pos());
+              return;
+            }
           }
         }
         // Allow to move selected items.
@@ -1706,7 +1729,10 @@ void DoingNothingState::mouse_pressed(const QMouseEvent& event) {
     if (entity_item != nullptr) {
       if (!entity_item->isSelected()) {
         // Select the right-clicked item.
-        view.select_entity(entity_item->get_index(), true);
+        const EntityIndex& index = entity_item->get_index();
+        if (!view.get_view_settings()->is_layer_locked(index.layer)) {
+          view.select_entity(index, true);
+        }
       }
     }
   }
@@ -1753,7 +1779,16 @@ void DoingNothingState::mouse_released(const QMouseEvent& event) {
     QGraphicsItem* item = items_under_mouse.isEmpty() ? nullptr : items_under_mouse.first();
     const EntityItem* entity_item = qgraphicsitem_cast<const EntityItem*>(item);
     if (entity_item != nullptr) {
-      view.select_entity(entity_item->get_index(), !item->isSelected());
+      const bool was_selected = item->isSelected();
+      if (was_selected) {
+        view.select_entity(entity_item->get_index(), false);
+      }
+      else {
+        const bool layer_locked = view.get_view_settings()->is_layer_locked(entity_item->get_index().layer);
+        if (!layer_locked) {
+          view.select_entity(entity_item->get_index(), true);
+        }
+      }
     }
     clicked_with_control_or_shift = false;
   }
@@ -1854,6 +1889,15 @@ void DrawingRectangleState::mouse_moved(const QMouseEvent& event) {
   path.addRect(QRect(area.topLeft() - QPoint(1, 1),
                      area.size() + QSize(2, 2)));
   scene.setSelectionArea(path, Qt::ContainsItemBoundingRect);
+
+  // But don't select entities on locked layers.
+  const EntityIndexes selected_indexes = scene.get_selected_entities();
+  const ViewSettings& view_settings = *view.get_view_settings();
+  for (const EntityIndex& index : selected_indexes) {
+    if (view_settings.is_layer_locked(index.layer)) {
+      view.select_entity(index, false);
+    }
+  }
 
   // Also restore the initial selection.
   for (int i = 0; i < initial_selection.size(); ++i) {

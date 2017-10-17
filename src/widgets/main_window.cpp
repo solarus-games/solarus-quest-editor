@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget* parent) :
   show_layers_button(nullptr),
   show_layers_action(nullptr),
   show_layers_subactions(),
+  lock_layers_menu(nullptr),
+  lock_layers_subactions(),
   show_entities_menu(nullptr),
   show_entities_button(nullptr),
   show_entities_subactions(),
@@ -138,8 +140,10 @@ MainWindow::MainWindow(QWidget* parent) :
   show_layers_button->setMenu(show_layers_menu);
   show_layers_button->setPopupMode(QToolButton::InstantPopup);
   show_layers_action = ui.tool_bar->insertWidget(ui.action_show_traversables, show_layers_button);
+  lock_layers_menu = new QMenu(tr("Lock/unlock layers"));
   ui.tool_bar->insertSeparator(ui.action_show_traversables);
   ui.menu_view->insertMenu(ui.action_show_traversables, show_layers_menu);
+  ui.menu_view->insertMenu(ui.action_show_traversables, lock_layers_menu);
   ui.menu_view->insertSeparator(ui.action_show_traversables);
 
   show_entities_button = new QToolButton();
@@ -394,6 +398,52 @@ void MainWindow::update_show_layers_menu() {
         if (editor != nullptr) {
           const bool visible = action->isChecked();
           editor->get_view_settings().set_layer_visible(i, visible);
+        }
+      });
+    }
+  }
+}
+
+/**
+ * @brief Updates the lock layers menu to match the current range of layers.
+ */
+void MainWindow::update_lock_layers_menu() {
+
+  if (lock_layers_menu == nullptr) {
+    return;
+  }
+
+  // Clear previous actions.
+  const QList<QAction*>& actions = lock_layers_menu->actions();
+  for (QAction* action : actions) {
+    delete action;
+  }
+  lock_layers_menu->clear();
+
+  // TODO add an "Unlock all layers" action.
+
+  // Add an action for each layer.
+  Editor* editor = get_current_editor();
+  if (editor != nullptr) {
+    int min_layer = 0;
+    int max_layer = 0;
+    editor->get_layers_supported(min_layer, max_layer);
+    for (int i = min_layer; i <= max_layer; ++i) {
+      QAction* action = new QAction(tr("Lock layer %1").arg(i), this);
+      // TODO add an icon.
+      if (i >= 0 && i <= 9) {
+        // Layers 0 to 9 have a shortcut.
+        action->setShortcut(tr("Ctrl+%1").arg(QString::number(i)));
+        addAction(action);
+      }
+      action->setCheckable(true);
+      action->setChecked(false);
+      lock_layers_menu->addAction(action);
+      connect(action, &QAction::triggered, [this, action, i]() {
+        Editor* editor = get_current_editor();
+        if (editor != nullptr) {
+          const bool locked = action->isChecked();
+          editor->get_view_settings().set_layer_locked(i, locked);
         }
       });
     }
@@ -1272,6 +1322,7 @@ void MainWindow::update_layer_range() {
   show_layers_action->setVisible(min_layer < 0 || max_layer >= 3);
   show_layers_menu->setEnabled(min_layer < 0 || max_layer >= 3);
   update_show_layers_menu();
+  update_lock_layers_menu();
 }
 
 /**

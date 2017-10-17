@@ -152,6 +152,7 @@ public slots:
   void mouse_coordinates_changed(const QPoint& xy);
   void update_grid_visibility();
   void update_layer_visibility(int layer);
+  void update_layer_locking(int layer);
   void update_traversables_visibility();
   void update_obstacles_visibility();
   void update_entity_type_visibility(EntityType type);

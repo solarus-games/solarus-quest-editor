@@ -46,6 +46,7 @@ public:
   static QSize get_margin_size();
 
   void update_layer_visibility(int layer, const ViewSettings& view_settings);
+  void update_layer_locking(int layer, const ViewSettings& view_settings);
   void update_traversables_visibility(const ViewSettings& view_settings);
   void update_obstacles_visibility(const ViewSettings& view_settings);
   void update_entity_type_visibility(EntityType type, const ViewSettings& view_settings);
@@ -54,6 +55,7 @@ public:
   void set_selected_entities(const EntityIndexes& indexes);
   void select_entity(const EntityIndex& index, bool selected);
   void select_all();
+  void select_all_except_locked();
   void unselect_all();
 
   void redraw_entity(const EntityIndex& index);

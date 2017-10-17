@@ -54,6 +54,8 @@ public:
 
   void get_layer_range(int& min_layer, int& max_layer) const;
   void set_layer_range(int min_layer, int max_layer);
+  void set_layer_locked(int layer, bool locked);
+  bool is_layer_locked(int layer) const;
   void set_layer_visible(int layer, bool visible);
   bool is_layer_visible(int layer) const;
   void show_all_layers();
@@ -77,6 +79,7 @@ signals:
   void grid_style_changed(GridStyle style);
   void grid_color_changed(const QColor& color);
   void layer_range_changed(int min_layer, int max_layer);
+  void layer_locking_changed(int layer, bool locked);
   void layer_visibility_changed(int layer, bool visible);
   void traversables_visibility_changed(bool traversables_visible);
   void obstacles_visibility_changed(bool obstacles_visible);
@@ -93,6 +96,7 @@ private:
                                              * (0 if showing/hiding layers is not supported). */
   int max_layer;                            /**< Highest layer in the editor
                                              * (-1 if showing/hiding layers is not supported). */
+  std::set<int> locked_layers;              /**< Layers currently locked, if supported. */
   std::set<int> visible_layers;             /**< Layers currently shown, if supported. */
   bool traversables_visible;                /**< If supported, whether traversables are currently shown. */
   bool obstacles_visible;                   /**< If supported, whether obstacles are currently shown. */

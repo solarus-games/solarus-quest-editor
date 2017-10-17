@@ -123,6 +123,7 @@ private:
   void update_recent_quests_menu();
   QMenu* create_zoom_menu();
   void update_show_layers_menu();
+  void update_lock_layers_menu();
   QMenu* create_show_entities_menu();
   bool is_console_visible() const;
   void set_console_visible(bool console_visible);
@@ -180,6 +181,11 @@ private:
                                    * plus two special actions "Show all" and "Hide all".
                                    * The key is the layer as a string or
                                    * "action_show_all" or "action_hide_all". */
+  QMenu* lock_layers_menu;        /**< The menu with the lock status of all layers. */
+  QMap<int, QAction*>
+      lock_layers_subactions;     /**< Actions in the lock layer menu.
+                                   * There is one action for each layer.
+                                   * The key is the layer. */
 
   QMenu* show_entities_menu;      /**< The menu with the visibility of all entity types. */
   QToolButton*

@@ -229,6 +229,31 @@ void MapScene::update_layer_visibility(int layer, const ViewSettings& view_setti
 }
 
 /**
+ * @brief Locks or unlocks a layer.
+ * @param layer The layer to update.
+ * @param view_settings The new view settings to apply.
+ */
+void MapScene::update_layer_locking(int layer, const ViewSettings& view_settings) {
+
+  this->view_settings = &view_settings;
+
+  // Ensure the number of layers is up to date.
+  // It may have changed and we are not notified yet.
+  // This is possible due to the order of slots.
+  layer_range_changed(map.get_min_layer(), map.get_max_layer());
+
+  if (!view_settings.is_layer_locked(layer)) {
+    // Nothing to do.
+    return;
+  }
+
+  // Unselect entities on the newly locked layer.
+  for (EntityItem* item : get_entity_items(layer)) {
+    item->setSelected(false);
+  }
+}
+
+/**
  * @brief Shows or hide traversable entities.
  * @param view_settings The new view settings to apply.
  */
@@ -634,6 +659,29 @@ void MapScene::select_all() {
     for (EntityItem* item : layer_items) {
       if (item == nullptr) {
         continue;
+      }
+      item->setSelected(true);
+    }
+  }
+  blockSignals(was_blocked);
+
+  emit selectionChanged();
+}
+
+/**
+ * @brief Selects all entities of the map except the ones on locked layers.
+ */
+void MapScene::select_all_except_locked() {
+
+  const bool was_blocked = signalsBlocked();
+  blockSignals(true);
+  for (const EntityItems& layer_items : get_entity_items()) {
+    for (EntityItem* item : layer_items) {
+      if (item == nullptr) {
+        continue;
+      }
+      if (view_settings->is_layer_locked(item->get_index().layer)) {
+        break;
       }
       item->setSelected(true);
     }
