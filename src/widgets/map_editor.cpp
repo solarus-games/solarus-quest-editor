@@ -1955,19 +1955,11 @@ void MapEditor::update_status_bar() {
     return;
   }
 
-  // Show mouse coordinates.
+  // Show mouse coordinates and information about the entity under the mouse.
   QString mouse_coordinates_string;
   QPoint view_xy = ui.map_view->mapFromGlobal(QCursor::pos());
-  if (view_xy.x() >= 0 &&
-      view_xy.x() < ui.map_view->width() &&
-      view_xy.y() >= 0 &&
-      view_xy.y() < ui.map_view->height()) {
-    QPoint map_xy = ui.map_view->mapToScene(view_xy).toPoint() - MapScene::get_margin_top_left();
-    QPoint snapped_xy(Point::round_8(map_xy));
-    mouse_coordinates_string = tr("%1,%2 ").arg(snapped_xy.x()).arg(snapped_xy.y());
-  }
+  int layer_under_mouse = map->get_min_layer();
 
-  // Show information about the entity under the mouse.
   QString entity_string;
   EntityIndex index = ui.map_view->get_entity_index_under_cursor();
   if (index.is_valid()) {
@@ -1977,6 +1969,19 @@ void MapEditor::update_status_bar() {
     if (!name.isEmpty()) {
       entity_string += tr(": %1").arg(name);
     }
+    layer_under_mouse = map->get_entity_layer(index);
+  }
+
+  if (view_xy.x() >= 0 &&
+      view_xy.x() < ui.map_view->width() &&
+      view_xy.y() >= 0 &&
+      view_xy.y() < ui.map_view->height()) {
+    QPoint map_xy = ui.map_view->mapToScene(view_xy).toPoint() - MapScene::get_margin_top_left();
+    QPoint snapped_xy(Point::round_8(map_xy));
+    mouse_coordinates_string = tr("%1,%2,%3 ").
+        arg(snapped_xy.x()).
+        arg(snapped_xy.y()).
+        arg(layer_under_mouse);
   }
 
   QString message = mouse_coordinates_string + entity_string;
