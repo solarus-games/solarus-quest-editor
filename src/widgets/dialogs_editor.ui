@@ -445,7 +445,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="dialog_properties_horizontal_layout">
          <item>
           <widget class="SolarusEditor::DialogPropertiesTable" name="dialog_properties_table">
            <property name="indentation">
@@ -481,7 +481,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QVBoxLayout" name="dialog_properties_vertical_layout">
            <item>
             <widget class="QPushButton" name="create_property_button">
              <property name="maximumSize">
