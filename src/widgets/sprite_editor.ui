@@ -67,8 +67,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>581</width>
-            <height>692</height>
+            <width>588</width>
+            <height>717</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -399,6 +399,18 @@
                   <layout class="QHBoxLayout" name="horizontal_layout_2">
                    <item>
                     <widget class="QLabel" name="src_image_value">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>10</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="toolTip">
                       <string>Source image of the animation</string>
                      </property>
