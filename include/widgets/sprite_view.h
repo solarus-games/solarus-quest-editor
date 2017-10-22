@@ -132,13 +132,14 @@ private:
 
   protected:
 
-    virtual void paint(
-      QPainter* painter, const QStyleOptionGraphicsItem* option,
+    void paint(
+      QPainter* painter,
+      const QStyleOptionGraphicsItem* option,
       QWidget* widget = nullptr) override;
 
   private:
 
-    void update_bouding_rect();
+    void update_bounding_rect();
 
     QSize frame_size;     /**< The size of a frame. */
     QRect bounding_rect;  /**< The current bounding rect. */
@@ -150,7 +151,7 @@ private:
 
   void show_context_menu(const QPoint& where);
 
-  QPoint map_to_scene(const QPoint& point, bool snap_to_grid = true);
+  QPoint map_to_scene(const QPoint& point, bool snap_to_grid);
 
   void change_num_frames_columns(const ChangingNumFramesColumnsMode& mode);
 

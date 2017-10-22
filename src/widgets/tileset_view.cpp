@@ -481,9 +481,6 @@ void TilesetView::mouseDoubleClickEvent(QMouseEvent* event) {
 
 /**
  * @brief Receives a mouse move event.
- *
- * Reimplemented to scroll the view when the middle mouse button is pressed.
- *
  * @param event The event to handle.
  */
 void TilesetView::mouseMoveEvent(QMouseEvent* event) {

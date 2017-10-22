@@ -19,6 +19,7 @@
 #include "widgets/sprite_scene.h"
 #include "widgets/sprite_view.h"
 #include "widgets/zoom_tool.h"
+#include "point.h"
 #include "view_settings.h"
 #include <QAction>
 #include <QApplication>
@@ -265,8 +266,7 @@ QPoint SpriteView::map_to_scene(const QPoint& point, bool snap_to_grid) {
 
   if (snap_to_grid) {
     // TODO: use the grid size (settings).
-    mapped_point.setX(qFloor(mapped_point.x() / 8) * 8);
-    mapped_point.setY(qFloor(mapped_point.y() / 8) * 8);
+    return mapped_point / 8 * 8;
   }
 
   return mapped_point;
@@ -372,7 +372,11 @@ void SpriteView::keyPressEvent(QKeyEvent* event) {
  */
 void SpriteView::mousePressEvent(QMouseEvent* event) {
 
-  if (model == nullptr || state == State::CHANGING_NUM_FRAMES_COLUMNS) {
+  if (model == nullptr) {
+    return;
+  }
+
+  if (state == State::CHANGING_NUM_FRAMES_COLUMNS) {
     return;
   }
 
@@ -392,15 +396,17 @@ void SpriteView::mousePressEvent(QMouseEvent* event) {
         item->setSelected(true);
       }
       if (event->button() == Qt::LeftButton &&
-               model->get_selected_index().is_direction_index()) {
+          model->get_selected_index().is_direction_index()) {
         // Allow to move it.
         start_state_moving_direction(event->pos());
       }
     }
     else {
-      // Left click outside items: trace a selection rectangle.
-      scene->clearSelection();
-      start_state_drawing_rectangle(event->pos());
+      if (event->button() == Qt::LeftButton) {
+        // Left click outside items: trace a selection rectangle.
+        scene->clearSelection();
+        start_state_drawing_rectangle(event->pos());
+      }
     }
   }
 }
@@ -450,7 +456,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
 
     // Compute the selected area.
     QPoint dragging_previous_point = dragging_current_point;
-    dragging_current_point = map_to_scene(event->pos());
+    dragging_current_point = map_to_scene(event->pos(), true);
 
     if (dragging_current_point != dragging_previous_point) {
 
@@ -458,15 +464,6 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       int y = qMin(dragging_current_point.y(), dragging_start_point.y());
       int width = qAbs(dragging_current_point.x() - dragging_start_point.x());
       int height = qAbs(dragging_current_point.y() - dragging_start_point.y());
-
-      // TODO: use the grid size (settings).
-      if (x == dragging_start_point.x()) {
-        width += 8;
-      }
-
-      if (y == dragging_start_point.y()) {
-        height += 8;
-      }
 
       current_area_item.setPos(QPoint(x, y));
       current_area_item.set_frame_size(QSize(width, height));
@@ -484,7 +481,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
       QPoint position = model->get_direction_position(index);
       QRect previous_rect = current_area_item.get_direction_all_frames_rect();
 
-      dragging_current_point = map_to_scene(event->pos());
+      dragging_current_point = Point::floor_8(mapToScene(event->pos()));
       current_area_item.setPos(QPoint(
         position.x() + dragging_current_point.x() - dragging_start_point.x(),
         position.y() + dragging_current_point.y() - dragging_start_point.y()));
@@ -507,7 +504,7 @@ void SpriteView::mouseMoveEvent(QMouseEvent* event) {
 
   if (update_selection_validity) {
     QRect rect = current_area_item.get_direction_all_frames_rect();
-    current_area_item.set_valid(!rect.isEmpty() && sceneRect().contains(rect));
+    current_area_item.set_valid(rect.isEmpty() || sceneRect().contains(rect));
   }
 
   // The parent class tracks mouse movements for internal needs
@@ -587,11 +584,11 @@ void SpriteView::start_state_normal() {
 void SpriteView::start_state_drawing_rectangle(const QPoint& initial_point) {
 
   state = State::DRAWING_RECTANGLE;
-  dragging_start_point = map_to_scene(initial_point);
+  dragging_start_point = map_to_scene(initial_point, true);
   dragging_current_point = dragging_start_point;
 
   current_area_item.setPos(dragging_current_point);
-  current_area_item.set_frame_size(QSize(8, 8));
+  current_area_item.set_frame_size(QSize(0, 0));
   current_area_item.set_num_frames(1);
   current_area_item.set_num_columns(1);
   current_area_item.set_valid(true);
@@ -647,7 +644,7 @@ void SpriteView::start_state_moving_direction(const QPoint& initial_point) {
   }
 
   state = State::MOVING_DIRECTION;
-  dragging_start_point = map_to_scene(initial_point);
+  dragging_start_point = Point::floor_8(mapToScene(initial_point));
   dragging_current_point = dragging_start_point;
 
   current_area_item.setPos(model->get_direction_position(index));
@@ -816,7 +813,7 @@ SpriteView::DirectionAreaItem::DirectionAreaItem() :
   num_frames(1),
   num_columns(1),
   is_valid(true) {
-  update_bouding_rect();
+  update_bounding_rect();
 }
 
 /**
@@ -850,7 +847,7 @@ int SpriteView::DirectionAreaItem::get_num_columns() const {
 void SpriteView::DirectionAreaItem::set_frame_size(const QSize& size) {
 
   frame_size = size;
-  update_bouding_rect();
+  update_bounding_rect();
 }
 
 /**
@@ -860,7 +857,7 @@ void SpriteView::DirectionAreaItem::set_frame_size(const QSize& size) {
 void SpriteView::DirectionAreaItem::set_num_frames(int num_frames) {
 
   this->num_frames = qMax(num_frames, 1);
-  update_bouding_rect();
+  update_bounding_rect();
 }
 
 /**
@@ -870,7 +867,7 @@ void SpriteView::DirectionAreaItem::set_num_frames(int num_frames) {
 void SpriteView::DirectionAreaItem::set_num_columns(int num_columns) {
 
   this->num_columns = qMax(num_columns, 1);
-  update_bouding_rect();
+  update_bounding_rect();
 }
 
 /**
@@ -906,13 +903,24 @@ QRectF SpriteView::DirectionAreaItem::boundingRect() const {
  * @brief The paint event.
  */
 void SpriteView::DirectionAreaItem::paint(
-  QPainter* painter, const QStyleOptionGraphicsItem* /* option */,
-  QWidget* /* widget */) {
+  QPainter* painter, const QStyleOptionGraphicsItem* option,
+  QWidget* widget) {
 
-  QSize draw_size = frame_size - QSize(1, 1);
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+
+  if (frame_size.isNull()) {
+    return;
+  }
 
   painter->save();
   painter->setPen(is_valid ? Qt::yellow : Qt::red);
+
+  if (frame_size.isEmpty()) {
+    painter->drawRect(QRect(QPoint(0, 0), frame_size));
+  }
+
+  QSize draw_size = frame_size;
 
   for (int i = 0; i < num_frames; ++i) {
     int row = qFloor(i / num_columns);
@@ -927,7 +935,7 @@ void SpriteView::DirectionAreaItem::paint(
 /**
  * @brief Updates the bounding rect.
  */
-void SpriteView::DirectionAreaItem::update_bouding_rect() {
+void SpriteView::DirectionAreaItem::update_bounding_rect() {
 
   int num_columns = qMin(this->num_columns, num_frames);
   int num_rows = qFloor((num_frames - 1) / num_columns) + 1;
