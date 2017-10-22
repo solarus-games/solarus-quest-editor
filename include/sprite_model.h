@@ -154,6 +154,7 @@ public:
   void set_direction_size(const Index& index, const QSize& size);
   QPoint get_direction_origin(const Index& index) const;
   void set_direction_origin(const Index& index, const QPoint& origin);
+  static QPoint get_direction_default_origin(const QSize& frame_size);
   bool is_direction_multi_frame(const Index& index) const;
   int get_direction_num_frames(const Index& index) const;
   void set_direction_num_frames(const Index& index, int num_frames);

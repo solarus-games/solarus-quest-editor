@@ -871,6 +871,8 @@ int SpriteModel::add_direction(
         Size::to_solarus_size(frame.size()));
   direction.set_num_frames(num_frames);
   direction.set_num_columns(num_columns);
+  QPoint origin = get_direction_default_origin(frame.size());
+  direction.set_origin(Point::to_solarus_point(origin));
 
   animation_data.add_direction(direction);
 
@@ -1249,6 +1251,16 @@ void SpriteModel::set_direction_origin(
 
   direction.set_origin(Point::to_solarus_point(origin));
   emit direction_origin_changed(index, origin);
+}
+
+/**
+ * @brief Returns a default origin value for the given frame size.
+ * @param frame_size A frame size.
+ * @return @c A hopefully appropriate origin guess.
+ */
+QPoint SpriteModel::get_direction_default_origin(const QSize& frame_size) {
+
+  return QPoint(frame_size.width() / 2, frame_size.height() - 3);
 }
 
 /**

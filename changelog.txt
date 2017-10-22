@@ -9,6 +9,7 @@ ________________________________________
 * Tileset editor: allow to move several patterns at once (#171).
 * Sprite editor: allow to reorder directions by Maxs (#144).
 * Sprite editor: allow to change the frame number graphically by Maxs (#147).
+* Sprite editor: the default origin is now 8,13 as usual in Solarus (#307).
 
 _______________________________________
 
