@@ -23,6 +23,7 @@
 #include "ground_traits.h"
 #include "pattern_animation_traits.h"
 #include "pattern_separation_traits.h"
+#include "point.h"
 #include "rectangle.h"
 #include "tileset_model.h"
 #include "view_settings.h"
@@ -825,7 +826,7 @@ void TilesetView::start_state_moving_patterns(const QPoint& initial_point) {
   }
 
   state = State::MOVING_PATTERNS;
-  dragging_start_point = mapToScene(initial_point).toPoint() / 8 * 8;
+  dragging_start_point = Point::floor_8(mapToScene(initial_point));
   dragging_current_point = dragging_start_point;
 
   const QList<int>& selected_indexes = model->get_selected_indexes();
@@ -924,7 +925,7 @@ void TilesetView::dragMoveEvent(QDragMoveEvent* event) {
     return;
   }
 
-  dragging_current_point = mapToScene(event->pos()).toPoint() / 8 * 8;
+  dragging_current_point = Point::floor_8(mapToScene(event->pos()));
   QPoint delta = dragging_current_point - dragging_start_point;
 
   clear_current_areas();
