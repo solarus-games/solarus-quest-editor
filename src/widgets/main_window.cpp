@@ -385,9 +385,10 @@ void MainWindow::update_show_layers_menu() {
         QString file_name = QString(":/images/icon_layer_%1.png").arg(i);
         action->setIcon(QIcon(file_name));
       }
-      if (i >= 0 && i <= 9) {
-        // Layers 0 to 9 have a shortcut.
-        action->setShortcut(QString::number(i));
+      // Layers -4 to 5 have a shortcut.
+      if (i >= -4 && i <= 5) {
+        const int digit = (i >= 0) ? i : (10 + i);
+        action->setShortcut(QString::number(digit));
         addAction(action);
       }
       action->setCheckable(true);
@@ -431,9 +432,10 @@ void MainWindow::update_lock_layers_menu() {
     for (int i = min_layer; i <= max_layer; ++i) {
       QAction* action = new QAction(tr("Lock layer %1").arg(i), this);
       // TODO add an icon.
-      if (i >= 0 && i <= 9) {
-        // Layers 0 to 9 have a shortcut.
-        action->setShortcut(tr("Ctrl+%1").arg(QString::number(i)));
+      if (i >= -4 && i <= 5) {
+        const int digit = (i >= 0) ? i : (10 + i);
+        // Layers -4 to 5 have a shortcut.
+        action->setShortcut(tr("Ctrl+%1").arg(QString::number(digit)));
         addAction(action);
       }
       action->setCheckable(true);

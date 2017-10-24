@@ -5,6 +5,7 @@ ________________________________________
 
 * Map editor: allow to lock layers (#94).
 * Map editor: show the layer under the cursor in the status bar (#91).
+* Map editor: add shortcuts to show/hide negative layers too.
 * Tileset editor: allow to duplicate tile patterns (#188).
 * Tileset editor: allow to move several patterns at once (#171).
 * Sprite editor: allow to reorder directions by Maxs (#144).
