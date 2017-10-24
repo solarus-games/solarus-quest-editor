@@ -1235,7 +1235,10 @@ void MainWindow::current_editor_changed(int index) {
             this, SLOT(update_layer_range()));
     connect(&view_settings, SIGNAL(layer_visibility_changed(int, bool)),
             this, SLOT(update_layer_visibility(int)));
+    connect(&view_settings, SIGNAL(layer_locking_changed(int, bool)),
+            this, SLOT(update_layer_locking(int)));
     update_layers_visibility();
+    update_layers_locking();
 
     connect(&view_settings, SIGNAL(traversables_visibility_changed(bool)),
             this, SLOT(update_traversables_visibility()));
@@ -1326,6 +1329,58 @@ void MainWindow::update_layer_range() {
 }
 
 /**
+ * @brief Slot called when a layer of the current editor was just locked or unlocked.
+ * @param layer The layer whose locking state has just changed.
+ */
+void MainWindow::update_layer_locking(int layer) {
+
+  const Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+  const ViewSettings& view_settings = editor->get_view_settings();
+  const bool locked = view_settings.is_layer_locked(layer);
+
+  int min_layer = 0;
+  int max_layer = 0;
+  editor->get_layers_supported(min_layer, max_layer);
+
+  // Update the show layer menu.
+  const int index = layer - min_layer;
+  QAction* action = lock_layers_menu->actions().value(index);
+  if (action == nullptr) {
+    qCritical() << "Missing lock layer action for layer " << layer << ": " << index;
+    return;
+  }
+  action->setChecked(locked);
+}
+
+/**
+ * @brief Slot called when the locking state of all layers should be updated to the GUI.
+ */
+void MainWindow::update_layers_locking() {
+
+  Editor* editor = get_current_editor();
+  if (editor == nullptr) {
+    return;
+  }
+
+  int min_layer = 0;
+  int max_layer = 0;
+  editor->get_layers_supported(min_layer, max_layer);
+
+  const ViewSettings& view_settings = editor->get_view_settings();
+
+  const QList<QAction*>& actions = lock_layers_menu->actions();
+  for (int i = min_layer; i <= max_layer; ++i) {
+    QAction* action = actions.value(i - min_layer);
+    if (action != nullptr) {
+      action->setChecked(view_settings.is_layer_locked(i));
+    }
+  }
+}
+
+/**
  * @brief Slot called when a layer of the current editor was just shown or hidden.
  * @param layer The layer whose visibility has just changed.
  */
@@ -1384,7 +1439,7 @@ void MainWindow::update_layers_visibility() {
   int max_layer = 0;
   editor->get_layers_supported(min_layer, max_layer);
 
-  ViewSettings& view_settings = editor->get_view_settings();
+  const ViewSettings& view_settings = editor->get_view_settings();
   ui.action_show_layer_0->setChecked(view_settings.is_layer_visible(0));
   ui.action_show_layer_1->setChecked(max_layer >= 1 && view_settings.is_layer_visible(1));
   ui.action_show_layer_2->setChecked(max_layer >= 2 && view_settings.is_layer_visible(2));
@@ -1393,7 +1448,7 @@ void MainWindow::update_layers_visibility() {
   for (int i = min_layer; i <= max_layer; ++i) {
     QAction* action = actions.value(i - min_layer);
     if (action != nullptr) {
-      action->setVisible(view_settings.is_layer_visible(i));
+      action->setChecked(view_settings.is_layer_visible(i));
     }
   }
 }

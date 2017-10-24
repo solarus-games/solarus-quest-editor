@@ -92,6 +92,8 @@ private slots:
   void update_grid_visibility();
   void update_grid_size();
   void update_layer_range();
+  void update_layer_locking(int layer);
+  void update_layers_locking();
   void update_layer_visibility(int layer);
   void update_layers_visibility();
   void update_traversables_visibility();
