@@ -2771,8 +2771,12 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
     addable_entities.emplace_back(std::move(entity), index);
   }
 
+  EntityModels clones = view.clone_selected_entities();
+
   // Add them.
-  view.add_entities_requested(addable_entities, true);
+  const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
+  const bool keep_selection = control_or_shift && event.button() != Qt::RightButton;
+  view.add_entities_requested(addable_entities, !keep_selection);
 
   // Decide what to do next: resize them, add new ones or do nothing.
   if (view.are_entities_resizable(view.get_selected_entities())) {
@@ -2783,7 +2787,6 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   else {
     if (event.button() == Qt::RightButton) {
       // Entities were added with the right mouse button: add new ones again.
-      EntityModels clones = view.clone_selected_entities();
       const bool guess_layer = false;
       view.start_state_adding_entities(std::move(clones), guess_layer);
     }
