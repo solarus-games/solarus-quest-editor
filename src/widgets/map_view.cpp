@@ -2786,7 +2786,8 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   view.add_entities_requested(addable_entities, !keep_selection);
 
   // Decide what to do next: resize them, add new ones or do nothing.
-  if (view.are_entities_resizable(view.get_selected_entities())) {
+  if (view.are_entities_resizable(view.get_selected_entities()) &&
+      !control_or_shift) {
     // Start resizing the newly added entities
     // (until the mouse button is released).
     view.start_state_resizing_entities();
