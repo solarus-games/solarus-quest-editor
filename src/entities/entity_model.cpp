@@ -154,11 +154,25 @@ EntityModelPtr EntityModel::create(
 EntityModelPtr EntityModel::clone(
     MapModel& map, const EntityIndex& index) {
 
-  const Solarus::EntityData& existing_data = map.get_internal_entity(index);
-  EntityModelPtr clone = create(map, EntityIndex(), existing_data.get_type());
+  return map.get_entity(index).clone();
+}
+
+/**
+ * @brief Clones this entity.
+ *
+ * The created clone is not on the map.
+ *
+ * @param entity The entity to clone.
+ * @return The created entity.
+ */
+EntityModelPtr EntityModel::clone() const {
+
+  Q_ASSERT(map != nullptr);
+  const Solarus::EntityData& existing_data = get_entity();
+  EntityModelPtr clone = create(*map, EntityIndex(), existing_data.get_type());
   clone->set_entity(existing_data);
   clone->index = EntityIndex();
-  clone->name = map.get_entity_name(index);
+  clone->name = get_name();
   return clone;
 }
 

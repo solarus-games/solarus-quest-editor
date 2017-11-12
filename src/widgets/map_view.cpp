@@ -2743,6 +2743,15 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
   // to compute correct indexes below.
   sort_entities();
 
+  // Clone them in case the user wants to add more entities.
+  EntityModels clones;
+  if (event.button() == Qt::RightButton) {
+    for (EntityModelPtr& entity : entities) {
+      Q_ASSERT(entity != nullptr);
+      clones.emplace_back(entity->clone());
+    }
+  }
+
   // Make entities ready to be added at their specific index.
   AddableEntities addable_entities;
   EntityIndex previous_index;
@@ -2770,8 +2779,6 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
     previous_index = index;
     addable_entities.emplace_back(std::move(entity), index);
   }
-
-  EntityModels clones = view.clone_selected_entities();
 
   // Add them.
   const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));

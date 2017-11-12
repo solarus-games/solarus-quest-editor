@@ -46,6 +46,8 @@ class EntityModel {
 
 public:
 
+  virtual ~EntityModel() = default;
+
   static EntityModelPtr create(
       MapModel& map, EntityType type);
   static EntityModelPtr create(
@@ -54,8 +56,7 @@ public:
       MapModel& map, const EntityIndex& index);
   static EntityModelPtr clone(
       MapModel& map, const EntityIndex& index);
-
-  virtual ~EntityModel() = default;
+  EntityModelPtr clone() const;
 
   const MapModel& get_map() const;
   MapModel& get_map();
@@ -77,6 +78,7 @@ public:
 
   const Solarus::EntityData& get_entity() const;
   Solarus::EntityData& get_entity();
+
 
   // Access data.
   bool has_name() const;
