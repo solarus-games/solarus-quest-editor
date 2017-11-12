@@ -2782,7 +2782,7 @@ void AddingEntitiesState::mouse_pressed(const QMouseEvent& event) {
 
   // Add them.
   const bool control_or_shift = (event.modifiers() & (Qt::ControlModifier | Qt::ShiftModifier));
-  const bool keep_selection = control_or_shift && event.button() != Qt::RightButton;
+  const bool keep_selection = control_or_shift;
   view.add_entities_requested(addable_entities, !keep_selection);
 
   // Decide what to do next: resize them, add new ones or do nothing.
