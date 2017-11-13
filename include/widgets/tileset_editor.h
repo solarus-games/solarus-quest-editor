@@ -84,6 +84,8 @@ public slots:
   void delete_border_set_patterns_requested(const QList<QPair<QString, BorderKind>>& patterns);
   void update_border_set_id_field();
   void change_selected_border_set_id_requested();
+  void update_border_set_inner_field();
+  void border_set_inner_selector_activated();
   void change_border_set_patterns_requested(
       const QString& border_set_id,
       const QStringList& pattern_ids

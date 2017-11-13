@@ -607,6 +607,35 @@ private:
 };
 
 /**
+ * @brief Changing the inner property of a border set.
+ */
+class SetBorderSetInnerCommand : public TilesetEditorCommand {
+
+public:
+
+  SetBorderSetInnerCommand(TilesetEditor& editor, const QString& border_set_id, bool inner) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Border set inner")),
+    border_set_id(border_set_id),
+    inner_before(get_model().is_border_set_inner(border_set_id)),
+    inner_after(inner) {
+  }
+
+  virtual void undo() override {
+    get_model().set_border_set_inner(border_set_id, inner_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_border_set_inner(border_set_id, inner_after);
+  }
+
+private:
+
+  QString border_set_id;
+  bool inner_before;
+  bool inner_after;
+};
+
+/**
  * @brief Changing the patterns of a border set.
  */
 class SetBorderSetPatternsCommand : public TilesetEditorCommand {
@@ -891,6 +920,10 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(change_selected_border_set_id_requested()));
   connect(model, SIGNAL(border_set_id_changed(QString, QString)),
           this, SLOT(update_border_set_id_field()));
+  connect(ui.border_set_inner_field, SIGNAL(activated(QString)),
+          this, SLOT(border_set_inner_selector_activated()));
+  connect(model, SIGNAL(border_set_inner_changed(QString, bool)),
+          this, SLOT(update_border_set_inner_field()));
   connect(ui.border_sets_tree_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_border_set_view()));
 
@@ -1385,7 +1418,7 @@ void TilesetEditor::animation_separation_selector_activated() {
     return;
   }
 
-  if (!try_command(new SetPatternsSeparationCommand(*this,  indexes, new_separation))) {
+  if (!try_command(new SetPatternsSeparationCommand(*this, indexes, new_separation))) {
     // In case of failure, restore the selector.
     update_animation_separation_field();
   }
@@ -1564,7 +1597,7 @@ void TilesetEditor::delete_selected_patterns_requested() {
 void TilesetEditor::update_border_set_view() {
 
   update_border_set_id_field();
-  // TOOD update_border_set_inner_field();
+  update_border_set_inner_field();
 
   // If no border set is selected, disable the border set view.
   const QString& border_set_id = ui.border_sets_tree_view->get_selected_border_set_id();
@@ -1667,6 +1700,41 @@ void TilesetEditor::change_selected_border_set_id_requested() {
   }
 
   try_command(new SetBorderSetIdCommand(*this, old_id, new_id));
+}
+
+/**
+ * @brief Updates the border set inner setting from the model.
+ */
+void TilesetEditor::update_border_set_inner_field() {
+
+  const QString& border_set_id = ui.border_sets_tree_view->get_selected_border_set_id();
+  bool inner = false;
+  if (!border_set_id.isEmpty()) {
+    inner = model->is_border_set_inner(border_set_id);
+  }
+
+  ui.border_set_inner_field->setCurrentIndex(inner ? 1 : 0);
+}
+
+/**
+ * @brief Slot called when the user changes the border set inner setting in the selector.
+ */
+void TilesetEditor::border_set_inner_selector_activated() {
+
+  const QString& border_set_id = ui.border_sets_tree_view->get_selected_border_set_id();
+  if (border_set_id.isEmpty()) {
+    return;
+  }
+
+  bool old_inner = model->is_border_set_inner(border_set_id);
+  bool new_inner = (ui.border_set_inner_field->currentIndex() == 1);
+
+  if (new_inner == old_inner) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetBorderSetInnerCommand(*this, border_set_id, new_inner));
 }
 
 /**
