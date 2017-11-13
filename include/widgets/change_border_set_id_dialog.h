@@ -14,36 +14,29 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_CHANGE_PATTERN_ID_DIALOG_H
-#define SOLARUSEDITOR_CHANGE_PATTERN_ID_DIALOG_H
+#ifndef SOLARUSEDITOR_CHANGE_BORDER_SET_ID_DIALOG_H
+#define SOLARUSEDITOR_CHANGE_BORDER_SET_ID_DIALOG_H
 
-#include "ui_change_pattern_id_dialog.h"
+#include "ui_change_border_set_id_dialog.h"
 #include <QDialog>
 
 namespace SolarusEditor {
 
 /**
- * @brief A dialog to rename a pattern in the tileset editor.
- *
- * This dialog is similar to a standard QInputDialog with a line edit,
- * but has an additional checkbox to let the user choose if she wants
- * to update references in existing maps.
+ * @brief A dialog to rename a border set id in the tileset editor.
  */
-class ChangePatternIdDialog : public QDialog {
+class ChangeBorderSetIdDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  ChangePatternIdDialog(
-      const QString& initial_pattern_id,
+  explicit ChangeBorderSetIdDialog(
+      const QString& initial_border_set_id,
       QWidget* parent = nullptr
   );
 
-  QString get_pattern_id() const;
-  void set_pattern_id(const QString& pattern_id);
-
-  bool get_update_references() const;
-  void set_update_references(bool update_references);
+  QString get_border_set_id() const;
+  void set_border_set_id(const QString& border_set_id);
 
 public slots:
 
@@ -51,7 +44,7 @@ public slots:
 
 private:
 
-  Ui::ChangePatternIdDialog ui;   /**< The widgets. */
+  Ui::ChangeBorderSetIdDialog ui;   /**< The widgets. */
 
 };
 

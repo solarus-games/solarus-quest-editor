@@ -37,7 +37,8 @@ public:
 
   void set_tileset(TilesetModel& tileset);
 
-  QStringList get_selection() const;
+  QString get_selected_border_set_id() const;
+  void set_selected_border_set_id(const QString& border_set_id);
 
 signals:
 

@@ -37,7 +37,7 @@ ChangePatternIdDialog::ChangePatternIdDialog(
 }
 
 /**
- * @brief Returns pattern id entered by the user.
+ * @brief Returns the pattern id entered by the user.
  * @return The pattern id.
  */
 QString ChangePatternIdDialog::get_pattern_id() const {

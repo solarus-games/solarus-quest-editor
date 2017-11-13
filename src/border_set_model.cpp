@@ -553,10 +553,29 @@ void BorderSetModel::border_set_deleted(const QString& border_set_id) {
   endRemoveRows();
 }
 
+/**
+ * @brief Slot called when a border set has been renamed.
+ * @param old_id Id of the border set before the change.
+ * @param new_id Id of the border set after the change.
+ */
 void BorderSetModel::border_set_id_changed(const QString& old_id, const QString& new_id) {
 
-  Q_UNUSED(old_id);
-  Q_UNUSED(new_id);
+  const QModelIndex& old_index = get_border_set_index(old_id);
+  if (!old_index.isValid()) {
+    return;
+  }
+
+  beginRemoveRows(QModelIndex(), old_index.row(), old_index.row());
+  border_set_indexes.removeAt(old_index.row());
+  endRemoveRows();
+
+  const QStringList& border_set_ids = tileset.get_border_set_ids();
+  int new_row = border_set_ids.indexOf(new_id);
+  Q_ASSERT(new_row != -1);
+
+  beginInsertRows(QModelIndex(), new_row, new_row);
+  border_set_indexes.insert(new_row, BorderSetIndex(new_id));
+  endInsertRows();
 }
 
 /**

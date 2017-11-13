@@ -118,6 +118,7 @@ set(solarus_quest_editor_SOURCES
   include/entities/wall.h
   include/widgets/border_set_selector.h
   include/widgets/border_set_tree_view.h
+  include/widgets/change_border_set_id_dialog.h
   include/widgets/change_dialog_id_dialog.h
   include/widgets/change_pattern_id_dialog.h
   include/widgets/change_resource_id_dialog.h
@@ -238,6 +239,7 @@ set(solarus_quest_editor_SOURCES
   src/entities/wall.cpp
   src/widgets/border_set_selector.cpp
   src/widgets/border_set_tree_view.cpp
+  src/widgets/change_border_set_id_dialog.cpp
   src/widgets/change_dialog_id_dialog.cpp
   src/widgets/change_pattern_id_dialog.cpp
   src/widgets/change_resource_id_dialog.cpp
@@ -334,6 +336,7 @@ endif()
 
 # UI files.
 set(solarus_quest_editor_FORMS
+  src/widgets/change_border_set_id_dialog.ui
   src/widgets/change_dialog_id_dialog.ui
   src/widgets/change_pattern_id_dialog.ui
   src/widgets/change_resource_id_dialog.ui

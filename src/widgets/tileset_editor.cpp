@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "widgets/change_border_set_id_dialog.h"
 #include "widgets/change_pattern_id_dialog.h"
 #include "widgets/gui_tools.h"
 #include "widgets/tileset_editor.h"
@@ -63,7 +64,6 @@ public:
 private:
 
   TilesetEditor& editor;
-
 };
 
 /**
@@ -91,7 +91,6 @@ private:
 
   QColor color_before;
   QColor color_after;
-
 };
 
 /**
@@ -207,7 +206,6 @@ private:
   QList<int> indexes;
   QList<Ground> grounds_before;
   Ground ground_after;
-
 };
 
 /**
@@ -250,7 +248,6 @@ private:
   QList<int> indexes;
   QList<int> layers_before;
   int layer_after;
-
 };
 
 /**
@@ -293,7 +290,6 @@ private:
   QList<int> indexes;
   QList<TilePatternRepeatMode> repeat_modes_before;
   TilePatternRepeatMode repeat_mode_after;
-
 };
 
 /**
@@ -338,7 +334,6 @@ private:
   QList<int> indexes;
   QList<PatternAnimation> animations_before;
   PatternAnimation animation_after;
-
 };
 
 /**
@@ -381,7 +376,6 @@ private:
   QList<int> indexes;
   QList<PatternSeparation> separations_before;
   PatternSeparation separation_after;
-
 };
 
 /**
@@ -418,7 +412,6 @@ private:
   QString pattern_id;
   QRect frame;
   Ground ground;
-
 };
 
 /**
@@ -486,7 +479,6 @@ private:
   QList<QString> ids;
   QList<QString> new_ids;
   QPoint delta;
-
 };
 
 /**
@@ -552,7 +544,6 @@ private:
   };
 
   QList<Pattern> patterns;
-
 };
 
 /**
@@ -586,7 +577,33 @@ private:
   int index_after;
   QString id_before;
   QString id_after;
+};
 
+/**
+ * @brief Changing the id of a border set.
+ */
+class SetBorderSetIdCommand : public TilesetEditorCommand {
+
+public:
+
+  SetBorderSetIdCommand(TilesetEditor& editor, const QString& old_id, const QString& new_id) :
+    TilesetEditorCommand(editor, TilesetEditor::tr("Border set id")),
+    id_before(old_id),
+    id_after(new_id) {
+  }
+
+  virtual void undo() override {
+    get_model().set_border_set_id(id_after, id_before);
+  }
+
+  virtual void redo() override {
+    get_model().set_border_set_id(id_before, id_after);
+  }
+
+private:
+
+  QString id_before;
+  QString id_after;
 };
 
 /**
@@ -865,9 +882,17 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
           this, SLOT(create_border_set_requested()));
   connect(ui.border_sets_tree_view, SIGNAL(change_border_set_patterns_requested(QString, QStringList)),
           this, SLOT(change_border_set_patterns_requested(QString, QStringList)));
-
   connect(&model->get_selection_model(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_pattern_view()));
+
+  connect(ui.rename_border_set_button, SIGNAL(clicked()),
+          this, SLOT(change_selected_border_set_id_requested()));
+  connect(ui.border_set_id_button, SIGNAL(clicked()),
+          this, SLOT(change_selected_border_set_id_requested()));
+  connect(model, SIGNAL(border_set_id_changed(QString, QString)),
+          this, SLOT(update_border_set_id_field()));
+  connect(ui.border_sets_tree_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+          this, SLOT(update_border_set_view()));
 
   QFileSystemWatcher* watcher = new QFileSystemWatcher(this);
   watcher->addPath(quest.get_tileset_tiles_image_path(tileset_id));
@@ -944,6 +969,7 @@ void TilesetEditor::update() {
   update_description_to_gui();
   update_background_color();
   update_pattern_view();
+  update_border_set_view();
 }
 
 /**
@@ -1529,6 +1555,23 @@ void TilesetEditor::delete_selected_patterns_requested() {
 }
 
 /**
+ * @brief Fills the border set view.
+ *
+ * If a border set is selected, its properties are displayed in the tile
+ * pattern view.
+ * Otherwise, the border set view becomes disabled.
+ */
+void TilesetEditor::update_border_set_view() {
+
+  update_border_set_id_field();
+  // TOOD update_border_set_inner_field();
+
+  // If no border set is selected, disable the border set view.
+  const QString& border_set_id = ui.border_sets_tree_view->get_selected_border_set_id();
+  ui.border_set_properties_group_box->setEnabled(!border_set_id.isEmpty());
+}
+
+/**
  * @brief Slot called when the user wants to create a border set.
  */
 void TilesetEditor::create_border_set_requested() {
@@ -1581,6 +1624,49 @@ void TilesetEditor::delete_border_set_patterns_requested(const QList<QPair<QStri
   }
 
   try_command(new DeleteBorderSetPatternsCommand(*this, patterns));
+}
+
+/**
+ * @brief Updates the border set id field from the model.
+ */
+void TilesetEditor::update_border_set_id_field() {
+
+  // Get the id of the selected border set
+  // (an empty string if no border set selected.
+  QString border_set_id = ui.border_sets_tree_view->get_selected_border_set_id();
+  ui.border_set_id_value->setText(border_set_id);
+
+  bool enable = !border_set_id.isEmpty();
+  ui.border_set_id_label->setEnabled(enable);
+  ui.border_set_id_button->setEnabled(enable);
+}
+
+/**
+ * @brief Slot called when the user wants to change the id of the selected
+ * border set.
+ */
+void TilesetEditor::change_selected_border_set_id_requested() {
+
+  const QString& old_id = ui.border_sets_tree_view->get_selected_border_set_id();
+  if (old_id.isEmpty()) {
+    // No border set selected.
+    return;
+  }
+
+  ChangeBorderSetIdDialog dialog(old_id, this);
+  int result = dialog.exec();
+
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString new_id = dialog.get_border_set_id();
+  if (new_id == old_id) {
+    // No change.
+    return;
+  }
+
+  try_command(new SetBorderSetIdCommand(*this, old_id, new_id));
 }
 
 /**

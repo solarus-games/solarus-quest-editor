@@ -48,7 +48,6 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
 
   model = new BorderSetModel(tileset);
   setModel(model);
-  expandAll();
   if (tileset.get_num_border_sets() > 0) {
     resizeColumnToContents(0);
   }
@@ -70,6 +69,44 @@ void BorderSetTreeView::set_tileset(TilesetModel& tileset) {
     resizeColumnToContents(0);
   });
 
+  connect(&tileset, &TilesetModel::border_set_id_changed,
+          [this](const QString&, const QString& new_id) {
+    set_selected_border_set_id(new_id);
+  });
+}
+
+/**
+ * @brief Returns the currently selected border set id.
+ * @return The selected border set id or an empty string.
+ */
+QString BorderSetTreeView::get_selected_border_set_id() const {
+
+  const QModelIndexList& selected_indexes = selectionModel()->selectedIndexes();
+  for (const QModelIndex& index : selected_indexes) {
+    if (model->is_border_set_index(index) ||
+        model->is_pattern_index(index)
+    ) {
+      return model->get_border_set_id(index);
+    }
+  }
+  return QString();
+}
+
+/**
+ * @brief Selects a border set id.
+ * @param border_set_id A border set id, or an empty string to select nothing.
+ */
+void BorderSetTreeView::set_selected_border_set_id(const QString& border_set_id) {
+
+  if (border_set_id.isEmpty()) {
+    selectionModel()->clear();
+    return;
+  }
+
+  const QModelIndex& index = model->get_border_set_index(border_set_id);
+  if (index.isValid()) {
+    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+  }
 }
 
 /**
