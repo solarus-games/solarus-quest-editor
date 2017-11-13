@@ -42,7 +42,7 @@ public:
     Type = UserType + 1
   };
 
-  virtual int type() const override {
+  int type() const override {
     return Type;
   }
 
@@ -53,9 +53,9 @@ public:
 
 protected:
 
-  virtual void paint(QPainter* painter,
-                     const QStyleOptionGraphicsItem* option,
-                     QWidget* widget = nullptr) override;
+  void paint(QPainter* painter,
+             const QStyleOptionGraphicsItem* option,
+             QWidget* widget = nullptr) override;
 
 private:
 
