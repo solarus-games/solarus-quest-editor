@@ -29,9 +29,11 @@ resources/images/icon_folder_open_music.png
 resources/images/icon_file.png
 resources/images/icon_first.png
 resources/images/icon_glasses.png
+resources/images/icon_inside.png
 resources/images/icon_last.png
 resources/images/icon_next.png
 resources/images/icon_open.png
+resources/images/icon_outside.png
 resources/images/icon_paste.png
 resources/images/icon_pause.png
 resources/images/icon_previous.png

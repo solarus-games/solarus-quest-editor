@@ -157,5 +157,7 @@
         <file>images/border_kind_9.png</file>
         <file>images/border_kind_10.png</file>
         <file>images/border_kind_11.png</file>
+        <file>images/icon_inside.png</file>
+        <file>images/icon_outside.png</file>
     </qresource>
 </RCC>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1000</width>
-    <height>700</height>
+    <height>736</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,8 +40,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>563</width>
-         <height>692</height>
+         <width>603</width>
+         <height>728</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -159,7 +159,7 @@
         <item>
          <widget class="QTabWidget" name="patterns_border_sets_tab_widget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="patterns_view">
            <property name="sizePolicy">
@@ -533,6 +533,103 @@
                </layout>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="border_set_properties_group_box">
+              <property name="title">
+               <string>Border set properties</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_3">
+               <item row="0" column="0">
+                <widget class="QLabel" name="border_set_id_label">
+                 <property name="text">
+                  <string>Border set id</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="border_set_id_layout">
+                 <item>
+                  <widget class="QLabel" name="border_set_id_value">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="border_set_id_button">
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../resources/images.qrc">
+                     <normaloff>:/images/icon_edit.png</normaloff>:/images/icon_edit.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontal_spacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="border_set_inner_label">
+                 <property name="text">
+                  <string>Positioning</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <layout class="QHBoxLayout" name="border_set_inner_layout">
+                 <item>
+                  <widget class="QComboBox" name="border_set_inner_combo_box">
+                   <item>
+                    <property name="text">
+                     <string>Outside the selection</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="../../resources/images.qrc">
+                      <normaloff>:/images/icon_outside.png</normaloff>:/images/icon_outside.png</iconset>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Inside the selection</string>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="../../resources/images.qrc">
+                      <normaloff>:/images/icon_inside.png</normaloff>:/images/icon_inside.png</iconset>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontal_spacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
            </layout>
           </widget>
