@@ -111,6 +111,12 @@ void EditorTabs::open_resource(
     open_text_editor(quest, quest.get_entity_script_path(id));
     break;
 
+  case ResourceType::SHADER:
+    // Open the shader file.
+    // TODO shader editor
+    open_text_editor(quest, quest.get_shader_path(id));
+    break;
+
   case ResourceType::MUSIC:
   case ResourceType::SOUND:
   case ResourceType::FONT:

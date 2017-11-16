@@ -43,6 +43,7 @@ const QMap<ResourceType, QString> resource_dirs = {
   { ResourceType::ENTITY,   "entities"  },
   { ResourceType::LANGUAGE, "languages" },
   { ResourceType::FONT,     "fonts"     },
+  { ResourceType::SHADER,   "shaders"   },
 };
 
 }
@@ -344,6 +345,11 @@ QStringList Quest::get_resource_element_paths(ResourceType resource_type,
   case ResourceType::FONT:
     paths << get_font_path(element_id);
     break;
+
+  case ResourceType::SHADER:
+    paths << get_shader_path(element_id);
+    break;
+
   }
 
   return paths;
@@ -574,6 +580,16 @@ QString Quest::get_tileset_entities_image_path(
 }
 
 /**
+ * @brief Returns the path to a shader data file.
+ * @param shader_id If of a shader.
+ * @return The path to the shader data file.
+ */
+QString Quest::get_shader_path(const QString& shader_id) const {
+
+  return get_data_path() + "/shaders/" + shader_id + "/.dat";
+}
+
+/**
  * @brief Returns whether a path is the quest properties file quest.dat.
  * @param path The path to test.
  * @return @c true if this is the quest properties file.
@@ -650,10 +666,12 @@ bool Quest::is_potential_resource_element(
   QString resource_path = get_resource_path(resource_type);
   QString path_from_resource = path.right(path.size() - resource_path.size() - 1);
   QStringList extensions;
+
   switch (resource_type) {
   case ResourceType::MAP:
   case ResourceType::TILESET:
   case ResourceType::SPRITE:
+  case ResourceType::SHADER:
     extensions << ".dat";
     break;
 
@@ -1457,23 +1475,24 @@ void Quest::create_resource_element(ResourceType resource_type,
 
   case ResourceType::MAP:
     // Create the map data file and the map script.
-    create_map_data_file_if_not_exists(element_id);
-    create_map_script_if_not_exists(element_id);
+    done_on_filesystem |= create_map_data_file_if_not_exists(element_id);
+    done_on_filesystem |= create_map_script_if_not_exists(element_id);
     break;
 
   case ResourceType::ITEM:
-    create_item_script_if_not_exists(element_id);
+    done_on_filesystem |= create_item_script_if_not_exists(element_id);
     break;
 
   case ResourceType::ENEMY:
-    create_enemy_script_if_not_exists(element_id);
+    done_on_filesystem |= create_enemy_script_if_not_exists(element_id);
     break;
 
   case ResourceType::ENTITY:
-    create_entity_script_if_not_exists(element_id);
+    done_on_filesystem |= create_entity_script_if_not_exists(element_id);
     break;
 
   case ResourceType::SPRITE:
+  case ResourceType::SHADER:
     // For this type of resources, files to create are simply blank text files.
     for (const QString& path : paths) {
       done_on_filesystem |= create_file_if_not_exists(path);

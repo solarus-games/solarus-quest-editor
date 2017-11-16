@@ -385,6 +385,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     case ResourceType::ITEM:
     case ResourceType::ENEMY:
     case ResourceType::ENTITY:
+    case ResourceType::SHADER:
       // Other editable resource types,
       menu.addAction(open_action);
       break;
