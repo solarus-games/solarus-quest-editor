@@ -159,5 +159,8 @@
         <file>images/border_kind_11.png</file>
         <file>images/icon_inside.png</file>
         <file>images/icon_outside.png</file>
+        <file>images/icon_folder_open_shader.png</file>
+        <file>images/icon_resource_shader_missing.png</file>
+        <file>images/icon_resource_shader.png</file>
     </qresource>
 </RCC>

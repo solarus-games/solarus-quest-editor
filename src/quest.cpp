@@ -586,7 +586,7 @@ QString Quest::get_tileset_entities_image_path(
  */
 QString Quest::get_shader_path(const QString& shader_id) const {
 
-  return get_data_path() + "/shaders/" + shader_id + "/.dat";
+  return get_data_path() + "/shaders/" + shader_id + ".dat";
 }
 
 /**
