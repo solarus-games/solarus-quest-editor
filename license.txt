@@ -47,6 +47,7 @@ resources/images/icon_resource_font.png
 resources/images/icon_resource_item.png
 resources/images/icon_resource_map.png
 resources/images/icon_resource_music.png
+resources/images/icon_resource_shader.png
 resources/images/icon_resource_sound.png
 resources/images/icon_resource_sprite.png
 resources/images/icon_resource_tileset.png
@@ -81,6 +82,7 @@ resources/images/icon_folder_open_item.png
 resources/images/icon_folder_open_language.png
 resources/images/icon_folder_open_map.png
 resources/images/icon_folder_open_missing.png
+resources/images/icon_folder_open_shader.png
 resources/images/icon_folder_open_sound.png
 resources/images/icon_folder_open_sprite.png
 resources/images/icon_folder_open_tileset.png
@@ -99,6 +101,7 @@ resources/images/icon_resource_language.png
 resources/images/icon_resource_language_missing.png
 resources/images/icon_resource_map_missing.png
 resources/images/icon_resource_music_missing.png
+resources/images/icon_resource_shader_missing.png
 resources/images/icon_resource_sound_missing.png
 resources/images/icon_resource_sprite_missing.png
 resources/images/icon_resource_tileset_missing.png
