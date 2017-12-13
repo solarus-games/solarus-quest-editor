@@ -49,7 +49,7 @@ CMakeLists.txt file.
 You might need to tell Qt Creator the path to the CMake binary.
 If Solarus is installed in a standard paths known by CMake, it should directly
 work. Otherwise, you need to set CMake variables indicating the location of the
-Solarus includes and libraries.
+Solarus includes and libraries
 (see the example in the command-line section below).
 
 ### With the command line
@@ -77,4 +77,3 @@ you can explictly indicate their location instead:
 #### Run:
 
     $ ./solarus-quest-editor
-
