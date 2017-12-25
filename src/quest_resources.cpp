@@ -42,6 +42,7 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::ENTITY,   tr("Custom entity", "resource_type")    },
     { ResourceType::LANGUAGE, tr("Language", "resource_type")         },
     { ResourceType::FONT,     tr("Font", "resource_type")             },
+    { ResourceType::SHADER,   tr("Shader", "resource_type")           },
   };
 
   resource_type_friendly_names_for_id = {
@@ -56,6 +57,7 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::ENTITY,   tr("Custom entity", "resource_element") },
     { ResourceType::LANGUAGE, tr("Language", "resource_element")      },
     { ResourceType::FONT,     tr("Font", "resource_element")          },
+    { ResourceType::SHADER,   tr("Shader", "resource_element")        },
   };
 
   resource_type_directory_friendly_names = {
@@ -69,6 +71,7 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::ENTITY,   tr("Custom entity folder")              },
     { ResourceType::LANGUAGE, tr("Language folder")                   },
     { ResourceType::FONT,     tr("Font folder")                       },
+    { ResourceType::SHADER,   tr("Shader folder")                     },
   };
 
   resource_type_create_friendly_names = {
@@ -82,6 +85,7 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::ENTITY,   tr("New custom entity model...")        },
     { ResourceType::LANGUAGE, tr("New language...")                   },
     { ResourceType::FONT,     tr("New font...")                       },
+    { ResourceType::SHADER,   tr("New shader...")                     },
   };
 
   connect(&quest, SIGNAL(root_path_changed(const QString&)),

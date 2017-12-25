@@ -89,6 +89,11 @@ NewResourceElementDialog::NewResourceElementDialog(
     id_text = tr("Font id (filename):");
     break;
 
+  case ResourceType::SHADER:
+    title = tr("New shader");
+    id_text = tr("Shader id (filename):");
+    break;
+
   }
 
   ui.id_label->setText(id_text);
