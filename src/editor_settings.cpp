@@ -30,7 +30,6 @@ const QString EditorSettings::last_file = "last_file";
 const QString EditorSettings::restore_last_files = "restore_last_files";
 const QString EditorSettings::save_files_before_running = "save_files_before_running";
 const QString EditorSettings::no_audio = "no_audio";
-const QString EditorSettings::video_acceleration = "video_acceleration";
 const QString EditorSettings::quest_size = "quest_size";
 
 // Console keys.
@@ -94,7 +93,6 @@ QMap<QString, QVariant> EditorSettings::default_values = {
   { EditorSettings::restore_last_files, true },
   { EditorSettings::save_files_before_running, "ask" },
   { EditorSettings::no_audio, false },
-  { EditorSettings::video_acceleration, true },
   { EditorSettings::quest_size, QSize() },
 
   // Console.

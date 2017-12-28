@@ -55,8 +55,6 @@ public slots:
   void change_save_files();
   void update_no_audio();
   void change_no_audio();
-  void update_video_acceleration();
-  void change_video_acceleration();
   void update_quest_size();
   void change_quest_size();
 

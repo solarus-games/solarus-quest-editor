@@ -37,7 +37,6 @@ public:
   static const QString restore_last_files;
   static const QString save_files_before_running;
   static const QString no_audio;
-  static const QString video_acceleration;
   static const QString quest_size;
 
   // Console keys.

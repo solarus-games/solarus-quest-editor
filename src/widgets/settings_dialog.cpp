@@ -63,8 +63,6 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           this, SLOT(change_save_files()));
   connect(ui.no_audio_field, SIGNAL(toggled(bool)),
           this, SLOT(change_no_audio()));
-  connect(ui.video_acceleration_field, SIGNAL(toggled(bool)),
-          this, SLOT(change_video_acceleration()));
   connect(ui.quest_size_check_box, SIGNAL(toggled(bool)),
           this, SLOT(change_quest_size()));
   connect(ui.quest_size_field, SIGNAL(value_changed(int,int)),
@@ -202,7 +200,6 @@ void SettingsDialog::update() {
   update_restore_last_files();
   update_save_files();
   update_no_audio();
-  update_video_acceleration();
   update_quest_size();
 
   // Text editor.
@@ -374,25 +371,6 @@ void SettingsDialog::update_no_audio() {
 void SettingsDialog::change_no_audio() {
 
   edited_settings[EditorSettings::no_audio] = ui.no_audio_field->isChecked();
-  update_buttons();
-}
-
-/**
- * @brief Updates the video acceleration field.
- */
-void SettingsDialog::update_video_acceleration() {
-
-  ui.video_acceleration_field->setChecked(
-    settings.get_value_bool(EditorSettings::video_acceleration));
-}
-
-/**
- * @brief Slot called when the user changes the video acceleration.
- */
-void SettingsDialog::change_video_acceleration() {
-
-  edited_settings[EditorSettings::video_acceleration] =
-    ui.video_acceleration_field->isChecked();
   update_buttons();
 }
 
