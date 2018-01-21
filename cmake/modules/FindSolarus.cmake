@@ -5,7 +5,7 @@
 #  SOLARUS_INCLUDE_DIR - where to find solarus headers.
 #  SOLARUS_LIBRARIES   - List of libraries when using libsolarus.
 #  SOLARUS_FOUND       - True if Solarus was found.
-find_path(SOLARUS_INCLUDE_DIR solarus/MainLoop.h)
+find_path(SOLARUS_INCLUDE_DIR solarus/core/MainLoop.h)
 
 find_library(SOLARUS_LIBRARY solarus)
 
