@@ -19,7 +19,7 @@
 
 #include "indexed_string_tree.h"
 
-#include <solarus/StringResources.h>
+#include <solarus/core/StringResources.h>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
 

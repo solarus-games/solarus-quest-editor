@@ -19,7 +19,7 @@
 
 #include "indexed_string_tree.h"
 
-#include <solarus/DialogResources.h>
+#include <solarus/core/DialogResources.h>
 #include <QAbstractItemModel>
 #include <QItemSelectionModel>
 

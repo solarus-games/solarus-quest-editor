@@ -18,7 +18,7 @@
 #include "widgets/editor.h"
 #include "editor_exception.h"
 #include "quest.h"
-#include <solarus/SolarusFatal.h>
+#include <solarus/core/SolarusFatal.h>
 #include <QApplication>
 #include <QMessageBox>
 #include <QUndoStack>

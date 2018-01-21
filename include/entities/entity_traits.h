@@ -18,8 +18,8 @@
 #define SOLARUSEDITOR_ENTITY_TRAITS_H
 
 #include "enum_traits.h"
+#include <solarus/core/MapData.h>
 #include <solarus/entities/EntityType.h>
-#include <solarus/MapData.h>
 #include <QList>
 #include <memory>
 

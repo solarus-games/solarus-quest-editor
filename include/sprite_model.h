@@ -19,7 +19,7 @@
 
 #include "natural_comparator.h"
 
-#include <solarus/SpriteData.h>
+#include <solarus/graphics/SpriteData.h>
 #include <QAbstractItemModel>
 #include <QImage>
 #include <QItemSelectionModel>

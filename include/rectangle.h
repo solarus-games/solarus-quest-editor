@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_RECTANGLE_H
 #define SOLARUSEDITOR_RECTANGLE_H
 
-#include <solarus/lowlevel/Rectangle.h>
+#include <solarus/core/Rectangle.h>
 #include <QRect>
 
 namespace SolarusEditor {

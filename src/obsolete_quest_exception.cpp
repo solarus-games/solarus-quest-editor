@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "obsolete_quest_exception.h"
-#include <solarus/Common.h>
+#include <solarus/core/Common.h>
 #include <QApplication>
 
 namespace SolarusEditor {

@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_RESOURCES_H
 #define SOLARUSEDITOR_QUEST_RESOURCES_H
 
-#include <solarus/QuestResources.h>
+#include <solarus/core/QuestResources.h>
 #include <QMap>
 #include <QObject>
 

@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_PROPERTIES_H
 #define SOLARUSEDITOR_QUEST_PROPERTIES_H
 
-#include <solarus/QuestProperties.h>
+#include <solarus/core/QuestProperties.h>
 #include <QDate>
 #include <QObject>
 

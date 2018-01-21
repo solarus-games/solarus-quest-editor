@@ -17,9 +17,9 @@
 #include "widgets/main_window.h"
 #include "editor_settings.h"
 #include "version.h"
-#include <solarus/lowlevel/Debug.h>
-#include <solarus/Arguments.h>
-#include <solarus/MainLoop.h>
+#include <solarus/core/Arguments.h>
+#include <solarus/core/Debug.h>
+#include <solarus/core/MainLoop.h>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLibraryInfo>

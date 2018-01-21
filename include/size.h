@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_SIZE_H
 #define SOLARUSEDITOR_SIZE_H
 
-#include <solarus/lowlevel/Size.h>
+#include <solarus/core/Size.h>
 #include <QSize>
 
 namespace SolarusEditor {

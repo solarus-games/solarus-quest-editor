@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_COLOR_H
 #define SOLARUSEDITOR_COLOR_H
 
-#include <solarus/lowlevel/Color.h>
+#include <solarus/graphics/Color.h>
 #include <QColor>
 
 namespace SolarusEditor {

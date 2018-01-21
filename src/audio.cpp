@@ -16,10 +16,10 @@
  */
 #include "audio.h"
 #include "quest.h"
-#include <solarus/lowlevel/QuestFiles.h>
-#include <solarus/lowlevel/Music.h>
-#include <solarus/lowlevel/Sound.h>
-#include <solarus/Arguments.h>
+#include <solarus/audio/Music.h>
+#include <solarus/audio/Sound.h>
+#include <solarus/core/Arguments.h>
+#include <solarus/core/QuestFiles.h>
 #include <QApplication>
 #include <QDebug>
 #include <QTimer>

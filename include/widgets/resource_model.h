@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_RESOURCE_MODEL_H
 #define SOLARUSEDITOR_RESOURCE_MODEL_H
 
-#include <solarus/ResourceType.h>
+#include <solarus/core/ResourceType.h>
 #include <QMap>
 #include <QStandardItemModel>
 

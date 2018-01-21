@@ -16,7 +16,7 @@
  */
 #include "editor_exception.h"
 #include "file_tools.h"
-#include <solarus/Common.h>
+#include <solarus/core/Common.h>
 #include <QApplication>
 #include <QDebug>
 #include <QDir>

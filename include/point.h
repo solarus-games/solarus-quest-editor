@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_POINT_H
 #define SOLARUSEDITOR_POINT_H
 
-#include <solarus/lowlevel/Point.h>
+#include <solarus/core/Point.h>
 #include <QPoint>
 
 class QSize;

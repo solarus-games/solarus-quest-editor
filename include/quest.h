@@ -19,7 +19,7 @@
 
 #include <quest_properties.h>
 #include <quest_resources.h>
-#include <solarus/ResourceType.h>
+#include <solarus/core/ResourceType.h>
 #include <QObject>
 #include <QSet>
 

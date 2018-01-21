@@ -18,7 +18,7 @@
 #define SOLARUSEDITOR_TRANSITION_TRAITS_H
 
 #include "enum_traits.h"
-#include <solarus/Transition.h>
+#include <solarus/graphics/Transition.h>
 
 namespace SolarusEditor {
 

@@ -18,7 +18,7 @@
 #define SOLARUSEDITOR_RESOURCE_SELECTOR_H
 
 #include <QComboBox>
-#include <solarus/ResourceType.h>
+#include <solarus/core/ResourceType.h>
 
 class QTreeView;
 
