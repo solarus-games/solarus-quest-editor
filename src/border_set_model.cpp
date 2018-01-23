@@ -42,6 +42,8 @@ BorderSetModel::BorderSetModel(TilesetModel& tileset, QObject* parent) :
           this, SLOT(border_set_id_changed(QString, QString)));
   connect(&tileset, SIGNAL(border_set_pattern_changed(QString, BorderKind, QString)),
           this, SLOT(border_set_pattern_changed(QString, BorderKind, QString)));
+  connect(&tileset, SIGNAL(pattern_id_changed(int, QString, int, QString)),
+          this, SLOT(pattern_id_changed(int, QString, int, QString)));
 }
 
 /**
@@ -594,6 +596,26 @@ void BorderSetModel::border_set_pattern_changed(
   Q_ASSERT(border_kind != BorderKind::NONE);
   QModelIndex top_left_index = get_pattern_index(border_set_id, border_kind);
   emit dataChanged(top_left_index, top_left_index);
+}
+
+/**
+ * @brief Slot called when a pattern is renamed.
+ */
+void BorderSetModel::pattern_id_changed(int old_index, const QString& old_id,
+                                        int new_index, const QString& new_id) {
+  Q_UNUSED(old_index);
+  Q_UNUSED(new_index);
+
+  const QStringList border_set_ids = tileset.get_border_set_ids();
+  for (const QString& border_set_id : border_set_ids) {
+    const QStringList& pattern_ids = tileset.get_border_set_patterns(border_set_id);
+    for (int i = 0; i < pattern_ids.size(); ++i) {
+      if (pattern_ids[i] == old_id) {
+        const BorderKind border_kind = static_cast<BorderKind>(i);
+        tileset.set_border_set_pattern(border_set_id, border_kind, new_id);
+      }
+    }
+  }
 }
 
 }

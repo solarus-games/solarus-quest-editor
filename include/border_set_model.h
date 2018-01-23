@@ -87,6 +87,8 @@ public slots:
       BorderKind border_kind,
       const QString& pattern_id
   );
+  void pattern_id_changed(int old_index, const QString& old_id,
+                          int new_index, const QString& new_id);
 
 private:
 
