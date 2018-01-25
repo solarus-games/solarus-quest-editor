@@ -66,10 +66,10 @@ private:
 
   void build();
 
-  TilesetModel& model;            /**< The tileset represented. */
+  TilesetModel& model;      /**< The tileset represented. */
   QList<PatternItem*>
-      pattern_items;              /**< Each pattern item in the scene,
-                                   * ordered as in the model. */
+      pattern_items;        /**< Each pattern item in the scene,
+                             * ordered as in the model. */
 
 };
 

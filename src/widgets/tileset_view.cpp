@@ -103,7 +103,6 @@ TilesetModel* TilesetView::get_model() {
 /**
  * @brief Sets the tileset to represent in this view.
  * @param model The tileset model, or nullptr to remove any model.
- * This class does not take ownership on the model.
  */
 void TilesetView::set_model(TilesetModel* model) {
 

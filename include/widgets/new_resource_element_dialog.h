@@ -35,7 +35,7 @@ class NewResourceElementDialog : public QDialog {
 
 public:
 
-  NewResourceElementDialog(ResourceType resource_type, QWidget* parent = nullptr);
+  explicit NewResourceElementDialog(ResourceType resource_type, QWidget* parent = nullptr);
 
   ResourceType get_resource_type() const;
   QString get_element_id() const;

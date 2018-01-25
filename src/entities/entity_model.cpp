@@ -468,6 +468,15 @@ const TilesetModel* EntityModel::get_tileset() const {
 }
 
 /**
+ * @overload
+ *
+ * Non-const version.
+ */
+TilesetModel* EntityModel::get_tileset() {
+  return get_map().get_tileset_model();
+}
+
+/**
  * @brief Returns the quest the map of this entity belongs to.
  * @return The quest.
  */

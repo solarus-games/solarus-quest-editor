@@ -154,6 +154,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/pair_spin_box.h
   include/widgets/pan_tool.h
   include/widgets/pattern_chooser.h
+  include/widgets/pattern_picker_dialog.h
   include/widgets/plain_text_edit.h
   include/widgets/quest_properties_editor.h
   include/widgets/quest_tree_view.h
@@ -272,6 +273,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/pair_spin_box.cpp
   src/widgets/pan_tool.cpp
   src/widgets/pattern_chooser.cpp
+  src/widgets/pattern_picker_dialog.cpp
   src/widgets/quest_properties_editor.cpp
   src/widgets/quest_tree_view.cpp
   src/widgets/resource_model.cpp
@@ -352,6 +354,7 @@ set(solarus_quest_editor_FORMS
   src/widgets/map_editor.ui
   src/widgets/new_resource_element_dialog.ui
   src/widgets/new_string_dialog.ui
+  src/widgets/pattern_picker_dialog.ui
   src/widgets/quest_properties_editor.ui
   src/widgets/settings_dialog.ui
   src/widgets/sprite_editor.ui

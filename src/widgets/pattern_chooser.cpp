@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/pattern_chooser.h"
+#include "widgets/pattern_picker_dialog.h"
 #include "tileset_model.h"
 #include <QInputDialog>
 
@@ -55,7 +56,7 @@ PatternChooser::PatternChooser(QWidget *parent) :
  * @brief Sets the tileset where patterns should come from in this chooser.
  * @param tileset The tileset or nullptr.
  */
-void PatternChooser::set_tileset(const TilesetModel* tileset) {
+void PatternChooser::set_tileset(TilesetModel* tileset) {
 
   this->tileset = tileset;
 }
@@ -125,17 +126,15 @@ void PatternChooser::update_style_sheet() {
  */
 void PatternChooser::pick_pattern_requested() {
 
-  // TODO open a dialog with a tileset view instead
-  bool ok = false;
-  QString pattern_id = QInputDialog::getText(
-        this,
-        tr("Pattern"),
-        tr("Pattern id:"),
-        QLineEdit::Normal,
-        "",
-        &ok);
+  PatternPickerDialog dialog(*tileset);
+  int result = dialog.exec();
 
-  if (ok && !pattern_id.isEmpty()) {
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString pattern_id = dialog.get_pattern_id();
+  if (!pattern_id.isEmpty()) {
     set_pattern_id(pattern_id);
   }
 }

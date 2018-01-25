@@ -14,44 +14,33 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_PATTERN_CHOOSER_H
-#define SOLARUSEDITOR_PATTERN_CHOOSER_H
+#ifndef SOLARUSEDITOR_PATTERN_PICKER_DIALOG_H
+#define SOLARUSEDITOR_PATTERN_PICKER_DIALOG_H
 
-#include <QPushButton>
+#include "ui_pattern_picker_dialog.h"
+#include <QDialog>
 
 namespace SolarusEditor {
 
-class TilesetModel;
-
 /**
- * @brief Widget to choose a pattern in a tileset.
+ * @brief Dialog allowing the user to pick a single pattern in a tileset view.
  */
-class PatternChooser : public QPushButton {
+class PatternPickerDialog : public QDialog {
   Q_OBJECT
 
 public:
 
-  explicit PatternChooser(QWidget* parent = nullptr);
-
-  void set_tileset(TilesetModel* tileset);
+  PatternPickerDialog(TilesetModel& tileset, QWidget* parent = nullptr);
 
   QString get_pattern_id() const;
-  void set_pattern_id(const QString& pattern_id);
 
 public slots:
 
-  void pick_pattern_requested();
-
-signals:
-
-  void pattern_id_changed(const QString& pattern_id);
+  void done(int result) override;
 
 private:
 
-  void update_icon();
-  void update_style_sheet();
-
-  TilesetModel* tileset;    /**< Tileset where to pick patterns from. */
+  Ui::PatternPickerDialog ui;     /**< The widgets. */
 
 };
 

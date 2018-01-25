@@ -3,6 +3,8 @@ ________________________________________
 Solarus Quest Editor 1.6.0 (in progress)
 ________________________________________
 
+* Allow to generate borders automatically (autotiles).
+* Map editor: allow to change the pattern of existing tiles (#280).
 * Map editor: allow to lock layers (#94).
 * Map editor: show the layer under the cursor in the status bar (#91).
 * Map editor: add shortcuts to show/hide negative layers too.

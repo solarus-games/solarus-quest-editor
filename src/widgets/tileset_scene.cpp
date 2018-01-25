@@ -59,8 +59,8 @@ protected:
 
 private:
 
-  TilesetModel& model;            /**< The tileset this pattern belongs to. */
-  int index;                      /**< Index of the pattern in the tileset. */
+  TilesetModel& model;      /**< The tileset this pattern belongs to. */
+  int index;                /**< Index of the pattern in the tileset. */
 
 };
 
