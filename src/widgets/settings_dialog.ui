@@ -317,7 +317,7 @@
              </widget>
             </item>
             <item>
-             <widget class="SolarusEditor::ColorPicker" name="map_main_background_field">
+             <widget class="SolarusEditor::ColorChooser" name="map_main_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -405,7 +405,7 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="SolarusEditor::ColorPicker" name="map_grid_color_field">
+               <widget class="SolarusEditor::ColorChooser" name="map_grid_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -485,7 +485,7 @@
            </widget>
           </item>
           <item>
-           <widget class="SolarusEditor::ColorPicker" name="map_tileset_background_field">
+           <widget class="SolarusEditor::ColorChooser" name="map_tileset_background_field">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -569,7 +569,7 @@
              </widget>
             </item>
             <item>
-             <widget class="SolarusEditor::ColorPicker" name="sprite_main_background_field">
+             <widget class="SolarusEditor::ColorChooser" name="sprite_main_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -650,7 +650,7 @@
                <widget class="SolarusEditor::PairSpinBox" name="sprite_grid_size_field" native="true"/>
               </item>
               <item row="1" column="4">
-               <widget class="SolarusEditor::ColorPicker" name="sprite_grid_color_field">
+               <widget class="SolarusEditor::ColorChooser" name="sprite_grid_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -746,7 +746,7 @@
              </widget>
             </item>
             <item>
-             <widget class="SolarusEditor::ColorPicker" name="sprite_previewer_background_field">
+             <widget class="SolarusEditor::ColorChooser" name="sprite_previewer_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -835,7 +835,7 @@
                </widget>
               </item>
               <item row="0" column="4">
-               <widget class="SolarusEditor::ColorPicker" name="sprite_origin_color_field">
+               <widget class="SolarusEditor::ColorChooser" name="sprite_origin_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -916,7 +916,7 @@
              </widget>
             </item>
             <item>
-             <widget class="SolarusEditor::ColorPicker" name="tileset_background_field">
+             <widget class="SolarusEditor::ColorChooser" name="tileset_background_field">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1004,7 +1004,7 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="SolarusEditor::ColorPicker" name="tileset_grid_color_field">
+               <widget class="SolarusEditor::ColorChooser" name="tileset_grid_color_field">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -1107,9 +1107,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SolarusEditor::ColorPicker</class>
+   <class>SolarusEditor::ColorChooser</class>
    <extends>QPushButton</extends>
-   <header>widgets/color_picker.h</header>
+   <header>widgets/color_chooser.h</header>
   </customwidget>
   <customwidget>
    <class>SolarusEditor::EnumSelector&lt;SolarusEditor::GridStyle&gt;</class>

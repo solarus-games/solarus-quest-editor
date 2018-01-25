@@ -141,7 +141,7 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="SolarusEditor::ColorPicker" name="background_field">
+            <widget class="SolarusEditor::ColorChooser" name="background_field">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -708,9 +708,9 @@
    <header>pattern_separation_traits.h</header>
   </customwidget>
   <customwidget>
-   <class>SolarusEditor::ColorPicker</class>
+   <class>SolarusEditor::ColorChooser</class>
    <extends>QPushButton</extends>
-   <header>widgets/color_picker.h</header>
+   <header>widgets/color_chooser.h</header>
   </customwidget>
   <customwidget>
    <class>SolarusEditor::EnumSelector&lt;SolarusEditor::TilePatternRepeatMode&gt;</class>

@@ -125,7 +125,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/change_source_image_dialog.h
   include/widgets/change_string_key_dialog.h
   include/widgets/closable_tab_bar.h
-  include/widgets/color_picker.h
+  include/widgets/color_chooser.h
   include/widgets/dialog_properties_table.h
   include/widgets/dialogs_editor.h
   include/widgets/dialogs_tree_view.h
@@ -153,7 +153,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/new_string_dialog.h
   include/widgets/pair_spin_box.h
   include/widgets/pan_tool.h
-  include/widgets/pattern_picker.h
+  include/widgets/pattern_chooser.h
   include/widgets/plain_text_edit.h
   include/widgets/quest_properties_editor.h
   include/widgets/quest_tree_view.h
@@ -247,7 +247,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/change_source_image_dialog.cpp
   src/widgets/change_string_key_dialog.cpp
   src/widgets/closable_tab_bar.cpp
-  src/widgets/color_picker.cpp
+  src/widgets/color_chooser.cpp
   src/widgets/dialog_properties_table.cpp
   src/widgets/dialogs_editor.cpp
   src/widgets/dialogs_tree_view.cpp
@@ -271,7 +271,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/new_string_dialog.cpp
   src/widgets/pair_spin_box.cpp
   src/widgets/pan_tool.cpp
-  src/widgets/pattern_picker.cpp
+  src/widgets/pattern_chooser.cpp
   src/widgets/quest_properties_editor.cpp
   src/widgets/quest_tree_view.cpp
   src/widgets/resource_model.cpp

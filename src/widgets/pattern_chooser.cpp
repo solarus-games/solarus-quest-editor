@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "widgets/pattern_picker.h"
+#include "widgets/pattern_chooser.h"
 #include <QInputDialog>
 
 namespace SolarusEditor {
@@ -23,7 +23,7 @@ namespace SolarusEditor {
  * @brief Creates a pattern picker.
  * @param parent The parent widget.
  */
-PatternPicker::PatternPicker(QWidget *parent) :
+PatternChooser::PatternChooser(QWidget *parent) :
   QPushButton(parent),
   pattern_id() {
 
@@ -38,7 +38,7 @@ PatternPicker::PatternPicker(QWidget *parent) :
  * @brief Returns the current pattern of the picker.
  * @return Id of the current pattern.
  */
-QString PatternPicker::get_pattern_id() const {
+QString PatternChooser::get_pattern_id() const {
 
   return pattern_id;
 }
@@ -50,7 +50,7 @@ QString PatternPicker::get_pattern_id() const {
  *
  * @param pattern_id The pattern id to set.
  */
-void PatternPicker::set_pattern_id(const QString& pattern_id) {
+void PatternChooser::set_pattern_id(const QString& pattern_id) {
 
   if (pattern_id == this->pattern_id) {
     return;
@@ -65,7 +65,7 @@ void PatternPicker::set_pattern_id(const QString& pattern_id) {
 /**
  * @brief Slot called when the user want to pick another pattern.
  */
-void PatternPicker::pick_pattern_requested() {
+void PatternChooser::pick_pattern_requested() {
 
   // TODO open a dialog with a tileset view instead
   bool ok = false;

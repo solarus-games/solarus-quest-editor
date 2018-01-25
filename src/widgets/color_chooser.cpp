@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "widgets/color_picker.h"
+#include "widgets/color_chooser.h"
 #include <QColorDialog>
 
 namespace SolarusEditor {
@@ -22,7 +22,7 @@ namespace SolarusEditor {
 namespace {
 
 const QString style_sheet =
-  "SolarusEditor--ColorPicker {\n"
+  "SolarusEditor--ColorChooser {\n"
   "    background-color: %1;\n"
   "    border-style: inset;\n"
   "    border-width: 2px;\n"
@@ -37,7 +37,7 @@ const QString style_sheet =
  * @brief Creates a color picker.
  * @param parent The parent widget.
  */
-ColorPicker::ColorPicker(QWidget *parent) :
+ColorChooser::ColorChooser(QWidget *parent) :
   QPushButton(parent),
   color(Qt::white) {
 
@@ -50,7 +50,7 @@ ColorPicker::ColorPicker(QWidget *parent) :
  * @brief Returns the current color of the picker.
  * @return The current color.
  */
-QColor ColorPicker::get_color() const {
+QColor ColorChooser::get_color() const {
 
   return color;
 }
@@ -62,7 +62,7 @@ QColor ColorPicker::get_color() const {
  *
  * @param color The new color.
  */
-void ColorPicker::set_color(const QColor& color) {
+void ColorChooser::set_color(const QColor& color) {
 
   if (color == this->color) {
     return;
@@ -76,7 +76,7 @@ void ColorPicker::set_color(const QColor& color) {
 /**
  * @brief Slot called when the user wants to pick another color.
  */
-void ColorPicker::pick_color_requested() {
+void ColorChooser::pick_color_requested() {
 
   QColor new_color = QColorDialog::getColor(color, this, tr("Select color"));
 
@@ -88,7 +88,7 @@ void ColorPicker::pick_color_requested() {
 /**
  * @brief Updates the stylesheet of the color picker.
  */
-void ColorPicker::update_style_sheet() {
+void ColorChooser::update_style_sheet() {
 
   setStyleSheet(style_sheet.arg(color.name()));
 }
