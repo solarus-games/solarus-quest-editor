@@ -21,6 +21,8 @@
 
 namespace SolarusEditor {
 
+class TilesetModel;
+
 /**
  * @brief Widget to choose a pattern in a tileset.
  */
@@ -30,6 +32,8 @@ class PatternChooser : public QPushButton {
 public:
 
   explicit PatternChooser(QWidget* parent = nullptr);
+
+  void set_tileset(const TilesetModel* tileset);
 
   QString get_pattern_id() const;
   void set_pattern_id(const QString& pattern_id);
@@ -44,7 +48,9 @@ signals:
 
 private:
 
-  QString pattern_id;
+  void update_icon();
+
+  const TilesetModel* tileset;    /**< Tileset where to pick patterns from. */
 
 };
 

@@ -1141,6 +1141,7 @@ void EditEntityDialog::initialize_pattern() {
 
   // Show the initial value.
   QString value = entity_before.get_field(pattern_field_name).toString();
+  ui.pattern_field->set_tileset(entity_before.get_tileset());
   ui.pattern_field->set_pattern_id(value);
 }
 

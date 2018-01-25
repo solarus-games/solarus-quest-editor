@@ -15,6 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "widgets/pattern_chooser.h"
+#include "tileset_model.h"
 #include <QInputDialog>
 
 namespace SolarusEditor {
@@ -25,13 +26,22 @@ namespace SolarusEditor {
  */
 PatternChooser::PatternChooser(QWidget *parent) :
   QPushButton(parent),
-  pattern_id() {
+  tileset() {
 
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setIconSize(QSize(32, 32));
-  setIcon(QIcon(":/images/entity_tile.png"));
+  update_icon();
 
   connect(this, SIGNAL(clicked()), this, SLOT(pick_pattern_requested()));
+}
+
+/**
+ * @brief Sets the tileset where patterns should come from in this chooser.
+ * @param tileset The tileset or nullptr.
+ */
+void PatternChooser::set_tileset(const TilesetModel* tileset) {
+
+  this->tileset = tileset;
 }
 
 /**
@@ -40,7 +50,7 @@ PatternChooser::PatternChooser(QWidget *parent) :
  */
 QString PatternChooser::get_pattern_id() const {
 
-  return pattern_id;
+  return text();
 }
 
 /**
@@ -52,14 +62,36 @@ QString PatternChooser::get_pattern_id() const {
  */
 void PatternChooser::set_pattern_id(const QString& pattern_id) {
 
-  if (pattern_id == this->pattern_id) {
+  if (pattern_id == get_pattern_id()) {
     return;
   }
 
-  this->pattern_id = pattern_id;
   setText(pattern_id);
-  // TODO set the button icon
+  update_icon();
+
   emit pattern_id_changed(pattern_id);
+}
+
+/**
+ * @brief Makes the button icon show the current pattern.
+ */
+void PatternChooser::update_icon() {
+
+  static QIcon default_icon = QIcon(":/images/entity_tile.png");
+
+  if (tileset == nullptr) {
+    // No tileset: use the generic tile icon.
+    setIcon(default_icon);
+    return;
+  }
+
+  const int pattern_index = tileset->id_to_index(get_pattern_id());
+  if (pattern_index == -1) {
+    setIcon(default_icon);
+    return;
+  }
+
+  setIcon(tileset->get_pattern_icon(pattern_index));
 }
 
 /**
