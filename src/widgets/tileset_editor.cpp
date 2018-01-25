@@ -1033,7 +1033,7 @@ void TilesetEditor::update_description_to_gui() {
 }
 
 /**
- * @brief Slot called when the user change the background color.
+ * @brief Slot called when the user changes the background color.
  */
 void TilesetEditor::change_background_color() {
 
