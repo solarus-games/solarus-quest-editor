@@ -32,6 +32,16 @@ PatternChooser::PatternChooser(QWidget *parent) :
   setIconSize(QSize(32, 32));
   update_icon();
 
+  setStyleSheet(
+        "SolarusEditor--PatternChooser {\n"
+        "    background-color: white;\n"
+        "    border-style: inset;\n"
+        "    border-width: 2px;\n"
+        "    border-color: gray;\n"
+        "    padding: 5px;\n"
+        "}"
+  );
+
   connect(this, SIGNAL(clicked()), this, SLOT(pick_pattern_requested()));
 }
 

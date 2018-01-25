@@ -789,7 +789,11 @@
       </widget>
      </item>
      <item row="24" column="1">
-      <widget class="SolarusEditor::PatternChooser" name="pattern_field"/>
+      <widget class="SolarusEditor::PatternChooser" name="pattern_field">
+       <property name="toolTip">
+        <string>Click to choose another pattern</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
