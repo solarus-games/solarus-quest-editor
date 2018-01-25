@@ -19,7 +19,9 @@
 
 namespace SolarusEditor {
 
-const QString ColorPicker::style_sheet =
+namespace {
+
+const QString style_sheet =
   "SolarusEditor--ColorPicker {\n"
   "    background-color: %1;\n"
   "    border-style: inset;\n"
@@ -28,6 +30,8 @@ const QString ColorPicker::style_sheet =
   "    min-width: 1em;\n"
   "    padding: 1px;\n"
   "}";
+
+}  // Anonymous namespace.
 
 /**
  * @brief Creates a color picker.
@@ -39,7 +43,7 @@ ColorPicker::ColorPicker(QWidget *parent) :
 
   update_style_sheet();
 
-  connect(this, SIGNAL(clicked()), this, SLOT(change_color()));
+  connect(this, SIGNAL(clicked()), this, SLOT(pick_color_requested()));
 }
 
 /**
@@ -52,9 +56,9 @@ QColor ColorPicker::get_color() const {
 }
 
 /**
- * @brief Changes the color of the picker.
+ * @brief Sets the color of the picker.
  *
- * Emits color_changed() if the color has changed.
+ * Emits color_changed() if there is a change.
  *
  * @param color The new color.
  */
@@ -70,9 +74,9 @@ void ColorPicker::set_color(const QColor& color) {
 }
 
 /**
- * @brief Slot called when the user want to change the color.
+ * @brief Slot called when the user wants to pick another color.
  */
-void ColorPicker::change_color() {
+void ColorPicker::pick_color_requested() {
 
   QColor new_color = QColorDialog::getColor(color, this, tr("Select color"));
 
@@ -82,7 +86,7 @@ void ColorPicker::change_color() {
 }
 
 /**
- * @brief Update the stylesheet of the color picker.
+ * @brief Updates the stylesheet of the color picker.
  */
 void ColorPicker::update_style_sheet() {
 

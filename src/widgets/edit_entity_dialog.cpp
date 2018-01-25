@@ -37,6 +37,7 @@ const QString model_field_name = "model";
 const QString opening_method_field_name = "opening_method";
 const QString opening_condition_field_name = "opening_condition";
 const QString opening_condition_consumed_field_name = "opening_condition_consumed";
+const QString pattern_field_name = "pattern";
 const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
@@ -221,6 +222,7 @@ void EditEntityDialog::initialize() {
   initialize_model();
   initialize_name();
   initialize_opening_method();
+  initialize_pattern();
   initialize_savegame_variable();
   initialize_size();
   initialize_sound();
@@ -258,6 +260,7 @@ void EditEntityDialog::apply() {
   apply_model();
   apply_name();
   apply_opening_method();
+  apply_pattern();
   apply_savegame_variable();
   apply_size();
   apply_sound();
@@ -1124,6 +1127,34 @@ void EditEntityDialog::apply_opening_method() {
     entity_after->set_field(opening_condition_field_name, ui.opening_condition_item_field->get_selected_id());
     entity_after->set_field(opening_condition_consumed_field_name, ui.opening_condition_item_consumed_checkbox->isChecked());
   }
+}
+
+/**
+ * @brief Initializes the pattern field.
+ */
+void EditEntityDialog::initialize_pattern() {
+
+  if (!entity_before.has_field(pattern_field_name)) {
+    remove_field(ui.pattern_label, ui.pattern_field);
+    return;
+  }
+
+  // Show the initial value.
+  QString value = entity_before.get_field(pattern_field_name).toString();
+  ui.pattern_field->set_pattern_id(value);
+}
+
+/**
+ * @brief Updates the entity from the pattern field.
+ */
+void EditEntityDialog::apply_pattern() {
+
+  if (!entity_before.has_field(pattern_field_name)) {
+    return;
+  }
+
+  QString value = ui.pattern_field->get_pattern_id();
+  entity_after->set_field(pattern_field_name, value);
 }
 
 /**

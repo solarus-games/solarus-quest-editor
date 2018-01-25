@@ -14,39 +14,37 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_COLOR_PICKER_H
-#define SOLARUSEDITOR_COLOR_PICKER_H
+#ifndef SOLARUSEDITOR_PATTERN_PICKER_H
+#define SOLARUSEDITOR_PATTERN_PICKER_H
 
 #include <QPushButton>
 
 namespace SolarusEditor {
 
 /**
- * @brief Widget to pick a color.
+ * @brief Widget to pick a pattern in a tileset.
  */
-class ColorPicker : public QPushButton {
+class PatternPicker : public QPushButton {
   Q_OBJECT
 
 public:
 
-  explicit ColorPicker(QWidget* parent = nullptr);
+  explicit PatternPicker(QWidget* parent = nullptr);
 
-  QColor get_color() const;
-  void set_color(const QColor& color);
+  QString get_pattern_id() const;
+  void set_pattern_id(const QString& pattern_id);
 
 public slots:
 
-  void pick_color_requested();
+  void pick_pattern_requested();
 
 signals:
 
-  void color_changed(const QColor& color);
+  void pattern_id_changed(const QString& pattern_id);
 
 private:
 
-  void update_style_sheet();
-
-  QColor color;
+  QString pattern_id;
 
 };
 

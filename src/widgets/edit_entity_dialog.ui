@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>625</width>
-    <height>1178</height>
+    <height>1224</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,6 +22,9 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QFormLayout" name="form_layout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="type_label">
        <property name="text">
@@ -778,6 +781,16 @@
        </property>
       </widget>
      </item>
+     <item row="24" column="0">
+      <widget class="QLabel" name="pattern_label">
+       <property name="text">
+        <string>Pattern</string>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="1">
+      <widget class="SolarusEditor::PatternPicker" name="pattern_field"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -832,6 +845,11 @@
    <extends>QWidget</extends>
    <header>widgets/sound_chooser.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>SolarusEditor::PatternPicker</class>
+   <extends>QPushButton</extends>
+   <header>widgets/pattern_picker.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
