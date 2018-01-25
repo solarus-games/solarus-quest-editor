@@ -20,6 +20,21 @@
 
 namespace SolarusEditor {
 
+namespace {
+
+const QString style_sheet =
+    "SolarusEditor--PatternChooser {\n"
+    "    background-color: white;\n"
+    "    border-style: inset;\n"
+    "    border-width: 2px;\n"
+    "    border-color: gray;\n"
+    "    padding: 5px;\n"
+    "    color: %1;\n"
+    "}"
+;
+
+}  // Anonymous namespace.
+
 /**
  * @brief Creates a pattern picker.
  * @param parent The parent widget.
@@ -31,16 +46,7 @@ PatternChooser::PatternChooser(QWidget *parent) :
   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   setIconSize(QSize(32, 32));
   update_icon();
-
-  setStyleSheet(
-        "SolarusEditor--PatternChooser {\n"
-        "    background-color: white;\n"
-        "    border-style: inset;\n"
-        "    border-width: 2px;\n"
-        "    border-color: gray;\n"
-        "    padding: 5px;\n"
-        "}"
-  );
+  update_style_sheet();
 
   connect(this, SIGNAL(clicked()), this, SLOT(pick_pattern_requested()));
 }
@@ -78,6 +84,7 @@ void PatternChooser::set_pattern_id(const QString& pattern_id) {
 
   setText(pattern_id);
   update_icon();
+  update_style_sheet();
 
   emit pattern_id_changed(pattern_id);
 }
@@ -87,21 +94,30 @@ void PatternChooser::set_pattern_id(const QString& pattern_id) {
  */
 void PatternChooser::update_icon() {
 
-  static QIcon default_icon = QIcon(":/images/entity_tile.png");
-
   if (tileset == nullptr) {
     // No tileset: use the generic tile icon.
-    setIcon(default_icon);
+    setIcon(QIcon(":/images/entity_tile.png"));
     return;
   }
 
   const int pattern_index = tileset->id_to_index(get_pattern_id());
   if (pattern_index == -1) {
-    setIcon(default_icon);
+    // Unknown pattern: show an error icon.
+    setIcon(QIcon(":/images/entity_tile_missing.png"));
     return;
   }
 
   setIcon(tileset->get_pattern_icon(pattern_index));
+}
+
+/**
+ * @brief Updates the stylesheet of the chooser.
+ */
+void PatternChooser::update_style_sheet() {
+
+  const bool valid = (tileset != nullptr && tileset->pattern_exists(get_pattern_id()));
+  QString text_color = valid ? "black" : "red";
+  setStyleSheet(style_sheet.arg(text_color));
 }
 
 /**

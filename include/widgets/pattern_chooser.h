@@ -49,6 +49,7 @@ signals:
 private:
 
   void update_icon();
+  void update_style_sheet();
 
   const TilesetModel* tileset;    /**< Tileset where to pick patterns from. */
 

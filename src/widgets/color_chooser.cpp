@@ -22,14 +22,14 @@ namespace SolarusEditor {
 namespace {
 
 const QString style_sheet =
-  "SolarusEditor--ColorChooser {\n"
-  "    background-color: %1;\n"
-  "    border-style: inset;\n"
-  "    border-width: 2px;\n"
-  "    border-color: gray;\n"
-  "    min-width: 1em;\n"
-  "    padding: 1px;\n"
-  "}";
+    "SolarusEditor--ColorChooser {\n"
+    "    background-color: %1;\n"
+    "    border-style: inset;\n"
+    "    border-width: 2px;\n"
+    "    border-color: gray;\n"
+    "    min-width: 1em;\n"
+    "    padding: 1px;\n"
+    "}";
 
 }  // Anonymous namespace.
 
@@ -74,6 +74,14 @@ void ColorChooser::set_color(const QColor& color) {
 }
 
 /**
+ * @brief Updates the stylesheet of the chooser.
+ */
+void ColorChooser::update_style_sheet() {
+
+  setStyleSheet(style_sheet.arg(color.name()));
+}
+
+/**
  * @brief Slot called when the user wants to pick another color.
  */
 void ColorChooser::pick_color_requested() {
@@ -83,14 +91,6 @@ void ColorChooser::pick_color_requested() {
   if (new_color.isValid()) {
     set_color(new_color);
   }
-}
-
-/**
- * @brief Updates the stylesheet of the color picker.
- */
-void ColorChooser::update_style_sheet() {
-
-  setStyleSheet(style_sheet.arg(color.name()));
 }
 
 }

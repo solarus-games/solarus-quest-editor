@@ -16,6 +16,8 @@ We give below the author or each image used in the editor.
 - Icons by Yusuke Kamiyamane:
 http://p.yusukekamiyamane.com/
 
+resources/images/entity_custom_entity.png
+resources/images/entity_tile.png
 resources/images/icon_add.png
 resources/images/icon_copy.png
 resources/images/icon_cross.png
@@ -23,6 +25,7 @@ resources/images/icon_cross_small.png
 resources/images/icon_cut.png
 resources/images/icon_delete.png
 resources/images/icon_edit.png
+resources/images/icon_error.png
 resources/images/icon_folder_closed.png
 resources/images/icon_folder_open.png
 resources/images/icon_folder_open_music.png
@@ -72,6 +75,7 @@ resources/images/icon_down.png
 
 - Icons by Christopho, adapated from Yusuke Kamiyamane's icons:
 
+resources/images/entity_tile_missing.png
 resources/images/icon_dialog_missing.png
 resources/images/icon_dialogs_missing.png
 resources/images/icon_file_unkown.png
