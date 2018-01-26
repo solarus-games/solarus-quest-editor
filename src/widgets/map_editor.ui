@@ -65,8 +65,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>817</width>
-             <height>387</height>
+             <width>816</width>
+             <height>390</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -333,6 +333,9 @@
                   <width>24</width>
                   <height>24</height>
                  </size>
+                </property>
+                <property name="shortcut">
+                 <string>Ctrl+T</string>
                 </property>
                </widget>
               </item>
