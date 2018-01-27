@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>287</width>
-    <height>80</height>
+    <width>350</width>
+    <height>120</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,16 @@
         </size>
        </property>
       </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="replace_label">
+       <property name="text">
+        <string>Replace</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="replace_field"/>
      </item>
     </layout>
    </item>

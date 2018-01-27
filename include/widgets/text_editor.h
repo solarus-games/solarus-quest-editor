@@ -51,6 +51,7 @@ public:
 private slots:
 
   void find_text_requested(const QString& text);
+  void replace_text_requested(const QString& text_search, const QString& text_replace);
   void open_map_requested();
 
 private:

@@ -232,6 +232,9 @@ void TextEditor::find() {
   connect(dialog, SIGNAL(find_text_requested(QString)),
           this, SLOT(find_text_requested(QString)));
 
+  connect(dialog, SIGNAL(replace_text_requested(QString, QString)),
+          this, SLOT(replace_text_requested(QString, QString)));
+
   dialog->show();
   dialog->raise();  // Put the dialog on top.
   dialog->activateWindow();
@@ -273,6 +276,32 @@ void TextEditor::find_text_requested(const QString& text) {
       text_widget->verticalScrollBar()->setValue(scroll_y);
     }
   }
+}
+
+/**
+ * @brief Slot called when the user searches an occurence of some text and want to replace it.
+ * @param text_search, text_replace The text to search and the text to replace.
+ */
+void TextEditor::replace_text_requested(const QString& text_search, const QString& text_replace) {
+    if (!text_widget->find(text_search)) {
+        QTextCursor cursor = text_widget->textCursor();
+        int scroll_x = text_widget->horizontalScrollBar()->value();
+        int scroll_y = text_widget->verticalScrollBar()->value();
+        text_widget->moveCursor(QTextCursor::Start);
+        if (!text_widget->find(text_search)) {
+            text_widget->setTextCursor(cursor);
+            text_widget->horizontalScrollBar()->setValue(scroll_x);
+            text_widget->verticalScrollBar()->setValue(scroll_y);
+        }
+        else {
+            text_widget->textCursor().removeSelectedText();
+            text_widget->textCursor().insertText(text_replace);
+        }
+   }
+    else {
+        text_widget->textCursor().removeSelectedText();
+        text_widget->textCursor().insertText(text_replace);
+    }
 }
 
 /**
