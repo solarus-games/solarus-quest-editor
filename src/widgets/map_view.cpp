@@ -640,7 +640,7 @@ QMenu* MapView::create_context_menu() {
   // Layout of the context menu (line breaks are separators):
   //
   // Edit, Resize, Direction
-  // Convert to dynamic/static tile(s)
+  // Change pattern, Change pattern of all, Convert to dynamic/static tile(s)
   // Cut, Copy, Paste
   // Borders
   // Layers, One layer up, One layer down
