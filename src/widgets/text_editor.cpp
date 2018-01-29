@@ -261,7 +261,7 @@ void TextEditor::reload_settings() {
  * @brief Slot called when the user searches an occurence of some text.
  * @param text The text to find.
  */
-void TextEditor::find_text_requested(const QString& text) {
+int TextEditor::find_text_requested(const QString& text) {
 
   if (!text_widget->find(text)) {
     // Text not found: search back from the beginning.
@@ -275,6 +275,12 @@ void TextEditor::find_text_requested(const QString& text) {
       text_widget->horizontalScrollBar()->setValue(scroll_x);
       text_widget->verticalScrollBar()->setValue(scroll_y);
     }
+    else {
+        return 1;
+    }
+  }
+  else {
+      return 1;
   }
 }
 
@@ -283,22 +289,8 @@ void TextEditor::find_text_requested(const QString& text) {
  * @param text_search, text_replace The text to search and the text to replace.
  */
 void TextEditor::replace_text_requested(const QString& text_search, const QString& text_replace) {
-    if (!text_widget->find(text_search)) {
-        QTextCursor cursor = text_widget->textCursor();
-        int scroll_x = text_widget->horizontalScrollBar()->value();
-        int scroll_y = text_widget->verticalScrollBar()->value();
-        text_widget->moveCursor(QTextCursor::Start);
-        if (!text_widget->find(text_search)) {
-            text_widget->setTextCursor(cursor);
-            text_widget->horizontalScrollBar()->setValue(scroll_x);
-            text_widget->verticalScrollBar()->setValue(scroll_y);
-        }
-        else {
-            text_widget->textCursor().removeSelectedText();
-            text_widget->textCursor().insertText(text_replace);
-        }
-   }
-    else {
+    if(this->find_text_requested(text_search) == 1) {
+        // Text found and selected: remove selected text and insert the new text
         text_widget->textCursor().removeSelectedText();
         text_widget->textCursor().insertText(text_replace);
     }
