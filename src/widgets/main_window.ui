@@ -340,7 +340,7 @@
   </action>
   <action name="action_find">
    <property name="text">
-    <string>Find...</string>
+    <string>Find / Replace</string>
    </property>
   </action>
   <action name="action_settings">

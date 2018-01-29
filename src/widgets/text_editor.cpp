@@ -232,6 +232,9 @@ void TextEditor::find() {
   connect(dialog, SIGNAL(find_text_requested(QString)),
           this, SLOT(find_text_requested(QString)));
 
+  connect(dialog, SIGNAL(replace_text_requested(QString, QString)),
+          this, SLOT(replace_text_requested(QString, QString)));
+
   dialog->show();
   dialog->raise();  // Put the dialog on top.
   dialog->activateWindow();
@@ -257,8 +260,9 @@ void TextEditor::reload_settings() {
 /**
  * @brief Slot called when the user searches an occurence of some text.
  * @param text The text to find.
+ * @return integer: 1 if text found, 0 else
  */
-void TextEditor::find_text_requested(const QString& text) {
+int TextEditor::find_text_requested(const QString& text) {
 
   if (!text_widget->find(text)) {
     // Text not found: search back from the beginning.
@@ -272,7 +276,26 @@ void TextEditor::find_text_requested(const QString& text) {
       text_widget->horizontalScrollBar()->setValue(scroll_x);
       text_widget->verticalScrollBar()->setValue(scroll_y);
     }
+    else {
+        return 1;
+    }
   }
+  else {
+      return 1;
+  }
+  return 0;
+}
+
+/**
+ * @brief Slot called when the user searches an occurence of some text and want to replace it.
+ * @param text_search, text_replace The text to search and the text to replace.
+ */
+void TextEditor::replace_text_requested(const QString& text_search, const QString& text_replace) {
+    if(this->find_text_requested(text_search) == 1) {
+        // Text found and selected: remove selected text and insert the new text
+        text_widget->textCursor().removeSelectedText();
+        text_widget->textCursor().insertText(text_replace);
+    }
 }
 
 /**
