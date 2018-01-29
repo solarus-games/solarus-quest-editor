@@ -319,7 +319,7 @@
               <item>
                <widget class="QToolButton" name="tileset_edit_button">
                 <property name="toolTip">
-                 <string>Edit tileset</string>
+                 <string>Edit tileset (Ctrl-T)</string>
                 </property>
                 <property name="text">
                  <string>...</string>
