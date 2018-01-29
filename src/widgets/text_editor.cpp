@@ -260,6 +260,7 @@ void TextEditor::reload_settings() {
 /**
  * @brief Slot called when the user searches an occurence of some text.
  * @param text The text to find.
+ * @return integer: 1 if text found, 0 else
  */
 int TextEditor::find_text_requested(const QString& text) {
 
