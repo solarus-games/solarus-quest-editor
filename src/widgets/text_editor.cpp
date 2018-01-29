@@ -282,6 +282,7 @@ int TextEditor::find_text_requested(const QString& text) {
   else {
       return 1;
   }
+  return 0;
 }
 
 /**
