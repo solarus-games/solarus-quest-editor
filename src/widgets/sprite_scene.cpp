@@ -219,7 +219,8 @@ void SpriteScene::update_selection_to_scene(
     const QItemSelection& /* deselected */) {
 
   SpriteModel::Index index = model.get_selected_index();
-  if (index.animation_name != animation_name) {
+  if (index.animation_name != animation_name ||
+      direction_items.length() != model.get_animation_num_directions(index)) {
     rebuild();
   } else if (index.is_valid()) {
 

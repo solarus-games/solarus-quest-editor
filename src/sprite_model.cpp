@@ -862,7 +862,7 @@ int SpriteModel::add_direction(
 
   // Save and clear the selection.
   Index selection = get_selected_index();
-  clear_selection();
+  selection_model.reset();
 
   // Add the direction to the sprite file.
   SpriteAnimationData& animation_data = get_animation(index);
@@ -917,7 +917,7 @@ int SpriteModel::insert_direction(
 
   // Save and clear the selection.
   Index selection = get_selected_index();
-  clear_selection();
+  selection_model.reset();
 
   // Insert the direction to the sprite file.
   SpriteAnimationData& animation_data = get_animation(index);
@@ -984,7 +984,7 @@ void SpriteModel::delete_direction(const Index &index) {
       selection.direction_nb--;
     }
   }
-  clear_selection();
+  selection_model.reset();
 
   // Delete the direction in the sprite file.
   get_animation(index).remove_direction(index.direction_nb);
