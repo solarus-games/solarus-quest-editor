@@ -16,6 +16,7 @@ ________________________________________
 * Sprite editor: allow to change the frame number graphically by Maxs (#147).
 * Sprite editor: the default origin is now 8,13 as usual in Solarus (#307).
 * Sprite editor: fix precision issues when creating or moving directions.
+* Sprite editor: fix scrollbars reset when adding directions by Maxs (#277).
 * Script editor: allow a replace option to the find dialog by Akadream (#3).
 * Clear the console when a quest is started (#230).
 
