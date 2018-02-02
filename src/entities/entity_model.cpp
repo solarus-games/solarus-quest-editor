@@ -1114,6 +1114,112 @@ void EntityModel::set_field(const QString& key, const QVariant& value) {
 }
 
 /**
+ * @brief Returns the number of user-defined properties of this entity.
+ * @return The number of user-defined properties.
+ */
+int EntityModel::get_user_property_count() const {
+
+  return get_entity().get_user_property_count();
+}
+
+/**
+ * @brief Returns a user-defined property of this entity.
+ * @param index An index between @c 0 and <tt>get_user_property_count() - 1</tt>.
+ * @return The corresponding user-defined property or an empty property.
+ */
+QPair<QString, QString> EntityModel::get_user_property(int index) const {
+
+  const Solarus::EntityData& entity = get_entity();
+  if (index < 0 || index >= get_user_property_count()) {
+    return QPair<QString, QString>();
+  }
+
+  const Solarus::EntityData::UserProperty& property = entity.get_user_property(index);
+  return qMakePair(
+      QString::fromStdString(property.first),
+      QString::fromStdString(property.second)
+  );
+}
+
+/**
+ * @brief Sets a user-defined property of this entity.
+ *
+ * The key should be valid and not already in use.
+ *
+ * @param index An index between @c 0 and <tt>get_user_property_count() - 1</tt>.
+ * @param property The new property to set.
+ * @return @c true in case of success.
+ */
+bool EntityModel::set_user_property(int index, const QPair<QString, QString>& property) {
+
+  Solarus::EntityData& entity = get_entity();
+  if (index < 0 || index >= get_user_property_count()) {
+    return false;
+  }
+
+  Solarus::EntityData::UserProperty solarus_property = std::make_pair(
+      property.first.toStdString(),
+      property.second.toStdString()
+  );
+  if (!Solarus::EntityData::is_user_property_key_valid(solarus_property.first)) {
+    // Invalid key.
+    return false;
+  }
+  int existing_index = entity.get_user_property_index(solarus_property.first);
+  if (existing_index != -1 && existing_index != index) {
+    // Another property already exists with this key.
+    return false;
+  }
+
+  entity.set_user_property(index, solarus_property);
+  return true;
+}
+
+/**
+ * @brief Creates a new user-defined property for this entity.
+ * @param property The new property to set.
+ * @return @c true in case of success.
+ */
+bool EntityModel::add_user_property(const QPair<QString, QString>& property) {
+
+  Solarus::EntityData& entity = get_entity();
+
+  Solarus::EntityData::UserProperty solarus_property = std::make_pair(
+      property.first.toStdString(),
+      property.second.toStdString()
+  );
+
+  if (!Solarus::EntityData::is_user_property_key_valid(solarus_property.first)) {
+    // Invalid key.
+    return false;
+  }
+
+  if (entity.has_user_property(solarus_property.first)) {
+    // Another property already exists with this key.
+    return false;
+  }
+
+  entity.add_user_property(solarus_property);
+  return true;
+}
+
+/**
+ * @brief Removes a user-defined property of this entity.
+ * @param index An index between @c 0 and <tt>get_user_property_count() - 1</tt>.
+ * @return @c true in case of success.
+ */
+bool EntityModel::remove_user_property(int index) {
+
+  Solarus::EntityData& entity = get_entity();
+  if (index < 0 || index >= get_user_property_count()) {
+    return false;
+  }
+
+  entity.remove_user_property(index);
+  return true;
+}
+
+/**
  * @brief Returns whether this entity is assumed to be traversable.
  *
  * This property is just a hint for the editor, it is not always

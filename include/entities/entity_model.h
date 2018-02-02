@@ -125,6 +125,11 @@ public:
   bool is_field_unset(const QString& key) const;
   QVariant get_field(const QString& key) const;
   void set_field(const QString& key, const QVariant& value);
+  int get_user_property_count() const;
+  QPair<QString, QString> get_user_property(int index) const;
+  bool set_user_property(int index, const QPair<QString, QString>& property);
+  bool add_user_property(const QPair<QString, QString>& property);
+  bool remove_user_property(int index);
   bool is_traversable() const;
   QString to_string() const;
 

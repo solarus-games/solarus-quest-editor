@@ -123,6 +123,11 @@ public:
   int get_entity_direction(const EntityIndex& index) const;
   void set_entity_direction(const EntityIndex& index, int direction);
   bool is_common_direction(const EntityIndexes& indexes, int& direction) const;
+  int get_entity_user_property_count(const EntityIndex& index) const;
+  QPair<QString, QString> get_entity_user_property(const EntityIndex& index, int property_index) const;
+  void set_entity_user_property(const EntityIndex& index, int property_index, const QPair<QString, QString>& property);
+  void add_entity_user_property(const EntityIndex& index, const QPair<QString, QString>& property);
+  void remove_entity_user_property(const EntityIndex& index, int property_index);
   bool has_entity_field(const EntityIndex& index, const QString& key) const;
   QVariant get_entity_field(const EntityIndex& index, const QString& key) const;
   void set_entity_field(const EntityIndex& index, const QString& key, const QVariant& value);
@@ -155,7 +160,10 @@ signals:
   void entity_name_changed(const EntityIndex& index, const QString& name);
   void entity_xy_changed(const EntityIndex& index, const QPoint& xy);
   void entity_size_changed(const EntityIndex& index, const QSize& size);
-  void entity_direction_changed(const EntityIndex& name, int direction);
+  void entity_direction_changed(const EntityIndex& index, int direction);
+  void entity_user_property_changed(const EntityIndex& index, int property_index, const QPair<QString, QString>& property);
+  void entity_user_property_added(const EntityIndex& index, int property_index, const QPair<QString, QString>& property);
+  void entity_user_property_removed(const EntityIndex& index, int property_index);
   void entity_field_changed(const EntityIndex& index, const QString& key, const QVariant& value);
 
 public slots:

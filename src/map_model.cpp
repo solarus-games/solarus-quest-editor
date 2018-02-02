@@ -1369,6 +1369,109 @@ bool MapModel::is_common_direction(const EntityIndexes& indexes, int& direction)
 }
 
 /**
+ * @brief Returns the number of user-defined properties of an entity.
+ * @param index Index of an entity.
+ * @return The number of user-defined properties.
+ */
+int MapModel::get_entity_user_property_count(const EntityIndex& index) const {
+
+  if (!entity_exists(index)) {
+    return 0;
+  }
+
+  return get_entity(index).get_user_property_count();
+}
+
+/**
+ * @brief Returns a user-defined property of this entity.
+ * @param index Index of an entity.
+ * @param property_index Index of a user-defined property of this entity.
+ * @return The corresponding user-defined property or an empty property.
+ */
+QPair<QString, QString> MapModel::get_entity_user_property(const EntityIndex& index, int property_index) const {
+
+  if (!entity_exists(index)) {
+    return QPair<QString, QString>();
+  }
+
+  return get_entity(index).get_user_property(property_index);
+}
+
+/**
+ * @brief Sets a user-defined property of this entity.
+ *
+ * The key should be valid and not already in use.
+ *
+ * Emits user_property_changed() if there is a change.
+ *
+ * @param property_index Index of a user-defined property of this entity.
+ * @param property The new property to set.
+ */
+void MapModel::set_entity_user_property(const EntityIndex& index, int property_index, const QPair<QString, QString>& property) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  if (get_entity_user_property(index, property_index) == property) {
+    // No change.
+    return;
+  }
+
+  bool success = get_entity(index).set_user_property(property_index, property);
+  if (!success) {
+    return;
+  }
+
+  emit entity_user_property_changed(index, property_index, property);
+}
+
+/**
+ * @brief Creates a new user-defined property for this entity.
+ *
+ * The key should be valid and not already in use.
+ *
+ * Emits user_property_added() if there is a change.
+ *
+ * @param property The new property to set.
+ */
+void MapModel::add_entity_user_property(const EntityIndex& index, const QPair<QString, QString>& property) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  bool success = get_entity(index).add_user_property(property);
+  if (!success) {
+    return;
+  }
+
+  int property_index = get_entity(index).get_user_property_count() - 1;
+  emit entity_user_property_added(index, property_index, property);
+}
+
+/**
+ * @brief Removes a user-defined property of this entity.
+ *
+ * Emits user_property_removed() if there is a change.
+ *
+ * @param property_index Index of a user-defined property of this entity.
+ */
+void MapModel::remove_entity_user_property(const EntityIndex& index, int property_index) {
+
+  if (!entity_exists(index)) {
+    return;
+  }
+
+  bool success = get_entity(index).remove_user_property(property_index);
+  if (!success) {
+    return;
+  }
+
+  emit entity_user_property_removed(index, property_index);
+}
+
+/**
  * @brief Returns whether an entity has a field with the given name.
  * @param index Index of an entity.
  * @param key Key of the field to check.
