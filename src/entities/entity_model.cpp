@@ -316,7 +316,7 @@ EntityModelPtr EntityModel::create(
 
   // Notify the entity of its properties.
   // Do this after its constructor because of the virtual call.
-  for (const auto& kvp : entity->get_entity().get_fields()) {
+  for (const auto& kvp : entity->get_entity().get_specific_properties()) {
     QString key = QString::fromStdString(kvp.first);
     QVariant value = entity->get_field(key);
     entity->notify_field_changed(key, value);
@@ -444,7 +444,7 @@ void EntityModel::set_entity(const EntityData& entity) {
     set_size(QSize(entity.get_integer("width"), entity.get_integer("height")));
   }
 
-  for (const auto& kvp : entity.get_fields()) {
+  for (const auto& kvp : entity.get_specific_properties()) {
     QString key = QString::fromStdString(kvp.first);
     QVariant value = get_field(key);
     notify_field_changed(key, value);
@@ -1035,7 +1035,7 @@ void EntityModel::set_subtype(const QString& subtype) {
  */
 bool EntityModel::has_field(const QString& key) const {
 
-  return get_entity().has_field(key.toStdString());
+  return get_entity().has_specific_property(key.toStdString());
 }
 
 /**
@@ -1045,7 +1045,7 @@ bool EntityModel::has_field(const QString& key) const {
  */
 bool EntityModel::is_field_optional(const QString& key) const {
 
-  return get_entity().is_field_optional(key.toStdString());
+  return get_entity().is_specific_property_optional(key.toStdString());
 }
 
 /**
@@ -1056,7 +1056,7 @@ bool EntityModel::is_field_optional(const QString& key) const {
  */
 bool EntityModel::is_field_unset(const QString& key) const {
 
-  return get_entity().is_field_unset(key.toStdString());
+  return get_entity().is_specific_property_unset(key.toStdString());
 }
 
 /**
