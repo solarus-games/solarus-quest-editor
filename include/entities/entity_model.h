@@ -130,6 +130,7 @@ public:
   bool set_user_property(int index, const QPair<QString, QString>& property);
   bool add_user_property(const QPair<QString, QString>& property);
   bool remove_user_property(int index);
+  bool is_valid_user_property_key(const QString &key) const;
   bool is_traversable() const;
   QString to_string() const;
 

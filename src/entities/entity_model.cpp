@@ -1220,6 +1220,16 @@ bool EntityModel::remove_user_property(int index) {
 }
 
 /**
+ * @brief Checks if a key is a valid one for user properties.
+ * @param key The key to check.
+ * @return true if the key is valid, false otherwise.
+ */
+bool EntityModel::is_valid_user_property_key(const QString &key) const
+{
+  return Solarus::EntityData::is_user_property_key_valid(key.toStdString());
+}
+
+/**
  * @brief Returns whether this entity is assumed to be traversable.
  *
  * This property is just a hint for the editor, it is not always
