@@ -16,7 +16,9 @@
  */
 #include "entities/destination.h"
 #include "widgets/edit_entity_dialog.h"
+#include "widgets/gui_tools.h"
 #include "map_model.h"
+#include <QInputDialog>
 
 namespace SolarusEditor {
 
@@ -166,6 +168,154 @@ void EditEntityDialog::direction_changed() {
 }
 
 /**
+ * @brief Slot called when the user wants add a new user property.
+ */
+void EditEntityDialog::add_user_property_requested() {
+
+  QTreeWidgetItem* selected = ui.user_properties_table->currentItem();
+  QString selected_key =
+      selected != nullptr ? selected->data(0, 0).toString() : "";
+  bool ok;
+  QString key = QInputDialog::getText(
+        this, tr("New user property"),
+        tr("New property key:"), QLineEdit::Normal,
+        selected_key, &ok);
+
+  if (!ok || key.isEmpty()) {
+    return;
+  }
+
+  if (!entity_before.is_valid_user_property_key(key)) {
+    GuiTools::error_dialog(
+      tr("The key '%1' is invalid").arg(key));
+    return;
+  }
+
+  if (user_property_exists(key)) {
+    GuiTools::error_dialog(
+      tr("The property '%1' already exists").arg(key));
+    return;
+  }
+
+  QTreeWidgetItem* item = new QTreeWidgetItem();
+  item->setData(0, Qt::DisplayRole, key);
+  ui.user_properties_table->addTopLevelItem(item);
+
+  ui.user_properties_table->setCurrentItem(item);
+}
+
+/**
+ * @brief Slot called when the user wants change a user property key.
+ */
+void EditEntityDialog::change_user_property_key_requested() {
+
+  QTreeWidgetItem* selected = ui.user_properties_table->currentItem();
+  if (selected == nullptr) {
+    return;
+  }
+
+  QString old_key =selected->data(0, 0).toString();
+  bool ok;
+  QString new_key = QInputDialog::getText(
+        this, tr("Change user property key"),
+        tr("Change the key of the property '%1':").arg(old_key),
+        QLineEdit::Normal, old_key, &ok);
+
+  if (!ok || new_key == old_key) {
+    return;
+  }
+
+  if (new_key.isEmpty()) {
+    GuiTools::error_dialog(tr("The property key cannot be empty"));
+    return;
+  }
+
+  if (!entity_before.is_valid_user_property_key(new_key)) {
+    GuiTools::error_dialog(
+      tr("The key '%1' is invalid").arg(new_key));
+    return;
+  }
+
+  selected->setData(0, 0, new_key);
+}
+
+/**
+ * @brief Slot called when the user wants delete a user property.
+ */
+void EditEntityDialog::delete_user_property_requested() {
+
+  QTreeWidgetItem* item = ui.user_properties_table->currentItem();
+  if (item != nullptr) {
+    delete item;
+    update_user_property_buttons();
+  }
+}
+
+/**
+ * @brief Slot called when the user wants move up a user property.
+ */
+void EditEntityDialog::move_up_user_property_requested() {
+
+  int index = ui.user_properties_table->currentIndex().row();
+  if (index <= 0) {
+    return;
+  }
+
+  QTreeWidgetItem* item = ui.user_properties_table->takeTopLevelItem(index);
+  ui.user_properties_table->insertTopLevelItem(index - 1, item);
+
+  ui.user_properties_table->setCurrentItem(item);
+}
+
+/**
+ * @brief Slot called when the user wants move down a user property.
+ */
+void EditEntityDialog::move_down_user_property_requested() {
+
+  int index = ui.user_properties_table->currentIndex().row();
+  int count = ui.user_properties_table->topLevelItemCount();
+  if (index >= count - 1) {
+    return;
+  }
+
+  QTreeWidgetItem* item = ui.user_properties_table->takeTopLevelItem(index);
+  ui.user_properties_table->insertTopLevelItem(index + 1, item);
+
+  ui.user_properties_table->setCurrentItem(item);
+}
+
+/**
+ * @brief Slot called when the user double click on the user property table.
+ */
+void EditEntityDialog::on_user_property_double_clicked(
+    QTreeWidgetItem *item, int column) {
+
+  Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+  if (column == 1) {
+    flags |= Qt::ItemIsEditable;
+  }
+
+  item->setFlags(flags);
+}
+
+/**
+ * @brief Slot called when the selected user property changes.
+ */
+void EditEntityDialog::update_user_property_buttons() {
+
+  QTreeWidgetItem* item = ui.user_properties_table->currentItem();
+  int index = ui.user_properties_table->currentIndex().row();
+  int count = ui.user_properties_table->topLevelItemCount();
+  bool exists = item != nullptr;
+
+  ui.change_property_key_button->setEnabled(exists);
+  ui.delete_property_button->setEnabled(exists);
+
+  ui.move_property_up_button->setEnabled(exists && index > 0);
+  ui.move_property_down_button->setEnabled(exists && index < count - 1);
+}
+
+/**
  * @brief Creates a validator for entity name fields.
  * @return A validator that checks entity name inputs.
  */
@@ -234,6 +384,7 @@ void EditEntityDialog::initialize() {
   initialize_type();
   initialize_weight();
   initialize_xy();
+  initialize_user_properties();
 
   adjustSize();
 }
@@ -272,6 +423,7 @@ void EditEntityDialog::apply() {
   apply_type();
   apply_weight();
   apply_xy();
+  apply_user_properties();
 }
 
 /**
@@ -1553,6 +1705,61 @@ void EditEntityDialog::apply_xy() {
 }
 
 /**
+ * @brief Initializes the user properties table.
+ */
+void EditEntityDialog::initialize_user_properties() {
+
+  connect(ui.add_property_button, SIGNAL(clicked(bool)),
+          this, SLOT(add_user_property_requested()));
+  connect(ui.change_property_key_button, SIGNAL(clicked(bool)),
+          this, SLOT(change_user_property_key_requested()));
+  connect(ui.delete_property_button, SIGNAL(clicked(bool)),
+          this, SLOT(delete_user_property_requested()));
+  connect(ui.move_property_up_button, SIGNAL(clicked(bool)),
+          this, SLOT(move_up_user_property_requested()));
+  connect(ui.move_property_down_button, SIGNAL(clicked(bool)),
+          this, SLOT(move_down_user_property_requested()));
+
+  connect(ui.user_properties_table,
+          SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+          this, SLOT(on_user_property_double_clicked(QTreeWidgetItem*,int)));
+
+  connect(ui.user_properties_table->selectionModel(),
+          SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+          this, SLOT(update_user_property_buttons()));
+
+  int count = entity_before.get_user_property_count();
+  for (int i = 0; i < count; i++) {
+    QPair<QString, QString> property = entity_before.get_user_property(i);
+    QTreeWidgetItem* item = new QTreeWidgetItem();
+    item->setData(0, Qt::DisplayRole, property.first);
+    item->setData(1, Qt::DisplayRole, property.second);
+    ui.user_properties_table->addTopLevelItem(item);
+  }
+}
+
+/**
+ * @brief Updates the entity from the user properties table.
+ */
+void EditEntityDialog::apply_user_properties() {
+
+  int entity_count = entity_after->get_user_property_count();
+  for (int i = 0; i < entity_count; ++i) {
+    entity_after->remove_user_property(0);
+  }
+
+  int table_count = ui.user_properties_table->topLevelItemCount();
+  for (int i = 0; i < table_count; ++i) {
+    QTreeWidgetItem* item = ui.user_properties_table->topLevelItem(i);
+    QPair<QString, QString> property = qMakePair(
+      item->data(0, Qt::DisplayRole).toString(),
+      item->data(1, Qt::DisplayRole).toString()
+    );
+    entity_after->add_user_property(property);
+  }
+}
+
+/**
  * @brief Updates the size constraints with the current resize mode.
  */
 void EditEntityDialog::update_size_constraints() {
@@ -1564,6 +1771,24 @@ void EditEntityDialog::update_size_constraints() {
   ui.size_field->set_second_enabled(
     resize_mode != ResizeMode::NONE &&
     resize_mode != ResizeMode::HORIZONTAL_ONLY);
+}
+
+/**
+ * @brief Check if an user property with a given key exists.
+ * @param key The key of the user property.
+ * @return true if the user property exists, false otherwise.
+ */
+bool EditEntityDialog::user_property_exists(const QString &key) const {
+
+  int count = ui.user_properties_table->topLevelItemCount();
+  for (int i = 0; i < count; i++) {
+    QTreeWidgetItem* item = ui.user_properties_table->topLevelItem(i);
+    if (item->data(0, Qt::DisplayRole).toString() == key) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 }

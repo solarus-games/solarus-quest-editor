@@ -44,6 +44,16 @@ private slots:
   void height_changed(int height);
   void direction_changed();
 
+  void add_user_property_requested();
+  void change_user_property_key_requested();
+  void delete_user_property_requested();
+  void move_up_user_property_requested();
+  void move_down_user_property_requested();
+
+  void on_user_property_double_clicked(QTreeWidgetItem* item, int column);
+
+  void update_user_property_buttons();
+
 private:
 
   void initialize();
@@ -105,6 +115,8 @@ private:
   void apply_weight();
   void initialize_xy();
   void apply_xy();
+  void initialize_user_properties();
+  void apply_user_properties();
 
   void initialize_possibly_optional_field(const QString& field_name,
                                           QLayout* label_layout,
@@ -123,6 +135,8 @@ private:
   QValidator* create_savegame_variable_validator();
 
   void update_size_constraints();
+
+  bool user_property_exists(const QString &key) const;
 
   Ui::EditEntityDialog ui;             /**< The widgets. */
   EntityModel& entity_before;          /**< The entity to edit (remains unchanged). */
