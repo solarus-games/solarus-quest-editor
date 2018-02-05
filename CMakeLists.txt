@@ -149,6 +149,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/main_window.h
   include/widgets/mouse_coordinates_tracking_tool.h
   include/widgets/music_chooser.h
+  include/widgets/new_entity_user_property_dialog.h
   include/widgets/new_resource_element_dialog.h
   include/widgets/new_string_dialog.h
   include/widgets/pair_spin_box.h
@@ -268,6 +269,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/map_scene.cpp
   src/widgets/mouse_coordinates_tracking_tool.cpp
   src/widgets/music_chooser.cpp
+  src/widgets/new_entity_user_property_dialog.cpp
   src/widgets/new_resource_element_dialog.cpp
   src/widgets/new_string_dialog.cpp
   src/widgets/pair_spin_box.cpp
@@ -352,6 +354,7 @@ set(solarus_quest_editor_FORMS
   src/widgets/find_text_dialog.ui
   src/widgets/main_window.ui
   src/widgets/map_editor.ui
+  src/widgets/new_entity_user_property_dialog.ui
   src/widgets/new_resource_element_dialog.ui
   src/widgets/new_string_dialog.ui
   src/widgets/pattern_picker_dialog.ui
