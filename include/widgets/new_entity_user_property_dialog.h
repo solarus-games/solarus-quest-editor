@@ -32,7 +32,7 @@ class NewEntityUserPropertyDialog : public QDialog {
 
 public:
 
-  NewEntityUserPropertyDialog(
+  explicit NewEntityUserPropertyDialog(
       const QString& key, const QString& value = "", QWidget* parent = nullptr);
 
   QPair<QString, QString> get_property() const;
