@@ -230,6 +230,12 @@ void EditEntityDialog::change_user_property_key_requested() {
     return;
   }
 
+  if (user_property_exists(new_key)) {
+    GuiTools::error_dialog(
+      tr("The property '%1' already exists").arg(new_key));
+    return;
+  }
+
   if (!entity_before.is_valid_user_property_key(new_key)) {
     GuiTools::error_dialog(
       tr("The key '%1' is invalid").arg(new_key));
@@ -287,8 +293,8 @@ void EditEntityDialog::move_down_user_property_requested() {
 /**
  * @brief Slot called when the user double click on the user property table.
  */
-void EditEntityDialog::on_user_property_double_clicked(
-    QTreeWidgetItem *item, int column) {
+void EditEntityDialog::user_property_double_clicked(
+    QTreeWidgetItem* item, int column) {
 
   Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
   if (column == 1) {
@@ -1721,11 +1727,11 @@ void EditEntityDialog::initialize_user_properties() {
           this, SLOT(move_down_user_property_requested()));
 
   connect(ui.user_properties_table,
-          SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-          this, SLOT(on_user_property_double_clicked(QTreeWidgetItem*,int)));
+          SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+          this, SLOT(user_property_double_clicked(QTreeWidgetItem*, int)));
 
   connect(ui.user_properties_table->selectionModel(),
-          SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+          SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
           this, SLOT(update_user_property_buttons()));
 
   int count = entity_before.get_user_property_count();

@@ -50,7 +50,7 @@ private slots:
   void move_up_user_property_requested();
   void move_down_user_property_requested();
 
-  void on_user_property_double_clicked(QTreeWidgetItem* item, int column);
+  void user_property_double_clicked(QTreeWidgetItem* item, int column);
 
   void update_user_property_buttons();
 
