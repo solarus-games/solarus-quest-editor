@@ -17,6 +17,7 @@
 #include "entities/destination.h"
 #include "widgets/edit_entity_dialog.h"
 #include "widgets/gui_tools.h"
+#include "widgets/new_entity_user_property_dialog.h"
 #include "map_model.h"
 #include <QInputDialog>
 
@@ -175,30 +176,27 @@ void EditEntityDialog::add_user_property_requested() {
   QTreeWidgetItem* selected = ui.user_properties_table->currentItem();
   QString selected_key =
       selected != nullptr ? selected->data(0, 0).toString() : "";
-  bool ok;
-  QString key = QInputDialog::getText(
-        this, tr("New user property"),
-        tr("New property key:"), QLineEdit::Normal,
-        selected_key, &ok);
+  QString selected_value =
+      selected != nullptr ? selected->data(1, 0).toString() : "";
 
-  if (!ok || key.isEmpty()) {
+  NewEntityUserPropertyDialog dialog(selected_key, selected_value, this);
+
+  int result = dialog.exec();
+  if (result != QDialog::Accepted) {
     return;
   }
 
-  if (!entity_before.is_valid_user_property_key(key)) {
-    GuiTools::error_dialog(
-      tr("The key '%1' is invalid").arg(key));
-    return;
-  }
+  QPair<QString, QString> property = dialog.get_property();
 
-  if (user_property_exists(key)) {
+  if (user_property_exists(property.first)) {
     GuiTools::error_dialog(
-      tr("The property '%1' already exists").arg(key));
+      tr("The property '%1' already exists").arg(property.first));
     return;
   }
 
   QTreeWidgetItem* item = new QTreeWidgetItem();
-  item->setData(0, Qt::DisplayRole, key);
+  item->setData(0, Qt::DisplayRole, property.first);
+  item->setData(1, Qt::DisplayRole, property.second);
   ui.user_properties_table->addTopLevelItem(item);
 
   ui.user_properties_table->setCurrentItem(item);

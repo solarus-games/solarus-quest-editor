@@ -1224,7 +1224,7 @@ bool EntityModel::remove_user_property(int index) {
  * @param key The key to check.
  * @return true if the key is valid, false otherwise.
  */
-bool EntityModel::is_valid_user_property_key(const QString &key) const
+bool EntityModel::is_valid_user_property_key(const QString &key)
 {
   return Solarus::EntityData::is_user_property_key_valid(key.toStdString());
 }
