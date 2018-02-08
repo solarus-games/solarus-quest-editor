@@ -541,6 +541,13 @@ void MapView::build_context_menu_actions() {
           this, SLOT(convert_selected_tiles()));
   addAction(convert_tiles_action);
 
+  change_pattern_action = new QAction(
+        tr("Change pattern"), this);
+  connect(change_pattern_action, &QAction::triggered, [this]() {
+    emit change_tiles_pattern_requested(get_selected_entities());
+  });
+  addAction(change_pattern_action);
+
   add_border_action = new QAction(
         tr("Add border tiles"), this);
   add_border_action->setShortcut(tr("Ctrl+B"));
@@ -670,6 +677,7 @@ QMenu* MapView::create_context_menu() {
     menu->addSeparator();
 
     // Convert to dynamic/static tile(s).
+    bool tile_action_added = false;
     EntityType type;
     const bool show_convert_tiles_action = map->is_common_type(indexes, type) &&
         (type == EntityType::TILE || type == EntityType::DYNAMIC_TILE);
@@ -683,6 +691,16 @@ QMenu* MapView::create_context_menu() {
       }
       convert_tiles_action->setText(text);
       menu->addAction(convert_tiles_action);
+      tile_action_added = true;
+    }
+
+    // Change pattern.
+    if (map->are_tiles(indexes)) {
+      menu->addAction(change_pattern_action);
+      tile_action_added = true;
+    }
+
+    if (tile_action_added) {
       menu->addSeparator();
     }
   }

@@ -583,6 +583,26 @@ bool MapModel::is_common_type(const EntityIndexes& indexes, EntityType& type) co
 }
 
 /**
+ * @brief Returns whether the given entities are all tiles or dynamic tiles.
+ * @param[in] indexes Indexes of the entities to check.
+ * @return @c true if these entities are all tiles or dynamic tiles.
+ */
+bool MapModel::are_tiles(const EntityIndexes& indexes) const {
+
+  if (indexes.isEmpty()) {
+    return false;
+  }
+
+  for (const EntityIndex& index : indexes) {
+    EntityType type = get_entity_type(index);
+    if (type != EntityType::TILE && type != EntityType::DYNAMIC_TILE) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * @brief Returns all entities of a given type.
  * @param type The type to get.
  * @return All entities of this type on the map.
@@ -1106,6 +1126,34 @@ void MapModel::set_entity_size(const EntityIndex& index, const QSize& size) {
 
   entity.set_size(size);
   emit entity_size_changed(index, size);
+}
+
+/**
+ * @brief Returns an entity size rounded to the closest multiple of its base size.
+ * @param index Index of the entity to check.
+ * @return @c the rounded size.
+ */
+QSize MapModel::get_entity_closest_base_size_multiple(
+    const EntityIndex& index) const {
+
+  return get_entity_closest_base_size_multiple(index, get_entity_size(index));
+}
+
+/**
+ * @brief Returns a size rounded to the closest multiple of an entity's base size.
+ * @param index Index of the entity to check.
+ * @param size The size to check.
+ * @return @c the rounded size.
+ */
+QSize MapModel::get_entity_closest_base_size_multiple(
+    const EntityIndex& index, const QSize& size) const {
+
+  if (!entity_exists(index)) {
+    return QSize();
+  }
+
+  const EntityModel& entity = get_entity(index);
+  return entity.get_closest_base_size_multiple(size);
 }
 
 /**

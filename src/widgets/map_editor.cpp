@@ -20,6 +20,7 @@
 #include "widgets/gui_tools.h"
 #include "widgets/map_editor.h"
 #include "widgets/map_scene.h"
+#include "widgets/pattern_picker_dialog.h"
 #include "widgets/tileset_scene.h"
 #include "audio.h"
 #include "editor_exception.h"
@@ -578,6 +579,63 @@ private:
 };
 
 /**
+ * @brief Changing the pattern of some tiles.
+ */
+class ChangeTilesPatternCommand : public MapEditorCommand {
+
+public:
+  ChangeTilesPatternCommand(
+      MapEditor& editor,
+      const EntityIndexes&
+      indexes,
+      const QString& pattern_id
+  ) :
+    MapEditorCommand(editor, MapEditor::tr("Change pattern")),
+    indexes(indexes),
+    pattern_ids_before(),
+    pattern_id_after(pattern_id) {
+
+    for (const EntityIndex& index : indexes) {
+      const QString& pattern_id_before =
+          get_map().get_entity_field(index, "pattern").toString();
+      pattern_ids_before << pattern_id_before;
+      sizes_before << get_map().get_entity_size(index);
+    }
+  }
+
+  void undo() override {
+    MapModel& map = get_map();
+    int i = 0;
+    for (const EntityIndex& index : indexes) {
+      map.set_entity_field(index, "pattern", pattern_ids_before[i]);
+      map.set_entity_size(index, sizes_before[i]);
+      ++i;
+    }
+    get_map_view().set_selected_entities(indexes);
+    get_map_view().get_scene()->redraw_entities(indexes);
+  }
+
+  void redo() override {
+    MapModel& map = get_map();
+    for (const EntityIndex& index : indexes) {
+      map.set_entity_field(index, "pattern", pattern_id_after);
+      const QSize& size = map.get_entity_closest_base_size_multiple(index);
+      if (map.is_entity_size_valid(index, size)) {
+        map.set_entity_size(index, size);
+      }
+    }
+    get_map_view().set_selected_entities(indexes);
+    get_map_view().get_scene()->redraw_entities(indexes);
+  }
+
+private:
+  EntityIndexes indexes;
+  QStringList pattern_ids_before;
+  QList<QSize> sizes_before;
+  QString pattern_id_after;
+};
+
+/**
  * @brief Changing the direction of entities on the map.
  *
  * For some entities, the size is also changed if it becomes invalid.
@@ -625,7 +683,6 @@ public:
       }
 
       map.get_entity(index).reload_sprite();
-
     }
 
     // Select impacted entities.
@@ -1103,6 +1160,8 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
           this, SLOT(resize_entities_requested(QMap<EntityIndex, QRect>, bool)));
   connect(ui.map_view, SIGNAL(convert_tiles_requested(EntityIndexes)),
           this, SLOT(convert_tiles_requested(EntityIndexes)));
+  connect(ui.map_view, SIGNAL(change_tiles_pattern_requested(EntityIndexes)),
+          this, SLOT(change_tiles_pattern_requested(EntityIndexes)));
   connect(ui.map_view, SIGNAL(set_entities_direction_requested(EntityIndexes, int)),
           this, SLOT(set_entities_direction_requested(EntityIndexes, int)));
   connect(ui.map_view, SIGNAL(set_entities_layer_requested(EntityIndexes, int)),
@@ -2084,6 +2143,47 @@ void MapEditor::convert_tiles_requested(const EntityIndexes& indexes) {
   else {
     try_command(new ConvertTilesToDynamicCommand(*this, indexes));
   }
+}
+
+/**
+ * @brief Slot called when the user wants to change the pattern of some tiles.
+ * @param indexes Indexes of the tiles or dynamic tiles to change.
+ */
+void MapEditor::change_tiles_pattern_requested(const EntityIndexes& indexes) {
+
+  if (indexes.isEmpty()) {
+    return;
+  }
+
+  for (const EntityIndex& index : indexes) {
+    EntityType type = map->get_entity_type(index);
+    if (type != EntityType::TILE && type != EntityType::DYNAMIC_TILE) {
+      return;
+    }
+  }
+
+  PatternPickerDialog dialog(*map->get_tileset_model());
+  int result = dialog.exec();
+
+  if (result != QDialog::Accepted) {
+    return;
+  }
+
+  QString pattern_id = dialog.get_pattern_id();
+
+  bool pattern_changed = false;
+  for (const EntityIndex& index : indexes) {
+    if (pattern_id != map->get_entity_field(index, "pattern").toString()) {
+      pattern_changed = true;
+      break;
+    }
+  }
+  if (!pattern_changed) {
+    // No change.
+    return;
+  }
+
+  try_command(new ChangeTilesPatternCommand(*this, indexes, pattern_id));
 }
 
 /**

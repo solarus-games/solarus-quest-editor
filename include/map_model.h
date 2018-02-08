@@ -87,6 +87,7 @@ public:
   EntityType get_entity_type(const EntityIndex& index) const;
   QString get_entity_type_name(const EntityIndex& index) const;
   bool is_common_type(const EntityIndexes& indexes, EntityType& type) const;
+  bool are_tiles(const EntityIndexes& indexes) const;
   EntityIndexes find_entities_of_type(EntityType type) const;
   EntityIndex find_default_destination_index() const;
   QString get_entity_name(const EntityIndex& index) const;
@@ -110,6 +111,8 @@ public:
   QPoint get_entity_origin(const EntityIndex& index) const;
   QSize get_entity_size(const EntityIndex& index) const;
   void set_entity_size(const EntityIndex& index, const QSize& size);
+  QSize get_entity_closest_base_size_multiple(const EntityIndex& index) const;
+  QSize get_entity_closest_base_size_multiple(const EntityIndex& index, const QSize& size) const;
   bool is_entity_size_valid(const EntityIndex& index) const;
   bool is_entity_size_valid(const EntityIndex& index, const QSize& size) const;
   QSize get_entity_valid_size(const EntityIndex& index) const;

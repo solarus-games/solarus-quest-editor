@@ -96,6 +96,7 @@ private slots:
   void resize_entities_requested(const QMap<EntityIndex, QRect>& boxes,
                                  bool allow_merge_to_previous);
   void convert_tiles_requested(const EntityIndexes& indexes);
+  void change_tiles_pattern_requested(const EntityIndexes& indexes);
   void set_entities_direction_requested(const EntityIndexes& indexes,
                                         int direction);
   void set_entities_layer_requested(const EntityIndexes& indexes,

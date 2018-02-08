@@ -1340,6 +1340,24 @@ void EntityModel::set_base_size(const QSize& base_size) {
 }
 
 /**
+ * @brief Rounds a size to the closest multiple of the base size.
+ * @param size The size to check.
+ * @return @c the rounded size.
+ */
+QSize EntityModel::get_closest_base_size_multiple(const QSize& size) const {
+
+  float base_width = get_base_size().width();
+  float base_height = get_base_size().height();
+
+  QSize rounded_size;
+  rounded_size.setWidth(qMax(base_width,
+      qRound(size.width() / base_width) * base_width));
+  rounded_size.setHeight(qMax(base_height,
+      qRound(size.height() / base_height) * base_height));
+  return rounded_size;
+}
+
+/**
  * @brief Returns whether this entity has a legal size.
  *
  * By default, the size should be non-null and a multiple of 8.

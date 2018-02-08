@@ -138,6 +138,7 @@ public:
   bool is_resizable() const;
   ResizeMode get_resize_mode() const;
   QSize get_base_size() const;
+  QSize get_closest_base_size_multiple(const QSize& size) const;
   bool is_size_valid() const;
   virtual bool is_size_valid(const QSize& size) const;
   virtual QSize get_valid_size() const;

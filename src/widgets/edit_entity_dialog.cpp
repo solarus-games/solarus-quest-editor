@@ -1402,12 +1402,8 @@ void EditEntityDialog::apply_size() {
   if (entity_after->has_size_fields()) {
     QSize size = ui.size_field->get_size();
 
-    // Rounding the size.
-    float base_width = entity_after->get_base_size().width();
-    float base_height = entity_after->get_base_size().height();
-
-    size.setWidth(qMax(base_width, qRound(size.width() / base_width) * base_width));
-    size.setHeight(qMax(base_height, qRound(size.height() / base_height) * base_height));
+    // Round the size.
+    size = entity_after->get_closest_base_size_multiple(size);
 
     // If the size is invalid, refuse the change.
     if (entity_after->is_size_valid(size)) {

@@ -122,6 +122,8 @@ signals:
       bool allow_merge_to_previous);
   void convert_tiles_requested(
       const EntityIndexes& indexes);
+  void change_tiles_pattern_requested(
+      const EntityIndexes& indexes);
   void set_entities_direction_requested(
       const EntityIndexes& indexes,
       int direction);
@@ -200,6 +202,7 @@ private:
   QAction* edit_action;            /**< Action of editing the selected entity. */
   QAction* resize_action;          /**< Action of resizing the selected entities. */
   QAction* convert_tiles_action;   /**< Action of converting tiles to/from dynamic ones. */
+  QAction* change_pattern_action;  /**< Action of changing the pattern of selected tiles. */
   QAction* add_border_action;      /**< Action of adding border tiles to the selection. */
   QList<QAction*>
       set_layer_actions;           /**< Actions of changing the layer of the selected entities. */
