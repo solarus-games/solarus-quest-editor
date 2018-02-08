@@ -542,10 +542,16 @@ void MapView::build_context_menu_actions() {
   addAction(convert_tiles_action);
 
   change_pattern_action = new QAction(
-        tr("Change pattern"), this);
+        tr("Change pattern..."), this);
   connect(change_pattern_action, &QAction::triggered, [this]() {
     emit change_tiles_pattern_requested(get_selected_entities());
   });
+  addAction(change_pattern_action);
+
+  change_pattern_all_action = new QAction(
+        tr("Change pattern of similar tiles..."), this);
+  connect(change_pattern_all_action, SIGNAL(triggered()),
+          this, SLOT(change_pattern_of_similar_tiles()));
   addAction(change_pattern_action);
 
   add_border_action = new QAction(
@@ -694,10 +700,23 @@ QMenu* MapView::create_context_menu() {
       tile_action_added = true;
     }
 
-    // Change pattern.
     if (map->are_tiles(indexes)) {
+      // Change pattern.
       menu->addAction(change_pattern_action);
       tile_action_added = true;
+
+      // Change pattern of all similar tiles.
+      bool same_pattern = true;
+      const QString& pattern_id = map->get_entity_field(indexes.first(), "pattern").toString();
+      for (const EntityIndex& index : indexes) {
+        if (map->get_entity_field(index, "pattern").toString() != pattern_id) {
+          same_pattern = false;
+          break;
+        }
+      }
+      if (same_pattern) {
+        menu->addAction(change_pattern_all_action);
+      }
     }
 
     if (tile_action_added) {
@@ -1456,6 +1475,36 @@ void MapView::edit_selected_entity() {
 void MapView::convert_selected_tiles() {
 
   emit convert_tiles_requested(get_selected_entities());
+}
+
+/**
+ * @brief Changes the pattern of tiles having the same pattern as the selection.
+ */
+void MapView::change_pattern_of_similar_tiles() {
+
+  const EntityIndexes& indexes = get_selected_entities();
+  if (indexes.empty()) {
+    return;
+  }
+
+  const QString& pattern_id = get_map()->get_entity_field(indexes.first(), "pattern").toString();
+
+  // Find all tiles and dynamic tiles that also have this pattern.
+  const EntityIndexes& tiles = map->find_entities_of_type(EntityType::TILE);
+  EntityIndexes similar_tiles;
+  for (const EntityIndex& tile : tiles) {
+    if (get_map()->get_entity_field(tile, "pattern").toString() == pattern_id) {
+      similar_tiles << tile;
+    }
+  }
+  const EntityIndexes& dynamic_tiles = map->find_entities_of_type(EntityType::DYNAMIC_TILE);
+  for (const EntityIndex& dynamic_tile : dynamic_tiles) {
+    if (get_map()->get_entity_field(dynamic_tile, "pattern").toString() == pattern_id) {
+      similar_tiles << dynamic_tile;
+    }
+  }
+
+  emit change_tiles_pattern_requested(similar_tiles);
 }
 
 /**
