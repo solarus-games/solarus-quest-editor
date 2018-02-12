@@ -81,7 +81,9 @@ QModelIndex QuestFilesModel::get_quest_root_index() const {
  * @param parent Parent index.
  * @return The number of columns
  */
-int QuestFilesModel::columnCount(const QModelIndex& /* parent */) const {
+int QuestFilesModel::columnCount(const QModelIndex& parent) const {
+
+  Q_UNUSED(parent);
 
   // File, Description, Type.
   return NUM_COLUMNS;
@@ -412,8 +414,18 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       }
 
       if (quest.is_script(path)) {
-        // An arbitrary Lua script.
+        // A Lua script.
         return tr("Lua script");
+      }
+
+      if (quest.is_image(path)) {
+        // A PNG image.
+        return tr("Image");
+      }
+
+      if (quest.is_data_file(path)) {
+        // A .dat file.
+        return tr("Data file");
       }
 
       // Not a file managed by Solarus.
@@ -550,6 +562,11 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
     icon_file_name = "icon_script.png";
   }
 
+  // Image icon.
+  else if (quest.is_image(file_path)) {
+    icon_file_name = "icon_image.png";
+  }
+
   // Generic icon for a file not known by the quest.
   else {
     icon_file_name = "icon_file_unknown.png";
@@ -654,9 +671,9 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   }
 
   const QString lua_extension = ".lua";
-  if (file_name.endsWith(lua_extension)) {
+  if (file_name.endsWith(lua_extension, Qt::CaseInsensitive)) {
     // Keep all .lua scripts except map scripts.
-    QString file_path_dat = file_path.replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
+    QString file_path_dat = file_path.toLower().replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
     ResourceType resource_type;
     QString element_id;
     if (quest.is_resource_element(file_path_dat, resource_type, element_id) &&
@@ -672,6 +689,36 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
   ResourceType resource_type;
   QString element_id;
   if (quest.is_potential_resource_element(file_path, resource_type, element_id)) {
+    return true;
+  }
+
+  // Keep .dat files.
+  if (quest.is_data_file(file_path)) {
+
+    // Except quest.dat and project_db.dat.
+    if (quest.is_properties_path(file_path)) {
+      // Quest properties file quest.dat.
+      return false;
+    }
+
+    if (quest.is_resource_list_path(file_path)) {
+      // Quest resource list project_db.dat.
+      return false;
+    }
+
+    return true;
+  }
+
+  // Keep .png files.
+  if (file_name.endsWith(".png", Qt::CaseInsensitive)) {
+
+    // Except tileset ones.
+    QString tileset_id;
+    if (quest.is_tileset_tiles_file(file_path, tileset_id) ||
+        quest.is_tileset_entities_file(file_path, tileset_id)) {
+      return false;
+    }
+
     return true;
   }
 

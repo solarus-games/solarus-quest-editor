@@ -99,7 +99,10 @@ public:
   void check_not_is_dir(const QString& path) const;
   bool is_script(const QString& path) const;
   void check_is_script(const QString& path) const;
+  bool is_data_file(const QString& path) const;
+  bool is_image(const QString& path) const;
   bool is_properties_path(const QString& path) const;
+  bool is_resource_list_path(const QString& path) const;
   bool is_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_in_resource_path(const QString& path, ResourceType& resource_type) const;
   bool is_potential_resource_element(
@@ -109,6 +112,8 @@ public:
   bool has_resource_element(
       const QString& path, ResourceType& resource_type) const;
   bool is_map_script(const QString& path, QString& map_id) const;
+  bool is_tileset_tiles_file(const QString& path, QString& tileset_id) const;
+  bool is_tileset_entities_file(const QString& path, QString& tileset_id) const;
   bool is_dialogs_file(const QString& path, QString& language_id) const;
   bool is_strings_file(const QString& path, QString& language_id) const;
 

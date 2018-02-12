@@ -3,6 +3,7 @@ ________________________________________
 Solarus Quest Editor 1.6.0 (in progress)
 ________________________________________
 
+* Quest tree: show .png and .dat files (#260).
 * Allow to generate borders automatically (autotiles).
 * Map editor: add support of custom properties for entities by Maxs (#327).
 * Map editor: allow to change the pattern of existing tiles (#280).

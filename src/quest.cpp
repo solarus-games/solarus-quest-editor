@@ -600,6 +600,16 @@ bool Quest::is_properties_path(const QString& path) const {
 }
 
 /**
+ * @brief Returns whether a path is the resource list file project_db.dat.
+ * @param path The path to test.
+ * @return @c true if this is the quest resource list file.
+ */
+bool Quest::is_resource_list_path(const QString& path) const {
+
+  return path == get_resource_list_path();
+}
+
+/**
  * @brief Returns whether a path is a resource path.
  * @param[in] path The path to test.
  * @param[out] resource_type The resource type found if any.
@@ -808,6 +818,78 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
   map_id = path_from_maps.section('.', 0, -2);
   if (!resources.exists(ResourceType::MAP, map_id)) {
     // Valid map id, but not declared in the resource list.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a tileset tiles image.
+ *
+ * This function exists because the main tileset resource path
+ * (as recognized by is_resource_element())
+ * is the tileset data file, not the tileset image files.
+ *
+ * @param[in] path The path to test.
+ * @param[out] tileset_id Id of the tileset if it is a tileset tiles image.
+ * @return @c true if this path is a tileset tiles image,
+ * even if it does not exist yet.
+ */
+bool Quest::is_tileset_tiles_file(const QString& path, QString& tileset_id) const {
+
+  QString tilesets_path = get_resource_path(ResourceType::TILESET);
+  if (!path.startsWith(tilesets_path + "/")) {
+    // We are not in the tileset directory.
+    return false;
+  }
+
+  if (!path.endsWith(".tiles.png")) {
+    return false;
+  }
+
+  QString path_from_tileset = path.right(path.size() - tilesets_path.size() - 1);
+
+  // Remove the extension.
+  tileset_id = path_from_tileset.section('.', 0, -3);
+  if (!resources.exists(ResourceType::TILESET, tileset_id)) {
+    // Valid tileset id, but not declared in the resource list.
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Determines if a path is a tileset entities image.
+ *
+ * This function exists because the main tileset resource path
+ * (as recognized by is_resource_element())
+ * is the tileset data file, not the tileset image files.
+ *
+ * @param[in] path The path to test.
+ * @param[out] tileset_id Id of the tileset if it is a tileset entities image.
+ * @return @c true if this path is a tileset entities image,
+ * even if it does not exist yet.
+ */
+bool Quest::is_tileset_entities_file(const QString& path, QString& tileset_id) const {
+
+  QString tilesets_path = get_resource_path(ResourceType::TILESET);
+  if (!path.startsWith(tilesets_path + "/")) {
+    // We are not in the tileset directory.
+    return false;
+  }
+
+  if (!path.endsWith(".entities.png")) {
+    return false;
+  }
+
+  QString path_from_tileset = path.right(path.size() - tilesets_path.size() - 1);
+
+  // Remove the extension.
+  tileset_id = path_from_tileset.section('.', 0, -3);
+  if (!resources.exists(ResourceType::TILESET, tileset_id)) {
+    // Valid tileset id, but not declared in the resource list.
     return false;
   }
 
@@ -1068,6 +1150,26 @@ void Quest::check_is_script(const QString& path) const {
     QString file_name(QFileInfo(path).fileName());
     throw EditorException(tr("Wrong script name: '%1' (should end with '.lua')").arg(file_name));
   }
+}
+
+/**
+ * @brief Returns whether a path of this quest corresponds to a .dat file.
+ * @param path The path to test.
+ * @return @c true if this path ends with ".dat", even if it does not exist yet.
+ */
+bool Quest::is_data_file(const QString& path) const {
+
+  return is_in_root_path(path) && path.endsWith(".dat");
+}
+
+/**
+ * @brief Returns whether a path of this quest corresponds to a PNG image.
+ * @param path The path to test.
+ * @return @c true if this path ends with ".png", even if it does not exist yet.
+ */
+bool Quest::is_image(const QString& path) const {
+
+  return is_in_root_path(path) && path.endsWith(".png");
 }
 
 /**

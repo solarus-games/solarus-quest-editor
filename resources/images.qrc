@@ -164,5 +164,6 @@
         <file>images/icon_resource_shader.png</file>
         <file>images/icon_error.png</file>
         <file>images/entity_tile_missing.png</file>
+        <file>images/icon_image.png</file>
     </qresource>
 </RCC>

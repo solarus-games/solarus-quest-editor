@@ -75,21 +75,21 @@ public:
   QItemSelection mapSelectionToSource(const QItemSelection& proxy_selection) const override;
 
   // Data.
-  virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
-  virtual QVariant headerData(
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
+  QVariant headerData(
       int section, Qt::Orientation orientation, int role = Qt::DisplayRole
-      ) const override;
-  virtual QVariant data(
+  ) const override;
+  QVariant data(
       const QModelIndex& index, int role = Qt::DisplayRole
-      ) const override;
-  virtual bool setData(
+  ) const override;
+  bool setData(
       const QModelIndex& index, const QVariant& value, int role = Qt::EditRole
-      ) override;
+  ) override;
 
 protected:
 
-  virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
-  virtual bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
+  bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
+  bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 
 private slots:
 
