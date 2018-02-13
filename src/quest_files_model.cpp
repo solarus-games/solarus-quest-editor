@@ -197,7 +197,7 @@ QModelIndex QuestFilesModel::sibling(int row, int column, const QModelIndex& idx
 }
 
 /**
- * @brief Returns whether an item has any children.
+ * @brief Returns whether an item has children.
  * @param parent The item to test.
  * @return @c true if this item has children.
  */
@@ -205,17 +205,9 @@ bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
 
   QString file_path = get_file_path(parent);
   ResourceType resource_type;
-  QString element_id;
-
-  if (quest.is_resource_element(file_path, resource_type, element_id)) {
-    // A resource element is always a leaf, even languages
-    // that are actually directories on the filesystem.
-    return false;
-  }
 
   if (QSortFilterProxyModel::hasChildren(parent))  {
     // This is a non-empty directory.
-    // TODO return false if the files are actually all ignored by the model.
     return true;
   }
 
@@ -303,8 +295,10 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
 
     if (quest.is_resource_element(file_path, resource_type, element_id)) {
       // Resource elements never has children,
-      // even languages that are actually directories on the filesystem.
-      flags |= Qt::ItemNeverHasChildren;
+      // except languages that are actually directories on the filesystem.
+      if (resource_type != ResourceType::LANGUAGE) {
+        flags |= Qt::ItemNeverHasChildren;
+      }
     }
     return flags;
 
@@ -543,6 +537,16 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
       // Resource declared but whose file is missing.
       icon_file_name = "icon_resource_" + resource_type_name + "_missing.png";
     }
+  }
+
+  // Dialogs file (under a language resource element).
+  else if (quest.is_dialogs_file(file_path, element_id)) {
+    icon_file_name = "icon_dialogs.png";
+  }
+
+  // Strings file (under a language resource element).
+  else if (quest.is_strings_file(file_path, element_id)) {
+    icon_file_name = "icon_strings.png";
   }
 
   // Directory icon.
