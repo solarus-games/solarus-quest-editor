@@ -111,6 +111,8 @@ public:
       const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool has_resource_element(
       const QString& path, ResourceType& resource_type) const;
+  bool is_in_resource_element(
+      const QString& path, ResourceType& resource_type, QString& element_id) const;
   bool is_map_script(const QString& path, QString& map_id) const;
   bool is_tileset_tiles_file(const QString& path, QString& tileset_id) const;
   bool is_tileset_entities_file(const QString& path, QString& tileset_id) const;

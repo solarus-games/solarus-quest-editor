@@ -459,9 +459,9 @@ DialogsEditor::DialogsEditor(
 
   // Editor properties.
   set_title(tr("Dialogs %1").arg(language_id));
-  set_icon(QIcon(":/images/icon_resource_language.png"));
+  set_icon(QIcon(":/images/icon_dialogs.png"));
   set_close_confirm_message(
-        tr("Dialogs '%1' has been modified. Save changes?").arg(language_id));
+        tr("Dialogs '%1' have been modified. Save changes?").arg(language_id));
 
   // Prepare the gui.
   ui.dialogs_tree_view->set_model(model);

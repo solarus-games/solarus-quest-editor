@@ -310,9 +310,9 @@ StringsEditor::StringsEditor(
 
   // Editor properties.
   set_title(tr("Strings %1").arg(language_id));
-  set_icon(QIcon(":/images/icon_resource_language.png"));
+  set_icon(QIcon(":/images/icon_strings.png"));
   set_close_confirm_message(
-        tr("Strings '%1' has been modified. Save changes?").arg(language_id));
+        tr("Strings '%1' have been modified. Save changes?").arg(language_id));
 
   // Prepare the gui.
   ui.strings_tree_view->set_model(model);

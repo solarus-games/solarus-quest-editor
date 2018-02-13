@@ -130,9 +130,10 @@ private:
     void rebuild_index_cache();
   };
 
+  QString get_quest_file_displayed_name(const QModelIndex& index) const;
+  QString get_quest_file_displayed_type(const QModelIndex& index) const;
   QIcon get_quest_file_icon(const QModelIndex& index) const;
   QString get_quest_file_tooltip(const QModelIndex& index) const;
-  QString get_quest_file_friendly_type_name(const QModelIndex& index) const;
   bool is_quest_data_index(const QModelIndex& index) const;
 
   bool is_dir_on_filesystem(const QModelIndex& index) const;

@@ -788,6 +788,46 @@ bool Quest::has_resource_element(
   return get_resources().exists_with_prefix(resource_type, prefix);
 }
 
+/**
+ * @brief Returns whether a path is under a resource element.
+ *
+ * Only possible for resource elements that are directories,
+ * that is, languages.
+ *
+ * @param[in] path The path to test.
+ * @param[out] resource_type The resource type found if any.
+ * @param[out] element_id Id of the parent resource element if any.
+ * @return @c true if this path is under a declared resource element,
+ * even if it does not exist yet.
+ */
+bool Quest::is_in_resource_element(
+    const QString& path, ResourceType& resource_type, QString& element_id) const {
+
+  if (!is_potential_resource_element(path, resource_type, element_id)) {
+    // Not a potential resource element file.
+    return false;
+  }
+
+  if (resource_type != ResourceType::LANGUAGE) {
+    // Only language elements have a subtree.
+    return false;
+  }
+
+  if (resources.exists(resource_type, element_id)) {
+    // Already the resource element itself.
+    return false;
+  }
+
+  // Remove the last path component until we find a declared resource element.
+  while (!element_id.isEmpty()) {
+    element_id = element_id.section("/", 0, -2);
+    if (resources.exists(resource_type, element_id)) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 /**
  * @brief Determines if a path is a map script.

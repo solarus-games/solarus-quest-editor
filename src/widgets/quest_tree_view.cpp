@@ -226,8 +226,13 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   if (is_potential_resource_element) {
 
     if (is_declared_resource_element) {
-      // No creation item on an existing resource element
-      // (even for languages, that are actually directories).
+      // No creation item on an existing resource element.
+      return;
+    }
+
+    if (quest.is_in_resource_element(path, resource_type, element_id)) {
+      // Don't create an element in the tree of an already existing element.
+      // (languages have a tree because they are actually directories).
       return;
     }
 
@@ -372,9 +377,14 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
 
       // For a language, the user can open dialogs or strings.
       open_action->setText(tr("Open Dialogs"));
+      open_action->setIcon(QIcon(":/images/icon_dialogs.png"));
       menu.addAction(open_action);
 
-      action = new QAction(open_action->icon(), tr("Open Strings"), this);
+      action = new QAction(
+            QIcon(":/images/icon_dialogs.png"),
+            tr("Open Strings"),
+            this
+      );
       connect(action, SIGNAL(triggered()),
               this, SLOT(open_language_strings_action_triggered()));
       menu.addAction(action);
@@ -499,6 +509,11 @@ void QuestTreeView::new_element_action_triggered() {
     if (quest.is_potential_resource_element(path, resource_type, initial_id_value)) {
       if (resources.exists(resource_type, initial_id_value)) {
         // The element already exists.
+        return;
+      }
+      QString element_id;
+      if (quest.is_in_resource_element(path, resource_type, element_id)) {
+        // Already under an existing element.
         return;
       }
       initial_description_value = initial_id_value;
