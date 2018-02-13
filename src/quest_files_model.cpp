@@ -481,10 +481,7 @@ QString QuestFilesModel::get_quest_file_displayed_name(const QModelIndex& index)
     return quest.get_name();
   }
 
-  if (quest.is_resource_element(path, resource_type, element_id) ||
-      quest.is_dialogs_file(path, element_id) ||
-      quest.is_strings_file(path, element_id)
-  ) {
+  if (quest.is_resource_element(path, resource_type, element_id)) {
     // A resource element: show its id (remove the extension).
     return QFileInfo(path).completeBaseName();
   }
@@ -692,7 +689,7 @@ QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const 
     else {
       if (quest.is_in_resource_element(path, resource_type, element_id)) {
         // Actually already under the tree of a resource element.
-        return file_name;
+        return QString();
       }
       else {
         // Found on the filesystem but not declared in the resource list.
