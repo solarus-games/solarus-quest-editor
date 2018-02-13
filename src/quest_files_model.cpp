@@ -391,10 +391,10 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
     case DESCRIPTION_COLUMN:
       // The resource element description can be edited.
-      if (!quest.is_resource_element(path, resource_type, element_id)) {
-        return QVariant();
+      if (quest.is_resource_element(path, resource_type, element_id)) {
+        return resources.get_description(resource_type, element_id);
       }
-      return resources.get_description(resource_type, element_id);
+      return QVariant();
     }
     return QVariant();
 
