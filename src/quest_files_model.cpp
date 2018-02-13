@@ -330,7 +330,7 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
     switch (section) {
 
     case FILE_COLUMN:
-      return tr("Resource");
+      return tr("File");
 
     case DESCRIPTION_COLUMN:
       return tr("Description");
@@ -536,11 +536,27 @@ QString QuestFilesModel::get_quest_file_displayed_name(const QModelIndex& index)
 
     if (quest.is_script(path)) {
       // A Lua script.
-      return tr("Lua script");
+
+      if (quest.is_map_script(path, element_id)) {
+        // A map Lua script.
+        return tr("Map script");
+      }
+
+      return tr("Script");
     }
 
     if (quest.is_image(path)) {
       // A PNG image.
+
+      if (quest.is_tileset_tiles_file(path, element_id)) {
+        // A tileset tiles PNG image.
+        return tr("Tileset tiles image");
+      }
+      else if (quest.is_tileset_entities_file(path, element_id)) {
+        // A tileset entities PNG image.
+        return tr("Tileset sprites image");
+      }
+
       return tr("Image");
     }
 
@@ -608,12 +624,30 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
 
   // Lua script icon.
   else if (quest.is_script(file_path)) {
-    icon_file_name = "icon_script.png";
+
+    if (quest.is_map_script(file_path, element_id)) {
+      // A map script.
+      icon_file_name = "icon_script_map.png";
+    }
+    else {
+      // Another script.
+      icon_file_name = "icon_script.png";
+    }
   }
 
   // Image icon.
   else if (quest.is_image(file_path)) {
-    icon_file_name = "icon_image.png";
+
+    if (quest.is_tileset_tiles_file(file_path, element_id) ||
+        quest.is_tileset_entities_file(file_path, element_id)) {
+      icon_file_name = "icon_image_tileset.png";
+    }
+    else if (quest.is_language_image_file(file_path, element_id)) {
+      icon_file_name = "icon_image_language.png";
+    }
+    else {
+      icon_file_name = "icon_image.png";
+    }
   }
 
   // Generic icon for a file not known by the quest.
@@ -725,17 +759,8 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
     return true;
   }
 
-  const QString lua_extension = ".lua";
-  if (file_name.endsWith(lua_extension, Qt::CaseInsensitive)) {
-    // Keep all .lua scripts except map scripts.
-    QString file_path_dat = file_path.toLower().replace(file_path.lastIndexOf(lua_extension), lua_extension.size(), ".dat");
-    ResourceType resource_type;
-    QString element_id;
-    if (quest.is_resource_element(file_path_dat, resource_type, element_id) &&
-        resource_type == ResourceType::MAP) {
-      return false;
-    }
-
+  // Keep all .lua scripts including map scripts.
+  if (quest.is_script(file_path)) {
     return true;
   }
 
@@ -764,16 +789,8 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
     return true;
   }
 
-  // Keep .png files.
+  // Keep .png files, including tileset ones.
   if (file_name.endsWith(".png", Qt::CaseInsensitive)) {
-
-    // Except tileset ones.
-    QString tileset_id;
-    if (quest.is_tileset_tiles_file(file_path, tileset_id) ||
-        quest.is_tileset_entities_file(file_path, tileset_id)) {
-      return false;
-    }
-
     return true;
   }
 

@@ -365,9 +365,10 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
       menu.addAction(open_action);
 
       action = new QAction(
-            QIcon(":/images/icon_script.png"),
+            QIcon(":/images/icon_script_map.png"),
             tr("Open Script"),
-            this);
+            this
+      );
       connect(action, SIGNAL(triggered()),
               this, SLOT(open_map_script_action_triggered()));
       menu.addAction(action);
@@ -563,7 +564,6 @@ void QuestTreeView::new_element_action_triggered() {
   catch (const EditorException& ex) {
     ex.show_dialog();
   }
-
 }
 
 /**

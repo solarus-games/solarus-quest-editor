@@ -1009,6 +1009,45 @@ bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 }
 
 /**
+ * @brief Determines if a path if a language-specific image file.
+ * @param[in] path The path to test.
+ * @param[out] language_id Language of the image if it is a language-specific one.
+ * @return @c true if this path is a language-specific image file,
+ * even if it does not exist yet.
+ */
+bool Quest::is_language_image_file(const QString& path, QString& language_id) const {
+
+  if (!is_image(path)) {
+    // Not an image file.
+    return false;
+  }
+
+  QString languages_path = get_resource_path(ResourceType::LANGUAGE);
+  if (!path.startsWith(languages_path)) {
+    // Not under the languages directory.
+    return false;
+  }
+
+  ResourceType resource_type;
+  if (!is_in_resource_element(path, resource_type, language_id)) {
+    // Not under a language resource element.
+    return false;
+  }
+
+  if (resource_type != ResourceType::LANGUAGE) {
+    // Not under a language.
+    return false;
+  }
+
+  QString expected_prefix = QString("%1/%2/images/").arg(languages_path, language_id);
+  if (!path.startsWith(expected_prefix)) {
+    // Not in the image-specific directory of this language.
+    return false;
+  }
+  return true;
+}
+
+/**
  * @brief Returns whether a string is a valid file name for creation.
  *
  * You should call this function to check the name before creating or renaming

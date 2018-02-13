@@ -61,17 +61,17 @@ QuestResources::QuestResources(Quest& quest):
   };
 
   resource_type_directory_friendly_names = {
-    { ResourceType::MAP,      tr("Map folder")                        },
-    { ResourceType::TILESET,  tr("Tileset folder")                    },
-    { ResourceType::SPRITE,   tr("Sprite folder")                     },
-    { ResourceType::MUSIC,    tr("Music folder")                      },
-    { ResourceType::SOUND,    tr("Sound folder")                      },
-    { ResourceType::ITEM,     tr("Item folder")                       },
-    { ResourceType::ENEMY,    tr("Enemy folder")                      },
-    { ResourceType::ENTITY,   tr("Custom entity folder")              },
-    { ResourceType::LANGUAGE, tr("Language folder")                   },
-    { ResourceType::FONT,     tr("Font folder")                       },
-    { ResourceType::SHADER,   tr("Shader folder")                     },
+    { ResourceType::MAP,      tr("Maps folder")                       },
+    { ResourceType::TILESET,  tr("Tilesets folder")                   },
+    { ResourceType::SPRITE,   tr("Sprites folder")                    },
+    { ResourceType::MUSIC,    tr("Musics folder")                     },
+    { ResourceType::SOUND,    tr("Sounds folder")                     },
+    { ResourceType::ITEM,     tr("Items folder")                      },
+    { ResourceType::ENEMY,    tr("Enemys folder")                     },
+    { ResourceType::ENTITY,   tr("Custom entities folder")            },
+    { ResourceType::LANGUAGE, tr("Languages folder")                  },
+    { ResourceType::FONT,     tr("Fonts folder")                      },
+    { ResourceType::SHADER,   tr("Shaders folder")                    },
   };
 
   resource_type_create_friendly_names = {

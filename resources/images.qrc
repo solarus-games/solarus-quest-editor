@@ -165,5 +165,8 @@
         <file>images/icon_error.png</file>
         <file>images/entity_tile_missing.png</file>
         <file>images/icon_image.png</file>
+        <file>images/icon_script_map.png</file>
+        <file>images/icon_image_language.png</file>
+        <file>images/icon_image_tileset.png</file>
     </qresource>
 </RCC>

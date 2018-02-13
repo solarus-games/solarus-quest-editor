@@ -118,6 +118,7 @@ public:
   bool is_tileset_entities_file(const QString& path, QString& tileset_id) const;
   bool is_dialogs_file(const QString& path, QString& language_id) const;
   bool is_strings_file(const QString& path, QString& language_id) const;
+  bool is_language_image_file(const QString& path, QString& language_id) const;
 
   // Create, rename and delete paths.
   void create_file(const QString& path);

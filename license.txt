@@ -91,6 +91,8 @@ resources/images/icon_folder_open_shader.png
 resources/images/icon_folder_open_sound.png
 resources/images/icon_folder_open_sprite.png
 resources/images/icon_folder_open_tileset.png
+resources/images/icon_image_language.png
+resources/images/icon_image_tileset.png
 resources/images/icon_layer_0.png
 resources/images/icon_layer_1.png
 resources/images/icon_layer_2.png
@@ -110,6 +112,7 @@ resources/images/icon_resource_shader_missing.png
 resources/images/icon_resource_sound_missing.png
 resources/images/icon_resource_sprite_missing.png
 resources/images/icon_resource_tileset_missing.png
+resources/images/icon_script_map.png
 resources/images/icon_stop_music.png
 resources/images/icon_string_missing.png
 resources/images/icon_strings_missing.png

@@ -121,25 +121,20 @@ QIcon TextEditor::create_icon() const {
   QString path = get_file_path();
   ResourceType resource_type;
   QString element_id;
+
   if (get_quest().is_resource_element(path, resource_type, element_id)) {
+    // A resource element that is a Lua file (enemy, custom entity or item).
     QString resource_lua_name = get_quest().get_resources().get_lua_name(resource_type);
     return QIcon(":/images/icon_resource_" + resource_lua_name + ".png");
   }
 
   if (get_quest().is_map_script(path, element_id)) {
-    return QIcon(":/images/icon_resource_map.png");
-  }
-
-  if (get_quest().is_dialogs_file(path, element_id)) {
-    return QIcon(":/images/icon_resource_language.png");
-  }
-
-  if (get_quest().is_dialogs_file(path, element_id)) {
-    return QIcon(":/images/icon_resource_language.png");
+    // A map Lua script.
+    return QIcon(":/images/icon_script_map.png");
   }
 
   if (get_quest().is_script(path)) {
-    // A Lua script.
+    // Another Lua script.
     return QIcon(":/images/icon_script.png");
   }
   return QIcon(":/images/icon_file.png");
