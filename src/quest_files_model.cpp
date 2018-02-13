@@ -377,7 +377,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
         // A resource element: show its id (remove the extension).
         return QFileInfo(path).completeBaseName();
       }
-      return file_name;
+      return file_name;  // Real file name by default.
 
     case DESCRIPTION_COLUMN:  // Resource element description.
 
@@ -387,47 +387,12 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return resources.get_description(resource_type, element_id);
 
     case TYPE_COLUMN:  // Type.
-      if (is_quest_data_index(index)) {
-        // Quest data directory (top-level item).
-        return tr("Quest");
-      }
-
-      if (path == quest.get_main_script_path()) {
-        // main.lua
-        return tr("Main Lua script");
-      }
-
-      if (quest.is_resource_path(path, resource_type)) {
-        // A resource element folder.
-        return resources.get_directory_friendly_name(resource_type);
-      }
-
-      if (quest.is_resource_element(path, resource_type, element_id)) {
-        // A declared resource element.
-        return resources.get_friendly_name(resource_type);
-      }
-
-      if (quest.is_script(path)) {
-        // A Lua script.
-        return tr("Lua script");
-      }
-
-      if (quest.is_image(path)) {
-        // A PNG image.
-        return tr("Image");
-      }
-
-      if (quest.is_data_file(path)) {
-        // A .dat file.
-        return tr("Data file");
-      }
-
-      // Not a file managed by Solarus.
-      return QVariant();
+      return get_quest_file_friendly_type_name(index);
     }
+    return QVariant();
 
   case Qt::EditRole:
-    // Editable file name.
+    // Editable file name or other field.
     switch (index.column()) {
 
     case FILE_COLUMN:  // File name.
@@ -440,6 +405,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       }
       return resources.get_description(resource_type, element_id);
     }
+    return QVariant();
 
   case Qt::DecorationRole:
     // Icon.
@@ -617,6 +583,57 @@ QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const 
   }
 
   return "";
+}
+
+/**
+ * @brief Returns an appropriate type string for the specified quest file.
+ * @param index Index of a file item in the model.
+ * @return An appropriate friendly type name for this file.
+ */
+QString QuestFilesModel::get_quest_file_friendly_type_name(const QModelIndex& index) const {
+
+  QString path = get_file_path(index);
+  ResourceType resource_type;
+  QString element_id;
+  const QuestResources& resources = quest.get_resources();
+
+  if (is_quest_data_index(index)) {
+    // Quest data directory (top-level item).
+    return tr("Quest");
+  }
+
+  if (path == quest.get_main_script_path()) {
+    // main.lua
+    return tr("Main Lua script");
+  }
+
+  if (quest.is_resource_path(path, resource_type)) {
+    // A resource element folder.
+    return resources.get_directory_friendly_name(resource_type);
+  }
+
+  if (quest.is_resource_element(path, resource_type, element_id)) {
+    // A declared resource element.
+    return resources.get_friendly_name(resource_type);
+  }
+
+  if (quest.is_script(path)) {
+    // A Lua script.
+    return tr("Lua script");
+  }
+
+  if (quest.is_image(path)) {
+    // A PNG image.
+    return tr("Image");
+  }
+
+  if (quest.is_data_file(path)) {
+    // A .dat file.
+    return tr("Data file");
+  }
+
+  // Not a file managed by Solarus.
+  return QString();
 }
 
 /**
