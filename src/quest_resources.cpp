@@ -67,7 +67,7 @@ QuestResources::QuestResources(Quest& quest):
     { ResourceType::MUSIC,    tr("Musics folder")                     },
     { ResourceType::SOUND,    tr("Sounds folder")                     },
     { ResourceType::ITEM,     tr("Items folder")                      },
-    { ResourceType::ENEMY,    tr("Enemys folder")                     },
+    { ResourceType::ENEMY,    tr("Enemies folder")                    },
     { ResourceType::ENTITY,   tr("Custom entities folder")            },
     { ResourceType::LANGUAGE, tr("Languages folder")                  },
     { ResourceType::FONT,     tr("Fonts folder")                      },
