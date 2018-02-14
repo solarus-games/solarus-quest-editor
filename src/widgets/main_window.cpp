@@ -1253,6 +1253,8 @@ void MainWindow::current_editor_changed(int index) {
     update_entity_types_visibility();
 
     editor->set_common_actions(common_actions);
+
+    ui.quest_tree_view->set_selected_path(editor->get_file_path());
   }
 }
 
