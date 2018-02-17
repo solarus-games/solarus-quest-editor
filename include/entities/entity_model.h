@@ -26,7 +26,7 @@ namespace SolarusEditor {
 
 class MapModel;
 class Quest;
-class QuestResources;
+class QuestDatabase;
 class TilesetModel;
 
 using SubtypeList = QList<QPair<QString, QString>>;
@@ -64,7 +64,7 @@ public:
   const TilesetModel* get_tileset() const;
   TilesetModel* get_tileset();
   const Quest& get_quest() const;
-  const QuestResources& get_resources() const;
+  const QuestDatabase& get_database() const;
 
   // Index on the map.
   EntityIndex get_index() const;

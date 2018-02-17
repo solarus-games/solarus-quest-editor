@@ -26,7 +26,7 @@ namespace SolarusEditor {
 using ResourceType = Solarus::ResourceType;
 
 class Quest;
-class QuestResources;
+class QuestDatabase;
 
 /**
  * @brief A tree model with resources elements of a type.
@@ -39,7 +39,7 @@ public:
   ResourceModel(const Quest& quest, ResourceType resource_type, QObject* parent = nullptr);
 
   const Quest& get_quest() const;
-  const QuestResources& get_resources() const;
+  const QuestDatabase& get_database() const;
   QString get_tileset_id() const;
   void set_tileset_id(const QString& tileset_id);
 

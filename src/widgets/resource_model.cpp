@@ -17,7 +17,7 @@
 #include "widgets/resource_model.h"
 #include "editor_exception.h"
 #include "quest.h"
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "sprite_model.h"
 
 namespace SolarusEditor {
@@ -37,19 +37,20 @@ ResourceModel::ResourceModel(const Quest& quest, ResourceType resource_type, QOb
   directory_icon(":/images/icon_folder_open.png"),
   tileset_id() {
 
-  const QStringList& ids = get_resources().get_elements(this->resource_type);
+  const QuestDatabase& database = get_database();
+
+  const QStringList& ids = database.get_elements(this->resource_type);
   for (const QString& id : ids) {
     add_element(id);
   }
 
-  const QuestResources& resources = get_resources();
-  connect(&resources, SIGNAL(element_added(ResourceType, QString, QString)),
+  connect(&database, SIGNAL(element_added(ResourceType, QString, QString)),
           this, SLOT(element_added(ResourceType, QString, QString)));
-  connect(&resources, SIGNAL(element_removed(ResourceType, QString)),
+  connect(&database, SIGNAL(element_removed(ResourceType, QString)),
           this, SLOT(element_removed(ResourceType, QString)));
-  connect(&resources, SIGNAL(element_renamed(ResourceType, QString, QString)),
+  connect(&database, SIGNAL(element_renamed(ResourceType, QString, QString)),
           this, SLOT(element_renamed(ResourceType, QString, QString)));
-  connect(&resources, SIGNAL(element_description_changed(ResourceType, QString, QString)),
+  connect(&database, SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(element_description_changed(ResourceType, QString, QString)));
 }
 
@@ -62,11 +63,11 @@ const Quest& ResourceModel::get_quest() const {
 }
 
 /**
- * @brief Returns the resources of the quest.
- * @return The resources.
+ * @brief Returns the resources and files of the quest.
+ * @return The quest database.
  */
-const QuestResources& ResourceModel::get_resources() const {
-  return quest.get_resources();
+const QuestDatabase& ResourceModel::get_database() const {
+  return quest.get_database();
 }
 
 /**
@@ -188,7 +189,7 @@ void ResourceModel::remove_element(const QString& element_id) {
  */
 QStandardItem* ResourceModel::create_element_item(const QString& element_id) {
 
-  QString description = get_resources().get_description(resource_type, element_id);
+  QString description = get_database().get_description(resource_type, element_id);
 
   QStandardItem* item = new QStandardItem(description);
 
@@ -279,7 +280,7 @@ QIcon ResourceModel::create_icon(const QString& element_id) const {
 
   const Quest& quest = get_quest();
   Q_ASSERT(!element_id.isEmpty());
-  Q_ASSERT(quest.get_resources().exists(resource_type, element_id));
+  Q_ASSERT(quest.get_database().exists(resource_type, element_id));
 
   try {
     if (resource_type == ResourceType::SPRITE) {
@@ -320,7 +321,7 @@ QIcon ResourceModel::create_icon(const QString& element_id) const {
   }
 
   // Return an icon representing the resource type.
-  QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
+  QString resource_type_name = quest.get_database().get_lua_name(resource_type);
   return QIcon(":/images/icon_resource_" + resource_type_name + ".png");
 }
 
@@ -437,7 +438,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const {
       return QIcon();
     }
 
-    if (!get_quest().get_resources().exists(resource_type, element_id)) {
+    if (!get_database().exists(resource_type, element_id)) {
       // Special item.
       return QIcon();
     }

@@ -17,8 +17,8 @@
 #ifndef SOLARUSEDITOR_QUEST_H
 #define SOLARUSEDITOR_QUEST_H
 
+#include <quest_database.h>
 #include <quest_properties.h>
-#include <quest_resources.h>
 #include <solarus/core/ResourceType.h>
 #include <QObject>
 #include <QSet>
@@ -51,8 +51,8 @@ public:
   const QuestProperties& get_properties() const;
   QuestProperties& get_properties();
 
-  const QuestResources& get_resources() const;
-  QuestResources& get_resources();
+  const QuestDatabase& get_database() const;
+  QuestDatabase& get_database();
 
   // Get paths.
   QString get_name() const;
@@ -178,7 +178,7 @@ private:
                                     * An empty string means no quest. */
 
   QuestProperties properties;      /**< Properties given in quest.dat. */
-  QuestResources resources;        /**< Resources declared in project_db.dat. */
+  QuestDatabase database;          /**< Resources and files declared in project_db.dat. */
   QString current_music_id;        /**< Id of the music currently playing if any. */
 
 };

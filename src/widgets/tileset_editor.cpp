@@ -22,7 +22,7 @@
 #include "editor_exception.h"
 #include "editor_settings.h"
 #include "quest.h"
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "refactoring.h"
 #include "tileset_model.h"
 #include <QGuiApplication>
@@ -831,7 +831,7 @@ TilesetEditor::TilesetEditor(Quest& quest, const QString& path, QWidget* parent)
   update();
 
   // Make connections.
-  connect(&get_resources(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
+  connect(&get_database(), SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
           this, SLOT(set_description_from_gui()));
@@ -1026,7 +1026,7 @@ void TilesetEditor::update_background_color() {
  */
 void TilesetEditor::update_description_to_gui() {
 
-  QString description = get_resources().get_description(ResourceType::TILESET, tileset_id);
+  QString description = get_database().get_description(ResourceType::TILESET, tileset_id);
   if (ui.description_field->text() != description) {
     ui.description_field->setText(description);
   }
@@ -1057,7 +1057,7 @@ void TilesetEditor::change_background_color() {
 void TilesetEditor::set_description_from_gui() {
 
   QString description = ui.description_field->text();
-  if (description == get_resources().get_description(ResourceType::TILESET, tileset_id)) {
+  if (description == get_database().get_description(ResourceType::TILESET, tileset_id)) {
     return;
   }
 
@@ -1069,8 +1069,8 @@ void TilesetEditor::set_description_from_gui() {
 
   const bool was_blocked = blockSignals(true);
   try {
-    get_resources().set_description(ResourceType::TILESET, tileset_id, description);
-    get_resources().save();
+    get_database().set_description(ResourceType::TILESET, tileset_id, description);
+    get_database().save();
   }
   catch (const EditorException& ex) {
     ex.print_message();
@@ -1200,7 +1200,7 @@ QStringList TilesetEditor::change_pattern_id_in_maps(
     const QString& old_pattern_id, const QString& new_pattern_id) {
 
   QStringList modified_paths;
-  const QStringList& map_ids = get_resources().get_elements(ResourceType::MAP);
+  const QStringList& map_ids = get_database().get_elements(ResourceType::MAP);
   for (const QString& map_id : map_ids) {
     if (change_pattern_id_in_map(map_id, old_pattern_id, new_pattern_id)) {
       modified_paths << get_quest().get_map_data_file_path(map_id);

@@ -1868,7 +1868,7 @@ void MainWindow::refactor_map_id(const QString& map_id_before, const QString& ma
 
     // Update teletransporters in all maps.
     QStringList modified_paths;
-    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    const QStringList& map_ids = quest.get_database().get_elements(ResourceType::MAP);
     for (const QString& map_id : map_ids) {
       if (update_destination_map_in_map(map_id, map_id_before, map_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
@@ -1921,7 +1921,7 @@ void MainWindow::refactor_tileset_id(const QString& tileset_id_before, const QSt
 
     // Update all maps.
     QStringList modified_paths;
-    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    const QStringList& map_ids = quest.get_database().get_elements(ResourceType::MAP);
     for (const QString& map_id : map_ids) {
       if (update_tileset_in_map(map_id, tileset_id_before, tileset_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
@@ -1974,7 +1974,7 @@ void MainWindow::refactor_music_id(const QString& music_id_before, const QString
 
     // Update all maps.
     QStringList modified_paths;
-    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    const QStringList& map_ids = quest.get_database().get_elements(ResourceType::MAP);
     for (const QString& map_id : map_ids) {
       if (update_music_in_map(map_id, music_id_before, music_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
@@ -2027,7 +2027,7 @@ void MainWindow::refactor_enemy_id(const QString& enemy_id_before, const QString
 
     // Update enemies in all maps.
     QStringList modified_paths;
-    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    const QStringList& map_ids = quest.get_database().get_elements(ResourceType::MAP);
     for (const QString& map_id : map_ids) {
       if (update_enemy_breed_in_map(map_id, enemy_id_before, enemy_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);
@@ -2080,7 +2080,7 @@ void MainWindow::refactor_custom_entity_id(const QString& entity_id_before, cons
 
     // Update enemies in all maps.
     QStringList modified_paths;
-    const QStringList& map_ids = quest.get_resources().get_elements(ResourceType::MAP);
+    const QStringList& map_ids = quest.get_database().get_elements(ResourceType::MAP);
     for (const QString& map_id : map_ids) {
       if (update_custom_entity_model_in_map(map_id, entity_id_before, entity_id_after)) {
         modified_paths << quest.get_map_data_file_path(map_id);

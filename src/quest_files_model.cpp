@@ -38,13 +38,14 @@ QuestFilesModel::QuestFilesModel(Quest& quest):
   setSourceModel(source_model);
 
   // Watch changes in resources.
-  connect(&quest.get_resources(), SIGNAL(element_added(ResourceType, QString, QString)),
+  const QuestDatabase& database = quest.get_database();
+  connect(&database, SIGNAL(element_added(ResourceType, QString, QString)),
           this, SLOT(resource_element_added(ResourceType, QString, QString)));
-  connect(&quest.get_resources(), SIGNAL(element_removed(ResourceType, QString)),
+  connect(&database, SIGNAL(element_removed(ResourceType, QString)),
           this, SLOT(resource_element_removed(ResourceType, QString)));
-  connect(&quest.get_resources(), SIGNAL(element_renamed(ResourceType, QString, QString)),
+  connect(&database, SIGNAL(element_renamed(ResourceType, QString, QString)),
           this, SLOT(resource_element_renamed(ResourceType, QString, QString)));
-  connect(&quest.get_resources(), SIGNAL(element_description_changed(ResourceType, QString, QString)),
+  connect(&database, SIGNAL(element_description_changed(ResourceType, QString, QString)),
           this, SLOT(resource_element_description_changed(ResourceType, QString, QString)));
 
   // This model adds extra items for files missing on the filesystem.
@@ -353,7 +354,7 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
  */
 QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
-  const QuestResources& resources = quest.get_resources();
+  const QuestDatabase& database = quest.get_database();
   ResourceType resource_type;
   QString element_id;
 
@@ -375,7 +376,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (!quest.is_resource_element(path, resource_type, element_id)) {
         return QVariant();
       }
-      return resources.get_description(resource_type, element_id);
+      return database.get_description(resource_type, element_id);
 
     case TYPE_COLUMN:  // Type.
       return get_quest_file_displayed_type(index);
@@ -392,7 +393,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
     case DESCRIPTION_COLUMN:
       // The resource element description can be edited.
       if (quest.is_resource_element(path, resource_type, element_id)) {
-        return resources.get_description(resource_type, element_id);
+        return database.get_description(resource_type, element_id);
       }
       return QVariant();
     }
@@ -454,8 +455,8 @@ bool QuestFilesModel::setData(
   }
 
   try {
-    quest.get_resources().set_description(resource_type, element_id, value.toString());
-    quest.get_resources().save();
+    quest.get_database().set_description(resource_type, element_id, value.toString());
+    quest.get_database().save();
     emit dataChanged(index, index);
     return true;
   }
@@ -501,7 +502,7 @@ QString QuestFilesModel::get_quest_file_displayed_name(const QModelIndex& index)
     QString path = get_file_path(index);
     ResourceType resource_type;
     QString element_id;
-    const QuestResources& resources = quest.get_resources();
+    const QuestDatabase& database = quest.get_database();
 
     if (is_quest_data_index(index)) {
       // Quest data directory (top-level item).
@@ -515,12 +516,12 @@ QString QuestFilesModel::get_quest_file_displayed_name(const QModelIndex& index)
 
     if (quest.is_resource_path(path, resource_type)) {
       // A resource element folder.
-      return resources.get_directory_friendly_name(resource_type);
+      return database.get_directory_friendly_name(resource_type);
     }
 
     if (quest.is_resource_element(path, resource_type, element_id)) {
       // A declared resource element.
-      return resources.get_friendly_name(resource_type);
+      return database.get_friendly_name(resource_type);
     }
 
     if (quest.is_dialogs_file(path, element_id)) {
@@ -586,7 +587,7 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
   // Resource element (possibly a directory for languages).
   else if (quest.is_resource_element(file_path, resource_type, element_id)) {
 
-    QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
+    QString resource_type_name = quest.get_database().get_lua_name(resource_type);
     if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
       // Resource declared and present on the filesystem.
       icon_file_name = "icon_resource_" + resource_type_name + ".png";
@@ -611,7 +612,7 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
   else if (quest.is_dir(file_path)) {
 
     if (quest.is_resource_path(file_path, resource_type)) {
-      QString resource_type_name = quest.get_resources().get_lua_name(resource_type);
+      QString resource_type_name = quest.get_database().get_lua_name(resource_type);
       icon_file_name = "icon_folder_open_" + resource_type_name + ".png";
     }
     else {
@@ -675,7 +676,7 @@ QString QuestFilesModel::get_quest_file_tooltip(const QModelIndex& index) const 
   if (quest.is_potential_resource_element(path, resource_type, element_id)) {
 
     QString file_name = QFileInfo(path).fileName();
-    if (quest.get_resources().exists(resource_type, element_id)) {
+    if (quest.get_database().exists(resource_type, element_id)) {
       // Declared in the resource list.
       if (quest.exists(quest.get_resource_element_path(resource_type, element_id))) {
         // Declared in the resource list and existing on the filesystem.
@@ -1005,7 +1006,7 @@ void QuestFilesModel::compute_extra_paths(const QModelIndex& parent) const {
 
   // Get all declared elements of this resource type that are directly in
   // the directory.
-  const QStringList& element_ids = quest.get_resources().get_elements(resource_type);
+  const QStringList& element_ids = quest.get_database().get_elements(resource_type);
   for (const QString& element_id : element_ids) {
     QString current_path = quest.get_resource_element_path(resource_type, element_id);
     if (!current_path.startsWith(parent_path)) {
@@ -1115,7 +1116,7 @@ void QuestFilesModel::resource_element_renamed(
 
   resource_element_removed(resource_type, old_id);
   resource_element_added(resource_type, new_id,
-                         quest.get_resources().get_description(resource_type, new_id));
+                         quest.get_database().get_description(resource_type, new_id));
 }
 
 /**

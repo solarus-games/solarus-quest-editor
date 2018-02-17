@@ -28,7 +28,7 @@ class QUndoStack;
 namespace SolarusEditor {
 
 class Quest;
-class QuestResources;
+class QuestDatabase;
 class Refactoring;
 
 /**
@@ -45,8 +45,8 @@ public:
 
   const Quest& get_quest() const;
   Quest& get_quest();
-  const QuestResources& get_resources() const;
-  QuestResources& get_resources();
+  const QuestDatabase& get_database() const;
+  QuestDatabase& get_database();
   QString get_file_path() const;
   QString get_file_name() const;
   QString get_file_name_without_extension() const;

@@ -42,7 +42,7 @@
 #include "map_model.h"
 #include "point.h"
 #include "quest.h"
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "sprite_model.h"
 #include <QDebug>
 #include <QPainter>
@@ -485,11 +485,11 @@ const Quest& EntityModel::get_quest() const {
 }
 
 /**
- * @brief Returns the quest resources.
- * @return The resources.
+ * @brief Returns the quest database.
+ * @return The database.
  */
-const QuestResources& EntityModel::get_resources() const {
-  return get_quest().get_resources();
+const QuestDatabase& EntityModel::get_database() const {
+  return get_quest().get_database();
 }
 
 /**
@@ -1621,7 +1621,7 @@ bool EntityModel::draw_as_sprite(
     return false;
   }
 
-  if (!get_resources().exists(ResourceType::SPRITE, sprite_id)) {
+  if (!get_database().exists(ResourceType::SPRITE, sprite_id)) {
     // The sprite is not declared in the quest.
     return false;
   }

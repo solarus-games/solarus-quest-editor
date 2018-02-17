@@ -124,7 +124,7 @@ QIcon TextEditor::create_icon() const {
 
   if (get_quest().is_resource_element(path, resource_type, element_id)) {
     // A resource element that is a Lua file (enemy, custom entity or item).
-    QString resource_lua_name = get_quest().get_resources().get_lua_name(resource_type);
+    QString resource_lua_name = get_database().get_lua_name(resource_type);
     return QIcon(":/images/icon_resource_" + resource_lua_name + ".png");
   }
 

@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_QUEST_FILES_MODEL_H
 #define SOLARUSEDITOR_QUEST_FILES_MODEL_H
 
-#include "quest_resources.h"
+#include "quest_database.h"
 #include <QSet>
 #include <QSortFilterProxyModel>
 #include <array>

@@ -192,22 +192,18 @@ Quest& Editor::get_quest() {
 }
 
 /**
- * @brief Returns the list of resources of the quest.
- * @return The quest resources.
+ * @brief Returns the resource and files database of the quest.
+ * @return The quest database.
  */
-const QuestResources& Editor::get_resources() const {
-  return quest.get_resources();
+const QuestDatabase& Editor::get_database() const {
+  return quest.get_database();
 }
 
 /**
- * @brief Returns the list of resources of the quest.
- *
- * Non-const version.
- *
- * @return The quest resources.
+ * @overload Non-const version.
  */
-QuestResources& Editor::get_resources() {
-  return quest.get_resources();
+QuestDatabase& Editor::get_database() {
+  return quest.get_database();
 }
 
 /**

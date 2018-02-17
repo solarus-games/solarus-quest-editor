@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_EDITOR_TABS_H
 #define SOLARUSEDITOR_EDITOR_TABS_H
 
-#include "quest_resources.h"
+#include "quest_database.h"
 #include <QMap>
 #include <QPointer>
 #include <QTabWidget>

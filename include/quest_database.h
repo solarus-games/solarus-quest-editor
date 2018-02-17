@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SOLARUSEDITOR_QUEST_RESOURCES_H
-#define SOLARUSEDITOR_QUEST_RESOURCES_H
+#ifndef SOLARUSEDITOR_QUEST_DATABASE_H
+#define SOLARUSEDITOR_QUEST_DATABASE_H
 
-#include <solarus/core/QuestResources.h>
+#include <solarus/core/QuestDatabase.h>
 #include <QMap>
 #include <QObject>
 
@@ -28,14 +28,14 @@ using ResourceType = Solarus::ResourceType;
 class Quest;
 
 /**
- * @brief Stores the resources of a quest and sends signals when they change.
+ * @brief Stores the resources and other file information of a quest.
  */
-class QuestResources : public QObject {
+class QuestDatabase : public QObject {
   Q_OBJECT
 
 public:
 
-  explicit QuestResources(Quest& quest);
+  explicit QuestDatabase(Quest& quest);
 
   void save() const;
 
@@ -86,7 +86,7 @@ private slots:
 private:
 
   Quest& quest;                                  /**< The quest. */
-  Solarus::QuestResources resources;             /**< The wrapped data. */
+  Solarus::QuestDatabase database;               /**< The wrapped data. */
 
   QMap<ResourceType, QString>
       resource_type_friendly_names;              /**< Human-readable name of each resource type. */

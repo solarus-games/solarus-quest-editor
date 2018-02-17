@@ -16,7 +16,7 @@
  */
 #include "editor_exception.h"
 #include "quest.h"
-#include "quest_resources.h"
+#include "quest_database.h"
 #include <QFile>
 #include <QTextStream>
 
@@ -26,7 +26,7 @@ namespace SolarusEditor {
  * @brief Creates an empty resource list for the specified quest.
  * @param quest The quest.
  */
-QuestResources::QuestResources(Quest& quest):
+QuestDatabase::QuestDatabase(Quest& quest):
   quest(quest) {
 
   // Friendly names are set dynamically because they are translated.
@@ -96,13 +96,13 @@ QuestResources::QuestResources(Quest& quest):
 /**
  * @brief Reads project_db.dat and rebuilds the model.
  */
-void QuestResources::reload() {
+void QuestDatabase::reload() {
 
-  resources.clear();
+  database.clear();
 
   // TODO don't try this if the quest format is obsolete
   if (quest.is_valid()) {
-    resources.import_from_file(quest.get_resource_list_path().toStdString());
+    database.import_from_file(quest.get_resource_list_path().toStdString());
     // TODO throw an exception in case of error
   }
 }
@@ -111,14 +111,14 @@ void QuestResources::reload() {
  * @brief Saves the resource list to the project_db.dat file of the quest.
  * @throws EditorException If the save operation failed.
  */
-void QuestResources::save() const {
+void QuestDatabase::save() const {
 
   if (!quest.is_valid()) {
     throw EditorException(tr("No quest"));
   }
 
   QString file_name = quest.get_resource_list_path();
-  if (!resources.export_to_file(file_name.toStdString())) {
+  if (!database.export_to_file(file_name.toStdString())) {
     throw EditorException(tr("Cannot write file '%1'").arg(file_name));
   }
 }
@@ -129,9 +129,9 @@ void QuestResources::save() const {
  * @param id The id to lookup.
  * @return @c true if such an element exists in the resource.
  */
-bool QuestResources::exists(ResourceType type, const QString& id) const {
+bool QuestDatabase::exists(ResourceType type, const QString& id) const {
 
-  return resources.exists(type, id.toStdString());
+  return database.resource_exists(type, id.toStdString());
 }
 
 /**
@@ -140,9 +140,9 @@ bool QuestResources::exists(ResourceType type, const QString& id) const {
  * @param prefix The prefix of ids to look for.
  * @return @c true if at least such an element exists in the resource.
  */
-bool QuestResources::exists_with_prefix(ResourceType type, const QString& prefix) const {
+bool QuestDatabase::exists_with_prefix(ResourceType type, const QString& prefix) const {
 
-  for (const auto& kvp : resources.get_elements(type)) {
+  for (const auto& kvp : database.get_resource_elements(type)) {
     const QString& id = QString::fromStdString(kvp.first);
     if (id.startsWith(prefix)) {
       return true;
@@ -157,10 +157,10 @@ bool QuestResources::exists_with_prefix(ResourceType type, const QString& prefix
  * @param type A type of resource.
  * @return All ids declared for this resource type.
  */
-QStringList QuestResources::get_elements(ResourceType type) const {
+QStringList QuestDatabase::get_elements(ResourceType type) const {
 
   QStringList ids;
-  for (const auto& kvp : resources.get_elements(type)) {
+  for (const auto& kvp : database.get_resource_elements(type)) {
     ids << QString::fromStdString(kvp.first);
   }
 
@@ -175,13 +175,13 @@ QStringList QuestResources::get_elements(ResourceType type) const {
  * @return @c true if the element was added, @c false if an element with
  * this id already exists.
  */
-bool QuestResources::add(
+bool QuestDatabase::add(
     ResourceType resource_type,
     const QString& id,
     const QString& description
 ) {
 
-  if (!resources.add(resource_type, id.toStdString(), description.toStdString())) {
+  if (!database.add(resource_type, id.toStdString(), description.toStdString())) {
     return false;
   }
   emit element_added(resource_type, id, description);
@@ -195,12 +195,12 @@ bool QuestResources::add(
  * @return @c true if the element was removed, @c false if such an element
  * did not exist.
  */
-bool QuestResources::remove(
+bool QuestDatabase::remove(
     ResourceType resource_type,
     const QString& id
 ) {
 
-  if (!resources.remove(resource_type, id.toStdString())) {
+  if (!database.remove(resource_type, id.toStdString())) {
     return false;
   }
 
@@ -216,13 +216,13 @@ bool QuestResources::remove(
  * @return @c true in case of success, @c false if the old id does not
  * exist or if the new id already exists.
  */
-bool QuestResources::rename(
+bool QuestDatabase::rename(
     ResourceType resource_type,
     const QString& old_id,
     const QString& new_id
 ) {
 
-  if (!resources.rename(resource_type, old_id.toStdString(),
+  if (!database.rename(resource_type, old_id.toStdString(),
                         new_id.toStdString())) {
     return false;
   }
@@ -237,11 +237,11 @@ bool QuestResources::rename(
  * @return The description of this element.
  * Returns an empty string if the element does not exist.
  */
-QString QuestResources::get_description(
+QString QuestDatabase::get_description(
     ResourceType type, const QString& id) const {
 
   return QString::fromStdString(
-        resources.get_description(type, id.toStdString()));
+        database.get_description(type, id.toStdString()));
 }
 
 /**
@@ -252,7 +252,7 @@ QString QuestResources::get_description(
  * @return @c true in case of success, @c false if such an element does not
  * exist or if the description is invalid.
  */
-bool QuestResources::set_description(
+bool QuestDatabase::set_description(
     ResourceType type, const QString& id, const QString& description) {
 
   if (description.isEmpty() ||
@@ -265,7 +265,7 @@ bool QuestResources::set_description(
     return false;
   }
 
-  if (!resources.set_description(type, id.toStdString(), description.toStdString())) {
+  if (!database.set_description(type, id.toStdString(), description.toStdString())) {
     return false;
   }
   emit element_description_changed(type, id, description);
@@ -277,7 +277,7 @@ bool QuestResources::set_description(
  * @param resource_type A type of resource.
  * @return The Lua name of this resource type.
  */
-QString QuestResources::get_lua_name(ResourceType resource_type) const {
+QString QuestDatabase::get_lua_name(ResourceType resource_type) const {
   return QString::fromStdString(Solarus::enum_to_name(resource_type));
 }
 
@@ -286,7 +286,7 @@ QString QuestResources::get_lua_name(ResourceType resource_type) const {
  * @param resource_type A type of resources.
  * @return The human-readable name of this resource type.
  */
-QString QuestResources::get_friendly_name(ResourceType resource_type) const {
+QString QuestDatabase::get_friendly_name(ResourceType resource_type) const {
   return resource_type_friendly_names[resource_type];
 }
 
@@ -303,7 +303,7 @@ QString QuestResources::get_friendly_name(ResourceType resource_type) const {
  * @return The human-readable name of this resource type when it needs to be
  * followed by a resource element id.
  */
-QString QuestResources::get_friendly_name_for_id(ResourceType resource_type) const {
+QString QuestDatabase::get_friendly_name_for_id(ResourceType resource_type) const {
   return resource_type_friendly_names_for_id[resource_type];
 }
 
@@ -313,7 +313,7 @@ QString QuestResources::get_friendly_name_for_id(ResourceType resource_type) con
  * @param resource_type A type of resources.
  * @return The human-readable description of the corresponding directory.
  */
-QString QuestResources::get_directory_friendly_name(ResourceType resource_type) const {
+QString QuestDatabase::get_directory_friendly_name(ResourceType resource_type) const {
   return resource_type_directory_friendly_names[resource_type];
 }
 
@@ -322,7 +322,7 @@ QString QuestResources::get_directory_friendly_name(ResourceType resource_type) 
  * @param resource_type A type of resources.
  * @return The human-readable action name of creating such a resource element.
  */
-QString QuestResources::get_create_friendly_name(ResourceType resource_type) const {
+QString QuestDatabase::get_create_friendly_name(ResourceType resource_type) const {
   return resource_type_create_friendly_names[resource_type];
 }
 

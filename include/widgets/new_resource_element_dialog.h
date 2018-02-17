@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_NEW_RESOURCE_ELEMENT_DIALOG_H
 #define SOLARUSEDITOR_NEW_RESOURCE_ELEMENT_DIALOG_H
 
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "ui_new_resource_element_dialog.h"
 #include <QDialog>
 #include <QPair>

@@ -17,7 +17,7 @@
 #ifndef SOLARUSEDITOR_CHANGE_RESOURCE_ID_DIALOG_H
 #define SOLARUSEDITOR_CHANGE_RESOURCE_ID_DIALOG_H
 
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "ui_change_resource_id_dialog.h"
 #include <QDialog>
 

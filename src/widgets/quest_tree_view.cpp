@@ -213,12 +213,12 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
   }
 
   Quest& quest = model->get_quest();
-  const QuestResources& resources = quest.get_resources();
+  const QuestDatabase& database = quest.get_database();
 
   ResourceType resource_type;
   QString element_id;
   const bool is_potential_resource_element = quest.is_potential_resource_element(path, resource_type, element_id);
-  const bool is_declared_resource_element = is_potential_resource_element && resources.exists(resource_type, element_id);
+  const bool is_declared_resource_element = is_potential_resource_element && database.exists(resource_type, element_id);
   const bool is_dir = QFileInfo(path).isDir();
 
   QAction* new_resource_element_action = nullptr;
@@ -239,8 +239,8 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
     // File that looks like a resource element, but that is not declared in
     // the quest: let the user add it.
 
-    QString resource_type_friendly_name = resources.get_friendly_name(resource_type);
-    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+    QString resource_type_friendly_name = database.get_friendly_name(resource_type);
+    QString resource_type_lua_name = database.get_lua_name(resource_type);
 
     new_resource_element_action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
@@ -251,8 +251,8 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
            (is_dir && quest.is_in_resource_path(path, resource_type))) {
     // Resource directory or subdirectory: let the user create a new element in it.
 
-    QString resource_type_create_friendly_name = resources.get_create_friendly_name(resource_type);
-    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+    QString resource_type_create_friendly_name = database.get_create_friendly_name(resource_type);
+    QString resource_type_lua_name = database.get_lua_name(resource_type);
 
     new_resource_element_action = new QAction(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"),
@@ -343,7 +343,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   }
 
   Quest& quest = model->get_quest();
-  const QuestResources& resources = quest.get_resources();
+  const QuestDatabase& database = quest.get_database();
   QAction* action = nullptr;
   open_action->setText(tr("Open"));  // Restore the normal Open text and icon.
   open_action->setIcon(QIcon());
@@ -353,7 +353,7 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
   if (quest.is_resource_element(path, resource_type, element_id)) {
     // A resource element.
 
-    QString resource_type_lua_name = resources.get_lua_name(resource_type);
+    QString resource_type_lua_name = database.get_lua_name(resource_type);
     open_action->setIcon(
           QIcon(":/images/icon_resource_" + resource_type_lua_name + ".png"));
 
@@ -502,13 +502,13 @@ void QuestTreeView::new_element_action_triggered() {
 
   try {
     Quest& quest = model->get_quest();
-    QuestResources& resources = quest.get_resources();
+    QuestDatabase& database = quest.get_database();
     ResourceType resource_type;
     QString initial_id_value;
     QString initial_description_value;
 
     if (quest.is_potential_resource_element(path, resource_type, initial_id_value)) {
-      if (resources.exists(resource_type, initial_id_value)) {
+      if (database.exists(resource_type, initial_id_value)) {
         // The element already exists.
         return;
       }
@@ -799,7 +799,7 @@ void QuestTreeView::change_description_action_triggered() {
   }
 
   Quest& quest = model->get_quest();
-  QuestResources& resources = quest.get_resources();
+  QuestDatabase& database = quest.get_database();
   ResourceType resource_type;
   QString element_id;
   if (!quest.is_resource_element(path, resource_type, element_id)) {
@@ -807,8 +807,8 @@ void QuestTreeView::change_description_action_triggered() {
     return;
   }
 
-  QString resource_friendly_type_name_for_id = resources.get_friendly_name_for_id(resource_type);
-  QString old_description = resources.get_description(resource_type, element_id);
+  QString resource_friendly_type_name_for_id = database.get_friendly_name_for_id(resource_type);
+  QString old_description = database.get_description(resource_type, element_id);
   bool ok = false;
   QString new_description = QInputDialog::getText(
         this,
@@ -823,8 +823,8 @@ void QuestTreeView::change_description_action_triggered() {
       if (new_description.isEmpty()) {
         throw EditorException("Empty description");
       }
-      resources.set_description(resource_type, element_id, new_description);
-      resources.save();
+      database.set_description(resource_type, element_id, new_description);
+      database.save();
     }
     catch (const EditorException& ex) {
       ex.show_dialog();
@@ -863,9 +863,9 @@ void QuestTreeView::delete_action_triggered() {
     if (quest.is_resource_element(path, resource_type, element_id)) {
       // This is a resource element.
 
-      QuestResources& resources = quest.get_resources();
+      QuestDatabase& database = quest.get_database();
       const QString& resource_friendly_name_for_id =
-          resources.get_friendly_name_for_id(resource_type);
+          database.get_friendly_name_for_id(resource_type);
       QMessageBox::StandardButton answer = QMessageBox::question(
             this,
             tr("Delete confirmation"),

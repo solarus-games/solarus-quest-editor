@@ -202,9 +202,9 @@ set(solarus_quest_editor_SOURCES
   include/pattern_separation_traits.h
   include/point.h
   include/quest.h
+  include/quest_database.h
   include/quest_files_model.h
   include/quest_properties.h
-  include/quest_resources.h
   include/rectangle.h
   include/refactoring.h
   include/resize_mode.h
@@ -318,9 +318,9 @@ set(solarus_quest_editor_SOURCES
   src/pattern_separation_traits.cpp
   src/point.cpp
   src/quest.cpp
+  src/quest_database.cpp
   src/quest_files_model.cpp
   src/quest_properties.cpp
-  src/quest_resources.cpp
   src/rectangle.cpp
   src/refactoring.cpp
   src/size.cpp

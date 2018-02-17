@@ -54,7 +54,7 @@ const QMap<ResourceType, QString> resource_dirs = {
 Quest::Quest():
   root_path(),
   properties(*this),
-  resources(*this) {
+  database(*this) {
 }
 
 /**
@@ -64,7 +64,7 @@ Quest::Quest():
 Quest::Quest(const QString& root_path):
   root_path(),
   properties(*this),
-  resources(*this) {
+  database(*this) {
   set_root_path(root_path);
 }
 
@@ -173,19 +173,19 @@ QuestProperties& Quest::get_properties() {
 }
 
 /**
- * @brief Returns the resources declared in this quest.
- * @return The resources.
+ * @brief Returns the resources and files declared in this quest.
+ * @return The quest database.
  */
-const QuestResources& Quest::get_resources() const {
-  return resources;
+const QuestDatabase& Quest::get_database() const {
+  return database;
 }
 
 /**
- * @brief Returns the resources declared in this quest.
- * @return The resources.
+ * @brief Returns the resources and files declared in this quest.
+ * @return The quest database.
  */
-QuestResources& Quest::get_resources() {
-  return resources;
+QuestDatabase& Quest::get_database() {
+  return database;
 }
 
 /**
@@ -750,7 +750,7 @@ bool Quest::is_resource_element(
     return false;
   }
 
-  if (!resources.exists(resource_type, element_id)) {
+  if (!database.exists(resource_type, element_id)) {
     // Valid id, but not declared in the resource list.
     return false;
   }
@@ -785,7 +785,7 @@ bool Quest::has_resource_element(
     prefix = prefix + '/';
   }
 
-  return get_resources().exists_with_prefix(resource_type, prefix);
+  return get_database().exists_with_prefix(resource_type, prefix);
 }
 
 /**
@@ -813,7 +813,7 @@ bool Quest::is_in_resource_element(
     return false;
   }
 
-  if (resources.exists(resource_type, element_id)) {
+  if (database.exists(resource_type, element_id)) {
     // Already the resource element itself.
     return false;
   }
@@ -821,7 +821,7 @@ bool Quest::is_in_resource_element(
   // Remove the last path component until we find a declared resource element.
   while (!element_id.isEmpty()) {
     element_id = element_id.section("/", 0, -2);
-    if (resources.exists(resource_type, element_id)) {
+    if (database.exists(resource_type, element_id)) {
       return true;
     }
   }
@@ -856,7 +856,7 @@ bool Quest::is_map_script(const QString& path, QString& map_id) const {
 
   // Remove the extension.
   map_id = path_from_maps.section('.', 0, -2);
-  if (!resources.exists(ResourceType::MAP, map_id)) {
+  if (!database.exists(ResourceType::MAP, map_id)) {
     // Valid map id, but not declared in the resource list.
     return false;
   }
@@ -892,7 +892,7 @@ bool Quest::is_tileset_tiles_file(const QString& path, QString& tileset_id) cons
 
   // Remove the extension.
   tileset_id = path_from_tileset.section('.', 0, -3);
-  if (!resources.exists(ResourceType::TILESET, tileset_id)) {
+  if (!database.exists(ResourceType::TILESET, tileset_id)) {
     // Valid tileset id, but not declared in the resource list.
     return false;
   }
@@ -928,7 +928,7 @@ bool Quest::is_tileset_entities_file(const QString& path, QString& tileset_id) c
 
   // Remove the extension.
   tileset_id = path_from_tileset.section('.', 0, -3);
-  if (!resources.exists(ResourceType::TILESET, tileset_id)) {
+  if (!database.exists(ResourceType::TILESET, tileset_id)) {
     // Valid tileset id, but not declared in the resource list.
     return false;
   }
@@ -964,7 +964,7 @@ bool Quest::is_dialogs_file(const QString& path, QString& language_id) const {
 
   // Remove "/text/dialogs.dat" to determine the language id.
   language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
-  if (!resources.exists(ResourceType::LANGUAGE, language_id)) {
+  if (!database.exists(ResourceType::LANGUAGE, language_id)) {
     // Language id not declared in the resource list.
     return false;
   }
@@ -1000,7 +1000,7 @@ bool Quest::is_strings_file(const QString& path, QString& language_id) const {
 
   // Remove "/text/strings.dat" to determine the language id.
   language_id = path_from_languages.left(path_from_languages.size() - expected_path_end.size());
-  if (!resources.exists(ResourceType::LANGUAGE, language_id)) {
+  if (!database.exists(ResourceType::LANGUAGE, language_id)) {
     // Language id not declared in the resource list.
     return false;
   }
@@ -1368,7 +1368,7 @@ void Quest::create_map_data_file(const QString& map_id) {
 
   // Set initial values.
   MapModel map(*this, map_id);
-  const QStringList& tileset_ids = get_resources().get_elements(ResourceType::TILESET);
+  const QStringList& tileset_ids = get_database().get_elements(ResourceType::TILESET);
   if (!tileset_ids.isEmpty()) {
     map.set_tileset_id(tileset_ids.first());
   }
@@ -1705,10 +1705,10 @@ void Quest::create_resource_element(ResourceType resource_type,
 
   // Also declare it in the resource list.
   bool done_in_resource_list = false;
-  if (!resources.exists(resource_type, element_id)) {
+  if (!database.exists(resource_type, element_id)) {
     done_in_resource_list = true;
-    resources.add(resource_type, element_id, description);
-    resources.save();
+    database.add(resource_type, element_id, description);
+    database.save();
   }
 
   if (!done_on_filesystem && !done_in_resource_list) {
@@ -1780,13 +1780,13 @@ void Quest::rename_resource_element(
 
   check_valid_file_name(new_id);
 
-  if (resources.exists(resource_type, old_id) &&
-      resources.exists(resource_type, new_id)) {
+  if (database.exists(resource_type, old_id) &&
+      database.exists(resource_type, new_id)) {
     throw EditorException(tr("A resource with id '%1' already exists").arg(new_id));
   }
 
-  if (!resources.exists(resource_type, old_id) &&
-      !resources.exists(resource_type, new_id)) {
+  if (!database.exists(resource_type, old_id) &&
+      !database.exists(resource_type, new_id)) {
     throw EditorException(tr("No such resource: '%1'").arg(old_id));
   }
 
@@ -1818,10 +1818,10 @@ void Quest::rename_resource_element(
 
   // Also rename it in the resource list.
   bool renamed_in_resource_list = false;
-  if (resources.exists(resource_type, old_id)) {
+  if (database.exists(resource_type, old_id)) {
     renamed_in_resource_list = true;
-    resources.rename(resource_type, old_id, new_id);
-    resources.save();
+    database.rename(resource_type, old_id, new_id);
+    database.save();
   }
 
   if (!renamed_on_filesystem && !renamed_in_resource_list) {
@@ -1960,10 +1960,10 @@ void Quest::delete_resource_element(
 
   // Also remove it from the resource list.
   bool found_in_resource_list = false;
-  if (resources.exists(resource_type, element_id)) {
+  if (database.exists(resource_type, element_id)) {
     found_in_resource_list = true;
-    resources.remove(resource_type, element_id);
-    resources.save();
+    database.remove(resource_type, element_id);
+    database.save();
   }
 
   if (!found_in_filesystem && !found_in_resource_list) {

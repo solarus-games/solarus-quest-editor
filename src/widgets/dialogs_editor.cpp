@@ -476,7 +476,7 @@ DialogsEditor::DialogsEditor(
   update();
 
   // Make connections.
-  connect(&get_resources(),
+  connect(&get_database(),
           SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
@@ -607,7 +607,7 @@ void DialogsEditor::update_language_id_field() {
  */
 void DialogsEditor::update_description_to_gui() {
 
-  QString description = get_resources().get_description(
+  QString description = get_database().get_description(
         ResourceType::LANGUAGE, language_id);
   if (ui.description_field->text() != description) {
     ui.description_field->setText(description);
@@ -623,7 +623,7 @@ void DialogsEditor::update_description_to_gui() {
 void DialogsEditor::set_description_from_gui() {
 
   QString description = ui.description_field->text();
-  if (description == get_resources().get_description(
+  if (description == get_database().get_description(
         ResourceType::LANGUAGE, language_id)) {
     return;
   }
@@ -636,9 +636,9 @@ void DialogsEditor::set_description_from_gui() {
 
   const bool was_blocked = blockSignals(true);
   try {
-    get_resources().set_description(
+    get_database().set_description(
           ResourceType::LANGUAGE, language_id, description);
-    get_resources().save();
+    get_database().save();
   }
   catch (const EditorException& ex) {
     ex.print_message();

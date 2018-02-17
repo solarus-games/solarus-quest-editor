@@ -23,7 +23,7 @@
 #include "editor_settings.h"
 #include "point.h"
 #include "quest.h"
-#include "quest_resources.h"
+#include "quest_database.h"
 #include "sprite_model.h"
 #include <QFileInfo>
 #include <QUndoStack>
@@ -805,7 +805,7 @@ SpriteEditor::SpriteEditor(Quest& quest, const QString& path, QWidget* parent) :
   update();
 
   // Make connections.
-  connect(&get_resources(),
+  connect(&get_database(),
           SIGNAL(element_description_changed(ResourceType, const QString&, const QString&)),
           this, SLOT(update_description_to_gui()));
   connect(ui.description_field, SIGNAL(editingFinished()),
@@ -983,7 +983,7 @@ void SpriteEditor::update_sprite_id_field() {
  */
 void SpriteEditor::update_description_to_gui() {
 
-  QString description = get_resources().get_description(ResourceType::SPRITE, sprite_id);
+  QString description = get_database().get_description(ResourceType::SPRITE, sprite_id);
   if (ui.description_field->text() != description) {
     ui.description_field->setText(description);
   }
@@ -998,7 +998,7 @@ void SpriteEditor::update_description_to_gui() {
 void SpriteEditor::set_description_from_gui() {
 
   QString description = ui.description_field->text();
-  if (description == get_resources().get_description(ResourceType::SPRITE, sprite_id)) {
+  if (description == get_database().get_description(ResourceType::SPRITE, sprite_id)) {
     return;
   }
 
@@ -1010,8 +1010,8 @@ void SpriteEditor::set_description_from_gui() {
 
   const bool was_blocked = blockSignals(true);
   try {
-    get_resources().set_description(ResourceType::SPRITE, sprite_id, description);
-    get_resources().save();
+    get_database().set_description(ResourceType::SPRITE, sprite_id, description);
+    get_database().save();
   }
   catch (const EditorException& ex) {
     ex.print_message();

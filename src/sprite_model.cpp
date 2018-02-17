@@ -67,7 +67,7 @@ SpriteModel::SpriteModel(
 
   // Use the first tileset of the quest.
   QStringList tilesets =
-      quest.get_resources().get_elements(ResourceType::TILESET);
+      quest.get_database().get_elements(ResourceType::TILESET);
   if (tilesets.size() > 0) {
     tileset_id = tilesets[0];
   }
