@@ -68,6 +68,11 @@ public:
   QString get_directory_friendly_name(ResourceType resource_type) const;
   QString get_create_friendly_name(ResourceType resource_type) const;
 
+  QString get_file_author(const QString& path);
+  void set_file_author(const QString& path, const QString& author);
+  QString get_file_license(const QString& path);
+  void set_file_license(const QString& path, const QString& license);
+
 signals:
 
   void element_added(
@@ -78,6 +83,11 @@ signals:
       ResourceType type, const QString& old_id, const QString& new_id);
   void element_description_changed(
       ResourceType type, const QString& id, const QString& new_description);
+
+  void file_author_changed(
+      const QString& path, const QString& author);
+  void file_license_changed(
+      const QString& path, const QString& license);
 
 private slots:
 

@@ -326,4 +326,68 @@ QString QuestDatabase::get_create_friendly_name(ResourceType resource_type) cons
   return resource_type_create_friendly_names[resource_type];
 }
 
+/**
+ * @brief Returns the author of a file.
+ * @param path Path to a file or directory.
+ * @return The author or an empty string.
+ */
+QString QuestDatabase::get_file_author(const QString& path) {
+
+  const Solarus::QuestDatabase::FileInfo& info = database.get_file_info(path.toStdString());
+  return QString::fromStdString(info.author);
+}
+
+/**
+ * @brief Sets the author of a file.
+ *
+ * Emits file_author_changed if there is a change.
+ *
+ * @param path Path to a file or directory.
+ * @param author The author or an empty string.
+ */
+void QuestDatabase::set_file_author(const QString& path, const QString& author) {
+
+  if (get_file_author(path) == author) {
+    return;
+  }
+
+  Solarus::QuestDatabase::FileInfo info = database.get_file_info(path.toStdString());
+  info.author = author.toStdString();
+  database.set_file_info(path.toStdString(), info);
+
+  emit file_author_changed(path, author);
+}
+
+/**
+ * @brief Returns the license of a file.
+ * @param path Path to a file or directory.
+ * @return The license or an empty string.
+ */
+QString QuestDatabase::get_file_license(const QString& path) {
+
+  const Solarus::QuestDatabase::FileInfo& info = database.get_file_info(path.toStdString());
+  return QString::fromStdString(info.license);
+}
+
+/**
+ * @brief Sets the license of a file.
+ *
+ * Emits file_license_changed if there is a change.
+ *
+ * @param path Path to a file or directory.
+ * @param license The license or an empty string.
+ */
+void QuestDatabase::set_file_license(const QString& path, const QString& license) {
+
+  if (get_file_license(path) == license) {
+    return;
+  }
+
+  Solarus::QuestDatabase::FileInfo info = database.get_file_info(path.toStdString());
+  info.license = license.toStdString();
+  database.set_file_info(path.toStdString(), info);
+
+  emit file_license_changed(path, license);
+}
+
 }

@@ -26,7 +26,6 @@ namespace SolarusEditor {
 
 struct AddableEntity;
 class Quest;
-class QuestResources;
 class TilesetModel;
 class ViewSettings;
 
