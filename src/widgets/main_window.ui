@@ -63,7 +63,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_quest">
@@ -78,6 +78,7 @@
     <addaction name="action_close_all"/>
     <addaction name="action_save"/>
     <addaction name="action_save_all"/>
+    <addaction name="action_import"/>
     <addaction name="action_open_quest_properties"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -447,6 +448,11 @@
     <string>Ctrl+P</string>
    </property>
   </action>
+  <action name="action_import">
+   <property name="text">
+    <string>Import from a quest...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -469,6 +475,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../resources/images.qrc"/>
   <include location="../../resources/images.qrc"/>
  </resources>
  <connections/>
