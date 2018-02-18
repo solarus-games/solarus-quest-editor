@@ -87,7 +87,7 @@ int QuestFilesModel::columnCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
 
   // File, Description, Type, Author, License.
-  return NUM_COLUMNS + 1;
+  return NUM_COLUMNS;
 }
 
 /**
@@ -131,11 +131,19 @@ QModelIndex QuestFilesModel::index(int row, int column, const QModelIndex& paren
 
   QModelIndex index_mapped_from_source = QSortFilterProxyModel::index(row, column, parent);
   if (index_mapped_from_source.isValid()) {
+    // Regular index that exists in the source model.
     return index_mapped_from_source;
   }
 
-  // Item does not exist in the source model: this is an extra item of
-  // QuestFilesModel. Determine its file path.
+  // Item does not exist in the source model: this is an extra row or column.
+
+  QModelIndex index_mapped_from_source_column_0 = QSortFilterProxyModel::index(row, 0, parent);
+  if (index_mapped_from_source_column_0.isValid()) {
+    // This is an extra column.
+    return createIndex(row, column, index_mapped_from_source_column_0.internalPointer());
+  }
+
+  // This is an extra row. Determine its file path.
   int num_existing = QSortFilterProxyModel::rowCount(parent);
   int index_in_extra = row - num_existing;
   ExtraPaths* extra_paths = get_extra_paths(parent);
@@ -167,12 +175,18 @@ QModelIndex QuestFilesModel::parent(const QModelIndex& index) const {
 
   QString path;
   if (is_extra_path(index, path)) {
-    // Index that does not exist in the source model.
+    // The row does not exist in the source model.
     QDir parent_dir(path);
     if (!parent_dir.cdUp()) {
       return QModelIndex();
     }
     return get_file_index(parent_dir.path());
+  }
+
+  if (index.column() >= sourceModel()->columnCount()) {
+    // The column does not exist in the source model,
+    // but its parent is the same as the one of column 0.
+    return QSortFilterProxyModel::createIndex(index.row(), 0, index.internalPointer());
   }
 
   // Regular QSortFilterProxyModel index.
@@ -243,7 +257,8 @@ bool QuestFilesModel::hasChildren(const QModelIndex& parent) const {
 QModelIndex QuestFilesModel::mapToSource(const QModelIndex& proxy_index) const {
 
   QString path;
-  if (is_extra_path(proxy_index, path)) {
+  if (is_extra_path(proxy_index, path) ||
+      proxy_index.column() >= sourceModel()->columnCount()) {
     // This item does not exist in the source model
     // (it was added by us).
     return QModelIndex();
