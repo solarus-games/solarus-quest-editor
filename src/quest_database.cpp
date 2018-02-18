@@ -331,7 +331,7 @@ QString QuestDatabase::get_create_friendly_name(ResourceType resource_type) cons
  * @param path Path to a file or directory.
  * @return The author or an empty string.
  */
-QString QuestDatabase::get_file_author(const QString& path) {
+QString QuestDatabase::get_file_author(const QString& path) const {
 
   const Solarus::QuestDatabase::FileInfo& info = database.get_file_info(path.toStdString());
   return QString::fromStdString(info.author);
@@ -363,7 +363,7 @@ void QuestDatabase::set_file_author(const QString& path, const QString& author) 
  * @param path Path to a file or directory.
  * @return The license or an empty string.
  */
-QString QuestDatabase::get_file_license(const QString& path) {
+QString QuestDatabase::get_file_license(const QString& path) const {
 
   const Solarus::QuestDatabase::FileInfo& info = database.get_file_info(path.toStdString());
   return QString::fromStdString(info.license);

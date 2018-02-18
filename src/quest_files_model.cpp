@@ -86,8 +86,8 @@ int QuestFilesModel::columnCount(const QModelIndex& parent) const {
 
   Q_UNUSED(parent);
 
-  // File, Description, Type.
-  return NUM_COLUMNS;
+  // File, Description, Type, Author, License.
+  return NUM_COLUMNS + 1;
 }
 
 /**
@@ -113,7 +113,7 @@ int QuestFilesModel::rowCount(const QModelIndex& parent) const {
  * @brief Returns the index of an item.
  *
  * Reimplemented from QSortFilterProxyModel to create custom indexes
- * for items that are not in the source modelk
+ * for items that are not in the source model.
  * Such items represent files expected by the quest, shown in the model but
  * that are missing on the filesystem.
  *
@@ -310,6 +310,14 @@ Qt::ItemFlags QuestFilesModel::flags(const QModelIndex& index) const {
       return flags | Qt::ItemIsEditable;
     }
     return flags;
+
+  case AUTHOR_COLUMN:
+  case LICENSE_COLUMN:
+    // The author and license are always editable (except on root).
+    if (!quest.is_data_path(file_path)) {
+      return flags | Qt::ItemIsEditable;
+    }
+    return flags;
   }
 
   return flags;
@@ -334,10 +342,16 @@ QVariant QuestFilesModel::headerData(int section, Qt::Orientation orientation, i
       return tr("File");
 
     case DESCRIPTION_COLUMN:
-      return tr("Description");
+      return tr("Resource description");
 
     case TYPE_COLUMN:
       return tr("Type");
+
+    case AUTHOR_COLUMN:
+      return tr("Author");
+
+    case LICENSE_COLUMN:
+      return tr("License");
     }
     return QVariant();
   }
@@ -380,6 +394,12 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 
     case TYPE_COLUMN:  // Type.
       return get_quest_file_displayed_type(index);
+
+    case AUTHOR_COLUMN:
+      return database.get_file_author(path);
+
+    case LICENSE_COLUMN:
+      return database.get_file_license(path);
     }
     return QVariant();
 
@@ -395,7 +415,6 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (quest.is_resource_element(path, resource_type, element_id)) {
         return database.get_description(resource_type, element_id);
       }
-      return QVariant();
     }
     return QVariant();
 

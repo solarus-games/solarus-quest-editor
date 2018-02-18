@@ -68,9 +68,9 @@ public:
   QString get_directory_friendly_name(ResourceType resource_type) const;
   QString get_create_friendly_name(ResourceType resource_type) const;
 
-  QString get_file_author(const QString& path);
+  QString get_file_author(const QString& path) const;
   void set_file_author(const QString& path, const QString& author);
-  QString get_file_license(const QString& path);
+  QString get_file_license(const QString& path) const;
   void set_file_license(const QString& path, const QString& license);
 
 signals:

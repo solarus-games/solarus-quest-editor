@@ -50,7 +50,9 @@ public:
   static constexpr int FILE_COLUMN = 0;          /**< Column index of the file in the model. */
   static constexpr int DESCRIPTION_COLUMN = 1;   /**< Column index of the resource description in the model. */
   static constexpr int TYPE_COLUMN = 2;          /**< Column index of the type info in the model. */
-  static constexpr int NUM_COLUMNS = 3;          /**< Number of columns of the model. */
+  static constexpr int AUTHOR_COLUMN = 3;        /**< Column index of the author info in the model. */
+  static constexpr int LICENSE_COLUMN = 4;       /**< Column index of the license info in the model. */
+  static constexpr int NUM_COLUMNS = 5;          /**< Number of columns of the model. */
 
   explicit QuestFilesModel(Quest& quest);
 
