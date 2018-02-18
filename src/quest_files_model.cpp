@@ -389,6 +389,7 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
   QString element_id;
 
   QString path = get_file_path(index);
+  QString quest_relative_path = quest.get_path_relative_to_data_path(path);
   QString file_name = QFileInfo(path).fileName();
 
   switch (role) {
@@ -412,10 +413,10 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       return get_quest_file_displayed_type(index);
 
     case AUTHOR_COLUMN:
-      return database.get_file_author(path);
+      return database.get_file_author(quest_relative_path);
 
     case LICENSE_COLUMN:
-      return database.get_file_license(path);
+      return database.get_file_license(quest_relative_path);
     }
     return QVariant();
 
@@ -431,6 +432,14 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
       if (quest.is_resource_element(path, resource_type, element_id)) {
         return database.get_description(resource_type, element_id);
       }
+      return QVariant();
+
+    case AUTHOR_COLUMN:
+      return database.get_file_author(quest_relative_path);
+
+    case LICENSE_COLUMN:
+      return database.get_file_license(quest_relative_path);
+
     }
     return QVariant();
 
@@ -473,32 +482,55 @@ QVariant QuestFilesModel::data(const QModelIndex& index, int role) const {
 bool QuestFilesModel::setData(
     const QModelIndex& index, const QVariant& value, int role) {
 
-  if (index.column() != DESCRIPTION_COLUMN) {
-    // Only the description column is editable.
-    return false;
-  }
-
   if (role != Qt::EditRole) {
     return false;
   }
 
   QString file_path = get_file_path(index);
-  ResourceType resource_type;
-  QString element_id;
-  if (!quest.is_resource_element(file_path, resource_type, element_id)) {
+  QString quest_relative_path = quest.get_path_relative_to_data_path(file_path);
+  if (quest_relative_path.isEmpty()) {
     return false;
   }
+  QuestDatabase& database = quest.get_database();
 
   try {
-    quest.get_database().set_description(resource_type, element_id, value.toString());
-    quest.get_database().save();
-    emit dataChanged(index, index);
-    return true;
+
+    switch (index.column()) {
+
+    case DESCRIPTION_COLUMN:
+    {
+      ResourceType resource_type;
+      QString element_id;
+      if (!quest.is_resource_element(file_path, resource_type, element_id)) {
+        return false;
+      }
+
+      database.set_description(resource_type, element_id, value.toString());
+      database.save();
+      emit dataChanged(index, index);
+      return true;
+    }
+
+    case AUTHOR_COLUMN:
+      database.set_file_author(quest_relative_path, value.toString());
+      database.save();
+      emit dataChanged(index, index);
+      return true;
+
+    case LICENSE_COLUMN:
+      database.set_file_license(quest_relative_path, value.toString());
+      database.save();
+      emit dataChanged(index, index);
+      return true;
+    }
+
   }
   catch (const EditorException& ex) {
     ex.print_message();
     return false;
   }
+
+  return false;
 }
 
 /**
@@ -915,10 +947,9 @@ QString QuestFilesModel::get_file_path(const QModelIndex& index) const {
   }
 
   // The item is a file that exists on the filesystem.
-  QModelIndex source_index = mapToSource(index);
-  QModelIndex file_source_index = source_model->index(
-        source_index.row(), FILE_COLUMN, source_index.parent());
-  return source_model->filePath(file_source_index);
+  QModelIndex file_index = this->index(index.row(), FILE_COLUMN, index.parent());
+  QModelIndex source_index = mapToSource(file_index);
+  return source_model->filePath(source_index);
 }
 
 /**

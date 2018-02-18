@@ -57,6 +57,7 @@ public:
   // Get paths.
   QString get_name() const;
   QString get_data_path() const;
+  QString get_path_relative_to_data_path(const QString& path);
   QString get_properties_path() const;
   QString get_main_script_path() const;
   QString get_resource_list_path() const;

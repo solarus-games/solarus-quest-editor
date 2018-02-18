@@ -215,6 +215,22 @@ QString Quest::get_data_path() const {
 }
 
 /**
+ * @brief Returns a path relative to the data directory from an absolute path.
+ * @param path The absolute path to convert.
+ * @return The path relative to the quest data directory, or an empty string
+ * if it is not in the quest data directory.
+ */
+QString Quest::get_path_relative_to_data_path(const QString& path) {
+
+  const QString& data_path = get_data_path();
+  if (!path.startsWith(data_path)) {
+    return QString();
+  }
+
+  return path.right(path.size() - data_path.size() - 1);
+}
+
+/**
  * @brief Returns the path of the quest properties file of this quest.
  * @return The path to quest.dat.
  * Returns an empty string if the quest is invalid.
