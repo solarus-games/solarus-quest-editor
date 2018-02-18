@@ -63,9 +63,8 @@ public:
 
   // The proxy changes the underlying filesystem model a lot:
   // rows and columns are added and removed.
-  // We have to reimplement a lot of functions, in particular because
-  // adding extra rows breaks an assumption of QSortFilterProxyModel:
-  // the fact that a valid proxy index can always be mapped to a valid
+  // We have to reimplement a lot of functions, because
+  // a valid proxy index can not always be mapped to a valid
   // source index.
   int columnCount(const QModelIndex& parent = QModelIndex()) const override;
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;

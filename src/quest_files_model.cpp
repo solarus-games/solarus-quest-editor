@@ -186,7 +186,8 @@ QModelIndex QuestFilesModel::parent(const QModelIndex& index) const {
   if (index.column() >= sourceModel()->columnCount()) {
     // The column does not exist in the source model,
     // but its parent is the same as the one of column 0.
-    return QSortFilterProxyModel::createIndex(index.row(), 0, index.internalPointer());
+    QModelIndex index_column_0 = createIndex(index.row(), 0, index.internalPointer());
+    return QSortFilterProxyModel::parent(index_column_0);
   }
 
   // Regular QSortFilterProxyModel index.
