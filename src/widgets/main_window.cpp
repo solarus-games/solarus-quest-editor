@@ -20,6 +20,7 @@
 #include "widgets/enum_menus.h"
 #include "widgets/external_script_dialog.h"
 #include "widgets/gui_tools.h"
+#include "widgets/import_dialog.h"
 #include "widgets/main_window.h"
 #include "widgets/pair_spin_box.h"
 #include "audio.h"
@@ -98,6 +99,7 @@ MainWindow::MainWindow(QWidget* parent) :
   recent_quests_menu = new QMenu(tr("Recent quests"));
   update_recent_quests_menu();
   ui.menu_quest->insertMenu(ui.menu_quest->actions()[3], recent_quests_menu);
+  ui.action_import->setEnabled(false);
 
   QUndoGroup& undo_group = ui.tab_widget->get_undo_group();
   QAction* undo_action = undo_group.createUndoAction(this);
@@ -564,6 +566,7 @@ void MainWindow::close_quest() {
 
   quest.set_root_path("");
   update_title();
+  ui.action_import->setEnabled(false);
   ui.action_run_quest->setEnabled(false);
   ui.quest_tree_view->set_quest(quest);
 
@@ -602,6 +605,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
     connect(&quest, SIGNAL(file_deleted(QString)),
             ui.tab_widget, SLOT(file_deleted(QString)));
 
+    ui.action_import->setEnabled(true);
     ui.action_run_quest->setEnabled(true);
 
     add_quest_to_recent_list();
@@ -630,6 +634,7 @@ bool MainWindow::open_quest(const QString& quest_path) {
         quest.set_root_path("");
         quest.set_root_path(quest_path);
         quest.check_version();
+        ui.action_import->setEnabled(true);
         ui.action_run_quest->setEnabled(true);
         success = true;
       }
@@ -851,6 +856,21 @@ void MainWindow::on_action_close_triggered() {
 void MainWindow::on_action_close_all_triggered() {
 
   ui.tab_widget->close_all_files_requested();
+}
+
+/**
+ * @brief Slot called when the user triggers the "Import" action.
+ */
+void MainWindow::on_action_import_triggered() {
+
+  Quest& quest = get_quest();
+  if (!quest.exists()) {
+    // No valid quest is currently open.
+    return;
+  }
+
+  ImportDialog import_dialog(quest);
+  import_dialog.exec();
 }
 
 /**
