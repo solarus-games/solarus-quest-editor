@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -33,7 +33,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>accepted()</signal>
    <receiver>SolarusEditor::ImportDialog</receiver>
    <slot>accept()</slot>
@@ -49,7 +49,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>rejected()</signal>
    <receiver>SolarusEditor::ImportDialog</receiver>
    <slot>reject()</slot>
