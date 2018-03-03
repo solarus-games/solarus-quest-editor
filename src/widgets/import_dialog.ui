@@ -62,16 +62,26 @@
           <iconset resource="../../resources/images.qrc">
            <normaloff>:/images/icon_next.png</normaloff>:/images/icon_next.png</iconset>
          </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget_2">
       <layout class="QVBoxLayout" name="vertical_layout">
        <item>
         <widget class="QLabel" name="destination_quest_label">
          <property name="text">
           <string>Destination quest</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="destination_quest_field">
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
