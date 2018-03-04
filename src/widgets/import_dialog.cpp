@@ -34,6 +34,7 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
 
   Q_ASSERT(destination_quest.exists());
 
+  ui.destination_quest_field->setText(destination_quest.get_root_path());
   ui.destination_quest_tree_view->set_quest(destination_quest);
 }
 
