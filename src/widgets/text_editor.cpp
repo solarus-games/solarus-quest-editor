@@ -291,10 +291,16 @@ int TextEditor::find_text_requested(const QString& text) {
  * @param text_search, text_replace The text to search and the text to replace.
  */
 void TextEditor::replace_text_requested(const QString& text_search, const QString& text_replace) {
-    if(this->find_text_requested(text_search) == 1) {
-        // Text found and selected: remove selected text and insert the new text
+    if(text_widget->textCursor().hasSelection()) {
         text_widget->textCursor().removeSelectedText();
         text_widget->textCursor().insertText(text_replace);
+    }
+    else {
+        if(this->find_text_requested(text_search) == 1) {
+            // Text found and selected: remove selected text and insert the new text
+            text_widget->textCursor().removeSelectedText();
+            text_widget->textCursor().insertText(text_replace);
+        }
     }
 }
 
