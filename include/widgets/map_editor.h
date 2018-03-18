@@ -48,6 +48,7 @@ public:
   void paste() override;
   void select_all() override;
   void unselect_all() override;
+  void export_to_image() override;
   void reload_settings() override;
 
 private slots:

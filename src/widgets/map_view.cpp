@@ -855,6 +855,31 @@ QMenu* MapView::create_direction_context_menu(const EntityIndexes& indexes) {
   return menu;
 }
 
+/**
+ * @brief Exports the current view to an image file.
+ * @param file_name Name of the image file to write.
+ */
+void MapView::export_to_image(const QString& file_name) {
+
+  if (scene == nullptr) {
+    return;
+  }
+
+  // Clear the selection first (we don't want selection markers.
+  EntityIndexes selected_indexes = get_selected_entities();
+  set_selected_entities(EntityIndexes());
+
+  // Create the image.
+  QImage image(map->get_size(), QImage::Format_ARGB32);
+  image.fill(Qt::transparent);
+  QPainter painter(&image);
+  scene->render(&painter, image.rect(),
+                QRect(scene->get_margin_top_left(), map->get_size()));
+  image.save(file_name);
+
+  // Restore the selection.
+  set_selected_entities(selected_indexes);
+}
 
 /**
  * @brief Copies the selected entities to the clipboard and removes them.

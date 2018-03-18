@@ -154,7 +154,7 @@ MainWindow::MainWindow(QWidget* parent) :
   show_entities_menu = create_show_entities_menu();
   show_entities_button->setMenu(show_entities_menu);
   show_entities_button->setPopupMode(QToolButton::InstantPopup);
-  ui.tool_bar->addWidget(show_entities_button);
+  ui.tool_bar->insertWidget(ui.action_export_to_image, show_entities_button);
   ui.menu_view->addMenu(show_entities_menu);
 
   common_actions["cut"] = ui.action_cut;
@@ -184,6 +184,7 @@ MainWindow::MainWindow(QWidget* parent) :
   addAction(ui.action_exit);
   addAction(ui.action_close);
   addAction(ui.action_save);
+  addAction(ui.action_import);
   addAction(ui.action_cut);
   addAction(ui.action_copy);
   addAction(ui.action_paste);
@@ -201,6 +202,7 @@ MainWindow::MainWindow(QWidget* parent) :
   addAction(ui.action_show_layer_0);
   addAction(ui.action_show_layer_1);
   addAction(ui.action_show_layer_2);
+  addAction(ui.action_export_to_image);
   addAction(ui.action_settings);
   addAction(ui.action_doc);
   addAction(ui.action_website);
@@ -1158,6 +1160,16 @@ void MainWindow::on_action_show_obstacles_triggered() {
 }
 
 /**
+ * @brief Slot called when the user triggers the "Export to image" action.
+ */
+void MainWindow::on_action_export_to_image_triggered() {
+
+  Editor* editor = get_current_editor();
+  if (editor != nullptr && editor->is_export_to_image_supported()) {
+    editor->export_to_image();
+  }
+}
+/**
  * @brief Slot called when the user triggers the "Settings" action.
  */
 void MainWindow::on_action_settings_triggered() {
@@ -1202,6 +1214,9 @@ void MainWindow::current_editor_changed(int index) {
   ui.action_close_all->setEnabled(has_editor);
   ui.action_save->setEnabled(has_editor);
   ui.action_save_all->setEnabled(has_editor);
+
+  const bool export_to_image_supported = has_editor && editor->is_export_to_image_supported();
+  ui.action_export_to_image->setEnabled(export_to_image_supported);
 
   const bool select_all_supported = has_editor && editor->is_select_all_supported();
   ui.action_select_all->setEnabled(select_all_supported);

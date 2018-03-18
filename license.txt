@@ -19,6 +19,7 @@ http://p.yusukekamiyamane.com/
 resources/images/entity_custom_entity.png
 resources/images/entity_tile.png
 resources/images/icon_add.png
+resources/images/icon_camera.png
 resources/images/icon_copy.png
 resources/images/icon_cross.png
 resources/images/icon_cross_small.png

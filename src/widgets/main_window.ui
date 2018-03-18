@@ -78,7 +78,6 @@
     <addaction name="action_close_all"/>
     <addaction name="action_save"/>
     <addaction name="action_save_all"/>
-    <addaction name="action_import"/>
     <addaction name="action_open_quest_properties"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -127,6 +126,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="action_export_to_image"/>
     <addaction name="action_settings"/>
    </widget>
    <widget class="QMenu" name="menuAudio">
@@ -168,6 +168,7 @@
    <addaction name="action_show_layer_2"/>
    <addaction name="action_show_traversables"/>
    <addaction name="action_show_obstacles"/>
+   <addaction name="action_export_to_image"/>
   </widget>
   <action name="action_new_quest">
    <property name="text">
@@ -454,6 +455,18 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="action_export_to_image">
+   <property name="icon">
+    <iconset resource="../../resources/images.qrc">
+     <normaloff>:/images/icon_camera.png</normaloff>:/images/icon_camera.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export to image...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
    </property>
   </action>
  </widget>

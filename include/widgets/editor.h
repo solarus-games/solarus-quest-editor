@@ -68,6 +68,7 @@ public:
   bool is_traversables_visibility_supported() const;
   bool is_obstacles_visibility_supported() const;
   bool is_entity_type_visibility_supported() const;
+  bool is_export_to_image_supported() const;
   const ViewSettings& get_view_settings() const;
   ViewSettings& get_view_settings();
 
@@ -81,6 +82,7 @@ public:
   virtual void select_all();
   virtual void unselect_all();
   virtual void find();
+  virtual void export_to_image();
   virtual void reload_settings();
 
 signals:
@@ -107,6 +109,7 @@ protected:
   void set_traversables_visibility_supported(bool supported);
   void set_obstacles_visibility_supported(bool supported);
   void set_entity_type_visibility_supported(bool supported);
+  void set_export_to_image_supported(bool export_to_image_supported);
 
   void focusInEvent(QFocusEvent* event) override;
   virtual void editor_made_visible();
@@ -139,6 +142,7 @@ private:
   bool traversables_visibility_supported;   /**< Whether the editor supports showing/hiding traversables. */
   bool obstacles_visibility_supported;      /**< Whether the editor supports showing/hiding obstacles. */
   bool entity_type_visibility_supported;    /**< Whether the editor supports showing/hiding entity types. */
+  bool export_to_image_supported;           /**< Whether the editor supports exporting to an image. */
   ViewSettings view_settings;               /**< What is shown and how. */
 
 };

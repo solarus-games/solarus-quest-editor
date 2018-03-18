@@ -76,6 +76,7 @@ public:
   void set_map(MapModel* map);
   const ViewSettings* get_view_settings() const;
   void set_view_settings(ViewSettings& view_settings);
+  void export_to_image(const QString& file_name);
   const QMap<QString, QAction*>* get_common_actions() const;
   void set_common_actions(const QMap<QString, QAction*>* common_actions);
 

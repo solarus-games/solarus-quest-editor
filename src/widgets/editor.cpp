@@ -160,6 +160,7 @@ Editor::Editor(Quest& quest, const QString& file_path, QWidget* parent) :
   traversables_visibility_supported(false),
   obstacles_visibility_supported(false),
   entity_type_visibility_supported(false),
+  export_to_image_supported(false),
   view_settings() {
 
   setFocusPolicy(Qt::StrongFocus);
@@ -509,6 +510,35 @@ void Editor::paste() {
 }
 
 /**
+ * @brief Returns whether this editor supports exporting to an image.
+ * @return @c true if exporting to an image is supported.
+ */
+bool Editor::is_export_to_image_supported() const {
+  return export_to_image_supported;
+}
+
+/**
+ * @brief Sets whether this editor supports exporting to an image.
+ *
+ * If your editor supports exporting to an image, you are responsible to
+ * reimplement export_to_image().
+ *
+ * @param export_supported @c true to support exporting.
+ */
+void Editor::set_export_to_image_supported(bool export_to_image_supported) {
+  this->export_to_image_supported = export_to_image_supported;
+}
+
+/**
+ * @brief Exports the current editor to some image.
+ *
+ * The default implementation does nothing.
+ * Subclasses that support exporting to an image should reimplement this function.
+ */
+void Editor::export_to_image() {
+}
+
+/**
  * @brief Returns whether this editor supports selecting all.
  * @return @c true if selecting all is supported.
  */
@@ -519,13 +549,31 @@ bool Editor::is_select_all_supported() const {
 /**
  * @brief Sets whether this editor supports selecting all.
  *
- * If your editor supports find operations, you are responsible to
+ * If your editor supports select all operations, you are responsible to
  * reimplement select_all().
  *
  * @param select_all_supported @c true to support selecting all.
  */
 void Editor::set_select_all_supported(bool select_all_supported) {
   this->select_all_supported = select_all_supported;
+}
+
+/**
+ * @brief Performs a select all operation.
+ *
+ * The default implementation does nothing.
+ * Subclasses that support select all should reimplement this function.
+ */
+void Editor::select_all() {
+}
+
+/**
+ * @brief Performs an unselect all operation.
+ *
+ * The default implementation does nothing.
+ * Subclasses that support unselect all should reimplement this function.
+ */
+void Editor::unselect_all() {
 }
 
 /**
@@ -546,24 +594,6 @@ bool Editor::is_find_supported() const {
  */
 void Editor::set_find_supported(bool find_supported) {
   this->find_supported = find_supported;
-}
-
-/**
- * @brief Performs a select all operation.
- *
- * The default implementation does nothing.
- * Subclasses that support select all should reimplement this function.
- */
-void Editor::select_all() {
-}
-
-/**
- * @brief Performs an unselect all operation.
- *
- * The default implementation does nothing.
- * Subclasses that support unselect all should reimplement this function.
- */
-void Editor::unselect_all() {
 }
 
 /**

@@ -33,6 +33,7 @@
 #include "refactoring.h"
 #include "tileset_model.h"
 #include "view_settings.h"
+#include <QFileDialog>
 #include <QItemSelectionModel>
 #include <QMessageBox>
 #include <QStatusBar>
@@ -1050,6 +1051,7 @@ MapEditor::MapEditor(Quest& quest, const QString& path, QWidget* parent) :
   set_traversables_visibility_supported(true);
   set_obstacles_visibility_supported(true);
   set_entity_type_visibility_supported(true);
+  set_export_to_image_supported(true);
 
   // Shortcuts.
   QAction* open_script_action = new QAction(this);
@@ -1281,6 +1283,23 @@ void MapEditor::build_status_bar() {
 void MapEditor::save() {
 
   map->save();
+}
+
+/**
+ * @copydoc Editor::export_to_image
+ */
+void MapEditor::export_to_image() {
+
+  QString map_id_without_dirs = map->get_map_id().section("/", -1, -1);
+  const QString& file_name = QFileDialog::getSaveFileName(
+        this,
+        tr("Save map as PNG file"),
+        QString("%1/%2.png").arg(get_quest().get_root_path(), map_id_without_dirs),
+        tr("PNG image (*.png)"));
+
+  if (!file_name.isEmpty()) {
+    ui.map_view->export_to_image(file_name);
+  }
 }
 
 /**
