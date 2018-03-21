@@ -40,6 +40,10 @@ signals:
 
   void destination_quest_rename_file_requested(Quest& quest, const QString& path);
 
+public slots:
+
+  void browse_source_quest();
+
 private:
 
   Ui::ImportDialog ui;

@@ -42,6 +42,9 @@ public:
   // Console keys.
   static const QString console_history;
 
+  // Import dialog keys.
+  static const QString import_last_source_quest;
+
   // Text editor keys.
   static const QString font_family;
   static const QString font_size;

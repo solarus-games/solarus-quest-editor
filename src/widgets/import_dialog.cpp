@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "include/widgets/import_dialog.h"
+#include "widgets/gui_tools.h"
+#include "widgets/import_dialog.h"
+#include "editor_settings.h"
+#include <QFileDialog>
 
 namespace SolarusEditor {
 
@@ -43,6 +46,16 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
 
   connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
           this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
+  connect(ui.source_quest_browse_button, SIGNAL(clicked(bool)),
+          this, SLOT(browse_source_quest()));
+
+  EditorSettings settings;
+  QString last_source_quest_path = settings.get_value_string(EditorSettings::import_last_source_quest);
+
+  source_quest.set_root_path(last_source_quest_path);
+  if (!source_quest.exists()) {
+    browse_source_quest();
+  }
 }
 
 /**
@@ -61,32 +74,42 @@ Quest& ImportDialog::get_destination_quest() const {
   return destination_quest;
 }
 
-/* TODO
+/**
+ * @brief Lets the user choose the source quest where to import from.
+ */
+void ImportDialog::browse_source_quest() {
+
   // Ask the quest path where to import from.
   EditorSettings settings;
+  QString initial_value = settings.get_value_string(EditorSettings::import_last_source_quest);
   QString src_quest_path = QFileDialog::getExistingDirectory(
         this,
         tr("Select a quest where to import from"),
-        settings.get_value_string(EditorSettings::working_directory),
-        QFileDialog::ShowDirsOnly);
+        initial_value,
+        QFileDialog::ShowDirsOnly
+  );
 
   if (src_quest_path.isEmpty()) {
     // Canceled.
     return;
   }
 
-  if (src_quest_path == quest.get_root_path()) {
+  if (src_quest_path == destination_quest.get_root_path()) {
     // Same quest.
     GuiTools::warning_dialog(tr("Source and destination quest are the same"));
     return;
   }
 
-  Quest src_quest(src_quest_path);
-  if (!src_quest.exists()) {
+  source_quest.set_root_path(src_quest_path);
+  if (!source_quest.exists()) {
     GuiTools::error_dialog(
           tr("No source quest was not found in directory '%1'").arg(src_quest_path));
-    return;
   }
-*/
+
+  ui.source_quest_browse_field->setText(src_quest_path);
+  ui.source_quest_tree_view->set_quest(source_quest);
+
+  settings.set_value(EditorSettings::import_last_source_quest, src_quest_path);
+}
 
 }
