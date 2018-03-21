@@ -37,7 +37,13 @@ namespace SolarusEditor {
  */
 QuestTreeView::QuestTreeView(QWidget* parent) :
   QTreeView(parent),
-  model(nullptr) {
+  model(nullptr),
+  play_action(nullptr),
+  open_action(nullptr),
+  rename_action(nullptr),
+  delete_action(nullptr),
+  read_only(false),
+  opening_files_allowed(true) {
 
   setUniformRowHeights(true);
   setAutoScroll(false);
@@ -109,6 +115,44 @@ void QuestTreeView::set_quest(Quest& quest) {
     // It is better for performance to enable sorting only after the model is ready.
     setSortingEnabled(true);
   }
+}
+
+/**
+ * @brief Returns whether the view is in read-only mode.
+ * @return @c true if the mode is read-only, @c false if changes can be
+ * made to the tileset.
+ */
+bool QuestTreeView::is_read_only() const {
+  return read_only;
+}
+
+/**
+ * @brief Sets whether the view is in read-only mode.
+ * @param read_only @c true to block changes from this view, @c false to allow them.
+ */
+void QuestTreeView::set_read_only(bool read_only) {
+
+  this->read_only = read_only;
+  rename_action->setEnabled(!read_only);
+  delete_action->setEnabled(!read_only);
+}
+
+/**
+ * @brief Returns whether the user can open files from this view.
+ * @return @c true if opening files is allowed.
+ */
+bool QuestTreeView::is_opening_files_allowed() const {
+  return this->opening_files_allowed;
+}
+
+/**
+ * @brief Sets whether the user can open files from this view.
+ * @param opening_files_allowed @c true to allow opening files.
+ */
+void QuestTreeView::set_opening_files_allowed(bool opening_files_allowed) {
+
+  this->opening_files_allowed = opening_files_allowed;
+  open_action->setEnabled(opening_files_allowed);
 }
 
 /**
@@ -207,6 +251,10 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
  * @param path Path whose context menu is requested.
  */
 void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
+
+  if (is_read_only()) {
+    return;
+  }
 
   if (!menu.isEmpty()) {
     menu.addSeparator();
@@ -338,6 +386,10 @@ void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
  */
 void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
 
+  if (!is_opening_files_allowed()) {
+    return;
+  }
+
   if (!menu.isEmpty()) {
     menu.addSeparator();
   }
@@ -428,6 +480,10 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
  */
 void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) {
 
+  if (is_read_only()) {
+    return;
+  }
+
   if (!menu.isEmpty()) {
     menu.addSeparator();
   }
@@ -463,6 +519,10 @@ void QuestTreeView::build_context_menu_rename(QMenu& menu, const QString& path) 
  * @param path Path whose context menu is requested.
  */
 void QuestTreeView::build_context_menu_delete(QMenu& menu, const QString& path) {
+
+  if (is_read_only()) {
+    return;
+  }
 
   if (!menu.isEmpty()) {
     menu.addSeparator();
@@ -574,6 +634,10 @@ void QuestTreeView::new_element_action_triggered() {
  */
 void QuestTreeView::new_directory_action_triggered() {
 
+  if (is_read_only()) {
+    return;
+  }
+
   QString path = get_selected_path();
   if (path.isEmpty()) {
     return;
@@ -612,6 +676,10 @@ void QuestTreeView::new_directory_action_triggered() {
  * The file name will be prompted to the user.
  */
 void QuestTreeView::new_script_action_triggered() {
+
+  if (is_read_only()) {
+    return;
+  }
 
   QString parent_path = get_selected_path();
   if (parent_path.isEmpty()) {
@@ -711,6 +779,10 @@ void QuestTreeView::play_action_triggered() {
  */
 void QuestTreeView::open_action_triggered() {
 
+  if (!is_opening_files_allowed()) {
+    return;
+  }
+
   QString path = get_selected_path();
   if (path.isEmpty()) {
     return;
@@ -723,6 +795,10 @@ void QuestTreeView::open_action_triggered() {
  * @brief Slot called when the user wants to open the script of a map.
  */
 void QuestTreeView::open_map_script_action_triggered() {
+
+  if (!is_opening_files_allowed()) {
+    return;
+  }
 
   QString path = get_selected_path();
   if (path.isEmpty()) {
@@ -746,6 +822,10 @@ void QuestTreeView::open_map_script_action_triggered() {
  */
 void QuestTreeView::open_language_strings_action_triggered() {
 
+  if (!is_opening_files_allowed()) {
+    return;
+  }
+
   QString path = get_selected_path();
   if (path.isEmpty()) {
     return;
@@ -767,6 +847,10 @@ void QuestTreeView::open_language_strings_action_triggered() {
  * directory.
  */
 void QuestTreeView::rename_action_triggered() {
+
+  if (is_read_only()) {
+    return;
+  }
 
   emit rename_file_requested(model->get_quest(), get_selected_path());
 }
@@ -792,6 +876,10 @@ void QuestTreeView::file_renamed(const QString& old_path,
  * The new description will be prompted to the user.
  */
 void QuestTreeView::change_description_action_triggered() {
+
+  if (is_read_only()) {
+    return;
+  }
 
   QString path = get_selected_path();
   if (path.isEmpty()) {
@@ -839,6 +927,10 @@ void QuestTreeView::change_description_action_triggered() {
  * Confirmation will be asked to the user.
  */
 void QuestTreeView::delete_action_triggered() {
+
+  if (is_read_only()) {
+    return;
+  }
 
   const QString& path = get_selected_path();
   Quest& quest = model->get_quest();

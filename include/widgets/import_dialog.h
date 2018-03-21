@@ -36,6 +36,10 @@ public:
   const Quest& get_source_quest() const;
   Quest& get_destination_quest() const;
 
+signals:
+
+  void destination_quest_rename_file_requested(Quest& quest, const QString& path);
+
 private:
 
   Ui::ImportDialog ui;

@@ -47,6 +47,7 @@ public:
   void set_model(TilesetModel* tileset);
   void set_view_settings(ViewSettings& view_settings);
   bool is_read_only() const;
+  void set_read_only(bool read_only);
 
 signals:
 
@@ -65,7 +66,6 @@ signals:
 
 public slots:
 
-  void set_read_only(bool read_only);
   void update_zoom();
   void zoom_in();
   void zoom_out();

@@ -872,6 +872,13 @@ void MainWindow::on_action_import_triggered() {
   }
 
   ImportDialog import_dialog(quest);
+
+  // If the user wants to rename something from the dialog's quest tree,
+  // we need to handle it from here in order to check open files
+  // and perform refactoring if necessary.
+  connect(&import_dialog, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)),
+          this, SLOT(rename_file_requested(Quest&, QString)));
+
   import_dialog.exec();
 }
 

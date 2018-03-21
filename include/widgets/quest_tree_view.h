@@ -37,6 +37,12 @@ public:
   explicit QuestTreeView(QWidget* parent = nullptr);
 
   void set_quest(Quest& quest);
+
+  bool is_read_only() const;
+  void set_read_only(bool read_only);
+  bool is_opening_files_allowed() const;
+  void set_opening_files_allowed(bool opening_files_allowed);
+
   QString get_selected_path() const;
   void set_selected_path(const QString& path);
 
@@ -79,6 +85,9 @@ private:
   QAction* open_action;           /**< Action of opening the selected file. */
   QAction* rename_action;         /**< Action of renaming the selected file. */
   QAction* delete_action;         /**< Action of deleting the selected file. */
+
+  bool read_only;                 /**< Whether the view forbids editing the tree. */
+  bool opening_files_allowed;     /**< Whether the user can open files from this tree. */
 
 };
 

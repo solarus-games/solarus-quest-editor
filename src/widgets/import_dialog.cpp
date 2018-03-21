@@ -34,8 +34,15 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
 
   Q_ASSERT(destination_quest.exists());
 
+  ui.source_quest_tree_view->set_read_only(true);
+  ui.source_quest_tree_view->set_opening_files_allowed(false);
+
   ui.destination_quest_field->setText(destination_quest.get_root_path());
   ui.destination_quest_tree_view->set_quest(destination_quest);
+  ui.destination_quest_tree_view->set_opening_files_allowed(false);
+
+  connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
+          this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
 }
 
 /**
