@@ -153,6 +153,7 @@ void QuestTreeView::set_opening_files_allowed(bool opening_files_allowed) {
 
   this->opening_files_allowed = opening_files_allowed;
   open_action->setEnabled(opening_files_allowed);
+  play_action->setEnabled(opening_files_allowed);
 }
 
 /**
@@ -343,6 +344,10 @@ void QuestTreeView::build_context_menu_new(QMenu& menu, const QString& path) {
  * @param path Path whose context menu is requested.
  */
 void QuestTreeView::build_context_menu_play(QMenu& menu, const QString& path) {
+
+  if (!is_opening_files_allowed()) {
+    return;
+  }
 
   const Quest& quest = model->get_quest();
 
@@ -749,6 +754,10 @@ void QuestTreeView::default_action_triggered() {
  * @brief Slot called when the user wants to play the selected file.
  */
 void QuestTreeView::play_action_triggered() {
+
+  if (!is_opening_files_allowed()) {
+    return;
+  }
 
   QString path = get_selected_path();
   if (path.isEmpty()) {
