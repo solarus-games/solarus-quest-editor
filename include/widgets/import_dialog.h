@@ -21,6 +21,8 @@
 #include "ui_import_dialog.h"
 #include <QDialog>
 
+class QFileInfo;
+
 namespace SolarusEditor {
 
 /**
@@ -45,8 +47,14 @@ private slots:
   void browse_source_quest();
   void source_quest_root_path_changed();
   void update_import_button();
+  void import_button_triggered();
 
 private:
+
+  void import_path(const QString& source_path);
+  void import_file(const QFileInfo& source_info);
+  void import_dir(const QFileInfo& source_info);
+  QString source_to_destination_path(const QString& source_path);
 
   Ui::ImportDialog ui;
 

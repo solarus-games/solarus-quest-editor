@@ -16,6 +16,7 @@
  */
 #include "widgets/gui_tools.h"
 #include "widgets/import_dialog.h"
+#include "editor_exception.h"
 #include "editor_settings.h"
 #include <QFileDialog>
 
@@ -52,6 +53,8 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
           this, SLOT(update_import_button()));
   connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
           this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
+  connect(ui.import_button, SIGNAL(clicked(bool)),
+          this, SLOT(import_button_triggered()));
 
   EditorSettings settings;
   QString last_source_quest_path = settings.get_value_string(EditorSettings::import_last_source_quest);
@@ -132,6 +135,105 @@ void ImportDialog::source_quest_root_path_changed() {
 void ImportDialog::update_import_button() {
 
   ui.import_button->setEnabled(ui.source_quest_tree_view->selectionModel()->hasSelection());
+}
+
+/**
+ * @brief Slot called when the user clicks the "import" button.
+ */
+void ImportDialog::import_button_triggered() {
+
+  try {
+    QStringList source_paths = ui.source_quest_tree_view->get_selected_paths();
+    for (const QString& source_path : source_paths) {
+      import_path(source_path);
+    }
+  }
+  catch (const EditorException& ex) {
+    GuiTools::error_dialog(ex.get_message());
+  }
+}
+
+/**
+ * @brief Imports the given file or directory into the destination quest.
+ * @param source_path Path or the file or directory to import.
+ */
+void ImportDialog::import_path(const QString& source_path) {
+
+  QFileInfo source_info(source_path);
+  if (source_info.isSymLink()) {
+    throw EditorException(tr("Cannot import symbolic link '%1'").arg(source_path));
+  }
+
+  if (source_info.isDir()) {
+    import_dir(source_info);
+  }
+  else {
+    import_file(source_info);
+  }
+}
+
+/**
+ * @brief Imports the given file into the destination quest.
+ * @param source_file File to import.
+ */
+void ImportDialog::import_file(const QFileInfo& source_info) {
+
+  const QString& source_path = source_info.filePath();
+  if (!source_info.exists()) {
+    throw EditorException(QApplication::tr("Source file does not exist: '%1'").arg(source_path));
+  }
+
+  if (source_info.isDir()) {
+    throw EditorException(QApplication::tr("Source file is a directory: '%1'").arg(source_path));
+  }
+
+  if (source_info.isSymLink()) {
+    throw EditorException(QApplication::tr("Source file is a symbolic link: '%1'").arg(source_path));
+  }
+
+  if (!source_info.isReadable()) {
+    throw EditorException(QApplication::tr("Source file cannot be read: '%1'").arg(source_path));
+  }
+
+  QString destination_path = source_to_destination_path(source_path);
+  QFileInfo destination_info(destination_path);
+  if (destination_info.exists()) {
+    if (destination_info.isDir()) {
+      throw EditorException(tr("Destination path already exists and is a directory: '%1'").arg(destination_path));
+    }
+    // TODO confirm overwrite
+    throw EditorException(tr("Destination file already exists '%1'").arg(destination_path));
+  }
+
+  if (!QFile::copy(source_path, destination_path)) {
+    throw EditorException(QApplication::tr("Cannot copy file '%1' to '%2'").arg(source_path, destination_path));
+  }
+
+  // TODO copy author and license
+  // TODO handle declared resources
+}
+
+/**
+ * @brief Imports the given directory into the destination quest.
+ * @param source_dir The directory to import.
+ */
+void ImportDialog::import_dir(const QFileInfo& source_info) {
+
+  // TODO
+  Q_UNUSED(source_info);
+  throw EditorException(tr("Importing directories is not supported yet"));
+}
+
+/**
+ * @brief Returns an equivalent path in the destination quest
+ * from a source path.
+ * @param source_path Path of a file or directory in the source quest.
+ * @return The same path with the source quest replaced by the destination one.
+ */
+QString ImportDialog::source_to_destination_path(const QString& source_path) {
+
+  QString relative_path = source_path.right(source_path.size() - source_quest.get_root_path().size());
+  return destination_quest.get_root_path() + relative_path;
 }
 
 }
