@@ -159,13 +159,13 @@ void QuestTreeView::set_opening_files_allowed(bool opening_files_allowed) {
 }
 
 /**
- * @brief Returns the file path of the item selected if any.
+ * @brief Returns the selected file path if exactly one item is selected.
  * @return The selected file path or an empty string.
  */
 QString QuestTreeView::get_selected_path() const {
 
   QModelIndexList selected_indexes = selectedIndexes();
-  if (selected_indexes.isEmpty()) {
+  if (selected_indexes.size() != 1) {
     return "";
   }
   return model->get_file_path(selected_indexes.first());
@@ -188,7 +188,7 @@ void QuestTreeView::set_selected_path(const QString& path) {
   selectionModel()->clear();
   QModelIndex index = model->get_file_index(path);
   if (index.isValid()) {
-    selectionModel()->select(index, QItemSelectionModel::Select);
+    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
     expand(index.parent());
   }
 }
@@ -946,6 +946,10 @@ void QuestTreeView::delete_action_triggered() {
   }
 
   const QString& path = get_selected_path();
+  if (path.isEmpty()) {
+    return;
+  }
+
   Quest& quest = model->get_quest();
   if (path == quest.get_data_path()) {
     // We don't want to delete the data directory.
