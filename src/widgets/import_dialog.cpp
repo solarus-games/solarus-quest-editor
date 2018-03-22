@@ -107,6 +107,7 @@ void ImportDialog::browse_source_quest() {
   if (!source_quest.exists()) {
     GuiTools::error_dialog(
           tr("No source quest was not found in directory '%1'").arg(src_quest_path));
+    source_quest.set_root_path("");
   }
 }
 

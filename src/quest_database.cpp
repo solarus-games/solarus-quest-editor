@@ -101,7 +101,7 @@ void QuestDatabase::reload() {
   database.clear();
 
   // TODO don't try this if the quest format is obsolete
-  if (quest.is_valid()) {
+  if (quest.exists()) {
     database.import_from_file(quest.get_resource_list_path().toStdString());
     // TODO throw an exception in case of error
   }
