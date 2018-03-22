@@ -190,7 +190,7 @@ void QuestTreeView::set_selected_path(const QString& path) {
   selectionModel()->clear();
   QModelIndex index = model->get_file_index(path);
   if (index.isValid()) {
-    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     expand(index.parent());
   }
 }
