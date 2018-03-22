@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QPointer>
 #include <QTabWidget>
+#include <memory>
 
 template<typename T> class QSet;
 class QUndoGroup;
