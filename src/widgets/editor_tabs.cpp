@@ -140,7 +140,7 @@ void EditorTabs::open_quest_properties_editor(Quest& quest) {
   }
 
   try {
-    add_editor(new QuestPropertiesEditor(quest));
+    add_editor(std::unique_ptr<Editor>(new QuestPropertiesEditor(quest)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -172,7 +172,7 @@ void EditorTabs::open_text_editor(
   }
 
   try {
-    add_editor(new TextEditor(quest, path));
+    add_editor(std::unique_ptr<Editor>(new TextEditor(quest, path)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -201,7 +201,7 @@ void EditorTabs::open_map_editor(
   }
 
   try {
-    add_editor(new MapEditor(quest, path));
+    add_editor(std::unique_ptr<Editor>(new MapEditor(quest, path)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -230,7 +230,7 @@ void EditorTabs::open_tileset_editor(
   }
 
   try {
-    add_editor(new TilesetEditor(quest, path));
+    add_editor(std::unique_ptr<Editor>(new TilesetEditor(quest, path)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -259,7 +259,7 @@ void EditorTabs::open_sprite_editor(
   }
 
   try {
-    add_editor(new SpriteEditor(quest, path));
+    add_editor(std::unique_ptr<Editor>(new SpriteEditor(quest, path)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -290,7 +290,7 @@ void EditorTabs::open_dialogs_editor(Quest& quest, const QString& language_id) {
   }
 
   try {
-    add_editor(new DialogsEditor(quest, language_id));
+    add_editor(std::unique_ptr<Editor>(new DialogsEditor(quest, language_id)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -322,7 +322,7 @@ void EditorTabs::open_strings_editor(
   }
 
   try {
-    add_editor(new StringsEditor(quest, language_id));
+    add_editor(std::unique_ptr<Editor>(new StringsEditor(quest, language_id)));
   }
   catch (const EditorException& ex) {
     ex.show_dialog();
@@ -333,8 +333,8 @@ void EditorTabs::open_strings_editor(
  * @brief Creates a new tab and shows it.
  * @param editor The editor to put in the new tab.
  */
-void EditorTabs::add_editor(Editor* editor) {
-  insert_editor(editor, count());
+void EditorTabs::add_editor(std::unique_ptr<Editor> editor) {
+  insert_editor(std::move(editor), count());
   setCurrentIndex(count() - 1);
 }
 
@@ -343,24 +343,25 @@ void EditorTabs::add_editor(Editor* editor) {
  * @param editor The editor to put in the new tab.
  * @param index Index of the tab to add.
  */
-void EditorTabs::insert_editor(Editor* editor, int index) {
+void EditorTabs::insert_editor(std::unique_ptr<Editor> editor, int index) {
 
   QUndoStack* undo_stack = &editor->get_undo_stack();
   undo_group->addStack(undo_stack);
 
   QString path = editor->get_file_path();
-  editors.insert(path, editor);
-  insertTab(index, editor, editor->get_icon(), editor->get_title());
+  insertTab(index, editor.get(), editor->get_icon(), editor->get_title());
   setTabToolTip(index, editor->get_file_path());
 
   // Show an asterisk in tab title when a file is modified.
   connect(undo_stack, SIGNAL(cleanChanged(bool)),
           this, SLOT(current_editor_modification_state_changed(bool)));
 
-  connect(editor, SIGNAL(open_file_requested(Quest&, QString)),
+  connect(editor.get(), SIGNAL(open_file_requested(Quest&, QString)),
           this, SLOT(open_file_requested(Quest&, QString)));
-  connect(editor, SIGNAL(refactoring_requested(Refactoring)),
+  connect(editor.get(), SIGNAL(refactoring_requested(Refactoring)),
           this, SIGNAL(refactoring_requested(Refactoring)));
+
+  editors.emplace(path, std::move(editor));
 }
 
 /**
@@ -374,8 +375,8 @@ void EditorTabs::remove_editor(int index) {
 
   undo_group->removeStack(&editor->get_undo_stack());
 
-  editors.remove(path);
   removeTab(index);
+  editors.erase(path);
 }
 
 /**
@@ -414,11 +415,12 @@ Editor* EditorTabs::get_editor() {
  */
 int EditorTabs::find_editor(const QString& path) {
 
-  Editor* editor = editors.value(path);
-  if (editor == nullptr) {
+  auto it = editors.find(path);
+  if (it == editors.end()) {
     return -1;
   }
 
+  Editor* editor = it->second.get();
   return indexOf(editor);
 }
 
@@ -429,11 +431,12 @@ int EditorTabs::find_editor(const QString& path) {
  */
 bool EditorTabs::show_editor(const QString& path) {
 
-  Editor* editor = editors.value(path);
-  if (editor == nullptr) {
-    return false;
+  auto it = editors.find(path);
+  if (it == editors.end()) {
+    return -1;
   }
 
+  Editor* editor = it->second.get();
   setCurrentWidget(editor);
   return true;
 }
@@ -563,8 +566,10 @@ void EditorTabs::reload_file_requested(int index) {
   open_file_requested(quest, path);
 
   editor = get_editor(count() - 1);
-  remove_editor(count() - 1);
-  insert_editor(editor, index);
+
+  removeTab(count() - 1);
+  insertTab(index, editor, editor->get_icon(), editor->get_title());
+  setTabToolTip(index, editor->get_file_path());
 
   setCurrentIndex(active_editor_index);
 }

@@ -106,13 +106,13 @@ private slots:
 
 private:
 
-  void add_editor(Editor* editor);
-  void insert_editor(Editor* editor, int index);
+  void add_editor(std::unique_ptr<Editor> editor);
+  void insert_editor(std::unique_ptr<Editor> editor, int index);
   void remove_editor(int index);
 
-  QMap<QString, Editor*> editors;      /**< All editors currently open,
-                                        * indexed by their file path. */
-  QUndoGroup* undo_group;              /**< Undo/redo stacks of open files. */
+  std::map<QString, std::unique_ptr<Editor>> editors;      /**< All editors currently open,
+                                                            * indexed by their file path. */
+  QUndoGroup* undo_group;                                  /**< Undo/redo stacks of open files. */
 };
 
 }

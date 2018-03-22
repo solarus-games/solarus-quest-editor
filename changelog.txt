@@ -26,6 +26,7 @@ ________________________________________
 * Sprite editor: fix scrollbars reset when adding directions by Maxs (#277).
 * Script editor: allow a replace option to the find dialog by Akadream (#3).
 * Clear the console when a quest is started (#230).
+* Fix memory not released when closing an editor (#306).
 
 _______________________________________
 
