@@ -52,6 +52,9 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
   EditorSettings settings;
   QString last_source_quest_path = settings.get_value_string(EditorSettings::import_last_source_quest);
 
+  connect(&source_quest, SIGNAL(root_path_changed(QString)),
+          this, SLOT(source_quest_root_path_changed()));
+
   source_quest.set_root_path(last_source_quest_path);
   if (!source_quest.exists()) {
     browse_source_quest();
@@ -105,11 +108,21 @@ void ImportDialog::browse_source_quest() {
     GuiTools::error_dialog(
           tr("No source quest was not found in directory '%1'").arg(src_quest_path));
   }
+}
 
-  ui.source_quest_browse_field->setText(src_quest_path);
+/**
+ * @brief Slot called when the root path of the source quest has changed.
+ */
+void ImportDialog::source_quest_root_path_changed() {
+
+  ui.source_quest_browse_field->setText(source_quest.get_root_path());
   ui.source_quest_tree_view->set_quest(source_quest);
 
-  settings.set_value(EditorSettings::import_last_source_quest, src_quest_path);
+  ui.import_button->setEnabled(source_quest.exists());
+  if (source_quest.exists()) {
+    EditorSettings settings;
+    settings.set_value(EditorSettings::import_last_source_quest, source_quest.get_root_path());
+  }
 }
 
 }

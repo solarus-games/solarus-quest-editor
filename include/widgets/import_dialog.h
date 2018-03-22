@@ -40,9 +40,10 @@ signals:
 
   void destination_quest_rename_file_requested(Quest& quest, const QString& path);
 
-public slots:
+private slots:
 
   void browse_source_quest();
+  void source_quest_root_path_changed();
 
 private:
 
