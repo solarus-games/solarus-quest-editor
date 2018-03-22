@@ -48,6 +48,8 @@ QuestTreeView::QuestTreeView(QWidget* parent) :
   setUniformRowHeights(true);
   setAutoScroll(false);
   setAlternatingRowColors(true);
+  setSelectionBehavior(SelectRows);
+  setSelectionMode(ExtendedSelection);
 
   play_action = new QAction(tr("Play"), this);
   play_action->setShortcutContext(Qt::WidgetShortcut);
@@ -242,6 +244,8 @@ void QuestTreeView::contextMenuEvent(QContextMenuEvent* event) {
     delete menu;
   }
   else {
+    // Deselect other items as for now, the context menu only support a single item.
+    set_selected_path(path);
     menu->popup(viewport()->mapToGlobal(position) + QPoint(1, 1));
   }
 }
