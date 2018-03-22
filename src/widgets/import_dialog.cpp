@@ -44,17 +44,17 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
   ui.destination_quest_tree_view->set_quest(destination_quest);
   ui.destination_quest_tree_view->set_opening_files_allowed(false);
 
-  connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
-          this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
   connect(ui.source_quest_browse_button, SIGNAL(clicked(bool)),
           this, SLOT(browse_source_quest()));
+  connect(&source_quest, SIGNAL(root_path_changed(QString)),
+          this, SLOT(source_quest_root_path_changed()));
+  connect(ui.source_quest_tree_view, SIGNAL(selected_path_changed(QString)),
+          this, SLOT(update_import_button()));
+  connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
+          this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
 
   EditorSettings settings;
   QString last_source_quest_path = settings.get_value_string(EditorSettings::import_last_source_quest);
-
-  connect(&source_quest, SIGNAL(root_path_changed(QString)),
-          this, SLOT(source_quest_root_path_changed()));
-
   source_quest.set_root_path(last_source_quest_path);
   if (!source_quest.exists()) {
     browse_source_quest();
@@ -119,11 +119,19 @@ void ImportDialog::source_quest_root_path_changed() {
   ui.source_quest_browse_field->setText(source_quest.get_root_path());
   ui.source_quest_tree_view->set_quest(source_quest);
 
-  ui.import_button->setEnabled(source_quest.exists());
+  update_import_button();
   if (source_quest.exists()) {
     EditorSettings settings;
     settings.set_value(EditorSettings::import_last_source_quest, source_quest.get_root_path());
   }
+}
+
+/**
+ * @brief Updates the enabled state of the import button.
+ */
+void ImportDialog::update_import_button() {
+
+  ui.import_button->setEnabled(ui.source_quest_tree_view->selectionModel()->hasSelection());
 }
 
 }

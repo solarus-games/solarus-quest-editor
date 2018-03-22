@@ -44,6 +44,7 @@ private slots:
 
   void browse_source_quest();
   void source_quest_root_path_changed();
+  void update_import_button();
 
 private:
 
