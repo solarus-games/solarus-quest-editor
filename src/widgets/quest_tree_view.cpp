@@ -164,9 +164,12 @@ void QuestTreeView::set_opening_files_allowed(bool opening_files_allowed) {
  */
 QString QuestTreeView::get_selected_path() const {
 
-  QModelIndexList selected_indexes = selectedIndexes();
+  if (selectionModel() == nullptr) {
+    return QString();
+  }
+  QModelIndexList selected_indexes = selectionModel()->selectedRows();
   if (selected_indexes.size() != 1) {
-    return "";
+    return QString();
   }
   return model->get_file_path(selected_indexes.first());
 }
@@ -181,16 +184,33 @@ QString QuestTreeView::get_selected_path() const {
  */
 void QuestTreeView::set_selected_path(const QString& path) {
 
-  if (get_selected_path() == path) {
+  if (selectionModel() == nullptr) {
     return;
   }
-
   selectionModel()->clear();
   QModelIndex index = model->get_file_index(path);
   if (index.isValid()) {
     selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
     expand(index.parent());
   }
+}
+
+/**
+ * @brief Returns the selected file paths.
+ * @return The paths of all selected items.
+ */
+QStringList QuestTreeView::get_selected_paths() const {
+
+  if (selectionModel() == nullptr) {
+    return QStringList();
+  }
+
+  QStringList selected_paths;
+  const QModelIndexList& indexes = selectionModel()->selectedRows();
+  for (const QModelIndex& index : indexes) {
+    selected_paths << model->get_file_path(index);
+  }
+  return selected_paths;
 }
 
 /**
