@@ -32,7 +32,8 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
   QDialog(parent),
   ui(),
   source_quest(),
-  destination_quest(destination_quest) {
+  destination_quest(destination_quest),
+  last_confirm_overwrite_file(QMessageBox::No) {
 
   ui.setupUi(this);
 
@@ -201,8 +202,23 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
     if (destination_info.isDir()) {
       throw EditorException(tr("Destination path already exists and is a directory: '%1'").arg(destination_path));
     }
-    // TODO confirm overwrite
-    throw EditorException(tr("Destination file already exists '%1'").arg(destination_path));
+
+    if (last_confirm_overwrite_file == QMessageBox::NoToAll) {
+      return;
+    }
+
+    if (last_confirm_overwrite_file != QMessageBox::YesToAll) {
+      last_confirm_overwrite_file = QMessageBox::question(
+            this,
+            tr("Destination file already exists"),
+            tr("The destination file '%1' already exists.\nDo you want to overwrite it?").arg(destination_path),
+            QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel
+      );
+
+      if (last_confirm_overwrite_file != QMessageBox::Yes &&
+          last_confirm_overwrite_file != QMessageBox::YesToAll)
+        return;
+      }
   }
 
   if (!QFile::copy(source_path, destination_path)) {

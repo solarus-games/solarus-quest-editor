@@ -20,6 +20,7 @@
 #include "quest.h"
 #include "ui_import_dialog.h"
 #include <QDialog>
+#include <QMessageBox>
 
 class QFileInfo;
 
@@ -60,6 +61,7 @@ private:
 
   Quest source_quest;
   Quest& destination_quest;
+  QMessageBox::StandardButton last_confirm_overwrite_file;
 };
 
 }
