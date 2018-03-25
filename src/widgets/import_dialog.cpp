@@ -144,6 +144,7 @@ void ImportDialog::update_import_button() {
 void ImportDialog::import_button_triggered() {
 
   try {
+    last_confirm_overwrite_file = QMessageBox::No;
     QStringList source_paths = ui.source_quest_tree_view->get_selected_paths();
     for (const QString& source_path : source_paths) {
       import_path(source_path);
@@ -216,16 +217,23 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
       );
 
       if (last_confirm_overwrite_file != QMessageBox::Yes &&
-          last_confirm_overwrite_file != QMessageBox::YesToAll)
+          last_confirm_overwrite_file != QMessageBox::YesToAll) {
         return;
       }
+
+      if (!QFile::remove(destination_path)) {
+        throw EditorException(tr("Failed to remove existing file '%1'").arg(destination_path));
+      }
+    }
   }
 
   if (!QFile::copy(source_path, destination_path)) {
-    throw EditorException(QApplication::tr("Cannot copy file '%1' to '%2'").arg(source_path, destination_path));
+    throw EditorException(tr("Failed to copy file '%1' to '%2'").arg(source_path, destination_path));
   }
 
-  // TODO copy author and license
+  // Copy author and license info.
+  import_path_meta_information(source_path, destination_path);
+
   // TODO handle declared resources
 }
 
@@ -238,6 +246,25 @@ void ImportDialog::import_dir(const QFileInfo& source_info) {
   // TODO
   Q_UNUSED(source_info);
   throw EditorException(tr("Importing directories is not supported yet"));
+}
+
+/**
+ * @brief Copies the author and license information from a file to another one.
+ * @param source_path File or directory in the source quest.
+ * @param destination_path File or directory in the destination quest.
+ */
+void ImportDialog::import_path_meta_information(
+    const QString& source_path, const QString& destination_path) {
+
+  QString source_relative_path = source_quest.get_path_relative_to_data_path(source_path);
+  const QuestDatabase& source_database = source_quest.get_database();
+  QString destination_relative_path = destination_quest.get_path_relative_to_data_path(destination_path);
+  QuestDatabase& destination_database = destination_quest.get_database();
+  destination_database.set_file_author(destination_relative_path,
+                                       source_database.get_file_author(source_relative_path));
+  destination_database.set_file_license(destination_relative_path,
+                                        source_database.get_file_license(destination_relative_path));
+  destination_database.save();
 }
 
 /**

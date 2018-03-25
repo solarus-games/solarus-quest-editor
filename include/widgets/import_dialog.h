@@ -55,6 +55,7 @@ private:
   void import_path(const QString& source_path);
   void import_file(const QFileInfo& source_info);
   void import_dir(const QFileInfo& source_info);
+  void import_path_meta_information(const QString& source_path, const QString& destination_path);
   QString source_to_destination_path(const QString& source_path);
 
   Ui::ImportDialog ui;

@@ -328,7 +328,7 @@ QString QuestDatabase::get_create_friendly_name(ResourceType resource_type) cons
 
 /**
  * @brief Returns the author of a file.
- * @param path Path to a file or directory.
+ * @param path Path to a file or directory relative to the quest data directory.
  * @return The author or an empty string.
  */
 QString QuestDatabase::get_file_author(const QString& path) const {
@@ -342,7 +342,7 @@ QString QuestDatabase::get_file_author(const QString& path) const {
  *
  * Emits file_author_changed if there is a change.
  *
- * @param path Path to a file or directory.
+ * @param path Path to a file or directory relative to the quest data directory.
  * @param author The author or an empty string.
  */
 void QuestDatabase::set_file_author(const QString& path, const QString& author) {
@@ -360,7 +360,7 @@ void QuestDatabase::set_file_author(const QString& path, const QString& author) 
 
 /**
  * @brief Returns the license of a file.
- * @param path Path to a file or directory.
+ * @param path Path to a file or directory relative to the quest data directory.
  * @return The license or an empty string.
  */
 QString QuestDatabase::get_file_license(const QString& path) const {
@@ -374,7 +374,7 @@ QString QuestDatabase::get_file_license(const QString& path) const {
  *
  * Emits file_license_changed if there is a change.
  *
- * @param path Path to a file or directory.
+ * @param path Path to a file or directory relative to the quest data directory.
  * @param license The license or an empty string.
  */
 void QuestDatabase::set_file_license(const QString& path, const QString& license) {
