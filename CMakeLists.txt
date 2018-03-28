@@ -58,6 +58,7 @@ find_package(VorbisFile REQUIRED)
 find_package(Ogg REQUIRED)
 find_package(ModPlug REQUIRED)
 find_package(PhysFS REQUIRED)
+find_package(GLM REQUIRED)
 if(SOLARUS_USE_LUAJIT)
   find_package(LuaJit REQUIRED)
 else()
@@ -88,6 +89,7 @@ include_directories(SYSTEM
   "${OGG_INCLUDE_DIR}"
   "${LUA_INCLUDE_DIR}"
   "${PHYSFS_INCLUDE_DIR}"
+  "${GLM_INCLUDE_DIR}"
 )
 
 # Source files.
