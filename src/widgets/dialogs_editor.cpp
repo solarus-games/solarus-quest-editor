@@ -515,6 +515,12 @@ DialogsEditor::DialogsEditor(
           this, SLOT(update_dialog_text_field()));
   connect(ui.dialog_text_field, SIGNAL(editing_finished()),
           this, SLOT(change_dialog_text_requested()));
+  connect(ui.dialog_text_field, SIGNAL(cursorPositionChanged()),
+          this, SLOT(update_dialog_cursor_position_label()));
+  connect(ui.dialog_text_field, SIGNAL(focus_in()),
+          this, SLOT(update_dialog_cursor_position_label()));
+  connect(ui.dialog_text_field, SIGNAL(focus_out()),
+          this, SLOT(update_dialog_cursor_position_label()));
 
   connect(ui.create_property_button, SIGNAL(clicked()),
           this, SLOT(create_dialog_property_requested()));
@@ -592,6 +598,7 @@ void DialogsEditor::update() {
   update_language_id_field();
   update_description_to_gui();
   update_selection();
+  update_dialog_cursor_position_label();
 }
 
 /**
@@ -805,6 +812,7 @@ void DialogsEditor::update_dialog_view() {
   update_dialog_text_field();
   update_translation_text_field();
   update_properties_buttons();
+  update_dialog_cursor_position_label();
 }
 
 /**
@@ -874,6 +882,20 @@ void DialogsEditor::update_translation_text_field() {
     ui.translation_text_field->setPlainText("");
     ui.translation_text_field->setEnabled(false);
   }
+}
+
+/**
+ * @brief Updates the line and column display of the dialog text field.
+ */
+void DialogsEditor::update_dialog_cursor_position_label() {
+
+  if (!ui.dialog_text_field->hasFocus()) {
+    ui.dialog_cursor_position_label->setVisible(false);
+    return;
+  }
+  QTextCursor cursor = ui.dialog_text_field->textCursor();
+  ui.dialog_cursor_position_label->setText(QString("%1,%2").arg(cursor.blockNumber() + 1).arg(cursor.columnNumber()));
+  ui.dialog_cursor_position_label->setVisible(true);
 }
 
 /**

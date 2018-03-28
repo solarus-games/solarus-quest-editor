@@ -367,6 +367,13 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
+          <widget class="QLabel" name="dialog_cursor_position_label">
+           <property name="text">
+            <string>1,1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>

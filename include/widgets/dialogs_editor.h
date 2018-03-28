@@ -63,6 +63,7 @@ public slots:
   void update_dialog_text_field();
   void change_dialog_text_requested();
   void update_translation_text_field();
+  void update_dialog_cursor_position_label();
 
   void update_properties_buttons();
 
