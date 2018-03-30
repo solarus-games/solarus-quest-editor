@@ -66,8 +66,8 @@ protected:
 
   void focusInEvent(QFocusEvent* event) override {
     Q_UNUSED(event);
+    QPlainTextEdit::focusInEvent(event);
     emit focus_in();
-    QPlainTextEdit::focusOutEvent(event);
   }
 
   void focusOutEvent(QFocusEvent* event) override {
