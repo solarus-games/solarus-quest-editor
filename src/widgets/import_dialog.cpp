@@ -234,7 +234,14 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
   // Copy author and license info.
   import_path_meta_information(source_path, destination_path);
 
-  // TODO handle declared resources
+  // Handle declared resources.
+  ResourceType resource_type;
+  QString element_id;
+  if (source_quest.is_resource_element(source_path, resource_type, element_id)) {
+    const QString& description = source_quest.get_database().get_description(resource_type, element_id);
+    QuestDatabase& destination_database = destination_quest.get_database();
+    destination_database.add(resource_type, element_id, description);
+  }
 }
 
 /**
