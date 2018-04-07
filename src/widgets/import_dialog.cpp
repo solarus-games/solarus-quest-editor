@@ -18,6 +18,7 @@
 #include "widgets/import_dialog.h"
 #include "editor_exception.h"
 #include "editor_settings.h"
+#include "file_tools.h"
 #include <QFileDialog>
 
 namespace SolarusEditor {
@@ -226,6 +227,10 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
       }
     }
   }
+
+  // Ensure that the destination directory exists.
+  QString destination_parent_path = destination_info.path();  // Strip the file name part.
+  FileTools::create_directories(destination_parent_path);
 
   if (!QFile::copy(source_path, destination_path)) {
     throw EditorException(tr("Failed to copy file '%1' to '%2'").arg(source_path, destination_path));

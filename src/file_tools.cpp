@@ -193,6 +193,22 @@ void delete_recursive(const QString& path) {
 }
 
 /**
+ * @brief Makes sure that the specified directory exists.
+ *
+ * Creates necessary parents directories if needed.
+ *
+ * @param path A directory path.
+ * @throws EditorException In case of error.
+ */
+void create_directories(const QString& path) {
+
+  bool success = QDir().mkpath(path);
+  if (!success) {
+    throw EditorException(QApplication::tr("Cannot create directory '%1'").arg(path));
+  }
+}
+
+/**
  * @brief Replaces all occurences of the given pattern in a file.
  * @param path Path of the file to modify.
  * @param regexp The pattern to replace.

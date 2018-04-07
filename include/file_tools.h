@@ -32,6 +32,7 @@ namespace FileTools {
 
 void copy_recursive(const QString& src, const QString& dst);
 void delete_recursive(const QString& path);
+void create_directories(const QString& path);
 
 bool replace_in_file(
     const QString& path,
