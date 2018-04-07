@@ -146,9 +146,12 @@ void ImportDialog::import_button_triggered() {
 
   try {
     last_confirm_overwrite_file = QMessageBox::No;
-    QStringList source_paths = ui.source_quest_tree_view->get_selected_paths();
+    const QStringList& source_paths = ui.source_quest_tree_view->get_selected_paths();
     for (const QString& source_path : source_paths) {
-      import_path(source_path);
+      const QString& destination_path = import_path(source_path);
+      if (!destination_path.isEmpty()) {
+        ui.destination_quest_tree_view->add_selected_path(destination_path);
+      }
     }
   }
   catch (const EditorException& ex) {
@@ -159,8 +162,11 @@ void ImportDialog::import_button_triggered() {
 /**
  * @brief Imports the given file or directory into the destination quest.
  * @param source_path Path or the file or directory to import.
+ * @return Path to the corresponding file or directory in the destination
+ * quest.
+ * An empty string means that the user skipped this file or directory.
  */
-void ImportDialog::import_path(const QString& source_path) {
+QString ImportDialog::import_path(const QString& source_path) {
 
   QFileInfo source_info(source_path);
   if (source_info.isSymLink()) {
@@ -168,18 +174,20 @@ void ImportDialog::import_path(const QString& source_path) {
   }
 
   if (source_info.isDir()) {
-    import_dir(source_info);
+    return import_dir(source_info);
   }
   else {
-    import_file(source_info);
+    return import_file(source_info);
   }
 }
 
 /**
  * @brief Imports the given file into the destination quest.
  * @param source_file File to import.
+ * @return Path to the corresponding file in the destination quest.
+ * An empty string means that the user skipped this file.
  */
-void ImportDialog::import_file(const QFileInfo& source_info) {
+QString ImportDialog::import_file(const QFileInfo& source_info) {
 
   const QString& source_path = source_info.filePath();
   if (!source_info.exists()) {
@@ -206,7 +214,7 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
     }
 
     if (last_confirm_overwrite_file == QMessageBox::NoToAll) {
-      return;
+      return QString();
     }
 
     if (last_confirm_overwrite_file != QMessageBox::YesToAll) {
@@ -219,7 +227,7 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
 
       if (last_confirm_overwrite_file != QMessageBox::Yes &&
           last_confirm_overwrite_file != QMessageBox::YesToAll) {
-        return;
+        return QString();
       }
 
       if (!QFile::remove(destination_path)) {
@@ -247,17 +255,23 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
     QuestDatabase& destination_database = destination_quest.get_database();
     destination_database.add(resource_type, element_id, description);
   }
+
+  return destination_path;
 }
 
 /**
  * @brief Imports the given directory into the destination quest.
  * @param source_dir The directory to import.
+ * @return Path to the corresponding directory in the destination quest.
+ * An empty string means that the user skipped this directory.
  */
-void ImportDialog::import_dir(const QFileInfo& source_info) {
+QString ImportDialog::import_dir(const QFileInfo& source_info) {
 
   // TODO
   Q_UNUSED(source_info);
   throw EditorException(tr("Importing directories is not supported yet"));
+
+  return QString();  // TODO
 }
 
 /**

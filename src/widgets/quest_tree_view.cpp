@@ -177,22 +177,42 @@ QString QuestTreeView::get_selected_path() const {
 /**
  * @brief Selects the item corresponding to the specified file path.
  *
- * Also ensures the parent of the item to make it visible.
+ * Clears any previous selection.
+ * Also ensures that the item is expanded.
  *
- * @param The file path to selected. An empty string unselects any previous
- * path.
+ * @param The file path to select.
+ * Nothing is selected if the path does not exist in the tree.
  */
 void QuestTreeView::set_selected_path(const QString& path) {
+
+  if (path.isEmpty()) {
+    selectionModel()->clear();
+    return;
+  }
+
+  set_selected_paths(QStringList() << path);
+}
+
+/**
+ * @brief Adds the specified file path to the selection.
+ *
+ * Also ensures that the item is expanded.
+ *
+ * @param The file path to select.
+ * Nothing happens if the path does not exist in the tree.
+ */
+void QuestTreeView::add_selected_path(const QString& path) {
 
   if (selectionModel() == nullptr) {
     return;
   }
-  selectionModel()->clear();
   QModelIndex index = model->get_file_index(path);
-  if (index.isValid()) {
-    selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-    expand(index.parent());
+  if (!index.isValid()) {
+    return;
   }
+
+  selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+  expand(index.parent());
 }
 
 /**
@@ -211,6 +231,30 @@ QStringList QuestTreeView::get_selected_paths() const {
     selected_paths << model->get_file_path(index);
   }
   return selected_paths;
+}
+
+/**
+ * @brief Selects the specified paths and clears the previous selection.
+ *
+ * Also ensures that the items are expanded.
+ *
+ * @param The file paths to select.
+ * An empty list unselects any previous path.
+ * Paths that do not exist in the tree are ignored.
+ */
+void QuestTreeView::set_selected_paths(const QStringList& paths) {
+
+  if (selectionModel() == nullptr) {
+    return;
+  }
+  selectionModel()->clear();
+  for (const QString& path : paths) {
+    QModelIndex index = model->get_file_index(path);
+    if (index.isValid()) {
+      selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+      expand(index.parent());
+    }
+  }
 }
 
 /**

@@ -45,7 +45,9 @@ public:
 
   QString get_selected_path() const;
   void set_selected_path(const QString& path);
+  void add_selected_path(const QString& path);
   QStringList get_selected_paths() const;
+  void set_selected_paths(const QStringList& paths);
 
 signals:
 
