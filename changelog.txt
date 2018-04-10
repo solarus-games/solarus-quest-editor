@@ -3,6 +3,7 @@ ________________________________________
 Solarus Quest Editor 1.6.0 (in progress)
 ________________________________________
 
+* Allow to import files from other quests (#4).
 * Quest tree: show all .png and .dat files (#260).
 * Quest tree: show all language files, map files and tileset files.
 * Quest tree: allow to set the author and license information of files.
