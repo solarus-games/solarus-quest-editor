@@ -160,12 +160,7 @@ void ImportDialog::import_button_triggered() {
 
   destination_quest.get_database().save();
   ui.destination_quest_tree_view->setFocus();
-  QTimer::singleShot(200, this, [this]() {
-    ui.destination_quest_tree_view->set_selected_paths(paths_to_select);
-    for (const QString& path : paths_to_select) {
-      ui.destination_quest_tree_view->expand_to_path(path);
-    }
-  });
+  QTimer::singleShot(200, this, SLOT(select_recently_created_paths()));
 }
 
 /**
@@ -363,6 +358,17 @@ QString ImportDialog::source_to_destination_path(const QString& source_path) {
 
   QString relative_path = source_path.right(source_path.size() - source_quest.get_root_path().size());
   return destination_quest.get_root_path() + relative_path;
+}
+
+/**
+ * @brief Selects paths that were just imported in the destination quest.
+ */
+void ImportDialog::select_recently_created_paths() {
+
+  ui.destination_quest_tree_view->set_selected_paths(paths_to_select);
+  for (const QString& path : paths_to_select) {
+    ui.destination_quest_tree_view->expand_to_path(path);
+  }
 }
 
 }
