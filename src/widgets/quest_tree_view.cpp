@@ -249,11 +249,30 @@ void QuestTreeView::set_selected_paths(const QStringList& paths) {
   }
   selectionModel()->clear();
   for (const QString& path : paths) {
-    QModelIndex index = model->get_file_index(path);
+    const QModelIndex& index = model->get_file_index(path);
     if (index.isValid()) {
       selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
       expand(index.parent());
     }
+  }
+}
+
+/**
+ * @brief Expands the tree to the selected path.
+ * @param path The path to make selected.
+ */
+void QuestTreeView::expand_to_path(const QString& path) {
+
+  const Quest& quest = model->get_quest();
+  const QString& parent_path = QFileInfo(path).path();
+  if (parent_path.startsWith(quest.get_data_path())) {
+    // Try to expand parents first otherwise the child index
+    // might not exist.
+    expand_to_path(parent_path);
+  }
+  const QModelIndex& index = model->get_file_index(path);
+  if (index.isValid()) {
+    expand(index.parent());
   }
 }
 

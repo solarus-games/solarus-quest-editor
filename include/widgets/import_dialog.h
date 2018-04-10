@@ -63,6 +63,7 @@ private:
   Quest source_quest;
   Quest& destination_quest;
   QMessageBox::StandardButton last_confirm_overwrite_file;
+  QMessageBox::StandardButton last_confirm_overwrite_directory;
   QStringList paths_to_select;
 };
 

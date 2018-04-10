@@ -145,22 +145,27 @@ void ImportDialog::update_import_button() {
  */
 void ImportDialog::import_button_triggered() {
 
+  last_confirm_overwrite_file = QMessageBox::No;
+  paths_to_select.clear();
+
   try {
-    last_confirm_overwrite_file = QMessageBox::No;
-    paths_to_select.clear();
     const QStringList& source_paths = ui.source_quest_tree_view->get_selected_paths();
     for (const QString& source_path : source_paths) {
       import_path(source_path);
     }
-
-    QTimer::singleShot(200, this, [this]() {
-      ui.destination_quest_tree_view->set_selected_paths(paths_to_select);
-    });
-
   }
   catch (const EditorException& ex) {
     GuiTools::error_dialog(ex.get_message());
   }
+
+  destination_quest.get_database().save();
+  ui.destination_quest_tree_view->setFocus();
+  QTimer::singleShot(200, this, [this]() {
+    ui.destination_quest_tree_view->set_selected_paths(paths_to_select);
+    for (const QString& path : paths_to_select) {
+      ui.destination_quest_tree_view->expand_to_path(path);
+    }
+  });
 }
 
 /**
@@ -228,10 +233,10 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
           last_confirm_overwrite_file != QMessageBox::YesToAll) {
         return;
       }
+    }
 
-      if (!QFile::remove(destination_path)) {
-        throw EditorException(tr("Failed to remove existing file '%1'").arg(destination_path));
-      }
+    if (!QFile::remove(destination_path)) {
+      throw EditorException(tr("Failed to remove existing file '%1'").arg(destination_path));
     }
   }
 
@@ -280,8 +285,29 @@ void ImportDialog::import_dir(const QFileInfo& source_info) {
   QString destination_path = source_to_destination_path(source_path);
   QFileInfo destination_info(destination_path);
   if (destination_info.exists()) {
-    // TODO
-    throw EditorException(tr("Destination directory already exists (merge is not supported yet): '%1'").arg(destination_path));
+    if (!destination_info.isDir()) {
+      throw EditorException(tr("Destination path already exists and is not a directory: '%1'").arg(destination_path));
+    }
+
+    ui.destination_quest_tree_view->expand_to_path(destination_path);
+
+    if (last_confirm_overwrite_directory == QMessageBox::NoToAll) {
+      return;
+    }
+
+    if (last_confirm_overwrite_directory != QMessageBox::YesToAll) {
+      last_confirm_overwrite_directory = QMessageBox::question(
+            this,
+            tr("Destination directory already exists"),
+            tr("The destination directory '%1' already exists.\nDo you want to merge it with the contents from the source directory?").arg(destination_path),
+            QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel
+      );
+
+      if (last_confirm_overwrite_directory != QMessageBox::Yes &&
+          last_confirm_overwrite_directory != QMessageBox::YesToAll) {
+        return;
+      }
+    }
   }
 
   // Copy author and license info.
@@ -325,7 +351,6 @@ void ImportDialog::import_path_meta_information(
                                        source_database.get_file_author(source_relative_path));
   destination_database.set_file_license(destination_relative_path,
                                         source_database.get_file_license(destination_relative_path));
-  destination_database.save();
 }
 
 /**
