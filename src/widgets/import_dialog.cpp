@@ -20,6 +20,7 @@
 #include "editor_settings.h"
 #include "file_tools.h"
 #include <QFileDialog>
+#include <QTimer>
 
 namespace SolarusEditor {
 
@@ -146,13 +147,16 @@ void ImportDialog::import_button_triggered() {
 
   try {
     last_confirm_overwrite_file = QMessageBox::No;
+    paths_to_select.clear();
     const QStringList& source_paths = ui.source_quest_tree_view->get_selected_paths();
     for (const QString& source_path : source_paths) {
-      const QString& destination_path = import_path(source_path);
-      if (!destination_path.isEmpty()) {
-        ui.destination_quest_tree_view->add_selected_path(destination_path);
-      }
+      import_path(source_path);
     }
+
+    QTimer::singleShot(200, this, [this]() {
+      ui.destination_quest_tree_view->set_selected_paths(paths_to_select);
+    });
+
   }
   catch (const EditorException& ex) {
     GuiTools::error_dialog(ex.get_message());
@@ -162,11 +166,8 @@ void ImportDialog::import_button_triggered() {
 /**
  * @brief Imports the given file or directory into the destination quest.
  * @param source_path Path or the file or directory to import.
- * @return Path to the corresponding file or directory in the destination
- * quest.
- * An empty string means that the user skipped this file or directory.
  */
-QString ImportDialog::import_path(const QString& source_path) {
+void ImportDialog::import_path(const QString& source_path) {
 
   QFileInfo source_info(source_path);
   if (source_info.isSymLink()) {
@@ -174,20 +175,18 @@ QString ImportDialog::import_path(const QString& source_path) {
   }
 
   if (source_info.isDir()) {
-    return import_dir(source_info);
+    import_dir(source_info);
   }
   else {
-    return import_file(source_info);
+    import_file(source_info);
   }
 }
 
 /**
  * @brief Imports the given file into the destination quest.
  * @param source_file File to import.
- * @return Path to the corresponding file in the destination quest.
- * An empty string means that the user skipped this file.
  */
-QString ImportDialog::import_file(const QFileInfo& source_info) {
+void ImportDialog::import_file(const QFileInfo& source_info) {
 
   const QString& source_path = source_info.filePath();
   if (!source_info.exists()) {
@@ -195,7 +194,7 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
   }
 
   if (source_info.isDir()) {
-    throw EditorException(QApplication::tr("Source file is a directory: '%1'").arg(source_path));
+    throw EditorException(QApplication::tr("Source path is a directory: '%1'").arg(source_path));
   }
 
   if (source_info.isSymLink()) {
@@ -214,7 +213,7 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
     }
 
     if (last_confirm_overwrite_file == QMessageBox::NoToAll) {
-      return QString();
+      return;
     }
 
     if (last_confirm_overwrite_file != QMessageBox::YesToAll) {
@@ -227,7 +226,7 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
 
       if (last_confirm_overwrite_file != QMessageBox::Yes &&
           last_confirm_overwrite_file != QMessageBox::YesToAll) {
-        return QString();
+        return;
       }
 
       if (!QFile::remove(destination_path)) {
@@ -236,6 +235,9 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
     }
   }
 
+  // Copy author and license info.
+  import_path_meta_information(source_path, destination_path);
+
   // Ensure that the destination directory exists.
   QString destination_parent_path = destination_info.path();  // Strip the file name part.
   FileTools::create_directories(destination_parent_path);
@@ -243,9 +245,6 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
   if (!QFile::copy(source_path, destination_path)) {
     throw EditorException(tr("Failed to copy file '%1' to '%2'").arg(source_path, destination_path));
   }
-
-  // Copy author and license info.
-  import_path_meta_information(source_path, destination_path);
 
   // Handle declared resources.
   ResourceType resource_type;
@@ -256,22 +255,58 @@ QString ImportDialog::import_file(const QFileInfo& source_info) {
     destination_database.add(resource_type, element_id, description);
   }
 
-  return destination_path;
+  paths_to_select << destination_path;
 }
 
 /**
  * @brief Imports the given directory into the destination quest.
  * @param source_dir The directory to import.
- * @return Path to the corresponding directory in the destination quest.
- * An empty string means that the user skipped this directory.
  */
-QString ImportDialog::import_dir(const QFileInfo& source_info) {
+void ImportDialog::import_dir(const QFileInfo& source_info) {
 
-  // TODO
-  Q_UNUSED(source_info);
-  throw EditorException(tr("Importing directories is not supported yet"));
+  const QString& source_path = source_info.filePath();
+  if (!source_info.exists()) {
+    throw EditorException(QApplication::tr("Source directory does not exist: '%1'").arg(source_path));
+  }
 
-  return QString();  // TODO
+  if (!source_info.isDir()) {
+    throw EditorException(QApplication::tr("Source path is not a directory: '%1'").arg(source_path));
+  }
+
+  if (!source_info.isReadable()) {
+    throw EditorException(QApplication::tr("Source directory cannot be read: '%1'").arg(source_path));
+  }
+
+  QString destination_path = source_to_destination_path(source_path);
+  QFileInfo destination_info(destination_path);
+  if (destination_info.exists()) {
+    // TODO
+    throw EditorException(tr("Destination directory already exists (merge is not supported yet): '%1'").arg(destination_path));
+  }
+
+  // Copy author and license info.
+  import_path_meta_information(source_path, destination_path);
+
+  // Create the directory itself.
+  FileTools::create_directories(destination_path);
+
+  // Copy children.
+  const QStringList& source_children_file_names = QDir(source_path).entryList();
+  for (const QString& source_child_file_name : source_children_file_names) {
+    if (source_child_file_name == "." ||
+        source_child_file_name == ".." ) {
+      continue;
+    }
+    QString source_child_path = QString("%1/%2").arg(source_path, source_child_file_name);
+    if (!QFileInfo(source_child_path).exists()) {
+      // Path in the tree but not on the filesystem:
+      // maybe a declared resource that is missing.
+      continue;
+    }
+    import_path(source_child_path);
+  }
+
+  paths_to_select << destination_path;
 }
 
 /**
