@@ -56,6 +56,8 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
           this, SLOT(update_import_button()));
   connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
           this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
+  connect(ui.find_missing_button, SIGNAL(clicked(bool)),
+          this, SLOT(find_missing_button_triggered()));
   connect(ui.import_button, SIGNAL(clicked(bool)),
           this, SLOT(import_button_triggered()));
 
@@ -133,6 +135,13 @@ void ImportDialog::source_quest_root_path_changed() {
 }
 
 /**
+ * @brief Slot called when the user clicks the "Find missing" button.
+ */
+void ImportDialog::find_missing_button_triggered() {
+
+}
+
+/**
  * @brief Updates the enabled state of the import button.
  */
 void ImportDialog::update_import_button() {
@@ -141,7 +150,7 @@ void ImportDialog::update_import_button() {
 }
 
 /**
- * @brief Slot called when the user clicks the "import" button.
+ * @brief Slot called when the user clicks the "Import" button.
  */
 void ImportDialog::import_button_triggered() {
 

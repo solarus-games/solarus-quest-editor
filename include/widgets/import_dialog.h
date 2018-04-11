@@ -47,6 +47,7 @@ private slots:
 
   void browse_source_quest();
   void source_quest_root_path_changed();
+  void find_missing_button_triggered();
   void update_import_button();
   void import_button_triggered();
   void select_recently_created_paths();

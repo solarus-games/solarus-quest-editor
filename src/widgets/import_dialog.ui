@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Import files from another quest</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -54,18 +54,59 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="import_button">
-         <property name="text">
-          <string>Import</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../../resources/images.qrc">
-           <normaloff>:/images/icon_next.png</normaloff>:/images/icon_next.png</iconset>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="vertical_layout_3">
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="find_missing_button">
+           <property name="text">
+            <string>Find missing</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/icon_zoom.png</normaloff>:/images/icon_zoom.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="import_button">
+           <property name="text">
+            <string>Import</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../resources/images.qrc">
+             <normaloff>:/images/icon_next.png</normaloff>:/images/icon_next.png</iconset>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -112,7 +153,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../resources/images.qrc"/>
   <include location="../../resources/images.qrc"/>
  </resources>
  <connections>
