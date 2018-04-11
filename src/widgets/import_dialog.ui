@@ -80,6 +80,16 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="missing_files_count_label">
+           <property name="text">
+            <string>No missing files found</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="import_button">
            <property name="text">
             <string>Import</string>

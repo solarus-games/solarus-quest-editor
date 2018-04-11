@@ -47,6 +47,8 @@ private slots:
 
   void browse_source_quest();
   void source_quest_root_path_changed();
+  void source_quest_selected_path_changed();
+  void update_find_missing_button();
   void find_missing_button_triggered();
   void update_import_button();
   void import_button_triggered();
@@ -59,6 +61,10 @@ private:
   void import_dir(const QFileInfo& source_info);
   void import_path_meta_information(const QString& source_path, const QString& destination_path);
   QString source_to_destination_path(const QString& source_path);
+  void find_source_paths_not_in_destination_quest(
+      const QString& source_path,
+      QStringList& missing_source_paths
+  );
 
   Ui::ImportDialog ui;
 

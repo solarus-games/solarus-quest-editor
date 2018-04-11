@@ -48,12 +48,14 @@ ImportDialog::ImportDialog(Quest& destination_quest, QWidget* parent) :
   ui.destination_quest_tree_view->set_quest(destination_quest);
   ui.destination_quest_tree_view->set_opening_files_allowed(false);
 
+  ui.missing_files_count_label->clear();
+
   connect(ui.source_quest_browse_button, SIGNAL(clicked(bool)),
           this, SLOT(browse_source_quest()));
   connect(&source_quest, SIGNAL(root_path_changed(QString)),
           this, SLOT(source_quest_root_path_changed()));
   connect(ui.source_quest_tree_view, SIGNAL(selected_path_changed(QString)),
-          this, SLOT(update_import_button()));
+          this, SLOT(source_quest_selected_path_changed()));
   connect(ui.destination_quest_tree_view, SIGNAL(rename_file_requested(Quest&, QString)),
           this, SIGNAL(destination_quest_rename_file_requested(Quest&, QString)));
   connect(ui.find_missing_button, SIGNAL(clicked(bool)),
@@ -135,10 +137,97 @@ void ImportDialog::source_quest_root_path_changed() {
 }
 
 /**
+ * @brief Slot called when the selection has changed in the source quest.
+ */
+void ImportDialog::source_quest_selected_path_changed() {
+
+  update_find_missing_button();
+  update_import_button();
+}
+
+/**
+ * @brief Updates the enabled state of the "Find missing" button.
+ */
+void ImportDialog::update_find_missing_button() {
+
+  ui.find_missing_button->setEnabled(false);
+  if (!source_quest.exists()) {
+    return;
+  }
+
+  QString selected_path = ui.source_quest_tree_view->get_selected_path();
+  if (selected_path.isEmpty() ||
+      QFileInfo(selected_path).isDir()
+  ) {
+    ui.find_missing_button->setEnabled(true);
+  }
+}
+
+/**
  * @brief Slot called when the user clicks the "Find missing" button.
  */
 void ImportDialog::find_missing_button_triggered() {
 
+  if (!source_quest.exists()) {
+    return;
+  }
+
+  QString selected_source_path = ui.source_quest_tree_view->get_selected_path();
+  QString initial_source_path = !selected_source_path.isEmpty() ?
+        selected_source_path : source_quest.get_data_path();
+  QStringList missing_source_paths;
+  ui.source_quest_tree_view->expand_to_path(initial_source_path);  // TODO expand the directory
+  find_source_paths_not_in_destination_quest(initial_source_path, missing_source_paths);
+
+  ui.source_quest_tree_view->set_selected_paths(missing_source_paths);
+  ui.missing_files_count_label->setText(
+        missing_source_paths.isEmpty() ?
+          tr("No candidates found") :
+          tr("%1 candidates found").arg(missing_source_paths.size())
+  );
+}
+
+/**
+ * @brief Checks if a path and its children exist in the destination quest.
+ *
+ * Only the existence of files is checked, not their content.
+ *
+ * @param source_path The source path to check.
+ * If it is a directory, it will be recursively explored.
+ * @param[out] missing_source_paths List that will be appended with source
+ * paths that have no equivalent in the destination quest.
+ */
+void ImportDialog::find_source_paths_not_in_destination_quest(
+    const QString& source_path,
+    QStringList& missing_source_paths
+) {
+
+  QFileInfo source_info(source_path);
+  if (!source_info.exists()) {
+    return;
+  }
+  if (source_info.isSymLink()) {
+    return;
+  }
+
+  QString destination_path = source_to_destination_path(source_path);
+  if (!QFileInfo(destination_path).exists()) {
+    // Found a missing one.
+    missing_source_paths << source_path;
+  }
+
+  if (source_info.isDir()) {
+    // Recursively explore the directory.
+    const QStringList& source_children_file_names = QDir(source_path).entryList();
+    for (const QString& source_child_file_name : source_children_file_names) {
+      if (source_child_file_name == "." ||
+          source_child_file_name == ".." ) {
+        continue;
+      }
+      QString source_child_path = QString("%1/%2").arg(source_path, source_child_file_name);
+      find_source_paths_not_in_destination_quest(source_child_path, missing_source_paths);
+    }
+  }
 }
 
 /**
@@ -156,6 +245,7 @@ void ImportDialog::import_button_triggered() {
 
   last_confirm_overwrite_file = QMessageBox::No;
   paths_to_select.clear();
+  ui.missing_files_count_label->clear();
 
   try {
     const QStringList& source_paths = ui.source_quest_tree_view->get_selected_paths();

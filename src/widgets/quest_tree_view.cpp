@@ -248,13 +248,20 @@ void QuestTreeView::set_selected_paths(const QStringList& paths) {
     return;
   }
   selectionModel()->clear();
+  QItemSelection selection;
   for (const QString& path : paths) {
     const QModelIndex& index = model->get_file_index(path);
     if (index.isValid()) {
-      selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+      selection.select(index, index);
       expand(index.parent());
     }
+    else {
+      // Item to deep in the model for now: try harder
+      // to build it.
+      expand_to_path(path);
+    }
   }
+  selectionModel()->select(selection, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }
 
 /**
