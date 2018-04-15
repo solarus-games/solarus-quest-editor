@@ -33,7 +33,9 @@ To build Solarus Quest Editor, you need:
   - SDL2main
   - SDL2_image
   - SDL2_ttf
-  - openal
+  - OpenGL
+  - GLM
+  - OpenAL
   - vorbisfile
   - modplug (0.8.8.4 or greater)
   - lua5.1 or luajit (LuaJIT is recommended)
