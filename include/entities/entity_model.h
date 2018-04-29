@@ -60,9 +60,9 @@ public:
 
   const MapModel& get_map() const;
   MapModel& get_map();
-  QString get_tileset_id() const;
-  const TilesetModel* get_tileset() const;
-  TilesetModel* get_tileset();
+  QString get_map_tileset_id() const;
+  const TilesetModel* get_map_tileset() const;
+  TilesetModel* get_map_tileset();
   const Quest& get_quest() const;
   const QuestDatabase& get_database() const;
 

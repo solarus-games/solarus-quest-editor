@@ -56,6 +56,7 @@ public:
   TilesetModel(
       Quest& quest, const QString& tileset_id, QObject* parent = nullptr);
 
+  const Quest& get_quest() const;
   Quest& get_quest();
   QString get_tileset_id() const;
 

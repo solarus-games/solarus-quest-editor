@@ -701,11 +701,7 @@ QMenu* MapView::create_context_menu() {
     }
 
     if (map->are_tiles(indexes)) {
-      // Change pattern.
-      menu->addAction(change_pattern_action);
-      tile_action_added = true;
 
-      // Change pattern of all similar tiles.
       bool same_pattern = true;
       const QString& pattern_id = map->get_entity_field(indexes.first(), "pattern").toString();
       for (const EntityIndex& index : indexes) {
@@ -714,8 +710,24 @@ QMenu* MapView::create_context_menu() {
           break;
         }
       }
-      if (same_pattern) {
-        menu->addAction(change_pattern_all_action);
+
+      bool same_tileset = true;
+      const QString& tileset_id = map->get_entity_field(indexes.first(), "tileset").toString();
+      for (const EntityIndex& index : indexes) {
+        if (map->get_entity_field(index, "tileset").toString() != tileset_id) {
+          same_tileset = false;
+          break;
+        }
+      }
+
+      // Change pattern.
+      if (same_tileset) {
+        menu->addAction(change_pattern_action);
+        tile_action_added = true;
+        // Change pattern of all similar tiles.
+        if (same_pattern) {
+          menu->addAction(change_pattern_all_action);
+        }
       }
     }
 
@@ -1513,18 +1525,21 @@ void MapView::change_pattern_of_similar_tiles() {
   }
 
   const QString& pattern_id = get_map()->get_entity_field(indexes.first(), "pattern").toString();
+  const QString& tileset_id = get_map()->get_entity_field(indexes.first(), "tileset").toString();
 
   // Find all tiles and dynamic tiles that also have this pattern.
   const EntityIndexes& tiles = map->find_entities_of_type(EntityType::TILE);
   EntityIndexes similar_tiles;
   for (const EntityIndex& tile : tiles) {
-    if (get_map()->get_entity_field(tile, "pattern").toString() == pattern_id) {
+    if (get_map()->get_entity_field(tile, "pattern").toString() == pattern_id &&
+        get_map()->get_entity_field(tile, "tileset").toString() == tileset_id ) {
       similar_tiles << tile;
     }
   }
   const EntityIndexes& dynamic_tiles = map->find_entities_of_type(EntityType::DYNAMIC_TILE);
   for (const EntityIndex& dynamic_tile : dynamic_tiles) {
-    if (get_map()->get_entity_field(dynamic_tile, "pattern").toString() == pattern_id) {
+    if (get_map()->get_entity_field(dynamic_tile, "pattern").toString() == pattern_id &&
+        get_map()->get_entity_field(dynamic_tile, "tileset").toString() == tileset_id) {
       similar_tiles << dynamic_tile;
     }
   }

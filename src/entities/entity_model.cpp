@@ -455,7 +455,7 @@ void EntityModel::set_entity(const EntityData& entity) {
  * @brief Returns the id of the tileset of the map.
  * @return The tileset id or an empty string if no tileset is set.
  */
-QString EntityModel::get_tileset_id() const {
+QString EntityModel::get_map_tileset_id() const {
   return get_map().get_tileset_id();
 }
 
@@ -463,7 +463,7 @@ QString EntityModel::get_tileset_id() const {
  * @brief Returns the tileset of the map.
  * @return The tileset or nullptr if no tileset is set.
  */
-const TilesetModel* EntityModel::get_tileset() const {
+const TilesetModel* EntityModel::get_map_tileset() const {
   return get_map().get_tileset_model();
 }
 
@@ -472,7 +472,7 @@ const TilesetModel* EntityModel::get_tileset() const {
  *
  * Non-const version.
  */
-TilesetModel* EntityModel::get_tileset() {
+TilesetModel* EntityModel::get_map_tileset() {
   return get_map().get_tileset_model();
 }
 
@@ -1635,7 +1635,7 @@ bool EntityModel::draw_as_sprite(
     if (sprite_model == nullptr ||
         sprite_model->get_sprite_id() != sprite_id) {
       sprite_model = std::unique_ptr<SpriteModel>(new SpriteModel(quest, sprite_id));
-      sprite_model->set_tileset_id(get_tileset_id());
+      sprite_model->set_tileset_id(get_map_tileset_id());
     }
 
     SpriteModel::Index index(animation, 0);

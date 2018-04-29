@@ -27,6 +27,8 @@ class QRegularExpression;
 
 namespace SolarusEditor {
 
+class TilesetModel;
+
 /**
  * @brief A Solarus project that can be open with the editor.
  *
@@ -165,6 +167,9 @@ public:
   QString get_current_music_id() const;
   void set_current_music_id(const QString& music_id);
 
+  TilesetModel* get_tileset(const QString& tileset_id) const;
+  void tileset_saved(const TilesetModel* tileset) const;
+
 signals:
 
   void root_path_changed(const QString& root_path);
@@ -182,6 +187,8 @@ private:
   QuestDatabase database;          /**< Resources and files declared in project_db.dat. */
   QString current_music_id;        /**< Id of the music currently playing if any. */
 
+  mutable QMap<QString, TilesetModel*>
+      tilesets;                    /** Cache of loaded tilesets. */
 };
 
 }

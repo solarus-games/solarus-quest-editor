@@ -105,6 +105,9 @@ private:
   void apply_starting_location_mode();
   void initialize_subtype();
   void apply_subtype();
+  void initialize_tileset();
+  void apply_tileset();
+  void update_pattern_chooser_tileset();
   void initialize_transition();
   void apply_transition();
   void initialize_treasure();

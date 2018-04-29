@@ -18,6 +18,7 @@
 #include "obsolete_editor_exception.h"
 #include "obsolete_quest_exception.h"
 #include "quest.h"
+#include "tileset_model.h"
 #include <QDir>
 #include <QDebug>
 #include <QFile>
@@ -2011,6 +2012,30 @@ void Quest::set_current_music_id(const QString& music_id) {
 
   this->current_music_id = music_id;
   emit current_music_changed(music_id);
+}
+
+/**
+ * @brief Returns a tileset after loading it if necessary.
+ * @param tileset_id Id of the tileset to get.
+ * @return The corresponding tileset.
+ */
+TilesetModel* Quest::get_tileset(const QString& tileset_id) const {
+
+  TilesetModel* tileset = tilesets.value(tileset_id);
+  if (tileset == nullptr) {
+    tileset = new TilesetModel(*const_cast<Quest*>(this), tileset_id, const_cast<Quest*>(this));  // TODO move to a separate class
+    tilesets.insert(tileset_id, tileset);
+  }
+  return tileset;
+}
+
+/**
+ * @brief This function is called when a tileset file has changed.
+ * @param tileset The tileset that has just been saved.
+ */
+void Quest::tileset_saved(const TilesetModel* tileset) const {
+
+  tilesets.remove(tileset->get_tileset_id());
 }
 
 }

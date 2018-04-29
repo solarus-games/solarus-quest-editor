@@ -10,6 +10,7 @@ ________________________________________
 * Quest tree: automatically select the currently open file (#336).
 * Allow to generate borders automatically (autotiles).
 * Map editor: add support of custom properties for entities by Maxs (#327).
+* Map editor: allow to use multiple tilesets in the same map.
 * Map editor: allow to change the pattern of existing tiles (#280).
 * Map editor: allow to change the pattern of all similar tiles at once (#329).
 * Map editor: allow to export the view as a PNG file (#81).

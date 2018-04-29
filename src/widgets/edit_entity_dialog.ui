@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>1224</height>
+    <width>614</width>
+    <height>1436</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,9 +22,6 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QFormLayout" name="form_layout">
-     <property name="fieldGrowthPolicy">
-      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="type_label">
        <property name="text">
@@ -796,13 +793,20 @@
       </widget>
      </item>
      <item row="25" column="0">
+      <widget class="QLabel" name="tileset_label">
+       <property name="text">
+        <string>Tileset</string>
+       </property>
+      </widget>
+     </item>
+     <item row="26" column="0">
       <widget class="QLabel" name="user_properties_label">
        <property name="text">
         <string>User properties</string>
        </property>
       </widget>
      </item>
-     <item row="25" column="1">
+     <item row="26" column="1">
       <layout class="QHBoxLayout" name="custom_properties_layout">
        <item>
         <widget class="QTreeWidget" name="user_properties_table">
@@ -978,6 +982,52 @@
        </item>
       </layout>
      </item>
+     <item row="25" column="1">
+      <widget class="QWidget" name="tileset_layout" native="true">
+       <layout class="QVBoxLayout" name="tileset_layout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="tileset_from_map_radio">
+          <property name="text">
+           <string>Tileset of the map</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontal_layout_5">
+          <item>
+           <widget class="QRadioButton" name="tileset_other_radio">
+            <property name="text">
+             <string>Other:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="SolarusEditor::ResourceSelector" name="tileset_field">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -1040,6 +1090,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../resources/images.qrc"/>
   <include location="../../resources/images.qrc"/>
  </resources>
  <connections>

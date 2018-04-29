@@ -17,6 +17,7 @@
 #include "entities/tile.h"
 #include "ground_traits.h"
 #include "map_model.h"
+#include "quest.h"
 #include "tileset_model.h"
 #include <QPainter>
 
@@ -80,13 +81,27 @@ void Tile::set_pattern_id(const QString& pattern_id) {
 }
 
 /**
+ * @brief Returns the tileset used by this tile.
+ * @return The tileset.
+ */
+const TilesetModel* Tile::get_tileset() const {
+
+  QString tileset_id = get_field("tileset").toString();
+  if (tileset_id.isEmpty()) {
+    return get_map().get_tileset_model();
+  }
+
+  return get_quest().get_tileset(tileset_id);
+}
+
+/**
  * @copydoc EntityModel::notify_field_changed
  */
 void Tile::notify_field_changed(const QString& key, const QVariant& value) {
 
   EntityModel::notify_field_changed(key, value);
 
-  if (key == "pattern") {
+  if (key == "pattern" || key == "tileset") {
     update_pattern();
   }
 }

@@ -1218,8 +1218,9 @@ void MapEditor::build_entity_creation_toolbar() {
 
   // List of types proposed in the toolbar.
   // The list is specified here manually because we want to control the order
-  // and all types are not included (tiles and dynamic tiles are omitted).
+  // and all types are not included (dynamic tiles are omitted).
   const std::vector<std::pair<EntityType, QString>> types_in_toolbar = {
+    { EntityType::TILE, tr("Add tile") },
     { EntityType::DESTINATION, tr("Add destination") },
     { EntityType::TELETRANSPORTER, tr("Add teletransporter") },
     { EntityType::PICKABLE, tr("Add pickable") },
@@ -2174,14 +2175,18 @@ void MapEditor::change_tiles_pattern_requested(const EntityIndexes& indexes) {
     return;
   }
 
+  const QString& tileset_id = map->get_entity_field(indexes.first(), "tileset").toString();
   for (const EntityIndex& index : indexes) {
     EntityType type = map->get_entity_type(index);
     if (type != EntityType::TILE && type != EntityType::DYNAMIC_TILE) {
       return;
     }
+    if (map->get_entity_field(index, "tileset") != tileset_id) {
+      return;
+    }
   }
 
-  PatternPickerDialog dialog(*map->get_tileset_model());
+  PatternPickerDialog dialog(*get_quest().get_tileset(tileset_id));
   int result = dialog.exec();
 
   if (result != QDialog::Accepted) {

@@ -19,6 +19,8 @@
 #include "widgets/gui_tools.h"
 #include "widgets/new_entity_user_property_dialog.h"
 #include "map_model.h"
+#include "quest.h"
+#include "tileset_model.h"
 #include <QInputDialog>
 
 namespace SolarusEditor {
@@ -45,6 +47,7 @@ const QString savegame_variable_field_name = "savegame_variable";
 const QString sound_field_name = "sound";
 const QString sprite_field_name = "sprite";
 const QString starting_location_mode_field_name = "starting_location_mode";
+const QString tileset_field_name = "tileset";
 const QString transition_field_name = "transition";
 const QString treasure_name_field_name = "treasure_name";
 const QString treasure_variant_field_name = "treasure_variant";
@@ -383,6 +386,7 @@ void EditEntityDialog::initialize() {
   initialize_sprite();
   initialize_starting_location_mode();
   initialize_subtype();
+  initialize_tileset();
   initialize_transition();
   initialize_treasure();
   initialize_type();
@@ -422,6 +426,7 @@ void EditEntityDialog::apply() {
   apply_sprite();
   apply_starting_location_mode();
   apply_subtype();
+  apply_tileset();
   apply_transition();
   apply_treasure();
   apply_type();
@@ -1297,7 +1302,6 @@ void EditEntityDialog::initialize_pattern() {
 
   // Show the initial value.
   QString value = entity_before.get_field(pattern_field_name).toString();
-  ui.pattern_field->set_tileset(entity_before.get_tileset());
   ui.pattern_field->set_pattern_id(value);
 }
 
@@ -1555,6 +1559,77 @@ void EditEntityDialog::apply_subtype() {
 }
 
 /**
+ * @brief Initializes the tileset field.
+ */
+void EditEntityDialog::initialize_tileset() {
+
+  if (!entity_before.has_field(tileset_field_name)) {
+    remove_field(ui.tileset_label, ui.tileset_field);
+    return;
+  }
+
+  ui.tileset_field->set_quest(get_quest());
+  ui.tileset_field->set_resource_type(ResourceType::TILESET);
+
+  QString tileset_id = entity_before.get_field(tileset_field_name).toString();
+  if (tileset_id.isEmpty()) {
+    ui.tileset_from_map_radio->setChecked(true);
+    ui.tileset_field->setEnabled(false);
+  }
+  else {
+    ui.tileset_other_radio->setChecked(true);
+    ui.tileset_field->set_selected_id(tileset_id);
+  }
+
+  connect(ui.tileset_from_map_radio, &QRadioButton::clicked, [this]() {
+    ui.tileset_field->setEnabled(false);
+    update_pattern_chooser_tileset();
+  });
+  connect(ui.tileset_other_radio, &QRadioButton::clicked, [this]() {
+    ui.tileset_field->setEnabled(true);
+    update_pattern_chooser_tileset();
+  });
+
+  connect(ui.tileset_field, &QComboBox::currentTextChanged,
+          this, &EditEntityDialog::update_pattern_chooser_tileset);
+
+  update_pattern_chooser_tileset();
+}
+
+/**
+ * @brief Updates the entity from the tileset field.
+ */
+void EditEntityDialog::apply_tileset() {
+
+  if (entity_before.has_field(tileset_field_name)) {
+    QString tileset_id;
+    if (ui.tileset_other_radio->isChecked()) {
+      tileset_id = ui.tileset_field->get_selected_id();
+    }
+    entity_after->set_field(tileset_field_name, tileset_id);
+  }
+}
+
+/**
+ * @brief Sets the tileset of the pattern chooser.
+ */
+void EditEntityDialog::update_pattern_chooser_tileset() {
+
+  QString tileset_id;
+  if (ui.tileset_other_radio->isChecked()) {
+    tileset_id = ui.tileset_field->get_selected_id();
+    if (!tileset_id.isEmpty()) {
+      TilesetModel* tileset = get_quest().get_tileset(tileset_id);
+      ui.pattern_field->set_tileset(tileset);
+      return;
+    }
+  }
+
+  // Use the tileset of the map otherwise.
+  ui.pattern_field->set_tileset(get_map().get_tileset_model());
+}
+
+/**
  * @brief Initializes the transition field.
  */
 void EditEntityDialog::initialize_transition() {
@@ -1564,8 +1639,8 @@ void EditEntityDialog::initialize_transition() {
     return;
   }
 
-  QString transition_name = entity_before.get_field(transition_field_name).toString();
-  ui.transition_field->set_selected_value(TransitionTraits::get_by_lua_name(transition_name));
+  QString tileset_id = entity_before.get_field(tileset_field_name).toString();
+  ui.tileset_field->set_selected_id(tileset_id);
 }
 
 /**

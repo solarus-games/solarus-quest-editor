@@ -34,6 +34,8 @@ public:
   QString get_pattern_id() const;
   void set_pattern_id(const QString& pattern_id);
 
+  const TilesetModel* get_tileset() const;
+
   void draw(QPainter& painter) const override;
   void notify_tileset_changed(const QString& tileset_id) override;
 

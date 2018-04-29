@@ -61,6 +61,13 @@ TilesetModel::TilesetModel(
 /**
  * @brief Returns the quest.
  */
+const Quest& TilesetModel::get_quest() const {
+  return quest;
+}
+
+/**
+ * @overload Non-const version.
+ */
 Quest& TilesetModel::get_quest() {
   return quest;
 }
@@ -84,6 +91,8 @@ void TilesetModel::save() const {
   if (!tileset.export_to_file(path.toStdString())) {
     throw EditorException(tr("Cannot save tileset data file '%1'").arg(path));
   }
+
+  get_quest().tileset_saved(this);
 }
 
 /**

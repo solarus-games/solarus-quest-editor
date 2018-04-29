@@ -59,6 +59,8 @@ PatternChooser::PatternChooser(QWidget *parent) :
 void PatternChooser::set_tileset(TilesetModel* tileset) {
 
   this->tileset = tileset;
+  update_icon();
+  update_style_sheet();
 }
 
 /**
