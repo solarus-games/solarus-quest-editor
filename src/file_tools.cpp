@@ -106,7 +106,7 @@ void copy_recursive(const QString& src, const QString& dst) {
   QFileInfo dst_info(dst);
 
   if (!src_info.exists()) {
-    throw EditorException(QApplication::tr("No such file or directory: '%1'").arg(src));
+    throw EditorException(QApplication::tr("No such file or folder: '%1'").arg(src));
   }
 
   if (!src_info.isReadable()) {
@@ -123,14 +123,14 @@ void copy_recursive(const QString& src, const QString& dst) {
     dst_dir.cdUp();
 
     if (!dst_dir.exists()) {
-      throw EditorException(QApplication::tr("No such directory: '%1'").arg(dst_dir.path()));
+      throw EditorException(QApplication::tr("No such folder: '%1'").arg(dst_dir.path()));
     }
 
     QString src_canonical_path = src_info.canonicalFilePath();
     QString dst_parent_canonical_path = dst_dir.canonicalPath();
 
     if (dst_parent_canonical_path.startsWith(src_canonical_path)) {
-      throw EditorException(QApplication::tr("Cannot copy directory '%1' to one of its own subdirectories: '%2'").arg(src, dst));
+      throw EditorException(QApplication::tr("Cannot copy folder '%1' to one of its own subfolders: '%2'").arg(src, dst));
     }
 
     if (!dst_dir.mkdir(dst_info.fileName())) {
@@ -204,7 +204,7 @@ void create_directories(const QString& path) {
 
   bool success = QDir().mkpath(path);
   if (!success) {
-    throw EditorException(QApplication::tr("Cannot create directory '%1'").arg(path));
+    throw EditorException(QApplication::tr("Cannot create folder '%1'").arg(path));
   }
 }
 

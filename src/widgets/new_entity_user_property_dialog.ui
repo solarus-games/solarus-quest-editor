@@ -21,7 +21,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="property_key_label">
          <property name="text">
-          <string>New property key:</string>
+          <string>Key:</string>
          </property>
         </widget>
        </item>
@@ -31,7 +31,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="property_value_label">
          <property name="text">
-          <string>New property value:</string>
+          <string>Value:</string>
          </property>
         </widget>
        </item>

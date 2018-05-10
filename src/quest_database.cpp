@@ -31,7 +31,7 @@ QuestDatabase::QuestDatabase(Quest& quest):
 
   // Friendly names are set dynamically because they are translated.
   resource_type_friendly_names = {
-    //: To describe the type of resource itself like: New Map.
+    //: To describe the type of resource itself like: this is a Map.
     { ResourceType::MAP,      tr("Map", "resource_type")              },
     { ResourceType::TILESET,  tr("Tileset", "resource_type")          },
     { ResourceType::SPRITE,   tr("Sprite", "resource_type")           },

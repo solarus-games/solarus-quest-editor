@@ -932,7 +932,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Move to up</string>
+            <string>Move up</string>
            </property>
            <property name="text">
             <string/>
@@ -961,7 +961,7 @@
             </size>
            </property>
            <property name="toolTip">
-            <string>Move to down</string>
+            <string>Move down</string>
            </property>
            <property name="text">
             <string/>

@@ -446,13 +446,12 @@ public:
 
       int index = get_model().id_to_index(id);
 
-      QString suffix = QObject::tr(" (copy%1)");
-      QString new_id = id + suffix.arg("");
-
-      int integer_id = 2;
-      while (get_model().id_to_index(new_id) != -1) {
-        new_id = id + suffix.arg(integer_id++);
-      }
+      int integer_id = 1;
+      QString new_id;
+      do {
+        ++integer_id;
+        new_id = QString("%1_%2").arg(id).arg(integer_id);
+      } while (get_model().id_to_index(new_id) != -1);
 
       QRect frames = get_model().get_pattern_frames_bounding_box(index);
       frames.translate(delta);

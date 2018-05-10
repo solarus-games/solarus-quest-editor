@@ -116,7 +116,7 @@ void ImportDialog::browse_source_quest() {
   source_quest.set_root_path(src_quest_path);
   if (!source_quest.exists()) {
     GuiTools::error_dialog(
-          tr("No source quest was not found in directory '%1'").arg(src_quest_path));
+          tr("No source quest was not found in folder '%1'").arg(src_quest_path));
     source_quest.set_root_path("");
   }
 }
@@ -293,7 +293,7 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
   }
 
   if (source_info.isDir()) {
-    throw EditorException(QApplication::tr("Source path is a directory: '%1'").arg(source_path));
+    throw EditorException(QApplication::tr("Source path is a folder: '%1'").arg(source_path));
   }
 
   if (source_info.isSymLink()) {
@@ -308,7 +308,7 @@ void ImportDialog::import_file(const QFileInfo& source_info) {
   QFileInfo destination_info(destination_path);
   if (destination_info.exists()) {
     if (destination_info.isDir()) {
-      throw EditorException(tr("Destination path already exists and is a directory: '%1'").arg(destination_path));
+      throw EditorException(tr("Destination path already exists and is a folder: '%1'").arg(destination_path));
     }
 
     if (last_confirm_overwrite_file == QMessageBox::NoToAll) {
@@ -365,15 +365,15 @@ void ImportDialog::import_dir(const QFileInfo& source_info) {
 
   const QString& source_path = source_info.filePath();
   if (!source_info.exists()) {
-    throw EditorException(QApplication::tr("Source directory does not exist: '%1'").arg(source_path));
+    throw EditorException(QApplication::tr("Source folder does not exist: '%1'").arg(source_path));
   }
 
   if (!source_info.isDir()) {
-    throw EditorException(QApplication::tr("Source path is not a directory: '%1'").arg(source_path));
+    throw EditorException(QApplication::tr("Source path is not a folder: '%1'").arg(source_path));
   }
 
   if (!source_info.isReadable()) {
-    throw EditorException(QApplication::tr("Source directory cannot be read: '%1'").arg(source_path));
+    throw EditorException(QApplication::tr("Source folder cannot be read: '%1'").arg(source_path));
   }
 
   QString destination_path = source_to_destination_path(source_path);
@@ -392,8 +392,8 @@ void ImportDialog::import_dir(const QFileInfo& source_info) {
     if (last_confirm_overwrite_directory != QMessageBox::YesToAll) {
       last_confirm_overwrite_directory = QMessageBox::question(
             this,
-            tr("Destination directory already exists"),
-            tr("The destination directory '%1' already exists.\nDo you want to merge it with the contents from the source directory?").arg(destination_path),
+            tr("Destination folder already exists"),
+            tr("The destination folder '%1' already exists.\nDo you want to merge it with the contents from the source folder?").arg(destination_path),
             QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel
       );
 

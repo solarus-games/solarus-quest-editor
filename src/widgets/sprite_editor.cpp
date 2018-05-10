@@ -419,7 +419,7 @@ public:
 
   MoveUpDirectionCommand(
       SpriteEditor& editor, const SpriteModel::Index& index) :
-    SpriteEditorCommand(editor, SpriteEditor::tr("Move up direction")),
+    SpriteEditorCommand(editor, SpriteEditor::tr("Move direction up")),
     index_before(index),
     index_after(index) {
     index_after.direction_nb--;
@@ -452,7 +452,7 @@ public:
 
   MoveDownDirectionCommand(
       SpriteEditor& editor, const SpriteModel::Index& index) :
-    SpriteEditorCommand(editor, SpriteEditor::tr("Move down direction")),
+    SpriteEditorCommand(editor, SpriteEditor::tr("Move direction down")),
     index_before(index),
     index_after(index) {
     index_after.direction_nb++;
@@ -620,7 +620,7 @@ public:
 
   SetDirectionNumFramesCommand(
       SpriteEditor& editor, const SpriteModel::Index& index, int num_frames) :
-    SpriteEditorCommand(editor, SpriteEditor::tr("Change direction num frames")),
+    SpriteEditorCommand(editor, SpriteEditor::tr("Change number of frames of direction")),
     index(index),
     num_frames_before(get_model().get_direction_num_frames(index)),
     num_frames_after(num_frames) {
@@ -656,7 +656,7 @@ public:
   SetDirectionNumColumnsCommand(
       SpriteEditor& editor, const SpriteModel::Index& index, int num_columns) :
     SpriteEditorCommand(
-      editor, SpriteEditor::tr("Change direction num columns")),
+      editor, SpriteEditor::tr("Change number of columns of direction")),
     index(index),
     num_columns_before(get_model().get_direction_num_columns(index)),
     num_columns_after(num_columns) {
@@ -692,7 +692,7 @@ public:
       SpriteEditor& editor, const SpriteModel::Index& index,
       int num_frames, int num_columns) :
     SpriteEditorCommand(
-      editor, SpriteEditor::tr("Change direction num frames/columns")),
+      editor, SpriteEditor::tr("Change number of frames/columns of direction")),
     index(index),
     num_frames_before(get_model().get_direction_num_frames(index)),
     num_frames_after(num_frames),
