@@ -2572,7 +2572,7 @@ La prochaine étape est de modifier manuellement les propriétés de votre quêt
         <source>Could not locate the assets directory.
 Some features like creating a new quest will not be available.
 Please make sure that Solarus Quest Editor is correctly installed.</source>
-        <translation type="unfinished">Impossible de trouver le dossier &quot;assets&quot;.
+        <translation>Impossible de trouver le dossier &quot;assets&quot;.
 Certaines fonctionnalités commes créer une nouvelle quête ne seront pas disponibles.
 Vérifiez que Solarus Quest Editor est correctement installé.</translation>
     </message>
