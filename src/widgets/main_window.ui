@@ -467,7 +467,7 @@
     <string>Export to image...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+E</string>
+    <string>F10</string>
    </property>
   </action>
  </widget>
