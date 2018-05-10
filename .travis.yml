@@ -21,9 +21,6 @@ compiler:
 addons:
   apt:
     packages:
-    - libsdl2-dev
-    - libsdl2-image-dev
-    - libsdl2-ttf-dev
     - libluajit-5.1-dev
     - libphysfs-dev
     - libopenal-dev
@@ -35,8 +32,23 @@ addons:
     - qttools5-dev-tools
 
 install:
-# The Solarus library is also a dependency. A branch of the editor is
-# supposed to compile with the same branch of Solarus.
+  # Install SDL.
+  - wget -q http://www.libsdl.org/release/SDL2-2.0.6.tar.gz
+  - tar xf SDL2-*.tar.gz
+  - cd SDL2-* && ./configure && make && sudo make install && cd ..
+
+  # Install SDL_ttf.
+  - wget -q http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.12.tar.gz
+  - tar xf SDL2_ttf-*.tar.gz
+  - cd SDL2_ttf-* && ./configure && make && sudo make install && cd ..
+
+  # Install SDL_image.
+  - wget -q https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.1.tar.gz
+  - tar xf SDL2_image*
+  - cd SDL2_image* && ./configure && make && sudo make install && cd ..
+
+  # The Solarus library is also a dependency. A branch of the editor is
+  # supposed to compile with the same branch of Solarus.
   - git clone --branch=$TRAVIS_BRANCH https://github.com/christopho/solarus
   - cd solarus && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && sudo make install && cd ../..
 
