@@ -2175,7 +2175,7 @@ void MapEditor::change_tiles_pattern_requested(const EntityIndexes& indexes) {
     return;
   }
 
-  const QString& tileset_id = map->get_entity_field(indexes.first(), "tileset").toString();
+  QString tileset_id = map->get_entity_field(indexes.first(), "tileset").toString();
   for (const EntityIndex& index : indexes) {
     EntityType type = map->get_entity_type(index);
     if (type != EntityType::TILE && type != EntityType::DYNAMIC_TILE) {
@@ -2184,6 +2184,10 @@ void MapEditor::change_tiles_pattern_requested(const EntityIndexes& indexes) {
     if (map->get_entity_field(index, "tileset") != tileset_id) {
       return;
     }
+  }
+
+  if (tileset_id.isEmpty()) {
+    tileset_id = map->get_tileset_id();
   }
 
   PatternPickerDialog dialog(*get_quest().get_tileset(tileset_id));

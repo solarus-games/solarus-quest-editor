@@ -42,6 +42,8 @@ TilesetModel::TilesetModel(
   tileset_id(tileset_id),
   selection_model(this) {
 
+  Q_ASSERT(!tileset_id.isEmpty());
+
   // Load the tileset data file.
   QString path = quest.get_tileset_data_file_path(tileset_id);
 
