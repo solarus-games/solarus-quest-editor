@@ -1564,7 +1564,7 @@ void EditEntityDialog::apply_subtype() {
 void EditEntityDialog::initialize_tileset() {
 
   if (!entity_before.has_field(tileset_field_name)) {
-    remove_field(ui.tileset_label, ui.tileset_field);
+    remove_field(ui.tileset_label, ui.tileset_layout);
     return;
   }
 
