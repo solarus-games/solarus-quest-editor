@@ -1249,6 +1249,17 @@ void Quest::check_is_script(const QString& path) const {
 }
 
 /**
+ * @brief Returns whether a path of this quest is a shader code file.
+ * @param path The path to test.
+ * @return @c true if this path ends with ".glsl",
+ * even if it does not exist yet.
+ */
+bool Quest::is_shader_code(const QString& path) const {
+
+  return is_in_root_path(path) && path.endsWith(".glsl");
+}
+
+/**
  * @brief Returns whether a path of this quest corresponds to a .dat file.
  * @param path The path to test.
  * @return @c true if this path ends with ".dat", even if it does not exist yet.

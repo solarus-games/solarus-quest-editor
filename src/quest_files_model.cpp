@@ -610,6 +610,10 @@ QString QuestFilesModel::get_quest_file_displayed_name(const QModelIndex& index)
       return tr("Script");
     }
 
+    if (quest.is_shader_code(path)) {
+      return tr("GLSL shader code");
+    }
+
     if (quest.is_image(path)) {
       // A PNG image.
 
@@ -698,6 +702,11 @@ QIcon QuestFilesModel::get_quest_file_icon(const QModelIndex& index) const {
       // Another script.
       icon_file_name = "icon_script.png";
     }
+  }
+
+  // Shader code icon.
+  else if (quest.is_shader_code(file_path)) {
+    icon_file_name = "icon_shader_code.png";
   }
 
   // Image icon.
@@ -826,6 +835,11 @@ bool QuestFilesModel::filterAcceptsRow(int source_row, const QModelIndex& source
 
   // Keep all .lua scripts including map scripts.
   if (quest.is_script(file_path)) {
+    return true;
+  }
+
+  // Keep shader code files.
+  if (quest.is_shader_code(file_path)) {
     return true;
   }
 

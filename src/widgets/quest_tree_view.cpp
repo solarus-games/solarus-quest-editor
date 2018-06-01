@@ -565,6 +565,11 @@ void QuestTreeView::build_context_menu_open(QMenu& menu, const QString& path) {
     open_action->setIcon(QIcon(":/images/icon_script.png"));
     menu.addAction(open_action);
   }
+  else if (quest.is_shader_code(path)) {
+    // Open a GLSL file.
+    open_action->setIcon(QIcon(":/images/icon_shader_code.png"));
+    menu.addAction(open_action);
+  }
   else if (quest.is_data_path(path)) {
     // Open quest properties file.
     open_action->setText(tr("Open Properties"));

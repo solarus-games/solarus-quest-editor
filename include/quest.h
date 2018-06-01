@@ -102,6 +102,7 @@ public:
   void check_not_is_dir(const QString& path) const;
   bool is_script(const QString& path) const;
   void check_is_script(const QString& path) const;
+  bool is_shader_code(const QString& path) const;
   bool is_data_file(const QString& path) const;
   bool is_image(const QString& path) const;
   bool is_properties_path(const QString& path) const;

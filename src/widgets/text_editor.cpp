@@ -137,6 +137,12 @@ QIcon TextEditor::create_icon() const {
     // Another Lua script.
     return QIcon(":/images/icon_script.png");
   }
+
+  if (get_quest().is_shader_code(path)) {
+    // A GLSL file.
+    return QIcon(":/images/icon_shader_code.png");
+  }
+
   return QIcon(":/images/icon_file.png");
 }
 

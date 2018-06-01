@@ -515,6 +515,10 @@ void EditorTabs::open_file_requested(Quest& quest, const QString& path) {
     // A Lua script that is not a resource element.
     open_text_editor(quest, canonical_path);
   }
+  else if (quest.is_shader_code(canonical_path)) {
+    // A GLSL file.
+    open_text_editor(quest, canonical_path);
+  }
   else if (quest.is_properties_path(canonical_path)) {
     // Opening quest.dat directly.
     open_quest_properties_editor(quest);
