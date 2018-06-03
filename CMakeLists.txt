@@ -165,6 +165,7 @@ set(solarus_quest_editor_SOURCES
   include/widgets/resource_model.h
   include/widgets/resource_selector.h
   include/widgets/settings_dialog.h
+  include/widgets/shader_editor.h
   include/widgets/sound_chooser.h
   include/widgets/sprite_editor.h
   include/widgets/sprite_tree_view.h
@@ -285,6 +286,7 @@ set(solarus_quest_editor_SOURCES
   src/widgets/resource_model.cpp
   src/widgets/resource_selector.cpp
   src/widgets/settings_dialog.cpp
+  src/widgets/shader_editor.cpp
   src/widgets/sound_chooser.cpp
   src/widgets/sprite_editor.cpp
   src/widgets/sprite_tree_view.cpp
@@ -365,6 +367,7 @@ set(solarus_quest_editor_FORMS
   src/widgets/pattern_picker_dialog.ui
   src/widgets/quest_properties_editor.ui
   src/widgets/settings_dialog.ui
+  src/widgets/shader_editor.ui
   src/widgets/sprite_editor.ui
   src/widgets/sprite_previewer.ui
   src/widgets/strings_editor.ui
