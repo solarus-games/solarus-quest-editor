@@ -21,6 +21,8 @@
 #include <QGraphicsView>
 #include <QPointer>
 
+class QActionGroup;
+
 namespace SolarusEditor {
 
 class MapModel;

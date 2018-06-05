@@ -30,6 +30,7 @@
 #include "tileset_model.h"
 #include "view_settings.h"
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
